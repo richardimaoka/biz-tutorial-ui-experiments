@@ -1,0 +1,26 @@
+body {
+  margin: 0px;
+}
+
+.header {
+  background-color: rgb(107, 240, 240);
+}
+
+.header-container {
+  height: 50px;
+}
+
+.main {
+  background-color: aliceblue;
+}
+
+.main-container {
+  width: 680px;
+  margin: 0px auto;
+  background-color: white;
+}
+.editor {
+  height: 300px;
+  overflow-y: scroll;
+  margin: 0px;
+}
