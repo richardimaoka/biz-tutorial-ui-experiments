@@ -129,16 +129,16 @@ docker run --rm cmd-nginx`,
 interface State {
   state: "command writing" | "wait command execution" | "output writing";
   stepAt: number;
-  commandCharAt: number;
+  commandWrittenLength: number;
 }
 
 export const Terminal = (): JSX.Element => {
   const [state, setState] = useState<State>({
     state: "command writing",
     stepAt: 0,
-    commandCharAt: 0,
+    commandWrittenLength: 0,
   });
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef(null);
 
   const cssRunnable = css`
     background-color: green;
@@ -162,19 +162,59 @@ export const Terminal = (): JSX.Element => {
     border-bottom: 1px solid white;
   `;
 
+  // const updateCommandCharAt = () => {
+  //   const command = expected2[state.stepAt].command;
+  //   const durationMills = 10000;
+  //   const numCycles = 4;
+  //   const charsPerCycle = command.length / numCycles;
+  //   let nextCharAt = Math.min(
+  //     Math.round(state.commandCharAt + charsPerCycle),
+  //     Math.round(command.length - 1)
+  //   );
+  //   console.log(
+  //     `updateCommandCharAt state.commandCharAt=${state.commandCharAt} command.length=${command.length} nextCharAt=${nextCharAt}`
+  //   );
+  //   if (state.commandCharAt < command.length - 1) {
+  //     setState({ ...state, commandCharAt: nextCharAt });
+  //     setTimeout(updateCommandCharAt, durationMills / numCycles);
+  //   } else {
+  //     setState({ ...state, state: "wait command execution" });
+  //   }
+  // };
+
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollIntoView();
     }
     switch (state.state) {
       case "command writing":
-        setTimeout(() => {
+        console.log("command writing");
+        const command = expected2[state.stepAt].command;
+        const durationMills = 3000;
+        const numCycles = 10;
+        const charsPerCycle = command.length / numCycles;
+
+        let nextWrittenLength = Math.min(
+          Math.round(state.commandWrittenLength + charsPerCycle),
+          command.length
+        );
+        console.log(
+          `updateCommandCharAt state.commandWrittenLength=${state.commandWrittenLength} command.length=${command.length} nextWrittenLength=${nextWrittenLength}`
+        );
+
+        if (state.commandWrittenLength < command.length) {
+          setTimeout(() => {
+            setState({ ...state, commandWrittenLength: nextWrittenLength });
+          }, durationMills / numCycles);
+        } else {
           setState({ ...state, state: "wait command execution" });
-        }, 300);
+        }
         break;
       case "wait command execution":
+        console.log("wait command execution");
         break;
       case "output writing":
+        console.log("output writing");
         if (state.stepAt < expected2.length - 1) {
           setTimeout(() => {
             setState({
@@ -209,30 +249,47 @@ export const Terminal = (): JSX.Element => {
           .filter((_, index) => index < state.stepAt)
           .map((elem, index) => (
             <>
-              <pre css={cssTerminalCommand} key={index}>
+              <pre css={cssTerminalCommand} key={"command" + index}>
                 <code>{elem.command}</code>
               </pre>
-              <pre css={cssTerminalOutput} key={index}>
+              <pre css={cssTerminalOutput} key={"output" + index}>
                 <code>{elem.output}</code>
               </pre>
             </>
           ))}
         {state.state === "command writing" ? (
-          <pre css={cssTerminalCommand} key={state.stepAt} ref={ref}>
-            <code>{expected2[state.stepAt].command}</code>
+          <pre
+            css={cssTerminalCommand}
+            key={"command" + state.stepAt}
+            ref={ref}
+          >
+            <code>
+              {expected2[state.stepAt].command.substring(
+                0,
+                state.commandWrittenLength
+              )}
+            </code>
           </pre>
         ) : state.state === "wait command execution" ? (
           <>
-            <pre css={cssTerminalCommand} key={state.stepAt} ref={ref}>
+            <pre
+              css={cssTerminalCommand}
+              key={"command" + state.stepAt}
+              ref={ref}
+            >
               <code>{expected2[state.stepAt].command}</code>
             </pre>
           </>
         ) : state.state === "output writing" ? (
           <>
-            <pre css={cssTerminalCommand} key={state.stepAt}>
+            <pre css={cssTerminalCommand} key={"command" + state.stepAt}>
               <code>{expected2[state.stepAt].command}</code>
             </pre>
-            <pre css={cssTerminalOutput} key={state.stepAt} ref={ref}>
+            <pre
+              css={cssTerminalOutput}
+              key={"output" + state.stepAt}
+              ref={ref}
+            >
               <code>{expected2[state.stepAt].output}</code>
             </pre>
           </>

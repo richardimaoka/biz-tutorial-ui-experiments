@@ -1,0 +1,43 @@
+body {
+  margin: 0px;
+}
+
+.header {
+  background-color: rgb(107, 240, 240);
+}
+
+.header-container {
+  height: 50px;
+}
+
+.main {
+  background-color: aliceblue;
+}
+
+.main-container {
+  width: 680px;
+  margin: 0px auto;
+  background-color: white;
+}
+
+.editor {
+  display: flex;
+  margin: 0px;
+  background-color: rgb(209, 209, 209);
+}
+
+.left-pane {
+  height: 300px;
+
+  overflow-y: auto;
+}
+
+.right-pane {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.file-row {
+  width: 300px;
+  font-size: 12px;
+}
