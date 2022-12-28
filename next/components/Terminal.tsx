@@ -157,7 +157,7 @@ export const Terminal = (): JSX.Element => {
   const cssTerminalOutput = css`
     margin: 1px 0px;
     padding: 4px;
-    background-color: #a5a5a5;
+    background-color: #3a3a3a;
     color: white;
     border-bottom: 1px solid white;
   `;
@@ -170,7 +170,7 @@ export const Terminal = (): JSX.Element => {
       case "command writing":
         setTimeout(() => {
           setState({ ...state, state: "wait command execution" });
-        }, 1000);
+        }, 300);
         break;
       case "wait command execution":
         break;
@@ -182,7 +182,7 @@ export const Terminal = (): JSX.Element => {
               stepAt: state.stepAt + 1,
               state: "command writing",
             });
-          }, 1000);
+          }, 300);
         }
         break;
       default:
