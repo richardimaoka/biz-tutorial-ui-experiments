@@ -162,26 +162,6 @@ export const Terminal = (): JSX.Element => {
     border-bottom: 1px solid white;
   `;
 
-  // const updateCommandCharAt = () => {
-  //   const command = expected2[state.stepAt].command;
-  //   const durationMills = 10000;
-  //   const numCycles = 4;
-  //   const charsPerCycle = command.length / numCycles;
-  //   let nextCharAt = Math.min(
-  //     Math.round(state.commandCharAt + charsPerCycle),
-  //     Math.round(command.length - 1)
-  //   );
-  //   console.log(
-  //     `updateCommandCharAt state.commandCharAt=${state.commandCharAt} command.length=${command.length} nextCharAt=${nextCharAt}`
-  //   );
-  //   if (state.commandCharAt < command.length - 1) {
-  //     setState({ ...state, commandCharAt: nextCharAt });
-  //     setTimeout(updateCommandCharAt, durationMills / numCycles);
-  //   } else {
-  //     setState({ ...state, state: "wait command execution" });
-  //   }
-  // };
-
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollIntoView();
@@ -257,7 +237,7 @@ export const Terminal = (): JSX.Element => {
               </pre>
             </>
           ))}
-        {state.state === "command writing" ? (
+        {/* {state.state === "command writing" ? (
           <pre
             css={cssTerminalCommand}
             key={"command" + state.stepAt}
@@ -295,7 +275,7 @@ export const Terminal = (): JSX.Element => {
           </>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
       <button
         disabled={state.state !== "wait command execution"}
