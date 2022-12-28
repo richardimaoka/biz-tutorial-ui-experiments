@@ -12,15 +12,18 @@ docker run --rm cmd-nginx`,
 export default function Home() {
   const [terminalElements, setTerminalElements] = useState<string[]>([]);
   const onClick = () => {
-    const currentIndex = terminalElements.length - 1;
-    const newElements = [...terminalElements];
-    newElements.push(expected[currentIndex + 1]);
-    setTerminalElements(newElements);
+    if (terminalElements.length < expected.length) {
+      console.log("append");
+      const currentIndex = terminalElements.length - 1;
+      const newElements = [...terminalElements];
+      newElements.push(expected[currentIndex + 1]);
+      setTerminalElements(newElements);
+    }
   };
   return (
     <>
-      {terminalElements.map((elem) => (
-        <pre>
+      {terminalElements.map((elem, index) => (
+        <pre key={index}>
           <code>{elem}</code>
         </pre>
       ))}
