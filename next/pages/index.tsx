@@ -1,35 +1,23 @@
-import { useState } from "react";
-
-const expected = [
-  `docker build -t cmd-nginx -f Dockerfile.cmd-nginx .
-docker run --rm cmd-nginx`,
-  `2022/09/03 05:48:46 [notice] 7#7: start worker process 13
-2022/09/03 05:48:46 [notice] 7#7: start worker process 14
-2022/09/03 05:48:46 [notice] 7#7: start worker process 15
-^C`,
-];
+import { css } from "@emotion/react";
+import { Terminal } from "../components/Terminal";
 
 export default function Home() {
-  const [terminalElements, setTerminalElements] = useState<string[]>([]);
-  const onClick = () => {
-    if (terminalElements.length < expected.length) {
-      console.log("append");
-      const currentIndex = terminalElements.length - 1;
-      const newElements = [...terminalElements];
-      newElements.push(expected[currentIndex + 1]);
-      setTerminalElements(newElements);
-    }
-  };
   return (
-    <>
-      {terminalElements.map((elem, index) => (
-        <pre key={index}>
-          <code>{elem}</code>
-        </pre>
-      ))}
-      <button type="button" onClick={onClick}>
-        run
-      </button>
-    </>
+    <main
+      css={css`
+        background-color: #f8f8f8;
+      `}
+    >
+      <div
+        css={css`
+          width: 1080px;
+
+          margin: 0 auto;
+          background-color: white;
+        `}
+      >
+        <Terminal />
+      </div>
+    </main>
   );
 }
