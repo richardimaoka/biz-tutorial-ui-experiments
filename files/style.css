@@ -19,8 +19,17 @@ body {
   margin: 0px auto;
   background-color: white;
 }
+
 .editor {
   height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0px;
+  background-color: rgb(209, 209, 209);
+}
+
+.terminal {
+  margin: 1px 0px;
+  padding: 4px;
+  color: white;
+  background-color: rgb(92, 92, 92);
 }
