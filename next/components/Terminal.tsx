@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 
 const expected = [
@@ -138,8 +138,7 @@ export const Terminal = (): JSX.Element => {
     stepAt: 0,
     commandCharAt: 0,
   });
-  const [terminalElements, setTerminalElements] = useState<Command[]>([]);
-  const [buttonRunnable, setButtonRunnable] = useState(false);
+  const ref = useRef<HTMLElement>(null);
 
   const cssRunnable = css`
     background-color: green;
@@ -148,15 +147,25 @@ export const Terminal = (): JSX.Element => {
     background-color: gray;
   `;
 
-  const cssTerminal = css`
+  const cssTerminalCommand = css`
     margin: 1px 0px;
     padding: 4px;
     background-color: #3a3a3a;
     color: white;
     border-bottom: 1px solid white;
   `;
+  const cssTerminalOutput = css`
+    margin: 1px 0px;
+    padding: 4px;
+    background-color: #a5a5a5;
+    color: white;
+    border-bottom: 1px solid white;
+  `;
 
   useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollIntoView();
+    }
     switch (state.state) {
       case "command writing":
         setTimeout(() => {
@@ -200,31 +209,30 @@ export const Terminal = (): JSX.Element => {
           .filter((_, index) => index < state.stepAt)
           .map((elem, index) => (
             <>
-              <pre css={cssTerminal} key={index}>
+              <pre css={cssTerminalCommand} key={index}>
                 <code>{elem.command}</code>
               </pre>
-              <pre css={cssTerminal} key={index}>
+              <pre css={cssTerminalOutput} key={index}>
                 <code>{elem.output}</code>
               </pre>
             </>
           ))}
         {state.state === "command writing" ? (
-          <pre css={cssTerminal} key={state.stepAt}>
+          <pre css={cssTerminalCommand} key={state.stepAt} ref={ref}>
             <code>{expected2[state.stepAt].command}</code>
           </pre>
         ) : state.state === "wait command execution" ? (
           <>
-            <pre css={cssTerminal} key={state.stepAt}>
+            <pre css={cssTerminalCommand} key={state.stepAt} ref={ref}>
               <code>{expected2[state.stepAt].command}</code>
             </pre>
           </>
         ) : state.state === "output writing" ? (
           <>
-            {" "}
-            <pre css={cssTerminal} key={state.stepAt}>
+            <pre css={cssTerminalCommand} key={state.stepAt}>
               <code>{expected2[state.stepAt].command}</code>
             </pre>
-            <pre css={cssTerminal} key={state.stepAt}>
+            <pre css={cssTerminalOutput} key={state.stepAt} ref={ref}>
               <code>{expected2[state.stepAt].output}</code>
             </pre>
           </>
