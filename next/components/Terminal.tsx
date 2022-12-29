@@ -11,7 +11,7 @@ export interface Command {
 }
 
 interface State {
-  state: "command writing" | "wait command execution" | "output writing";
+  state: "command writing" | "command ready" | "output writing";
   stepAt: number;
   commandWrittenLength: number;
 }
@@ -44,11 +44,11 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
             });
           }, 30);
         } else {
-          setState({ ...state, state: "wait command execution" });
+          setState({ ...state, state: "command ready" });
         }
         break;
-      case "wait command execution":
-        // console.log("wait command execution");
+      case "command ready":
+        // console.log("command ready");
         break;
       case "output writing":
         // console.log("output writing");
@@ -84,7 +84,7 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
             />
           </div>
         );
-      case "wait command execution":
+      case "command ready":
         return (
           <div ref={ref}>
             <Command command={command} writtenLength={command.length} />
@@ -130,7 +130,7 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
         <LastElement />
       </div>
       <button
-        disabled={state.state !== "wait command execution"}
+        disabled={state.state !== "command ready"}
         type="button"
         onClick={onClick}
       >
