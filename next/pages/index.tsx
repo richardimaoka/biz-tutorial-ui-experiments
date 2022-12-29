@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { Command } from "../components/Command";
 import { Terminal } from "../components/Terminal";
 
 export default function Home() {
@@ -15,7 +16,10 @@ export default function Home() {
           background-color: white;
         `}
       >
-        <Terminal />
+        <Command
+          command={`docker build -t cmd4 -f Dockerfile.cmd4 .
+docker run --rm cmd4`}
+        />
       </div>
     </main>
   );
