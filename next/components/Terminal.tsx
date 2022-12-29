@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { Command } from "./Command";
+import { Output } from "./Output";
 
 interface Command {
   command: string;
@@ -107,9 +108,9 @@ export const Terminal = (): JSX.Element => {
   `;
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollIntoView();
-    }
+    // if (ref.current) {
+    //   ref.current.scrollIntoView();
+    // }
     switch (state.state) {
       case "command writing":
         console.log("command writing");
@@ -121,6 +122,8 @@ export const Terminal = (): JSX.Element => {
               commandWrittenLength: state.commandWrittenLength + 6,
             });
           }, 30);
+        } else {
+          setState({ ...state, state: "wait command execution" });
         }
         break;
       case "wait command execution":
@@ -148,6 +151,38 @@ export const Terminal = (): JSX.Element => {
     setState({ ...state, state: "output writing" });
   };
 
+  const LastElement = (): JSX.Element => {
+    const command = expected2[state.stepAt].command;
+    switch (state.state) {
+      case "command writing":
+        return (
+          <>
+            <Command
+              command={command}
+              writtenLength={state.commandWrittenLength}
+            />
+          </>
+        );
+      case "wait command execution":
+        return (
+          <>
+            <Command command={command} writtenLength={command.length} />
+          </>
+        );
+      case "output writing":
+        const output = expected2[state.stepAt].output;
+        return (
+          <>
+            <Command command={command} writtenLength={command.length} />
+            <Output output={output} />
+          </>
+        );
+      default:
+        const _exhaustiveCheck: never = state.state;
+        return _exhaustiveCheck;
+    }
+  };
+
   return (
     <div>
       <div
@@ -171,45 +206,7 @@ export const Terminal = (): JSX.Element => {
               </pre>
             </React.Fragment>
           ))}
-        {/* {state.state === "command writing" ? (
-          <pre
-            css={cssTerminalCommand}
-            key={"command" + state.stepAt}
-            ref={ref}
-          >
-            <code>
-              {expected2[state.stepAt].command.substring(
-                0,
-                state.commandWrittenLength
-              )}
-            </code>
-          </pre>
-        ) : state.state === "wait command execution" ? (
-          <>
-            <pre
-              css={cssTerminalCommand}
-              key={"command" + state.stepAt}
-              ref={ref}
-            >
-              <code>{expected2[state.stepAt].command}</code>
-            </pre>
-          </>
-        ) : state.state === "output writing" ? (
-          <>
-            <pre css={cssTerminalCommand} key={"command" + state.stepAt}>
-              <code>{expected2[state.stepAt].command}</code>
-            </pre>
-            <pre
-              css={cssTerminalOutput}
-              key={"output" + state.stepAt}
-              ref={ref}
-            >
-              <code>{expected2[state.stepAt].output}</code>
-            </pre>
-          </>
-        ) : (
-          <></>
-        )} */}
+        <LastElement />
       </div>
       <button
         disabled={state.state !== "wait command execution"}
