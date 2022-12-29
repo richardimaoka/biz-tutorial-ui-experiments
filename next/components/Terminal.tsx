@@ -1,57 +1,8 @@
 import { css } from "@emotion/react";
+import React from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-
-const expected = [
-  `docker build -t cmd1 -f Dockerfile.cmd1 .
-docker run --rm cmd1`,
-  "abc",
-  `docker build -t cmd2 -f Dockerfile.cmd2 .
-docker run --rm cmd2`,
-  "abc def",
-  `docker build -t cmd3 -f Dockerfile.cmd3 .
-docker run --rm cmd3`,
-  "abc",
-  `docker build -t cmd4 -f Dockerfile.cmd4 .
-docker run --rm cmd4`,
-  "abc def",
-  `docker build -t cmd5 -f Dockerfile.cmd5 .
-docker run --rm cmd5`,
-  `/home/your_username`,
-  `docker build -t cmd6 -f Dockerfile.cmd6 .
-docker run --rm cmd6`,
-  `/home/your_username`,
-  `docker pull nginx
-docker inspect nginx`,
-  `"Config": {
-    "Cmd": [
-        "nginx",
-        "-g",
-        "daemon off;"
-    ]
-}`,
-  `docker run nginx:1.23.1`,
-  `2022/09/03 07:14:58 [notice] 1#1: using the "epoll" event method
-2022/09/03 07:14:58 [notice] 1#1: nginx/1.23.1
-2022/09/03 07:14:58 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
-2022/09/03 07:14:58 [notice] 1#1: OS: Linux 5.10.102.1-microsoft-standard-WSL2
-2022/09/03 07:14:58 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
-2022/09/03 07:14:58 [notice] 1#1: start worker processes
-2022/09/03 07:14:58 [notice] 1#1: start worker process 31
-2022/09/03 07:14:58 [notice] 1#1: start worker process 32
-2022/09/03 07:14:58 [notice] 1#1: start worker process 33
-2022/09/03 07:14:58 [notice] 1#1: start worker process 34
-2022/09/03 07:14:58 [notice] 1#1: start worker process 35
-2022/09/03 07:14:58 [notice] 1#1: start worker process 36
-2022/09/03 07:14:58 [notice] 1#1: start worker process 37
-2022/09/03 07:14:58 [notice] 1#1: start worker process 38`,
-  `docker build -t cmd-nginx -f Dockerfile.cmd-nginx .
-docker run --rm cmd-nginx`,
-  `2022/09/03 05:48:46 [notice] 7#7: start worker process 13
-2022/09/03 05:48:46 [notice] 7#7: start worker process 14
-2022/09/03 05:48:46 [notice] 7#7: start worker process 15`,
-  `^C`,
-];
+import { Command } from "./Command";
 
 interface Command {
   command: string;
@@ -140,13 +91,6 @@ export const Terminal = (): JSX.Element => {
   });
   const ref = useRef(null);
 
-  const cssRunnable = css`
-    background-color: green;
-  `;
-  const cssNotRunnable = css`
-    background-color: gray;
-  `;
-
   const cssTerminalCommand = css`
     margin: 1px 0px;
     padding: 4px;
@@ -170,24 +114,13 @@ export const Terminal = (): JSX.Element => {
       case "command writing":
         console.log("command writing");
         const command = expected2[state.stepAt].command;
-        const durationMills = 3000;
-        const numCycles = 10;
-        const charsPerCycle = command.length / numCycles;
-
-        let nextWrittenLength = Math.min(
-          Math.round(state.commandWrittenLength + charsPerCycle),
-          command.length
-        );
-        console.log(
-          `updateCommandCharAt state.commandWrittenLength=${state.commandWrittenLength} command.length=${command.length} nextWrittenLength=${nextWrittenLength}`
-        );
-
         if (state.commandWrittenLength < command.length) {
           setTimeout(() => {
-            setState({ ...state, commandWrittenLength: nextWrittenLength });
-          }, durationMills / numCycles);
-        } else {
-          setState({ ...state, state: "wait command execution" });
+            setState({
+              ...state,
+              commandWrittenLength: state.commandWrittenLength + 6,
+            });
+          }, 30);
         }
         break;
       case "wait command execution":
@@ -228,14 +161,15 @@ export const Terminal = (): JSX.Element => {
           //render up to previous step's element
           .filter((_, index) => index < state.stepAt)
           .map((elem, index) => (
-            <>
-              <pre css={cssTerminalCommand} key={"command" + index}>
-                <code>{elem.command}</code>
-              </pre>
-              <pre css={cssTerminalOutput} key={"output" + index}>
+            <React.Fragment key={index}>
+              <Command
+                command={elem.command}
+                writtenLength={elem.command.length}
+              />
+              <pre css={cssTerminalOutput}>
                 <code>{elem.output}</code>
               </pre>
-            </>
+            </React.Fragment>
           ))}
         {/* {state.state === "command writing" ? (
           <pre

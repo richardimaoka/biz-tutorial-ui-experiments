@@ -16,10 +16,7 @@ export default function Home() {
           background-color: white;
         `}
       >
-        <Command
-          command={`docker build -t cmd4 -f Dockerfile.cmd4 .
-docker run --rm cmd4`}
-        />
+        <Terminal />
       </div>
     </main>
   );
