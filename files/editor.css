@@ -27,17 +27,44 @@ body {
 }
 
 .left-pane {
-  height: 300px;
+  flex-shrink: 0;
+  height: 340px;
+  width: 160px;
+  overflow: auto;
+}
 
-  overflow-y: auto;
+.left-pane::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.left-pane::-webkit-scrollbar-thumb {
+  background: #888;
 }
 
 .right-pane {
-  height: 300px;
+  flex-shrink: 0;
+  width: 520px;
+}
+
+.editor-group {
+  height: 20px;
+}
+
+.source-code-editor {
+  height: 320px;
   overflow-y: auto;
 }
 
 .file-row {
   width: 300px;
   font-size: 12px;
+}
+
+.offset1 {
+  padding-left: 8px;
+}
+
+.offset2 {
+  padding-left: 16px;
 }
