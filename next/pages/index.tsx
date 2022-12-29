@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { IDESideBar } from "../components/IDESideBar";
+import { IDE } from "../components/IDE";
 import { Command, Terminal } from "../components/Terminal";
 
 const list: Command[] = [
@@ -84,7 +84,7 @@ export default function Home() {
           background-color: white;
         `}
       >
-        <IDESideBar />
+        <IDE />
         <Terminal list={list} />
       </div>
     </main>
