@@ -90,7 +90,7 @@ export const Terminal = (): JSX.Element => {
     stepAt: 0,
     commandWrittenLength: 0,
   });
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const cssTerminalCommand = css`
     margin: 1px 0px;
@@ -108,9 +108,9 @@ export const Terminal = (): JSX.Element => {
   `;
 
   useEffect(() => {
-    // if (ref.current) {
-    //   ref.current.scrollIntoView();
-    // }
+    if (ref.current) {
+      ref.current.scrollIntoView();
+    }
     switch (state.state) {
       case "command writing":
         console.log("command writing");
@@ -134,9 +134,9 @@ export const Terminal = (): JSX.Element => {
         if (state.stepAt < expected2.length - 1) {
           setTimeout(() => {
             setState({
-              ...state,
               stepAt: state.stepAt + 1,
               state: "command writing",
+              commandWrittenLength: 0,
             });
           }, 300);
         }
@@ -156,25 +156,27 @@ export const Terminal = (): JSX.Element => {
     switch (state.state) {
       case "command writing":
         return (
-          <>
+          <div ref={ref}>
             <Command
               command={command}
               writtenLength={state.commandWrittenLength}
             />
-          </>
+          </div>
         );
       case "wait command execution":
         return (
-          <>
+          <div ref={ref}>
             <Command command={command} writtenLength={command.length} />
-          </>
+          </div>
         );
       case "output writing":
         const output = expected2[state.stepAt].output;
         return (
           <>
             <Command command={command} writtenLength={command.length} />
-            <Output output={output} />
+            <div ref={ref}>
+              <Output output={output} />
+            </div>
           </>
         );
       default:
