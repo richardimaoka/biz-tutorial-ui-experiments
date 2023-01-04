@@ -2,27 +2,23 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+type Command {
+  command: String
 }
 
-type User {
-  id: ID!
-  name: String!
+type Terminal {
+  elements: [Command]
+}
+
+type IDE {
+  focusedFile: String
+}
+
+type Step {
+  terminal: Terminal
+  ide: IDE
 }
 
 type Query {
-  todos: [Todo!]!
-}
-
-input NewTodo {
-  text: String!
-  userId: String!
-}
-
-type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  tutorial(id: ID): [Step]
 }

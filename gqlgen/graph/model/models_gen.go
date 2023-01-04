@@ -2,19 +2,19 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Command struct {
+	Command *string `json:"command"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type IDE struct {
+	FocusedFile *string `json:"focusedFile"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type Step struct {
+	Terminal *Terminal `json:"terminal"`
+	Ide      *IDE      `json:"ide"`
+}
+
+type Terminal struct {
+	Elements []*Command `json:"elements"`
 }
