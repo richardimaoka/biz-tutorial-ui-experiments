@@ -47,21 +47,20 @@ export const IDESideBar = (): JSX.Element => {
         overflow: auto;
       `}
     >
-      {files.map((elem, index) => (
-        <div
-          key={elem.filename}
-          css={css`
-            font-size: 12px;
-            padding-left: ${8 * elem.offset}px;
-          `}
-        >
+      <div
+        css={css`
+          width: fit-content;
+        `}
+      >
+        {files.map((elem) => (
           <FileNameComponent
+            key={elem.filename}
             type={elem.__typename}
             offset={elem.offset}
             name={elem.filename}
           />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
