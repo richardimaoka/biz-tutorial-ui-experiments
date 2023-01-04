@@ -45,6 +45,15 @@ export const IDESideBar = (): JSX.Element => {
         height: 340px;
         width: 160px;
         overflow: auto;
+        ::-webkit-scrollbar {
+          width: 5px;
+          height: 5px;
+          background-color: #252526; /* or add it to the track */
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #a0a0a0;
+          border-radius: 5px;
+        }
       `}
     >
       <div
