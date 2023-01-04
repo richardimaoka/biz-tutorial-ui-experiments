@@ -2,9 +2,21 @@
 
 package model
 
+type TerminalElement interface {
+	IsTerminalElement()
+}
+
 type Command struct {
 	Command *string `json:"command"`
 }
+
+func (Command) IsTerminalElement() {}
+
+type CommandOutput struct {
+	Output *string `json:"output"`
+}
+
+func (CommandOutput) IsTerminalElement() {}
 
 type IDE struct {
 	FocusedFile *string `json:"focusedFile"`
@@ -16,5 +28,5 @@ type Step struct {
 }
 
 type Terminal struct {
-	Elements []*Command `json:"elements"`
+	Elements []TerminalElement `json:"elements"`
 }

@@ -6,8 +6,14 @@ type Command {
   command: String
 }
 
+type CommandOutput {
+  output: String
+}
+
+union TerminalElement = Command | CommandOutput
+
 type Terminal {
-  elements: [Command]
+  elements: [TerminalElement]
 }
 
 type IDE {
