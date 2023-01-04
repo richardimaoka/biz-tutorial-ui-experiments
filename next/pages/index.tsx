@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { Header } from "../components/Header";
 import { IDE } from "../components/IDE";
 import { Command, Terminal } from "../components/Terminal";
 
@@ -72,21 +73,24 @@ docker run --rm cmd-nginx`,
 
 export default function Home() {
   return (
-    <main
-      css={css`
-        background-color: #f8f8f8;
-      `}
-    >
-      <div
+    <>
+      <Header />
+      <main
         css={css`
-          width: 680px;
-          margin: 0 auto;
-          background-color: white;
+          background-color: #f8f8f8;
         `}
       >
-        <IDE />
-        <Terminal list={list} />
-      </div>
-    </main>
+        <div
+          css={css`
+            width: 680px;
+            margin: 0 auto;
+            background-color: white;
+          `}
+        >
+          <IDE />
+          <Terminal list={list} />
+        </div>
+      </main>
+    </>
   );
 }
