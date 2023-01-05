@@ -18,6 +18,11 @@ type CommandOutput struct {
 
 func (CommandOutput) IsTerminalElement() {}
 
+type File struct {
+	IsFullContent *bool   `json:"isFullContent"`
+	Content       *string `json:"content"`
+}
+
 type IDE struct {
 	FocusedFile *string `json:"focusedFile"`
 }

@@ -17,7 +17,7 @@ type Terminal {
 }
 
 type IDE {
-  focusedFile: String
+  focusedFile: File
 }
 
 type Step {
@@ -25,6 +25,13 @@ type Step {
   ide: IDE
 }
 
+type File {
+  filePath: [String]
+  isFullContent: Boolean
+  content: String
+}
+
 type Query {
   tutorial(id: ID): [Step]
+  file(tutorialId: ID, stepId: ID, filepath: String): File
 }

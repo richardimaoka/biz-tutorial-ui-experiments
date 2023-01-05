@@ -16,6 +16,11 @@ func (r *queryResolver) Tutorial(ctx context.Context, id *string) ([]*model.Step
 	panic(fmt.Errorf("not implemented: Tutorial - tutorial"))
 }
 
+// File is the resolver for the file field.
+func (r *queryResolver) File(ctx context.Context, tutorialID *string, stepID *string, filepath *string) (*model.File, error) {
+	panic(fmt.Errorf("not implemented: File - file"))
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
