@@ -4,13 +4,13 @@
       {
         "__typename": "Directory",
         "offset": 0,
-        "name": "protoc-go-experiments"
+        "name": "protoc-go-experiments",
+        "isCurrentDirectory": true
       },
       {
         "__typename": "Directory",
         "offset": 2,
-        "name": "helloworld",
-        "isCurrentDirectory": true
+        "name": "helloworld"
       },
       {
         "__typename": "File",
@@ -75,6 +75,26 @@
     {
       "__typename": "Command",
       "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "CommandOutput",
+      "command": "outdir/: No such file or directory"
+    },
+    {
+      "__typename": "Command",
+      "command": "mkdir outdir"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "Command",
+      "command": "rm -rf outdir"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd ../"
     }
   ]
 }

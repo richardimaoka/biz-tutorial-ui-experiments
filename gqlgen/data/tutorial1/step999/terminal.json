@@ -57,6 +57,10 @@
   },
   {
     "__typename": "Command",
+    "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+  },
+  {
+    "__typename": "Command",
     "command": "rm -rf outdir"
   },
   {

@@ -17,7 +17,12 @@
         "offset": 3,
         "name": "helloworld.proto"
       }
-    ]
+    ],
+    "focusedFile": {
+      "name": "helloworld.pb.go",
+      "isFullContent": false,
+      "content": "..."
+    }
   },
   "terminal": [
     {
@@ -75,6 +80,14 @@
     {
       "__typename": "Command",
       "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "CommandOutput",
+      "command": "outdir/: No such file or directory"
+    },
+    {
+      "__typename": "Command",
+      "command": "mkdir outdir"
     }
   ]
 }

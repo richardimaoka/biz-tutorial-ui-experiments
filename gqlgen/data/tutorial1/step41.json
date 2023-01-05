@@ -4,20 +4,32 @@
       {
         "__typename": "Directory",
         "offset": 0,
-        "name": "protoc-go-experiments"
+        "name": "protoc-go-experiments",
+        "isCurrentDirectory": true
       },
       {
         "__typename": "Directory",
         "offset": 2,
-        "name": "helloworld",
-        "isCurrentDirectory": true
+        "name": "helloworld"
+      },
+      {
+        "__typename": "File",
+        "offset": 3,
+        "isFocused": true,
+        "isUpdated": true,
+        "name": "greeting.proto"
       },
       {
         "__typename": "File",
         "offset": 3,
         "name": "helloworld.proto"
       }
-    ]
+    ],
+    "focusedFile": {
+      "name": "greeting.proto",
+      "isFullContent": false,
+      "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }\n"
+    }
   },
   "terminal": [
     {
@@ -75,6 +87,50 @@
     {
       "__typename": "Command",
       "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "CommandOutput",
+      "command": "outdir/: No such file or directory"
+    },
+    {
+      "__typename": "Command",
+      "command": "mkdir outdir"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=outdir --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "Command",
+      "command": "rm -rf outdir"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd ../"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=. --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "CommandOutput",
+      "command": "helloworld.proto: No such file or directory"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=. --go_opt=paths=source_relative   helloworld.proto"
+    },
+    {
+      "__typename": "Command",
+      "command": "rm -rf helloworld/helloworld.pb.go"
+    },
+    {
+      "__typename": "Command",
+      "command": "cat << EOF > helloworld/greeting.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }\nEOF"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=. --go_opt=paths=source_relative   helloworld/*.proto"
     }
   ]
 }

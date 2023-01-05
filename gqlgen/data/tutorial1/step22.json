@@ -17,12 +17,7 @@
         "offset": 3,
         "name": "helloworld.proto"
       }
-    ],
-    "focusedFile": {
-      "name": "helloworld.pb.go",
-      "isFullContent": false,
-      "content": "..."
-    }
+    ]
   },
   "terminal": [
     {
