@@ -1,0 +1,36 @@
+{
+  "nextAction": "see the next command",
+  "ide": {
+    "fileTree": [
+      {
+        "__typename": "Directory",
+        "offset": 0,
+        "name": "protoc-go-experiments"
+      },
+      {
+        "__typename": "Directory",
+        "offset": 2,
+        "name": "helloworld",
+        "isCurrentDirectory": true
+      }
+    ]
+  },
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd protoc-go-experiments"
+    },
+    {
+      "__typename": "Command",
+      "command": "mkdir helloworld"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd helloworld"
+    }
+  ]
+}

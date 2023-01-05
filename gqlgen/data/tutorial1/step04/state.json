@@ -1,0 +1,23 @@
+{
+  "nextAction": "see the next command",
+  "ide": {
+    "fileTree": [
+      {
+        "__typename": "Directory",
+        "offset": 0,
+        "name": "protoc-go-experiments",
+        "isCurrentDirectory": true
+      }
+    ]
+  },
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd protoc-go-experiments"
+    }
+  ]
+}

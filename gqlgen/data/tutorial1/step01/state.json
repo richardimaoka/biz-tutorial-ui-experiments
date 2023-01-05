@@ -1,0 +1,9 @@
+{
+  "nextAction": "run the latest command",
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    }
+  ]
+}

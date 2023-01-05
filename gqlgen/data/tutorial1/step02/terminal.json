@@ -1,6 +1,0 @@
-[
-  {
-    "__typename": "Command",
-    "command": "mkdir protoc-go-experiments"
-  }
-]
