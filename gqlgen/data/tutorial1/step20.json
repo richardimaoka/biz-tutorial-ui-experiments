@@ -1,0 +1,84 @@
+{
+  "ide": {
+    "fileTree": [
+      {
+        "__typename": "Directory",
+        "offset": 0,
+        "name": "protoc-go-experiments"
+      },
+      {
+        "__typename": "Directory",
+        "offset": 2,
+        "name": "helloworld",
+        "isCurrentDirectory": true
+      },
+      {
+        "__typename": "File",
+        "offset": 3,
+        "name": "helloworld.proto"
+      },
+      {
+        "__typename": "File",
+        "offset": 3,
+        "isUpdated": true,
+        "isFocused": true,
+        "name": "helloworld.pb.go"
+      }
+    ],
+    "focusedFile": {
+      "name": "helloworld.pb.go",
+      "isFullContent": false,
+      "content": "..."
+    }
+  },
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd protoc-go-experiments"
+    },
+    {
+      "__typename": "Command",
+      "command": "mkdir helloworld"
+    },
+    {
+      "__typename": "Command",
+      "command": "cd helloworld"
+    },
+    {
+      "__typename": "Command",
+      "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat << EOF > helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF"
+    },
+    {
+      "__typename": "Command",
+      "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定"
+    },
+    {
+      "__typename": "CommandOutput",
+      "command": "Missing output directives."
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc --go_out=. helloworld.proto"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc-gen-go: unable to determine Go import path for \"helloworld.proto\"\n\nPlease specify either:\n• a \"go_package\" option in the .proto source file, or\n• a \"M\" argument on the command line.\n\nSee https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information."
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc --go_out=. helloworld.proto"
+    },
+    {
+      "__typename": "Command",
+      "command": "rm -rf github.com"
+    },
+    {
+      "__typename": "Command",
+      "command": "protoc   --go_out=. --go_opt=paths=source_relative   helloworld.proto"
+    }
+  ]
+}
