@@ -108,7 +108,7 @@ export const IDE = (): JSX.Element => {
           css={css`
             height: ${sourceCodeHeight}px;
             max-width: 160px;
-            overflow: auto;
+            overflow: scroll;
             ::-webkit-scrollbar {
               width: 5px;
               height: 5px;
@@ -123,6 +123,8 @@ export const IDE = (): JSX.Element => {
           <div
             css={css`
               width: fit-content;
+              min-height: 100%; //expand up to the outer element
+              background-color: #252526;
             `}
           >
             {files.map((elem) => (
@@ -167,7 +169,7 @@ export const IDE = (): JSX.Element => {
           <pre
             css={css`
               width: fit-content;
-              min-height: 100%; //expand up to the bounding
+              min-height: 100%; //expand up to the outer element
             `}
           >
             <code className="language-protobuf" ref={ref}>
