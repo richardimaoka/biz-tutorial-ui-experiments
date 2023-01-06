@@ -19,12 +19,13 @@ type CommandOutput struct {
 func (CommandOutput) IsTerminalElement() {}
 
 type File struct {
-	IsFullContent *bool   `json:"isFullContent"`
-	Content       *string `json:"content"`
+	FilePath      []*string `json:"filePath"`
+	IsFullContent *bool     `json:"isFullContent"`
+	Content       *string   `json:"content"`
 }
 
 type IDE struct {
-	FocusedFile *string `json:"focusedFile"`
+	FocusedFile *File `json:"focusedFile"`
 }
 
 type Step struct {
