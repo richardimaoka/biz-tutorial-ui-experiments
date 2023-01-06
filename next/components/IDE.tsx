@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 import { IDEEditorTab } from "./IDEEditorTab";
-import { IDESideBar } from "./IDESideBar";
 
 import Prism from "prismjs";
 import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
