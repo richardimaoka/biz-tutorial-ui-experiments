@@ -16,7 +16,6 @@
         "__typename": "File",
         "offset": 3,
         "isFocused": true,
-        "isUpdated": true,
         "name": "greeting.proto"
       },
       {
