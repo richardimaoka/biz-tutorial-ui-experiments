@@ -10,16 +10,5 @@
       }
     ]
   ],
-  "plugins": [
-    "@emotion/babel-plugin",
-    [
-      "prismjs",
-      {
-        "languages": ["javascript", "css", "markup", "protobuf"],
-        "plugins": ["line-numbers"],
-        "theme": "tomorrow",
-        "css": true
-      }
-    ]
-  ]
+  "plugins": ["@emotion/babel-plugin"]
 }
