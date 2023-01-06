@@ -43,7 +43,7 @@ export const IDESideBar = (): JSX.Element => {
     <div
       css={css`
         height: 340px;
-        width: 160px;
+        max-width: 160px;
         overflow: auto;
         ::-webkit-scrollbar {
           width: 5px;

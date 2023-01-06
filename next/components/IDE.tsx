@@ -13,7 +13,7 @@ const sourceCode = `syntax = "proto3";
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHello (HelloRequest) returns (HelloReply) {} rpc SayHello (HelloRequest) returns (HelloReply) {} 
 }
 
 // The request message containing the user's name.
@@ -24,7 +24,9 @@ message HelloRequest {
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
-}`;
+}
+
+`;
 
 export const IDE = (): JSX.Element => {
   const ref = useRef<HTMLElement>(null);
@@ -39,11 +41,40 @@ export const IDE = (): JSX.Element => {
         display: flex;
       `}
     >
-      <IDESideBar />
-      <div>
+      <div
+        css={css`
+          flex-grow: 0;
+        `}
+      >
+        <IDESideBar />
+      </div>
+      <div
+        css={css`
+          flex-grow: 1; //necessary for narrower-than-width source code
+          max-width: 520px; //necessary for wider-than-width source code
+        `}
+      >
         <IDEEditorTab filename="package.json" />
-        <div>
-          <pre>
+        <div
+          css={css`
+            height: 312px;
+            overflow: scroll; //scroll here, not to include file name tabe in the vertical scroll
+            ::-webkit-scrollbar {
+              width: 5px;
+              height: 5px;
+              background-color: #252526; /* or add it to the track */
+            }
+            ::-webkit-scrollbar-thumb {
+              background: #a0a0a0;
+              border-radius: 5px;
+            }
+          `}
+        >
+          <pre
+            css={css`
+              width: fit-content;
+            `}
+          >
             <code className="language-protobuf" ref={ref}>
               {sourceCode}
             </code>
