@@ -1,7 +1,11 @@
 import { css } from "@emotion/react";
 import { FileNameComponent } from "./IDE/filetree/FileNameComponent";
 
-export const IDESideBar = (): JSX.Element => {
+interface IDESideBarProps {
+  height: number;
+}
+
+export const IDESideBar = ({ height }: IDESideBarProps): JSX.Element => {
   const files = [
     { offset: 0, __typename: "directory", filename: "next" },
     { offset: 1, __typename: "directory", filename: "cache" },
@@ -42,7 +46,7 @@ export const IDESideBar = (): JSX.Element => {
   return (
     <div
       css={css`
-        height: 340px;
+        height: ${height}px;
         max-width: 160px;
         overflow: auto;
         ::-webkit-scrollbar {

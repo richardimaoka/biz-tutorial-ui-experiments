@@ -28,6 +28,8 @@ message HelloReply {
 
 `;
 
+const sourceCodeHeight = 400;
+
 export const IDE = (): JSX.Element => {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -46,7 +48,14 @@ export const IDE = (): JSX.Element => {
           flex-grow: 0;
         `}
       >
-        <IDESideBar />
+        <div
+          css={css`
+            height: 28px;
+          `}
+        >
+          {"<<"}
+        </div>
+        <IDESideBar height={sourceCodeHeight} />
       </div>
       <div
         css={css`
@@ -57,7 +66,7 @@ export const IDE = (): JSX.Element => {
         <IDEEditorTab filename="package.json" />
         <div
           css={css`
-            height: 312px;
+            height: ${sourceCodeHeight}px;
             overflow: scroll; //scroll here, not to include file name tabe in the vertical scroll
             ::-webkit-scrollbar {
               width: 5px;
@@ -73,6 +82,7 @@ export const IDE = (): JSX.Element => {
           <pre
             css={css`
               width: fit-content;
+              min-height: 100%; //expand up to the bounding
             `}
           >
             <code className="language-protobuf" ref={ref}>

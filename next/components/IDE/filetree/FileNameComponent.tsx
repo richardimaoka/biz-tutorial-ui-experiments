@@ -20,9 +20,8 @@ export const FileNameComponent = ({
         gap: 4px;
         background-color: #252526;
         color: white;
-        font-size: 12px;
-        padding-top: 4px;
-        padding-bottom: 4px;
+        padding-top: 3px;
+        padding-bottom: 3px;
         padding-right: 8px;
         padding-left: ${8 * offset + 8}px;
       `}
@@ -32,6 +31,9 @@ export const FileNameComponent = ({
         css={css`
           width: fit-content;
           white-space: nowrap;
+          font-size: 13px;
+          font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono",
+            "Courier New", monospace;
         `}
       >
         {name}
