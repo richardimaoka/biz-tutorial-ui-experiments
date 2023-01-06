@@ -142,7 +142,13 @@ export const IDE = (): JSX.Element => {
           max-width: 520px; //necessary for wider-than-width source code
         `}
       >
-        <IDEEditorTab filename="package.json" />
+        <div
+          css={css`
+            background-color: #121212;
+          `}
+        >
+          <IDEEditorTab filename="package.json" />
+        </div>
         <div
           css={css`
             height: ${sourceCodeHeight}px;
