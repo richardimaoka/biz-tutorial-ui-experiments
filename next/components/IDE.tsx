@@ -1,10 +1,12 @@
 import { css } from "@emotion/react";
-import Prism from "prismjs";
-import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
-import "prismjs/themes/prism-tomorrow.css";
 import { useEffect, useRef } from "react";
 import { IDEEditorTab } from "./IDEEditorTab";
 import { IDESideBar } from "./IDESideBar";
+
+import Prism from "prismjs";
+import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
+// prism stylesheet /styles/prism-xxx.css is imported from /pages/_app.tsx, as global stylesheet import is only allowed there.
+// https://nextjs.org/docs/messages/css-global
 
 const sourceCode = `syntax = "proto3";
 
@@ -42,14 +44,7 @@ export const IDE = (): JSX.Element => {
         <IDEEditorTab filename="package.json" />
         <div>
           <pre>
-            <code
-              style={{ fontSize: "12px" }}
-              // css={css`
-              //   font-size: 12px;
-              // `}
-              className="language-protobuf"
-              ref={ref}
-            >
+            <code className="language-protobuf" ref={ref}>
               {sourceCode}
             </code>
           </pre>
