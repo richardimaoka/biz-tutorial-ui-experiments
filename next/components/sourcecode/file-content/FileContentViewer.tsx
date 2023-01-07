@@ -29,13 +29,17 @@ export const FileContentViewer = ({
         height: ${sourceCodeHeight}px; // always fix the height no matter how long the content is
         overflow: scroll; //scroll within file content (not to include file name tab in vertical scroll)
         ::-webkit-scrollbar {
-          width: 5px;
-          height: 5px;
+          width: 8px;
+          height: 8px;
           background-color: #252526; /* or add it to the track */
         }
         ::-webkit-scrollbar-thumb {
+          background: #2b2b30;
+          border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:horizontal {
           background: #37373d;
-          border-radius: 5px;
+          border-radius: 8px;
         }
         ::-webkit-scrollbar-corner {
           background-color: #252526;

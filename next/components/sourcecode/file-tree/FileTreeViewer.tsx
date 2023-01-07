@@ -24,13 +24,13 @@ export const FileTreeViewer = ({
         max-width: 160px;
         overflow: scroll;
         ::-webkit-scrollbar {
-          width: 5px;
-          height: 5px;
+          width: 8px;
+          height: 8px;
           background-color: #252526; /* or add it to the track */
         }
         ::-webkit-scrollbar-thumb {
           background: #37373d;
-          border-radius: 5px;
+          border-radius: 8px;
         }
         ::-webkit-scrollbar-corner {
           background-color: #252526;
