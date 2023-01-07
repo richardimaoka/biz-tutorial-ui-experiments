@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
@@ -17,6 +18,7 @@ import (
 // Step is the resolver for the step field.
 func (r *queryResolver) Step(ctx context.Context, tutorialID *string, stepID *string) (*model.Step, error) {
 	filename := fmt.Sprintf("data/tutorial%s/step%s.json", *tutorialID, *stepID)
+	log.Printf("reading data from %s", filename)
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("tutorialId = %s, stepId = %s not found", *tutorialID, *stepID))
@@ -25,6 +27,7 @@ func (r *queryResolver) Step(ctx context.Context, tutorialID *string, stepID *st
 	var step model.Step
 	err = json.Unmarshal(data, &step)
 	if err != nil {
+		log.Printf("ERROR: %s", err)
 		return nil, errors.New("internal server error")
 	}
 

@@ -12,10 +12,6 @@ type CommandOutput {
 
 union TerminalElement = Command | CommandOutput
 
-type Terminal {
-  elements: [TerminalElement]
-}
-
 type IDE {
   focusedFile: File
 }
@@ -23,7 +19,7 @@ type IDE {
 type Step {
   id: ID
   ide: IDE
-  terminal: Terminal
+  terminal: [Command]
 }
 
 type File {

@@ -1,5 +1,6 @@
 {
   "nextAction": "run the latest command",
+  "id": "01",
   "terminal": [
     {
       "__typename": "Command",
