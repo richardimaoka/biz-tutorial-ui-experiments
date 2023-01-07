@@ -82,7 +82,7 @@ export const IDE = (): JSX.Element => {
     >
       <div
         css={css`
-          flex-grow: 0;
+          flex-grow: 1;
         `}
       >
         <div
@@ -123,6 +123,7 @@ export const IDE = (): JSX.Element => {
           <div
             css={css`
               width: fit-content;
+              min-width: 100%;
               min-height: 100%; //expand up to the outer element
               background-color: #252526;
             `}
