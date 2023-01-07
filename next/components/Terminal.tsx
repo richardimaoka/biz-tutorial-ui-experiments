@@ -110,7 +110,7 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
     <div>
       <div
         css={css`
-          background-color: #3a3a3a;
+          background-color: #1e1e1e;
           height: 300px;
           overflow-y: auto;
         `}
@@ -129,13 +129,19 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
           ))}
         <LastElement />
       </div>
-      <button
-        disabled={state.state !== "command ready"}
-        type="button"
-        onClick={onClick}
+      <div
+        css={css`
+          background-color: #1e1e1e;
+        `}
       >
-        run
-      </button>
+        <button
+          disabled={state.state !== "command ready"}
+          type="button"
+          onClick={onClick}
+        >
+          run
+        </button>
+      </div>
     </div>
   );
 };
