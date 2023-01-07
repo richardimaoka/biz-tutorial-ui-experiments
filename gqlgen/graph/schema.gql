@@ -19,7 +19,7 @@ type IDE {
 type Step {
   id: ID
   ide: IDE
-  terminal: [Command]
+  terminal: [TerminalElement]
 }
 
 type File {
@@ -28,7 +28,7 @@ type File {
   content: String
 }
 
-#
+##
 type Query {
   step(tutorialId: ID, stepId: ID): Step
 }

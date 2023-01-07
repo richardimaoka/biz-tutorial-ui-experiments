@@ -29,7 +29,7 @@ type IDE struct {
 }
 
 type Step struct {
-	ID       *string    `json:"id"`
-	Ide      *IDE       `json:"ide"`
-	Terminal []*Command `json:"terminal"`
+	ID       *string           `json:"id"`
+	Ide      *IDE              `json:"ide"`
+	Terminal []TerminalElement `json:"terminal"`
 }

@@ -25,6 +25,8 @@ func (r *queryResolver) Step(ctx context.Context, tutorialID *string, stepID *st
 	}
 
 	var step model.Step
+
+	//TODO: Instead of loading everything in one shot, load non-Union and Union separately, and combine them
 	err = json.Unmarshal(data, &step)
 	if err != nil {
 		log.Printf("ERROR: %s", err)
