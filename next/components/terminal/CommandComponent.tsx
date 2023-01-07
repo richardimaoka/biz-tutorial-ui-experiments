@@ -1,14 +1,14 @@
 import { css } from "@emotion/react";
 
-interface CommandProps {
+interface CommandComponentProps {
   command: string;
   writtenLength: number;
 }
 
-export const Command = ({
+export const CommandComponent = ({
   command,
   writtenLength,
-}: CommandProps): JSX.Element => {
+}: CommandComponentProps): JSX.Element => {
   const cssTerminalCommand = css`
     margin: 1px 0px;
     padding: 4px;

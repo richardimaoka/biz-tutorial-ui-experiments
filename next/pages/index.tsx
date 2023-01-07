@@ -1,7 +1,10 @@
 import { css } from "@emotion/react";
 import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
-import { Command, Terminal } from "../components/Terminal";
+import {
+  Command,
+  TerminalComponent,
+} from "../components/terminal/TerminalComponent";
 
 const list: Command[] = [
   {
@@ -88,7 +91,7 @@ export default function Home() {
           `}
         >
           <SourceCodeViewer />
-          <Terminal list={list} />
+          <TerminalComponent list={list} />
         </div>
       </main>
     </>

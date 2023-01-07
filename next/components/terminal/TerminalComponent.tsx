@@ -1,9 +1,7 @@
 import { css } from "@emotion/react";
-import React from "react";
-import { useEffect, useRef } from "react";
-import { useState } from "react";
-import { Command } from "./Command";
-import { Output } from "./Output";
+import React, { useEffect, useRef, useState } from "react";
+import { CommandComponent } from "./CommandComponent";
+import { CommandOutputComponent } from "./CommandOutputComponent";
 
 export interface Command {
   command: string;
@@ -20,7 +18,7 @@ interface TerminalProps {
   list: Command[];
 }
 
-export const Terminal = ({ list }: TerminalProps): JSX.Element => {
+export const TerminalComponent = ({ list }: TerminalProps): JSX.Element => {
   const [state, setState] = useState<State>({
     state: "command writing",
     stepAt: 0,
@@ -78,7 +76,7 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
       case "command writing":
         return (
           <div ref={ref}>
-            <Command
+            <CommandComponent
               command={command}
               writtenLength={state.commandWrittenLength}
             />
@@ -87,16 +85,22 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
       case "command ready":
         return (
           <div ref={ref}>
-            <Command command={command} writtenLength={command.length} />
+            <CommandComponent
+              command={command}
+              writtenLength={command.length}
+            />
           </div>
         );
       case "output writing":
         const output = list[state.stepAt].output;
         return (
           <>
-            <Command command={command} writtenLength={command.length} />
+            <CommandComponent
+              command={command}
+              writtenLength={command.length}
+            />
             <div ref={ref}>
-              <Output output={output} />
+              <CommandOutputComponent output={output} />
             </div>
           </>
         );
@@ -120,11 +124,11 @@ export const Terminal = ({ list }: TerminalProps): JSX.Element => {
           .filter((_, index) => index < state.stepAt)
           .map((elem, index) => (
             <React.Fragment key={index}>
-              <Command
+              <CommandComponent
                 command={elem.command}
                 writtenLength={elem.command.length}
               />
-              <Output output={elem.output} />
+              <CommandOutputComponent output={elem.output} />
             </React.Fragment>
           ))}
         <LastElement />
