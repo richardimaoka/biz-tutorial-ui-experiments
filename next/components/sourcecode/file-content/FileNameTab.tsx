@@ -1,12 +1,10 @@
 import { css } from "@emotion/react";
 
-interface FileContentTabProps {
+interface FileNameTabProps {
   filename: string;
 }
 
-export const FileContentTab = ({
-  filename,
-}: FileContentTabProps): JSX.Element => {
+export const FileNameTab = ({ filename }: FileNameTabProps): JSX.Element => {
   return (
     <div
       css={css`

@@ -1,10 +1,10 @@
 import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 import { IDEEditorTab } from "./IDEEditorTab";
+import { FileNameComponent } from "./IDE/filetree/FileNameComponent";
 
 import Prism from "prismjs";
 import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
-import { FileNameComponent } from "./IDE/filetree/FileNameComponent";
 // prism stylesheet /styles/prism-xxx.css is imported from /pages/_app.tsx, as global stylesheet import is only allowed there.
 // https://nextjs.org/docs/messages/css-global
 
