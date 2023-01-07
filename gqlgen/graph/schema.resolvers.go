@@ -6,19 +6,29 @@ package graph
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-// Tutorial is the resolver for the tutorial field.
-func (r *queryResolver) Tutorial(ctx context.Context, id *string) ([]*model.Step, error) {
-	panic(fmt.Errorf("not implemented: Tutorial - tutorial"))
-}
+// Step is the resolver for the step field.
+func (r *queryResolver) Step(ctx context.Context, tutorialID *string, stepID *string) (*model.Step, error) {
+	filename := fmt.Sprintf("data/tutorial%s/step%s.json", *tutorialID, *stepID)
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("tutorialId = %s, stepId = %s not found", *tutorialID, *stepID))
+	}
 
-// File is the resolver for the file field.
-func (r *queryResolver) File(ctx context.Context, tutorialID *string, stepID *string, filepath *string) (*model.File, error) {
-	panic(fmt.Errorf("not implemented: File - file"))
+	var step model.Step
+	err = json.Unmarshal(data, &step)
+	if err != nil {
+		return nil, errors.New("internal server error")
+	}
+
+	return &step, nil
 }
 
 // Query returns QueryResolver implementation.
@@ -32,6 +42,12 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) Tutorial(ctx context.Context, id *string) ([]*model.Step, error) {
+	panic(fmt.Errorf("not implemented: Tutorial - tutorial"))
+}
+func (r *queryResolver) File(ctx context.Context, tutorialID *string, stepID *string, filepath *string) (*model.File, error) {
+	panic(fmt.Errorf("not implemented: File - file"))
+}
 func (r *queryResolver) Hello(ctx context.Context) (*string, error) {
 	panic(fmt.Errorf("not implemented: Hello - hello"))
 }

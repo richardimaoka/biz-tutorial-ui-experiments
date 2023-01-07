@@ -21,6 +21,7 @@ type IDE {
 }
 
 type Step {
+  id: ID
   terminal: Terminal
   ide: IDE
 }
@@ -31,7 +32,7 @@ type File {
   content: String
 }
 
+#
 type Query {
-  tutorial(id: ID): [Step]
-  file(tutorialId: ID, stepId: ID, filepath: String): File
+  step(tutorialId: ID, stepId: ID): Step
 }

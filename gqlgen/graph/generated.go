@@ -62,11 +62,11 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		File     func(childComplexity int, tutorialID *string, stepID *string, filepath *string) int
-		Tutorial func(childComplexity int, id *string) int
+		Step func(childComplexity int, tutorialID *string, stepID *string) int
 	}
 
 	Step struct {
+		ID       func(childComplexity int) int
 		Ide      func(childComplexity int) int
 		Terminal func(childComplexity int) int
 	}
@@ -77,8 +77,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	Tutorial(ctx context.Context, id *string) ([]*model.Step, error)
-	File(ctx context.Context, tutorialID *string, stepID *string, filepath *string) (*model.File, error)
+	Step(ctx context.Context, tutorialID *string, stepID *string) (*model.Step, error)
 }
 
 type executableSchema struct {
@@ -138,29 +137,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.IDE.FocusedFile(childComplexity), true
 
-	case "Query.file":
-		if e.complexity.Query.File == nil {
+	case "Query.step":
+		if e.complexity.Query.Step == nil {
 			break
 		}
 
-		args, err := ec.field_Query_file_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_step_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.File(childComplexity, args["tutorialId"].(*string), args["stepId"].(*string), args["filepath"].(*string)), true
+		return e.complexity.Query.Step(childComplexity, args["tutorialId"].(*string), args["stepId"].(*string)), true
 
-	case "Query.tutorial":
-		if e.complexity.Query.Tutorial == nil {
+	case "Step.id":
+		if e.complexity.Step.ID == nil {
 			break
 		}
 
-		args, err := ec.field_Query_tutorial_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Tutorial(childComplexity, args["id"].(*string)), true
+		return e.complexity.Step.ID(childComplexity), true
 
 	case "Step.ide":
 		if e.complexity.Step.Ide == nil {
@@ -269,7 +263,7 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_file_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_step_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
@@ -290,30 +284,6 @@ func (ec *executionContext) field_Query_file_args(ctx context.Context, rawArgs m
 		}
 	}
 	args["stepId"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["filepath"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filepath"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filepath"] = arg2
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_tutorial_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
 	return args, nil
 }
 
@@ -609,8 +579,8 @@ func (ec *executionContext) fieldContext_IDE_focusedFile(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_tutorial(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_tutorial(ctx, field)
+func (ec *executionContext) _Query_step(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_step(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -623,7 +593,7 @@ func (ec *executionContext) _Query_tutorial(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Tutorial(rctx, fc.Args["id"].(*string))
+		return ec.resolvers.Query().Step(rctx, fc.Args["tutorialId"].(*string), fc.Args["stepId"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -632,12 +602,12 @@ func (ec *executionContext) _Query_tutorial(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Step)
+	res := resTmp.(*model.Step)
 	fc.Result = res
-	return ec.marshalOStep2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx, field.Selections, res)
+	return ec.marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_tutorial(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -645,6 +615,8 @@ func (ec *executionContext) fieldContext_Query_tutorial(ctx context.Context, fie
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_Step_id(ctx, field)
 			case "terminal":
 				return ec.fieldContext_Step_terminal(ctx, field)
 			case "ide":
@@ -660,67 +632,7 @@ func (ec *executionContext) fieldContext_Query_tutorial(ctx context.Context, fie
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_tutorial_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_file(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_file(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().File(rctx, fc.Args["tutorialId"].(*string), fc.Args["stepId"].(*string), fc.Args["filepath"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.File)
-	fc.Result = res
-	return ec.marshalOFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFile(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_file(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "filePath":
-				return ec.fieldContext_File_filePath(ctx, field)
-			case "isFullContent":
-				return ec.fieldContext_File_isFullContent(ctx, field)
-			case "content":
-				return ec.fieldContext_File_content(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type File", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_file_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_step_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -851,6 +763,47 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_id(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2918,7 +2871,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "tutorial":
+		case "step":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2927,27 +2880,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_tutorial(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "file":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_file(ctx, field)
+				res = ec._Query_step(ctx, field)
 				return res
 			}
 
@@ -2991,6 +2924,10 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Step")
+		case "id":
+
+			out.Values[i] = ec._Step_id(ctx, field, obj)
+
 		case "terminal":
 
 			out.Values[i] = ec._Step_terminal(ctx, field, obj)
@@ -3690,47 +3627,6 @@ func (ec *executionContext) marshalOIDE2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑ
 		return graphql.Null
 	}
 	return ec._IDE(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOStep2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx context.Context, sel ast.SelectionSet, v []*model.Step) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
 }
 
 func (ec *executionContext) marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx context.Context, sel ast.SelectionSet, v *model.Step) graphql.Marshaler {
