@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
-import { useEffect, useRef } from "react";
 
-import { File } from "./sourcecode/file-tree/FileTreeViewer";
-import { FileContentPane } from "./sourcecode/file-content/FileContentPane";
-import { FileTreePane } from "./sourcecode/file-tree/FileTreePane";
+import { FileContentPane } from "./file-content/FileContentPane";
+import { FileTreePane } from "./file-tree/FileTreePane";
+import { File } from "./file-tree/FileTreeViewer";
 
 const sourceCode = `syntax = "proto3";
 
@@ -75,7 +74,7 @@ const files: File[] = [
 
 const sourceCodeHeight = 400;
 
-export const IDE = (): JSX.Element => {
+export const SourceCodeViewer = (): JSX.Element => {
   return (
     <div
       css={css`

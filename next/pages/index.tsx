@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { Header } from "../components/Header";
-import { IDE } from "../components/IDE";
+import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { Command, Terminal } from "../components/Terminal";
 
 const list: Command[] = [
@@ -87,7 +87,7 @@ export default function Home() {
             background-color: white;
           `}
         >
-          <IDE />
+          <SourceCodeViewer />
           <Terminal list={list} />
         </div>
       </main>

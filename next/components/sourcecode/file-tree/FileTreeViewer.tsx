@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { FileNameComponent } from "../../IDE/filetree/FileNameComponent";
+import { FileNameNode } from "./FileNameNode";
 
 export interface File {
   filepath: string[];
@@ -43,7 +43,7 @@ export const FileTreeViewer = ({
         `}
       >
         {files.map((elem) => (
-          <FileNameComponent
+          <FileNameNode
             key={elem.filepath.join("/")}
             type={elem.__typename}
             offset={elem.offset}
