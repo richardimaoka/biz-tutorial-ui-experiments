@@ -37,6 +37,9 @@ export const FileContentViewer = ({
           background: #a0a0a0;
           border-radius: 5px;
         }
+        ::-webkit-scrollbar-corner {
+          background-color: #252526;
+        }
       `}
     >
       <pre

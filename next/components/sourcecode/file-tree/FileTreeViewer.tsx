@@ -32,6 +32,9 @@ export const FileTreeViewer = ({
           background: #a0a0a0;
           border-radius: 5px;
         }
+        ::-webkit-scrollbar-corner {
+          background-color: #252526;
+        }
       `}
     >
       <div
