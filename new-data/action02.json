@@ -1,0 +1,13 @@
+{
+  "action": {
+    "__typename": "Command",
+    "command": "cd protoc-go-experiments"
+  },
+  "results": [
+    {
+      "__typename": "ChangeCurrentDirectoryInTerminal",
+      "terminalId": "0",
+      "filePath": ["protoc-go-experiments"]
+    }
+  ]
+}
