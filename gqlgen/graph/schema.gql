@@ -22,8 +22,8 @@ type IDE {
 
 type Step {
   id: ID
-  terminal: Terminal
   ide: IDE
+  terminal: Terminal
 }
 
 type File {

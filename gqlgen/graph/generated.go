@@ -228,7 +228,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "schema.graphqls"
+//go:embed "schema.gql"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -240,7 +240,7 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
+	{Name: "schema.gql", Input: sourceData("schema.gql"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -617,10 +617,10 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Step_id(ctx, field)
-			case "terminal":
-				return ec.fieldContext_Step_terminal(ctx, field)
 			case "ide":
 				return ec.fieldContext_Step_ide(ctx, field)
+			case "terminal":
+				return ec.fieldContext_Step_terminal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Step", field.Name)
 		},
@@ -809,51 +809,6 @@ func (ec *executionContext) fieldContext_Step_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Step_terminal(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_terminal(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Terminal, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Terminal)
-	fc.Result = res
-	return ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "elements":
-				return ec.fieldContext_Terminal_elements(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Step_ide(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Step_ide(ctx, field)
 	if err != nil {
@@ -894,6 +849,51 @@ func (ec *executionContext) fieldContext_Step_ide(ctx context.Context, field gra
 				return ec.fieldContext_IDE_focusedFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type IDE", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_terminal(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_terminal(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Terminal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Terminal)
+	fc.Result = res
+	return ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "elements":
+				return ec.fieldContext_Terminal_elements(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
 		},
 	}
 	return fc, nil
@@ -2928,13 +2928,13 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Step_id(ctx, field, obj)
 
-		case "terminal":
-
-			out.Values[i] = ec._Step_terminal(ctx, field, obj)
-
 		case "ide":
 
 			out.Values[i] = ec._Step_ide(ctx, field, obj)
+
+		case "terminal":
+
+			out.Values[i] = ec._Step_terminal(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
