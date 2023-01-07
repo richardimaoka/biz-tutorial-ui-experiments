@@ -9,11 +9,13 @@ import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-
 interface FileContentViewerProps {
   fileContent: string;
   sourceCodeHeight: number;
+  prismLanguage: string;
 }
 
 export const FileContentViewer = ({
   fileContent,
   sourceCodeHeight,
+  prismLanguage,
 }: FileContentViewerProps): JSX.Element => {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -24,8 +26,8 @@ export const FileContentViewer = ({
   return (
     <div
       css={css`
-        height: ${sourceCodeHeight}px;
-        overflow: scroll; //scroll here, not to include file name tabe in the vertical scroll
+        height: ${sourceCodeHeight}px; // always fix the height no matter how long the content is
+        overflow: scroll; //scroll within file content (not to include file name tab in vertical scroll)
         ::-webkit-scrollbar {
           width: 5px;
           height: 5px;
@@ -43,7 +45,7 @@ export const FileContentViewer = ({
           min-height: 100%; //expand up to the outer element
         `}
       >
-        <code className="language-protobuf" ref={ref}>
+        <code className={`language-${prismLanguage}`} ref={ref}>
           {fileContent}
         </code>
       </pre>
