@@ -34,7 +34,7 @@ export const FileContentViewer = ({
           background-color: #252526; /* or add it to the track */
         }
         ::-webkit-scrollbar-thumb {
-          background: #a0a0a0;
+          background: #37373d;
           border-radius: 5px;
         }
         ::-webkit-scrollbar-corner {

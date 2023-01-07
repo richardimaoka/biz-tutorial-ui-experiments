@@ -77,7 +77,7 @@ export default function Home() {
       <Header />
       <main
         css={css`
-          background-color: #f8f8f8;
+          background-color: #333333;
         `}
       >
         <div

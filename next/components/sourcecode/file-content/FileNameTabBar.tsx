@@ -11,7 +11,7 @@ export const FileNameTabBar = ({
   return (
     <div
       css={css`
-        background-color: #121212;
+        background-color: #222121;
       `}
     >
       <FileNameTab filename={filename} />
