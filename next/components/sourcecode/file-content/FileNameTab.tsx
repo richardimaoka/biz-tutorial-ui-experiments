@@ -10,7 +10,7 @@ export const FileNameTab = ({ filename }: FileNameTabProps): JSX.Element => {
       css={css`
         width: fit-content;
         font-size: 13px;
-        padding: 4px;
+        padding: 4px 8px;
         background-color: #232a36;
         color: white;
       `}

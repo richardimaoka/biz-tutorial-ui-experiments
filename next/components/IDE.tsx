@@ -7,6 +7,7 @@ import Prism from "prismjs";
 import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
 import { FileNameTabBar } from "./sourcecode/file-content/FileNameTabBar";
 import { FileContentViewer } from "./sourcecode/file-content/FileContentViewer";
+import { FileContentPane } from "./sourcecode/file-content/FileContentPane";
 // prism stylesheet /styles/prism-xxx.css is imported from /pages/_app.tsx, as global stylesheet import is only allowed there.
 // https://nextjs.org/docs/messages/css-global
 
@@ -147,8 +148,7 @@ export const IDE = (): JSX.Element => {
           max-width: 520px; //necessary for wider-than-width source code
         `}
       >
-        <FileNameTabBar filename="package.json" />
-        <FileContentViewer
+        <FileContentPane
           fileContent={sourceCode}
           prismLanguage="protobuf"
           sourceCodeHeight={sourceCodeHeight}
