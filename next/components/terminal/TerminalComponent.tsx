@@ -14,11 +14,13 @@ interface State {
   commandWrittenLength: number;
 }
 
-interface TerminalProps {
+interface TerminalComponentProps {
   list: Command[];
 }
 
-export const TerminalComponent = ({ list }: TerminalProps): JSX.Element => {
+export const TerminalComponent = ({
+  list,
+}: TerminalComponentProps): JSX.Element => {
   const [state, setState] = useState<State>({
     state: "command writing",
     stepAt: 0,

@@ -10,9 +10,9 @@ export const CommandOutputComponent = ({
   const cssTerminalCommand = css`
     margin: 1px 0px;
     padding: 4px;
-    background-color: #3a3a3a;
+    background-color: #1e1e1e;
     color: white;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #333333;
   `;
   return (
     <pre css={cssTerminalCommand}>
