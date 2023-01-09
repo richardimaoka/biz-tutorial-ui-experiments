@@ -14,3 +14,13 @@ do
     fi
   done
 done
+
+#TODO: create a script to generate state.json from , maybe a Go script
+# directory structure
+#   data
+#     |- step01
+#          |- action.json
+#          |- state.json 
+#     |- step02
+#          |- action.json
+#          |- state.json //auto generated from prev state + action
