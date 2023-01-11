@@ -50,38 +50,52 @@ type State struct {
 	Terminal   interface{}
 }
 
-func main() {
-	filename := "step01/action.json"
+func getAction(filename string) (Action, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		panic(fmt.Sprintf("Error in reading action from file: %s", err))
+		return nil, fmt.Errorf("Error in filename = %s, %s", filename, err)
 	}
 
 	var data interface{}
 	if err := json.Unmarshal(bytes, &data); err != nil {
-		panic(fmt.Sprintf("Error in unmarshaling JSON from file: %s is not a valid JSON, %s", filename, err))
+		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
 	}
 
 	asserted, ok := data.(map[string]interface{}) //type assertion
 	if !ok {
-		panic(fmt.Sprintf("Error in constructing Go data from JSON: Perhaps %s is not in JSON 'object'", filename))
+		return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'object'", filename)
 	}
 
-	action, ok := asserted["__typename"]
+	typename, ok := asserted["__typename"]
 	if !ok {
-		panic(fmt.Sprintf("Error in validating action type: \"__typename\" does not exist in %s", filename))
+		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" does not exist", filename)
 	}
 
-	switch s := action.(type) {
+	switch t := typename.(type) {
 	case string:
-		switch s {
+		switch t {
 		case "Command":
-			fmt.Printf("successfully retrieved action = %s from %s", s, filename)
+			fmt.Printf("successfully retrieved action = %s from %s\n", t, filename)
+			var command Command
+			if err := json.Unmarshal(bytes, &command); err != nil {
+				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+			}
+
+			return &command, nil
 		default:
-			panic(fmt.Sprintf("Error in validating action type: %s is not a valid action type", s))
+			return nil, fmt.Errorf("Error in filename = %s, while validating action type: %s is not a valid action type", filename, t)
 		}
 	default:
-		panic(fmt.Sprintf("Error in validating action type: \"__typename\" = %v is in wrong type %v", s, reflect.TypeOf(s)))
+		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" = %v is in wrong type %v", filename, t, reflect.TypeOf(t))
 	}
 
+}
+
+func main() {
+	filename := "step01/action.json"
+	action, err := getAction(filename)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Print(action)
 }
