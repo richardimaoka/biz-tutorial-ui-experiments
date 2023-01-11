@@ -142,6 +142,32 @@ func getResult(filename string) (Result, error) {
 	}
 }
 
+type ActionInput struct {
+	Action  map[string]interface{}
+	Results []map[string]interface{}
+}
+
+func readActionFile(filename string) error {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		return fmt.Errorf("Error in filename = %s, %s", filename, err)
+	}
+
+	var unmarshalled ActionInput
+	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
+		return fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+	}
+
+	actionBytes, err := json.Marshal(unmarshalled.Action)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(actionBytes))
+
+	return nil
+}
+
 // func getEachResult(bytes []byte, filename string) (Result, error) {
 // 	var unmarshaled interface{}
 // 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
@@ -239,6 +265,7 @@ func main() {
 	}
 	fmt.Println(action)
 
+	readActionFile("action01.json")
 	// filename = "step01/result.json"
 	// result, err := getResult(filename)
 	// if err != nil {
