@@ -35,25 +35,36 @@ type State struct {
 	Terminal   interface{}
 }
 
-func getAction(filename string) (Action, error) {
+func getActionFromFile(filename string) (Action, error) {
+	errorPreceding := "Error in getActionFromFile for filename = " + filename
+
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("Error in filename = %s, %s", filename, err)
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
+	action, err := getAction(bytes)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
+	}
+
+	return action, nil
+}
+
+func getAction(bytes []byte) (Action, error) {
 	var unmarshaled interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
-		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+		return nil, err
 	}
 
 	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
 	if !ok {
-		return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'object'", filename)
+		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object'")
 	}
 
 	typename, ok := asserted["__typename"]
 	if !ok {
-		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" does not exist", filename)
+		return nil, fmt.Errorf("\"__typename\" does not exist in JSON")
 	}
 
 	switch t := typename.(type) {
@@ -62,15 +73,15 @@ func getAction(filename string) (Action, error) {
 		case "Command":
 			var command Command
 			if err := json.Unmarshal(bytes, &command); err != nil {
-				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+				return nil, err
 			}
 
 			return &command, nil
 		default:
-			return nil, fmt.Errorf("Error in filename = %s, while validating action type: %s is not a valid action type", filename, t)
+			return nil, fmt.Errorf("\"__typename\" = %s is not a valid action type", t)
 		}
 	default:
-		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" = %v is in wrong type %v", filename, t, reflect.TypeOf(t))
+		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
 	}
 }
 
@@ -259,7 +270,7 @@ func Ordinal(x int) string {
 
 func main() {
 	filename := "step01/action.json"
-	action, err := getAction(filename)
+	action, err := getActionFromFile(filename)
 	if err != nil {
 		panic(err)
 	}
