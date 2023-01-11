@@ -1,4 +1,4 @@
 {
-  "__tpename": "Command",
+  "__typename": "Command",
   "command": "mkdir protoc-go-experiments"
 }

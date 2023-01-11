@@ -104,25 +104,36 @@ type ChangeCurrentDirectoryInTerminal struct {
 
 func (c *ChangeCurrentDirectoryInTerminal) IsResult() {}
 
-func getResult(filename string) (Result, error) {
+func getResultFromFile(filename string) (Result, error) {
+	errorPreceding := "Error in getResultFromFile for filename = " + filename
+
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("Error in filename = %s, %s", filename, err)
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
+	result, err := getResultFromBytes(bytes)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
+	}
+
+	return result, nil
+}
+
+func getResultFromBytes(bytes []byte) (Result, error) {
 	var unmarshaled interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
-		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+		return nil, err
 	}
 
 	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
 	if !ok {
-		return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'object'", filename)
+		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object'")
 	}
 
 	typename, ok := asserted["__typename"]
 	if !ok {
-		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" does not exist", filename)
+		return nil, fmt.Errorf("\"__typename\" does not exist in JSON")
 	}
 
 	switch t := typename.(type) {
@@ -131,90 +142,72 @@ func getResult(filename string) (Result, error) {
 		case "SourceCodeUpdate":
 			var srcUpdate SourceCodeUpdate
 			if err := json.Unmarshal(bytes, &srcUpdate); err != nil {
-				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+				return nil, err
 			}
-
 			return &srcUpdate, nil
 
 		case "ChangeCurrentDirectoryInTerminal":
 			var cd ChangeCurrentDirectoryInTerminal
 			if err := json.Unmarshal(bytes, &cd); err != nil {
-				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+				return nil, err
 			}
 
 			return &cd, nil
 
 		default:
-			return nil, fmt.Errorf("Error in filename = %s, while validating action type: %s is not a valid action type", filename, t)
+			return nil, fmt.Errorf("\"__typename\" = %s is not a valid action type", t)
 		}
-
 	default:
-		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" = %v is in wrong type %v", filename, t, reflect.TypeOf(t))
+		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
 	}
-}
-
-type ActionInput struct {
-	Action  map[string]interface{}
-	Results []map[string]interface{}
-	Nothing string
 }
 
 func readActionFile(filename string) error {
 	errorPreceding := "Error in readActionFile for filename = " + filename
 
+	// read and process the whole file
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
-	var unmarshalled ActionInput
+	var unmarshalled struct {
+		Action  map[string]interface{}
+		Results []map[string]interface{}
+	}
 	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
+	// process the action part
 	actionBytes, err := json.Marshal(unmarshalled.Action)
 	if err != nil {
-		return fmt.Errorf("%s, %s", errorPreceding, err)
+		return fmt.Errorf("%s, failed to marshal action, %s", errorPreceding, err)
 	}
 
-	fmt.Println(string(actionBytes))
+	action, err := getActionFromBytes(actionBytes)
+	if err != nil {
+		return fmt.Errorf("%s, failed construct action, %s", errorPreceding, err)
+	}
+	fmt.Println(action)
+
+	// process the results part
+	var results []interface{}
+	for i, r := range unmarshalled.Results {
+		resultBytes, err := json.Marshal(r)
+		if err != nil {
+			return fmt.Errorf("%s, failed to marshal %s result %s", errorPreceding, Ordinal(i), err)
+		}
+		result, err := getResultFromBytes(resultBytes)
+		if err != nil {
+			return fmt.Errorf("%s, failed construct %s result, %s", errorPreceding, Ordinal(i), err)
+		}
+		results = append(results, result)
+		fmt.Println(result)
+	}
 
 	return nil
 }
-
-// func getEachResult(bytes []byte, filename string) (Result, error) {
-// 	var unmarshaled interface{}
-// 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
-// 		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
-// 	}
-
-// 	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
-// 	if !ok {
-// 		return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'object'", filename)
-// 	}
-
-// 	typename, ok := asserted["__typename"]
-// 	if !ok {
-// 		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" does not exist", filename)
-// 	}
-
-// 	switch t := typename.(type) {
-// 	case string:
-// 		switch t {
-// 		case "SourceCodeUpdate":
-// 			var sourceCodeUpdate SourceCodeUpdate
-// 			if err := json.Unmarshal(bytes, &sourceCodeUpdate); err != nil {
-// 				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
-// 			}
-
-// 			return &sourceCodeUpdate, nil
-// 		default:
-// 			return nil, fmt.Errorf("Error in filename = %s, while validating result type: %s is not a valid result type", filename, t)
-// 		}
-// 	default:
-// 		return nil, fmt.Errorf("Error in filename = %s, while validating result type: \"__typename\" = %v is in wrong type %v", filename, t, reflect.TypeOf(t))
-// 	}
-// }
 
 func Ordinal(x int) string {
 	suffix := "th"
@@ -279,7 +272,10 @@ func main() {
 	}
 	fmt.Println(action)
 
-	readActionFile("action01.json")
+	err = readActionFile("action01.json")
+	if err != nil {
+		panic(err)
+	}
 	// filename = "step01/result.json"
 	// result, err := getResult(filename)
 	// if err != nil {
