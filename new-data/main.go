@@ -85,13 +85,62 @@ type SourceCodeUpdate struct {
 
 func (c *SourceCodeUpdate) IsResult() {}
 
-type ChangeCurrentDirectory struct {
+type ChangeCurrentDirectoryInTerminal struct {
 	TypeName   string `json:"__typename"`
 	TerminalId string
 	FilePath   []string
 }
 
-func (c *ChangeCurrentDirectory) IsResult() {}
+func (c *ChangeCurrentDirectoryInTerminal) IsResult() {}
+
+func getResult(filename string) (Result, error) {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("Error in filename = %s, %s", filename, err)
+	}
+
+	var unmarshaled interface{}
+	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
+		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+	}
+
+	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
+	if !ok {
+		return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'object'", filename)
+	}
+
+	typename, ok := asserted["__typename"]
+	if !ok {
+		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" does not exist", filename)
+	}
+
+	switch t := typename.(type) {
+	case string:
+		switch t {
+		case "SourceCodeUpdate":
+			var srcUpdate SourceCodeUpdate
+			if err := json.Unmarshal(bytes, &srcUpdate); err != nil {
+				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+			}
+
+			return &srcUpdate, nil
+
+		case "ChangeCurrentDirectoryInTerminal":
+			var cd ChangeCurrentDirectoryInTerminal
+			if err := json.Unmarshal(bytes, &cd); err != nil {
+				return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+			}
+
+			return &cd, nil
+
+		default:
+			return nil, fmt.Errorf("Error in filename = %s, while validating action type: %s is not a valid action type", filename, t)
+		}
+
+	default:
+		return nil, fmt.Errorf("Error in filename = %s, while validating action type: \"__typename\" = %v is in wrong type %v", filename, t, reflect.TypeOf(t))
+	}
+}
 
 // func getEachResult(bytes []byte, filename string) (Result, error) {
 // 	var unmarshaled interface{}
