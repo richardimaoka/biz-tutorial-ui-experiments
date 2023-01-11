@@ -162,13 +162,18 @@ func getResultFromBytes(bytes []byte) (Result, error) {
 	}
 }
 
-func readActionFile(filename string) error {
+type ActionInfo struct {
+	Action  Action
+	Results []Result
+}
+
+func readActionFile(filename string) (*ActionInfo, error) {
 	errorPreceding := "Error in readActionFile for filename = " + filename
 
 	// read and process the whole file
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("%s, %s", errorPreceding, err)
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	var unmarshalled struct {
@@ -176,37 +181,35 @@ func readActionFile(filename string) error {
 		Results []map[string]interface{}
 	}
 	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
-		return fmt.Errorf("%s, %s", errorPreceding, err)
+		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	// process the action part
 	actionBytes, err := json.Marshal(unmarshalled.Action)
 	if err != nil {
-		return fmt.Errorf("%s, failed to marshal action, %s", errorPreceding, err)
+		return nil, fmt.Errorf("%s, failed to marshal action, %s", errorPreceding, err)
 	}
 
 	action, err := getActionFromBytes(actionBytes)
 	if err != nil {
-		return fmt.Errorf("%s, failed construct action, %s", errorPreceding, err)
+		return nil, fmt.Errorf("%s, failed construct action, %s", errorPreceding, err)
 	}
-	fmt.Println(action)
 
 	// process the results part
-	var results []interface{}
+	var results []Result
 	for i, r := range unmarshalled.Results {
 		resultBytes, err := json.Marshal(r)
 		if err != nil {
-			return fmt.Errorf("%s, failed to marshal %s result %s", errorPreceding, Ordinal(i), err)
+			return nil, fmt.Errorf("%s, failed to marshal %s result %s", errorPreceding, Ordinal(i), err)
 		}
 		result, err := getResultFromBytes(resultBytes)
 		if err != nil {
-			return fmt.Errorf("%s, failed construct %s result, %s", errorPreceding, Ordinal(i), err)
+			return nil, fmt.Errorf("%s, failed construct %s result, %s", errorPreceding, Ordinal(i), err)
 		}
 		results = append(results, result)
-		fmt.Println(result)
 	}
 
-	return nil
+	return &ActionInfo{action, results}, nil
 }
 
 func Ordinal(x int) string {
@@ -228,42 +231,6 @@ func Ordinal(x int) string {
 	return strconv.Itoa(x) + suffix
 }
 
-// func getResult(filename string) ([]Result, error) {
-// 	bytes, err := os.ReadFile(filename)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("Error in filename = %s, %s", filename, err)
-// 	}
-
-// 	var data interface{}
-// 	if err := json.Unmarshal(bytes, &data); err != nil {
-// 		return nil, fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
-// 	}
-
-// 	asserted, ok := data.([]map[string]string) //type assertion
-// 	if !ok {
-// 		fmt.Println(reflect.TypeOf(data))
-// 		return nil, fmt.Errorf("Error in getResult, filename = %s, while constructing Go data from JSON, perhaps the file is not in JSON 'array of object'", filename)
-// 	}
-
-// 	var results []Result
-// 	for i, v := range asserted {
-// 		elementBytes, err := json.Marshal(v)
-// 		if err != nil {
-// 			ordinal := Ordinal(i)
-// 			return nil, fmt.Errorf("Error in filename = %s, while marshaling JSON array %s element, %s", filename, ordinal, err)
-// 		}
-
-// 		eachResult, err := getEachResult(elementBytes, filename)
-// 		if err != nil {
-// 			ordinal := Ordinal(i)
-// 			return nil, fmt.Errorf("Error in filename = %s, while constructing Go data from JSON array %s element, %s", filename, ordinal, err)
-// 		}
-// 		results = append(results, eachResult)
-// 	}
-
-// 	return results, nil
-// }
-
 func main() {
 	filename := "step01/action.json"
 	action, err := getActionFromFile(filename)
@@ -272,10 +239,11 @@ func main() {
 	}
 	fmt.Println(action)
 
-	err = readActionFile("action01.json")
+	a, err := readActionFile("action01.json")
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(a)
 	// filename = "step01/result.json"
 	// result, err := getResult(filename)
 	// if err != nil {
