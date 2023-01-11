@@ -19,22 +19,6 @@ type Command struct {
 
 func (c *Command) IsAction() {}
 
-type File struct {
-	TypeName    string `json:"__typename"`
-	FilePath    []string
-	FileContent string
-	Offset      int
-}
-
-type Terminal struct {
-	elements []interface{}
-}
-
-type State struct {
-	SourceCode interface{}
-	Terminal   interface{}
-}
-
 func getActionFromFile(filename string) (Action, error) {
 	errorPreceding := "Error in getActionFromFile for filename = " + filename
 
@@ -231,15 +215,31 @@ func Ordinal(x int) string {
 	return strconv.Itoa(x) + suffix
 }
 
+type File struct {
+	TypeName    string `json:"__typename"`
+	FilePath    []string
+	FileContent string
+	Offset      int
+}
+
+type Terminal struct {
+	elements []interface{}
+}
+
+type State struct {
+	SourceCode interface{}
+	Terminal   interface{}
+}
+
 func main() {
-	filename := "step01/action.json"
+	filename := "data/step01/action.json"
 	action, err := getActionFromFile(filename)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(action)
 
-	a, err := readActionFile("action01.json")
+	a, err := readActionFile("data/action01.json")
 	if err != nil {
 		panic(err)
 	}
