@@ -43,7 +43,7 @@ func getActionFromFile(filename string) (Action, error) {
 		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
-	action, err := getAction(bytes)
+	action, err := getActionFromBytes(bytes)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPreceding, err)
 	}
@@ -51,7 +51,7 @@ func getActionFromFile(filename string) (Action, error) {
 	return action, nil
 }
 
-func getAction(bytes []byte) (Action, error) {
+func getActionFromBytes(bytes []byte) (Action, error) {
 	var unmarshaled interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
 		return nil, err
@@ -156,22 +156,25 @@ func getResult(filename string) (Result, error) {
 type ActionInput struct {
 	Action  map[string]interface{}
 	Results []map[string]interface{}
+	Nothing string
 }
 
 func readActionFile(filename string) error {
+	errorPreceding := "Error in readActionFile for filename = " + filename
+
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("Error in filename = %s, %s", filename, err)
+		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	var unmarshalled ActionInput
 	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
-		return fmt.Errorf("Error in filename = %s, while unmarshaling JSON from file, %s", filename, err)
+		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	actionBytes, err := json.Marshal(unmarshalled.Action)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	fmt.Println(string(actionBytes))
