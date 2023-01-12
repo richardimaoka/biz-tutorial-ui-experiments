@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-type ActionInfo struct {
+type Input struct {
 	Action  Action
 	Results []Result
 }
 
-func ReadActionFile(filename string) (*ActionInfo, error) {
+func ReadActionFile(filename string) (*Input, error) {
 	errorPreceding := "Error in readActionFile for filename = " + filename
 
 	// read and process the whole file
@@ -55,7 +55,7 @@ func ReadActionFile(filename string) (*ActionInfo, error) {
 		results = append(results, result)
 	}
 
-	return &ActionInfo{action, results}, nil
+	return &Input{action, results}, nil
 }
 
 type inputUnmarshalled struct {
