@@ -1,0 +1,18 @@
+{
+  "sourceCode": {
+    "fileTree": [
+      {
+        "__typename": "Directory",
+        "offset": 0,
+        "name": "protoc-go-experiments",
+        "isCurrentDirectory": true
+      }
+    ]
+  },
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    }
+  ]
+}
