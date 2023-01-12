@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+type ActionInfo struct {
+	Action  Action
+	Results []Result
+}
+
 func ReadActionFile(filename string) (*ActionInfo, error) {
 	errorPreceding := "Error in readActionFile for filename = " + filename
 
