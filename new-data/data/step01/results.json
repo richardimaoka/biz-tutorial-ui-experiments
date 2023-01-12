@@ -1,0 +1,14 @@
+[
+  {
+    "__typename": "SourceCodeUpdate",
+    "filesAdded": [
+      {
+        "__typename": "Directory",
+        "filePath": [
+          "protoc-go-experiments"
+        ],
+        "offset": 0
+      }
+    ]
+  }
+]
