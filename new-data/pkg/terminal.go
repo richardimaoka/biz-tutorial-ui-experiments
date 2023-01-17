@@ -1,5 +1,5 @@
 package pkg
 
 type Terminal struct {
-	elements []interface{}
+	Elements []interface{}
 }

@@ -23,6 +23,6 @@ tmux send-keys -t "$SESSION:0.3" '(cd next && npm run codegen)' C-m
 tmux send-keys -t "$SESSION:0.4" '(cd files && npm run start)' C-m
 
 # open editors
-tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .) && (cd files && code .) && (cd new-data && code.)' C-m
+tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .) && (cd files && code .) && (cd new-data && code .)' C-m
 
 tmux attach -t "$SESSION"
