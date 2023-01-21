@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 )
 
 type Input struct {
@@ -63,7 +62,7 @@ type inputUnmarshalled struct {
 	Results []map[string]interface{}
 }
 
-func SplitInputFile(inputFilePath string) error {
+func SplitInputFile(inputFilePath string, outputDirPath string) error {
 	errorPreceding := "Error in SplitInputFile for filename = " + inputFilePath
 
 	// read and process the input file
@@ -86,9 +85,7 @@ func SplitInputFile(inputFilePath string) error {
 		return fmt.Errorf("%s, failed to marshal action, %s", errorPreceding, err)
 	}
 
-	path := strings.Split(inputFilePath, "/")
-	path[len(path)-1] = "action.json"
-	actionFilePath := strings.Join(path, "/")
+	actionFilePath := outputDirPath + "/action.json"
 	if err := os.WriteFile(actionFilePath, actionBytes, 0666); err != nil {
 		return fmt.Errorf("%s, failed write action to %s, %s", errorPreceding, actionFilePath, err)
 
@@ -100,9 +97,7 @@ func SplitInputFile(inputFilePath string) error {
 		return fmt.Errorf("%s, failed to marshal results, %s", errorPreceding, err)
 	}
 
-	path = strings.Split(inputFilePath, "/")
-	path[len(path)-1] = "results.json"
-	resultsFilePath := strings.Join(path, "/")
+	resultsFilePath := outputDirPath + "/results.json"
 	if err := os.WriteFile(resultsFilePath, resultsBytes, 0666); err != nil {
 		return fmt.Errorf("%s, failed write results to %s, %s", errorPreceding, resultsFilePath, err)
 	}

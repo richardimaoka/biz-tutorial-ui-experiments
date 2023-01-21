@@ -1,19 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/pkg"
 )
 
 func main() {
-	a, err := pkg.ReadActionFile("data/action01.json")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(a)
-
-	err = pkg.SplitInputFile("data/step01/input.json")
+	err := pkg.SplitInputFile("data/input01.json", "data/step01")
 	if err != nil {
 		panic(err)
 	}
