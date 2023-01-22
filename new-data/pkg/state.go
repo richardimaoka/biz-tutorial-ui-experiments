@@ -9,6 +9,14 @@ func InitialState() State {
 	return State{InitialSourceCode(), InitialTerminal()}
 }
 
+func (state *State) ApplyAction(action Command) {
+	if action.TypeName == "Command" {
+		element := ConvToTerminalElement(action)
+		state.Terminal.AppendElement(element)
+	}
+	//else do nothing
+}
+
 func StatesFromCommand(cmd *Command, state *State) (*State, *State) {
 	stateBefore := State{
 		SourceCode{FileTree: state.SourceCode.FileTree},
