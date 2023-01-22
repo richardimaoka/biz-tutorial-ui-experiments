@@ -18,9 +18,17 @@ type Terminal struct {
 	Elements []TerminalElement
 }
 
-func (src *Terminal) Copy(dst *Terminal) {
+func InitialTerminal() Terminal {
+	return Terminal{}
+}
+
+func CopyTerminal(src *Terminal, dst *Terminal) {
 	copy(src.Elements, dst.Elements)
 }
+
+// func ConvToTerminalElement(command Command) TerminalElement {
+
+// }
 
 func (t *Terminal) AppendElement(elem TerminalElement) {
 	t.Elements = append(t.Elements)

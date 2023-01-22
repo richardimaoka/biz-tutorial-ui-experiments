@@ -5,6 +5,10 @@ type State struct {
 	Terminal   Terminal
 }
 
+func InitialState() State {
+	return State{InitialSourceCode(), InitialTerminal()}
+}
+
 func StatesFromCommand(cmd *Command, state *State) (*State, *State) {
 	stateBefore := State{
 		SourceCode{FileTree: state.SourceCode.FileTree},
@@ -18,3 +22,10 @@ func StatesFromCommand(cmd *Command, state *State) (*State, *State) {
 
 	return &stateBefore, &stateAfter
 }
+
+// func transition(prevState *State, action *Action) (*State, *State) {
+// 	stateBeforeAction := action.stateBeforeAction(prevState)
+// 	stateAfterAction := action.stateAfterAction(stateBeforeAction)
+
+// 	return stateBeforeAction, stateAfterAction
+// }

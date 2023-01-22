@@ -17,3 +17,7 @@ type FileTreeNode struct {
 type SourceCode struct {
 	FileTree []FileTreeNode
 }
+
+func InitialSourceCode() SourceCode {
+	return SourceCode{}
+}

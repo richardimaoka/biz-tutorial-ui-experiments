@@ -9,6 +9,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// err := pkg.ConstructState("data/step01", "data/step02")
+	// if err != nil {
+	// 	panic(err)
+	// }
 	// filename = "step01/result.json"
 	// result, err := getResult(filename)
 	// if err != nil {
