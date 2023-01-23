@@ -16,7 +16,7 @@ import (
 )
 
 // Step is the resolver for the step field.
-func (r *queryResolver) Step(ctx context.Context, tutorialID *string, stepID *string) (*model.Step, error) {
+func (r *queryResolver) Step(ctx context.Context, stepNum *int) (*model.Step, error) {
 	filename := fmt.Sprintf("data/tutorial%s/step%s.json", *tutorialID, *stepID)
 	log.Printf("reading data from %s", filename)
 	data, err := os.ReadFile(filename)
