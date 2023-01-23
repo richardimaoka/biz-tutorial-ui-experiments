@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   schema: "../gqlgen/graph/schema.gql",
   documents: ["pages/**/*.tsx", "components/**/*.tsx"],
   generates: {
-    "libs/gql": {
+    "libs/gql/": {
       preset: "client",
       plugins: [],
       config: {
@@ -17,7 +17,7 @@ const config: CodegenConfig = {
   watch: [
     "pages/**/*.tsx",
     "components/**/*.tsx",
-    "../gqlgen/graphq/schema.graphqls",
+    "../gqlgen/graphq/schema.gql",
   ],
   hooks: { afterOneFileWrite: ["npx prettier --write"] },
 };
