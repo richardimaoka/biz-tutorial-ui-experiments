@@ -60,5 +60,5 @@ type Step {
 
 ##
 type Query {
-  step(tutorialId: ID, stepId: ID): Step
+  step(stepNum: Int): Step
 }
