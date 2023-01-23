@@ -1,5 +1,9 @@
 package pkg
 
+type Terminal struct {
+	Elements []TerminalElement
+}
+
 type TerminalElement interface {
 	String() string
 }
@@ -16,10 +20,6 @@ func (elem TerminalCommand) String() string {
 type TerminalCommandOutput struct {
 	TypeName string `json:"__typename"`
 	Output   string
-}
-
-type Terminal struct {
-	Elements []TerminalElement
 }
 
 func InitialTerminal() Terminal {

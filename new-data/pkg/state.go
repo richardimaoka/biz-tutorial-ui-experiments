@@ -17,6 +17,16 @@ func (state *State) ApplyAction(action Command) {
 	//else do nothing
 }
 
+func (state *State) ApplyActionResults(action Command) {
+	// switch result.TypeName {
+	// case "SourceCodeUpdate":
+	// 	// filesAdded
+	// 	// filesUpdated
+
+	// }
+	//else do nothing
+}
+
 func StatesFromCommand(cmd *Command, state *State) (*State, *State) {
 	stateBefore := State{
 		SourceCode{FileTree: state.SourceCode.FileTree},
