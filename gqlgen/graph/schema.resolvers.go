@@ -47,14 +47,8 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) Tutorial(ctx context.Context, id *string) ([]*model.Step, error) {
-	panic(fmt.Errorf("not implemented: Tutorial - tutorial"))
-}
-func (r *queryResolver) File(ctx context.Context, tutorialID *string, stepID *string, filepath *string) (*model.File, error) {
-	panic(fmt.Errorf("not implemented: File - file"))
-}
-func (r *queryResolver) Hello(ctx context.Context) (*string, error) {
-	panic(fmt.Errorf("not implemented: Hello - hello"))
+func (r *queryResolver) TerminalElements(ctx context.Context, step *int) ([]model.TerminalElement, error) {
+	panic(fmt.Errorf("not implemented: TerminalElements - terminalElements"))
 }
 
 type mutationResolver struct{ *Resolver }

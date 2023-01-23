@@ -20,26 +20,32 @@ export type Scalars = {
   Float: number;
 };
 
-export type Command = {
-  __typename: "Command";
-  command?: Maybe<Scalars["String"]>;
+export type DirectoryNode = {
+  __typename: "DirectoryNode";
+  filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  isUpdated?: Maybe<Scalars["Boolean"]>;
 };
 
-export type CommandOutput = {
-  __typename: "CommandOutput";
-  output?: Maybe<Scalars["String"]>;
+export type FileHighlight = {
+  __typename: "FileHighlight";
+  fromLine?: Maybe<Scalars["Int"]>;
+  toLine?: Maybe<Scalars["Int"]>;
 };
 
-export type File = {
-  __typename: "File";
+export type FileNode = {
+  __typename: "FileNode";
+  filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  isUpdated?: Maybe<Scalars["Boolean"]>;
+};
+
+export type FileTreeNode = DirectoryNode | FileNode;
+
+export type OpenFile = {
+  __typename: "OpenFile";
   content?: Maybe<Scalars["String"]>;
   filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]>;
-};
-
-export type Ide = {
-  __typename: "IDE";
-  focusedFile?: Maybe<File>;
 };
 
 export type Query = {
@@ -52,16 +58,25 @@ export type QueryStepArgs = {
   tutorialId?: InputMaybe<Scalars["ID"]>;
 };
 
+export type SourceCode = {
+  __typename: "SourceCode";
+  fileTree?: Maybe<Array<Maybe<FileTreeNode>>>;
+  openFile?: Maybe<OpenFile>;
+};
+
 export type Step = {
   __typename: "Step";
-  id?: Maybe<Scalars["ID"]>;
-  ide?: Maybe<Ide>;
-  terminal?: Maybe<Array<Maybe<TerminalElement>>>;
+  nextAction?: Maybe<Scalars["String"]>;
+  sourceCode?: Maybe<SourceCode>;
+  stepNum?: Maybe<Scalars["Int"]>;
+  terminalis?: Maybe<Array<Maybe<Terminal>>>;
 };
 
 export type Terminal = {
   __typename: "Terminal";
+  currentDirectory?: Maybe<Array<Maybe<Scalars["String"]>>>;
   elements?: Maybe<Array<Maybe<TerminalElement>>>;
+  name?: Maybe<Scalars["String"]>;
 };
 
 export type TerminalCommand = {

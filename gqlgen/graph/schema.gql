@@ -2,14 +2,6 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Command {
-  command: String
-}
-
-type CommandOutput {
-  output: String
-}
-
 type TerminalCommand {
   command: String
 }
@@ -25,23 +17,45 @@ type TerminalOutput {
 union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
 
 type Terminal {
+  name: String
+  currentDirectory: [String]
   elements: [TerminalElement]
 }
 
-type IDE {
-  focusedFile: File
+type FileHighlight {
+  fromLine: Int
+  toLine: Int
+}
+
+type OpenFile {
+  filePath: [String]
+  content: String
+  isFullContent: Boolean
+  highlight: [FileHighlight]
+}
+
+type FileNode {
+  filePath: [String]
+  isUpdated: Boolean
+}
+
+type DirectoryNode {
+  filePath: [String]
+  isUpdated: Boolean
+}
+
+union FileTreeNode = FileNode | DirectoryNode
+
+type SourceCode {
+  fileTree: [FileTreeNode]
+  openFile: OpenFile
 }
 
 type Step {
-  id: ID
-  ide: IDE
-  terminal: [TerminalElement]
-}
-
-type File {
-  filePath: [String]
-  isFullContent: Boolean
-  content: String
+  stepNum: Int
+  sourceCode: SourceCode
+  terminalis: [Terminal]
+  nextAction: String
 }
 
 ##

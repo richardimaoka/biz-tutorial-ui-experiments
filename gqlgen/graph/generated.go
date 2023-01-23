@@ -43,36 +43,48 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	Command struct {
-		Command func(childComplexity int) int
+	DirectoryNode struct {
+		FilePath  func(childComplexity int) int
+		IsUpdated func(childComplexity int) int
 	}
 
-	CommandOutput struct {
-		Output func(childComplexity int) int
+	FileHighlight struct {
+		FromLine func(childComplexity int) int
+		ToLine   func(childComplexity int) int
 	}
 
-	File struct {
+	FileNode struct {
+		FilePath  func(childComplexity int) int
+		IsUpdated func(childComplexity int) int
+	}
+
+	OpenFile struct {
 		Content       func(childComplexity int) int
 		FilePath      func(childComplexity int) int
+		Highlight     func(childComplexity int) int
 		IsFullContent func(childComplexity int) int
-	}
-
-	IDE struct {
-		FocusedFile func(childComplexity int) int
 	}
 
 	Query struct {
 		Step func(childComplexity int, tutorialID *string, stepID *string) int
 	}
 
+	SourceCode struct {
+		FileTree func(childComplexity int) int
+		OpenFile func(childComplexity int) int
+	}
+
 	Step struct {
-		ID       func(childComplexity int) int
-		Ide      func(childComplexity int) int
-		Terminal func(childComplexity int) int
+		NextAction func(childComplexity int) int
+		SourceCode func(childComplexity int) int
+		StepNum    func(childComplexity int) int
+		Terminalis func(childComplexity int) int
 	}
 
 	Terminal struct {
-		Elements func(childComplexity int) int
+		CurrentDirectory func(childComplexity int) int
+		Elements         func(childComplexity int) int
+		Name             func(childComplexity int) int
 	}
 
 	TerminalCommand struct {
@@ -107,47 +119,75 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Command.command":
-		if e.complexity.Command.Command == nil {
+	case "DirectoryNode.filePath":
+		if e.complexity.DirectoryNode.FilePath == nil {
 			break
 		}
 
-		return e.complexity.Command.Command(childComplexity), true
+		return e.complexity.DirectoryNode.FilePath(childComplexity), true
 
-	case "CommandOutput.output":
-		if e.complexity.CommandOutput.Output == nil {
+	case "DirectoryNode.isUpdated":
+		if e.complexity.DirectoryNode.IsUpdated == nil {
 			break
 		}
 
-		return e.complexity.CommandOutput.Output(childComplexity), true
+		return e.complexity.DirectoryNode.IsUpdated(childComplexity), true
 
-	case "File.content":
-		if e.complexity.File.Content == nil {
+	case "FileHighlight.fromLine":
+		if e.complexity.FileHighlight.FromLine == nil {
 			break
 		}
 
-		return e.complexity.File.Content(childComplexity), true
+		return e.complexity.FileHighlight.FromLine(childComplexity), true
 
-	case "File.filePath":
-		if e.complexity.File.FilePath == nil {
+	case "FileHighlight.toLine":
+		if e.complexity.FileHighlight.ToLine == nil {
 			break
 		}
 
-		return e.complexity.File.FilePath(childComplexity), true
+		return e.complexity.FileHighlight.ToLine(childComplexity), true
 
-	case "File.isFullContent":
-		if e.complexity.File.IsFullContent == nil {
+	case "FileNode.filePath":
+		if e.complexity.FileNode.FilePath == nil {
 			break
 		}
 
-		return e.complexity.File.IsFullContent(childComplexity), true
+		return e.complexity.FileNode.FilePath(childComplexity), true
 
-	case "IDE.focusedFile":
-		if e.complexity.IDE.FocusedFile == nil {
+	case "FileNode.isUpdated":
+		if e.complexity.FileNode.IsUpdated == nil {
 			break
 		}
 
-		return e.complexity.IDE.FocusedFile(childComplexity), true
+		return e.complexity.FileNode.IsUpdated(childComplexity), true
+
+	case "OpenFile.content":
+		if e.complexity.OpenFile.Content == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.Content(childComplexity), true
+
+	case "OpenFile.filePath":
+		if e.complexity.OpenFile.FilePath == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.FilePath(childComplexity), true
+
+	case "OpenFile.highlight":
+		if e.complexity.OpenFile.Highlight == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.Highlight(childComplexity), true
+
+	case "OpenFile.isFullContent":
+		if e.complexity.OpenFile.IsFullContent == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.IsFullContent(childComplexity), true
 
 	case "Query.step":
 		if e.complexity.Query.Step == nil {
@@ -161,26 +201,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Step(childComplexity, args["tutorialId"].(*string), args["stepId"].(*string)), true
 
-	case "Step.id":
-		if e.complexity.Step.ID == nil {
+	case "SourceCode.fileTree":
+		if e.complexity.SourceCode.FileTree == nil {
 			break
 		}
 
-		return e.complexity.Step.ID(childComplexity), true
+		return e.complexity.SourceCode.FileTree(childComplexity), true
 
-	case "Step.ide":
-		if e.complexity.Step.Ide == nil {
+	case "SourceCode.openFile":
+		if e.complexity.SourceCode.OpenFile == nil {
 			break
 		}
 
-		return e.complexity.Step.Ide(childComplexity), true
+		return e.complexity.SourceCode.OpenFile(childComplexity), true
 
-	case "Step.terminal":
-		if e.complexity.Step.Terminal == nil {
+	case "Step.nextAction":
+		if e.complexity.Step.NextAction == nil {
 			break
 		}
 
-		return e.complexity.Step.Terminal(childComplexity), true
+		return e.complexity.Step.NextAction(childComplexity), true
+
+	case "Step.sourceCode":
+		if e.complexity.Step.SourceCode == nil {
+			break
+		}
+
+		return e.complexity.Step.SourceCode(childComplexity), true
+
+	case "Step.stepNum":
+		if e.complexity.Step.StepNum == nil {
+			break
+		}
+
+		return e.complexity.Step.StepNum(childComplexity), true
+
+	case "Step.terminalis":
+		if e.complexity.Step.Terminalis == nil {
+			break
+		}
+
+		return e.complexity.Step.Terminalis(childComplexity), true
+
+	case "Terminal.currentDirectory":
+		if e.complexity.Terminal.CurrentDirectory == nil {
+			break
+		}
+
+		return e.complexity.Terminal.CurrentDirectory(childComplexity), true
 
 	case "Terminal.elements":
 		if e.complexity.Terminal.Elements == nil {
@@ -188,6 +256,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Terminal.Elements(childComplexity), true
+
+	case "Terminal.name":
+		if e.complexity.Terminal.Name == nil {
+			break
+		}
+
+		return e.complexity.Terminal.Name(childComplexity), true
 
 	case "TerminalCommand.command":
 		if e.complexity.TerminalCommand.Command == nil {
@@ -358,90 +433,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Command_command(ctx context.Context, field graphql.CollectedField, obj *model.Command) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Command_command(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Command, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Command_command(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Command",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CommandOutput_output(ctx context.Context, field graphql.CollectedField, obj *model.CommandOutput) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CommandOutput_output(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Output, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CommandOutput_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CommandOutput",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _File_filePath(ctx context.Context, field graphql.CollectedField, obj *model.File) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_File_filePath(ctx, field)
+func (ec *executionContext) _DirectoryNode_filePath(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DirectoryNode_filePath(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -468,9 +461,9 @@ func (ec *executionContext) _File_filePath(ctx context.Context, field graphql.Co
 	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_File_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DirectoryNode_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "File",
+		Object:     "DirectoryNode",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -481,8 +474,8 @@ func (ec *executionContext) fieldContext_File_filePath(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _File_isFullContent(ctx context.Context, field graphql.CollectedField, obj *model.File) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_File_isFullContent(ctx, field)
+func (ec *executionContext) _DirectoryNode_isUpdated(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DirectoryNode_isUpdated(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -495,7 +488,7 @@ func (ec *executionContext) _File_isFullContent(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.IsFullContent, nil
+		return obj.IsUpdated, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -509,9 +502,9 @@ func (ec *executionContext) _File_isFullContent(ctx context.Context, field graph
 	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_File_isFullContent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DirectoryNode_isUpdated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "File",
+		Object:     "DirectoryNode",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -522,8 +515,213 @@ func (ec *executionContext) fieldContext_File_isFullContent(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _File_content(ctx context.Context, field graphql.CollectedField, obj *model.File) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_File_content(ctx, field)
+func (ec *executionContext) _FileHighlight_fromLine(ctx context.Context, field graphql.CollectedField, obj *model.FileHighlight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileHighlight_fromLine(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FromLine, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileHighlight_fromLine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileHighlight",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileHighlight_toLine(ctx context.Context, field graphql.CollectedField, obj *model.FileHighlight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileHighlight_toLine(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ToLine, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileHighlight_toLine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileHighlight",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileNode_filePath(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_filePath(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FilePath, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileNode_isUpdated(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_isUpdated(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsUpdated, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_isUpdated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpenFile_filePath(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_filePath(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FilePath, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpenFile_content(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_content(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -550,9 +748,9 @@ func (ec *executionContext) _File_content(ctx context.Context, field graphql.Col
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_File_content(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_OpenFile_content(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "File",
+		Object:     "OpenFile",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -563,8 +761,8 @@ func (ec *executionContext) fieldContext_File_content(ctx context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _IDE_focusedFile(ctx context.Context, field graphql.CollectedField, obj *model.IDE) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_IDE_focusedFile(ctx, field)
+func (ec *executionContext) _OpenFile_isFullContent(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_isFullContent(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -577,7 +775,7 @@ func (ec *executionContext) _IDE_focusedFile(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.FocusedFile, nil
+		return obj.IsFullContent, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -586,27 +784,66 @@ func (ec *executionContext) _IDE_focusedFile(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.File)
+	res := resTmp.(*bool)
 	fc.Result = res
-	return ec.marshalOFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFile(ctx, field.Selections, res)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_IDE_focusedFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_OpenFile_isFullContent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "IDE",
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpenFile_highlight(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_highlight(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Highlight, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.FileHighlight)
+	fc.Result = res
+	return ec.marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_highlight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "filePath":
-				return ec.fieldContext_File_filePath(ctx, field)
-			case "isFullContent":
-				return ec.fieldContext_File_isFullContent(ctx, field)
-			case "content":
-				return ec.fieldContext_File_content(ctx, field)
+			case "fromLine":
+				return ec.fieldContext_FileHighlight_fromLine(ctx, field)
+			case "toLine":
+				return ec.fieldContext_FileHighlight_toLine(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type File", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type FileHighlight", field.Name)
 		},
 	}
 	return fc, nil
@@ -648,12 +885,14 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Step_id(ctx, field)
-			case "ide":
-				return ec.fieldContext_Step_ide(ctx, field)
-			case "terminal":
-				return ec.fieldContext_Step_terminal(ctx, field)
+			case "stepNum":
+				return ec.fieldContext_Step_stepNum(ctx, field)
+			case "sourceCode":
+				return ec.fieldContext_Step_sourceCode(ctx, field)
+			case "terminalis":
+				return ec.fieldContext_Step_terminalis(ctx, field)
+			case "nextAction":
+				return ec.fieldContext_Step_nextAction(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Step", field.Name)
 		},
@@ -801,8 +1040,8 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Step_id(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_id(ctx, field)
+func (ec *executionContext) _SourceCode_fileTree(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode_fileTree(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -815,7 +1054,236 @@ func (ec *executionContext) _Step_id(ctx context.Context, field graphql.Collecte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
+		return obj.FileTree, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]model.FileTreeNode)
+	fc.Result = res
+	return ec.marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type FileTreeNode does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode_openFile(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode_openFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OpenFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.OpenFile)
+	fc.Result = res
+	return ec.marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "filePath":
+				return ec.fieldContext_OpenFile_filePath(ctx, field)
+			case "content":
+				return ec.fieldContext_OpenFile_content(ctx, field)
+			case "isFullContent":
+				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
+			case "highlight":
+				return ec.fieldContext_OpenFile_highlight(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_stepNum(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_stepNum(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StepNum, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_stepNum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_sourceCode(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_sourceCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SourceCode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SourceCode)
+	fc.Result = res
+	return ec.marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "fileTree":
+				return ec.fieldContext_SourceCode_fileTree(ctx, field)
+			case "openFile":
+				return ec.fieldContext_SourceCode_openFile(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_terminalis(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_terminalis(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Terminalis, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Terminal)
+	fc.Result = res
+	return ec.marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_terminalis(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Terminal_name(ctx, field)
+			case "currentDirectory":
+				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
+			case "elements":
+				return ec.fieldContext_Terminal_elements(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_nextAction(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_nextAction(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NextAction, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -826,24 +1294,24 @@ func (ec *executionContext) _Step_id(ctx context.Context, field graphql.Collecte
 	}
 	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Step_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Step_nextAction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Step",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Step_ide(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_ide(ctx, field)
+func (ec *executionContext) _Terminal_name(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -856,7 +1324,7 @@ func (ec *executionContext) _Step_ide(ctx context.Context, field graphql.Collect
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Ide, nil
+		return obj.Name, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -865,30 +1333,26 @@ func (ec *executionContext) _Step_ide(ctx context.Context, field graphql.Collect
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.IDE)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOIDE2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐIDE(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Step_ide(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Step",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "focusedFile":
-				return ec.fieldContext_IDE_focusedFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IDE", field.Name)
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Step_terminal(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_terminal(ctx, field)
+func (ec *executionContext) _Terminal_currentDirectory(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_currentDirectory(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -901,7 +1365,7 @@ func (ec *executionContext) _Step_terminal(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Terminal, nil
+		return obj.CurrentDirectory, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -910,19 +1374,19 @@ func (ec *executionContext) _Step_terminal(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]model.TerminalElement)
+	res := resTmp.([]*string)
 	fc.Result = res
-	return ec.marshalOTerminalElement2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx, field.Selections, res)
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Step_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_currentDirectory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Step",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type TerminalElement does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2873,6 +3337,29 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _FileTreeNode(ctx context.Context, sel ast.SelectionSet, obj model.FileTreeNode) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.FileNode:
+		return ec._FileNode(ctx, sel, &obj)
+	case *model.FileNode:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._FileNode(ctx, sel, obj)
+	case model.DirectoryNode:
+		return ec._DirectoryNode(ctx, sel, &obj)
+	case *model.DirectoryNode:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._DirectoryNode(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.SelectionSet, obj model.TerminalElement) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -2907,102 +3394,118 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 
 // region    **************************** object.gotpl ****************************
 
-var commandImplementors = []string{"Command"}
+var directoryNodeImplementors = []string{"DirectoryNode", "FileTreeNode"}
 
-func (ec *executionContext) _Command(ctx context.Context, sel ast.SelectionSet, obj *model.Command) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, commandImplementors)
+func (ec *executionContext) _DirectoryNode(ctx context.Context, sel ast.SelectionSet, obj *model.DirectoryNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, directoryNodeImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("Command")
-		case "command":
-
-			out.Values[i] = ec._Command_command(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var commandOutputImplementors = []string{"CommandOutput"}
-
-func (ec *executionContext) _CommandOutput(ctx context.Context, sel ast.SelectionSet, obj *model.CommandOutput) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, commandOutputImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CommandOutput")
-		case "output":
-
-			out.Values[i] = ec._CommandOutput_output(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var fileImplementors = []string{"File"}
-
-func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj *model.File) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, fileImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("File")
+			out.Values[i] = graphql.MarshalString("DirectoryNode")
 		case "filePath":
 
-			out.Values[i] = ec._File_filePath(ctx, field, obj)
+			out.Values[i] = ec._DirectoryNode_filePath(ctx, field, obj)
 
-		case "isFullContent":
+		case "isUpdated":
 
-			out.Values[i] = ec._File_isFullContent(ctx, field, obj)
+			out.Values[i] = ec._DirectoryNode_isUpdated(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var fileHighlightImplementors = []string{"FileHighlight"}
+
+func (ec *executionContext) _FileHighlight(ctx context.Context, sel ast.SelectionSet, obj *model.FileHighlight) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, fileHighlightImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FileHighlight")
+		case "fromLine":
+
+			out.Values[i] = ec._FileHighlight_fromLine(ctx, field, obj)
+
+		case "toLine":
+
+			out.Values[i] = ec._FileHighlight_toLine(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var fileNodeImplementors = []string{"FileNode", "FileTreeNode"}
+
+func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet, obj *model.FileNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, fileNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FileNode")
+		case "filePath":
+
+			out.Values[i] = ec._FileNode_filePath(ctx, field, obj)
+
+		case "isUpdated":
+
+			out.Values[i] = ec._FileNode_isUpdated(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var openFileImplementors = []string{"OpenFile"}
+
+func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet, obj *model.OpenFile) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, openFileImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OpenFile")
+		case "filePath":
+
+			out.Values[i] = ec._OpenFile_filePath(ctx, field, obj)
 
 		case "content":
 
-			out.Values[i] = ec._File_content(ctx, field, obj)
+			out.Values[i] = ec._OpenFile_content(ctx, field, obj)
 
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
+		case "isFullContent":
 
-var iDEImplementors = []string{"IDE"}
+			out.Values[i] = ec._OpenFile_isFullContent(ctx, field, obj)
 
-func (ec *executionContext) _IDE(ctx context.Context, sel ast.SelectionSet, obj *model.IDE) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, iDEImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("IDE")
-		case "focusedFile":
+		case "highlight":
 
-			out.Values[i] = ec._IDE_focusedFile(ctx, field, obj)
+			out.Values[i] = ec._OpenFile_highlight(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -3077,6 +3580,35 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
+var sourceCodeImplementors = []string{"SourceCode"}
+
+func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SourceCode")
+		case "fileTree":
+
+			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)
+
+		case "openFile":
+
+			out.Values[i] = ec._SourceCode_openFile(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var stepImplementors = []string{"Step"}
 
 func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj *model.Step) graphql.Marshaler {
@@ -3087,17 +3619,21 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Step")
-		case "id":
+		case "stepNum":
 
-			out.Values[i] = ec._Step_id(ctx, field, obj)
+			out.Values[i] = ec._Step_stepNum(ctx, field, obj)
 
-		case "ide":
+		case "sourceCode":
 
-			out.Values[i] = ec._Step_ide(ctx, field, obj)
+			out.Values[i] = ec._Step_sourceCode(ctx, field, obj)
 
-		case "terminal":
+		case "terminalis":
 
-			out.Values[i] = ec._Step_terminal(ctx, field, obj)
+			out.Values[i] = ec._Step_terminalis(ctx, field, obj)
+
+		case "nextAction":
+
+			out.Values[i] = ec._Step_nextAction(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -3120,6 +3656,14 @@ func (ec *executionContext) _Terminal(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Terminal")
+		case "name":
+
+			out.Values[i] = ec._Terminal_name(ctx, field, obj)
+
+		case "currentDirectory":
+
+			out.Values[i] = ec._Terminal_currentDirectory(ctx, field, obj)
+
 		case "elements":
 
 			out.Values[i] = ec._Terminal_elements(ctx, field, obj)
@@ -3837,11 +4381,100 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFile(ctx context.Context, sel ast.SelectionSet, v *model.File) graphql.Marshaler {
+func (ec *executionContext) marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx context.Context, sel ast.SelectionSet, v []*model.FileHighlight) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._File(ctx, sel, v)
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOFileHighlight2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOFileHighlight2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx context.Context, sel ast.SelectionSet, v *model.FileHighlight) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._FileHighlight(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOFileTreeNode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx context.Context, sel ast.SelectionSet, v model.FileTreeNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._FileTreeNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx context.Context, sel ast.SelectionSet, v []model.FileTreeNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOFileTreeNode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
@@ -3860,11 +4493,34 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalOIDE2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐIDE(ctx context.Context, sel ast.SelectionSet, v *model.IDE) graphql.Marshaler {
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._IDE(ctx, sel, v)
+	res := graphql.MarshalInt(*v)
+	return res
+}
+
+func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx context.Context, sel ast.SelectionSet, v *model.OpenFile) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._OpenFile(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SourceCode(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx context.Context, sel ast.SelectionSet, v *model.Step) graphql.Marshaler {
@@ -3920,6 +4576,54 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v *model.Terminal) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Terminal(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTerminalCommand2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx context.Context, sel ast.SelectionSet, v []*model.TerminalCommand) graphql.Marshaler {

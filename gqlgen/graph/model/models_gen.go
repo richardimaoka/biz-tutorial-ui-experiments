@@ -2,36 +2,56 @@
 
 package model
 
+type FileTreeNode interface {
+	IsFileTreeNode()
+}
+
 type TerminalElement interface {
 	IsTerminalElement()
 }
 
-type Command struct {
-	Command *string `json:"command"`
+type DirectoryNode struct {
+	FilePath  []*string `json:"filePath"`
+	IsUpdated *bool     `json:"isUpdated"`
 }
 
-type CommandOutput struct {
-	Output *string `json:"output"`
+func (DirectoryNode) IsFileTreeNode() {}
+
+type FileHighlight struct {
+	FromLine *int `json:"fromLine"`
+	ToLine   *int `json:"toLine"`
 }
 
-type File struct {
-	FilePath      []*string `json:"filePath"`
-	IsFullContent *bool     `json:"isFullContent"`
-	Content       *string   `json:"content"`
+type FileNode struct {
+	FilePath  []*string `json:"filePath"`
+	IsUpdated *bool     `json:"isUpdated"`
 }
 
-type IDE struct {
-	FocusedFile *File `json:"focusedFile"`
+func (FileNode) IsFileTreeNode() {}
+
+type OpenFile struct {
+	FilePath      []*string        `json:"filePath"`
+	Content       *string          `json:"content"`
+	IsFullContent *bool            `json:"isFullContent"`
+	Highlight     []*FileHighlight `json:"highlight"`
+}
+
+type SourceCode struct {
+	FileTree []FileTreeNode `json:"fileTree"`
+	OpenFile *OpenFile      `json:"openFile"`
 }
 
 type Step struct {
-	ID       *string           `json:"id"`
-	Ide      *IDE              `json:"ide"`
-	Terminal []TerminalElement `json:"terminal"`
+	StepNum    *int        `json:"stepNum"`
+	SourceCode *SourceCode `json:"sourceCode"`
+	Terminalis []*Terminal `json:"terminalis"`
+	NextAction *string     `json:"nextAction"`
 }
 
 type Terminal struct {
-	Elements []TerminalElement `json:"elements"`
+	Name             *string           `json:"name"`
+	CurrentDirectory []*string         `json:"currentDirectory"`
+	Elements         []TerminalElement `json:"elements"`
 }
 
 type TerminalCommand struct {
