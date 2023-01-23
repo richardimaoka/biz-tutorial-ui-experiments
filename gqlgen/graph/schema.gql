@@ -10,7 +10,23 @@ type CommandOutput {
   output: String
 }
 
-union TerminalElement = Command | CommandOutput
+type TerminalCommand {
+  command: String
+}
+
+type TerminalCommandSet {
+  commands: [TerminalCommand]
+}
+
+type TerminalOutput {
+  output: String
+}
+
+union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
+
+type Terminal {
+  elements: [TerminalElement]
+}
 
 type IDE {
   focusedFile: File

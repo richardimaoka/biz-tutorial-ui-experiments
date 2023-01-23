@@ -10,13 +10,9 @@ type Command struct {
 	Command *string `json:"command"`
 }
 
-func (Command) IsTerminalElement() {}
-
 type CommandOutput struct {
 	Output *string `json:"output"`
 }
-
-func (CommandOutput) IsTerminalElement() {}
 
 type File struct {
 	FilePath      []*string `json:"filePath"`
@@ -33,3 +29,25 @@ type Step struct {
 	Ide      *IDE              `json:"ide"`
 	Terminal []TerminalElement `json:"terminal"`
 }
+
+type Terminal struct {
+	Elements []TerminalElement `json:"elements"`
+}
+
+type TerminalCommand struct {
+	Command *string `json:"command"`
+}
+
+func (TerminalCommand) IsTerminalElement() {}
+
+type TerminalCommandSet struct {
+	Commands []*TerminalCommand `json:"commands"`
+}
+
+func (TerminalCommandSet) IsTerminalElement() {}
+
+type TerminalOutput struct {
+	Output *string `json:"output"`
+}
+
+func (TerminalOutput) IsTerminalElement() {}
