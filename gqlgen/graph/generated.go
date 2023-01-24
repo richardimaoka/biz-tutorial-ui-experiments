@@ -66,7 +66,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Step func(childComplexity int, stepNum *int) int
+		Step     func(childComplexity int, stepNum *int) int
+		Terminal func(childComplexity int) int
 	}
 
 	SourceCode struct {
@@ -102,6 +103,7 @@ type ComplexityRoot struct {
 
 type QueryResolver interface {
 	Step(ctx context.Context, stepNum *int) (*model.Step, error)
+	Terminal(ctx context.Context) (*model.Terminal, error)
 }
 
 type executableSchema struct {
@@ -200,6 +202,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Step(childComplexity, args["stepNum"].(*int)), true
+
+	case "Query.terminal":
+		if e.complexity.Query.Terminal == nil {
+			break
+		}
+
+		return e.complexity.Query.Terminal(childComplexity), true
 
 	case "SourceCode.fileTree":
 		if e.complexity.SourceCode.FileTree == nil {
@@ -898,6 +907,55 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 	if fc.Args, err = ec.field_Query_step_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_terminal(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_terminal(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Terminal(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Terminal)
+	fc.Result = res
+	return ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Terminal_name(ctx, field)
+			case "currentDirectory":
+				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
+			case "elements":
+				return ec.fieldContext_Terminal_elements(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -3538,6 +3596,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_step(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "terminal":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_terminal(ctx, field)
 				return res
 			}
 

@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { Header } from "../components/Header";
+import { TerminalCommandComponent } from "../components/terminal/TerminalCommandComponent";
 
 export default function Home2() {
   return (
@@ -32,7 +33,6 @@ export default function Home2() {
               }
             </code>
           </pre>
-
           <pre
             css={css`
               margin: 0px 0px;

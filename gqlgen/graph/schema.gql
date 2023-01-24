@@ -61,4 +61,5 @@ type Step {
 ##
 type Query {
   step(stepNum: Int): Step
+  terminal: Terminal
 }

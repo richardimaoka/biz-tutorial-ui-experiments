@@ -51,6 +51,7 @@ export type OpenFile = {
 export type Query = {
   __typename: "Query";
   step?: Maybe<Step>;
+  terminal?: Maybe<Terminal>;
 };
 
 export type QueryStepArgs = {
