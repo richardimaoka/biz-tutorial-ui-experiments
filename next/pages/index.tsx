@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Header } from "../components/Header";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
@@ -23,6 +24,21 @@ export default function Home2() {
     variables: { step: stepInt },
   });
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        router.push(`./?step=${stepInt + 1}`);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [step]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
@@ -34,6 +50,7 @@ export default function Home2() {
           css={css`
             background-color: #333333;
           `}
+          onKeyDown={(e) => e}
         >
           <div
             css={css`
@@ -46,6 +63,7 @@ export default function Home2() {
             <button type="button">
               <Link href={`./?step=${stepInt + 1}`}> next step</Link>
             </button>
+            <input />
           </div>
         </main>
       </>
