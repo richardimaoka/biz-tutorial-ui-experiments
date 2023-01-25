@@ -58,6 +58,10 @@ export type QueryStepArgs = {
   stepNum?: InputMaybe<Scalars["Int"]>;
 };
 
+export type QueryTerminalArgs = {
+  step: Scalars["Int"];
+};
+
 export type SourceCode = {
   __typename: "SourceCode";
   fileTree?: Maybe<Array<Maybe<FileTreeNode>>>;
@@ -128,7 +132,9 @@ export type TerminalOutput_FragmentFragment = {
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
-export type Home2_QueryQueryVariables = Exact<{ [key: string]: never }>;
+export type Home2_QueryQueryVariables = Exact<{
+  step: Scalars["Int"];
+}>;
 
 export type Home2_QueryQuery = {
   __typename: "Query";
@@ -255,12 +261,32 @@ export const Home2_QueryDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "Home2_Query" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "terminal" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "step" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "step" },
+                },
+              },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [

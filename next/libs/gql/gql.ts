@@ -19,7 +19,7 @@ const documents = {
     types.TerminalComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query Home2_Query {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
+  "\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
     types.Home2_QueryDocument,
 };
 
@@ -59,8 +59,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query Home2_Query {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n"
-): (typeof documents)["\n  query Home2_Query {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n"];
+  source: "\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n"
+): (typeof documents)["\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

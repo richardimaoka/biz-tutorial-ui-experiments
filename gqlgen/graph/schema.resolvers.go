@@ -39,7 +39,7 @@ func (r *queryResolver) Step(ctx context.Context, stepNum *int) (*model.Step, er
 }
 
 // Terminal is the resolver for the terminal field.
-func (r *queryResolver) Terminal(ctx context.Context) (*model.Terminal, error) {
+func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal, error) {
 	filename := "data/tutorial2/terminal.json"
 	log.Printf("reading data from %s", filename)
 

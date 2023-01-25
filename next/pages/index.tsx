@@ -5,15 +5,17 @@ import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
 
 const Home2_Query = graphql(/* GraphQL */ `
-  query Home2_Query {
-    terminal {
+  query Home2_Query($step: Int!) {
+    terminal(step: $step) {
       ...TerminalComponent_Fragment
     }
   }
 `);
 
 export default function Home2() {
-  const { loading, error, data } = useQuery(Home2_Query);
+  const { loading, error, data } = useQuery(Home2_Query, {
+    variables: { step: 1 },
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
