@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
@@ -42,6 +43,9 @@ export default function Home2() {
             `}
           >
             {data.terminal && <TerminalComponent fragment={data.terminal} />}
+            <button type="button">
+              <Link href={`./?step=${stepInt + 1}`}> next step</Link>
+            </button>
           </div>
         </main>
       </>
