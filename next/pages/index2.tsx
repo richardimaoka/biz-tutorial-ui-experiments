@@ -7,11 +7,7 @@ import { graphql } from "../libs/gql";
 const Home2_Query = graphql(/* GraphQL */ `
   query Home2_Query {
     terminal {
-      name
-      currentDirectory
-      elements {
-        ...TerminalElementComponent_Fragment
-      }
+      ...TerminalComponent_Fragment
     }
   }
 `);

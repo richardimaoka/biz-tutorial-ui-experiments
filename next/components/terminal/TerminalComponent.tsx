@@ -1,11 +1,18 @@
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
-import { TerminalElementComponent } from "./TerminalElementComponent";
+import { TerminalCommandComponent } from "./TerminalCommandComponent";
+import { TerminalOutputComponent } from "./TerminalOutputComponent";
 
 const TerminalComponent_Fragment = graphql(`
   fragment TerminalComponent_Fragment on Terminal {
     currentDirectory
     elements {
-      ...TerminalElementComponent_Fragment
+      __typename
+      ... on TerminalCommand {
+        ...TerminalCommand_Fragment
+      }
+      ... on TerminalOutput {
+        ...TerminalOutput_Fragment
+      }
     }
   }
 `);
@@ -18,12 +25,23 @@ export const TerminalComponent = (
   props: TerminalComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalComponent_Fragment, props.fragment);
+
   return (
     <>
-      {fragment.elements?.map(
-        (elem, index) =>
-          elem && <TerminalElementComponent key={index} fragment={elem} />
-      )}
+      {fragment.elements?.map((elem, index) => {
+        if (elem) {
+          switch (elem.__typename) {
+            case "TerminalCommand":
+              return <TerminalCommandComponent key={index} fragment={elem} />;
+            case "TerminalOutput":
+              return <TerminalOutputComponent key={index} fragment={elem} />;
+            case "TerminalCommandSet":
+              return <></>;
+          }
+        } else {
+          return <></>;
+        }
+      })}
     </>
   );
 };
