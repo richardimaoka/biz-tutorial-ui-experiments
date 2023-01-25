@@ -55,21 +55,18 @@ type Terminal struct {
 }
 
 type TerminalCommand struct {
-	Index   *int    `json:"index"`
 	Command *string `json:"command"`
 }
 
 func (TerminalCommand) IsTerminalElement() {}
 
 type TerminalCommandSet struct {
-	Index    *int               `json:"index"`
 	Commands []*TerminalCommand `json:"commands"`
 }
 
 func (TerminalCommandSet) IsTerminalElement() {}
 
 type TerminalOutput struct {
-	Index  *int    `json:"index"`
 	Output *string `json:"output"`
 }
 
