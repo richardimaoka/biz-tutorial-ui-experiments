@@ -3,14 +3,17 @@
 # https://gqlgen.com/getting-started/
 
 type TerminalCommand {
+  index: Int
   command: String
 }
 
 type TerminalCommandSet {
+  index: Int
   commands: [TerminalCommand]
 }
 
 type TerminalOutput {
+  index: Int
   output: String
 }
 

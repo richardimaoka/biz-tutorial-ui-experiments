@@ -138,7 +138,6 @@ func GetTerminalElementFromBytes(bytes []byte) (model.TerminalElement, error) {
 		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
 	}
 }
-
 func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, error) {
 	var unmarshaled []map[string]interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
@@ -160,7 +159,6 @@ func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, er
 
 	return elements, nil
 }
-
 func ordinal(x int) string {
 	suffix := "th"
 	switch x % 10 {

@@ -82,11 +82,13 @@ export type Terminal = {
 export type TerminalCommand = {
   __typename: "TerminalCommand";
   command?: Maybe<Scalars["String"]>;
+  index?: Maybe<Scalars["Int"]>;
 };
 
 export type TerminalCommandSet = {
   __typename: "TerminalCommandSet";
   commands?: Maybe<Array<Maybe<TerminalCommand>>>;
+  index?: Maybe<Scalars["Int"]>;
 };
 
 export type TerminalElement =
@@ -96,6 +98,7 @@ export type TerminalElement =
 
 export type TerminalOutput = {
   __typename: "TerminalOutput";
+  index?: Maybe<Scalars["Int"]>;
   output?: Maybe<Scalars["String"]>;
 };
 
