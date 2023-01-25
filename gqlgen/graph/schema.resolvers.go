@@ -38,89 +38,6 @@ func (r *queryResolver) Step(ctx context.Context, stepNum *int) (*model.Step, er
 	return &step, nil
 }
 
-func GetTerminalElementFromBytes(bytes []byte) (model.TerminalElement, error) {
-	var unmarshaled interface{}
-	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
-		return nil, err
-	}
-
-	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
-	if !ok {
-		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object'")
-	}
-
-	typename, ok := asserted["__typename"]
-	if !ok {
-		return nil, fmt.Errorf("\"__typename\" does not exist in JSON")
-	}
-
-	switch t := typename.(type) {
-	case string:
-		switch t {
-		case "TerminalCommand":
-			var cmd model.TerminalCommand
-			if err := json.Unmarshal(bytes, &cmd); err != nil {
-				return nil, err
-			}
-			return &cmd, nil
-
-		case "TerminalOutput":
-			var output model.TerminalOutput
-			if err := json.Unmarshal(bytes, &output); err != nil {
-				return nil, err
-			}
-
-			return &output, nil
-
-		default:
-			return nil, fmt.Errorf("\"__typename\" = %s is not a valid TerminalElement type", t)
-		}
-	default:
-		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
-	}
-}
-
-func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, error) {
-	var unmarshaled []map[string]interface{}
-	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
-		return nil, err
-	}
-
-	var elements []model.TerminalElement
-	for i, r := range unmarshaled {
-		elementBytes, err := json.Marshal(r)
-		if err != nil {
-			return nil, fmt.Errorf("failed to marshal back %s result %s", ordinal(i), err)
-		}
-		result, err := GetTerminalElementFromBytes(elementBytes)
-		if err != nil {
-			return nil, fmt.Errorf("failed construct %s result, %s", ordinal(i), err)
-		}
-		elements = append(elements, result)
-	}
-
-	return elements, nil
-}
-
-func ordinal(x int) string {
-	suffix := "th"
-	switch x % 10 {
-	case 1:
-		if x%100 != 11 {
-			suffix = "st"
-		}
-	case 2:
-		if x%100 != 12 {
-			suffix = "nd"
-		}
-	case 3:
-		if x%100 != 13 {
-			suffix = "rd"
-		}
-	}
-	return strconv.Itoa(x) + suffix
-}
-
 // Terminal is the resolver for the terminal field.
 func (r *queryResolver) Terminal(ctx context.Context) (*model.Terminal, error) {
 	filename := "data/tutorial2/terminal.json"
@@ -169,6 +86,86 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func GetTerminalElementFromBytes(bytes []byte) (model.TerminalElement, error) {
+	var unmarshaled interface{}
+	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
+		return nil, err
+	}
+
+	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
+	if !ok {
+		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object'")
+	}
+
+	typename, ok := asserted["__typename"]
+	if !ok {
+		return nil, fmt.Errorf("\"__typename\" does not exist in JSON")
+	}
+
+	switch t := typename.(type) {
+	case string:
+		switch t {
+		case "TerminalCommand":
+			var cmd model.TerminalCommand
+			if err := json.Unmarshal(bytes, &cmd); err != nil {
+				return nil, err
+			}
+			return &cmd, nil
+
+		case "TerminalOutput":
+			var output model.TerminalOutput
+			if err := json.Unmarshal(bytes, &output); err != nil {
+				return nil, err
+			}
+
+			return &output, nil
+
+		default:
+			return nil, fmt.Errorf("\"__typename\" = %s is not a valid TerminalElement type", t)
+		}
+	default:
+		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
+	}
+}
+func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, error) {
+	var unmarshaled []map[string]interface{}
+	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
+		return nil, err
+	}
+
+	var elements []model.TerminalElement
+	for i, r := range unmarshaled {
+		elementBytes, err := json.Marshal(r)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal back %s result %s", ordinal(i), err)
+		}
+		result, err := GetTerminalElementFromBytes(elementBytes)
+		if err != nil {
+			return nil, fmt.Errorf("failed construct %s result, %s", ordinal(i), err)
+		}
+		elements = append(elements, result)
+	}
+
+	return elements, nil
+}
+func ordinal(x int) string {
+	suffix := "th"
+	switch x % 10 {
+	case 1:
+		if x%100 != 11 {
+			suffix = "st"
+		}
+	case 2:
+		if x%100 != 12 {
+			suffix = "nd"
+		}
+	case 3:
+		if x%100 != 13 {
+			suffix = "rd"
+		}
+	}
+	return strconv.Itoa(x) + suffix
+}
 func (r *queryResolver) TerminalElements(ctx context.Context, step *int) ([]model.TerminalElement, error) {
 	panic(fmt.Errorf("not implemented: TerminalElements - terminalElements"))
 }
