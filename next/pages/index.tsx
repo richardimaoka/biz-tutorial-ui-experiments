@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 import { Header } from "../components/Header";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
@@ -13,9 +14,14 @@ const Home2_Query = graphql(/* GraphQL */ `
 `);
 
 export default function Home2() {
+  const router = useRouter();
+  const { step } = router.query;
+  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 0;
+
   const { loading, error, data } = useQuery(Home2_Query, {
-    variables: { step: 1 },
+    variables: { step: stepInt },
   });
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
