@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { Header } from "../components/Header";
+import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
 
 const Home2_Query = graphql(/* GraphQL */ `
@@ -9,13 +10,7 @@ const Home2_Query = graphql(/* GraphQL */ `
       name
       currentDirectory
       elements {
-        __typename
-        ... on TerminalCommand {
-          ...TerminalCommand_Fragment
-        }
-        ... on TerminalOutput {
-          ...TerminalOutput_Fragment
-        }
+        ...TerminalElementComponent_Fragment
       }
     }
   }
@@ -42,32 +37,7 @@ export default function Home2() {
               background-color: white;
             `}
           >
-            <pre
-              css={css`
-                margin: 0px 0px;
-                padding: 4px;
-                background-color: #1e1e1e;
-                color: #f1f1f1;
-                border-bottom: 1px solid #333333;
-              `}
-            >
-              <code>
-                {
-                  "protoc \\\n  --go_out=outdir --go_opt=paths=source_relative \\\n  helloworld.proto"
-                }
-              </code>
-            </pre>
-            <pre
-              css={css`
-                margin: 0px 0px;
-                padding: 4px;
-                background-color: #1e1e1e;
-                color: #f1f1f1;
-                border-bottom: 1px solid #333333;
-              `}
-            >
-              <code>outdir/: No such file or directory</code>
-            </pre>
+            {data.terminal && <TerminalComponent fragment={data.terminal} />}
           </div>
         </main>
       </>

@@ -99,6 +99,11 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]>;
 };
 
+export type TerminalCommand_FragmentFragment = {
+  __typename: "TerminalCommand";
+  command?: string | null;
+} & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
+
 export type TerminalComponent_FragmentFragment = {
   __typename: "Terminal";
   currentDirectory?: Array<string | null> | null;
@@ -121,11 +126,6 @@ export type TerminalComponent_FragmentFragment = {
     | null
   > | null;
 } & { " $fragmentName"?: "TerminalComponent_FragmentFragment" };
-
-export type TerminalCommand_FragmentFragment = {
-  __typename: "TerminalCommand";
-  command?: string | null;
-} & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
 
 type TerminalElementComponent_Fragment_TerminalCommand_Fragment = ({
   __typename: "TerminalCommand";
@@ -174,13 +174,17 @@ export type Home2_QueryQuery = {
     elements?: Array<
       | ({ __typename: "TerminalCommand" } & {
           " $fragmentRefs"?: {
-            TerminalCommand_FragmentFragment: TerminalCommand_FragmentFragment;
+            TerminalElementComponent_Fragment_TerminalCommand_Fragment: TerminalElementComponent_Fragment_TerminalCommand_Fragment;
           };
         })
-      | { __typename: "TerminalCommandSet" }
+      | ({ __typename: "TerminalCommandSet" } & {
+          " $fragmentRefs"?: {
+            TerminalElementComponent_Fragment_TerminalCommandSet_Fragment: TerminalElementComponent_Fragment_TerminalCommandSet_Fragment;
+          };
+        })
       | ({ __typename: "TerminalOutput" } & {
           " $fragmentRefs"?: {
-            TerminalOutput_FragmentFragment: TerminalOutput_FragmentFragment;
+            TerminalElementComponent_Fragment_TerminalOutput_Fragment: TerminalElementComponent_Fragment_TerminalOutput_Fragment;
           };
         })
       | null
@@ -346,45 +350,10 @@ export const Home2_QueryDocument = {
                     kind: "SelectionSet",
                     selections: [
                       {
-                        kind: "Field",
-                        name: { kind: "Name", value: "__typename" },
-                      },
-                      {
-                        kind: "InlineFragment",
-                        typeCondition: {
-                          kind: "NamedType",
-                          name: { kind: "Name", value: "TerminalCommand" },
-                        },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "FragmentSpread",
-                              name: {
-                                kind: "Name",
-                                value: "TerminalCommand_Fragment",
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: "InlineFragment",
-                        typeCondition: {
-                          kind: "NamedType",
-                          name: { kind: "Name", value: "TerminalOutput" },
-                        },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "FragmentSpread",
-                              name: {
-                                kind: "Name",
-                                value: "TerminalOutput_Fragment",
-                              },
-                            },
-                          ],
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalElementComponent_Fragment",
                         },
                       },
                     ],
@@ -396,7 +365,6 @@ export const Home2_QueryDocument = {
         ],
       },
     },
-    ...TerminalCommand_FragmentFragmentDoc.definitions,
-    ...TerminalOutput_FragmentFragmentDoc.definitions,
+    ...TerminalElementComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<Home2_QueryQuery, Home2_QueryQueryVariables>;

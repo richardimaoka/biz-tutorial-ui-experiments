@@ -15,6 +15,7 @@ export const TerminalOutputComponent = (
   props: TerminalOutputComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalOutput_Fragment, props.fragment);
+
   return (
     <pre
       css={css`

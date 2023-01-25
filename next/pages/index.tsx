@@ -3,8 +3,8 @@ import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import {
   Command,
-  TerminalComponent,
-} from "../components/terminal/TerminalComponent";
+  TerminalComponentOld,
+} from "../components/terminal/TerminalComponentOld";
 
 const list: Command[] = [
   {
@@ -91,7 +91,7 @@ export default function Home() {
           `}
         >
           <SourceCodeViewer />
-          <TerminalComponent list={list} />
+          <TerminalComponentOld list={list} />
         </div>
       </main>
     </>

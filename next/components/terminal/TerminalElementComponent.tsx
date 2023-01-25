@@ -1,5 +1,6 @@
-import { css } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
+import { TerminalCommandComponent } from "./TerminalCommandComponent";
+import { TerminalOutputComponent } from "./TerminalOutputComponent";
 
 const TerminalElementComponent_Fragment = graphql(`
   fragment TerminalElementComponent_Fragment on TerminalElement {
@@ -27,9 +28,9 @@ export const TerminalElementComponent = (
 
   switch (fragment.__typename) {
     case "TerminalCommand":
-      return <div>{fragment.__typename}</div>;
+      return <TerminalCommandComponent fragment={fragment} />;
     case "TerminalOutput":
-      return <div>{fragment.__typename}</div>;
+      return <TerminalOutputComponent fragment={fragment} />;
     case "TerminalCommandSet":
       return <></>;
   }
