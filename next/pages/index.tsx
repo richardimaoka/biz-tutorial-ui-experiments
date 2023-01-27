@@ -36,7 +36,7 @@ export default function Home2() {
     return function cleanup() {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [step]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -49,7 +49,6 @@ export default function Home2() {
           css={css`
             background-color: #333333;
           `}
-          onKeyDown={(e) => e}
         >
           <div
             css={css`
@@ -62,7 +61,6 @@ export default function Home2() {
             <button type="button">
               <Link href={`./?step=${stepInt + 1}`}> next step</Link>
             </button>
-            <input />
           </div>
         </main>
       </>
