@@ -30,14 +30,13 @@ export default function Home2() {
         router.push(`./?step=${stepInt + 1}`);
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
 
     // Don't forget to clean up
     return function cleanup() {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [step]);
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
