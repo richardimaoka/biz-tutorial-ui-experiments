@@ -49,10 +49,9 @@ type Step struct {
 }
 
 type Terminal struct {
-	Name             *string           `json:"name"`
-	CurrentDirectory []*string         `json:"currentDirectory"`
-	Elements         []TerminalElement `json:"elements"`
-	Nodes            []*TerminalNode   `json:"nodes"`
+	Name             *string         `json:"name"`
+	CurrentDirectory []*string       `json:"currentDirectory"`
+	Nodes            []*TerminalNode `json:"nodes"`
 }
 
 type TerminalCommand struct {

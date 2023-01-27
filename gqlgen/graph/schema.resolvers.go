@@ -56,21 +56,6 @@ func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal
 		return nil, errors.New("internal server error")
 	}
 
-	filename = "data/tutorial2/terminal_elements.json"
-	log.Printf("reading data from %s", filename)
-
-	data, err = os.ReadFile(filename)
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("%s not found", filename))
-	}
-
-	elements, err := GetTerminalElementSliceFromBytes(data)
-	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return nil, errors.New("internal server error")
-	}
-
-	terminal.Elements = elements
 	return &terminal, nil
 }
 
@@ -126,7 +111,6 @@ func GetTerminalElementFromBytes(bytes []byte) (model.TerminalElement, error) {
 		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
 	}
 }
-
 func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, error) {
 	var unmarshaled []map[string]interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
@@ -148,7 +132,6 @@ func GetTerminalElementSliceFromBytes(bytes []byte) ([]model.TerminalElement, er
 
 	return elements, nil
 }
-
 func ordinal(x int) string {
 	suffix := "th"
 	switch x % 10 {
@@ -167,7 +150,6 @@ func ordinal(x int) string {
 	}
 	return strconv.Itoa(x) + suffix
 }
-
 func (r *queryResolver) TerminalElements(ctx context.Context, step *int) ([]model.TerminalElement, error) {
 	panic(fmt.Errorf("not implemented: TerminalElements - terminalElements"))
 }

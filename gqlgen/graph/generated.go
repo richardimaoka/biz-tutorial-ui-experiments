@@ -84,7 +84,6 @@ type ComplexityRoot struct {
 
 	Terminal struct {
 		CurrentDirectory func(childComplexity int) int
-		Elements         func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Nodes            func(childComplexity int) int
 	}
@@ -269,13 +268,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Terminal.CurrentDirectory(childComplexity), true
-
-	case "Terminal.elements":
-		if e.complexity.Terminal.Elements == nil {
-			break
-		}
-
-		return e.complexity.Terminal.Elements(childComplexity), true
 
 	case "Terminal.name":
 		if e.complexity.Terminal.Name == nil {
@@ -998,8 +990,6 @@ func (ec *executionContext) fieldContext_Query_terminal(ctx context.Context, fie
 				return ec.fieldContext_Terminal_name(ctx, field)
 			case "currentDirectory":
 				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
-			case "elements":
-				return ec.fieldContext_Terminal_elements(ctx, field)
 			case "nodes":
 				return ec.fieldContext_Terminal_nodes(ctx, field)
 			}
@@ -1369,8 +1359,6 @@ func (ec *executionContext) fieldContext_Step_terminalis(ctx context.Context, fi
 				return ec.fieldContext_Terminal_name(ctx, field)
 			case "currentDirectory":
 				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
-			case "elements":
-				return ec.fieldContext_Terminal_elements(ctx, field)
 			case "nodes":
 				return ec.fieldContext_Terminal_nodes(ctx, field)
 			}
@@ -1498,47 +1486,6 @@ func (ec *executionContext) fieldContext_Terminal_currentDirectory(ctx context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Terminal_elements(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal_elements(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Elements, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]model.TerminalElement)
-	fc.Result = res
-	return ec.marshalOTerminalElement2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Terminal_elements(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Terminal",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type TerminalElement does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3924,10 +3871,6 @@ func (ec *executionContext) _Terminal(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._Terminal_currentDirectory(ctx, field, obj)
 
-		case "elements":
-
-			out.Values[i] = ec._Terminal_elements(ctx, field, obj)
-
 		case "nodes":
 
 			out.Values[i] = ec._Terminal_nodes(ctx, field, obj)
@@ -4971,47 +4914,6 @@ func (ec *executionContext) marshalOTerminalElement2githubᚗcomᚋrichardimaoka
 		return graphql.Null
 	}
 	return ec._TerminalElement(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOTerminalElement2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx context.Context, sel ast.SelectionSet, v []model.TerminalElement) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTerminalElement2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
 }
 
 func (ec *executionContext) marshalOTerminalNode2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalNode(ctx context.Context, sel ast.SelectionSet, v []*model.TerminalNode) graphql.Marshaler {
