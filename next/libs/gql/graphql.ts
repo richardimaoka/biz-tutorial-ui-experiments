@@ -81,6 +81,7 @@ export type Terminal = {
   currentDirectory?: Maybe<Array<Maybe<Scalars["String"]>>>;
   elements?: Maybe<Array<Maybe<TerminalElement>>>;
   name?: Maybe<Scalars["String"]>;
+  nodes?: Maybe<Array<Maybe<TerminalNode>>>;
 };
 
 export type TerminalCommand = {
@@ -97,6 +98,12 @@ export type TerminalElement =
   | TerminalCommand
   | TerminalCommandSet
   | TerminalOutput;
+
+export type TerminalNode = {
+  __typename: "TerminalNode";
+  content?: Maybe<TerminalElement>;
+  index?: Maybe<Scalars["Int"]>;
+};
 
 export type TerminalOutput = {
   __typename: "TerminalOutput";
@@ -132,6 +139,25 @@ export type TerminalComponent_FragmentFragment = {
     | null
   > | null;
 } & { " $fragmentName"?: "TerminalComponent_FragmentFragment" };
+
+export type TerminalNodeComponent_FragmentFragment = {
+  __typename: "TerminalNode";
+  index?: number | null;
+  content?:
+    | ({ __typename: "TerminalCommand" } & {
+        " $fragmentRefs"?: {
+          TerminalCommand_FragmentFragment: TerminalCommand_FragmentFragment;
+          TerminalCommandWriting_FragmentFragment: TerminalCommandWriting_FragmentFragment;
+        };
+      })
+    | { __typename: "TerminalCommandSet" }
+    | ({ __typename: "TerminalOutput" } & {
+        " $fragmentRefs"?: {
+          TerminalOutput_FragmentFragment: TerminalOutput_FragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "TerminalNodeComponent_FragmentFragment" };
 
 export type TerminalOutput_FragmentFragment = {
   __typename: "TerminalOutput";
@@ -287,6 +313,83 @@ export const TerminalComponent_FragmentFragmentDoc = {
     ...TerminalOutput_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
+export const TerminalNodeComponent_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalNodeComponent_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "index" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "content" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalCommand" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalCommand_Fragment",
+                        },
+                      },
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalCommandWriting_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalOutput" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalOutput_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...TerminalCommand_FragmentFragmentDoc.definitions,
+    ...TerminalCommandWriting_FragmentFragmentDoc.definitions,
+    ...TerminalOutput_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<TerminalNodeComponent_FragmentFragment, unknown>;
 export const Home2_QueryDocument = {
   kind: "Document",
   definitions: [
