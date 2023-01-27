@@ -1,5 +1,6 @@
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { TerminalCommandComponent } from "./TerminalCommandComponent";
+import { TerminalCommandWritingComponent } from "./TerminalCommandWritingComponent";
 import { TerminalOutputComponent } from "./TerminalOutputComponent";
 
 const TerminalComponent_Fragment = graphql(`
@@ -9,6 +10,7 @@ const TerminalComponent_Fragment = graphql(`
       __typename
       ... on TerminalCommand {
         ...TerminalCommand_Fragment
+        ...TerminalCommandWriting_Fragment
       }
       ... on TerminalOutput {
         ...TerminalOutput_Fragment
@@ -32,7 +34,12 @@ export const TerminalComponent = (
         if (elem) {
           switch (elem.__typename) {
             case "TerminalCommand":
-              return <TerminalCommandComponent key={index} fragment={elem} />;
+              return fragment.elements?.length === index + 1 ? (
+                //last element
+                <TerminalCommandWritingComponent key={index} fragment={elem} />
+              ) : (
+                <TerminalCommandComponent key={index} fragment={elem} />
+              );
             case "TerminalOutput":
               return <TerminalOutputComponent key={index} fragment={elem} />;
             case "TerminalCommandSet":
