@@ -1,21 +1,13 @@
 import { css } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
-import { TerminalCommandComponent } from "./TerminalCommandComponent";
-import { TerminalCommandWritingComponent } from "./TerminalCommandWritingComponent";
-import { TerminalOutputComponent } from "./TerminalOutputComponent";
+import { TerminalNodeComponent } from "./TerminalNodeComponent";
 
 const TerminalComponent_Fragment = graphql(`
   fragment TerminalComponent_Fragment on Terminal {
     currentDirectory
-    elements {
-      __typename
-      ... on TerminalCommand {
-        ...TerminalCommand_Fragment
-        ...TerminalCommandWriting_Fragment
-      }
-      ... on TerminalOutput {
-        ...TerminalOutput_Fragment
-      }
+    nodes {
+      index
+      ...TerminalNodeComponent_Fragment
     }
   }
 `);
@@ -53,25 +45,16 @@ export const TerminalComponent = (
         }
       `}
     >
-      {fragment.elements?.map((elem, index) => {
-        if (elem) {
-          switch (elem.__typename) {
-            case "TerminalCommand":
-              return fragment.elements?.length === index + 1 ? (
-                //last element
-                <TerminalCommandWritingComponent key={index} fragment={elem} />
-              ) : (
-                <TerminalCommandComponent key={index} fragment={elem} />
-              );
-            case "TerminalOutput":
-              return <TerminalOutputComponent key={index} fragment={elem} />;
-            case "TerminalCommandSet":
-              return <></>;
-          }
-        } else {
-          return <></>;
-        }
-      })}
+      {fragment.nodes?.map(
+        (elem, index) =>
+          elem && (
+            <TerminalNodeComponent
+              key={elem.index}
+              fragment={elem}
+              isLastElement={fragment.nodes?.length === index + 1}
+            />
+          )
+      )}
     </div>
   );
 };

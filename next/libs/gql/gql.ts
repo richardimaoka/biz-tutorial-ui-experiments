@@ -17,7 +17,7 @@ const documents = {
     types.TerminalCommand_FragmentFragmentDoc,
   "\n  fragment TerminalCommandWriting_Fragment on TerminalCommand {\n    command\n  }\n":
     types.TerminalCommandWriting_FragmentFragmentDoc,
-  "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    elements {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n        ...TerminalCommandWriting_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n":
+  "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      index\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n":
     types.TerminalComponent_FragmentFragmentDoc,
   "\n  fragment TerminalNodeComponent_Fragment on TerminalNode {\n    index\n    content {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n        ...TerminalCommandWriting_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n":
     types.TerminalNodeComponent_FragmentFragmentDoc,
@@ -57,8 +57,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    elements {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n        ...TerminalCommandWriting_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    elements {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n        ...TerminalCommandWriting_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      index\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n"
+): (typeof documents)["\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      index\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
