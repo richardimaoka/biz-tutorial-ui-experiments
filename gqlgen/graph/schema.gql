@@ -16,10 +16,16 @@ type TerminalOutput {
 
 union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
 
+type TerminalNode {
+  index: Int
+  content: TerminalElement
+}
+
 type Terminal {
   name: String
   currentDirectory: [String]
   elements: [TerminalElement]
+  nodes: [TerminalNode]
 }
 
 type FileHighlight {

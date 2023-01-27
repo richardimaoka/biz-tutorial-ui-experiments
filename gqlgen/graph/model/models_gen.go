@@ -52,6 +52,7 @@ type Terminal struct {
 	Name             *string           `json:"name"`
 	CurrentDirectory []*string         `json:"currentDirectory"`
 	Elements         []TerminalElement `json:"elements"`
+	Nodes            []*TerminalNode   `json:"nodes"`
 }
 
 type TerminalCommand struct {
@@ -65,6 +66,11 @@ type TerminalCommandSet struct {
 }
 
 func (TerminalCommandSet) IsTerminalElement() {}
+
+type TerminalNode struct {
+	Index   *int            `json:"index"`
+	Content TerminalElement `json:"content"`
+}
 
 type TerminalOutput struct {
 	Output *string `json:"output"`

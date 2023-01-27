@@ -8,5 +8,9 @@
     "__typename": "TerminalOutput",
     "index": 2,
     "output": "outdir/: No such file or directory"
+  },
+  {
+    "__typename": "TerminalCommand",
+    "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat << EOF > helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF"
   }
 ]
