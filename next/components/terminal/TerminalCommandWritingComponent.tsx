@@ -39,7 +39,7 @@ export const TerminalCommandWritingComponent = (
         padding: 4px;
         background-color: #1e1e1e;
         color: #f1f1f1;
-        border-bottom: 1px solid #333333;
+        /* border-bottom: 1px solid #333333; */
       `}
     >
       <code>{command && command.substring(0, writtenLength)}</code>
