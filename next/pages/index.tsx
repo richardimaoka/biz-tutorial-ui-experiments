@@ -18,7 +18,7 @@ const Home2_Query = graphql(/* GraphQL */ `
 export default function Home2() {
   const router = useRouter();
   const { step } = router.query;
-  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 0;
+  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
 
   const { loading, error, data } = useQuery(Home2_Query, {
     variables: { step: stepInt },

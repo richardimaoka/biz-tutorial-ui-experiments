@@ -1,0 +1,13 @@
+{
+  "__typename": "Terminal",
+  "name": "default",
+  "nodes": [
+    {
+      "index": 1,
+      "content": {
+        "__typename": "TerminalCommand",
+        "command": "protoc \\\n  --go_out=outdir --go_opt=paths=source_relative \\\n  helloworld.proto"
+      }
+    }
+  ]
+}

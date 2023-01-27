@@ -79,7 +79,6 @@ export type Step = {
 export type Terminal = {
   __typename: "Terminal";
   currentDirectory?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  elements?: Maybe<Array<Maybe<TerminalElement>>>;
   name?: Maybe<Scalars["String"]>;
   nodes?: Maybe<Array<Maybe<TerminalNode>>>;
 };
