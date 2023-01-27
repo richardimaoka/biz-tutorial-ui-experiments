@@ -4,7 +4,7 @@ import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import {
   Command,
   TerminalComponentOld,
-} from "../components/terminal/TerminalComponentOld";
+} from "../components/terminalold/TerminalComponentOld";
 
 const list: Command[] = [
   {
