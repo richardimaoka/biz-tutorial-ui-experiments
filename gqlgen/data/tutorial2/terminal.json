@@ -1,4 +1,13 @@
 {
   "__typename": "Terminal",
-  "name": "default"
+  "name": "default",
+  "nodes": [
+    {
+      "index": 1,
+      "content": {
+        "__typename": "TerminalCommand",
+        "command": "abdf"
+      }
+    }
+  ]
 }
