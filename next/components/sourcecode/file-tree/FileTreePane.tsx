@@ -1,19 +1,28 @@
+import { FragmentType, graphql, useFragment } from "../../../libs/gql";
+import { FileTreeComponent } from "./FileTreeComponent";
 import { FileTreeHeader } from "./FileTreeHeader";
-import { FileTreeViewer, File } from "./FileTreeViewer";
 
-interface FileTreePaneProps {
+const FileTreePane_Fragment = graphql(`
+  fragment FileTreePane_Fragment on SourceCode {
+    ...FileTreeComponent_Fragment
+  }
+`);
+
+export interface FileTreePaneProps {
+  fragment: FragmentType<typeof FileTreePane_Fragment>;
   sourceCodeHeight: number;
-  files: File[];
 }
 
-export const FileTreePane = ({
-  files,
-  sourceCodeHeight,
-}: FileTreePaneProps): JSX.Element => {
+export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
+  const fragment = useFragment(FileTreePane_Fragment, props.fragment);
+
   return (
     <div>
       <FileTreeHeader />
-      <FileTreeViewer files={files} sourceCodeHeight={sourceCodeHeight} />
+      <FileTreeComponent
+        fragment={fragment}
+        sourceCodeHeight={props.sourceCodeHeight}
+      />
     </div>
   );
 };

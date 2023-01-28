@@ -141,6 +141,12 @@ export type FileTreeComponent_FragmentFragment = {
   > | null;
 } & { " $fragmentName"?: "FileTreeComponent_FragmentFragment" };
 
+export type FileTreePane_FragmentFragment = ({ __typename: "SourceCode" } & {
+  " $fragmentRefs"?: {
+    FileTreeComponent_FragmentFragment: FileTreeComponent_FragmentFragment;
+  };
+}) & { " $fragmentName"?: "FileTreePane_FragmentFragment" };
+
 export type FileContentPane_FragmentFragment = ({ __typename: "OpenFile" } & {
   " $fragmentRefs"?: {
     FileNameTabBar_FragmentFragment: FileNameTabBar_FragmentFragment;
@@ -333,6 +339,29 @@ export const FileTreeComponent_FragmentFragmentDoc = {
     ...FileNodeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileTreeComponent_FragmentFragment, unknown>;
+export const FileTreePane_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "FileTreePane_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "FileTreeComponent_Fragment" },
+          },
+        ],
+      },
+    },
+    ...FileTreeComponent_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<FileTreePane_FragmentFragment, unknown>;
 export const FileNameTab_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
