@@ -61,6 +61,7 @@ type Step {
   sourceCode: SourceCode
   terminalis: [Terminal]
   nextAction: String
+  file(filePath: [String]!): OpenFile
 }
 
 ##

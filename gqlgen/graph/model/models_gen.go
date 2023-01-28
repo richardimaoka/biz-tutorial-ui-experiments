@@ -46,6 +46,7 @@ type Step struct {
 	SourceCode *SourceCode `json:"sourceCode"`
 	Terminalis []*Terminal `json:"terminalis"`
 	NextAction *string     `json:"nextAction"`
+	File       *OpenFile   `json:"file"`
 }
 
 type Terminal struct {
