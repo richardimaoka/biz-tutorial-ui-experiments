@@ -79,7 +79,7 @@ type ComplexityRoot struct {
 		NextAction func(childComplexity int) int
 		SourceCode func(childComplexity int) int
 		StepNum    func(childComplexity int) int
-		Terminalis func(childComplexity int) int
+		Terminals  func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -281,12 +281,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Step.StepNum(childComplexity), true
 
-	case "Step.terminalis":
-		if e.complexity.Step.Terminalis == nil {
+	case "Step.terminals":
+		if e.complexity.Step.Terminals == nil {
 			break
 		}
 
-		return e.complexity.Step.Terminalis(childComplexity), true
+		return e.complexity.Step.Terminals(childComplexity), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -1092,8 +1092,8 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 				return ec.fieldContext_Step_stepNum(ctx, field)
 			case "sourceCode":
 				return ec.fieldContext_Step_sourceCode(ctx, field)
-			case "terminalis":
-				return ec.fieldContext_Step_terminalis(ctx, field)
+			case "terminals":
+				return ec.fieldContext_Step_terminals(ctx, field)
 			case "nextAction":
 				return ec.fieldContext_Step_nextAction(ctx, field)
 			}
@@ -1510,8 +1510,8 @@ func (ec *executionContext) fieldContext_Step_sourceCode(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Step_terminalis(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_terminalis(ctx, field)
+func (ec *executionContext) _Step_terminals(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_terminals(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1524,7 +1524,7 @@ func (ec *executionContext) _Step_terminalis(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Terminalis, nil
+		return obj.Terminals, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1538,7 +1538,7 @@ func (ec *executionContext) _Step_terminalis(ctx context.Context, field graphql.
 	return ec.marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Step_terminalis(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Step_terminals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Step",
 		Field:      field,
@@ -3993,9 +3993,9 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Step_sourceCode(ctx, field, obj)
 
-		case "terminalis":
+		case "terminals":
 
-			out.Values[i] = ec._Step_terminalis(ctx, field, obj)
+			out.Values[i] = ec._Step_terminals(ctx, field, obj)
 
 		case "nextAction":
 

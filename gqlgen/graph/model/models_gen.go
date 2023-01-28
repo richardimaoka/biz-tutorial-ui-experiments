@@ -42,7 +42,7 @@ type SourceCode struct {
 type Step struct {
 	StepNum    *int        `json:"stepNum"`
 	SourceCode *SourceCode `json:"sourceCode"`
-	Terminalis []*Terminal `json:"terminalis"`
+	Terminals  []*Terminal `json:"terminals"`
 	NextAction *string     `json:"nextAction"`
 }
 

@@ -62,7 +62,7 @@ type SourceCode {
 type Step {
   stepNum: Int
   sourceCode: SourceCode
-  terminalis: [Terminal]
+  terminals: [Terminal]
   nextAction: String
 }
 

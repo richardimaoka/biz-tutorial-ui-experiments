@@ -36,10 +36,12 @@
       }
     ]
   },
-  "terminal": [
+  "terminals": [
     {
       "__typename": "Command",
-      "command": "mkdir protoc-go-experiments"
+      "name": "default",
+      "command": "mkdir protoc-go-experiments",
+      "currentDirectory": ["protoc-go-experiments", "helloworld", "outdir"]
     }
   ]
 }
