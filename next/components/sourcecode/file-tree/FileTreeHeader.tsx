@@ -12,6 +12,7 @@ export const FileTreeHeader = ({
   const padding = 4;
   const buttonSize = 16;
   const width = isFolded ? buttonSize + 2 * padding : 160 - 2 * padding;
+
   return (
     <div
       css={css`
@@ -37,7 +38,11 @@ export const FileTreeHeader = ({
             background-color: #f7f7f7;
             border-radius: 2px;
           `}
-          src="/images/ide-sidebar-shrink.svg"
+          src={
+            isFolded
+              ? "/images/ide-sidebar-expand.svg"
+              : "/images/ide-sidebar-shrink.svg"
+          }
         />
       </button>
     </div>
