@@ -11,9 +11,6 @@ import { nonNullArray } from "../libs/nonNullArray";
 
 const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: Int!) {
-    terminal(step: $step) {
-      ...TerminalComponent_Fragment
-    }
     step(stepNum: $step) {
       sourceCode {
         ...SourceCodeViewer_Fragment
@@ -21,6 +18,7 @@ const PageQuery = graphql(/* GraphQL */ `
       terminals {
         name
         currentDirectory
+        ...TerminalComponent_Fragment
       }
     }
   }
@@ -35,22 +33,13 @@ export default function Home() {
     variables: { step: stepInt },
   });
 
-  const [terminalName, setTerminalName] = useState("");
-  const terminals = data?.step?.terminals
-    ? nonNullArray(data.step.terminals)
-    : [];
+  const [currentTerminalIndex] = useState(0);
+  const terminals = data?.step?.terminals;
 
-  useEffect(() => {
-    terminals.length > 0 &&
-      terminals[0].name &&
-      setTerminalName(terminals[0].name);
-  });
-
-  const currentTerminal = terminals.find((t) => t.name === terminalName);
-  const currentDirectory =
-    currentTerminal && currentTerminal.currentDirectory
-      ? nonNullArray(currentTerminal.currentDirectory)
-      : undefined;
+  const currentTerminal = terminals && terminals[currentTerminalIndex];
+  const currentDirectory = currentTerminal?.currentDirectory
+    ? nonNullArray(currentTerminal?.currentDirectory)
+    : undefined;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -91,7 +80,9 @@ export default function Home() {
                 currentDirectory={currentDirectory}
               />
             )}
-            {data.terminal && <TerminalComponent fragment={data.terminal} />}
+            {currentTerminal && (
+              <TerminalComponent fragment={currentTerminal} />
+            )}
             <button type="button">
               <Link href={`./?step=${stepInt + 1}`}> next step</Link>
             </button>

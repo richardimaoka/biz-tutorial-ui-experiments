@@ -239,13 +239,6 @@ export type PageQueryQueryVariables = Exact<{
 
 export type PageQueryQuery = {
   __typename: "Query";
-  terminal?:
-    | ({ __typename: "Terminal" } & {
-        " $fragmentRefs"?: {
-          TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
-        };
-      })
-    | null;
   step?: {
     __typename: "Step";
     sourceCode?:
@@ -255,11 +248,18 @@ export type PageQueryQuery = {
           };
         })
       | null;
-    terminals?: Array<{
-      __typename: "Terminal";
-      name?: string | null;
-      currentDirectory?: Array<string | null> | null;
-    } | null> | null;
+    terminals?: Array<
+      | ({
+          __typename: "Terminal";
+          name?: string | null;
+          currentDirectory?: Array<string | null> | null;
+        } & {
+          " $fragmentRefs"?: {
+            TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
+          };
+        })
+      | null
+    > | null;
   } | null;
 };
 
@@ -685,29 +685,6 @@ export const PageQueryDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "terminal" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "step" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "step" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "TerminalComponent_Fragment" },
-                },
-              ],
-            },
-          },
-          {
-            kind: "Field",
             name: { kind: "Name", value: "step" },
             arguments: [
               {
@@ -749,6 +726,13 @@ export const PageQueryDocument = {
                         kind: "Field",
                         name: { kind: "Name", value: "currentDirectory" },
                       },
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalComponent_Fragment",
+                        },
+                      },
                     ],
                   },
                 },
@@ -758,7 +742,7 @@ export const PageQueryDocument = {
         ],
       },
     },
-    ...TerminalComponent_FragmentFragmentDoc.definitions,
     ...SourceCodeViewer_FragmentFragmentDoc.definitions,
+    ...TerminalComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
