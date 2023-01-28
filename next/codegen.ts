@@ -11,6 +11,7 @@ const config: CodegenConfig = {
       config: {
         // avoidOptionals: true,
         nonOptionalTypename: true,
+        enumsAsTypes: true,
       },
     },
   },
