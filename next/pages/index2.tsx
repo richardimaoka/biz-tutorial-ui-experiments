@@ -91,7 +91,6 @@ export default function Home() {
           `}
         >
           <SourceCodeViewer />
-          <TerminalComponentOld list={list} />
         </div>
       </main>
     </>

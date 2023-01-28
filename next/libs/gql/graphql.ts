@@ -70,10 +70,15 @@ export type SourceCode = {
 
 export type Step = {
   __typename: "Step";
+  file?: Maybe<OpenFile>;
   nextAction?: Maybe<Scalars["String"]>;
   sourceCode?: Maybe<SourceCode>;
   stepNum?: Maybe<Scalars["Int"]>;
   terminalis?: Maybe<Array<Maybe<Terminal>>>;
+};
+
+export type StepFileArgs = {
+  filePath: Array<InputMaybe<Scalars["String"]>>;
 };
 
 export type Terminal = {
