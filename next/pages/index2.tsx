@@ -2,8 +2,7 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
-import { FileContentViewer } from "../components/sourcecode/open-file/FileContentViewer";
-import { FileNameTabBar } from "../components/sourcecode/open-file/FileNameTabBar";
+import { FileContentPane } from "../components/sourcecode/open-file/FileContentPane";
 import { graphql } from "../libs/gql";
 
 const PageQuery = graphql(/* GraphQL */ `
@@ -11,8 +10,7 @@ const PageQuery = graphql(/* GraphQL */ `
     step(stepNum: $step) {
       sourceCode {
         openFile {
-          ...FileNameTabBar_Fragment
-          ...FileContentViewer_Fragment
+          ...FileContentPane_Fragment
         }
       }
     }
@@ -46,13 +44,7 @@ export default function Home() {
           `}
         >
           {data?.step?.sourceCode?.openFile && (
-            <>
-              <FileNameTabBar fragment={data?.step?.sourceCode?.openFile} />
-              <FileContentViewer
-                fragment={data?.step?.sourceCode?.openFile}
-                sourceCodeHeight={400}
-              />
-            </>
+            <FileContentPane fragment={data?.step?.sourceCode?.openFile} />
           )}
         </div>
       </main>

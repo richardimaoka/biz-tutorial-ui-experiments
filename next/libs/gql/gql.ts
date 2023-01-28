@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
+  "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n":
+    types.FileContentPane_FragmentFragmentDoc,
   "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n  }\n":
     types.FileContentViewer_FragmentFragmentDoc,
   "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n":
@@ -31,7 +33,7 @@ const documents = {
     types.TerminalOutput_FragmentFragmentDoc,
   "\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
     types.Home2_QueryDocument,
-  "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileNameTabBar_Fragment\n          ...FileContentViewer_Fragment\n        }\n      }\n    }\n  }\n":
+  "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n":
     types.PageQueryDocument,
 };
 
@@ -49,6 +51,12 @@ const documents = {
  **/
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n"
+): (typeof documents)["\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -107,8 +115,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileNameTabBar_Fragment\n          ...FileContentViewer_Fragment\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileNameTabBar_Fragment\n          ...FileContentViewer_Fragment\n        }\n      }\n    }\n  }\n"];
+  source: "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        openFile {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
