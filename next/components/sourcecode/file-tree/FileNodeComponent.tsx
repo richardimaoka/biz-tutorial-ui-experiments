@@ -21,13 +21,14 @@ export const FileNodeComponent = (
 ): JSX.Element => {
   const fragment = useFragment(FileNodeComponent_Fragment, props.fragment);
   const offset = fragment.offset ? fragment.offset : 0;
+  const background = fragment.isUpdated ? "#748d2e" : "#252526";
 
   return (
     <div
       css={css`
         display: flex;
         gap: 4px;
-        background-color: #252526;
+        background-color: ${background};
         color: white;
         padding-top: 3px;
         padding-bottom: 3px;
