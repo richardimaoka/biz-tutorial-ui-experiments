@@ -41,21 +41,20 @@ type OpenFile {
   highlight: [FileHighlight]
 }
 
+enum FileNodeType {
+  FILE
+  DIRECTORY
+}
+
 type FileNode {
+  nodeType: FileNodeType
   filePath: [String]
   isUpdated: Boolean
 }
-
-type DirectoryNode {
-  filePath: [String]
-  isUpdated: Boolean
-}
-
-union FileTreeNode = FileNode | DirectoryNode
 
 type SourceCode {
-  fileTree: [FileTreeNode]
-  openFile: OpenFile
+  fileTree: [FileNode]
+  openFile(filePath: [String]): OpenFile
 }
 
 type Step {
@@ -63,10 +62,8 @@ type Step {
   sourceCode: SourceCode
   terminalis: [Terminal]
   nextAction: String
-  file(filePath: [String]!): OpenFile
 }
 
-##
 type Query {
   step(stepNum: Int!): Step
   terminal(step: Int!): Terminal

@@ -2,20 +2,15 @@
 
 package model
 
-type FileTreeNode interface {
-	IsFileTreeNode()
-}
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
 
 type TerminalElement interface {
 	IsTerminalElement()
 }
-
-type DirectoryNode struct {
-	FilePath  []*string `json:"filePath"`
-	IsUpdated *bool     `json:"isUpdated"`
-}
-
-func (DirectoryNode) IsFileTreeNode() {}
 
 type FileHighlight struct {
 	FromLine *int `json:"fromLine"`
@@ -23,11 +18,10 @@ type FileHighlight struct {
 }
 
 type FileNode struct {
-	FilePath  []*string `json:"filePath"`
-	IsUpdated *bool     `json:"isUpdated"`
+	NodeType  *FileNodeType `json:"nodeType"`
+	FilePath  []*string     `json:"filePath"`
+	IsUpdated *bool         `json:"isUpdated"`
 }
-
-func (FileNode) IsFileTreeNode() {}
 
 type OpenFile struct {
 	FilePath      []*string        `json:"filePath"`
@@ -39,8 +33,8 @@ type OpenFile struct {
 }
 
 type SourceCode struct {
-	FileTree []FileTreeNode `json:"fileTree"`
-	OpenFile *OpenFile      `json:"openFile"`
+	FileTree []*FileNode `json:"fileTree"`
+	OpenFile *OpenFile   `json:"openFile"`
 }
 
 type Step struct {
@@ -48,7 +42,6 @@ type Step struct {
 	SourceCode *SourceCode `json:"sourceCode"`
 	Terminalis []*Terminal `json:"terminalis"`
 	NextAction *string     `json:"nextAction"`
-	File       *OpenFile   `json:"file"`
 }
 
 type Terminal struct {
@@ -79,3 +72,44 @@ type TerminalOutput struct {
 }
 
 func (TerminalOutput) IsTerminalElement() {}
+
+type FileNodeType string
+
+const (
+	FileNodeTypeFile      FileNodeType = "FILE"
+	FileNodeTypeDirectory FileNodeType = "DIRECTORY"
+)
+
+var AllFileNodeType = []FileNodeType{
+	FileNodeTypeFile,
+	FileNodeTypeDirectory,
+}
+
+func (e FileNodeType) IsValid() bool {
+	switch e {
+	case FileNodeTypeFile, FileNodeTypeDirectory:
+		return true
+	}
+	return false
+}
+
+func (e FileNodeType) String() string {
+	return string(e)
+}
+
+func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FileNodeType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FileNodeType", str)
+	}
+	return nil
+}
+
+func (e FileNodeType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}

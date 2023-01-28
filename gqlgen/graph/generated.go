@@ -43,11 +43,6 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	DirectoryNode struct {
-		FilePath  func(childComplexity int) int
-		IsUpdated func(childComplexity int) int
-	}
-
 	FileHighlight struct {
 		FromLine func(childComplexity int) int
 		ToLine   func(childComplexity int) int
@@ -56,6 +51,7 @@ type ComplexityRoot struct {
 	FileNode struct {
 		FilePath  func(childComplexity int) int
 		IsUpdated func(childComplexity int) int
+		NodeType  func(childComplexity int) int
 	}
 
 	OpenFile struct {
@@ -74,11 +70,10 @@ type ComplexityRoot struct {
 
 	SourceCode struct {
 		FileTree func(childComplexity int) int
-		OpenFile func(childComplexity int) int
+		OpenFile func(childComplexity int, filePath []*string) int
 	}
 
 	Step struct {
-		File       func(childComplexity int, filePath []*string) int
 		NextAction func(childComplexity int) int
 		SourceCode func(childComplexity int) int
 		StepNum    func(childComplexity int) int
@@ -129,20 +124,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "DirectoryNode.filePath":
-		if e.complexity.DirectoryNode.FilePath == nil {
-			break
-		}
-
-		return e.complexity.DirectoryNode.FilePath(childComplexity), true
-
-	case "DirectoryNode.isUpdated":
-		if e.complexity.DirectoryNode.IsUpdated == nil {
-			break
-		}
-
-		return e.complexity.DirectoryNode.IsUpdated(childComplexity), true
-
 	case "FileHighlight.fromLine":
 		if e.complexity.FileHighlight.FromLine == nil {
 			break
@@ -170,6 +151,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileNode.IsUpdated(childComplexity), true
+
+	case "FileNode.nodeType":
+		if e.complexity.FileNode.NodeType == nil {
+			break
+		}
+
+		return e.complexity.FileNode.NodeType(childComplexity), true
 
 	case "OpenFile.content":
 		if e.complexity.OpenFile.Content == nil {
@@ -249,19 +237,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.SourceCode.OpenFile(childComplexity), true
-
-	case "Step.file":
-		if e.complexity.Step.File == nil {
-			break
-		}
-
-		args, err := ec.field_Step_file_args(context.TODO(), rawArgs)
+		args, err := ec.field_SourceCode_openFile_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Step.File(childComplexity, args["filePath"].([]*string)), true
+		return e.complexity.SourceCode.OpenFile(childComplexity, args["filePath"].([]*string)), true
 
 	case "Step.nextAction":
 		if e.complexity.Step.NextAction == nil {
@@ -463,13 +444,13 @@ func (ec *executionContext) field_Query_terminal_args(ctx context.Context, rawAr
 	return args, nil
 }
 
-func (ec *executionContext) field_Step_file_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_SourceCode_openFile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 []*string
 	if tmp, ok := rawArgs["filePath"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filePath"))
-		arg0, err = ec.unmarshalNString2ᚕᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -515,88 +496,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _DirectoryNode_filePath(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryNode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DirectoryNode_filePath(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.FilePath, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*string)
-	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DirectoryNode_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectoryNode",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DirectoryNode_isUpdated(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryNode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DirectoryNode_isUpdated(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.IsUpdated, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*bool)
-	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DirectoryNode_isUpdated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectoryNode",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	return fc, nil
-}
 
 func (ec *executionContext) _FileHighlight_fromLine(ctx context.Context, field graphql.CollectedField, obj *model.FileHighlight) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_FileHighlight_fromLine(ctx, field)
@@ -675,6 +574,47 @@ func (ec *executionContext) fieldContext_FileHighlight_toLine(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileNode_nodeType(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_nodeType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NodeType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.FileNodeType)
+	fc.Result = res
+	return ec.marshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_nodeType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type FileNodeType does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1058,8 +998,6 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 				return ec.fieldContext_Step_terminalis(ctx, field)
 			case "nextAction":
 				return ec.fieldContext_Step_nextAction(ctx, field)
-			case "file":
-				return ec.fieldContext_Step_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Step", field.Name)
 		},
@@ -1290,9 +1228,9 @@ func (ec *executionContext) _SourceCode_fileTree(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]model.FileTreeNode)
+	res := resTmp.([]*model.FileNode)
 	fc.Result = res
-	return ec.marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx, field.Selections, res)
+	return ec.marshalOFileNode2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1302,7 +1240,15 @@ func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type FileTreeNode does not have child fields")
+			switch field.Name {
+			case "nodeType":
+				return ec.fieldContext_FileNode_nodeType(ctx, field)
+			case "filePath":
+				return ec.fieldContext_FileNode_filePath(ctx, field)
+			case "isUpdated":
+				return ec.fieldContext_FileNode_isUpdated(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FileNode", field.Name)
 		},
 	}
 	return fc, nil
@@ -1359,6 +1305,17 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_SourceCode_openFile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -1537,72 +1494,6 @@ func (ec *executionContext) fieldContext_Step_nextAction(ctx context.Context, fi
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
 		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_file(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_file(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.File, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.OpenFile)
-	fc.Result = res
-	return ec.marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_file(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "filePath":
-				return ec.fieldContext_OpenFile_filePath(ctx, field)
-			case "fileName":
-				return ec.fieldContext_OpenFile_fileName(ctx, field)
-			case "content":
-				return ec.fieldContext_OpenFile_content(ctx, field)
-			case "isFullContent":
-				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
-			case "language":
-				return ec.fieldContext_OpenFile_language(ctx, field)
-			case "highlight":
-				return ec.fieldContext_OpenFile_highlight(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Step_file_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
 	}
 	return fc, nil
 }
@@ -3722,29 +3613,6 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
-func (ec *executionContext) _FileTreeNode(ctx context.Context, sel ast.SelectionSet, obj model.FileTreeNode) graphql.Marshaler {
-	switch obj := (obj).(type) {
-	case nil:
-		return graphql.Null
-	case model.FileNode:
-		return ec._FileNode(ctx, sel, &obj)
-	case *model.FileNode:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._FileNode(ctx, sel, obj)
-	case model.DirectoryNode:
-		return ec._DirectoryNode(ctx, sel, &obj)
-	case *model.DirectoryNode:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._DirectoryNode(ctx, sel, obj)
-	default:
-		panic(fmt.Errorf("unexpected type %T", obj))
-	}
-}
-
 func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.SelectionSet, obj model.TerminalElement) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -3779,35 +3647,6 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 
 // region    **************************** object.gotpl ****************************
 
-var directoryNodeImplementors = []string{"DirectoryNode", "FileTreeNode"}
-
-func (ec *executionContext) _DirectoryNode(ctx context.Context, sel ast.SelectionSet, obj *model.DirectoryNode) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, directoryNodeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DirectoryNode")
-		case "filePath":
-
-			out.Values[i] = ec._DirectoryNode_filePath(ctx, field, obj)
-
-		case "isUpdated":
-
-			out.Values[i] = ec._DirectoryNode_isUpdated(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var fileHighlightImplementors = []string{"FileHighlight"}
 
 func (ec *executionContext) _FileHighlight(ctx context.Context, sel ast.SelectionSet, obj *model.FileHighlight) graphql.Marshaler {
@@ -3837,7 +3676,7 @@ func (ec *executionContext) _FileHighlight(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var fileNodeImplementors = []string{"FileNode", "FileTreeNode"}
+var fileNodeImplementors = []string{"FileNode"}
 
 func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet, obj *model.FileNode) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, fileNodeImplementors)
@@ -3847,6 +3686,10 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("FileNode")
+		case "nodeType":
+
+			out.Values[i] = ec._FileNode_nodeType(ctx, field, obj)
+
 		case "filePath":
 
 			out.Values[i] = ec._FileNode_filePath(ctx, field, obj)
@@ -4047,10 +3890,6 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 		case "nextAction":
 
 			out.Values[i] = ec._Step_nextAction(ctx, field, obj)
-
-		case "file":
-
-			out.Values[i] = ec._Step_file(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -4563,32 +4402,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) unmarshalNString2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]*string, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalOString2ᚖstring(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalNString2ᚕᚖstring(ctx context.Context, sel ast.SelectionSet, v []*string) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalOString2ᚖstring(ctx, sel, v[i])
-	}
-
-	return ret
-}
-
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
 	return ec.___Directive(ctx, sel, &v)
 }
@@ -4916,14 +4729,7 @@ func (ec *executionContext) marshalOFileHighlight2ᚖgithubᚗcomᚋrichardimaok
 	return ec._FileHighlight(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOFileTreeNode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx context.Context, sel ast.SelectionSet, v model.FileTreeNode) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._FileTreeNode(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx context.Context, sel ast.SelectionSet, v []model.FileTreeNode) graphql.Marshaler {
+func (ec *executionContext) marshalOFileNode2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNode(ctx context.Context, sel ast.SelectionSet, v []*model.FileNode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4950,7 +4756,7 @@ func (ec *executionContext) marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaoka
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOFileTreeNode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileTreeNode(ctx, sel, v[i])
+			ret[i] = ec.marshalOFileNode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNode(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4962,6 +4768,29 @@ func (ec *executionContext) marshalOFileTreeNode2ᚕgithubᚗcomᚋrichardimaoka
 	wg.Wait()
 
 	return ret
+}
+
+func (ec *executionContext) marshalOFileNode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNode(ctx context.Context, sel ast.SelectionSet, v *model.FileNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._FileNode(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, v interface{}) (*model.FileNodeType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.FileNodeType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, sel ast.SelectionSet, v *model.FileNodeType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
