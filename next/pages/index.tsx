@@ -42,6 +42,7 @@ export default function Home() {
     : undefined;
 
   useEffect(() => {
+    console.log(currentTerminal);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         router.push(`./?step=${stepInt + 1}`);
