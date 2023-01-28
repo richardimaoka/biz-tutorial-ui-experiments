@@ -6,7 +6,35 @@
       "_content": "message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}",
       "content": "message HelloReply {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n string message = 1;\n  Greeting greet = 2;\n}",
       "__content": "message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}"
-    }
+    },
+    "fileTree": [
+      {
+        "nodeType": "Directory",
+        "offset": 0,
+        "name": "protoc-go-experiments",
+        "filePath": ["protoc-go-experiments"]
+      },
+      {
+        "nodeType": "Directory",
+        "offset": 2,
+        "name": "helloworld",
+        "filePath": ["protoc-go-experiments", "helloworld"],
+        "isCurrentDirectory": true
+      },
+      {
+        "nodeType": "File",
+        "offset": 3,
+        "name": "helloworld.proto",
+        "filePath": ["protoc-go-experiments", "helloworld", "helloworld.proto"]
+      },
+      {
+        "nodeType": "Directory",
+        "offset": 3,
+        "isUpdated": true,
+        "name": "outdir",
+        "filePath": ["protoc-go-experiments", "helloworld", "outdir"]
+      }
+    ]
   },
   "terminal": [
     {

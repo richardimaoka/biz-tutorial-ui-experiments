@@ -51,7 +51,9 @@ type ComplexityRoot struct {
 	FileNode struct {
 		FilePath  func(childComplexity int) int
 		IsUpdated func(childComplexity int) int
+		Name      func(childComplexity int) int
 		NodeType  func(childComplexity int) int
+		Offset    func(childComplexity int) int
 	}
 
 	OpenFile struct {
@@ -152,12 +154,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.FileNode.IsUpdated(childComplexity), true
 
+	case "FileNode.name":
+		if e.complexity.FileNode.Name == nil {
+			break
+		}
+
+		return e.complexity.FileNode.Name(childComplexity), true
+
 	case "FileNode.nodeType":
 		if e.complexity.FileNode.NodeType == nil {
 			break
 		}
 
 		return e.complexity.FileNode.NodeType(childComplexity), true
+
+	case "FileNode.offset":
+		if e.complexity.FileNode.Offset == nil {
+			break
+		}
+
+		return e.complexity.FileNode.Offset(childComplexity), true
 
 	case "OpenFile.content":
 		if e.complexity.OpenFile.Content == nil {
@@ -620,6 +636,47 @@ func (ec *executionContext) fieldContext_FileNode_nodeType(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _FileNode_name(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _FileNode_filePath(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_FileNode_filePath(ctx, field)
 	if err != nil {
@@ -656,6 +713,47 @@ func (ec *executionContext) fieldContext_FileNode_filePath(ctx context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileNode_offset(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_offset(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Offset, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_offset(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1243,8 +1341,12 @@ func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context
 			switch field.Name {
 			case "nodeType":
 				return ec.fieldContext_FileNode_nodeType(ctx, field)
+			case "name":
+				return ec.fieldContext_FileNode_name(ctx, field)
 			case "filePath":
 				return ec.fieldContext_FileNode_filePath(ctx, field)
+			case "offset":
+				return ec.fieldContext_FileNode_offset(ctx, field)
 			case "isUpdated":
 				return ec.fieldContext_FileNode_isUpdated(ctx, field)
 			}
@@ -3690,9 +3792,17 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._FileNode_nodeType(ctx, field, obj)
 
+		case "name":
+
+			out.Values[i] = ec._FileNode_name(ctx, field, obj)
+
 		case "filePath":
 
 			out.Values[i] = ec._FileNode_filePath(ctx, field, obj)
+
+		case "offset":
+
+			out.Values[i] = ec._FileNode_offset(ctx, field, obj)
 
 		case "isUpdated":
 
