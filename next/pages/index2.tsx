@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
+import { FileNameTab } from "../components/sourcecode/open-file/FileNameTab";
 import { graphql } from "../libs/gql";
 
 const PageQuery = graphql(/* GraphQL */ `
@@ -41,7 +42,11 @@ export default function Home() {
             margin: 0 auto;
             background-color: white;
           `}
-        ></div>
+        >
+          {data?.step?.sourceCode?.openFile && (
+            <FileNameTab fragment={data?.step?.sourceCode?.openFile} />
+          )}
+        </div>
       </main>
     </>
   );

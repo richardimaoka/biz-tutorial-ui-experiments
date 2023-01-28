@@ -1,0 +1,14 @@
+{
+  "nextAction": "see the next command",
+  "sourceCode": {
+    "openFile": {
+      "fileName": "package.json"
+    }
+  },
+  "terminal": [
+    {
+      "__typename": "Command",
+      "command": "mkdir protoc-go-experiments"
+    }
+  ]
+}
