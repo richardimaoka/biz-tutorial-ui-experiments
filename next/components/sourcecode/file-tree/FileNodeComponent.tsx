@@ -22,6 +22,7 @@ export const FileNodeComponent = (
   const fragment = useFragment(FileNodeComponent_Fragment, props.fragment);
   const offset = fragment.offset ? fragment.offset : 0;
   const background = fragment.isUpdated ? "#748d2e" : "#252526";
+  const isCurrentDirectory = fragment.name == "outdir";
 
   return (
     <div
@@ -47,6 +48,15 @@ export const FileNodeComponent = (
         `}
       >
         {fragment.name}
+        {isCurrentDirectory && (
+          <span
+            css={css`
+              color: #a1a1a1;
+            `}
+          >
+            {" //current directory"}
+          </span>
+        )}
       </div>
     </div>
   );
