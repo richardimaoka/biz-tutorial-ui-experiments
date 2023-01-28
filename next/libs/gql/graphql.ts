@@ -129,6 +129,18 @@ export type FileNodeIcon_FragmentFragment = {
   nodeType?: FileNodeType | null;
 } & { " $fragmentName"?: "FileNodeIcon_FragmentFragment" };
 
+export type FileTreeComponent_FragmentFragment = {
+  __typename: "SourceCode";
+  fileTree?: Array<
+    | ({ __typename: "FileNode"; filePath?: Array<string | null> | null } & {
+        " $fragmentRefs"?: {
+          FileNodeComponent_FragmentFragment: FileNodeComponent_FragmentFragment;
+        };
+      })
+    | null
+  > | null;
+} & { " $fragmentName"?: "FileTreeComponent_FragmentFragment" };
+
 export type FileContentPane_FragmentFragment = ({ __typename: "OpenFile" } & {
   " $fragmentRefs"?: {
     FileNameTabBar_FragmentFragment: FileNameTabBar_FragmentFragment;
@@ -223,24 +235,22 @@ export type PageQueryQuery = {
   __typename: "Query";
   step?: {
     __typename: "Step";
-    sourceCode?: {
-      __typename: "SourceCode";
-      fileTree?: Array<
-        | ({ __typename: "FileNode" } & {
-            " $fragmentRefs"?: {
-              FileNodeComponent_FragmentFragment: FileNodeComponent_FragmentFragment;
-            };
-          })
-        | null
-      > | null;
-      openFile?:
-        | ({ __typename: "OpenFile" } & {
-            " $fragmentRefs"?: {
-              FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
-            };
-          })
-        | null;
-    } | null;
+    sourceCode?:
+      | ({
+          __typename: "SourceCode";
+          openFile?:
+            | ({ __typename: "OpenFile" } & {
+                " $fragmentRefs"?: {
+                  FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
+                };
+              })
+            | null;
+        } & {
+          " $fragmentRefs"?: {
+            FileTreeComponent_FragmentFragment: FileTreeComponent_FragmentFragment;
+          };
+        })
+      | null;
   } | null;
 };
 
@@ -290,6 +300,39 @@ export const FileNodeComponent_FragmentFragmentDoc = {
     ...FileNodeIcon_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileNodeComponent_FragmentFragment, unknown>;
+export const FileTreeComponent_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "FileTreeComponent_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "FileNodeComponent_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...FileNodeComponent_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<FileTreeComponent_FragmentFragment, unknown>;
 export const FileNameTab_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -643,19 +686,10 @@ export const PageQueryDocument = {
                     kind: "SelectionSet",
                     selections: [
                       {
-                        kind: "Field",
-                        name: { kind: "Name", value: "fileTree" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "FragmentSpread",
-                              name: {
-                                kind: "Name",
-                                value: "FileNodeComponent_Fragment",
-                              },
-                            },
-                          ],
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "FileTreeComponent_Fragment",
                         },
                       },
                       {
@@ -683,7 +717,7 @@ export const PageQueryDocument = {
         ],
       },
     },
-    ...FileNodeComponent_FragmentFragmentDoc.definitions,
+    ...FileTreeComponent_FragmentFragmentDoc.definitions,
     ...FileContentPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;

@@ -24,9 +24,4 @@ export const FileNodeIcon = (props: FileNodeIconProps): JSX.Element => {
   } else {
     return <></>;
   }
-
-  // switch (fragment.nodeType) {
-  //   case default:
-
-  // }
 };
