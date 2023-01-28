@@ -20,6 +20,7 @@ export interface SourceCodeViewerProps {
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
+
   return (
     <div
       css={css`
@@ -36,7 +37,7 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
       <div
         css={css`
           flex-grow: 1; //necessary for narrower-than-width source code
-          max-width: 520px; //necessary for wider-than-width source code
+          overflow: hidden; //necessary for wider-than-width source code
         `}
       >
         {fragment.openFile && (

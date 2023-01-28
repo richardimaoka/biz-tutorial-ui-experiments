@@ -4,8 +4,8 @@
     "openFile": {
       "fileName": "package.json",
       "_content": "message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}",
-      "content": "message HelloReply {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n string message = 1;\n  Greeting greet = 2;\n}",
-      "__content": "message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}"
+      "__content": "message HelloReply {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n string message = 1;\n  Greeting greet = 2;\n}",
+      "content": "message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}"
     },
     "fileTree": [
       {

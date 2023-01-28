@@ -1,3 +1,5 @@
+import { css } from "@emotion/react";
+import { useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../../libs/gql";
 import { FileTreeComponent } from "./FileTreeComponent";
 import { FileTreeHeader } from "./FileTreeHeader";
@@ -15,13 +17,20 @@ export interface FileTreePaneProps {
 
 export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
   const fragment = useFragment(FileTreePane_Fragment, props.fragment);
+  const [isFolded, setIsFolded] = useState(false);
 
   return (
     <div>
-      <FileTreeHeader />
+      <FileTreeHeader
+        isFolded={isFolded}
+        onButtonClick={() => {
+          setIsFolded(!isFolded);
+        }}
+      />
       <FileTreeComponent
         fragment={fragment}
         sourceCodeHeight={props.sourceCodeHeight}
+        isFolded={isFolded}
       />
     </div>
   );

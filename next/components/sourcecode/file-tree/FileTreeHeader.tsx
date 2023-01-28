@@ -1,27 +1,45 @@
 import { css } from "@emotion/react";
 
-export const FileTreeHeader = (): JSX.Element => {
-  const maxWidth = 160;
+interface FileTreeHeaderProps {
+  isFolded: boolean;
+  onButtonClick: () => void;
+}
+
+export const FileTreeHeader = ({
+  isFolded,
+  onButtonClick,
+}: FileTreeHeaderProps): JSX.Element => {
+  const padding = 4;
+  const buttonSize = 16;
+  const width = isFolded ? buttonSize + 2 * padding : 160 - 2 * padding;
   return (
     <div
       css={css`
         display: flex;
-        padding: 6px 10px 6px 6px;
-        max-width: ${maxWidth - 16}px;
+        padding: ${padding}px;
+        width: ${width}px;
         justify-content: end;
         background-color: #222121;
       `}
     >
-      <img
-        width="16"
-        height="16"
+      <button
         css={css`
-          display: block;
-          background-color: #f7f7f7;
-          border-radius: 2px;
+          margin: 0px;
+          padding: 0px;
         `}
-        src="/images/ide-sidebar-shrink.svg"
-      />
+        onClick={onButtonClick}
+      >
+        <img
+          width={buttonSize}
+          height={buttonSize}
+          css={css`
+            display: block;
+            background-color: #f7f7f7;
+            border-radius: 2px;
+          `}
+          src="/images/ide-sidebar-shrink.svg"
+        />
+      </button>
     </div>
   );
 };

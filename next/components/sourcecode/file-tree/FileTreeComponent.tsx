@@ -15,6 +15,7 @@ const FileTreeComponent_Fragment = graphql(`
 export interface FileTreeComponentProps {
   fragment: FragmentType<typeof FileTreeComponent_Fragment>;
   sourceCodeHeight: number;
+  isFolded: boolean;
 }
 
 export const FileTreeComponent = (
@@ -23,7 +24,14 @@ export const FileTreeComponent = (
   const fragment = useFragment(FileTreeComponent_Fragment, props.fragment);
   const maxWidth = 160;
 
-  return (
+  return props.isFolded ? (
+    <div
+      css={css`
+        height: ${props.sourceCodeHeight}px;
+        background-color: #252526;
+      `}
+    />
+  ) : (
     <div
       css={css`
         height: ${props.sourceCodeHeight}px;
