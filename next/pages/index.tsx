@@ -30,15 +30,25 @@ export default function Home() {
   const router = useRouter();
   const { step } = router.query;
   const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
-  const [terminalName] = useState("default");
 
   const { loading, error, data } = useQuery(PageQuery, {
     variables: { step: stepInt },
   });
 
-  const terminal = data?.step?.terminals?.find((e) => e?.name === terminalName);
-  const currentDirectory = terminal?.currentDirectory
-    ? nonNullArray(terminal.currentDirectory)
+  const [terminalName, setTerminalName] = useState("");
+  const terminals = data?.step?.terminals
+    ? nonNullArray(data.step.terminals)
+    : [];
+
+  useEffect(() => {
+    terminals.length > 0 &&
+      terminals[0].name &&
+      setTerminalName(terminals[0].name);
+  });
+
+  const currentTerminal = terminals.find((t) => t.name === terminalName);
+  const currentDirectory = currentTerminal
+    ? currentTerminal.currentDirectory
     : undefined;
 
   useEffect(() => {
