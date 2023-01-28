@@ -112,6 +112,21 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]>;
 };
 
+export type SourceCodeViewer_FragmentFragment = ({
+  __typename: "SourceCode";
+  openFile?:
+    | ({ __typename: "OpenFile" } & {
+        " $fragmentRefs"?: {
+          FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
+        };
+      })
+    | null;
+} & {
+  " $fragmentRefs"?: {
+    FileTreePane_FragmentFragment: FileTreePane_FragmentFragment;
+  };
+}) & { " $fragmentName"?: "SourceCodeViewer_FragmentFragment" };
+
 export type FileNodeComponent_FragmentFragment = ({
   __typename: "FileNode";
   name?: string | null;
@@ -242,18 +257,9 @@ export type PageQueryQuery = {
   step?: {
     __typename: "Step";
     sourceCode?:
-      | ({
-          __typename: "SourceCode";
-          openFile?:
-            | ({ __typename: "OpenFile" } & {
-                " $fragmentRefs"?: {
-                  FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
-                };
-              })
-            | null;
-        } & {
+      | ({ __typename: "SourceCode" } & {
           " $fragmentRefs"?: {
-            FileTreeComponent_FragmentFragment: FileTreeComponent_FragmentFragment;
+            SourceCodeViewer_FragmentFragment: SourceCodeViewer_FragmentFragment;
           };
         })
       | null;
@@ -452,6 +458,43 @@ export const FileContentPane_FragmentFragmentDoc = {
     ...FileContentViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileContentPane_FragmentFragment, unknown>;
+export const SourceCodeViewer_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SourceCodeViewer_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "FileTreePane_Fragment" },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "openFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "FileContentPane_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...FileTreePane_FragmentFragmentDoc.definitions,
+    ...FileContentPane_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -718,23 +761,7 @@ export const PageQueryDocument = {
                         kind: "FragmentSpread",
                         name: {
                           kind: "Name",
-                          value: "FileTreeComponent_Fragment",
-                        },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "openFile" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "FragmentSpread",
-                              name: {
-                                kind: "Name",
-                                value: "FileContentPane_Fragment",
-                              },
-                            },
-                          ],
+                          value: "SourceCodeViewer_Fragment",
                         },
                       },
                     ],
@@ -746,7 +773,6 @@ export const PageQueryDocument = {
         ],
       },
     },
-    ...FileTreeComponent_FragmentFragmentDoc.definitions,
-    ...FileContentPane_FragmentFragmentDoc.definitions,
+    ...SourceCodeViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;

@@ -11,6 +11,7 @@ const FileContentPane_Fragment = graphql(`
 
 export interface FileContentPaneProps {
   fragment: FragmentType<typeof FileContentPane_Fragment>;
+  sourceCodeHeight: number;
 }
 
 export const FileContentPane = (props: FileContentPaneProps): JSX.Element => {
@@ -18,7 +19,10 @@ export const FileContentPane = (props: FileContentPaneProps): JSX.Element => {
   return (
     <div>
       <FileNameTabBar fragment={fragment} />
-      <FileContentViewer fragment={fragment} sourceCodeHeight={400} />
+      <FileContentViewer
+        fragment={fragment}
+        sourceCodeHeight={props.sourceCodeHeight}
+      />
     </div>
   );
 };

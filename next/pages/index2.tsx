@@ -2,17 +2,14 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
-import { FileTreeComponent } from "../components/sourcecode/file-tree/FileTreeComponent";
+import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { graphql } from "../libs/gql";
 
 const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: Int!) {
     step(stepNum: $step) {
       sourceCode {
-        ...FileTreeComponent_Fragment
-        openFile {
-          ...FileContentPane_Fragment
-        }
+        ...SourceCodeViewer_Fragment
       }
     }
   }
@@ -45,10 +42,7 @@ export default function Home() {
           `}
         >
           {data?.step?.sourceCode && (
-            <FileTreeComponent
-              fragment={data.step.sourceCode}
-              sourceCodeHeight={400}
-            />
+            <SourceCodeViewer fragment={data.step.sourceCode} />
           )}
         </div>
       </main>
