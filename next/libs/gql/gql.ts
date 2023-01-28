@@ -41,9 +41,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
-    types.Home2_QueryDocument,
-  "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n":
+  "\n  query PageQuery($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n":
     types.PageQueryDocument,
 };
 
@@ -149,14 +147,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n"
-): (typeof documents)["\n  query Home2_Query($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query PageQuery($step: Int!) {\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n"];
+  source: "\n  query PageQuery($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query PageQuery($step: Int!) {\n    terminal(step: $step) {\n      ...TerminalComponent_Fragment\n    }\n    step(stepNum: $step) {\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

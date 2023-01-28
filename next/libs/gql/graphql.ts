@@ -233,11 +233,11 @@ export type TerminalOutput_FragmentFragment = {
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
-export type Home2_QueryQueryVariables = Exact<{
+export type PageQueryQueryVariables = Exact<{
   step: Scalars["Int"];
 }>;
 
-export type Home2_QueryQuery = {
+export type PageQueryQuery = {
   __typename: "Query";
   terminal?:
     | ({ __typename: "Terminal" } & {
@@ -246,14 +246,6 @@ export type Home2_QueryQuery = {
         };
       })
     | null;
-};
-
-export type PageQueryQueryVariables = Exact<{
-  step: Scalars["Int"];
-}>;
-
-export type PageQueryQuery = {
-  __typename: "Query";
   step?: {
     __typename: "Step";
     sourceCode?:
@@ -671,13 +663,13 @@ export const TerminalComponent_FragmentFragmentDoc = {
     ...TerminalNodeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
-export const Home2_QueryDocument = {
+export const PageQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "Home2_Query" },
+      name: { kind: "Name", value: "PageQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -714,32 +706,6 @@ export const Home2_QueryDocument = {
               ],
             },
           },
-        ],
-      },
-    },
-    ...TerminalComponent_FragmentFragmentDoc.definitions,
-  ],
-} as unknown as DocumentNode<Home2_QueryQuery, Home2_QueryQueryVariables>;
-export const PageQueryDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "PageQuery" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "step" },
@@ -792,6 +758,7 @@ export const PageQueryDocument = {
         ],
       },
     },
+    ...TerminalComponent_FragmentFragmentDoc.definitions,
     ...SourceCodeViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
