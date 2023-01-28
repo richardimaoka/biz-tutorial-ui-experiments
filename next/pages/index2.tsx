@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
+import { FileNodeComponent } from "../components/sourcecode/file-tree/FileNodeComponent";
 import { FileContentPane } from "../components/sourcecode/open-file/FileContentPane";
 import { graphql } from "../libs/gql";
 
@@ -9,6 +10,9 @@ const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: Int!) {
     step(stepNum: $step) {
       sourceCode {
+        fileTree {
+          ...FileNodeComponent_Fragment
+        }
         openFile {
           ...FileContentPane_Fragment
         }
@@ -43,9 +47,10 @@ export default function Home() {
             background-color: white;
           `}
         >
-          {data?.step?.sourceCode?.openFile && (
-            <FileContentPane fragment={data?.step?.sourceCode?.openFile} />
-          )}
+          {data?.step?.sourceCode?.fileTree &&
+            data.step.sourceCode.fileTree[0] && (
+              <FileNodeComponent fragment={data.step.sourceCode.fileTree[0]} />
+            )}
         </div>
       </main>
     </>
