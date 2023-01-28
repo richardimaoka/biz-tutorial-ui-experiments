@@ -47,9 +47,10 @@ export default function Home() {
   });
 
   const currentTerminal = terminals.find((t) => t.name === terminalName);
-  const currentDirectory = currentTerminal
-    ? currentTerminal.currentDirectory
-    : undefined;
+  const currentDirectory =
+    currentTerminal && currentTerminal.currentDirectory
+      ? nonNullArray(currentTerminal.currentDirectory)
+      : undefined;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
