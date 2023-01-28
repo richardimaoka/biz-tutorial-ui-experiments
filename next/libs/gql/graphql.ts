@@ -120,6 +120,12 @@ export type FileNameTab_FragmentFragment = {
   fileName?: string | null;
 } & { " $fragmentName"?: "FileNameTab_FragmentFragment" };
 
+export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
+  " $fragmentRefs"?: {
+    FileNameTab_FragmentFragment: FileNameTab_FragmentFragment;
+  };
+}) & { " $fragmentName"?: "FileNameTabBar_FragmentFragment" };
+
 export type TerminalCommand_FragmentFragment = {
   __typename: "TerminalCommand";
   command?: string | null;
@@ -195,7 +201,7 @@ export type PageQueryQuery = {
       openFile?:
         | ({ __typename: "OpenFile" } & {
             " $fragmentRefs"?: {
-              FileNameTab_FragmentFragment: FileNameTab_FragmentFragment;
+              FileNameTabBar_FragmentFragment: FileNameTabBar_FragmentFragment;
             };
           })
         | null;
@@ -222,6 +228,29 @@ export const FileNameTab_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<FileNameTab_FragmentFragment, unknown>;
+export const FileNameTabBar_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "FileNameTabBar_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "FileNameTab_Fragment" },
+          },
+        ],
+      },
+    },
+    ...FileNameTab_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<FileNameTabBar_FragmentFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -494,7 +523,7 @@ export const PageQueryDocument = {
                               kind: "FragmentSpread",
                               name: {
                                 kind: "Name",
-                                value: "FileNameTab_Fragment",
+                                value: "FileNameTabBar_Fragment",
                               },
                             },
                           ],
@@ -509,6 +538,6 @@ export const PageQueryDocument = {
         ],
       },
     },
-    ...FileNameTab_FragmentFragmentDoc.definitions,
+    ...FileNameTabBar_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;

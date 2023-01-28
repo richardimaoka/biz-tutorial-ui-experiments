@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Header } from "../components/Header";
-import { FileNameTab } from "../components/sourcecode/open-file/FileNameTab";
+import { FileNameTabBar } from "../components/sourcecode/open-file/FileNameTabBar";
 import { graphql } from "../libs/gql";
 
 const PageQuery = graphql(/* GraphQL */ `
@@ -10,7 +10,7 @@ const PageQuery = graphql(/* GraphQL */ `
     step(stepNum: $step) {
       sourceCode {
         openFile {
-          ...FileNameTab_Fragment
+          ...FileNameTabBar_Fragment
         }
       }
     }
@@ -44,7 +44,7 @@ export default function Home() {
           `}
         >
           {data?.step?.sourceCode?.openFile && (
-            <FileNameTab fragment={data?.step?.sourceCode?.openFile} />
+            <FileNameTabBar fragment={data?.step?.sourceCode?.openFile} />
           )}
         </div>
       </main>
