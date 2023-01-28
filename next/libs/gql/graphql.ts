@@ -43,6 +43,7 @@ export type FileTreeNode = DirectoryNode | FileNode;
 export type OpenFile = {
   __typename: "OpenFile";
   content?: Maybe<Scalars["String"]>;
+  fileName?: Maybe<Scalars["String"]>;
   filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]>;
@@ -55,7 +56,7 @@ export type Query = {
 };
 
 export type QueryStepArgs = {
-  stepNum?: InputMaybe<Scalars["Int"]>;
+  stepNum: Scalars["Int"];
 };
 
 export type QueryTerminalArgs = {
@@ -113,6 +114,11 @@ export type TerminalOutput = {
   __typename: "TerminalOutput";
   output?: Maybe<Scalars["String"]>;
 };
+
+export type FileNameTab_FragmentFragment = {
+  __typename: "OpenFile";
+  fileName?: string | null;
+} & { " $fragmentName"?: "FileNameTab_FragmentFragment" };
 
 export type TerminalCommand_FragmentFragment = {
   __typename: "TerminalCommand";
@@ -176,6 +182,46 @@ export type Home2_QueryQuery = {
     | null;
 };
 
+export type PageQueryQueryVariables = Exact<{
+  step: Scalars["Int"];
+}>;
+
+export type PageQueryQuery = {
+  __typename: "Query";
+  step?: {
+    __typename: "Step";
+    sourceCode?: {
+      __typename: "SourceCode";
+      openFile?:
+        | ({ __typename: "OpenFile" } & {
+            " $fragmentRefs"?: {
+              FileNameTab_FragmentFragment: FileNameTab_FragmentFragment;
+            };
+          })
+        | null;
+    } | null;
+  } | null;
+};
+
+export const FileNameTab_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "FileNameTab_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<FileNameTab_FragmentFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -396,3 +442,73 @@ export const Home2_QueryDocument = {
     ...TerminalComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<Home2_QueryQuery, Home2_QueryQueryVariables>;
+export const PageQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "PageQuery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "step" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "stepNum" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "step" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sourceCode" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "openFile" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: {
+                                kind: "Name",
+                                value: "FileNameTab_Fragment",
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...FileNameTab_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;

@@ -1,8 +1,32 @@
+import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 import { Header } from "../components/Header";
-import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
+import { graphql } from "../libs/gql";
+
+const PageQuery = graphql(/* GraphQL */ `
+  query PageQuery($step: Int!) {
+    step(stepNum: $step) {
+      sourceCode {
+        openFile {
+          ...FileNameTab_Fragment
+        }
+      }
+    }
+  }
+`);
 
 export default function Home() {
+  const router = useRouter();
+  const { step } = router.query;
+  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
+
+  const { loading, error, data } = useQuery(PageQuery, {
+    variables: { step: stepInt },
+  });
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+
   return (
     <>
       <Header />
@@ -17,9 +41,7 @@ export default function Home() {
             margin: 0 auto;
             background-color: white;
           `}
-        >
-          <SourceCodeViewer />
-        </div>
+        ></div>
       </main>
     </>
   );

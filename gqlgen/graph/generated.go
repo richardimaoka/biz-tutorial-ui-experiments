@@ -60,13 +60,14 @@ type ComplexityRoot struct {
 
 	OpenFile struct {
 		Content       func(childComplexity int) int
+		FileName      func(childComplexity int) int
 		FilePath      func(childComplexity int) int
 		Highlight     func(childComplexity int) int
 		IsFullContent func(childComplexity int) int
 	}
 
 	Query struct {
-		Step     func(childComplexity int, stepNum *int) int
+		Step     func(childComplexity int, stepNum int) int
 		Terminal func(childComplexity int, step int) int
 	}
 
@@ -108,7 +109,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	Step(ctx context.Context, stepNum *int) (*model.Step, error)
+	Step(ctx context.Context, stepNum int) (*model.Step, error)
 	Terminal(ctx context.Context, step int) (*model.Terminal, error)
 }
 
@@ -176,6 +177,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OpenFile.Content(childComplexity), true
 
+	case "OpenFile.fileName":
+		if e.complexity.OpenFile.FileName == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.FileName(childComplexity), true
+
 	case "OpenFile.filePath":
 		if e.complexity.OpenFile.FilePath == nil {
 			break
@@ -207,7 +215,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Step(childComplexity, args["stepNum"].(*int)), true
+		return e.complexity.Query.Step(childComplexity, args["stepNum"].(int)), true
 
 	case "Query.terminal":
 		if e.complexity.Query.Terminal == nil {
@@ -420,10 +428,10 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_step_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *int
+	var arg0 int
 	if tmp, ok := rawArgs["stepNum"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stepNum"))
-		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -787,6 +795,47 @@ func (ec *executionContext) fieldContext_OpenFile_filePath(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _OpenFile_fileName(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_fileName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_fileName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OpenFile_content(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_content(ctx, field)
 	if err != nil {
@@ -930,7 +979,7 @@ func (ec *executionContext) _Query_step(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Step(rctx, fc.Args["stepNum"].(*int))
+		return ec.resolvers.Query().Step(rctx, fc.Args["stepNum"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1248,6 +1297,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 			switch field.Name {
 			case "filePath":
 				return ec.fieldContext_OpenFile_filePath(ctx, field)
+			case "fileName":
+				return ec.fieldContext_OpenFile_fileName(ctx, field)
 			case "content":
 				return ec.fieldContext_OpenFile_content(ctx, field)
 			case "isFullContent":
@@ -1477,6 +1528,8 @@ func (ec *executionContext) fieldContext_Step_file(ctx context.Context, field gr
 			switch field.Name {
 			case "filePath":
 				return ec.fieldContext_OpenFile_filePath(ctx, field)
+			case "fileName":
+				return ec.fieldContext_OpenFile_fileName(ctx, field)
 			case "content":
 				return ec.fieldContext_OpenFile_content(ctx, field)
 			case "isFullContent":
@@ -3773,6 +3826,10 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 		case "filePath":
 
 			out.Values[i] = ec._OpenFile_filePath(ctx, field, obj)
+
+		case "fileName":
+
+			out.Values[i] = ec._OpenFile_fileName(ctx, field, obj)
 
 		case "content":
 

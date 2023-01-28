@@ -16,12 +16,12 @@ import (
 )
 
 // Step is the resolver for the step field.
-func (r *queryResolver) Step(ctx context.Context, stepNum *int) (*model.Step, error) {
-	filename := fmt.Sprintf("data/tutorial1/step%2d.json", stepNum)
+func (r *queryResolver) Step(ctx context.Context, stepNum int) (*model.Step, error) {
+	filename := fmt.Sprintf("data/tutorial1/step%02d.json", stepNum)
 	log.Printf("reading data from %s", filename)
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("stepNum = %d not found", *stepNum))
+		return nil, errors.New(fmt.Sprintf("stepNum = %d not found", stepNum))
 	}
 
 	var step model.Step

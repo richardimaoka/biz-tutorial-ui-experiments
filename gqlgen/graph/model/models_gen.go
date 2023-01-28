@@ -31,6 +31,7 @@ func (FileNode) IsFileTreeNode() {}
 
 type OpenFile struct {
 	FilePath      []*string        `json:"filePath"`
+	FileName      *string          `json:"fileName"`
 	Content       *string          `json:"content"`
 	IsFullContent *bool            `json:"isFullContent"`
 	Highlight     []*FileHighlight `json:"highlight"`

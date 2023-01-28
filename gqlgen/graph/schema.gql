@@ -34,6 +34,7 @@ type FileHighlight {
 
 type OpenFile {
   filePath: [String]
+  fileName: String
   content: String
   isFullContent: Boolean
   highlight: [FileHighlight]
@@ -66,6 +67,6 @@ type Step {
 
 ##
 type Query {
-  step(stepNum: Int): Step
+  step(stepNum: Int!): Step
   terminal(step: Int!): Terminal
 }
