@@ -14,6 +14,7 @@ const FileTreeComponent_Fragment = graphql(`
 
 export interface FileTreeComponentProps {
   fragment: FragmentType<typeof FileTreeComponent_Fragment>;
+  currentDirectory?: string[];
   sourceCodeHeight: number;
   isFolded: boolean;
 }
@@ -65,6 +66,7 @@ export const FileTreeComponent = (
               <FileNodeComponent
                 key={elem.filePath ? elem.filePath.join("/") : ""}
                 fragment={elem}
+                currentDirectory={props.currentDirectory}
               />
             )
         )}

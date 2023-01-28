@@ -15,6 +15,7 @@ const SourceCodeViewer_Fragment = graphql(`
 
 export interface SourceCodeViewerProps {
   fragment: FragmentType<typeof SourceCodeViewer_Fragment>;
+  currentDirectory?: string[];
 }
 
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
@@ -32,7 +33,11 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           flex-grow: 0; //flex-grow distributes the "remaining" space, and FileTreePane should give any remaining space to FileContentPane
         `}
       >
-        <FileTreePane fragment={fragment} sourceCodeHeight={sourceCodeHeight} />
+        <FileTreePane
+          fragment={fragment}
+          sourceCodeHeight={sourceCodeHeight}
+          currentDirectory={props.currentDirectory}
+        />
       </div>
       <div
         css={css`

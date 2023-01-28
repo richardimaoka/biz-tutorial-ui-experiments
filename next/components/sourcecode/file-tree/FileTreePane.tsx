@@ -13,6 +13,7 @@ const FileTreePane_Fragment = graphql(`
 export interface FileTreePaneProps {
   fragment: FragmentType<typeof FileTreePane_Fragment>;
   sourceCodeHeight: number;
+  currentDirectory?: string[];
 }
 
 export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
@@ -31,6 +32,7 @@ export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
         fragment={fragment}
         sourceCodeHeight={props.sourceCodeHeight}
         isFolded={isFolded}
+        currentDirectory={props.currentDirectory}
       />
     </div>
   );

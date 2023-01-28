@@ -14,6 +14,7 @@ const FileNodeComponent_Fragment = graphql(`
 
 export interface FileNodeComponentProps {
   fragment: FragmentType<typeof FileNodeComponent_Fragment>;
+  currentDirectory?: string[];
 }
 
 export const FileNodeComponent = (
@@ -22,7 +23,10 @@ export const FileNodeComponent = (
   const fragment = useFragment(FileNodeComponent_Fragment, props.fragment);
   const offset = fragment.offset ? fragment.offset : 0;
   const background = fragment.isUpdated ? "#748d2e" : "#252526";
-  const isCurrentDirectory = fragment.name == "outdir";
+  const isCurrentDirectory =
+    fragment.filePath &&
+    props.currentDirectory &&
+    fragment.filePath.join("/") === props.currentDirectory.join("/");
 
   return (
     <div

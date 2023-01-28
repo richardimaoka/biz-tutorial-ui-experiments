@@ -76,7 +76,7 @@ export type Step = {
   nextAction?: Maybe<Scalars["String"]>;
   sourceCode?: Maybe<SourceCode>;
   stepNum?: Maybe<Scalars["Int"]>;
-  terminalis?: Maybe<Array<Maybe<Terminal>>>;
+  terminals?: Maybe<Array<Maybe<Terminal>>>;
 };
 
 export type Terminal = {
@@ -263,6 +263,11 @@ export type PageQueryQuery = {
           };
         })
       | null;
+    terminals?: Array<{
+      __typename: "Terminal";
+      name?: string | null;
+      currentDirectory?: Array<string | null> | null;
+    } | null> | null;
   } | null;
 };
 
@@ -763,6 +768,20 @@ export const PageQueryDocument = {
                           kind: "Name",
                           value: "SourceCodeViewer_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "terminals" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentDirectory" },
                       },
                     ],
                   },
