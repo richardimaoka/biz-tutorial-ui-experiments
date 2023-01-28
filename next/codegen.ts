@@ -10,7 +10,7 @@ const config: CodegenConfig = {
       plugins: [],
       config: {
         // avoidOptionals: true,
-        nonOptionalTypename: true,
+        nonOptionalTypename: true, //__typename should always exist
         enumsAsTypes: true,
       },
     },
