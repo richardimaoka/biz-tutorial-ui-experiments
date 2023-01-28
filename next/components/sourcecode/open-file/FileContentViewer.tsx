@@ -37,23 +37,25 @@ export const FileContentViewer = (
     ? `language-${fragment.language}`
     : undefined;
 
+  const scrollBarWidth = 8; //px
+
   return (
     <div
       css={css`
         height: ${props.sourceCodeHeight}px; // fix the height no matter how long the content is
-        overflow: scroll; //scroll within file content (not to include file name tab in vertical scroll)
+        overflow: auto; //scroll within file content (not to include file name tab in vertical scroll)
         ::-webkit-scrollbar {
           width: 8px;
           height: 8px;
           background-color: #252526; /* or add it to the track */
         }
         ::-webkit-scrollbar-thumb {
-          background: #2b2b30;
-          border-radius: 8px;
+          background-color: #2b2b30;
+          border-radius: ${scrollBarWidth}px;
         }
         ::-webkit-scrollbar-thumb:horizontal {
-          background: #37373d;
-          border-radius: 8px;
+          background-color: #37373d;
+          border-radius: ${scrollBarWidth}px;
         }
         ::-webkit-scrollbar-corner {
           background-color: #252526;
@@ -62,8 +64,10 @@ export const FileContentViewer = (
     >
       <pre
         css={css`
-          width: fit-content;
-          min-height: 100%; //expand up to the outer element
+          width: auto; //if content width < parent width, then expand up to parent width
+          min-width: fit-content; //if content width > parent width, expand up to the content width
+          min-height: //expand up to the outer element
+            calc(100% - ${scrollBarWidth}px);
         `}
       >
         {/* See https://prismjs.com/#basic-usage for className="language-xxxx". 
