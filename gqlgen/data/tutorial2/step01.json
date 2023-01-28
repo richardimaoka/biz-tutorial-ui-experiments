@@ -2,7 +2,8 @@
   "nextAction": "see the next command",
   "sourceCode": {
     "openFile": {
-      "fileName": "package.json"
+      "fileName": "package.json",
+      "content": "message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}"
     }
   },
   "terminal": [

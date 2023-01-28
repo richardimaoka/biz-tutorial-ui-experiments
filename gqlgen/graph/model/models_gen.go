@@ -34,6 +34,7 @@ type OpenFile struct {
 	FileName      *string          `json:"fileName"`
 	Content       *string          `json:"content"`
 	IsFullContent *bool            `json:"isFullContent"`
+	Language      *string          `json:"language"`
 	Highlight     []*FileHighlight `json:"highlight"`
 }
 

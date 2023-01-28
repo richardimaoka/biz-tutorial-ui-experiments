@@ -64,6 +64,7 @@ type ComplexityRoot struct {
 		FilePath      func(childComplexity int) int
 		Highlight     func(childComplexity int) int
 		IsFullContent func(childComplexity int) int
+		Language      func(childComplexity int) int
 	}
 
 	Query struct {
@@ -204,6 +205,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.IsFullContent(childComplexity), true
+
+	case "OpenFile.language":
+		if e.complexity.OpenFile.Language == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.Language(childComplexity), true
 
 	case "Query.step":
 		if e.complexity.Query.Step == nil {
@@ -918,6 +926,47 @@ func (ec *executionContext) fieldContext_OpenFile_isFullContent(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _OpenFile_language(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_language(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Language, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_language(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OpenFile_highlight(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_highlight(ctx, field)
 	if err != nil {
@@ -1303,6 +1352,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 				return ec.fieldContext_OpenFile_content(ctx, field)
 			case "isFullContent":
 				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
+			case "language":
+				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "highlight":
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
@@ -1534,6 +1585,8 @@ func (ec *executionContext) fieldContext_Step_file(ctx context.Context, field gr
 				return ec.fieldContext_OpenFile_content(ctx, field)
 			case "isFullContent":
 				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
+			case "language":
+				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "highlight":
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
@@ -3838,6 +3891,10 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 		case "isFullContent":
 
 			out.Values[i] = ec._OpenFile_isFullContent(ctx, field, obj)
+
+		case "language":
+
+			out.Values[i] = ec._OpenFile_language(ctx, field, obj)
 
 		case "highlight":
 

@@ -37,6 +37,7 @@ type OpenFile {
   fileName: String
   content: String
   isFullContent: Boolean
+  language: String
   highlight: [FileHighlight]
 }
 

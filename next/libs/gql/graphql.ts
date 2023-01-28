@@ -47,6 +47,7 @@ export type OpenFile = {
   filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]>;
+  language?: Maybe<Scalars["String"]>;
 };
 
 export type Query = {
@@ -114,6 +115,12 @@ export type TerminalOutput = {
   __typename: "TerminalOutput";
   output?: Maybe<Scalars["String"]>;
 };
+
+export type FileContentViewer_FragmentFragment = {
+  __typename: "OpenFile";
+  content?: string | null;
+  language?: string | null;
+} & { " $fragmentName"?: "FileContentViewer_FragmentFragment" };
 
 export type FileNameTab_FragmentFragment = {
   __typename: "OpenFile";
@@ -202,6 +209,7 @@ export type PageQueryQuery = {
         | ({ __typename: "OpenFile" } & {
             " $fragmentRefs"?: {
               FileNameTabBar_FragmentFragment: FileNameTabBar_FragmentFragment;
+              FileContentViewer_FragmentFragment: FileContentViewer_FragmentFragment;
             };
           })
         | null;
@@ -209,6 +217,26 @@ export type PageQueryQuery = {
   } | null;
 };
 
+export const FileContentViewer_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "FileContentViewer_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<FileContentViewer_FragmentFragment, unknown>;
 export const FileNameTab_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -526,6 +554,13 @@ export const PageQueryDocument = {
                                 value: "FileNameTabBar_Fragment",
                               },
                             },
+                            {
+                              kind: "FragmentSpread",
+                              name: {
+                                kind: "Name",
+                                value: "FileContentViewer_Fragment",
+                              },
+                            },
                           ],
                         },
                       },
@@ -539,5 +574,6 @@ export const PageQueryDocument = {
       },
     },
     ...FileNameTabBar_FragmentFragmentDoc.definitions,
+    ...FileContentViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
