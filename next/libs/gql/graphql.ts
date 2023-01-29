@@ -88,6 +88,7 @@ export type Terminal = {
 
 export type TerminalCommand = {
   __typename: "TerminalCommand";
+  alreadyExecuted?: Maybe<Scalars["Boolean"]>;
   command?: Maybe<Scalars["String"]>;
 };
 

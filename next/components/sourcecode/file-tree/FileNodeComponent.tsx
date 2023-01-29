@@ -22,7 +22,6 @@ export const FileNodeComponent = (
 ): JSX.Element => {
   const fragment = useFragment(FileNodeComponent_Fragment, props.fragment);
   const offset = fragment.offset ? fragment.offset : 0;
-  const background = fragment.isUpdated ? "#748d2e" : "#252526";
   const isCurrentDirectory =
     fragment.filePath &&
     props.currentDirectory &&
@@ -33,7 +32,7 @@ export const FileNodeComponent = (
       css={css`
         display: flex;
         gap: 4px;
-        background-color: ${background};
+        background-color: ${fragment.isUpdated ? "#748d2e" : "#252526"};
         color: white;
         padding-top: 3px;
         padding-bottom: 3px;
@@ -44,6 +43,7 @@ export const FileNodeComponent = (
       <FileNodeIcon fragment={fragment} />
       <div
         css={css`
+          background-color: ${isCurrentDirectory && "#007acc"};
           width: fit-content;
           white-space: nowrap;
           font-size: 13px;
