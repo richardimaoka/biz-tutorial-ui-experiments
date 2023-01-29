@@ -3,7 +3,7 @@
 # https://gqlgen.com/getting-started/
 
 type TerminalCommand {
-  alreadyExecuted: Boolean
+  beforeExecution: Boolean
   command: String
 }
 

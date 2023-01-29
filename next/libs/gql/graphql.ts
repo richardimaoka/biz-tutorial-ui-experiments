@@ -88,7 +88,7 @@ export type Terminal = {
 
 export type TerminalCommand = {
   __typename: "TerminalCommand";
-  alreadyExecuted?: Maybe<Scalars["Boolean"]>;
+  beforeExecution?: Maybe<Scalars["Boolean"]>;
   command?: Maybe<Scalars["String"]>;
 };
 
@@ -214,7 +214,7 @@ export type TerminalNodeComponent_FragmentFragment = {
   __typename: "TerminalNode";
   index?: number | null;
   content?:
-    | ({ __typename: "TerminalCommand" } & {
+    | ({ __typename: "TerminalCommand"; beforeExecution?: boolean | null } & {
         " $fragmentRefs"?: {
           TerminalCommand_FragmentFragment: TerminalCommand_FragmentFragment;
           TerminalCommandWriting_FragmentFragment: TerminalCommandWriting_FragmentFragment;
@@ -580,6 +580,10 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "beforeExecution" },
+                      },
                       {
                         kind: "FragmentSpread",
                         name: {

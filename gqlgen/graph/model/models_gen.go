@@ -53,7 +53,7 @@ type Terminal struct {
 }
 
 type TerminalCommand struct {
-	AlreadyExecuted *bool   `json:"alreadyExecuted"`
+	BeforeExecution *bool   `json:"beforeExecution"`
 	Command         *string `json:"command"`
 }
 

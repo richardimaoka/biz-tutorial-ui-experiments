@@ -9,6 +9,7 @@ const TerminalNodeComponent_Fragment = graphql(`
     content {
       __typename
       ... on TerminalCommand {
+        beforeExecution
         ...TerminalCommand_Fragment
         ...TerminalCommandWriting_Fragment
       }
@@ -31,7 +32,7 @@ export const TerminalNodeComponent = (
   if (fragment.content) {
     switch (fragment.content.__typename) {
       case "TerminalCommand":
-        return props.isLastElement ? (
+        return props.isLastElement && fragment.content.beforeExecution ? (
           <TerminalCommandWritingComponent fragment={fragment.content} />
         ) : (
           <TerminalCommandComponent fragment={fragment.content} />
