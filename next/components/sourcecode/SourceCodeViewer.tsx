@@ -18,6 +18,16 @@ export interface SourceCodeViewerProps {
   currentDirectory?: string[];
 }
 
+const EmptyFileContentPane = () => (
+  <div
+    css={css`
+      background-color: #1e1e1e;
+      width: auto;
+      height: 100%; //expand up to the outer element
+    `}
+  />
+);
+
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
@@ -45,11 +55,13 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           overflow: hidden; //necessary for wider-than-width source code
         `}
       >
-        {fragment.openFile && (
+        {fragment.openFile ? (
           <FileContentPane
             fragment={fragment.openFile}
             sourceCodeHeight={sourceCodeHeight}
           />
+        ) : (
+          <EmptyFileContentPane />
         )}
       </div>
     </div>
