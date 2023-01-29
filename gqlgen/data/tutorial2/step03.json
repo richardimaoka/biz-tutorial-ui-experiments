@@ -8,6 +8,7 @@
           "index": 1,
           "content": {
             "__typename": "TerminalCommand",
+            "alreadyExecuted": true,
             "command": "mkdir protoc-go-experiments"
           }
         },
@@ -15,6 +16,7 @@
           "index": 2,
           "content": {
             "__typename": "TerminalCommand",
+            "alreadyExecuted": false,
             "command": "cd protoc-go-experiments"
           }
         }

@@ -89,7 +89,8 @@ type ComplexityRoot struct {
 	}
 
 	TerminalCommand struct {
-		Command func(childComplexity int) int
+		AlreadyExecuted func(childComplexity int) int
+		Command         func(childComplexity int) int
 	}
 
 	TerminalCommandSet struct {
@@ -308,6 +309,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Terminal.Nodes(childComplexity), true
+
+	case "TerminalCommand.alreadyExecuted":
+		if e.complexity.TerminalCommand.AlreadyExecuted == nil {
+			break
+		}
+
+		return e.complexity.TerminalCommand.AlreadyExecuted(childComplexity), true
 
 	case "TerminalCommand.command":
 		if e.complexity.TerminalCommand.Command == nil {
@@ -1729,6 +1737,47 @@ func (ec *executionContext) fieldContext_Terminal_nodes(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _TerminalCommand_alreadyExecuted(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalCommand_alreadyExecuted(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlreadyExecuted, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalCommand_alreadyExecuted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalCommand",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TerminalCommand_command(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TerminalCommand_command(ctx, field)
 	if err != nil {
@@ -1806,6 +1855,8 @@ func (ec *executionContext) fieldContext_TerminalCommandSet_commands(ctx context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "alreadyExecuted":
+				return ec.fieldContext_TerminalCommand_alreadyExecuted(ctx, field)
 			case "command":
 				return ec.fieldContext_TerminalCommand_command(ctx, field)
 			}
@@ -4055,6 +4106,10 @@ func (ec *executionContext) _TerminalCommand(ctx context.Context, sel ast.Select
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TerminalCommand")
+		case "alreadyExecuted":
+
+			out.Values[i] = ec._TerminalCommand_alreadyExecuted(ctx, field, obj)
+
 		case "command":
 
 			out.Values[i] = ec._TerminalCommand_command(ctx, field, obj)

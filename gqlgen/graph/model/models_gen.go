@@ -53,7 +53,8 @@ type Terminal struct {
 }
 
 type TerminalCommand struct {
-	Command *string `json:"command"`
+	AlreadyExecuted *bool   `json:"alreadyExecuted"`
+	Command         *string `json:"command"`
 }
 
 func (TerminalCommand) IsTerminalElement() {}
