@@ -26,9 +26,10 @@ const PageQuery = graphql(/* GraphQL */ `
 
 export default function Home() {
   const router = useRouter();
-  const { step } = router.query;
+  const { step, nonUsed } = router.query;
   const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
 
+  // Page load optimization: const { loading, error, data, client } = useQuery(PageQuery, {
   const { loading, error, data } = useQuery(PageQuery, {
     variables: { step: stepInt },
   });
@@ -42,7 +43,6 @@ export default function Home() {
     : undefined;
 
   useEffect(() => {
-    console.log(currentTerminal);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         router.push(`./?step=${stepInt + 1}`);
@@ -56,7 +56,17 @@ export default function Home() {
     };
   }, [step]);
 
-  if (loading) return <p>Loading...</p>;
+  // Page load optimization:
+  // useEffect(() => {
+  //   client
+  //     .query({ query: PageQuery, variables: { step: stepInt + 1 } })
+  //     .catch((error) => console.log(error));
+  // }, [step]);
+
+  if (loading) {
+    console.log("loading", data);
+    return <p>Loading...</p>;
+  }
   if (error) return <p>Error : {error.message}</p>;
 
   return (
