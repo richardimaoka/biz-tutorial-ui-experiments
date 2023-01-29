@@ -6,6 +6,49 @@ import (
 	"reflect"
 )
 
+type AddDirectory struct {
+	FilePath []string
+}
+
+type DeleteDirectory struct {
+	FilePath []string
+}
+
+type AddFile struct {
+	FilePath []string
+	Content  string
+}
+
+type UpdateFile struct {
+	FilePath []string
+	Content  string
+}
+
+type DeleteFile struct {
+	FilePath []string
+}
+
+type UpdateSourceCode struct {
+	AddDirectories    []AddDirectory
+	DeleteDirectories []DeleteDirectory
+	AddFiles          []AddFile
+	UpdateFiles       []UpdateFile
+	DeleteFiles       []DeleteFile
+}
+
+type UpdateTerminal struct {
+	Output           string
+	CurrentDirectory []string
+}
+
+type ActionCommand struct {
+	ActionType       string
+	Command          string
+	TerminalName     string
+	UpdateTerminal   UpdateTerminal
+	UpdateSourceCode UpdateSourceCode
+}
+
 func ExtractTypeName(bytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
