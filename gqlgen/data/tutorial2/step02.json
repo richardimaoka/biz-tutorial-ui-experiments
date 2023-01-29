@@ -14,5 +14,15 @@
       ]
     }
   ],
-  "sourceCode": {}
+  "sourceCode": {
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "offset": 0,
+        "isUpdated": true,
+        "name": "protoc-go-experiments",
+        "filePath": ["protoc-go-experiments"]
+      }
+    ]
+  }
 }

@@ -1,0 +1,68 @@
+{
+  "nextAction": "see the next command",
+  "sourceCode": {
+    "openFile": {
+      "fileName": "package.json",
+      "_content": "message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}",
+      "__content": "message HelloReply {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n {\n string message = 1;\n  Greeting greet = 2;\n}",
+      "content": "message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply message HelloReply {\n string message = 1;\n  Greeting greet = 2;\n}"
+    },
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "offset": 0,
+        "name": "protoc-go-experiments",
+        "filePath": ["protoc-go-experiments"]
+      },
+      {
+        "nodeType": "DIRECTORY",
+        "offset": 2,
+        "name": "helloworld",
+        "filePath": ["protoc-go-experiments", "helloworld"],
+        "isCurrentDirectory": true
+      },
+      {
+        "nodeType": "FILE",
+        "offset": 3,
+        "name": "helloworld.proto",
+        "filePath": ["protoc-go-experiments", "helloworld", "helloworld.proto"]
+      },
+      {
+        "nodeType": "DIRECTORY",
+        "offset": 3,
+        "isUpdated": true,
+        "name": "outdir",
+        "filePath": ["protoc-go-experiments", "helloworld", "outdir"]
+      }
+    ]
+  },
+  "terminals": [
+    {
+      "name": "default",
+      "currentDirectory": ["protoc-go-experiments", "helloworld", "outdir"],
+      "nodes": [
+        {
+          "index": 1,
+          "content": {
+            "__typename": "TerminalCommand",
+            "command": "protoc \\\n  --go_out=outdir --go_opt=paths=source_relative \\\n  helloworld.proto"
+          }
+        },
+        {
+          "index": 2,
+          "content": {
+            "__typename": "TerminalOutput",
+            "output": "outdir/: No such file or directory"
+          }
+        },
+        {
+          "index": 3,
+          "content": {
+            "__typename": "TerminalCommand",
+            "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat << EOF > helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF"
+          }
+        }
+      ]
+    }
+  ]
+}
