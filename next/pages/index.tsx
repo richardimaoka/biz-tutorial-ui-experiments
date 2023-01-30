@@ -12,6 +12,7 @@ import { nonNullArray } from "../libs/nonNullArray";
 const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: Int!) {
     step(stepNum: $step) {
+      nextStepNum
       sourceCode {
         ...SourceCodeViewer_Fragment
       }
@@ -32,6 +33,14 @@ export default function Home() {
   // Page load optimization: const { loading, error, data, client } = useQuery(PageQuery, {
   const { loading, error, data } = useQuery(PageQuery, {
     variables: { step: stepInt },
+    // onCompleted: (data) => { THIS DOESN'T WORK as it adds the event listner twice, three times, ...
+    //   const handleKeyDown = (event: KeyboardEvent) => {
+    //     if (event.code === "Space" && data?.step?.nextStepNum) {
+    //       router.push(`./?step=${stepInt + 1}`);
+    //     }
+    //   };
+    //   document.addEventListener("keydown", handleKeyDown);
+    // },
   });
 
   const [currentTerminalIndex] = useState(0);
@@ -43,18 +52,19 @@ export default function Home() {
     : undefined;
 
   useEffect(() => {
+    console.log("step: ", step, data?.step?.nextStepNum);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         router.push(`./?step=${stepInt + 1}`);
       }
     };
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyDown);
 
     // Don't forget to clean up
     return function cleanup() {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyDown);
     };
-  }, [step]);
+  }, [step, data?.step?.nextStepNum]);
 
   // Page load optimization:
   // useEffect(() => {
@@ -63,10 +73,7 @@ export default function Home() {
   //     .catch((error) => console.log(error));
   // }, [step]);
 
-  if (loading) {
-    console.log("loading", data);
-    return <p>Loading...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
@@ -94,9 +101,11 @@ export default function Home() {
             {currentTerminal && (
               <TerminalComponent fragment={currentTerminal} />
             )}
-            <button type="button">
-              <Link href={`./?step=${stepInt + 1}`}> next step</Link>
-            </button>
+            {data.step?.nextStepNum && (
+              <button type="button">
+                <Link href={`./?step=${stepInt + 1}`}> next step</Link>
+              </button>
+            )}
           </div>
         </main>
       </>

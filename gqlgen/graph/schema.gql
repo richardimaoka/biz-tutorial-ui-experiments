@@ -64,6 +64,7 @@ type Step {
   stepNum: Int
   sourceCode: SourceCode
   terminals: [Terminal]
+  nextStepNum: Int
   nextAction: String
 }
 

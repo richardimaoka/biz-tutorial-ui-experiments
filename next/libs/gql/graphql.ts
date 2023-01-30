@@ -74,6 +74,7 @@ export type SourceCodeOpenFileArgs = {
 export type Step = {
   __typename: "Step";
   nextAction?: Maybe<Scalars["String"]>;
+  nextStepNum?: Maybe<Scalars["Int"]>;
   sourceCode?: Maybe<SourceCode>;
   stepNum?: Maybe<Scalars["Int"]>;
   terminals?: Maybe<Array<Maybe<Terminal>>>;
@@ -242,6 +243,7 @@ export type PageQueryQuery = {
   __typename: "Query";
   step?: {
     __typename: "Step";
+    nextStepNum?: number | null;
     sourceCode?:
       | ({ __typename: "SourceCode" } & {
           " $fragmentRefs"?: {
@@ -704,6 +706,7 @@ export const PageQueryDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
+                { kind: "Field", name: { kind: "Name", value: "nextStepNum" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "sourceCode" },

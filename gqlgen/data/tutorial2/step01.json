@@ -1,5 +1,5 @@
 {
-  "nextAction": "see the next command",
+  "nextStepNum": 2,
   "terminals": [
     {
       "name": "default",

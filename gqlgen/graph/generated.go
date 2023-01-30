@@ -76,10 +76,11 @@ type ComplexityRoot struct {
 	}
 
 	Step struct {
-		NextAction func(childComplexity int) int
-		SourceCode func(childComplexity int) int
-		StepNum    func(childComplexity int) int
-		Terminals  func(childComplexity int) int
+		NextAction  func(childComplexity int) int
+		NextStepNum func(childComplexity int) int
+		SourceCode  func(childComplexity int) int
+		StepNum     func(childComplexity int) int
+		Terminals   func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -267,6 +268,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Step.NextAction(childComplexity), true
+
+	case "Step.nextStepNum":
+		if e.complexity.Step.NextStepNum == nil {
+			break
+		}
+
+		return e.complexity.Step.NextStepNum(childComplexity), true
 
 	case "Step.sourceCode":
 		if e.complexity.Step.SourceCode == nil {
@@ -1102,6 +1110,8 @@ func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field g
 				return ec.fieldContext_Step_sourceCode(ctx, field)
 			case "terminals":
 				return ec.fieldContext_Step_terminals(ctx, field)
+			case "nextStepNum":
+				return ec.fieldContext_Step_nextStepNum(ctx, field)
 			case "nextAction":
 				return ec.fieldContext_Step_nextAction(ctx, field)
 			}
@@ -1562,6 +1572,47 @@ func (ec *executionContext) fieldContext_Step_terminals(ctx context.Context, fie
 				return ec.fieldContext_Terminal_nodes(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Step_nextStepNum(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Step_nextStepNum(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NextStepNum, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Step_nextStepNum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Step",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4047,6 +4098,10 @@ func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj
 		case "terminals":
 
 			out.Values[i] = ec._Step_terminals(ctx, field, obj)
+
+		case "nextStepNum":
+
+			out.Values[i] = ec._Step_nextStepNum(ctx, field, obj)
 
 		case "nextAction":
 

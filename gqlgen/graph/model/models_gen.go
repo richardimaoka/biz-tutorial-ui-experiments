@@ -40,10 +40,11 @@ type SourceCode struct {
 }
 
 type Step struct {
-	StepNum    *int        `json:"stepNum"`
-	SourceCode *SourceCode `json:"sourceCode"`
-	Terminals  []*Terminal `json:"terminals"`
-	NextAction *string     `json:"nextAction"`
+	StepNum     *int        `json:"stepNum"`
+	SourceCode  *SourceCode `json:"sourceCode"`
+	Terminals   []*Terminal `json:"terminals"`
+	NextStepNum *int        `json:"nextStepNum"`
+	NextAction  *string     `json:"nextAction"`
 }
 
 type Terminal struct {
