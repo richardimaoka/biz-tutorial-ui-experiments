@@ -19,6 +19,7 @@ export const TerminalCommandWritingComponent = (
   const command = fragment.command;
   const [writtenLength, setWrittenLength] = useState(0);
 
+  //TODO: can avoid re-render with React.memo (+ useMemo hook?)
   useEffect(() => {
     if (command && writtenLength < command.length) {
       const incrementStep = command.length / 10;
