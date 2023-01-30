@@ -30,17 +30,8 @@ export default function Home() {
   const { step, nonUsed } = router.query;
   const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
 
-  // Page load optimization: const { loading, error, data, client } = useQuery(PageQuery, {
-  const { loading, error, data } = useQuery(PageQuery, {
+  const { loading, error, data, client } = useQuery(PageQuery, {
     variables: { step: stepInt },
-    // onCompleted: (data) => { THIS DOESN'T WORK as it adds the event listner twice, three times, ...
-    //   const handleKeyDown = (event: KeyboardEvent) => {
-    //     if (event.code === "Space" && data?.step?.nextStepNum) {
-    //       router.push(`./?step=${stepInt + 1}`);
-    //     }
-    //   };
-    //   document.addEventListener("keydown", handleKeyDown);
-    // },
   });
 
   const [currentTerminalIndex] = useState(0);
@@ -52,7 +43,6 @@ export default function Home() {
     : undefined;
 
   useEffect(() => {
-    console.log("step: ", step, data?.step?.nextStepNum);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         router.push(`./?step=${stepInt + 1}`);
@@ -67,11 +57,16 @@ export default function Home() {
   }, [step, data?.step?.nextStepNum]);
 
   // Page load optimization:
-  // useEffect(() => {
-  //   client
-  //     .query({ query: PageQuery, variables: { step: stepInt + 1 } })
-  //     .catch((error) => console.log(error));
-  // }, [step]);
+  useEffect(() => {
+    if (data?.step?.nextStepNum) {
+      client
+        .query({
+          query: PageQuery,
+          variables: { step: data?.step?.nextStepNum },
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [data?.step?.nextStepNum]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -103,7 +98,7 @@ export default function Home() {
             )}
             {data.step?.nextStepNum && (
               <button type="button">
-                <Link href={`./?step=${stepInt + 1}`}> next step</Link>
+                <Link href={`./?step=${data.step.nextStepNum}`}>next step</Link>
               </button>
             )}
           </div>
