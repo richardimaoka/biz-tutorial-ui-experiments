@@ -1,4 +1,4 @@
-package pkg2
+package model
 
 type Input struct {
 	Action  ActionNode

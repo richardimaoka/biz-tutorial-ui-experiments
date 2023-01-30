@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	err := pkg2.Process("data2/action00.json", "data2/step00.json")
+	err := pkg2.Process()
 	if err != nil {
 		panic(err)
 	}

@@ -1,4 +1,4 @@
-package pkg2
+package model
 
 import (
 	"encoding/json"
@@ -93,11 +93,69 @@ func readAction(filePath string) (*ActionCommand, error) {
 	}
 }
 
-func Process(actionFile string, stepFile string) error {
-	_, err := readAction(actionFile)
+func convertActionCommand(command *ActionCommand, step int) (int, error) {
+	nextStep := step + 1
+	nextNextStep := step + 1
+	terminalName := "default"
+	// terminalCommandType := "TerminalCommand"
+	trueValue := true
+	falseValue := false
+
+	stepBeforeStruct := Step{
+		StepNum:     &step,
+		NextStepNum: &nextStep,
+		Terminals: []*Terminal{
+			{
+				Name:             &terminalName,
+				CurrentDirectory: []*string{&terminalName},
+				Nodes: []*TerminalNode{
+					{
+						// ContentType: &terminalCommandType,
+						Content: TerminalCommand{
+							Command:         &command.Command,
+							BeforeExecution: &trueValue,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	stepAfterStruct := Step{
+		StepNum:     &nextStep,
+		NextStepNum: &nextNextStep,
+		Terminals: []*Terminal{
+			{
+				Name:             &terminalName,
+				CurrentDirectory: []*string{&terminalName},
+				Nodes: []*TerminalNode{
+					{
+						// ContentType: &terminalCommandType,
+						Content: TerminalCommand{
+							Command:         &command.Command,
+							BeforeExecution: &falseValue,
+						},
+					},
+				},
+			},
+		},
+		SourceCode: &SourceCode{},
+	}
+
+	fmt.Println(stepBeforeStruct.StepNum)
+	fmt.Println(stepAfterStruct.StepNum)
+
+	return nextNextStep, nil
+}
+
+func Process() error {
+	var step = 0
+	var actionFile = fmt.Sprintf("data2/action%02d.json", step)
+
+	action, err := readAction(actionFile)
 	if err != nil {
 		return err
 	}
-
+	convertActionCommand(action, step)
 	return nil
 }
