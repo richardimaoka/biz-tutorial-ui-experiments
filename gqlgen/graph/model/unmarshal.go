@@ -54,9 +54,10 @@ func terminalElementFromBytes(bytes []byte) (TerminalElement, error) {
 		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object', as it is unmarshaled to type = %v", reflect.TypeOf(unmarshaled))
 	}
 
-	typename, ok := asserted["__typename"]
+	contentType := "contentType"
+	typename, ok := asserted[contentType]
 	if !ok {
-		return nil, fmt.Errorf("\"__typename\" does not exist in JSON")
+		return nil, fmt.Errorf("\"%s\" does not exist in JSON", contentType)
 	}
 
 	switch t := typename.(type) {
@@ -78,9 +79,9 @@ func terminalElementFromBytes(bytes []byte) (TerminalElement, error) {
 			return &output, nil
 
 		default:
-			return nil, fmt.Errorf("\"__typename\" = %s is not a valid TerminalElement type", t)
+			return nil, fmt.Errorf("\"%s\" = %s is not a valid TerminalElement type", contentType, t)
 		}
 	default:
-		return nil, fmt.Errorf("\"__typename\" = %v is in wrong type %v", t, reflect.TypeOf(t))
+		return nil, fmt.Errorf("\"%s\" = %v is in wrong type %v", contentType, t, reflect.TypeOf(t))
 	}
 }
