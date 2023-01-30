@@ -11,17 +11,6 @@
       {
         "filePath": ["protoc-go-experiments"]
       }
-    ],
-    "updateFiles": [
-      {
-        "filePath": ["protoc-go-experiments"],
-        "content": ""
-      }
-    ],
-    "filesDelete": [
-      {
-        "filePath": ["protoc-go-experiments"]
-      }
     ]
   }
 }

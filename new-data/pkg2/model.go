@@ -3,6 +3,7 @@ package pkg2
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"reflect"
 )
 
@@ -49,7 +50,7 @@ type ActionCommand struct {
 	UpdateSourceCode UpdateSourceCode
 }
 
-func ExtractTypeName(bytes []byte, fromField string) (string, error) {
+func extractTypeName(bytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
 	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
 		return "", err
@@ -62,8 +63,41 @@ func ExtractTypeName(bytes []byte, fromField string) (string, error) {
 
 	typeName, ok := typeNameRaw.(string)
 	if !ok {
-		return "", fmt.Errorf("\"%s\" is not a string, but found %s", fromField, reflect.TypeOf(typeNameRaw))
+		return "", fmt.Errorf("\"%s\" is not a string, but found in type = %v", fromField, reflect.TypeOf(typeNameRaw))
 	}
 
 	return typeName, nil
+}
+
+func readAction(filePath string) (*ActionCommand, error) {
+	bytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("readAction() failed, %s", err)
+	}
+
+	typeName, err := extractTypeName(bytes, "actionType")
+	if err != nil {
+		return nil, fmt.Errorf("readAction() failed to actionType from %s, %s", filePath, err)
+	}
+
+	switch typeName {
+	case "ActionCommand":
+		var action ActionCommand
+		err := json.Unmarshal(bytes, &action)
+		if err != nil {
+			return nil, err
+		}
+		return &action, nil
+	default:
+		return nil, fmt.Errorf("readAction() found invalid typeName = %s in file = %s", typeName, filePath)
+	}
+}
+
+func Process(actionFile string, stepFile string) error {
+	_, err := readAction(actionFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

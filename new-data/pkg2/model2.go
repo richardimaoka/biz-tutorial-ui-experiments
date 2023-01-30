@@ -17,7 +17,7 @@ type Command struct {
 	Command string
 }
 
-func (c *Command) IsAction()
+func (c *Command) IsAction() {}
 
 type Result struct {
 }
