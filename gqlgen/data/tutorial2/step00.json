@@ -1,0 +1,19 @@
+{
+  "nextStepNum": 1,
+  "terminals": [
+    {
+      "name": "default",
+      "nodes": [
+        {
+          "index": 1,
+          "content": {
+            "__typename": "TerminalCommand",
+            "beforeExecution": true,
+            "command": "mkdir protoc-go-experiments"
+          }
+        }
+      ]
+    }
+  ],
+  "sourceCode": {}
+}

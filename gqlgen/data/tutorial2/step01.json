@@ -8,12 +8,22 @@
           "index": 1,
           "content": {
             "__typename": "TerminalCommand",
-            "beforeExecution": true,
+            "beforeExecution": false,
             "command": "mkdir protoc-go-experiments"
           }
         }
       ]
     }
   ],
-  "sourceCode": {}
+  "sourceCode": {
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "offset": 0,
+        "isUpdated": true,
+        "name": "protoc-go-experiments",
+        "filePath": ["protoc-go-experiments"]
+      }
+    ]
+  }
 }

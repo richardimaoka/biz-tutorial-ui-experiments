@@ -28,7 +28,7 @@ const PageQuery = graphql(/* GraphQL */ `
 export default function Home() {
   const router = useRouter();
   const { step, nonUsed } = router.query;
-  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 1;
+  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 0;
 
   const { loading, error, data, client } = useQuery(PageQuery, {
     variables: { step: stepInt },

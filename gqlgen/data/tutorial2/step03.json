@@ -1,8 +1,8 @@
 {
-  "nextStepNum": 4,
   "terminals": [
     {
       "name": "default",
+      "currentDirectory": ["protoc-go-experiments"],
       "nodes": [
         {
           "index": 1,
@@ -16,7 +16,7 @@
           "index": 2,
           "content": {
             "__typename": "TerminalCommand",
-            "beforeExecution": true,
+            "beforeExecution": false,
             "command": "cd protoc-go-experiments"
           }
         }

@@ -11,6 +11,14 @@
             "beforeExecution": false,
             "command": "mkdir protoc-go-experiments"
           }
+        },
+        {
+          "index": 2,
+          "content": {
+            "__typename": "TerminalCommand",
+            "beforeExecution": true,
+            "command": "cd protoc-go-experiments"
+          }
         }
       ]
     }
@@ -20,7 +28,6 @@
       {
         "nodeType": "DIRECTORY",
         "offset": 0,
-        "isUpdated": true,
         "name": "protoc-go-experiments",
         "filePath": ["protoc-go-experiments"]
       }
