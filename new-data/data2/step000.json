@@ -1,0 +1,16 @@
+{
+  "stepNum": 0,
+  "sourceCode": {
+    "fileTree": null,
+    "openFile": null
+  },
+  "terminals": [
+    {
+      "name": "default",
+      "currentDirectory": null,
+      "nodes": null
+    }
+  ],
+  "nextStepNum": 1,
+  "nextAction": null
+}
