@@ -1,7 +1,7 @@
 {
   "actionType": "ActionCommand",
-  "command": "mkdir protoc-go-experiments",
   "terminalName": "default",
+  "command": "mkdir protoc-go-experiments",
   "updateTerminal": {
     "output": "",
     "currentDirectory": [""]
