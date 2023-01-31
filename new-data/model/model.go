@@ -93,11 +93,32 @@ func readAction(filePath string) (*ActionCommand, error) {
 	}
 }
 
+func (node TerminalNode) MarshalJSON() ([]byte, error) {
+	type TerminalNodeExtended struct {
+		ContentType string `json:"contentType"`
+		TerminalNode
+	}
+
+	switch content := node.Content.(type) {
+	case TerminalCommand:
+		typedNode := struct {
+			ContentType string
+			Content     TerminalCommand
+		}{
+			"TerminalCommand",
+			content,
+		}
+		return json.Marshal(typedNode)
+	default:
+		fmt.Println("(t TerminalNode) MarshalJSON()")
+		return nil, fmt.Errorf("default is error")
+	}
+}
+
 func convertActionCommand(command *ActionCommand, step int) (int, error) {
 	nextStep := step + 1
 	nextNextStep := step + 1
 	terminalName := "default"
-	// terminalCommandType := "TerminalCommand"
 	trueValue := true
 	falseValue := false
 
@@ -110,7 +131,6 @@ func convertActionCommand(command *ActionCommand, step int) (int, error) {
 				CurrentDirectory: []*string{&terminalName},
 				Nodes: []*TerminalNode{
 					{
-						// ContentType: &terminalCommandType,
 						Content: TerminalCommand{
 							Command:         &command.Command,
 							BeforeExecution: &trueValue,
@@ -144,6 +164,11 @@ func convertActionCommand(command *ActionCommand, step int) (int, error) {
 
 	fmt.Println(stepBeforeStruct.StepNum)
 	fmt.Println(stepAfterStruct.StepNum)
+	s, err := json.Marshal(stepAfterStruct)
+	if err != nil {
+		return 0, err
+	}
+	fmt.Println(string(s))
 
 	return nextNextStep, nil
 }

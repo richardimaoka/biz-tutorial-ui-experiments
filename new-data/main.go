@@ -1,11 +1,9 @@
 package main
 
-import (
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/pkg2"
-)
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/model"
 
 func main() {
-	err := pkg2.Process()
+	err := model.Process()
 	if err != nil {
 		panic(err)
 	}
