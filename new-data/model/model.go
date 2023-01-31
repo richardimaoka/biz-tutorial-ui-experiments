@@ -116,17 +116,19 @@ func (node TerminalNode) MarshalJSON() ([]byte, error) {
 }
 
 func (step *Step) TypeInTerminalCommand(command *ActionCommand) error {
-	for _, v := range step.Terminals {
-		if *v.Name == command.TerminalName {
+	for _, t := range step.Terminals {
+		if *t.Name == command.TerminalName {
+			*step.StepNum++
+			*step.NextStepNum++
+
 			falseValue := false
-			v.Nodes = append(v.Nodes, &TerminalNode{
+			t.Nodes = append(t.Nodes, &TerminalNode{
 				Content: TerminalCommand{
 					Command:         &command.Command,
 					BeforeExecution: &falseValue,
 				},
 			})
-			*step.StepNum++
-			*step.NextStepNum++
+
 			return nil
 		}
 	}
@@ -135,15 +137,45 @@ func (step *Step) TypeInTerminalCommand(command *ActionCommand) error {
 }
 
 func (step *Step) RunTerminalCommand(command *ActionCommand) error {
-	for _, v := range step.Terminals {
-		if v.Name == &command.TerminalName {
-			v.Nodes = append(v.Nodes, &TerminalNode{
-				Content: TerminalCommand{
-					Command: &command.Command,
-				},
-			})
+	for _, t := range step.Terminals {
+		if t.Name == &command.TerminalName {
 			*step.StepNum++
 			*step.NextStepNum++
+
+			if command.UpdateTerminal.Output != "" {
+				t.Nodes = append(t.Nodes, &TerminalNode{
+					Content: TerminalOutput{
+						Output: &command.Command,
+					},
+				})
+			}
+
+			if len(command.UpdateTerminal.CurrentDirectory) > 0 {
+				t.CurrentDirectory = []*string{}
+				for _, d := range command.UpdateTerminal.CurrentDirectory {
+					t.CurrentDirectory = append(t.CurrentDirectory, &d)
+				}
+			}
+
+			if len(command.UpdateSourceCode.AddDirectories) > 0 {
+				for _, d := range command.UpdateSourceCode.AddDirectories {
+					dType := FileNodeTypeDirectory
+					offset := len(d.FilePath)
+					trueValue := true
+					step.SourceCode.FileTree = append(
+						step.SourceCode.FileTree,
+						&FileNode{
+							NodeType: &dType,
+							// Name: &d.FilePath[],
+							Offset:    &offset,
+							IsUpdated: &trueValue,
+						},
+					)
+					// t.CurrentDirectory = append(t.CurrentDirectory, &d)
+				}
+
+			}
+
 			return nil
 		}
 	}
