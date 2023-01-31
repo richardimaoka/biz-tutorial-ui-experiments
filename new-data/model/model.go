@@ -111,7 +111,6 @@ func (node TerminalNode) MarshalJSON() ([]byte, error) {
 		}
 		return json.Marshal(typedNode)
 	default:
-		fmt.Println("(t TerminalNode) MarshalJSON()")
 		return nil, fmt.Errorf("default is error")
 	}
 }
@@ -216,6 +215,7 @@ func (step *Step) runTerminalCommand(command *ActionCommand) error {
 }
 
 func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string) error {
+	//step 1 type in terminal command
 	err := step.typeInTerminalCommand(command)
 	if err != nil {
 		return err
@@ -227,11 +227,11 @@ func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string
 	}
 
 	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
-	err = os.WriteFile(fileName, bytes, 0644)
-	if err != nil {
+	if os.WriteFile(fileName, bytes, 0644) != nil {
 		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
 	}
 
+	//step 2 run terminal command
 	err = step.runTerminalCommand(command)
 	if err != nil {
 		return err
@@ -251,79 +251,28 @@ func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string
 	return nil
 }
 
-func convertActionCommand(command *ActionCommand, step int) (int, error) {
-	nextStep := step + 1
-	nextNextStep := step + 1
-	terminalName := "default"
-	trueValue := true
-	falseValue := false
-
-	stepBeforeStruct := Step{
-		StepNum:     &step,
-		NextStepNum: &nextStep,
-		Terminals: []*Terminal{
-			{
-				Name:             &terminalName,
-				CurrentDirectory: []*string{&terminalName},
-				Nodes: []*TerminalNode{
-					{
-						Content: TerminalCommand{
-							Command:         &command.Command,
-							BeforeExecution: &trueValue,
-						},
-					},
-				},
-			},
-		},
-	}
-
-	stepAfterStruct := Step{
-		StepNum:     &nextStep,
-		NextStepNum: &nextNextStep,
-		Terminals: []*Terminal{
-			{
-				Name:             &terminalName,
-				CurrentDirectory: []*string{&terminalName},
-				Nodes: []*TerminalNode{
-					{
-						// ContentType: &terminalCommandType,
-						Content: TerminalCommand{
-							Command:         &command.Command,
-							BeforeExecution: &falseValue,
-						},
-					},
-				},
-			},
-		},
-		SourceCode: &SourceCode{},
-	}
-
-	fmt.Println(stepBeforeStruct.StepNum)
-	fmt.Println(stepAfterStruct.StepNum)
-	s, err := json.Marshal(stepAfterStruct)
-	if err != nil {
-		return 0, err
-	}
-	fmt.Println(string(s))
-
-	return nextNextStep, nil
-}
-
 func Process() error {
 	step := NewStep()
 
-	actionFile := fmt.Sprintf("data2/action%03d.json", 0)
-	cmd, err := readAction(actionFile)
-	if err != nil {
-		return err
+	for i := 0; i <= 100; i++ {
+		actionFile := fmt.Sprintf("data2/action%03d.json", i)
+		_, err := os.ReadFile(actionFile)
+		if err != nil {
+			return nil
+		}
+
+		cmd, err := readAction(actionFile)
+		if err != nil {
+			return err
+		}
+
+		err = step.ProcessActionCommand(cmd, "data2/step")
+		if err != nil {
+			return err
+		}
 	}
 
-	err = step.ProcessActionCommand(cmd, "data2/step")
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return fmt.Errorf("loop count 100, too big!!")
 }
 
 func ordinal(x int) string {
