@@ -2,9 +2,22 @@ package model
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 )
+
+func Test_NewStep(t *testing.T) {
+	step := NewStep()
+
+	if len(step.Terminals) != 1 {
+		t.Errorf("terminal size = %d, not 1", len(step.Terminals))
+	}
+
+	if len(step.Terminals[0].Nodes) != 0 {
+		t.Errorf("terminal nodes size = %d, not 0", len(step.Terminals[0].Nodes))
+	}
+
+	step.Terminals[0].Nodes = append(step.Terminals[0].Nodes, &TerminalNode{})
+}
 
 func Test_MarshalStep(t *testing.T) {
 	stepNum := 1
@@ -32,7 +45,6 @@ func Test_MarshalStep(t *testing.T) {
 		t.Errorf("got %s but want %s", got, want)
 
 	}
-	fmt.Println(string(m))
 }
 
 func Test_TypeInTerminalCommand(t *testing.T) {
@@ -50,7 +62,7 @@ func Test_TypeInTerminalCommand(t *testing.T) {
 		},
 	}
 
-	err := step.TypeInTerminalCommand(&ActionCommand{
+	err := step.typeInTerminalCommand(&ActionCommand{
 		Command:      "mkdir protoc-go-experiments",
 		TerminalName: "default",
 	})

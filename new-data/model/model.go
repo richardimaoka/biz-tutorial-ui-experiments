@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strconv"
 )
 
 type AddDirectory struct {
@@ -115,7 +116,24 @@ func (node TerminalNode) MarshalJSON() ([]byte, error) {
 	}
 }
 
-func (step *Step) TypeInTerminalCommand(command *ActionCommand) error {
+func NewStep() *Step {
+	stepNum := 0
+	nextStepNum := 1
+	terminalName := "default"
+
+	return &Step{
+		StepNum:     &stepNum,
+		NextStepNum: &nextStepNum,
+		Terminals: []*Terminal{
+			{
+				Name: &terminalName,
+			},
+		},
+		SourceCode: &SourceCode{},
+	}
+}
+
+func (step *Step) typeInTerminalCommand(command *ActionCommand) error {
 	for _, t := range step.Terminals {
 		if *t.Name == command.TerminalName {
 			*step.StepNum++
@@ -133,15 +151,16 @@ func (step *Step) TypeInTerminalCommand(command *ActionCommand) error {
 		}
 	}
 
-	return fmt.Errorf("TypeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+	return fmt.Errorf("typeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
 }
 
-func (step *Step) RunTerminalCommand(command *ActionCommand) error {
+func (step *Step) runTerminalCommand(command *ActionCommand) error {
 	for _, t := range step.Terminals {
-		if t.Name == &command.TerminalName {
+		if *t.Name == command.TerminalName {
 			*step.StepNum++
 			*step.NextStepNum++
 
+			// Process UpdateTerminal
 			if command.UpdateTerminal.Output != "" {
 				t.Nodes = append(t.Nodes, &TerminalNode{
 					Content: TerminalOutput{
@@ -157,30 +176,79 @@ func (step *Step) RunTerminalCommand(command *ActionCommand) error {
 				}
 			}
 
+			// Process UpdateSourceCode
 			if len(command.UpdateSourceCode.AddDirectories) > 0 {
-				for _, d := range command.UpdateSourceCode.AddDirectories {
+				for i, d := range command.UpdateSourceCode.AddDirectories {
+					if len(d.FilePath) == 0 {
+						return fmt.Errorf("AddDirectories has %s element with empty filePath", ordinal(i))
+					}
+
 					dType := FileNodeTypeDirectory
 					offset := len(d.FilePath)
 					trueValue := true
+					dirName := d.FilePath[len(d.FilePath)-1]
+
+					filePath := []*string{}
+					for _, p := range d.FilePath {
+						filePath = append(filePath, &p)
+					}
+
 					step.SourceCode.FileTree = append(
 						step.SourceCode.FileTree,
 						&FileNode{
-							NodeType: &dType,
-							// Name: &d.FilePath[],
+							NodeType:  &dType,
+							Name:      &dirName,
+							FilePath:  filePath,
 							Offset:    &offset,
 							IsUpdated: &trueValue,
 						},
 					)
-					// t.CurrentDirectory = append(t.CurrentDirectory, &d)
 				}
-
 			}
+
+			//TODO: sort FileTree
 
 			return nil
 		}
 	}
 
-	return fmt.Errorf("TypeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+	return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+}
+
+func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string) error {
+	err := step.typeInTerminalCommand(command)
+	if err != nil {
+		return err
+	}
+
+	bytes, err := json.MarshalIndent(step, "", "  ")
+	if err != nil {
+		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
+	}
+
+	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
+	err = os.WriteFile(fileName, bytes, 0644)
+	if err != nil {
+		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
+	}
+
+	err = step.runTerminalCommand(command)
+	if err != nil {
+		return err
+	}
+
+	bytes, err = json.MarshalIndent(step, "", "  ")
+	if err != nil {
+		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
+	}
+
+	fileName = fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
+	err = os.WriteFile(fileName, bytes, 0644)
+	if err != nil {
+		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
+	}
+
+	return nil
 }
 
 func convertActionCommand(command *ActionCommand, step int) (int, error) {
@@ -242,13 +310,37 @@ func convertActionCommand(command *ActionCommand, step int) (int, error) {
 }
 
 func Process() error {
-	var step = 0
-	var actionFile = fmt.Sprintf("data2/action%02d.json", step)
+	step := NewStep()
 
-	action, err := readAction(actionFile)
+	actionFile := fmt.Sprintf("data2/action%03d.json", 0)
+	cmd, err := readAction(actionFile)
 	if err != nil {
 		return err
 	}
-	convertActionCommand(action, step)
+
+	err = step.ProcessActionCommand(cmd, "data2/step")
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func ordinal(x int) string {
+	suffix := "th"
+	switch x % 10 {
+	case 1:
+		if x%100 != 11 {
+			suffix = "st"
+		}
+	case 2:
+		if x%100 != 12 {
+			suffix = "nd"
+		}
+	case 3:
+		if x%100 != 13 {
+			suffix = "rd"
+		}
+	}
+	return strconv.Itoa(x) + suffix
 }
