@@ -70,15 +70,10 @@ func extractTypeName(bytes []byte, fromField string) (string, error) {
 	return typeName, nil
 }
 
-func readAction(filePath string) (*ActionCommand, error) {
-	bytes, err := os.ReadFile(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("readAction() failed, %s", err)
-	}
-
+func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 	typeName, err := extractTypeName(bytes, "actionType")
 	if err != nil {
-		return nil, fmt.Errorf("readAction() failed to actionType from %s, %s", filePath, err)
+		return nil, fmt.Errorf("readActionFromBytes() failed to extract actionType %s", err)
 	}
 
 	switch typeName {
@@ -90,7 +85,7 @@ func readAction(filePath string) (*ActionCommand, error) {
 		}
 		return &action, nil
 	default:
-		return nil, fmt.Errorf("readAction() found invalid typeName = %s in file = %s", typeName, filePath)
+		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s in file = %s", typeName)
 	}
 }
 
@@ -267,14 +262,14 @@ func Process() error {
 
 	for i := 0; i <= 100; i++ {
 		actionFile := fmt.Sprintf("data2/action%03d.json", i)
-		_, err := os.ReadFile(actionFile)
+		bytes, err := os.ReadFile(actionFile)
 		if err != nil {
-			return nil
+			return nil //no file found, end of processing
 		}
 
-		cmd, err := readAction(actionFile)
+		cmd, err := readActionFromBytes(bytes)
 		if err != nil {
-			return err
+			return fmt.Errorf("failure in %s, %s", actionFile, err)
 		}
 
 		err = step.ProcessActionCommand(cmd, filePrefix)
