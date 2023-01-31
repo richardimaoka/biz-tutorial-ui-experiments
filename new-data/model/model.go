@@ -85,7 +85,7 @@ func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 		}
 		return &action, nil
 	default:
-		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s in file = %s", typeName)
+		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s", typeName)
 	}
 }
 
@@ -216,13 +216,8 @@ func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string
 		return err
 	}
 
-	bytes, err := json.MarshalIndent(step, "", "  ")
+	err = step.writeFile(filePrefix)
 	if err != nil {
-		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
-	}
-
-	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
-	if os.WriteFile(fileName, bytes, 0644) != nil {
 		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
 	}
 
@@ -232,13 +227,7 @@ func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string
 		return err
 	}
 
-	bytes, err = json.MarshalIndent(step, "", "  ")
-	if err != nil {
-		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
-	}
-
-	fileName = fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
-	err = os.WriteFile(fileName, bytes, 0644)
+	err = step.writeFile(filePrefix)
 	if err != nil {
 		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
 	}
@@ -246,19 +235,25 @@ func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string
 	return nil
 }
 
+func (s *Step) writeFile(filePrefix string) error {
+	bytes, err := json.MarshalIndent(s, "", "  ")
+	if err != nil {
+		return fmt.Errorf("writeFile() failed, %s", err)
+	}
+
+	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *s.StepNum)
+	if os.WriteFile(fileName, bytes, 0644) != nil {
+		return fmt.Errorf("writeFile() failed, %s", err)
+	}
+
+	return nil
+}
+
 func Process() error {
-	step := NewStep()
 	filePrefix := "data2/step"
 
-	bytes, err := json.MarshalIndent(step, "", "  ")
-	if err != nil {
-		return fmt.Errorf("Process() failed, %s", err)
-	}
-
-	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *step.StepNum)
-	if os.WriteFile(fileName, bytes, 0644) != nil {
-		return fmt.Errorf("Process() failed, %s", err)
-	}
+	step := NewStep()
+	step.writeFile(filePrefix)
 
 	for i := 0; i <= 100; i++ {
 		actionFile := fmt.Sprintf("data2/action%03d.json", i)
