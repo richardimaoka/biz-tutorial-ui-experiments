@@ -115,6 +115,42 @@ func (node TerminalNode) MarshalJSON() ([]byte, error) {
 	}
 }
 
+func (step *Step) TypeInTerminalCommand(command *ActionCommand) error {
+	for _, v := range step.Terminals {
+		if *v.Name == command.TerminalName {
+			falseValue := false
+			v.Nodes = append(v.Nodes, &TerminalNode{
+				Content: TerminalCommand{
+					Command:         &command.Command,
+					BeforeExecution: &falseValue,
+				},
+			})
+			*step.StepNum++
+			*step.NextStepNum++
+			return nil
+		}
+	}
+
+	return fmt.Errorf("TypeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+}
+
+func (step *Step) RunTerminalCommand(command *ActionCommand) error {
+	for _, v := range step.Terminals {
+		if v.Name == &command.TerminalName {
+			v.Nodes = append(v.Nodes, &TerminalNode{
+				Content: TerminalCommand{
+					Command: &command.Command,
+				},
+			})
+			*step.StepNum++
+			*step.NextStepNum++
+			return nil
+		}
+	}
+
+	return fmt.Errorf("TypeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+}
+
 func convertActionCommand(command *ActionCommand, step int) (int, error) {
 	nextStep := step + 1
 	nextNextStep := step + 1
