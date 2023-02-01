@@ -7,8 +7,8 @@ import (
 )
 
 func TestUnflatten(t *testing.T) {
-	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "a": 250}`))
-	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "chilsdB": 10.0}, "a": 250}
+	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "a": 250, "b": "bbb"}`))
+	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0}, "a": 250}
 
 	for key, value := range result {
 		switch children := value.(type) {
@@ -50,7 +50,33 @@ func TestUnflatten(t *testing.T) {
 				}
 			}
 		default:
-			fmt.Println("result  : key =", key, "value = ", value)
+			eValue, ok := expected[key]
+			if !ok {
+				t.Errorf("expected[%s] does not exist, while result[%s] does", key, key)
+				return
+			}
+
+			if reflect.ValueOf(value).Kind() == reflect.Ptr {
+				t.Errorf("result[%s] is a pointer %s of type %v", key, value, reflect.TypeOf(value))
+				return
+			}
+
+			if reflect.ValueOf(eValue).Kind() == reflect.Ptr {
+				t.Errorf("expected[%s] is a pointer %s of type %v", key, eValue, reflect.TypeOf(eValue))
+				return
+			}
+
+			vType := reflect.TypeOf(value)
+			eType := reflect.TypeOf(eValue)
+			if vType != eType {
+				t.Errorf("expected[%s] has type = %v, not matching with result[%s] in type = %v", key, vType, key, eType)
+				return
+			}
+
+			if value != eValue {
+				t.Errorf("result[%s] = %v is not equal to expected[%s] = %v", key, value, key, eValue)
+				return
+			}
 		}
 	}
 
