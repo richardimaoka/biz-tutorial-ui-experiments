@@ -1,6 +1,9 @@
 package model
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"strings"
+)
 
 func unflatten(bytes []byte) map[string]interface{} {
 	var unmarshaled map[string]interface{}
@@ -10,15 +13,24 @@ func unflatten(bytes []byte) map[string]interface{} {
 	}
 
 	var nested = make(map[string]interface{})
-	nested["parent"] = make(map[string]interface{})
-	children, ok := nested["parent"].(map[string]interface{})
-	if !ok {
-		panic("chldren is not map[string]interface{P}")
+	for k, v := range unmarshaled {
+		if dotIndex := strings.IndexRune(k, '.'); dotIndex != -1 {
+			parentKey := k[0:dotIndex]
+			childKey := k[dotIndex+1:]
+
+			if nested[parentKey] == nil {
+				children := make(map[string]interface{})
+				children[childKey] = v
+				nested[parentKey] = children
+			} else {
+				children, ok := nested[parentKey].(map[string]interface{})
+				if !ok {
+					panic(parentKey + " conflicted!!")
+				}
+				children[childKey] = v
+			}
+		}
 	}
-
-	children["childA"] = "AAA"
-
-	children["childB"] = 10
 
 	return nested
 }
