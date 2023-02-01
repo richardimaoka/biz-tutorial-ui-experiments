@@ -64,20 +64,23 @@ func compareTwoMaps(t *testing.T, m1name string, m1 interface{}, m2name string, 
 
 func TestUnflatten(t *testing.T) {
 	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250, "b": "bbb", "d": 1234}`))
-	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0, "childC": nil}, "a": 250, "c": 2520}
+	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAASA", "childB": 10.0, "childC": nil}, "a": 250, "c": 2520}
 
 	for key, value := range result {
 		switch children := value.(type) {
 		case map[string]interface{}:
-			compareTwoMaps(t, fmt.Sprintf("result[%s]", key), children, fmt.Sprintf("expected[%s]", key), expected[key])
+			t.Run("a", func(t *testing.T) {
+				compareTwoMaps(t, fmt.Sprintf("result[%s]", key), children, fmt.Sprintf("expected[%s]", key), expected[key])
+			})
 		default:
 			eValue, ok := expected[key]
 			if !ok {
 				t.Errorf("expected[%s] does not exist, while result[%s] does", key, key)
-				return
+				continue
 			}
-
-			compareTwoValues(t, fmt.Sprintf("result[%s]", key), value, fmt.Sprintf("expected[%s]", key), eValue)
+			t.Run("b", func(t *testing.T) {
+				compareTwoValues(t, fmt.Sprintf("result[%s]", key), value, fmt.Sprintf("expected[%s]", key), eValue)
+			})
 		}
 	}
 }
