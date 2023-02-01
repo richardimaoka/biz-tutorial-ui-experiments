@@ -44,8 +44,8 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
-        router.push(`./?step=${stepInt + 1}`);
+      if (event.code === "Space" && data?.step?.nextStepNum) {
+        router.push(`./?step=${data.step.nextStepNum}`);
       }
     };
     document.addEventListener("keyup", handleKeyDown);
