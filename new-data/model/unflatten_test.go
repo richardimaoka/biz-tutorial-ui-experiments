@@ -34,7 +34,7 @@ func compareTwo(t *testing.T, v1name string, v1 interface{}, v2name string, v2 i
 		compareTwoMaps(t, v1name, m1, v2name, m2)
 	} else {
 		if v1 != v2 {
-			t.Errorf("%s = %v is not equal to %s = %v", v1name, v1, v2name, v2)
+			t.Errorf("%s = %v not equal to %s = %v", v1name, v1, v2name, v2)
 		}
 	}
 }
@@ -45,7 +45,7 @@ func compareTwoMaps(t *testing.T, m1name string, m1 map[string]interface{}, m2na
 		kCompared = append(kCompared, k)
 		v2, ok := m2[k]
 		if !ok {
-			t.Errorf("%s[%s] does not exist, while %s[%s] does", m2name, k, m1name, k)
+			t.Errorf("%s[%s] exists but %s[%s] does not exist, ", m1name, k, m2name, k)
 			continue
 		}
 
@@ -79,5 +79,5 @@ func TestUnflatten(t *testing.T) {
 	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250, "b": "bbb", "d": 1234}`))
 	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAASA", "childB": 10.0, "childC": nil}, "a": 250, "c": 2520}
 
-	compareTwo(t, "result", result, "expected", expected)
+	compareTwo(t, "expected", expected, "result", result)
 }
