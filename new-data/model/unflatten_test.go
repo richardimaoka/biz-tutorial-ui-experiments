@@ -8,7 +8,7 @@ import (
 
 func TestUnflatten(t *testing.T) {
 	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "a": 250}`))
-	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0}, "a": 250}
+	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "chilsdB": 10.0}, "a": 250}
 
 	for key, value := range result {
 		switch children := value.(type) {
@@ -16,25 +16,37 @@ func TestUnflatten(t *testing.T) {
 			for childKey, childValue := range children {
 				fmt.Println("result  : key =", key, ", childKey =", childKey, ", childValue = ", childValue)
 
+				eChildren, ok := expected[key]
+				if !ok {
+					t.Errorf("expected[%s] does not exist, while result[%s] does", key, key)
+					return
+				}
+
+				ecMap, ok := eChildren.(map[string]interface{})
+				if !ok {
+					t.Errorf("expected[%s] is not a map[string]interface{}, while result[%s] is", key, key)
+					return
+				}
+
+				eChildValue, ok := ecMap[childKey]
+				if !ok {
+					t.Errorf("expected[%s][%s] does not exist, while result[%s][%s] does", key, childKey, key, childKey)
+					return
+				}
+
 				if reflect.ValueOf(childValue).Kind() == reflect.Ptr {
-					panic("child value pointer!")
+					t.Errorf("result[%s][%s] is a pointer %s of type %v", key, childKey, childValue, reflect.TypeOf(childValue))
+					return
 				}
 
-				e, ok := expected[key]
-				if !ok {
-					panic("not okkk!!")
+				if reflect.ValueOf(eChildValue).Kind() == reflect.Ptr {
+					t.Errorf("result[%s][%s] is a pointer %s of type %v", key, childKey, eChildValue, reflect.TypeOf(eChildValue))
+					return
 				}
 
-				ec, ok := e.(map[string]interface{})
-				if !ok {
-					panic("not okkk2!!")
-				}
-
-				if childValue != ec[childKey] {
-					fmt.Println(reflect.TypeOf(childValue))
-					fmt.Println(childValue)
-					fmt.Println(reflect.TypeOf(ec[childKey]))
-					fmt.Println(ec[childKey])
+				if childValue != eChildValue {
+					t.Errorf("result[%s][%s] = %v is not equal to expected[%s][%s] = %v", key, childKey, childValue, key, childKey, eChildValue)
+					return
 				}
 			}
 		default:
