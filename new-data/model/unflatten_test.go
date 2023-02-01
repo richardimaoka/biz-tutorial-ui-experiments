@@ -33,29 +33,45 @@ func compareTwoValues(t *testing.T, v1name string, v1 interface{}, v2name string
 func compareTwoMaps(t *testing.T, m1name string, m1 interface{}, m2name string, m2 interface{}) {
 	m1Map, ok := m1.(map[string]interface{})
 	if !ok {
-		t.Errorf("%s has type = %v, not map[string]interface{}", reflect.TypeOf(m1), m1name)
+		t.Errorf("%s has type = %v, not map[string]interface{}", m1name, reflect.TypeOf(m1))
+		return
 	}
 
 	m2Map, ok := m2.(map[string]interface{})
 	if !ok {
-		t.Errorf("%s has type = %v, not map[string]interface{}", reflect.TypeOf(m2), m2name)
+		t.Errorf("%s has type = %v, not map[string]interface{}", m2name, reflect.TypeOf(m2))
+		return
 	}
 
+	kCompared := []string{}
 	for k, v1 := range m1Map {
+		kCompared = append(kCompared, k)
 		v2, ok := m2Map[k]
 		if !ok {
 			t.Errorf("%s[%s] does not exist, while %s[%s] does", m2name, k, m1name, k)
-			return
+			continue
 		}
 
 		compareTwoValues(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
 	}
 
 	for k, v2 := range m2Map {
+		// if already compared, skip k
+		matched := -1
+		for i, kc := range kCompared {
+			if k == kc {
+				matched = i
+			}
+		}
+		if matched != -1 {
+			continue
+		}
+
+		// not compared yet, then do compare
 		v1, ok := m1Map[k]
 		if !ok {
 			t.Errorf("%s[%s] does not exist, while %s[%s] does", m1name, k, m2name, k)
-			return
+			continue
 		}
 
 		compareTwoValues(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
