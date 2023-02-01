@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func compareTwoValues(t *testing.T, v1name string, v1 interface{}, v2name string, v2 interface{}) {
+func compareTwo(t *testing.T, v1name string, v1 interface{}, v2name string, v2 interface{}) {
 	if reflect.ValueOf(v1).Kind() == reflect.Ptr {
 		t.Errorf("%s is a pointer of type %v", v1name, reflect.TypeOf(v1))
 		return
@@ -24,38 +24,35 @@ func compareTwoValues(t *testing.T, v1name string, v1 interface{}, v2name string
 		return
 	}
 
-	if v1 != v2 {
-		t.Errorf("%s = %v is not equal to %s = %v", v1name, v1, v2name, v2)
-		return
+	m1, isMap := v1.(map[string]interface{})
+	if isMap {
+		m2, ok := v2.(map[string]interface{})
+		if !ok {
+			t.Errorf("%s has type = %v, but must be map[string]interface{}", v2name, reflect.TypeOf(m2))
+			return
+		}
+		compareTwoMaps(t, v1name, m1, v2name, m2)
+	} else {
+		if v1 != v2 {
+			t.Errorf("%s = %v is not equal to %s = %v", v1name, v1, v2name, v2)
+		}
 	}
 }
 
-func compareTwoMaps(t *testing.T, m1name string, m1 interface{}, m2name string, m2 interface{}) {
-	m1Map, ok := m1.(map[string]interface{})
-	if !ok {
-		t.Errorf("%s has type = %v, not map[string]interface{}", m1name, reflect.TypeOf(m1))
-		return
-	}
-
-	m2Map, ok := m2.(map[string]interface{})
-	if !ok {
-		t.Errorf("%s has type = %v, not map[string]interface{}", m2name, reflect.TypeOf(m2))
-		return
-	}
-
+func compareTwoMaps(t *testing.T, m1name string, m1 map[string]interface{}, m2name string, m2 map[string]interface{}) {
 	kCompared := []string{}
-	for k, v1 := range m1Map {
+	for k, v1 := range m1 {
 		kCompared = append(kCompared, k)
-		v2, ok := m2Map[k]
+		v2, ok := m2[k]
 		if !ok {
 			t.Errorf("%s[%s] does not exist, while %s[%s] does", m2name, k, m1name, k)
 			continue
 		}
 
-		compareTwoValues(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
+		compareTwo(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
 	}
 
-	for k, v2 := range m2Map {
+	for k, v2 := range m2 {
 		// if already compared, skip k
 		matched := -1
 		for i, kc := range kCompared {
@@ -68,13 +65,13 @@ func compareTwoMaps(t *testing.T, m1name string, m1 interface{}, m2name string, 
 		}
 
 		// not compared yet, then do compare
-		v1, ok := m1Map[k]
+		v1, ok := m1[k]
 		if !ok {
 			t.Errorf("%s[%s] does not exist, while %s[%s] does", m1name, k, m2name, k)
 			continue
 		}
 
-		compareTwoValues(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
+		compareTwo(t, fmt.Sprintf("%s[%s]", m1name, k), v1, fmt.Sprintf("%s[%s]", m2name, k), v2)
 	}
 }
 
@@ -82,21 +79,5 @@ func TestUnflatten(t *testing.T) {
 	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250, "b": "bbb", "d": 1234}`))
 	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAASA", "childB": 10.0, "childC": nil}, "a": 250, "c": 2520}
 
-	for key, value := range result {
-		switch children := value.(type) {
-		case map[string]interface{}:
-			t.Run("a", func(t *testing.T) {
-				compareTwoMaps(t, fmt.Sprintf("result[%s]", key), children, fmt.Sprintf("expected[%s]", key), expected[key])
-			})
-		default:
-			eValue, ok := expected[key]
-			if !ok {
-				t.Errorf("expected[%s] does not exist, while result[%s] does", key, key)
-				continue
-			}
-			t.Run("b", func(t *testing.T) {
-				compareTwoValues(t, fmt.Sprintf("result[%s]", key), value, fmt.Sprintf("expected[%s]", key), eValue)
-			})
-		}
-	}
+	compareTwo(t, "result", result, "expected", expected)
 }
