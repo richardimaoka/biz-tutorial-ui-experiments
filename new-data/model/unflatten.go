@@ -12,25 +12,33 @@ func unflatten(bytes []byte) map[string]interface{} {
 		panic(err)
 	}
 
+	return unflattenMap(unmarshaled)
+}
+
+func unflattenMap(m map[string]interface{}) map[string]interface{} {
 	var nested = make(map[string]interface{})
-	for k, v := range unmarshaled {
-		if dotIndex := strings.IndexRune(k, '.'); dotIndex != -1 {
+	for k, v := range m {
+		if dotIndex := strings.IndexRune(k, '.'); dotIndex == -1 {
+			// no nesting
+			nested[k] = v
+		} else {
+			// nesting needed
 			parentKey := k[0:dotIndex]
 			childKey := k[dotIndex+1:]
 
 			if nested[parentKey] == nil {
+				// if same parentKey not used
 				children := make(map[string]interface{})
 				children[childKey] = v
 				nested[parentKey] = children
 			} else {
+				// if same paretKey already found
 				children, ok := nested[parentKey].(map[string]interface{})
 				if !ok {
 					panic(parentKey + " conflicted!!")
 				}
 				children[childKey] = v
 			}
-		} else {
-			nested[k] = v
 		}
 	}
 
