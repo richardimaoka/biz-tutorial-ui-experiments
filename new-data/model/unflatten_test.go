@@ -58,20 +58,7 @@ func TestUnflatten(t *testing.T) {
 					return
 				}
 
-				if reflect.ValueOf(childValue).Kind() == reflect.Ptr {
-					t.Errorf("result[%s][%s] is a pointer %s of type %v", key, childKey, childValue, reflect.TypeOf(childValue))
-					return
-				}
-
-				if reflect.ValueOf(eChildValue).Kind() == reflect.Ptr {
-					t.Errorf("result[%s][%s] is a pointer %s of type %v", key, childKey, eChildValue, reflect.TypeOf(eChildValue))
-					return
-				}
-
-				if childValue != eChildValue {
-					t.Errorf("result[%s][%s] = %v is not equal to expected[%s][%s] = %v", key, childKey, childValue, key, childKey, eChildValue)
-					return
-				}
+				compareTwoValues(t, fmt.Sprintf("result[%s][%s]", key, childKey), childValue, fmt.Sprintf("expected[%s][%s]", key, childKey), eChildValue)
 			}
 		default:
 			eValue, ok := expected[key]
