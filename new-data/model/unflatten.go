@@ -29,6 +29,8 @@ func unflatten(bytes []byte) map[string]interface{} {
 				}
 				children[childKey] = v
 			}
+		} else {
+			nested[k] = v
 		}
 	}
 
