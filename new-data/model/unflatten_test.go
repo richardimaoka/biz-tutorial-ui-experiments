@@ -6,9 +6,33 @@ import (
 	"testing"
 )
 
+func compareTwoValues(t *testing.T, v1name string, v1 interface{}, v2name string, v2 interface{}) {
+	if reflect.ValueOf(v1).Kind() == reflect.Ptr {
+		t.Errorf("%s is a pointer of type %v", v1name, reflect.TypeOf(v1))
+		return
+	}
+
+	if reflect.ValueOf(v2).Kind() == reflect.Ptr {
+		t.Errorf("%s is a pointer of type %v", v2name, reflect.TypeOf(v2))
+		return
+	}
+
+	v1type := reflect.TypeOf(v1)
+	v2type := reflect.TypeOf(v2)
+	if v1type != v2type {
+		t.Errorf("%s has type = %v, not matching with %s in type = %v", v1name, v1type, v2name, v2type)
+		return
+	}
+
+	if v1 != v2 {
+		t.Errorf("%s = %v is not equal to %s = %v", v1name, v1, v2name, v2)
+		return
+	}
+}
+
 func TestUnflatten(t *testing.T) {
 	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "a": 250, "b": "bbb"}`))
-	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0}, "a": 250}
+	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0}, "a": 250, "c": 2520}
 
 	for key, value := range result {
 		switch children := value.(type) {
@@ -56,27 +80,7 @@ func TestUnflatten(t *testing.T) {
 				return
 			}
 
-			if reflect.ValueOf(value).Kind() == reflect.Ptr {
-				t.Errorf("result[%s] is a pointer %s of type %v", key, value, reflect.TypeOf(value))
-				return
-			}
-
-			if reflect.ValueOf(eValue).Kind() == reflect.Ptr {
-				t.Errorf("expected[%s] is a pointer %s of type %v", key, eValue, reflect.TypeOf(eValue))
-				return
-			}
-
-			vType := reflect.TypeOf(value)
-			eType := reflect.TypeOf(eValue)
-			if vType != eType {
-				t.Errorf("expected[%s] has type = %v, not matching with result[%s] in type = %v", key, vType, key, eType)
-				return
-			}
-
-			if value != eValue {
-				t.Errorf("result[%s] = %v is not equal to expected[%s] = %v", key, value, key, eValue)
-				return
-			}
+			compareTwoValues(t, fmt.Sprintf("result[%s]", key), value, fmt.Sprintf("expected[%s]", key), eValue)
 		}
 	}
 
