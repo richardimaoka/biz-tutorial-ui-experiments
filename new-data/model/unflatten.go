@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func unflatten(bytes []byte) map[string]interface{} {
+func unflatten(bytes []byte) (map[string]interface{}, error) {
 	var unmarshaled map[string]interface{}
 	err := json.Unmarshal(bytes, &unmarshaled)
 	if err != nil {
@@ -15,7 +15,7 @@ func unflatten(bytes []byte) map[string]interface{} {
 	return unflattenMap(unmarshaled)
 }
 
-func unflattenMap(m map[string]interface{}) map[string]interface{} {
+func unflattenMap(m map[string]interface{}) (map[string]interface{}, error) {
 	var nested = make(map[string]interface{})
 	for k, v := range m {
 		if dotIndex := strings.IndexRune(k, '.'); dotIndex == -1 {
@@ -42,5 +42,5 @@ func unflattenMap(m map[string]interface{}) map[string]interface{} {
 		}
 	}
 
-	return nested
+	return nested, nil
 }

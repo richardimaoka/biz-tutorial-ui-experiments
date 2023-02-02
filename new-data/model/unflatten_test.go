@@ -76,7 +76,7 @@ func compareTwoMaps(t *testing.T, m1name string, m1 map[string]interface{}, m2na
 }
 
 func TestUnflatten(t *testing.T) {
-	result := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250, "b": "bbb", "d": 1234}`))
+	result, _ := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250, "b": "bbb", "d": 1234}`))
 	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAASA", "childB": 10.0, "childC": nil}, "a": 250, "c": 2520}
 
 	compareTwo(t, "expected", expected, "result", result)
