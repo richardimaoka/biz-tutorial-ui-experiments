@@ -7,17 +7,20 @@ import (
 	"strings"
 )
 
-func Unflatten(bytes []byte, m map[string]interface{}) error {
+type MapType = map[string]interface{}
+
+func Unflatten(bytes []byte, m *MapType) error {
 	var unmarshaled map[string]interface{}
 	err := json.Unmarshal(bytes, &unmarshaled)
 	if err != nil {
 		panic(err)
 	}
 
-	return unflattenMap(unmarshaled, m)
+	*m = make(MapType)
+	return unflattenMap(unmarshaled, *m)
 }
 
-func unflattenMap(mOriginal map[string]interface{}, mTarget map[string]interface{}) error {
+func unflattenMap(mOriginal MapType, mTarget MapType) error {
 	for k, v := range mOriginal {
 		err := set(mTarget, k, k, v)
 		if err != nil {
@@ -28,7 +31,7 @@ func unflattenMap(mOriginal map[string]interface{}, mTarget map[string]interface
 	return nil
 }
 
-func set(m map[string]interface{}, originalKey, key string, v interface{}) error {
+func set(m MapType, originalKey, key string, v interface{}) error {
 	//pre-condition check
 	existingValue, already := m[key]
 	if already {
