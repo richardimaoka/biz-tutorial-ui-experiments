@@ -21,24 +21,35 @@ func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) err
 	}
 
 	// process each element
-	for i, actionFlat := range unmarshalled {
-		marshaledBack, err := json.Marshal(actionFlat)
+	for i, flat := range unmarshalled {
+		marshaledBack, err := json.Marshal(flat)
 		if err != nil {
 			return fmt.Errorf("%s, marshaling %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		var action map[string]interface{}
-		err = Unflatten(marshaledBack, &action)
+		var unflat map[string]interface{}
+		err = Unflatten(marshaledBack, &unflat)
 		if err != nil {
 			return fmt.Errorf("%s, unflattening %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		marshaledUnflat, err := json.MarshalIndent(action, "", "  ")
+		marshaledUnflat, err := json.Marshal(unflat)
 		if err != nil {
 			return fmt.Errorf("%s, marshaling %s *unflattened* action failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		err = os.WriteFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetFilePrefix, i), marshaledUnflat, 0644)
+		var action ActionCommand
+		err = json.Unmarshal(marshaledUnflat, &action)
+		if err != nil {
+			return fmt.Errorf("%s, unmarshaling %s action to ActionCommand failed, %s", errorPreceding, ordinal(i), err)
+		}
+
+		outBytes, err := json.MarshalIndent(unflat, "", "  ")
+		if err != nil {
+			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
+		}
+
+		err = os.WriteFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetFilePrefix, i), outBytes, 0644)
 		if err != nil {
 			return fmt.Errorf("%s, writing %s action failed, %s", errorPreceding, ordinal(i), err)
 		}

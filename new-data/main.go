@@ -3,7 +3,10 @@ package main
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/model"
 
 func actionListParse() error {
-	model.SplitActionListFile("data2/action_list.json", "data2", "action")
+	err := model.SplitActionListFile("data2/action_list.json", "data2", "action")
+	if err != nil {
+		panic(err)
+	}
 	return nil
 }
 
