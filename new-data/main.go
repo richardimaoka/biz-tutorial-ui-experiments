@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/json"
 	"os"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/model"
 )
 
 func actionListParse() error {
@@ -19,7 +17,11 @@ func actionListParse() error {
 		return err
 	}
 
-	model.Unflatten(bytes)
+	// m := make(map[string]interface{})
+	// err = model.Unflatten(bytes, m)
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
