@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func unflatten(bytes []byte) (map[string]interface{}, error) {
+func Unflatten(bytes []byte) (map[string]interface{}, error) {
 	var unmarshaled map[string]interface{}
 	err := json.Unmarshal(bytes, &unmarshaled)
 	if err != nil {
@@ -15,6 +15,19 @@ func unflatten(bytes []byte) (map[string]interface{}, error) {
 	}
 
 	return unflattenMap(unmarshaled)
+}
+
+func unflattenMap(mOriginal map[string]interface{}) (map[string]interface{}, error) {
+	mUnflattened := make(map[string]interface{})
+
+	for k, v := range mOriginal {
+		err := set(mUnflattened, k, k, v)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return mUnflattened, nil
 }
 
 func set(m map[string]interface{}, originalKey, key string, v interface{}) error {
@@ -66,17 +79,4 @@ func set(m map[string]interface{}, originalKey, key string, v interface{}) error
 		m[parentKey] = mm
 		return set(mm, originalKey, childKey, v)
 	}
-}
-
-func unflattenMap(mOriginal map[string]interface{}) (map[string]interface{}, error) {
-	mUnflattened := make(map[string]interface{})
-
-	for k, v := range mOriginal {
-		err := set(mUnflattened, k, k, v)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return mUnflattened, nil
 }

@@ -7,11 +7,11 @@ import (
 )
 
 func compareTwo(t *testing.T, v1name string, v1 interface{}, v2name string, v2 interface{}) {
+	// Pre-condition check
 	if reflect.ValueOf(v1).Kind() == reflect.Ptr {
 		t.Errorf("%s is a pointer of type %v", v1name, reflect.TypeOf(v1))
 		return
 	}
-
 	if reflect.ValueOf(v2).Kind() == reflect.Ptr {
 		t.Errorf("%s is a pointer of type %v", v2name, reflect.TypeOf(v2))
 		return
@@ -26,6 +26,7 @@ func compareTwo(t *testing.T, v1name string, v1 interface{}, v2name string, v2 i
 
 	m1, isMap := v1.(map[string]interface{})
 	if isMap {
+		// Pattern 1 if map
 		m2, ok := v2.(map[string]interface{})
 		if !ok {
 			t.Errorf("%s has type = %v, but must be map[string]interface{}", v2name, reflect.TypeOf(m2))
@@ -33,6 +34,7 @@ func compareTwo(t *testing.T, v1name string, v1 interface{}, v2name string, v2 i
 		}
 		compareTwoMaps(t, v1name, m1, v2name, m2)
 	} else {
+		// Pattern 2 if not map
 		if v1 != v2 {
 			t.Errorf("%s = %v not equal to %s = %v", v1name, v1, v2name, v2)
 		}
@@ -76,7 +78,7 @@ func compareTwoMaps(t *testing.T, m1name string, m1 map[string]interface{}, m2na
 }
 
 func TestUnflatten(t *testing.T) {
-	result, _ := unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250}`))
+	result, _ := Unflatten([]byte(`{"parent.childA": "AAA", "parent.childB": 10, "parent.childD": null, "a": 250}`))
 	expected := map[string]interface{}{"parent": map[string]interface{}{"childA": "AAA", "childB": 10.0, "childD": nil}, "a": 250.0}
 
 	compareTwo(t, "expected", expected, "result", result)
