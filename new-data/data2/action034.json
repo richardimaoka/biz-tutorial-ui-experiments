@@ -1,6 +1,6 @@
 {
   "actionType": "ActionCommand",
-  "command": "mkdir protoc-go-experiments",
+  "command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
   "terminalName": "default",
   "updateTerminal.output": ""
 }

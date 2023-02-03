@@ -1,6 +1,6 @@
 {
   "actionType": "ActionCommand",
-  "command": "mkdir protoc-go-experiments",
+  "command": "rm -rf outdir",
   "terminalName": "default",
   "updateTerminal.output": ""
 }

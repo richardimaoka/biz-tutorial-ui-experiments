@@ -1,0 +1,6 @@
+{
+  "actionType": "ActionCommand",
+  "command": "mkdir helloworld/subdir\ncat \u003c\u003c EOF \u003e helloworld/subdir/subhello.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld/subdir\";\n\n// The greeting service definition.\nservice SubGreeter {\n  // Sends a greeting\n  rpc SayHello(SubHelloRequest) returns (SubHelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage SubHelloRequest { string name = 1; }\n\n// The response message containing the greetings\nmessage SubHelloReply { string message = 1; }\nEOF",
+  "terminalName": "default",
+  "updateTerminal.output": ""
+}

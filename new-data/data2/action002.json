@@ -1,6 +1,6 @@
 {
   "actionType": "ActionCommand",
-  "command": "mkdir protoc-go-experiments",
+  "command": "mkdir helloworld",
   "terminalName": "default",
   "updateTerminal.output": ""
 }
