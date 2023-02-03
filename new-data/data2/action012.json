@@ -2,5 +2,7 @@
   "actionType": "ActionCommand",
   "command": "mkdir outdir",
   "terminalName": "default",
-  "updateTerminal.output": ""
+  "updateTerminal": {
+    "output": ""
+  }
 }

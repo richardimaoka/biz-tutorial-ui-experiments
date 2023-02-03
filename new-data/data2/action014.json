@@ -2,5 +2,7 @@
   "actionType": "ActionCommand",
   "command": "rm -rf outdir",
   "terminalName": "default",
-  "updateTerminal.output": ""
+  "updateTerminal": {
+    "output": ""
+  }
 }

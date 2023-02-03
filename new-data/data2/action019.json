@@ -2,5 +2,7 @@
   "actionType": "ActionCommand",
   "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto",
   "terminalName": "default",
-  "updateTerminal.output": ""
+  "updateTerminal": {
+    "output": ""
+  }
 }

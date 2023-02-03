@@ -2,5 +2,7 @@
   "actionType": "ActionCommand",
   "command": "cd helloworld # protoc-go-experiments/helloworld",
   "terminalName": "default",
-  "updateTerminal.output": ""
+  "updateTerminal": {
+    "output": ""
+  }
 }
