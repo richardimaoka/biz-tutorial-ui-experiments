@@ -59,16 +59,11 @@ export type PageState = {
 export type Query = {
   __typename: "Query";
   pageState?: Maybe<PageState>;
-  step?: Maybe<Step>;
   terminal?: Maybe<Terminal>;
 };
 
 export type QueryPageStateArgs = {
   step?: InputMaybe<Scalars["String"]>;
-};
-
-export type QueryStepArgs = {
-  stepNum: Scalars["Int"];
 };
 
 export type QueryTerminalArgs = {
@@ -83,15 +78,6 @@ export type SourceCode = {
 
 export type SourceCodeOpenFileArgs = {
   filePath?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-};
-
-export type Step = {
-  __typename: "Step";
-  nextAction?: Maybe<Scalars["String"]>;
-  nextStepNum?: Maybe<Scalars["Int"]>;
-  sourceCode?: Maybe<SourceCode>;
-  stepNum?: Maybe<Scalars["Int"]>;
-  terminals?: Maybe<Array<Maybe<Terminal>>>;
 };
 
 export type Terminal = {

@@ -75,21 +75,12 @@ type ComplexityRoot struct {
 
 	Query struct {
 		PageState func(childComplexity int, step *string) int
-		Step      func(childComplexity int, stepNum int) int
 		Terminal  func(childComplexity int, step int) int
 	}
 
 	SourceCode struct {
 		FileTree func(childComplexity int) int
 		OpenFile func(childComplexity int, filePath []*string) int
-	}
-
-	Step struct {
-		NextAction  func(childComplexity int) int
-		NextStepNum func(childComplexity int) int
-		SourceCode  func(childComplexity int) int
-		StepNum     func(childComplexity int) int
-		Terminals   func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -119,7 +110,6 @@ type ComplexityRoot struct {
 
 type QueryResolver interface {
 	PageState(ctx context.Context, step *string) (*model.PageState, error)
-	Step(ctx context.Context, stepNum int) (*model.Step, error)
 	Terminal(ctx context.Context, step int) (*model.Terminal, error)
 }
 
@@ -276,18 +266,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.PageState(childComplexity, args["step"].(*string)), true
 
-	case "Query.step":
-		if e.complexity.Query.Step == nil {
-			break
-		}
-
-		args, err := ec.field_Query_step_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Step(childComplexity, args["stepNum"].(int)), true
-
 	case "Query.terminal":
 		if e.complexity.Query.Terminal == nil {
 			break
@@ -318,41 +296,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SourceCode.OpenFile(childComplexity, args["filePath"].([]*string)), true
-
-	case "Step.nextAction":
-		if e.complexity.Step.NextAction == nil {
-			break
-		}
-
-		return e.complexity.Step.NextAction(childComplexity), true
-
-	case "Step.nextStepNum":
-		if e.complexity.Step.NextStepNum == nil {
-			break
-		}
-
-		return e.complexity.Step.NextStepNum(childComplexity), true
-
-	case "Step.sourceCode":
-		if e.complexity.Step.SourceCode == nil {
-			break
-		}
-
-		return e.complexity.Step.SourceCode(childComplexity), true
-
-	case "Step.stepNum":
-		if e.complexity.Step.StepNum == nil {
-			break
-		}
-
-		return e.complexity.Step.StepNum(childComplexity), true
-
-	case "Step.terminals":
-		if e.complexity.Step.Terminals == nil {
-			break
-		}
-
-		return e.complexity.Step.Terminals(childComplexity), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -515,21 +458,6 @@ func (ec *executionContext) field_Query_pageState_args(ctx context.Context, rawA
 		}
 	}
 	args["step"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_step_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int
-	if tmp, ok := rawArgs["stepNum"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stepNum"))
-		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["stepNum"] = arg0
 	return args, nil
 }
 
@@ -1423,70 +1351,6 @@ func (ec *executionContext) fieldContext_Query_pageState(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_step(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_step(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Step(rctx, fc.Args["stepNum"].(int))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Step)
-	fc.Result = res
-	return ec.marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "stepNum":
-				return ec.fieldContext_Step_stepNum(ctx, field)
-			case "sourceCode":
-				return ec.fieldContext_Step_sourceCode(ctx, field)
-			case "terminals":
-				return ec.fieldContext_Step_terminals(ctx, field)
-			case "nextStepNum":
-				return ec.fieldContext_Step_nextStepNum(ctx, field)
-			case "nextAction":
-				return ec.fieldContext_Step_nextAction(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Step", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_step_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_terminal(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_terminal(ctx, field)
 	if err != nil {
@@ -1791,225 +1655,6 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 	if fc.Args, err = ec.field_SourceCode_openFile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_stepNum(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_stepNum(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.StepNum, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_stepNum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_sourceCode(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_sourceCode(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.SourceCode, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.SourceCode)
-	fc.Result = res
-	return ec.marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "fileTree":
-				return ec.fieldContext_SourceCode_fileTree(ctx, field)
-			case "openFile":
-				return ec.fieldContext_SourceCode_openFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_terminals(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_terminals(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Terminals, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Terminal)
-	fc.Result = res
-	return ec.marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_terminals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "name":
-				return ec.fieldContext_Terminal_name(ctx, field)
-			case "currentDirectory":
-				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
-			case "nodes":
-				return ec.fieldContext_Terminal_nodes(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_nextStepNum(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_nextStepNum(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NextStepNum, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_nextStepNum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Step_nextAction(ctx context.Context, field graphql.CollectedField, obj *model.Step) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Step_nextAction(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NextAction, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Step_nextAction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Step",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
 	}
 	return fc, nil
 }
@@ -4401,26 +4046,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "step":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_step(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "terminal":
 			field := field
 
@@ -4481,47 +4106,6 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 		case "openFile":
 
 			out.Values[i] = ec._SourceCode_openFile(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var stepImplementors = []string{"Step"}
-
-func (ec *executionContext) _Step(ctx context.Context, sel ast.SelectionSet, obj *model.Step) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, stepImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Step")
-		case "stepNum":
-
-			out.Values[i] = ec._Step_stepNum(ctx, field, obj)
-
-		case "sourceCode":
-
-			out.Values[i] = ec._Step_sourceCode(ctx, field, obj)
-
-		case "terminals":
-
-			out.Values[i] = ec._Step_terminals(ctx, field, obj)
-
-		case "nextStepNum":
-
-			out.Values[i] = ec._Step_nextStepNum(ctx, field, obj)
-
-		case "nextAction":
-
-			out.Values[i] = ec._Step_nextAction(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5464,13 +5048,6 @@ func (ec *executionContext) marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaoka�
 		return graphql.Null
 	}
 	return ec._SourceCode(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOStep2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐStep(ctx context.Context, sel ast.SelectionSet, v *model.Step) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Step(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {

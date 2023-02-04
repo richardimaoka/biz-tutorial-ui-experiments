@@ -60,14 +60,6 @@ type SourceCode {
   openFile(filePath: [String]): OpenFile
 }
 
-type Step {
-  stepNum: Int
-  sourceCode: SourceCode
-  terminals: [Terminal]
-  nextStepNum: Int
-  nextAction: String
-}
-
 type PageState {
   step: String
   sourceCode: SourceCode
@@ -78,6 +70,5 @@ type PageState {
 
 type Query {
   pageState(step: String): PageState
-  step(stepNum: Int!): Step
   terminal(step: Int!): Terminal
 }

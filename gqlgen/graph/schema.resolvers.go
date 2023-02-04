@@ -40,26 +40,6 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 	return &pageState, nil
 }
 
-// Step is the resolver for the step field.
-func (r *queryResolver) Step(ctx context.Context, stepNum int) (*model.Step, error) {
-	filename := fmt.Sprintf("data/tutorial2/step%02d.json", stepNum)
-	log.Printf("reading data from %s", filename)
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("stepNum = %d not found", stepNum))
-	}
-
-	var step model.Step
-
-	err = json.Unmarshal(data, &step)
-	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return nil, errors.New("internal server error")
-	}
-
-	return &step, nil
-}
-
 // Terminal is the resolver for the terminal field.
 func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal, error) {
 	filename := fmt.Sprintf("data/tutorial2/terminal%03d.json", step)

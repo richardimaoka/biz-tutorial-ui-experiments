@@ -47,14 +47,6 @@ type SourceCode struct {
 	OpenFile *OpenFile   `json:"openFile"`
 }
 
-type Step struct {
-	StepNum     *int        `json:"stepNum"`
-	SourceCode  *SourceCode `json:"sourceCode"`
-	Terminals   []*Terminal `json:"terminals"`
-	NextStepNum *int        `json:"nextStepNum"`
-	NextAction  *string     `json:"nextAction"`
-}
-
 type Terminal struct {
 	Name             *string         `json:"name"`
 	CurrentDirectory []*string       `json:"currentDirectory"`
