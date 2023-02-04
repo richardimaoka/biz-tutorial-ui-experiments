@@ -11,6 +11,14 @@ export interface TerminalCommandComponentProps {
   fragment: FragmentType<typeof TerminalCommand_Fragment>;
 }
 
+interface CodeComponentProps {
+  command: string | null | undefined;
+}
+
+const CodeComponent = ({ command }: CodeComponentProps) => {
+  return <code>{command}</code>;
+};
+
 export const TerminalCommandComponent = (
   props: TerminalCommandComponentProps
 ): JSX.Element => {
@@ -26,7 +34,7 @@ export const TerminalCommandComponent = (
         border-bottom: 1px solid #333333;
       `}
     >
-      <code>{fragment.command}</code>
+      <CodeComponent command={fragment.command} />
     </pre>
   );
 };
