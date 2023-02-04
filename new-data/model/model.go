@@ -148,6 +148,8 @@ func newTerminal() *Terminal {
 func NewPageState() *PageState {
 	step := "000"
 	nextStep := "001"
+
+	//There must be a default terminal
 	terminals := []*Terminal{newTerminal()}
 
 	return &PageState{
@@ -155,6 +157,59 @@ func NewPageState() *PageState {
 		NextStep:  &nextStep,
 		Terminals: terminals,
 	}
+}
+
+func calcNextStep(stepNumString string) (string, error) {
+	stepNum, err := strconv.Atoi(stepNumString)
+	if err != nil {
+		return "", fmt.Errorf("next step calc failed, as step %s is not number format", stepNumString)
+	}
+
+	expected := fmt.Sprintf("%03d", stepNum)
+	if stepNumString != expected {
+		return "", fmt.Errorf("next step calc failed, as step %s is expected 3-digit number format %s", stepNumString, expected)
+	}
+
+	return fmt.Sprintf("%3d", stepNum+1), nil
+}
+
+func (p *PageState) gotoNextStep(nextNextStep string) {
+	p.PrevStep = p.Step
+	p.Step = p.NextStep
+	p.NextStep = &nextNextStep
+}
+
+func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
+	var terminal *Terminal
+
+	// find command's target terminal
+	for _, t := range p.Terminals {
+		if *t.Name == command.TerminalName {
+			terminal = t
+		}
+	}
+
+	if terminal == nil {
+		return fmt.Errorf("failed to type in command, terminal with name = %s not found", command.TerminalName)
+	}
+
+	// append terminal node
+	falseValue := false
+	terminal.Nodes = append(terminal.Nodes, &TerminalNode{
+		Content: TerminalCommand{
+			Command:         &command.Command,
+			BeforeExecution: &falseValue,
+		},
+	})
+
+	// update step
+	nextNextStep, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return fmt.Errorf("failed to type in command, %s", err)
+	}
+	p.gotoNextStep(nextNextStep)
+
+	return nil
 }
 
 func (step *Step) typeInTerminalCommand(command *ActionCommand) error {

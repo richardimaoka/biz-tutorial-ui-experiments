@@ -64,6 +64,28 @@ func Test_MarshalStep(t *testing.T) {
 	}
 }
 
+// func Test_TypeInTerminalCommand2(t *testing.T) {
+// 	page := NewPageState()
+// 	command := ActionCommand{
+// 		Command:      "mkdir protoc-go-experiments",
+// 		TerminalName: "default",
+// 	}
+
+// 	err := page.typeInTerminalCommand(&command)
+
+// 	if err != nil {
+// 		t.Errorf("%s", err)
+// 	}
+
+// 	if *step.StepNum != 2 {
+// 		t.Errorf("StepNum = %d, which is not incremented", *step.StepNum)
+// 	}
+
+// 	if *step.NextStepNum != 3 {
+// 		t.Errorf("NextStepNum = %d, which is not incremented", *step.StepNum)
+// 	}
+// }
+
 func Test_TypeInTerminalCommand(t *testing.T) {
 	stepNum := 1
 	nextStepNum := 2
