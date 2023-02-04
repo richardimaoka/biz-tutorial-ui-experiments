@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 
@@ -39,7 +40,10 @@ export const TerminalCommandComponent = (
   props: TerminalCommandComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalCommand_Fragment, props.fragment);
-  console.log(fragment);
+
+  const router = useRouter();
+  const { skipAnimation } = router.query;
+  const animate = skipAnimation !== "true";
 
   return (
     <pre
@@ -51,7 +55,7 @@ export const TerminalCommandComponent = (
         border-bottom: 1px solid #333333;
       `}
     >
-      {fragment.beforeExecution ? (
+      {fragment.beforeExecution && animate ? (
         <TypeInCodeComponent command={fragment.command} />
       ) : (
         <code>{fragment.command}</code>

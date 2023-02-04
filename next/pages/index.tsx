@@ -53,7 +53,7 @@ export default function Home() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         if (event.shiftKey) {
-          prevStep && router.push(`./?step=${prevStep}`);
+          prevStep && router.push(`./?step=${prevStep}&skipAnimation=true`);
         } else {
           nextStep && router.push(`./?step=${nextStep}`);
         }
