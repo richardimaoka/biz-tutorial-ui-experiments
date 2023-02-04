@@ -47,6 +47,14 @@ export type OpenFile = {
   language?: Maybe<Scalars["String"]>;
 };
 
+export type PageState = {
+  __typename: "PageState";
+  nextStep?: Maybe<Scalars["String"]>;
+  sourceCode?: Maybe<SourceCode>;
+  step?: Maybe<Scalars["String"]>;
+  terminals?: Maybe<Array<Maybe<Terminal>>>;
+};
+
 export type Query = {
   __typename: "Query";
   step?: Maybe<Step>;

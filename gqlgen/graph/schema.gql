@@ -68,6 +68,13 @@ type Step {
   nextAction: String
 }
 
+type PageState {
+  step: String
+  sourceCode: SourceCode
+  terminals: [Terminal]
+  nextStep: String
+}
+
 type Query {
   step(stepNum: Int!): Step
   terminal(step: Int!): Terminal
