@@ -1,9 +1,11 @@
 import { css } from "@emotion/react";
+import { memo, useEffect, useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 
 const TerminalCommand_Fragment = graphql(`
   fragment TerminalCommand_Fragment on TerminalCommand {
     command
+    beforeExecution
   }
 `);
 
@@ -15,9 +17,25 @@ interface CodeComponentProps {
   command: string | null | undefined;
 }
 
-const CodeComponent = ({ command }: CodeComponentProps) => {
+const TypeInCodeComponent = ({ command }: CodeComponentProps) => {
+  const [writtenLength, setWrittenLength] = useState(0);
+
+  useEffect(() => {
+    if (command && writtenLength < command.length) {
+      const incrementStep = command.length / 10;
+      const nextLength = Math.min(
+        writtenLength + incrementStep,
+        command.length
+      );
+      setTimeout(() => {
+        setWrittenLength(nextLength);
+      }, 20);
+    }
+  });
   return <code>{command}</code>;
 };
+
+const MemoTypeInCodeComponent = memo(TypeInCodeComponent);
 
 export const TerminalCommandComponent = (
   props: TerminalCommandComponentProps
@@ -34,7 +52,11 @@ export const TerminalCommandComponent = (
         border-bottom: 1px solid #333333;
       `}
     >
-      <CodeComponent command={fragment.command} />
+      {fragment.beforeExecution ? (
+        <MemoTypeInCodeComponent command={fragment.command} />
+      ) : (
+        <code>{fragment.command}</code>
+      )}
     </pre>
   );
 };

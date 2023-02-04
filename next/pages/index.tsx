@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import next from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -46,11 +47,16 @@ export default function Home() {
     ? nonNullArray(currentTerminal?.currentDirectory)
     : undefined;
 
+  // console.log("rendering home", prevStep, step, nextStep);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
-        if (event.shiftKey && prevStep) router.push(`./?step=${prevStep}`);
-        else if (nextStep) router.push(`./?step=${nextStep}`);
+        if (event.shiftKey) {
+          prevStep && router.push(`./?step=${prevStep}`);
+        } else {
+          nextStep && router.push(`./?step=${nextStep}`);
+        }
       }
     };
     document.addEventListener("keyup", handleKeyDown);
@@ -59,7 +65,7 @@ export default function Home() {
     return function cleanup() {
       document.removeEventListener("keyup", handleKeyDown);
     };
-  }, [router, step, nextStep]);
+  }, [router, step, nextStep, prevStep]);
 
   // Page load optimization:
   useEffect(() => {

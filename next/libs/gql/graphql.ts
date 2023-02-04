@@ -191,6 +191,7 @@ export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
 export type TerminalCommand_FragmentFragment = {
   __typename: "TerminalCommand";
   command?: string | null;
+  beforeExecution?: boolean | null;
 } & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
 
 export type TerminalCommandWriting_FragmentFragment = {
@@ -215,10 +216,9 @@ export type TerminalNodeComponent_FragmentFragment = {
   __typename: "TerminalNode";
   index?: number | null;
   content?:
-    | ({ __typename: "TerminalCommand"; beforeExecution?: boolean | null } & {
+    | ({ __typename: "TerminalCommand" } & {
         " $fragmentRefs"?: {
           TerminalCommand_FragmentFragment: TerminalCommand_FragmentFragment;
-          TerminalCommandWriting_FragmentFragment: TerminalCommandWriting_FragmentFragment;
         };
       })
     | { __typename: "TerminalCommandSet" }
@@ -496,25 +496,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
     ...FileContentPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
-export const TerminalCommand_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalCommand_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "TerminalCommand" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "command" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalCommand_FragmentFragment, unknown>;
 export const TerminalCommandWriting_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -534,6 +515,26 @@ export const TerminalCommandWriting_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<TerminalCommandWriting_FragmentFragment, unknown>;
+export const TerminalCommand_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommand_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "command" } },
+          { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalCommand_FragmentFragment, unknown>;
 export const TerminalOutput_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -584,21 +585,10 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
                     kind: "SelectionSet",
                     selections: [
                       {
-                        kind: "Field",
-                        name: { kind: "Name", value: "beforeExecution" },
-                      },
-                      {
                         kind: "FragmentSpread",
                         name: {
                           kind: "Name",
                           value: "TerminalCommand_Fragment",
-                        },
-                      },
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "TerminalCommandWriting_Fragment",
                         },
                       },
                     ],
@@ -630,7 +620,6 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
       },
     },
     ...TerminalCommand_FragmentFragmentDoc.definitions,
-    ...TerminalCommandWriting_FragmentFragmentDoc.definitions,
     ...TerminalOutput_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalNodeComponent_FragmentFragment, unknown>;
