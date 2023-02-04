@@ -138,13 +138,22 @@ func NewStep() *Step {
 	}
 }
 
+func newTerminal() *Terminal {
+	name := "default"
+	return &Terminal{
+		Name: &name,
+	}
+}
+
 func NewPageState() *PageState {
 	step := "000"
 	nextStep := "001"
+	terminals := []*Terminal{newTerminal()}
 
 	return &PageState{
-		Step:     &step,
-		NextStep: &nextStep,
+		Step:      &step,
+		NextStep:  &nextStep,
+		Terminals: terminals,
 	}
 }
 
