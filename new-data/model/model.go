@@ -195,12 +195,13 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 
 	// append terminal node
 	falseValue := false
-	terminal.Nodes = append(terminal.Nodes, &TerminalNode{
+	node := TerminalNode{
 		Content: TerminalCommand{
 			Command:         &command.Command,
 			BeforeExecution: &falseValue,
 		},
-	})
+	}
+	terminal.Nodes = append(terminal.Nodes, &node)
 
 	// update step
 	nextNextStep, err := calcNextStep(*p.NextStep)
