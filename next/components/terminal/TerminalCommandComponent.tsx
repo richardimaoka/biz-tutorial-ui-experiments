@@ -32,15 +32,14 @@ const TypeInCodeComponent = ({ command }: CodeComponentProps) => {
       }, 20);
     }
   });
-  return <code>{command}</code>;
+  return <code>{command?.substring(0, writtenLength)}</code>;
 };
-
-const MemoTypeInCodeComponent = memo(TypeInCodeComponent);
 
 export const TerminalCommandComponent = (
   props: TerminalCommandComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalCommand_Fragment, props.fragment);
+  console.log(fragment);
 
   return (
     <pre
@@ -53,7 +52,7 @@ export const TerminalCommandComponent = (
       `}
     >
       {fragment.beforeExecution ? (
-        <MemoTypeInCodeComponent command={fragment.command} />
+        <TypeInCodeComponent command={fragment.command} />
       ) : (
         <code>{fragment.command}</code>
       )}
