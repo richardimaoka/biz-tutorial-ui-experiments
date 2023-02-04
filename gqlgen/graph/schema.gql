@@ -73,6 +73,7 @@ type PageState {
   sourceCode: SourceCode
   terminals: [Terminal]
   nextStep: String
+  prevStep: String
 }
 
 type Query {

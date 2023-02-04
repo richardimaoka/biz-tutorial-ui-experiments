@@ -13,6 +13,7 @@ const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: String) {
     pageState(step: $step) {
       nextStep
+      prevStep
       sourceCode {
         ...SourceCodeViewer_Fragment
       }
@@ -36,6 +37,7 @@ export default function Home() {
 
   const currentPage = data?.pageState;
   const nextStep = currentPage?.nextStep;
+  const prevStep = currentPage?.prevStep;
 
   const terminals = currentPage?.terminals;
   const [currentTerminalIndex] = useState(0);
@@ -46,8 +48,9 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space" && nextStep) {
-        router.push(`./?step=${nextStep}`);
+      if (event.code === "Space") {
+        if (event.shiftKey && prevStep) router.push(`./?step=${prevStep}`);
+        else if (nextStep) router.push(`./?step=${nextStep}`);
       }
     };
     document.addEventListener("keyup", handleKeyDown);
@@ -68,7 +71,15 @@ export default function Home() {
         })
         .catch((error) => console.log(error));
     }
-  }, [client, nextStep]);
+    if (prevStep) {
+      client
+        .query({
+          query: PageQuery,
+          variables: { step: prevStep },
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [client, nextStep, prevStep]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -97,6 +108,11 @@ export default function Home() {
             )}
             {currentTerminal && (
               <TerminalComponent fragment={currentTerminal} />
+            )}
+            {prevStep && (
+              <button type="button">
+                <Link href={`./?step=${prevStep}`}>prev step</Link>
+              </button>
             )}
             {nextStep && (
               <button type="button">

@@ -50,6 +50,7 @@ export type OpenFile = {
 export type PageState = {
   __typename: "PageState";
   nextStep?: Maybe<Scalars["String"]>;
+  prevStep?: Maybe<Scalars["String"]>;
   sourceCode?: Maybe<SourceCode>;
   step?: Maybe<Scalars["String"]>;
   terminals?: Maybe<Array<Maybe<Terminal>>>;
@@ -257,6 +258,7 @@ export type PageQueryQuery = {
   pageState?: {
     __typename: "PageState";
     nextStep?: string | null;
+    prevStep?: string | null;
     sourceCode?:
       | ({ __typename: "SourceCode" } & {
           " $fragmentRefs"?: {
@@ -717,6 +719,7 @@ export const PageQueryDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "sourceCode" },

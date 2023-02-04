@@ -39,6 +39,7 @@ type PageState struct {
 	SourceCode *SourceCode `json:"sourceCode"`
 	Terminals  []*Terminal `json:"terminals"`
 	NextStep   *string     `json:"nextStep"`
+	PrevStep   *string     `json:"prevStep"`
 }
 
 type SourceCode struct {

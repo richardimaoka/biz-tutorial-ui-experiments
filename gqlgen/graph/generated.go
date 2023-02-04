@@ -67,6 +67,7 @@ type ComplexityRoot struct {
 
 	PageState struct {
 		NextStep   func(childComplexity int) int
+		PrevStep   func(childComplexity int) int
 		SourceCode func(childComplexity int) int
 		Step       func(childComplexity int) int
 		Terminals  func(childComplexity int) int
@@ -234,6 +235,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PageState.NextStep(childComplexity), true
+
+	case "PageState.prevStep":
+		if e.complexity.PageState.PrevStep == nil {
+			break
+		}
+
+		return e.complexity.PageState.PrevStep(childComplexity), true
 
 	case "PageState.sourceCode":
 		if e.complexity.PageState.SourceCode == nil {
@@ -1310,6 +1318,47 @@ func (ec *executionContext) fieldContext_PageState_nextStep(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _PageState_prevStep(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageState_prevStep(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrevStep, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageState_prevStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageState",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_pageState(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_pageState(ctx, field)
 	if err != nil {
@@ -1354,6 +1403,8 @@ func (ec *executionContext) fieldContext_Query_pageState(ctx context.Context, fi
 				return ec.fieldContext_PageState_terminals(ctx, field)
 			case "nextStep":
 				return ec.fieldContext_PageState_nextStep(ctx, field)
+			case "prevStep":
+				return ec.fieldContext_PageState_prevStep(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PageState", field.Name)
 		},
@@ -4295,6 +4346,10 @@ func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet
 		case "nextStep":
 
 			out.Values[i] = ec._PageState_nextStep(ctx, field, obj)
+
+		case "prevStep":
+
+			out.Values[i] = ec._PageState_prevStep(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
