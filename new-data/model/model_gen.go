@@ -34,6 +34,14 @@ type OpenFile struct {
 	Highlight     []*FileHighlight `json:"highlight"`
 }
 
+type PageState struct {
+	Step       *string     `json:"step"`
+	SourceCode *SourceCode `json:"sourceCode"`
+	Terminals  []*Terminal `json:"terminals"`
+	NextStep   *string     `json:"nextStep"`
+	PrevStep   *string     `json:"prevStep"`
+}
+
 type SourceCode struct {
 	FileTree []*FileNode `json:"fileTree"`
 	OpenFile *OpenFile   `json:"openFile"`
