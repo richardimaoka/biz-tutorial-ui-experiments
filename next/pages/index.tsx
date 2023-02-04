@@ -56,7 +56,7 @@ export default function Home() {
     return function cleanup() {
       document.removeEventListener("keyup", handleKeyDown);
     };
-  }, [step, nextStep]);
+  }, [router, step, nextStep]);
 
   // Page load optimization:
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function Home() {
         })
         .catch((error) => console.log(error));
     }
-  }, [nextStep]);
+  }, [client, nextStep]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
