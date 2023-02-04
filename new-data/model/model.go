@@ -138,6 +138,16 @@ func NewStep() *Step {
 	}
 }
 
+func NewPageState() *PageState {
+	step := "000"
+	nextStep := "001"
+
+	return &PageState{
+		Step:     &step,
+		NextStep: &nextStep,
+	}
+}
+
 func (step *Step) typeInTerminalCommand(command *ActionCommand) error {
 	for _, t := range step.Terminals {
 		if *t.Name == command.TerminalName {
