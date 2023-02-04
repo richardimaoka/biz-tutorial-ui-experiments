@@ -51,9 +51,9 @@ type ActionCommand struct {
 	UpdateSourceCode UpdateSourceCode
 }
 
-func extractTypeName(bytes []byte, fromField string) (string, error) {
+func extractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
-	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
+	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
 		return "", err
 	}
 
