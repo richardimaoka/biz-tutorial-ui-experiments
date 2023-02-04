@@ -44,7 +44,6 @@ type UpdateTerminal struct {
 }
 
 type ActionCommand struct {
-	ActionType       string
 	Command          string
 	TerminalName     string
 	UpdateTerminal   UpdateTerminal
@@ -138,8 +137,7 @@ func NewStep() *Step {
 	}
 }
 
-func newTerminal() *Terminal {
-	name := "default"
+func newTerminal(name string) *Terminal {
 	return &Terminal{
 		Name: &name,
 	}
@@ -150,12 +148,33 @@ func NewPageState() *PageState {
 	nextStep := "001"
 
 	//There must be a default terminal
-	terminals := []*Terminal{newTerminal()}
+	terminals := []*Terminal{newTerminal("default")}
 
 	return &PageState{
 		Step:      &step,
 		NextStep:  &nextStep,
 		Terminals: terminals,
+	}
+}
+
+func InitPage(command *ActionCommand) *PageState {
+	step := "000"
+	nextStep := "001"
+
+	terminal := newTerminal(command.TerminalName)
+	trueValue := true
+	node := TerminalNode{
+		Content: TerminalCommand{
+			Command:         &command.Command,
+			BeforeExecution: &trueValue,
+		},
+	}
+	terminal.Nodes = append(terminal.Nodes, &node)
+
+	return &PageState{
+		Step:      &step,
+		NextStep:  &nextStep,
+		Terminals: []*Terminal{terminal},
 	}
 }
 
