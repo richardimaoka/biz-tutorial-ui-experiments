@@ -15,6 +15,32 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
+// PageState is the resolver for the pageState field.
+func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
+	var filename string
+	if step == nil {
+		filename = "data/tutorial2/state000.json"
+	} else {
+		filename = fmt.Sprintf("data/tutorial2/state_%s.json", *step)
+	}
+
+	log.Printf("reading data from %s", filename)
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var pageState model.PageState
+
+	//TODO: Instead of loading everything in one shot, load non-Union and Union separately, and combine them
+	err = json.Unmarshal(data, &pageState)
+	if err != nil {
+		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
+	}
+
+	return &pageState, nil
+}
+
 // Step is the resolver for the step field.
 func (r *queryResolver) Step(ctx context.Context, stepNum int) (*model.Step, error) {
 	filename := fmt.Sprintf("data/tutorial2/step%02d.json", stepNum)

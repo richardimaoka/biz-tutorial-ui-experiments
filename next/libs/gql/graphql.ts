@@ -57,8 +57,13 @@ export type PageState = {
 
 export type Query = {
   __typename: "Query";
+  pageState?: Maybe<PageState>;
   step?: Maybe<Step>;
   terminal?: Maybe<Terminal>;
+};
+
+export type QueryPageStateArgs = {
+  step?: InputMaybe<Scalars["String"]>;
 };
 
 export type QueryStepArgs = {
