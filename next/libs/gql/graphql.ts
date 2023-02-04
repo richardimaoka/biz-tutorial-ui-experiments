@@ -249,14 +249,14 @@ export type TerminalOutput_FragmentFragment = {
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
 export type PageQueryQueryVariables = Exact<{
-  step: Scalars["Int"];
+  step?: InputMaybe<Scalars["String"]>;
 }>;
 
 export type PageQueryQuery = {
   __typename: "Query";
-  step?: {
-    __typename: "Step";
-    nextStepNum?: number | null;
+  pageState?: {
+    __typename: "PageState";
+    nextStep?: string | null;
     sourceCode?:
       | ({ __typename: "SourceCode" } & {
           " $fragmentRefs"?: {
@@ -694,10 +694,7 @@ export const PageQueryDocument = {
         {
           kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
       selectionSet: {
@@ -705,11 +702,11 @@ export const PageQueryDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "step" },
+            name: { kind: "Name", value: "pageState" },
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "stepNum" },
+                name: { kind: "Name", value: "step" },
                 value: {
                   kind: "Variable",
                   name: { kind: "Name", value: "step" },
@@ -719,7 +716,7 @@ export const PageQueryDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "nextStepNum" } },
+                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "sourceCode" },

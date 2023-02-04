@@ -10,9 +10,9 @@ import { graphql } from "../libs/gql";
 import { nonNullArray } from "../libs/nonNullArray";
 
 const PageQuery = graphql(/* GraphQL */ `
-  query PageQuery($step: Int!) {
-    step(stepNum: $step) {
-      nextStepNum
+  query PageQuery($step: String) {
+    pageState(step: $step) {
+      nextStep
       sourceCode {
         ...SourceCodeViewer_Fragment
       }
@@ -27,15 +27,15 @@ const PageQuery = graphql(/* GraphQL */ `
 
 export default function Home() {
   const router = useRouter();
-  const { step, nonUsed } = router.query;
-  const stepInt = typeof step === "string" ? Math.trunc(Number(step)) : 0;
+  const { step } = router.query;
+  const stepVariable = typeof step === "string" ? step : undefined;
 
   const { loading, error, data, client } = useQuery(PageQuery, {
-    variables: { step: stepInt },
+    variables: { step: stepVariable },
   });
 
   const [currentTerminalIndex] = useState(0);
-  const terminals = data?.step?.terminals;
+  const terminals = data?.pageState?.terminals;
 
   const currentTerminal = terminals && terminals[currentTerminalIndex];
   const currentDirectory = currentTerminal?.currentDirectory
@@ -44,8 +44,8 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space" && data?.step?.nextStepNum) {
-        router.push(`./?step=${data.step.nextStepNum}`);
+      if (event.code === "Space" && data?.pageState?.nextStep) {
+        router.push(`./?step=${data.pageState.nextStep}`);
       }
     };
     document.addEventListener("keyup", handleKeyDown);
@@ -54,19 +54,19 @@ export default function Home() {
     return function cleanup() {
       document.removeEventListener("keyup", handleKeyDown);
     };
-  }, [step, data?.step?.nextStepNum]);
+  }, [step, data?.pageState?.nextStep]);
 
   // Page load optimization:
   useEffect(() => {
-    if (data?.step?.nextStepNum) {
+    if (data?.pageState?.nextStep) {
       client
         .query({
           query: PageQuery,
-          variables: { step: data?.step?.nextStepNum },
+          variables: { step: data?.pageState?.nextStep },
         })
         .catch((error) => console.log(error));
     }
-  }, [data?.step?.nextStepNum]);
+  }, [data?.pageState?.nextStep]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -87,18 +87,20 @@ export default function Home() {
               background-color: white;
             `}
           >
-            {data?.step?.sourceCode && (
+            {data?.pageState?.sourceCode && (
               <SourceCodeViewer
-                fragment={data.step.sourceCode}
+                fragment={data.pageState.sourceCode}
                 currentDirectory={currentDirectory}
               />
             )}
             {currentTerminal && (
               <TerminalComponent fragment={currentTerminal} />
             )}
-            {data.step?.nextStepNum && (
+            {data.pageState?.nextStep && (
               <button type="button">
-                <Link href={`./?step=${data.step.nextStepNum}`}>next step</Link>
+                <Link href={`./?step=${data.pageState.nextStep}`}>
+                  next step
+                </Link>
               </button>
             )}
           </div>

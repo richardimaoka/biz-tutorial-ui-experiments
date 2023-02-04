@@ -19,7 +19,7 @@ import (
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
 	if step == nil {
-		filename = "data/tutorial2/state000.json"
+		filename = "data/tutorial2/state_000.json"
 	} else {
 		filename = fmt.Sprintf("data/tutorial2/state_%s.json", *step)
 	}
@@ -32,7 +32,6 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 
 	var pageState model.PageState
 
-	//TODO: Instead of loading everything in one shot, load non-Union and Union separately, and combine them
 	err = json.Unmarshal(data, &pageState)
 	if err != nil {
 		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
@@ -52,7 +51,6 @@ func (r *queryResolver) Step(ctx context.Context, stepNum int) (*model.Step, err
 
 	var step model.Step
 
-	//TODO: Instead of loading everything in one shot, load non-Union and Union separately, and combine them
 	err = json.Unmarshal(data, &step)
 	if err != nil {
 		log.Printf("ERROR: %s", err)
