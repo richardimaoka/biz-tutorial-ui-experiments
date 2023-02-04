@@ -34,9 +34,11 @@ export default function Home() {
     variables: { step: stepVariable },
   });
 
-  const [currentTerminalIndex] = useState(0);
-  const terminals = data?.pageState?.terminals;
+  const currentPage = data?.pageState;
+  const nextStep = currentPage?.nextStep;
 
+  const terminals = currentPage?.terminals;
+  const [currentTerminalIndex] = useState(0);
   const currentTerminal = terminals && terminals[currentTerminalIndex];
   const currentDirectory = currentTerminal?.currentDirectory
     ? nonNullArray(currentTerminal?.currentDirectory)
@@ -44,8 +46,8 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space" && data?.pageState?.nextStep) {
-        router.push(`./?step=${data.pageState.nextStep}`);
+      if (event.code === "Space" && nextStep) {
+        router.push(`./?step=${nextStep}`);
       }
     };
     document.addEventListener("keyup", handleKeyDown);
@@ -54,19 +56,19 @@ export default function Home() {
     return function cleanup() {
       document.removeEventListener("keyup", handleKeyDown);
     };
-  }, [step, data?.pageState?.nextStep]);
+  }, [step, nextStep]);
 
   // Page load optimization:
   useEffect(() => {
-    if (data?.pageState?.nextStep) {
+    if (nextStep) {
       client
         .query({
           query: PageQuery,
-          variables: { step: data?.pageState?.nextStep },
+          variables: { step: nextStep },
         })
         .catch((error) => console.log(error));
     }
-  }, [data?.pageState?.nextStep]);
+  }, [nextStep]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -87,20 +89,18 @@ export default function Home() {
               background-color: white;
             `}
           >
-            {data?.pageState?.sourceCode && (
+            {currentPage?.sourceCode && (
               <SourceCodeViewer
-                fragment={data.pageState.sourceCode}
+                fragment={currentPage.sourceCode}
                 currentDirectory={currentDirectory}
               />
             )}
             {currentTerminal && (
               <TerminalComponent fragment={currentTerminal} />
             )}
-            {data.pageState?.nextStep && (
+            {nextStep && (
               <button type="button">
-                <Link href={`./?step=${data.pageState.nextStep}`}>
-                  next step
-                </Link>
+                <Link href={`./?step=${nextStep}`}>next step</Link>
               </button>
             )}
           </div>
