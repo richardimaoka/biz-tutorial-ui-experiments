@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+func Test_NewPageState(t *testing.T) {
+	page := NewPageState()
+
+	// There must be a default terminal
+	if len(page.Terminals) != 1 {
+		t.Errorf("terminal size = %d, not 1", len(page.Terminals))
+		return
+	}
+
+	if len(page.Terminals[0].Nodes) != 0 {
+		t.Errorf("terminal nodes size = %d, not 0", len(page.Terminals[0].Nodes))
+		return
+	}
+
+	page.Terminals[0].Nodes = append(page.Terminals[0].Nodes, &TerminalNode{})
+}
+
 func Test_NewStep(t *testing.T) {
 	step := NewStep()
 
