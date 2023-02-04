@@ -1,8 +1,13 @@
 {
-  "actionType": "ActionCommand",
-  "command": "rm -rf helloworld/helloworld.pb.go",
-  "terminalName": "default",
-  "updateTerminal": {
-    "output": ""
+  "ActionType": "ActionCommand",
+  "Command": "rm -rf helloworld/helloworld.pb.go",
+  "TerminalName": "default",
+  "UpdateTerminal": {},
+  "UpdateSourceCode": {
+    "AddDirectories": null,
+    "DeleteDirectories": null,
+    "AddFiles": null,
+    "UpdateFiles": null,
+    "DeleteFiles": null
   }
 }

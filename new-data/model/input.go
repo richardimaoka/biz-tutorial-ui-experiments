@@ -22,13 +22,13 @@ func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) err
 
 	// process each element
 	for i, flat := range unmarshalled {
-		marshaledBack, err := json.Marshal(flat)
+		flatBytes, err := json.Marshal(flat)
 		if err != nil {
 			return fmt.Errorf("%s, marshaling %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
 
 		var unflat map[string]interface{}
-		err = Unflatten(marshaledBack, &unflat)
+		err = Unflatten(flatBytes, &unflat)
 		if err != nil {
 			return fmt.Errorf("%s, unflattening %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
@@ -44,7 +44,7 @@ func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) err
 			return fmt.Errorf("%s, unmarshaling %s action to ActionCommand failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		outBytes, err := json.MarshalIndent(unflat, "", "  ")
+		outBytes, err := json.MarshalIndent(action, "", "  ")
 		if err != nil {
 			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
 		}

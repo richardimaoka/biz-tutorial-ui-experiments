@@ -90,11 +90,6 @@ func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 }
 
 func (node TerminalNode) MarshalJSON() ([]byte, error) {
-	type TerminalNodeExtended struct {
-		ContentType string `json:"contentType"`
-		TerminalNode
-	}
-
 	switch content := node.Content.(type) {
 	case TerminalCommand:
 		typedNode := struct {
@@ -108,6 +103,22 @@ func (node TerminalNode) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("default is error")
 	}
+}
+
+func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {
+	fmt.Println("UpdateTerminal MarshalJSON")
+	m := make(map[string]interface{})
+
+	if ut.Output != "" {
+		m["output"] = ut.Output
+	}
+
+	if len(ut.CurrentDirectory) != 0 {
+		m["currentDirectory"] = ut.CurrentDirectory
+	}
+
+	return json.Marshal(m)
+
 }
 
 func NewStep() *Step {
