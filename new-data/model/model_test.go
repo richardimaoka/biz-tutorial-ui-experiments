@@ -36,7 +36,19 @@ func Test_InitPage(t *testing.T) {
 		TerminalName: "default",
 		Command:      "mkdir workspace",
 	}
+
 	page := InitPage(&command)
+
+	resultBytes, err := json.Marshal(page)
+	if err != nil {
+		t.Errorf("failed to marshal page")
+	}
+	var resultMap map[string]interface{}
+	err = json.Unmarshal(resultBytes, &resultMap)
+	if err != nil {
+		t.Errorf("failed to unmarshal result json")
+		return
+	}
 
 	expectedBytes := []byte(`{
 		"step":     "000",
@@ -60,20 +72,9 @@ func Test_InitPage(t *testing.T) {
 		"sourceCode": null
 	}`)
 	var expectedMap map[string]interface{}
-	err := json.Unmarshal(expectedBytes, &expectedMap)
+	err = json.Unmarshal(expectedBytes, &expectedMap)
 	if err != nil {
 		t.Errorf("failed to unmarshal expected json")
-		return
-	}
-
-	resultBytes, err := json.Marshal(page)
-	if err != nil {
-		t.Errorf("failed to marshal page")
-	}
-	var resultMap map[string]interface{}
-	err = json.Unmarshal(resultBytes, &resultMap)
-	if err != nil {
-		t.Errorf("failed to unmarshal result json")
 		return
 	}
 
