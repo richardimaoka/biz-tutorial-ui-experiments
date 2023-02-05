@@ -40,48 +40,49 @@ func (t *TerminalNode) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+func extractTypeName(jsonBytes []byte, fromField string) (string, error) {
+	var unmarshaled map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
+		return "", err
+	}
+
+	typeNameRaw, ok := unmarshaled[fromField]
+	if !ok {
+		return "", fmt.Errorf("\"%s\" does not exist in JSON", fromField)
+	}
+
+	typeName, ok := typeNameRaw.(string)
+	if !ok {
+		return "", fmt.Errorf("\"%s\" is not a string, but found in type = %v", fromField, reflect.TypeOf(typeNameRaw))
+	}
+
+	return typeName, nil
+}
+
 func terminalElementFromBytes(bytes []byte) (TerminalElement, error) {
-	var unmarshaled interface{}
-	if err := json.Unmarshal(bytes, &unmarshaled); err != nil {
+	fromField := "contentType"
+	typename, err := extractTypeName(bytes, fromField)
+	if err != nil {
 		return nil, err
 	}
-	if unmarshaled == nil {
-		return nil, nil
-	}
 
-	asserted, ok := unmarshaled.(map[string]interface{}) //type assertion
-	if !ok {
-		return nil, fmt.Errorf("perhaps the given JSON is not a JSON 'object', as it is unmarshaled to type = %v", reflect.TypeOf(unmarshaled))
-	}
-
-	contentType := "contentType"
-	typename, ok := asserted[contentType]
-	if !ok {
-		return nil, fmt.Errorf("\"%s\" does not exist in JSON", contentType)
-	}
-
-	switch t := typename.(type) {
-	case string:
-		switch t {
-		case "TerminalCommand":
-			var cmd TerminalCommand
-			if err := json.Unmarshal(bytes, &cmd); err != nil {
-				return nil, err
-			}
-			return &cmd, nil
-
-		case "TerminalOutput":
-			var output TerminalOutput
-			if err := json.Unmarshal(bytes, &output); err != nil {
-				return nil, err
-			}
-
-			return &output, nil
-
-		default:
-			return nil, fmt.Errorf("\"%s\" = %s is not a valid TerminalElement type", contentType, t)
+	switch typename {
+	case "TerminalCommand":
+		var cmd TerminalCommand
+		if err := json.Unmarshal(bytes, &cmd); err != nil {
+			return nil, err
 		}
+		return &cmd, nil
+
+	case "TerminalOutput":
+		var output TerminalOutput
+		if err := json.Unmarshal(bytes, &output); err != nil {
+			return nil, err
+		}
+
+		return &output, nil
+
 	default:
-		return nil, fmt.Errorf("\"%s\" = %v is in wrong type %v", contentType, t, reflect.TypeOf(t))
+		return nil, fmt.Errorf("\"%s\" = %s is not a valid TerminalElement type", fromField, typename)
 	}
 }
