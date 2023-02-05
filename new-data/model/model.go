@@ -88,20 +88,18 @@ func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 	}
 }
 
-func (node TerminalNode) MarshalJSON() ([]byte, error) {
-	switch content := node.Content.(type) {
-	case TerminalCommand:
-		typedNode := struct {
-			ContentType string
-			Content     TerminalCommand
-		}{
-			"TerminalCommand",
-			content,
-		}
-		return json.Marshal(typedNode)
-	default:
-		return nil, fmt.Errorf("default is error")
+func (c TerminalCommand) MarshalJSON() ([]byte, error) {
+	extendedCommand := struct {
+		ContentType     string  `json:"contentType"`
+		BeforeExecution *bool   `json:"beforeExecution"`
+		Command         *string `json:"command"`
+	}{
+		"TerminalCommand",
+		c.BeforeExecution,
+		c.Command,
 	}
+
+	return json.Marshal(extendedCommand)
 }
 
 func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {

@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"reflect"
 	"testing"
 )
 
@@ -22,25 +23,65 @@ func Test_NewPageState(t *testing.T) {
 	page.Terminals[0].Nodes = append(page.Terminals[0].Nodes, &TerminalNode{})
 }
 
+func prettyString(m map[string]interface{}) string {
+	jsonString, err := json.MarshalIndent(m, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(jsonString)
+}
+
 func Test_InitPage(t *testing.T) {
 	command := ActionCommand{
-		Command: "mkdir workspace",
+		TerminalName: "default",
+		Command:      "mkdir workspace",
 	}
 	page := InitPage(&command)
 
-	// There must be a default terminal
-	if len(page.Terminals) != 1 {
-		t.Errorf("terminal size = %d, not 1", len(page.Terminals))
+	expectedBytes := []byte(`{
+		"step":     "000",
+		"nextStep": "001",
+		"prevStep": null,
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"name": "default",
+				"nodes": [
+					{
+						"content": {
+							"contentType": "TerminalCommand",
+							"beforeExecution": true,
+							"command": "mkdir workspace"
+						}
+					}
+				]
+			}
+		],
+		"sourceCode": null
+	}`)
+	var expectedMap map[string]interface{}
+	err := json.Unmarshal(expectedBytes, &expectedMap)
+	if err != nil {
+		t.Errorf("failed to unmarshal expected json")
 		return
 	}
 
-	if len(page.Terminals[0].Nodes) != 1 {
-		t.Errorf("terminal nodes size = %d, not 0", len(page.Terminals[0].Nodes))
+	resultBytes, err := json.Marshal(page)
+	if err != nil {
+		t.Errorf("failed to marshal page")
+	}
+	var resultMap map[string]interface{}
+	err = json.Unmarshal(resultBytes, &resultMap)
+	if err != nil {
+		t.Errorf("failed to unmarshal result json")
 		return
 	}
 
-	page.Terminals[0].Nodes = append(page.Terminals[0].Nodes, &TerminalNode{})
+	if !reflect.DeepEqual(expectedMap, resultMap) {
+		t.Errorf("expected\n%v\nbut got\n%v", prettyString(expectedMap), prettyString(resultMap))
+	}
 }
+
 func Test_NewStep(t *testing.T) {
 	step := NewStep()
 

@@ -75,7 +75,6 @@ type TerminalCommandSet struct {
 func (TerminalCommandSet) IsTerminalElement() {}
 
 type TerminalNode struct {
-	Index   *int            `json:"index"`
 	Content TerminalElement `json:"content"`
 }
 
