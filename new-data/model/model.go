@@ -39,13 +39,14 @@ type UpdateSourceCode struct {
 }
 
 type UpdateTerminal struct {
-	Output           string
-	CurrentDirectory []string
+	Output               string //from spreadsheet
+	CurrentDirectoryPath string //from spreadsheet
+	CurrentDirectory     []string
 }
 
 type ActionCommand struct {
-	Command          string
-	TerminalName     string
+	Command          string //from spreadsheet
+	TerminalName     string //from spreadsheet
 	UpdateTerminal   UpdateTerminal
 	UpdateSourceCode UpdateSourceCode
 }

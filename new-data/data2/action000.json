@@ -4,7 +4,7 @@
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {
-    "AddDirectories": null,
+    "AddDirectories": [{ "filePath": "protoc-go-experiments" }],
     "DeleteDirectories": null,
     "AddFiles": null,
     "UpdateFiles": null,
