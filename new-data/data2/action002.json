@@ -4,7 +4,11 @@
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {
-    "AddDirectories": null,
+    "AddDirectories": [
+      {
+        "filePathString": "protoc-go-experiments/helloworld"
+      }
+    ],
     "DeleteDirectories": null,
     "AddFiles": null,
     "UpdateFiles": null,

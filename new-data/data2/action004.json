@@ -6,7 +6,11 @@
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,
-    "AddFiles": null,
+    "AddFiles": [
+      {
+        "filePathString": "protoc-go-experiments/helloworld/helloworld.proto"
+      }
+    ],
     "UpdateFiles": null,
     "DeleteFiles": null
   }
