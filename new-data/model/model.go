@@ -9,25 +9,30 @@ import (
 )
 
 type AddDirectory struct {
-	FilePath []string
+	FilePath       []string
+	FilePathString string
 }
 
 type DeleteDirectory struct {
-	FilePath []string
+	FilePath       []string
+	FilePathString string
 }
 
 type AddFile struct {
-	FilePath []string
-	Content  string
+	FilePath       []string
+	FilePathString string
+	Content        string
 }
 
 type UpdateFile struct {
-	FilePath []string
-	Content  string
+	FilePath       []string
+	FilePathString string
+	Content        string
 }
 
 type DeleteFile struct {
-	FilePath []string
+	FilePathString string
+	FilePath       []string
 }
 
 type UpdateSourceCode struct {

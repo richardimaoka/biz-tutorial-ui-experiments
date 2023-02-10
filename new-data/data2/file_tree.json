@@ -1,122 +1,62 @@
 [
   {
-    "offset": 0,
-    "type": "DIRECTORY",
-    "name": "protoc-go-experiments",
-    "path": "protoc-go-experiments"
+    "filePathString": "protoc-go-experiments"
   },
   {
-    "offset": 1,
-    "type": "DIRECTORY",
-    "name": "helloworld",
-    "path": "protoc-go-experiments/helloworld"
+    "filePathString": "protoc-go-experiments/helloworld"
   },
   {
-    "offset": 2,
-    "type": "FILE",
-    "name": "helloworld.proto",
-    "path": "protoc-go-experiments/helloworld/helloworld.proto"
+    "filePathString": "protoc-go-experiments/helloworld/helloworld.proto"
   },
   {
-    "offset": 2,
-    "type": "DIRECTORY",
-    "name": "github.com",
-    "path": "protoc-go-experiments/helloworld/github.com"
+    "filePathString": "protoc-go-experiments/helloworld/github.com"
   },
   {
-    "offset": 3,
-    "type": "DIRECTORY",
-    "name": "__github__username",
-    "path": "protoc-go-experiments/helloworld/github.com/__github__username"
+    "filePathString": "protoc-go-experiments/helloworld/github.com/__github__username"
   },
   {
-    "offset": 4,
-    "type": "FILE",
-    "name": "protoc-go-experiments",
-    "path": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments"
+    "filePathString": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments"
   },
   {
-    "offset": 5,
-    "type": "DIRECTORY",
-    "name": "helloworld",
-    "path": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments/helloworld"
+    "filePathString": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments/helloworld"
   },
   {
-    "offset": 6,
-    "type": "FILE",
-    "name": "helloworld.pb.go",
-    "path": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments/helloworld/helloworld.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld/github.com/__github__username/protoc-go-experiments/helloworld/helloworld.pb.go"
   },
   {
-    "offset": 2,
-    "type": "FILE",
-    "name": "helloworld.pb.go",
-    "path": "protoc-go-experiments/helloworld/helloworld.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld/helloworld.pb.go"
   },
   {
-    "offset": 2,
-    "type": "DIRECTORY",
-    "name": "outdir",
-    "path": "protoc-go-experiments/helloworld/outdir"
+    "filePathString": "protoc-go-experiments/helloworld/outdir"
   },
   {
-    "offset": 3,
-    "type": "FILE",
-    "name": "helloworld.pb.go",
-    "path": "protoc-go-experiments/helloworld/outdir/helloworld.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld/outdir/helloworld.pb.go"
   },
   {
-    "offset": 2,
-    "type": "FILE",
-    "name": "greeting.proto",
-    "path": "protoc-go-experiments/helloworld/greeting.proto"
+    "filePathString": "protoc-go-experiments/helloworld/greeting.proto"
   },
   {
-    "offset": 2,
-    "type": "FILE",
-    "name": "greeting.pb.go",
-    "path": "protoc-go-experiments/helloworld/greeting.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld/greeting.pb.go"
   },
   {
-    "offset": 2,
-    "type": "DIRECTORY",
-    "name": "subdir",
-    "path": "protoc-go-experiments/helloworld/subdir"
+    "filePathString": "protoc-go-experiments/helloworld/subdir"
   },
   {
-    "offset": 3,
-    "type": "FILE",
-    "name": "subhello.proto",
-    "path": "protoc-go-experiments/helloworld/subdir/subhello.proto"
+    "filePathString": "protoc-go-experiments/helloworld/subdir/subhello.proto"
   },
   {
-    "offset": 3,
-    "type": "FILE",
-    "name": "subhello.pb.go",
-    "path": "protoc-go-experiments/helloworld/subdir/subhello.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld/subdir/subhello.pb.go"
   },
   {
-    "offset": 1,
-    "type": "FILE",
-    "name": "greeting.pb.go",
-    "path": "protoc-go-experiments/greeting.pb.go"
+    "filePathString": "protoc-go-experiments/greeting.pb.go"
   },
   {
-    "offset": 1,
-    "type": "FILE",
-    "name": "helloworld.pb.go",
-    "path": "protoc-go-experiments/helloworld.pb.go"
+    "filePathString": "protoc-go-experiments/helloworld.pb.go"
   },
   {
-    "offset": 1,
-    "type": "DIRECTORY",
-    "name": "subdir",
-    "path": "protoc-go-experiments/subdir"
+    "filePathString": "protoc-go-experiments/subdir"
   },
   {
-    "offset": 2,
-    "type": "FILE",
-    "name": "subhello.pb.go",
-    "path": "protoc-go-experiments/subdir/subhello.pb.go"
+    "filePathString": "protoc-go-experiments/subdir/subhello.pb.go"
   }
 ]
