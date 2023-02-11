@@ -14,7 +14,7 @@ func main() {
 
 	// actionListParse()
 
-	err := model.SplitInputListFile("data2")
+	err := model.SplitActionListFile("data2")
 	if err != nil {
 		panic(err)
 	}
