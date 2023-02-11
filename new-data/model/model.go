@@ -60,13 +60,13 @@ type ActionCommand struct {
 	UpdateSourceCode UpdateSourceCode
 }
 
-func (c *ActionCommand) IsAction()
+func (c *ActionCommand) IsAction() {}
 
 type ManualUpdate struct {
 	UpdateSourceCode UpdateSourceCode
 }
 
-func (c *ManualUpdate) IsAction()
+func (c *ManualUpdate) IsAction() {}
 
 func extractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
@@ -106,6 +106,25 @@ func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 	}
 }
 
+func (c ActionCommand) MarshalJSON() ([]byte, error) {
+	fmt.Println("ActionCommand MarshalJSON")
+	extendedCommand := struct {
+		ActionType       string
+		Command          string
+		TerminalName     string
+		UpdateTerminal   UpdateTerminal
+		UpdateSourceCode UpdateSourceCode
+	}{
+		"ActionCommand",
+		c.Command,
+		c.TerminalName,
+		c.UpdateTerminal,
+		c.UpdateSourceCode,
+	}
+
+	return json.Marshal(extendedCommand)
+}
+
 func (c TerminalCommand) MarshalJSON() ([]byte, error) {
 	extendedCommand := struct {
 		ContentType     string  `json:"contentType"`
@@ -121,7 +140,6 @@ func (c TerminalCommand) MarshalJSON() ([]byte, error) {
 }
 
 func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {
-	fmt.Println("UpdateTerminal MarshalJSON")
 	m := make(map[string]interface{})
 
 	if ut.Output != "" {
