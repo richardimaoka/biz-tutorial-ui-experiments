@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "command": "cd protoc-go-experiments",
+  "terminalName": "default",
+  "updateTerminal.currentDirectoryPath": "protoc-go-experiments",
+  "updateTerminal.output": ""
+}

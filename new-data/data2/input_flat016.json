@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "command": "cd ../",
+  "terminalName": "default",
+  "updateTerminal.currentDirectoryPath": "",
+  "updateTerminal.output": ""
+}

@@ -4,6 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+)
+
+const (
+	inputFilePrefix  = "input_flat"
+	actionListPrefix = "action_input_list"
 )
 
 func toUnflatJsonBytes(flatJsonObj map[string]interface{}) ([]byte, error) {
@@ -29,13 +35,12 @@ func toUnflatJsonBytes(flatJsonObj map[string]interface{}) ([]byte, error) {
 }
 
 func SplitInputListFile(targetDir string) error {
-	actionListFile := targetDir + "action_input_list.json"
-	targetFilePrefix := "flat_input"
+	filename := targetDir + "/" + actionListPrefix + ".json"
 
-	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
+	errorPreceding := "Error in SplitInputListFile for filename = " + filename
 
 	// read and process the whole file
-	bytes, err := os.ReadFile(actionListFile)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("%s, reading action failed, %s", errorPreceding, err)
 	}
@@ -52,7 +57,8 @@ func SplitInputListFile(targetDir string) error {
 			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		err = os.WriteFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetFilePrefix, i), jsonBytes, 0644)
+		inputFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, inputFilePrefix, i)
+		err = os.WriteFile(inputFileName, jsonBytes, 0644)
 		if err != nil {
 			return fmt.Errorf("%s, writing %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
@@ -61,13 +67,33 @@ func SplitInputListFile(targetDir string) error {
 	return nil
 }
 
-func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) error {
+func ListInputFiles(targetDir string) ([]string, error) {
+	// errorPreceding := "errrrrrr" //"Error in SplitInputListFile for filename = " + actionListFile
+
+	entries, err := os.ReadDir(targetDir)
+	if err != nil {
+		return nil, err
+	}
+
+	var files []string
+	for _, e := range entries {
+		if strings.HasPrefix(e.Name(), "input") && strings.HasSuffix(e.Name(), "json") {
+			files = append(files, targetDir+"/"+e.Name())
+			fmt.Println(targetDir + "/" + e.Name())
+		}
+	}
+
+	return files, nil
+}
+
+func SplitActionListFile(targetDir string) error {
+	actionListFile := targetDir + "/" + actionListPrefix + ".json"
 	errorPreceding := "Error in SplitActionListFile for filename = " + actionListFile
 
 	// read and process the whole file
 	bytes, err := os.ReadFile(actionListFile)
 	if err != nil {
-		return fmt.Errorf("%s, reading action failed, %s", errorPreceding, err)
+		return fmt.Errorf("%s, reading action list failed, %s", errorPreceding, err)
 	}
 
 	var unmarshalled []map[string]interface{}
@@ -92,7 +118,8 @@ func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) err
 			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
 		}
 
-		err = os.WriteFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetFilePrefix, i), outBytes, 0644)
+		inputFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, inputFilePrefix, i)
+		err = os.WriteFile(inputFileName, outBytes, 0644)
 		if err != nil {
 			return fmt.Errorf("%s, writing %s action failed, %s", errorPreceding, ordinal(i), err)
 		}
