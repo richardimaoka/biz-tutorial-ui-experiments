@@ -35,6 +35,28 @@ func UnmarshalToAction(jsonBytes []byte) (Action, error) {
 	}
 }
 
+func toUnflatJsonBytes(flatJsonObj map[string]interface{}) ([]byte, error) {
+	errorPreceding := "Error in reflat"
+
+	flatJsonBytes, err := json.Marshal(flatJsonObj)
+	if err != nil {
+		return nil, fmt.Errorf("%s, marshaling to flat JSON bytes failed, %s", errorPreceding, err)
+	}
+
+	var unflatJsonObj map[string]interface{}
+	err = Unflatten(flatJsonBytes, &unflatJsonObj)
+	if err != nil {
+		return nil, fmt.Errorf("%s, unflattening failed, %s", errorPreceding, err)
+	}
+
+	unflatJsonBytes, err := json.Marshal(unflatJsonObj)
+	if err != nil {
+		return nil, fmt.Errorf("%s, marshaling to unflat JSON bytes failed, %s", errorPreceding, err)
+	}
+
+	return unflatJsonBytes, nil
+}
+
 func SplitActionListFile(actionListFile, targetDir, targetFilePrefix string) error {
 	errorPreceding := "Error in SplitActionListFile for filename = " + actionListFile
 
