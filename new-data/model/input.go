@@ -13,45 +13,61 @@ const (
 	actionListPrefix = "action_input_list"
 )
 
-func toUnflatJsonBytes(flatJsonObj map[string]interface{}) ([]byte, error) {
-	errorPreceding := "Error in reflat"
-
-	flatJsonBytes, err := json.Marshal(flatJsonObj)
-	if err != nil {
-		return nil, fmt.Errorf("%s, marshaling to flat JSON bytes failed, %s", errorPreceding, err)
-	}
-
+func toUnflattenBytes(flatJsonBytes []byte) ([]byte, error) {
 	var unflatJsonObj map[string]interface{}
-	err = Unflatten(flatJsonBytes, &unflatJsonObj)
+	err := Unflatten(flatJsonBytes, &unflatJsonObj)
 	if err != nil {
-		return nil, fmt.Errorf("%s, unflattening failed, %s", errorPreceding, err)
+		return nil, fmt.Errorf("unflattening failed, %s", err)
 	}
 
 	unflatJsonBytes, err := json.Marshal(unflatJsonObj)
 	if err != nil {
-		return nil, fmt.Errorf("%s, marshaling to unflat JSON bytes failed, %s", errorPreceding, err)
+		return nil, fmt.Errorf("marshaling to unflattened JSON bytes failed, %s", err)
 	}
 
 	return unflatJsonBytes, nil
 }
 
 func toActionJsonBytes(flatJsonBytes []byte) ([]byte, error) {
-	unflattenedJsonBytes, err := UnflattenBytes(flatJsonBytes)
+	// pre-process JSON bytes
+	unflattenedJsonBytes, err := toUnflattenBytes(flatJsonBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unflatten, %s", err)
 	}
 
+	// unmarshal to action
 	action, err := UnmarshalToAction(unflattenedJsonBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal, %s", err)
 	}
 
+	// marshal action
 	actionJsonBytes, err := json.MarshalIndent(action, "", "  ")
 	if err != nil {
 		return nil, fmt.Errorf("marshaling action failed, %s", err)
 	}
 
 	return actionJsonBytes, nil
+}
+
+func generateActionFile(flatJsonFileName, actionFileName string) error {
+	// read
+	flatJsonBytes, err := os.ReadFile(flatJsonFileName)
+	if err != nil {
+		return fmt.Errorf("failed to read %s, %s", flatJsonFileName, err)
+	}
+
+	// convert
+	actionJsonBytes, err := toActionJsonBytes(flatJsonBytes)
+	if err != nil {
+		return fmt.Errorf("failed to convert %s to action json, %s", flatJsonFileName, err)
+	}
+
+	// write
+	err = os.WriteFile(actionFileName, actionJsonBytes, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write %s, %s", actionFileName, err)
+	}
 }
 
 func SplitActionListFile(targetDir string) error {
@@ -86,35 +102,25 @@ func SplitActionListFile(targetDir string) error {
 	return nil
 }
 
-func AAA(targetDir string) error {
-	list, err := ListInputFiles(targetDir)
+func GenerateInputActionFiles(targetDir string) error {
+	inputFlatFiles, err := ListInputFlatFiles(targetDir)
 	if err != nil {
 		return err
 	}
 
-	// process each element
-	for i, inputFileName := range list {
-		flatJsonBytes, err := os.ReadFile(inputFileName)
-		if err != nil {
-			return fmt.Errorf("failed to read %s, %s", inputFileName, err)
-		}
-
-		actionJsonBytes, err := toActionJsonBytes(flatJsonBytes)
-		if err != nil {
-			return fmt.Errorf("failed to convert %s to action json, %s", inputFileName, err)
-		}
-
+	var errorHappened bool = false
+	for i, flatJsonFileName := range inputFlatFiles {
 		actionFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, actionFilePrefix, i)
-		err = os.WriteFile(inputFileName, actionJsonBytes, 0644)
-		if err != nil {
-			return fmt.Errorf("failed to write %s, %s", actionFileName, err)
-		}
+		errorHappened = errorHappened && generateActionFile(flatJsonFileName, actionFileName) != nil
 	}
 
+	if errorHappened {
+		return fmt.Errorf("error happend while processing action files")
+	}
 	return nil
 }
 
-func ListInputFiles(targetDir string) ([]string, error) {
+func ListInputFlatFiles(targetDir string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
 		return nil, err
@@ -128,46 +134,4 @@ func ListInputFiles(targetDir string) ([]string, error) {
 	}
 
 	return files, nil
-}
-
-func SplitActionListFile2(targetDir string) error {
-	actionListFile := targetDir + "/" + actionListPrefix + ".json"
-	errorPreceding := "Error in SplitActionListFile for filename = " + actionListFile
-
-	// read and process the whole file
-	bytes, err := os.ReadFile(actionListFile)
-	if err != nil {
-		return fmt.Errorf("%s, reading action list failed, %s", errorPreceding, err)
-	}
-
-	var unmarshalled []map[string]interface{}
-	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
-		return fmt.Errorf("%s, unmarshaling action failed, %s", errorPreceding, err)
-	}
-
-	// process each element
-	for i, flatJsonObj := range unmarshalled {
-		jsonBytes, err := toUnflatJsonBytes(flatJsonObj)
-		if err != nil {
-			return fmt.Errorf("%s, %s action, %s", errorPreceding, ordinal(i), err)
-		}
-
-		action, err := UnmarshalToAction(jsonBytes)
-		if err != nil {
-			return fmt.Errorf("%s, %s action, %s", errorPreceding, ordinal(i), err)
-		}
-
-		outBytes, err := json.MarshalIndent(action, "", "  ")
-		if err != nil {
-			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
-		}
-
-		inputFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, inputFilePrefix, i)
-		err = os.WriteFile(inputFileName, outBytes, 0644)
-		if err != nil {
-			return fmt.Errorf("%s, writing %s action failed, %s", errorPreceding, ordinal(i), err)
-		}
-	}
-
-	return nil
 }
