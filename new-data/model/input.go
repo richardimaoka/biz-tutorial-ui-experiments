@@ -68,6 +68,8 @@ func generateActionFile(flatJsonFileName, actionFileName string) error {
 	if err != nil {
 		return fmt.Errorf("failed to write %s, %s", actionFileName, err)
 	}
+
+	return nil
 }
 
 func SplitActionListFile(targetDir string) error {
