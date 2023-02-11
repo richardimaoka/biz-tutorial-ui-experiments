@@ -49,12 +49,24 @@ type UpdateTerminal struct {
 	CurrentDirectory     []string
 }
 
+type Action interface {
+	IsAction()
+}
+
 type ActionCommand struct {
 	Command          string //from spreadsheet
 	TerminalName     string //from spreadsheet
 	UpdateTerminal   UpdateTerminal
 	UpdateSourceCode UpdateSourceCode
 }
+
+func (c *ActionCommand) IsAction()
+
+type ManualUpdate struct {
+	UpdateSourceCode UpdateSourceCode
+}
+
+func (c *ManualUpdate) IsAction()
 
 func extractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
