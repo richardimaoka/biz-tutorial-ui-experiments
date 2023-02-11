@@ -106,6 +106,35 @@ func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
 	}
 }
 
+func UnmarshalToAction(jsonBytes []byte) (Action, error) {
+	errorPreceding := "Error in UnmarshalToAction"
+
+	actionTypeField := "actionType"
+	actionType, err := extractTypeName(jsonBytes, actionTypeField)
+	if err != nil {
+		return nil, fmt.Errorf("%s, extracting action type failed, %s", errorPreceding, err)
+	}
+
+	switch actionType {
+	case "ActionCommand":
+		var command ActionCommand
+		err = json.Unmarshal(jsonBytes, &command)
+		if err != nil {
+			return nil, fmt.Errorf("%s, unmarshaling action to ActionCommand failed, %s", errorPreceding, err)
+		}
+		return &command, nil
+	case "ManualUpdate":
+		var manual ManualUpdate
+		err = json.Unmarshal(jsonBytes, &manual)
+		if err != nil {
+			return nil, fmt.Errorf("%s, unmarshaling action to ManualUpdate failed, %s", errorPreceding, err)
+		}
+		return &manual, nil
+	default:
+		return nil, fmt.Errorf("%s, %s = %s is not a valid action type", errorPreceding, actionTypeField, actionType)
+	}
+}
+
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	fmt.Println("ActionCommand MarshalJSON")
 	extendedCommand := struct {
