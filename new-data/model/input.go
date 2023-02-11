@@ -72,57 +72,65 @@ func generateActionFile(flatJsonFileName, actionFileName string) error {
 	return nil
 }
 
+// map[string]interface{} represents JSON obj
+// return a slice of map[string]interface{} (i.e.) []map[string]interface{}
+func reacActionList(actionListFile string) ([]map[string]interface{}, error) {
+	bytes, err := os.ReadFile(actionListFile)
+	if err != nil {
+		return nil, fmt.Errorf("reading %s failed, %s", actionListFile, err)
+	}
+
+	var unmarshalled []map[string]interface{}
+	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
+		return nil, fmt.Errorf("unmarshaling %s failed, %s", actionListFile, err)
+	}
+
+	return unmarshalled, nil
+}
+
+func writeFlatJson(flatJson map[string]interface{}, filename string) error {
+	jsonBytes, err := json.MarshalIndent(flatJson, "", "  ")
+	if err != nil {
+		return fmt.Errorf("marshaling flat JSON failed, %s", err)
+	}
+
+	err = os.WriteFile(filename, jsonBytes, 0644)
+	if err != nil {
+		return fmt.Errorf("writing flat JSON to %s failed, %s", filename, err)
+	}
+
+	return nil
+}
+
 func SplitActionListFile(targetDir string) error {
 	actionListFile := fmt.Sprintf("%s/%s.json", targetDir, actionListPrefix)
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
 	// read and process the whole file
-	bytes, err := os.ReadFile(actionListFile)
+	jsonObjMaps, err := reacActionList(actionListFile)
 	if err != nil {
-		return fmt.Errorf("%s, reading action failed, %s", errorPreceding, err)
-	}
-
-	var unmarshalled []map[string]interface{}
-	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
-		return fmt.Errorf("%s, unmarshaling action failed, %s", errorPreceding, err)
+		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	// write each array element into file
-	for i, flatJsonObj := range unmarshalled {
-		jsonBytes, err := json.MarshalIndent(flatJsonObj, "", "  ")
-		if err != nil {
-			return fmt.Errorf("%s, marshaling %s ActionCommand failed, %s", errorPreceding, ordinal(i), err)
-		}
-
-		inputFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, inputFilePrefix, i)
-		err = os.WriteFile(inputFileName, jsonBytes, 0644)
-		if err != nil {
-			return fmt.Errorf("%s, writing %s action failed, %s", errorPreceding, ordinal(i), err)
-		}
-	}
-
-	return nil
-}
-
-func GenerateInputActionFiles(targetDir string) error {
-	inputFlatFiles, err := ListInputFlatFiles(targetDir)
-	if err != nil {
-		return err
-	}
-
 	var errorHappened bool = false
-	for i, flatJsonFileName := range inputFlatFiles {
-		actionFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, actionFilePrefix, i)
-		errorHappened = errorHappened && generateActionFile(flatJsonFileName, actionFileName) != nil
+	for i, flatJsonObj := range jsonObjMaps {
+		inputFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, inputFilePrefix, i)
+		err = writeFlatJson(flatJsonObj, inputFileName)
+		if err != nil {
+			fmt.Printf("GenerateInputActionFiles failed, %s", err)
+			errorHappened = true
+		}
 	}
 
 	if errorHappened {
-		return fmt.Errorf("error happend while processing action files")
+		return fmt.Errorf("error happend while splitting %s", actionListFile)
 	}
+
 	return nil
 }
 
-func ListInputFlatFiles(targetDir string) ([]string, error) {
+func InputFlatFiles(targetDir string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
 		return nil, err
@@ -136,4 +144,27 @@ func ListInputFlatFiles(targetDir string) ([]string, error) {
 	}
 
 	return files, nil
+}
+
+func GenerateInputActionFiles(targetDir string) error {
+	inputFlatFiles, err := InputFlatFiles(targetDir)
+	if err != nil {
+		return err
+	}
+
+	var errorHappened bool = false
+	for i, flatJsonFileName := range inputFlatFiles {
+		actionFileName := fmt.Sprintf("%s/%s%03d.json", targetDir, actionFilePrefix, i)
+		err = generateActionFile(flatJsonFileName, actionFileName)
+		if err != nil {
+			fmt.Printf("GenerateInputActionFiles failed, %s", err)
+			errorHappened = true
+		}
+	}
+
+	if errorHappened {
+		return fmt.Errorf("error happend while processing action files")
+	}
+
+	return nil
 }
