@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "cd ../",
+  "Command": "rm -rf outdir",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

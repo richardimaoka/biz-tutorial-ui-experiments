@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "protoc \\\n  --proto_path=. \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
+  "Command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

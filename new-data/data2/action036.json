@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "rm helloworld/greeting.pb.go\nrm helloworld/helloworld.pb.go\nrm helloworld/subdir/subhello.pb.go",
+  "Command": "rm helloworld/subdir/subhello.pb.go",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

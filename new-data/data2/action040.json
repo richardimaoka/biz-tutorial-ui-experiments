@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "protoc \\\n  --proto_path=helloworld \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
+  "Command": "protoc \\\n  --proto_path=helloworld \\\n  --go_out=helloworld --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

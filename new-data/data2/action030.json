@@ -1,7 +1,7 @@
 {
-  "ActionType": "ActionCommand",
-  "Command": "rm helloworld/greeting.pb.go",
-  "TerminalName": "default",
+  "ActionType": "ManualUpdate",
+  "Command": "",
+  "TerminalName": "",
   "UpdateTerminal": {},
   "UpdateSourceCode": {
     "AddDirectories": null,

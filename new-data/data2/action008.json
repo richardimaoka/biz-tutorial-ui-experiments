@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "rm -rf github.com",
+  "Command": "protoc --go_out=. helloworld.proto",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

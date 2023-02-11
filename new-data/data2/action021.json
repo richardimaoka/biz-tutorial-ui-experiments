@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "rm helloworld/helloworld.pb.go",
+  "Command": "rm helloworld/greeting.pb.go",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

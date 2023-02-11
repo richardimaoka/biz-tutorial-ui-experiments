@@ -1,6 +1,6 @@
 {
   "ActionType": "ActionCommand",
-  "Command": "rm -rf helloworld/helloworld.pb.go",
+  "Command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld.proto",
   "TerminalName": "default",
   "UpdateTerminal": {},
   "UpdateSourceCode": {

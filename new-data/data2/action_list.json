@@ -3,240 +3,322 @@
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "mkdir protoc-go-experiments",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "cd protoc-go-experiments",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": "protoc-go-experiments"
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "mkdir helloworld",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "cd helloworld # protoc-go-experiments/helloworld",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": "protoc-go-experiments/helloworld"
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat << EOF > helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定",
-    "updateTerminal.output": "Missing output directives."
+    "updateTerminal.output": "Missing output directives.",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc --go_out=. helloworld.proto",
-    "updateTerminal.output": "protoc-gen-go: unable to determine Go import path for \"helloworld.proto\"\n\nPlease specify either:\n• a \"go_package\" option in the .proto source file, or\n• a \"M\" argument on the command line.\n\nSee https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information."
+    "updateTerminal.output": "protoc-gen-go: unable to determine Go import path for \"helloworld.proto\"\n\nPlease specify either:\n• a \"go_package\" option in the .proto source file, or\n• a \"M\" argument on the command line.\n\nSee https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information.",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc --go_out=. helloworld.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm -rf github.com",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=outdir --go_opt=paths=source_relative \\\n  helloworld.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "mkdir outdir",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=outdir --go_opt=paths=source_relative \\\n  helloworld.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm -rf outdir",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "cd ../",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm -rf helloworld/helloworld.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "cat << EOF > helloworld/greeting.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }\nEOF",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/greeting.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/helloworld.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "mkdir helloworld/subdir\ncat << EOF > helloworld/subdir/subhello.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld/subdir\";\n\n// The greeting service definition.\nservice SubGreeter {\n  // Sends a greeting\n  rpc SayHello(SubHelloRequest) returns (SubHelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage SubHelloRequest { string name = 1; }\n\n// The response message containing the greetings\nmessage SubHelloReply { string message = 1; }\nEOF",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/greeting.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/helloworld.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/subdir/subhello.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": "Greeting\" seems to be defined in \"greeting.proto\", which is not imported by \"helloworld.proto\".\nTo use it here, please add the necessary import."
+    "updateTerminal.output": "Greeting\" seems to be defined in \"greeting.proto\", which is not imported by \"helloworld.proto\".\nTo use it here, please add the necessary import.",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": "greeting.proto: File not found.\nhelloworld/helloworld.proto: Import \"greeting.proto\" was not found or had errors.\nhelloworld/helloworld.proto:19:3: \"Greeting\" seems to be defined in \"helloworld/greeting.proto\",\n  which is not imported by \"helloworld/helloworld.proto\".\n  To use it here, please add the necessary import."
+    "updateTerminal.output": "greeting.proto: File not found.\nhelloworld/helloworld.proto: Import \"greeting.proto\" was not found or had errors.\nhelloworld/helloworld.proto:19:3: \"Greeting\" seems to be defined in \"helloworld/greeting.proto\",\n  which is not imported by \"helloworld/helloworld.proto\".\n  To use it here, please add the necessary import.",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/greeting.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/helloworld.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/subdir/subhello.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --proto_path=helloworld \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --proto_path=helloworld \\\n  --go_out=helloworld --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "rm helloworld/greeting.pb.go\nrm helloworld/helloworld.pb.go\nrm helloworld/subdir/subhello.pb.go",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "Greeting\" seems to be defined in \"greeting.proto\", which is not imported by \"helloworld.proto\".\nTo use it here, please add the necessary import.",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --proto_path=. \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "greeting.proto: File not found.\nhelloworld/helloworld.proto: Import \"greeting.proto\" was not found or had errors.\nhelloworld/helloworld.proto:19:3: \"Greeting\" seems to be defined in \"helloworld/greeting.proto\",\n  which is not imported by \"helloworld/helloworld.proto\".\n  To use it here, please add the necessary import.",
+    "updateTerminal.currentDirectoryPath": ""
+  },
+  {
+    "actionType": "ManualUpdate",
+    "terminalName": "",
+    "command": "",
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   },
   {
     "actionType": "ActionCommand",
     "terminalName": "default",
     "command": "protoc \\\n  --proto_path=. \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-    "updateTerminal.output": ""
+    "updateTerminal.output": "",
+    "updateTerminal.currentDirectoryPath": ""
   }
 ]
