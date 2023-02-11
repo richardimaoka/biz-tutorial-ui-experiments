@@ -9,11 +9,26 @@ import (
 
 type MapType = map[string]interface{}
 
+func UnflattenBytes(flatJsonBytes []byte) ([]byte, error) {
+	var unflatJsonObj map[string]interface{}
+	err := Unflatten(flatJsonBytes, &unflatJsonObj)
+	if err != nil {
+		return nil, fmt.Errorf("unflattening failed, %s", err)
+	}
+
+	unflatJsonBytes, err := json.Marshal(unflatJsonObj)
+	if err != nil {
+		return nil, fmt.Errorf("marshaling to unflattened JSON bytes failed, %s", err)
+	}
+
+	return unflatJsonBytes, nil
+}
+
 func Unflatten(bytes []byte, m *MapType) error {
 	var unmarshaled map[string]interface{}
 	err := json.Unmarshal(bytes, &unmarshaled)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	*m = make(MapType)
