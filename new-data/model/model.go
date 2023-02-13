@@ -248,12 +248,12 @@ func calcNextStep(stepNumString string) (string, error) {
 		return "", fmt.Errorf("next step calc failed, as step %s is not number format", stepNumString)
 	}
 
-	expected := fmt.Sprintf("%03d", stepNum)
-	if stepNumString != expected {
-		return "", fmt.Errorf("next step calc failed, as step %s is expected 3-digit number format %s", stepNumString, expected)
+	formatted := fmt.Sprintf("%03d", stepNum)
+	if stepNumString != formatted {
+		return "", fmt.Errorf("next step calc failed, as step %s is expected 3-digit number format %s", stepNumString, formatted)
 	}
 
-	return fmt.Sprintf("%3d", stepNum+1), nil
+	return fmt.Sprintf("%03d", stepNum+1), nil
 }
 
 func (p *PageState) gotoNextStep(nextNextStep string) {
@@ -277,11 +277,11 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	}
 
 	// append terminal node
-	falseValue := false
+	trueValue := true
 	node := TerminalNode{
 		Content: TerminalCommand{
 			Command:         &command.Command,
-			BeforeExecution: &falseValue,
+			BeforeExecution: &trueValue,
 		},
 	}
 	terminal.Nodes = append(terminal.Nodes, &node)

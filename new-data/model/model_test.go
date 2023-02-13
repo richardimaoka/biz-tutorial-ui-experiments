@@ -64,6 +64,61 @@ func Test_NewPageState(t *testing.T) {
 	compareAfterMarshal(t, expectedBytes, result)
 }
 
+func Test_typeInCommand(t *testing.T) {
+	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
+	result := NewPageState()
+	result.typeInTerminalCommand(&cmd)
+
+	expectedBytes := []byte(`{
+		"step":     "001",
+		"nextStep": "002",
+		"prevStep": "000",
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"currentDirectoryPath": null,
+				"name": "default", 
+				"nodes" : [
+					{
+						"content": {
+							"contentType": "TerminalCommand",
+							"beforeExecution": true,
+							"command": "mkdir abc"
+						}
+     		  }
+				]
+			}
+		],
+		"sourceCode": null
+	}`)
+
+	compareAfterMarshal(t, expectedBytes, result)
+}
+
+func Test_calcNextStep(t *testing.T) {
+	cases := []struct {
+		Description string
+		CurrentStep string
+		Expected    string
+	}{
+		{Description: "next to 000 is 001", CurrentStep: "000", Expected: "001"},
+		{Description: "next to 001 is 002", CurrentStep: "001", Expected: "002"},
+	}
+
+	for _, test := range cases {
+		t.Run(test.Description, func(t *testing.T) {
+			result, err := calcNextStep(test.CurrentStep)
+			if err != nil {
+				t.Errorf("failed to calc next step for %s, %s", result, err)
+			}
+
+			if result != test.Expected {
+				t.Errorf("expected %s, but result %s", test.Expected, result)
+			}
+		})
+	}
+}
+
 func Test_InitPage(t *testing.T) {
 	command := ActionCommand{
 		TerminalName: "default",
