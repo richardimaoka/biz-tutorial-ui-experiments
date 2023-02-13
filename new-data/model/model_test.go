@@ -34,14 +34,18 @@ func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
 	}
 }
 
-func Test_NewPageState(t *testing.T) {
-	page := NewPageState()
-	resultBytes, err := json.Marshal(page)
+func compareAfterMarshal(t *testing.T, expectedBytes []byte, result interface{}) {
+	resultBytes, err := json.Marshal(result)
 	if err != nil {
-		t.Errorf("failed to marshal page")
+		t.Errorf("failed to marshal result")
 		return
 	}
 
+	compareJsonBytes(t, expectedBytes, resultBytes)
+}
+
+func Test_NewPageState(t *testing.T) {
+	result := NewPageState()
 	expectedBytes := []byte(`{
 		"step":     "000",
 		"nextStep": "001",
@@ -50,13 +54,14 @@ func Test_NewPageState(t *testing.T) {
 			{
 				"currentDirectory": null,
 				"currentDirectoryPath": null,
-				"name": "default"
+				"name": "default", 
+				"nodes" : null
 			}
 		],
 		"sourceCode": null
 	}`)
 
-	compareJsonBytes(t, expectedBytes, resultBytes)
+	compareAfterMarshal(t, expectedBytes, result)
 }
 
 func Test_InitPage(t *testing.T) {
