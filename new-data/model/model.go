@@ -214,9 +214,10 @@ func NewPageState() *PageState {
 	terminals := []*Terminal{newTerminal("default")}
 
 	return &PageState{
-		Step:      &step,
-		NextStep:  &nextStep,
-		Terminals: terminals,
+		Step:       &step,
+		NextStep:   &nextStep,
+		Terminals:  terminals,
+		SourceCode: nil,
 	}
 }
 

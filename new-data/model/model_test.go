@@ -6,29 +6,57 @@ import (
 	"testing"
 )
 
-func Test_NewPageState(t *testing.T) {
-	page := NewPageState()
-
-	// There must be a default terminal
-	if len(page.Terminals) != 1 {
-		t.Errorf("terminal size = %d, not 1", len(page.Terminals))
-		return
-	}
-
-	if len(page.Terminals[0].Nodes) != 0 {
-		t.Errorf("terminal nodes size = %d, not 0", len(page.Terminals[0].Nodes))
-		return
-	}
-
-	page.Terminals[0].Nodes = append(page.Terminals[0].Nodes, &TerminalNode{})
-}
-
 func prettyString(m map[string]interface{}) string {
 	jsonString, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
 		panic(err)
 	}
 	return string(jsonString)
+}
+
+func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
+	var resultMap map[string]interface{}
+	err := json.Unmarshal(resultBytes, &resultMap)
+	if err != nil {
+		t.Errorf("failed to unmarshal result json")
+		return
+	}
+
+	var expectedMap map[string]interface{}
+	err = json.Unmarshal(expectedBytes, &expectedMap)
+	if err != nil {
+		t.Errorf("failed to unmarshal expected json")
+		return
+	}
+
+	if !reflect.DeepEqual(expectedMap, resultMap) {
+		t.Errorf("expected\n%v\nbut got\n%v", prettyString(expectedMap), prettyString(resultMap))
+	}
+}
+
+func Test_NewPageState(t *testing.T) {
+	page := NewPageState()
+	resultBytes, err := json.Marshal(page)
+	if err != nil {
+		t.Errorf("failed to marshal page")
+		return
+	}
+
+	expectedBytes := []byte(`{
+		"step":     "000",
+		"nextStep": "001",
+		"prevStep": null,
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"currentDirectoryPath": null,
+				"name": "default"
+			}
+		],
+		"sourceCode": null
+	}`)
+
+	compareJsonBytes(t, expectedBytes, resultBytes)
 }
 
 func Test_InitPage(t *testing.T) {

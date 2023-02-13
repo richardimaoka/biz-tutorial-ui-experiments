@@ -42,6 +42,12 @@ type PageState struct {
 	Terminals  []*Terminal `json:"terminals"`
 }
 
+// func (p *PageState) ProcessCommand(command *ActionCommand)
+// func (p *PageState) typeInCommand(command *ActionCommand)
+// func (p *PageState) runCommand(command *ActionCommand)
+
+// func (p *PageState) ProcessManualUpdate(manual *ManualUpdate)
+
 type SourceCode struct {
 	FileTree []*FileNode `json:"fileTree"`
 	OpenFile *OpenFile   `json:"openFile"`
@@ -58,7 +64,7 @@ type Step struct {
 type Terminal struct {
 	Name             *string         `json:"name"`
 	CurrentDirectory []*string       `json:"currentDirectory"`
-	CurrentDirectoryPath *string       `json:"currentDirectoryPath"`
+	CurrentDirectoryPath *string     `json:"currentDirectoryPath"`
 	Nodes            []*TerminalNode `json:"nodes"`
 }
 
