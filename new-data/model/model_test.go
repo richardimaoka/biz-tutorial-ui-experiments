@@ -57,6 +57,7 @@ func Test_InitPage(t *testing.T) {
 		"terminals": [
 			{
 				"currentDirectory": null,
+				"currentDirectoryPath": null,
 				"name": "default",
 				"nodes": [
 					{
@@ -118,7 +119,7 @@ func Test_MarshalStep(t *testing.T) {
 	}
 
 	got := string(m)
-	want := `{"stepNum":1,"sourceCode":null,"terminals":[{"name":"default","currentDirectory":null,"nodes":null}],"nextStepNum":2,"nextAction":null}`
+	want := `{"stepNum":1,"sourceCode":null,"terminals":[{"name":"default","currentDirectory":null,"currentDirectoryPath":null,"nodes":null}],"nextStepNum":2,"nextAction":null}`
 	if got != want {
 		t.Errorf("got %s but want %s", got, want)
 

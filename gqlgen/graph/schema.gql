@@ -62,10 +62,10 @@ type SourceCode {
 
 type PageState {
   step: String
-  sourceCode: SourceCode
-  terminals: [Terminal]
   nextStep: String
   prevStep: String
+  sourceCode: SourceCode
+  terminals: [Terminal]
 }
 
 type Query {
