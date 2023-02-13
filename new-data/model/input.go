@@ -130,7 +130,7 @@ func SplitActionListFile(targetDir string) error {
 	return nil
 }
 
-func InputFlatFiles(targetDir string) ([]string, error) {
+func ListInputFlatFiles(targetDir string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func InputFlatFiles(targetDir string) ([]string, error) {
 }
 
 func GenerateInputActionFiles(targetDir string) error {
-	inputFlatFiles, err := InputFlatFiles(targetDir)
+	inputFlatFiles, err := ListInputFlatFiles(targetDir)
 	if err != nil {
 		return err
 	}
