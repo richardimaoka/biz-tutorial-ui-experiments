@@ -64,8 +64,9 @@ func Test_NewPageState(t *testing.T) {
 }
 
 func Test_typeInCommandSuccess(t *testing.T) {
-	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
 	result := NewPageState()
+
+	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
 	err := result.typeInTerminalCommand(&cmd)
 	if err != nil {
 		t.Error(err)
@@ -98,9 +99,10 @@ func Test_typeInCommandSuccess(t *testing.T) {
 }
 
 func Test_typeInCommandFailure(t *testing.T) {
+	result := NewPageState()
+
 	wrongname := "wrongname"
 	cmd := ActionCommand{Command: "mkdir abc", TerminalName: wrongname}
-	result := NewPageState()
 	err := result.typeInTerminalCommand(&cmd)
 	if err == nil {
 		t.Errorf("error expected as terminal with name = %s not found", wrongname)
@@ -117,6 +119,47 @@ func Test_typeInCommandFailure(t *testing.T) {
 				"currentDirectoryPath": null,
 				"name": "default", 
 				"nodes" : null
+			}
+		],
+		"sourceCode": null
+	}`)
+
+	compareAfterMarshal(t, expectedBytes, result)
+}
+
+func Test_runTerminalCommandSuccess(t *testing.T) {
+	result := NewPageState()
+
+	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
+	err := result.typeInTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = result.runTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	expectedBytes := []byte(`{
+		"step":     "002",
+		"nextStep": "003",
+		"prevStep": "001",
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"currentDirectoryPath": null,
+				"name": "default", 
+				"nodes" : [
+					{
+						"content": {
+							"contentType": "TerminalCommand",
+							"beforeExecution": false,
+							"command": "mkdir abc"
+						}
+     		  }
+				]
 			}
 		],
 		"sourceCode": null
@@ -149,6 +192,7 @@ func Test_calcNextStep(t *testing.T) {
 	}
 }
 
+//TODO: remove
 func Test_InitPage(t *testing.T) {
 	command := ActionCommand{
 		TerminalName: "default",

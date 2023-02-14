@@ -221,6 +221,7 @@ func NewPageState() *PageState {
 	}
 }
 
+//TODO: remove
 func InitPage(command *ActionCommand) *PageState {
 	step := "000"
 	nextStep := "001"
@@ -263,15 +264,19 @@ func (p *PageState) gotoNextStep(nextNextStep string) {
 }
 
 func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
-	var terminal *Terminal
+	// pre-condition - next step calculation
+	nextNextStep, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return fmt.Errorf("failed to type in command, %s", err)
+	}
 
-	// find command's target terminal
+	// pre-condition - find command's target terminal
+	var terminal *Terminal
 	for _, t := range p.Terminals {
 		if *t.Name == command.TerminalName {
 			terminal = t
 		}
 	}
-
 	if terminal == nil {
 		return fmt.Errorf("failed to type in command, terminal with name = %s not found", command.TerminalName)
 	}
@@ -287,15 +292,103 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	terminal.Nodes = append(terminal.Nodes, &node)
 
 	// update step
-	nextNextStep, err := calcNextStep(*p.NextStep)
-	if err != nil {
-		return fmt.Errorf("failed to type in command, %s", err)
-	}
 	p.gotoNextStep(nextNextStep)
 
 	return nil
 }
 
+func (p *PageState) runTerminalCommand(command *ActionCommand) error {
+	// pre-condition - next step calculation
+	nextNextStep, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return fmt.Errorf("failed to run command, %s", err)
+	}
+
+	// pre-condition - find command's target terminal
+	var terminal *Terminal
+	for _, t := range p.Terminals {
+		if *t.Name == command.TerminalName {
+			terminal = t
+		}
+	}
+	if terminal == nil {
+		return fmt.Errorf("failed run command, terminal with name = %s not found", command.TerminalName)
+	}
+
+	// pre-condition - find target terminal's last command
+	if len(terminal.Nodes) == 0 {
+		return fmt.Errorf("failed to run command, terminal '%s' has zero nodes, impossible run anything", command.TerminalName)
+	}
+	lastNode := terminal.Nodes[len(terminal.Nodes)-1]
+	if lastNode == nil {
+		return fmt.Errorf("failed to run command, terminal '%s' has last command as nil", command.TerminalName)
+	}
+	lastCommand, ok := lastNode.Content.(TerminalCommand)
+	if !ok {
+		return fmt.Errorf("failed to run command, terminal %s's last node's content is not TerminalCommand but %v", command.TerminalName, reflect.TypeOf(lastNode.Content))
+	}
+
+	//run command!
+	falseValue := false
+	lastCommand.BeforeExecution = &falseValue
+	lastNode.Content = lastCommand // work around copy
+
+	// Process UpdateTerminal
+	if command.UpdateTerminal.Output != "" {
+		terminal.Nodes = append(terminal.Nodes, &TerminalNode{
+			Content: TerminalOutput{
+				Output: &command.Command,
+			},
+		})
+	}
+
+	if len(command.UpdateTerminal.CurrentDirectory) > 0 {
+		terminal.CurrentDirectory = []*string{}
+		for _, d := range command.UpdateTerminal.CurrentDirectory {
+			terminal.CurrentDirectory = append(terminal.CurrentDirectory, &d)
+		}
+	}
+
+	// // Process UpdateSourceCode
+	// if len(command.UpdateSourceCode.AddDirectories) > 0 {
+	// 	for i, d := range command.UpdateSourceCode.AddDirectories {
+	// 		if len(d.FilePath) == 0 {
+	// 			return fmt.Errorf("AddDirectories has %s element with empty filePath", ordinal(i))
+	// 		}
+
+	// 		dType := FileNodeTypeDirectory
+	// 		offset := len(d.FilePath)
+	// 		trueValue := true
+	// 		dirName := d.FilePath[len(d.FilePath)-1]
+
+	// 		filePath := []*string{}
+	// 		for _, p := range d.FilePath {
+	// 			filePath = append(filePath, &p)
+	// 		}
+
+	// 		step.SourceCode.FileTree = append(
+	// 			step.SourceCode.FileTree,
+	// 			&FileNode{
+	// 				NodeType:  &dType,
+	// 				Name:      &dirName,
+	// 				FilePath:  filePath,
+	// 				Offset:    &offset,
+	// 				IsUpdated: &trueValue,
+	// 			},
+	// 		)
+	// 	}
+	// }
+
+	//TODO: sort FileTree
+
+	// update step
+	p.gotoNextStep(nextNextStep)
+
+	// return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+	return nil
+}
+
+//TODO: remove
 func (step *Step) typeInTerminalCommand(command *ActionCommand) error {
 	for _, t := range step.Terminals {
 		if *t.Name == command.TerminalName {
