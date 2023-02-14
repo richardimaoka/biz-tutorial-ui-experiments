@@ -327,6 +327,9 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	if !ok {
 		return fmt.Errorf("failed to run command, terminal %s's last node's content is not TerminalCommand but %v", command.TerminalName, reflect.TypeOf(lastNode.Content))
 	}
+	if lastCommand.Command != &command.Command {
+		return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
+	}
 
 	//run command!
 	falseValue := false
