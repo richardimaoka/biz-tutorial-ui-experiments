@@ -130,7 +130,7 @@ func Test_typeInCommandFailure(t *testing.T) {
 func Test_runTerminalCommandSuccess(t *testing.T) {
 	result := NewPageState()
 
-	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
+	cmd := ActionCommand{Command: "sleep 1", TerminalName: "default"}
 	err := result.typeInTerminalCommand(&cmd)
 	if err != nil {
 		t.Error(err)
@@ -156,7 +156,119 @@ func Test_runTerminalCommandSuccess(t *testing.T) {
 						"content": {
 							"contentType": "TerminalCommand",
 							"beforeExecution": false,
-							"command": "mkdir abc"
+							"command": "sleep 1"
+						}
+     		  }
+				]
+			}
+		],
+		"sourceCode": null
+	}`)
+
+	compareAfterMarshal(t, expectedBytes, result)
+}
+
+// func Test_runTerminalCommandSuccess2(t *testing.T) {
+// 	cmd := ActionCommand{
+// 		Command:      "mkdir abc",
+// 		TerminalName: "default",
+// 		UpdateSourceCode: UpdateSourceCode{
+// 			AddDirectories: []AddDirectory{
+// 				{FilePathString: "abc"},
+// 			},
+// 		},
+// 	}
+
+// 	result := NewPageState()
+// 	err := result.typeInTerminalCommand(&cmd)
+// 	if err != nil {
+// 		t.Error(err)
+// 		return
+// 	}
+// 	err = result.runTerminalCommand(&cmd)
+// 	if err != nil {
+// 		t.Error(err)
+// 		return
+// 	}
+
+// 	expectedBytes := []byte(`{
+// 		"step":     "002",
+// 		"nextStep": "003",
+// 		"prevStep": "001",
+// 		"terminals": [
+// 			{
+// 				"currentDirectory": null,
+// 				"currentDirectoryPath": null,
+// 				"name": "default",
+// 				"nodes" : [
+// 					{
+// 						"content": {
+// 							"contentType": "TerminalCommand",
+// 							"beforeExecution": false,
+// 							"command": "mkdir abc"
+// 						}
+//      		  }
+// 				]
+// 			}
+// 		],
+// 		"sourceCode": {
+// 			"fileTree": [
+// 				{
+// 					"nodeType": "DIRECTORY",
+// 					"name": "abc",
+// 					"filePath": ["abc"],
+// 					"offset": 0,
+// 					"IsUpdated": false
+// 				}
+// 			]
+// 		}
+// 	}`)
+
+// 	compareAfterMarshal(t, expectedBytes, result)
+// }
+
+func Test_runTerminalCommandSuccess3(t *testing.T) {
+	cmd := ActionCommand{
+		Command:      "echo hello",
+		TerminalName: "default",
+		UpdateTerminal: UpdateTerminal{
+			Output: "hello",
+		},
+	}
+
+	result := NewPageState()
+	err := result.typeInTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = result.runTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	expectedBytes := []byte(`{
+		"step":     "002",
+		"nextStep": "003",
+		"prevStep": "001",
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"currentDirectoryPath": null,
+				"name": "default", 
+				"nodes" : [
+					{
+						"content": {
+							"contentType": "TerminalCommand",
+							"beforeExecution": false,
+							"command": "echo hello"
+						}
+     		  },
+					{
+						"content": {
+							"contentType": "TerminalOutput",
+							"output": "hello"
 						}
      		  }
 				]

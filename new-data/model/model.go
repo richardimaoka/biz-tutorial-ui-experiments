@@ -168,6 +168,17 @@ func (c TerminalCommand) MarshalJSON() ([]byte, error) {
 	return json.Marshal(extendedCommand)
 }
 
+func (o TerminalOutput) MarshalJSON() ([]byte, error) {
+	extendedOutput := struct {
+		ContentType string  `json:"contentType"`
+		Output      *string `json:"output"`
+	}{
+		"TerminalOutput",
+		o.Output,
+	}
+
+	return json.Marshal(extendedOutput)
+}
 func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 
@@ -331,28 +342,39 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 		return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
 	}
 
+	// pre-condition UpdateSourceCode.AddDirectories
+	if len(command.UpdateSourceCode.AddDirectories) > 0 {
+		for i, d := range command.UpdateSourceCode.AddDirectories {
+			if d.FilePathString == "" {
+				return fmt.Errorf("AddDirectories has %s element with empty FilePathString", ordinal(i))
+			}
+		}
+	}
+
 	//run command!
 	falseValue := false
 	lastCommand.BeforeExecution = &falseValue
 	lastNode.Content = lastCommand // work around copy
 
-	// Process UpdateTerminal
+	// command.UpdateTerminal.update(terminal)
+
+	// Process UpdateTerminal.Output
 	if command.UpdateTerminal.Output != "" {
 		terminal.Nodes = append(terminal.Nodes, &TerminalNode{
 			Content: TerminalOutput{
-				Output: &command.Command,
+				Output: &command.UpdateTerminal.Output,
 			},
 		})
 	}
 
-	if len(command.UpdateTerminal.CurrentDirectory) > 0 {
-		terminal.CurrentDirectory = []*string{}
-		for _, d := range command.UpdateTerminal.CurrentDirectory {
-			terminal.CurrentDirectory = append(terminal.CurrentDirectory, &d)
-		}
-	}
+	// if len(command.UpdateTerminal.CurrentDirectory) > 0 {
+	// 	terminal.CurrentDirectory = []*string{}
+	// 	for _, d := range command.UpdateTerminal.CurrentDirectory {
+	// 		terminal.CurrentDirectory = append(terminal.CurrentDirectory, &d)
+	// 	}
+	// }
 
-	// // Process UpdateSourceCode
+	// Process UpdateSourceCode.AddDirectories
 	// if len(command.UpdateSourceCode.AddDirectories) > 0 {
 	// 	for i, d := range command.UpdateSourceCode.AddDirectories {
 	// 		if len(d.FilePath) == 0 {
