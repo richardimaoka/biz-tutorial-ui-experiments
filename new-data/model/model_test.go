@@ -14,6 +14,56 @@ func prettyString(m map[string]interface{}) string {
 	return string(jsonString)
 }
 
+// func printKeyInDifference(parentKey []string, expectedMap, resultMap map[string]interface{}) {
+// 	var alreadyCompared []string
+
+// 	for ek, ev := range expectedMap {
+// 		alreadyCompared = append(alreadyCompared, ek)
+// 		currentKey := append(parentKey, ek)
+
+// 		rv := resultMap[ek]
+// 		if !reflect.DeepEqual(ev, rv) {
+// 			evm, isMap1 := ev.(map[string]interface{})
+// 			rvm, isMap2 := rv.(map[string]interface{})
+// 			if isMap1 && isMap2 {
+// 				printKeyInDifference(currentKey, evm, rvm)
+// 				continue
+// 			}
+
+// 			evs, isSlice1 := ev.([]interface{})
+// 			rvs, isSlice2 := rv.([]interface{})
+// 			if isSlice1 && isSlice2 {
+// 				fmt.Printf("%s different\n", strings.Join(currentKey, "."))
+// 			}
+// 		}
+// 	}
+
+// 	for rk, rv := range resultMap {
+// 		// if already compared, skip k
+// 		matched := -1
+// 		for i, kc := range alreadyCompared {
+// 			if rk == kc {
+// 				matched = i
+// 			}
+// 		}
+// 		if matched != -1 {
+// 			continue
+// 		}
+
+// 		currentKey := append(parentKey, rk)
+// 		ev := expectedMap[rk]
+// 		if !reflect.DeepEqual(ev, rv) {
+// 			ec, isMap1 := ev.(map[string]interface{})
+// 			rc, isMap2 := rv.(map[string]interface{})
+// 			if isMap1 && isMap2 {
+// 				printKeyInDifference(append(currentKey, rk), ec, rc)
+// 			} else {
+// 				fmt.Printf("%s different\n", strings.Join(currentKey, "."))
+// 			}
+// 		}
+// 	}
+// }
+
 func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
 	var resultMap map[string]interface{}
 	err := json.Unmarshal(resultBytes, &resultMap)
@@ -30,6 +80,7 @@ func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
 	}
 
 	if !reflect.DeepEqual(expectedMap, resultMap) {
+		// printKeyInDifference([]string{}, expectedMap, resultMap)
 		t.Errorf("expected\n%v\nbut got\n%v", prettyString(expectedMap), prettyString(resultMap))
 	}
 }
@@ -230,7 +281,7 @@ func Test_runTerminalCommandSuccess2(t *testing.T) {
 					"name": "abc",
 					"filePath": ["abc"],
 					"offset": 0,
-					"IsUpdated": true
+					"isUpdated": true
 				}
 			],
 			"openFile": null
