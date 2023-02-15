@@ -228,7 +228,7 @@ func NewPageState() *PageState {
 		Step:       &step,
 		NextStep:   &nextStep,
 		Terminals:  terminals,
-		SourceCode: nil,
+		SourceCode: &SourceCode{},
 	}
 }
 

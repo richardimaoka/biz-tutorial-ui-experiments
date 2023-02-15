@@ -58,7 +58,10 @@ func Test_NewPageState(t *testing.T) {
 				"nodes" : null
 			}
 		],
-		"sourceCode": null
+		"sourceCode": {
+			"fileTree": null,
+			"openFile": null
+		}
 	}`)
 	compareAfterMarshal(t, expectedBytes, result)
 }
@@ -92,7 +95,10 @@ func Test_typeInCommandSuccess(t *testing.T) {
 				]
 			}
 		],
-		"sourceCode": null
+		"sourceCode": {
+			"fileTree": null,
+			"openFile": null
+		}
 	}`)
 
 	compareAfterMarshal(t, expectedBytes, result)
@@ -121,7 +127,10 @@ func Test_typeInCommandFailure(t *testing.T) {
 				"nodes" : null
 			}
 		],
-		"sourceCode": null
+		"sourceCode": {
+			"fileTree": null,
+			"openFile": null
+		}
 	}`)
 
 	compareAfterMarshal(t, expectedBytes, result)
@@ -162,7 +171,10 @@ func Test_runTerminalCommandSuccess(t *testing.T) {
 				]
 			}
 		],
-		"sourceCode": null
+		"sourceCode": {
+			"fileTree": null,
+			"openFile": null
+		}
 	}`)
 
 	compareAfterMarshal(t, expectedBytes, result)
@@ -274,7 +286,10 @@ func Test_runTerminalCommandSuccess3(t *testing.T) {
 				]
 			}
 		],
-		"sourceCode": null
+		"sourceCode": {
+			"fileTree": null,
+			"openFile": null
+		}
 	}`)
 
 	compareAfterMarshal(t, expectedBytes, result)
