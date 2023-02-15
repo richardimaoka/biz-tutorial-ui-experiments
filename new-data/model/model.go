@@ -379,7 +379,6 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	if len(command.UpdateSourceCode.AddDirectories) > 0 {
 		for _, dir := range command.UpdateSourceCode.AddDirectories {
 			fileNode := dir.toFileNode()
-			fmt.Println("--------------------------", p.SourceCode)
 			p.SourceCode.FileTree = append(p.SourceCode.FileTree, fileNode)
 		}
 	}

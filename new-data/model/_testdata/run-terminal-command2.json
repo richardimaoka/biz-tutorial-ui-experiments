@@ -1,0 +1,33 @@
+{
+  "step": "002",
+  "nextStep": "003",
+  "prevStep": "001",
+  "terminals": [
+    {
+      "currentDirectory": null,
+      "currentDirectoryPath": null,
+      "name": "default",
+      "nodes": [
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir abc"
+          }
+        }
+      ]
+    }
+  ],
+  "sourceCode": {
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "name": "abc",
+        "filePath": ["abc"],
+        "offset": 0,
+        "isUpdated": true
+      }
+    ],
+    "openFile": null
+  }
+}

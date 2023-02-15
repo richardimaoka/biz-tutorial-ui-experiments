@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"os"
 	"reflect"
 	"testing"
 
@@ -48,23 +49,12 @@ func compareAfterMarshal(t *testing.T, expectedBytes []byte, result interface{})
 
 func Test_NewPageState(t *testing.T) {
 	result := NewPageState()
-	expectedBytes := []byte(`{
-		"step":     "000",
-		"nextStep": "001",
-		"prevStep": null,
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default", 
-				"nodes" : null
-			}
-		],
-		"sourceCode": {
-			"fileTree": null,
-			"openFile": null
-		}
-	}`)
+	expectedBytes, err := os.ReadFile("_testdata/new-page.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	compareAfterMarshal(t, expectedBytes, result)
 }
 
@@ -72,36 +62,15 @@ func Test_typeInCommandSuccess(t *testing.T) {
 	result := NewPageState()
 
 	cmd := ActionCommand{Command: "mkdir abc", TerminalName: "default"}
-	err := result.typeInTerminalCommand(&cmd)
+	if err := result.typeInTerminalCommand(&cmd); err != nil {
+		t.Error(err)
+		return
+	}
+	expectedBytes, err := os.ReadFile("_testdata/type-in-command.json")
 	if err != nil {
 		t.Error(err)
+		return
 	}
-
-	expectedBytes := []byte(`{
-		"step":     "001",
-		"nextStep": "002",
-		"prevStep": "000",
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default", 
-				"nodes" : [
-					{
-						"content": {
-							"contentType": "TerminalCommand",
-							"beforeExecution": true,
-							"command": "mkdir abc"
-						}
-     		  }
-				]
-			}
-		],
-		"sourceCode": {
-			"fileTree": null,
-			"openFile": null
-		}
-	}`)
 
 	compareAfterMarshal(t, expectedBytes, result)
 }
@@ -117,23 +86,11 @@ func Test_typeInCommandFailure(t *testing.T) {
 	}
 
 	// expected to be unchanged from initial page
-	expectedBytes := []byte(`{
-		"step":     "000",
-		"nextStep": "001",
-		"prevStep": null,
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default", 
-				"nodes" : null
-			}
-		],
-		"sourceCode": {
-			"fileTree": null,
-			"openFile": null
-		}
-	}`)
+	expectedBytes, err := os.ReadFile("_testdata/new-page.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	compareAfterMarshal(t, expectedBytes, result)
 }
@@ -152,32 +109,11 @@ func Test_runTerminalCommandSuccess(t *testing.T) {
 		t.Error(err)
 		return
 	}
-
-	expectedBytes := []byte(`{
-		"step":     "002",
-		"nextStep": "003",
-		"prevStep": "001",
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default", 
-				"nodes" : [
-					{
-						"content": {
-							"contentType": "TerminalCommand",
-							"beforeExecution": false,
-							"command": "sleep 1"
-						}
-     		  }
-				]
-			}
-		],
-		"sourceCode": {
-			"fileTree": null,
-			"openFile": null
-		}
-	}`)
+	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	compareAfterMarshal(t, expectedBytes, result)
 }
@@ -203,39 +139,11 @@ func Test_runTerminalCommandSuccess2(t *testing.T) {
 		return
 	}
 
-	expectedBytes := []byte(`{
-		"step":     "002",
-		"nextStep": "003",
-		"prevStep": "001",
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default",
-				"nodes" : [
-					{
-						"content": {
-							"contentType": "TerminalCommand",
-							"beforeExecution": false,
-							"command": "mkdir abc"
-						}
-     		  }
-				]
-			}
-		],
-		"sourceCode": {
-			"fileTree": [
-				{
-					"nodeType": "DIRECTORY",
-					"name": "abc",
-					"filePath": ["abc"],
-					"offset": 0,
-					"sUpdated": true
-				}
-			],
-			"openFile": null
-		}
-	}`)
+	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command2.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	compareAfterMarshal(t, expectedBytes, result)
 }
@@ -261,37 +169,11 @@ func Test_runTerminalCommandSuccess3(t *testing.T) {
 		return
 	}
 
-	expectedBytes := []byte(`{
-		"step":     "002",
-		"nextStep": "003",
-		"prevStep": "001",
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default", 
-				"nodes" : [
-					{
-						"content": {
-							"contentType": "TerminalCommand",
-							"beforeExecution": false,
-							"command": "echo hello"
-						}
-     		  },
-					{
-						"content": {
-							"contentType": "TerminalOutput",
-							"output": "hello"
-						}
-     		  }
-				]
-			}
-		],
-		"sourceCode": {
-			"fileTree": null,
-			"openFile": null
-		}
-	}`)
+	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command3.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	compareAfterMarshal(t, expectedBytes, result)
 }
