@@ -180,64 +180,65 @@ func Test_runTerminalCommandSuccess(t *testing.T) {
 	compareAfterMarshal(t, expectedBytes, result)
 }
 
-// func Test_runTerminalCommandSuccess2(t *testing.T) {
-// 	cmd := ActionCommand{
-// 		Command:      "mkdir abc",
-// 		TerminalName: "default",
-// 		UpdateSourceCode: UpdateSourceCode{
-// 			AddDirectories: []AddDirectory{
-// 				{FilePathString: "abc"},
-// 			},
-// 		},
-// 	}
+func Test_runTerminalCommandSuccess2(t *testing.T) {
+	cmd := ActionCommand{
+		Command:      "mkdir abc",
+		TerminalName: "default",
+		UpdateSourceCode: UpdateSourceCode{
+			AddDirectories: []AddDirectory{
+				{FilePathString: "abc"},
+			},
+		},
+	}
 
-// 	result := NewPageState()
-// 	err := result.typeInTerminalCommand(&cmd)
-// 	if err != nil {
-// 		t.Error(err)
-// 		return
-// 	}
-// 	err = result.runTerminalCommand(&cmd)
-// 	if err != nil {
-// 		t.Error(err)
-// 		return
-// 	}
+	result := NewPageState()
+	err := result.typeInTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = result.runTerminalCommand(&cmd)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-// 	expectedBytes := []byte(`{
-// 		"step":     "002",
-// 		"nextStep": "003",
-// 		"prevStep": "001",
-// 		"terminals": [
-// 			{
-// 				"currentDirectory": null,
-// 				"currentDirectoryPath": null,
-// 				"name": "default",
-// 				"nodes" : [
-// 					{
-// 						"content": {
-// 							"contentType": "TerminalCommand",
-// 							"beforeExecution": false,
-// 							"command": "mkdir abc"
-// 						}
-//      		  }
-// 				]
-// 			}
-// 		],
-// 		"sourceCode": {
-// 			"fileTree": [
-// 				{
-// 					"nodeType": "DIRECTORY",
-// 					"name": "abc",
-// 					"filePath": ["abc"],
-// 					"offset": 0,
-// 					"IsUpdated": false
-// 				}
-// 			]
-// 		}
-// 	}`)
+	expectedBytes := []byte(`{
+		"step":     "002",
+		"nextStep": "003",
+		"prevStep": "001",
+		"terminals": [
+			{
+				"currentDirectory": null,
+				"currentDirectoryPath": null,
+				"name": "default",
+				"nodes" : [
+					{
+						"content": {
+							"contentType": "TerminalCommand",
+							"beforeExecution": false,
+							"command": "mkdir abc"
+						}
+     		  }
+				]
+			}
+		],
+		"sourceCode": {
+			"fileTree": [
+				{
+					"nodeType": "DIRECTORY",
+					"name": "abc",
+					"filePath": ["abc"],
+					"offset": 0,
+					"IsUpdated": true
+				}
+			],
+			"openFile": null
+		}
+	}`)
 
-// 	compareAfterMarshal(t, expectedBytes, result)
-// }
+	compareAfterMarshal(t, expectedBytes, result)
+}
 
 func Test_runTerminalCommandSuccess3(t *testing.T) {
 	cmd := ActionCommand{

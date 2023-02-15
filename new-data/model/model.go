@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 type AddDirectory struct {
@@ -375,34 +376,13 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// }
 
 	// Process UpdateSourceCode.AddDirectories
-	// if len(command.UpdateSourceCode.AddDirectories) > 0 {
-	// 	for i, d := range command.UpdateSourceCode.AddDirectories {
-	// 		if len(d.FilePath) == 0 {
-	// 			return fmt.Errorf("AddDirectories has %s element with empty filePath", ordinal(i))
-	// 		}
-
-	// 		dType := FileNodeTypeDirectory
-	// 		offset := len(d.FilePath)
-	// 		trueValue := true
-	// 		dirName := d.FilePath[len(d.FilePath)-1]
-
-	// 		filePath := []*string{}
-	// 		for _, p := range d.FilePath {
-	// 			filePath = append(filePath, &p)
-	// 		}
-
-	// 		step.SourceCode.FileTree = append(
-	// 			step.SourceCode.FileTree,
-	// 			&FileNode{
-	// 				NodeType:  &dType,
-	// 				Name:      &dirName,
-	// 				FilePath:  filePath,
-	// 				Offset:    &offset,
-	// 				IsUpdated: &trueValue,
-	// 			},
-	// 		)
-	// 	}
-	// }
+	if len(command.UpdateSourceCode.AddDirectories) > 0 {
+		for _, dir := range command.UpdateSourceCode.AddDirectories {
+			fileNode := dir.toFileNode()
+			fmt.Println("--------------------------", p.SourceCode)
+			p.SourceCode.FileTree = append(p.SourceCode.FileTree, fileNode)
+		}
+	}
 
 	//TODO: sort FileTree
 
@@ -411,6 +391,31 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 
 	// return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
 	return nil
+}
+
+func (a AddDirectory) toFileNode() *FileNode {
+	dType := FileNodeTypeDirectory
+
+	split := strings.Split(a.FilePathString, "/")
+	name := split[len(split)-1]
+
+	var filePath []*string
+	for _, v := range split {
+		filePath = append(filePath, &v)
+	}
+
+	offset := strings.Count(a.FilePathString, "/")
+
+	trueValue := true
+
+	fileNode := FileNode{
+		NodeType:  &dType,
+		Name:      &name,
+		FilePath:  filePath,
+		Offset:    &offset,
+		IsUpdated: &trueValue,
+	}
+	return &fileNode
 }
 
 //TODO: remove
