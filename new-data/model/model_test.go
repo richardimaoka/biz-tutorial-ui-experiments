@@ -194,13 +194,11 @@ func Test_runTerminalCommandSuccess2(t *testing.T) {
 	}
 
 	result := NewPageState()
-	err := result.typeInTerminalCommand(&cmd)
-	if err != nil {
+	if err := result.typeInTerminalCommand(&cmd); err != nil {
 		t.Error(err)
 		return
 	}
-	err = result.runTerminalCommand(&cmd)
-	if err != nil {
+	if err := result.runTerminalCommand(&cmd); err != nil {
 		t.Error(err)
 		return
 	}
