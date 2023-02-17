@@ -37,7 +37,13 @@ func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
 	}
 }
 
-func compareAfterMarshal(t *testing.T, expectedBytes []byte, result interface{}) {
+func compareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
+	expectedBytes, err := os.ReadFile(expectedJsonFile)
+	if err != nil {
+		t.Errorf("failed to read %s", expectedJsonFile)
+		return
+	}
+
 	resultBytes, err := json.Marshal(result)
 	if err != nil {
 		t.Errorf("failed to marshal result")
@@ -49,13 +55,7 @@ func compareAfterMarshal(t *testing.T, expectedBytes []byte, result interface{})
 
 func Test_NewPageState(t *testing.T) {
 	result := NewPageState()
-	expectedBytes, err := os.ReadFile("_testdata/new-page.json")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, expectedBytes, result)
+	compareAfterMarshal(t, "_testdata/new-page.json", result)
 }
 
 func Test_typeInCommandSuccess(t *testing.T) {
@@ -66,13 +66,8 @@ func Test_typeInCommandSuccess(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	expectedBytes, err := os.ReadFile("_testdata/type-in-command.json")
-	if err != nil {
-		t.Error(err)
-		return
-	}
 
-	compareAfterMarshal(t, expectedBytes, result)
+	compareAfterMarshal(t, "_testdata/type-in-command.json", result)
 }
 
 func Test_typeInCommandFailure(t *testing.T) {
@@ -80,42 +75,28 @@ func Test_typeInCommandFailure(t *testing.T) {
 
 	wrongname := "wrongname"
 	cmd := ActionCommand{Command: "mkdir abc", TerminalName: wrongname}
-	err := result.typeInTerminalCommand(&cmd)
-	if err == nil {
+	if err := result.typeInTerminalCommand(&cmd); err == nil {
 		t.Errorf("error expected as terminal with name = %s not found", wrongname)
 	}
 
-	// expected to be unchanged from initial page
-	expectedBytes, err := os.ReadFile("_testdata/new-page.json")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, expectedBytes, result)
+	// expected page state unchanged from initial page
+	compareAfterMarshal(t, "_testdata/new-page.json", result)
 }
 
 func Test_runTerminalCommandSuccess(t *testing.T) {
 	result := NewPageState()
 
 	cmd := ActionCommand{Command: "sleep 1", TerminalName: "default"}
-	err := result.typeInTerminalCommand(&cmd)
-	if err != nil {
+	if err := result.typeInTerminalCommand(&cmd); err != nil {
 		t.Error(err)
 		return
 	}
-	err = result.runTerminalCommand(&cmd)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command.json")
-	if err != nil {
+	if err := result.runTerminalCommand(&cmd); err != nil {
 		t.Error(err)
 		return
 	}
 
-	compareAfterMarshal(t, expectedBytes, result)
+	compareAfterMarshal(t, "_testdata/run-terminal-command.json", result)
 }
 
 func Test_runTerminalCommandSuccess2(t *testing.T) {
@@ -139,13 +120,7 @@ func Test_runTerminalCommandSuccess2(t *testing.T) {
 		return
 	}
 
-	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command2.json")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, expectedBytes, result)
+	compareAfterMarshal(t, "_testdata/run-terminal-command2.json", result)
 }
 
 func Test_runTerminalCommandSuccess3(t *testing.T) {
@@ -169,13 +144,7 @@ func Test_runTerminalCommandSuccess3(t *testing.T) {
 		return
 	}
 
-	expectedBytes, err := os.ReadFile("_testdata/run-terminal-command3.json")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, expectedBytes, result)
+	compareAfterMarshal(t, "_testdata/run-terminal-command3.json", result)
 }
 
 func Test_calcNextStep(t *testing.T) {
