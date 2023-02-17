@@ -55,7 +55,7 @@ func compareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 
 func Test_NewPageState(t *testing.T) {
 	result := NewPageState()
-	compareAfterMarshal(t, "_testdata/new-page.json", result)
+	compareAfterMarshal(t, "testdata/new-page.json", result)
 }
 
 func Test_typeInCommandSuccess(t *testing.T) {
@@ -67,7 +67,7 @@ func Test_typeInCommandSuccess(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "_testdata/type-in-command.json", result)
+	compareAfterMarshal(t, "testdata/type-in-command.json", result)
 }
 
 func Test_typeInCommandFailure(t *testing.T) {
@@ -80,7 +80,7 @@ func Test_typeInCommandFailure(t *testing.T) {
 	}
 
 	// expected page state unchanged from initial page
-	compareAfterMarshal(t, "_testdata/new-page.json", result)
+	compareAfterMarshal(t, "testdata/new-page.json", result)
 }
 
 func Test_runTerminalCommandSuccess(t *testing.T) {
@@ -96,7 +96,7 @@ func Test_runTerminalCommandSuccess(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "_testdata/run-terminal-command.json", result)
+	compareAfterMarshal(t, "testdata/run-terminal-command.json", result)
 }
 
 func Test_runTerminalCommandSuccess2(t *testing.T) {
@@ -120,7 +120,7 @@ func Test_runTerminalCommandSuccess2(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "_testdata/run-terminal-command2.json", result)
+	compareAfterMarshal(t, "testdata/run-terminal-command2.json", result)
 }
 
 func Test_runTerminalCommandSuccess3(t *testing.T) {
@@ -144,7 +144,7 @@ func Test_runTerminalCommandSuccess3(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "_testdata/run-terminal-command3.json", result)
+	compareAfterMarshal(t, "testdata/run-terminal-command3.json", result)
 }
 
 func Test_calcNextStep(t *testing.T) {
