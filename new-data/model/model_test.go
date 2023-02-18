@@ -3,7 +3,6 @@ package model
 import (
 	"encoding/json"
 	"os"
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -168,60 +167,6 @@ func Test_calcNextStep(t *testing.T) {
 				t.Errorf("expected %s, but result %s", test.Expected, result)
 			}
 		})
-	}
-}
-
-//TODO: remove
-func Test_InitPage(t *testing.T) {
-	command := ActionCommand{
-		TerminalName: "default",
-		Command:      "mkdir workspace",
-	}
-
-	page := InitPage(&command)
-
-	resultBytes, err := json.Marshal(page)
-	if err != nil {
-		t.Errorf("failed to marshal page")
-	}
-	var resultMap map[string]interface{}
-	err = json.Unmarshal(resultBytes, &resultMap)
-	if err != nil {
-		t.Errorf("failed to unmarshal result json")
-		return
-	}
-
-	expectedBytes := []byte(`{
-		"step":     "000",
-		"nextStep": "001",
-		"prevStep": null,
-		"terminals": [
-			{
-				"currentDirectory": null,
-				"currentDirectoryPath": null,
-				"name": "default",
-				"nodes": [
-					{
-						"content": {
-							"contentType": "TerminalCommand",
-							"beforeExecution": true,
-							"command": "mkdir workspace"
-						}
-					}
-				]
-			}
-		],
-		"sourceCode": null
-	}`)
-	var expectedMap map[string]interface{}
-	err = json.Unmarshal(expectedBytes, &expectedMap)
-	if err != nil {
-		t.Errorf("failed to unmarshal expected json")
-		return
-	}
-
-	if !reflect.DeepEqual(expectedMap, resultMap) {
-		t.Errorf("expected\n%v\nbut got\n%v", prettyString(expectedMap), prettyString(resultMap))
 	}
 }
 

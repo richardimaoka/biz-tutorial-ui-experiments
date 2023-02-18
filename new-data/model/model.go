@@ -180,6 +180,7 @@ func (o TerminalOutput) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(extendedOutput)
 }
+
 func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 
@@ -230,28 +231,6 @@ func NewPageState() *PageState {
 		NextStep:   &nextStep,
 		Terminals:  terminals,
 		SourceCode: &SourceCode{},
-	}
-}
-
-//TODO: remove
-func InitPage(command *ActionCommand) *PageState {
-	step := "000"
-	nextStep := "001"
-
-	terminal := newTerminal(command.TerminalName)
-	trueValue := true
-	node := TerminalNode{
-		Content: TerminalCommand{
-			Command:         &command.Command,
-			BeforeExecution: &trueValue,
-		},
-	}
-	terminal.Nodes = append(terminal.Nodes, &node)
-
-	return &PageState{
-		Step:      &step,
-		NextStep:  &nextStep,
-		Terminals: []*Terminal{terminal},
 	}
 }
 
