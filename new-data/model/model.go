@@ -262,12 +262,7 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	}
 
 	// pre-condition - find command's target terminal
-	var terminal *Terminal
-	for _, t := range p.Terminals {
-		if *t.Name == command.TerminalName {
-			terminal = t
-		}
-	}
+	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
 		return fmt.Errorf("failed to type in command, terminal with name = %s not found", command.TerminalName)
 	}
@@ -288,6 +283,16 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	return nil
 }
 
+func (p *PageState) getTerminal(terminalName string) *Terminal {
+	var terminal *Terminal // nil as zero value
+	for _, t := range p.Terminals {
+		if *t.Name == terminalName {
+			terminal = t
+		}
+	}
+	return terminal
+}
+
 func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// 1.1 pre-conditions for next step
 
@@ -300,14 +305,7 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// 1.2 pre-conditions for terminal
 
 	// pre-condition - find command's target terminal
-	// terminal := p.getTerminal(terminalName)
-	// if terminal != nil {}
-	var terminal *Terminal
-	for _, t := range p.Terminals {
-		if *t.Name == command.TerminalName {
-			terminal = t
-		}
-	}
+	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
 		return fmt.Errorf("failed run command, terminal with name = %s not found", command.TerminalName)
 	}
