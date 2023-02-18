@@ -345,9 +345,53 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 
 	// pre-condition UpdateSourceCode.AddDirectories
 	if len(command.UpdateSourceCode.AddDirectories) > 0 {
-		for i, d := range command.UpdateSourceCode.AddDirectories {
-			if d.FilePathString == "" {
+		for i, v := range command.UpdateSourceCode.AddDirectories {
+			if v.FilePathString == "" {
 				return fmt.Errorf("AddDirectories has %s element with empty FilePathString", ordinal(i))
+			}
+		}
+	}
+
+	// pre-condition UpdateSourceCode.DeleteDirectories
+	if len(command.UpdateSourceCode.DeleteDirectories) > 0 {
+		for i, v := range command.UpdateSourceCode.DeleteDirectories {
+			if v.FilePathString == "" {
+				return fmt.Errorf("DeleteDirectories has %s element with empty FilePathString", ordinal(i))
+			}
+		}
+	}
+
+	// type UpdateSourceCode struct {
+	// 	AddDirectories    []AddDirectory
+	// 	DeleteDirectories []DeleteDirectory
+	// 	AddFiles          []AddFile
+	// 	UpdateFiles       []UpdateFile
+	// 	DeleteFiles       []DeleteFile
+	// }
+
+	// pre-condition UpdateSourceCode.AddFiles
+	if len(command.UpdateSourceCode.AddFiles) > 0 {
+		for i, v := range command.UpdateSourceCode.AddFiles {
+			if v.FilePathString == "" {
+				return fmt.Errorf("AddFiles has %s element with empty FilePathString", ordinal(i))
+			}
+		}
+	}
+
+	// pre-condition UpdateSourceCode.UpdateFiles
+	if len(command.UpdateSourceCode.UpdateFiles) > 0 {
+		for i, v := range command.UpdateSourceCode.UpdateFiles {
+			if v.FilePathString == "" {
+				return fmt.Errorf("UpdateFiles has %s element with empty FilePathString", ordinal(i))
+			}
+		}
+	}
+
+	// pre-condition UpdateSourceCode.DeleteFiles
+	if len(command.UpdateSourceCode.DeleteFiles) > 0 {
+		for i, v := range command.UpdateSourceCode.DeleteFiles {
+			if v.FilePathString == "" {
+				return fmt.Errorf("UpdateFiles has %s element with empty FilePathString", ordinal(i))
 			}
 		}
 	}
