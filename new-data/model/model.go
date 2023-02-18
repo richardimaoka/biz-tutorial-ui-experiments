@@ -289,13 +289,19 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 }
 
 func (p *PageState) runTerminalCommand(command *ActionCommand) error {
+	// 1.1 pre-conditions for next step
+
 	// pre-condition - next step calculation
 	nextNextStep, err := calcNextStep(*p.NextStep)
 	if err != nil {
 		return fmt.Errorf("failed to run command, %s", err)
 	}
 
+	// 1.2 pre-conditions for terminal
+
 	// pre-condition - find command's target terminal
+	// terminal := p.getTerminal(terminalName)
+	// if terminal != nil {}
 	var terminal *Terminal
 	for _, t := range p.Terminals {
 		if *t.Name == command.TerminalName {
@@ -307,6 +313,7 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	}
 
 	// pre-condition - find target terminal's last command
+	// if err := terminal.preCondition(TerminalCommand); err != nil {}
 	if len(terminal.Nodes) == 0 {
 		return fmt.Errorf("failed to run command, terminal '%s' has zero nodes, impossible run anything", command.TerminalName)
 	}
@@ -321,6 +328,8 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	if lastCommand.Command != &command.Command {
 		return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
 	}
+
+	// 1.3 pre-conditions for TerminalCommand.UpdateSourceCode
 
 	// pre-condition UpdateSourceCode.AddDirectories
 	if len(command.UpdateSourceCode.AddDirectories) > 0 {
@@ -339,14 +348,6 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 			}
 		}
 	}
-
-	// type UpdateSourceCode struct {
-	// 	AddDirectories    []AddDirectory
-	// 	DeleteDirectories []DeleteDirectory
-	// 	AddFiles          []AddFile
-	// 	UpdateFiles       []UpdateFile
-	// 	DeleteFiles       []DeleteFile
-	// }
 
 	// pre-condition UpdateSourceCode.AddFiles
 	if len(command.UpdateSourceCode.AddFiles) > 0 {
@@ -375,12 +376,17 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 		}
 	}
 
+	// pre-condition AddFiles does not have a matching node in fileTree, and the parent dir
+	// pre-condition UpdateFiles has matching node in fileTree
+	// pre-condition DeleteFiles has matching node in fileTree
+
+	// 2.1 Terminal update
+	// p.updateTerminal(command.UpdateTerminal)
+
 	//run command!
 	falseValue := false
 	lastCommand.BeforeExecution = &falseValue
 	lastNode.Content = lastCommand // work around copy
-
-	// command.UpdateTerminal.update(terminal)
 
 	// Process UpdateTerminal.Output
 	if command.UpdateTerminal.Output != "" {
@@ -390,6 +396,8 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 			},
 		})
 	}
+
+	// 2.2 SourceCode update
 
 	// if len(command.UpdateTerminal.CurrentDirectory) > 0 {
 	// 	terminal.CurrentDirectory = []*string{}
