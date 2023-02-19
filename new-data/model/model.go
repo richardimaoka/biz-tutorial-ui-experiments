@@ -312,6 +312,7 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 
 	// pre-condition - find target terminal's last command
 	// if err := terminal.preCondition(TerminalCommand); err != nil {}
+	// lastCommand := p.lastCommand(command.TerminalName)
 	if len(terminal.Nodes) == 0 {
 		return fmt.Errorf("failed to run command, terminal '%s' has zero nodes, impossible run anything", command.TerminalName)
 	}
