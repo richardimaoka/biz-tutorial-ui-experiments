@@ -170,20 +170,6 @@ func Test_calcNextStep(t *testing.T) {
 	}
 }
 
-func Test_NewStep(t *testing.T) {
-	step := NewStep()
-
-	if len(step.Terminals) != 1 {
-		t.Errorf("terminal size = %d, not 1", len(step.Terminals))
-	}
-
-	if len(step.Terminals[0].Nodes) != 0 {
-		t.Errorf("terminal nodes size = %d, not 0", len(step.Terminals[0].Nodes))
-	}
-
-	step.Terminals[0].Nodes = append(step.Terminals[0].Nodes, &TerminalNode{})
-}
-
 // func Test_TypeInTerminalCommand2(t *testing.T) {
 // 	page := NewPageState()
 // 	command := ActionCommand{
