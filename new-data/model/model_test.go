@@ -146,6 +146,22 @@ func Test_runTerminalCommandSuccess3(t *testing.T) {
 	compareAfterMarshal(t, "testdata/run-terminal-command3.json", result)
 }
 
+func Test_ChangeDirectory(t *testing.T) {
+	terminal := newTerminal("default")
+	cd := UpdateTerminal{
+		CurrentDirectoryPath: "hello",
+	}
+
+	if terminal.CurrentDirectoryPath != nil && *terminal.CurrentDirectoryPath == cd.CurrentDirectoryPath {
+		t.Errorf("terminal's current directory is already same as `cd` target = %s", *terminal.CurrentDirectoryPath)
+	}
+
+	terminal.changeCurrentDirectory(cd)
+	if *terminal.CurrentDirectoryPath != cd.CurrentDirectoryPath {
+		t.Errorf("terminal's current directory is not changed from %s to %s", *terminal.CurrentDirectoryPath, cd.CurrentDirectoryPath)
+	}
+}
+
 func Test_calcNextStep(t *testing.T) {
 	cases := []struct {
 		Description string

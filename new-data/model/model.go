@@ -219,6 +219,10 @@ func newTerminal(name string) *Terminal {
 	}
 }
 
+func (t *Terminal) changeCurrentDirectory(cd UpdateTerminal) {
+	t.CurrentDirectoryPath = &cd.CurrentDirectoryPath
+}
+
 func NewPageState() *PageState {
 	step := "000"
 	nextStep := "001"
