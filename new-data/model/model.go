@@ -271,7 +271,7 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 		return fmt.Errorf("failed to type in command, terminal with name = %s not found", command.TerminalName)
 	}
 
-	// append terminal node
+	// type in command
 	terminal.typeInCommand(command)
 
 	// update step

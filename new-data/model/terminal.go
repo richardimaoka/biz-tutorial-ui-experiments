@@ -1,5 +1,6 @@
 package model
 
+//no pre-condition required, always succeed
 func (t *Terminal) typeInCommand(command *ActionCommand) {
 	// append terminal node
 	trueValue := true
