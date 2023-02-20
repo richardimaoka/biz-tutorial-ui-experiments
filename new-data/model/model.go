@@ -258,6 +258,16 @@ func (p *PageState) gotoNextStep(nextNextStep string) {
 	p.NextStep = &nextNextStep
 }
 
+func (p *PageState) getTerminal(terminalName string) *Terminal {
+	var terminal *Terminal // nil as zero value
+	for _, t := range p.Terminals {
+		if *t.Name == terminalName {
+			terminal = t
+		}
+	}
+	return terminal
+}
+
 func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	// pre-condition - next step calculation
 	nextNextStep, err := calcNextStep(*p.NextStep)
@@ -278,16 +288,6 @@ func (p *PageState) typeInTerminalCommand(command *ActionCommand) error {
 	p.gotoNextStep(nextNextStep)
 
 	return nil
-}
-
-func (p *PageState) getTerminal(terminalName string) *Terminal {
-	var terminal *Terminal // nil as zero value
-	for _, t := range p.Terminals {
-		if *t.Name == terminalName {
-			terminal = t
-		}
-	}
-	return terminal
 }
 
 func (p *PageState) runTerminalCommand(command *ActionCommand) error {
@@ -324,6 +324,13 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	if lastCommand.Command != &command.Command {
 		return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
 	}
+	//lastCommand, err := terminal.getLastCommand()
+	// if err != nil {
+	// 	return fmt.Errorf("failed to run command, %s", err)
+	// }
+	// if lastCommand.Command != &command.Command {
+	// 	return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
+	// }
 
 	// 1.3 pre-conditions for TerminalCommand.UpdateSourceCode
 
