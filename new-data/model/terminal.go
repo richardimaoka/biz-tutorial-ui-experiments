@@ -20,7 +20,7 @@ func (t *Terminal) typeInCommand(command *ActionCommand) {
 	t.Nodes = append(t.Nodes, &node)
 }
 
-func (t *Terminal) getLastCommand() (*TerminalCommand, error) {
+func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	if len(t.Nodes) == 0 {
 		return nil, fmt.Errorf("terminal has zero nodes")
 	}
@@ -30,12 +30,20 @@ func (t *Terminal) getLastCommand() (*TerminalCommand, error) {
 		return nil, fmt.Errorf("terminal' last node = nil")
 	}
 
-	//content is interface, possibly nil
-	content := lastNode.Content
-	lastCommand, ok := content.(TerminalCommand)
-	if !ok {
-		return nil, fmt.Errorf("terminal's last node's content is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	return lastNode, nil
+}
+
+func (t *Terminal) markLastCommandExecuted() error {
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("%s", err)
 	}
 
-	return &lastCommand, nil
+	lastCommand, ok := lastNode.Content.(TerminalCommand)
+	if !ok {
+		return fmt.Errorf("terminal's last node's content is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	}
+
+	lastNode.Content = lastCommand.toExecutedCommand()
+	return nil
 }

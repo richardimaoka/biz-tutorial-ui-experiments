@@ -386,10 +386,8 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// 2.1 Terminal update
 	// p.updateTerminal(command.UpdateTerminal)
 
-	//run command!
-	falseValue := false
-	lastCommand.BeforeExecution = &falseValue
-	lastNode.Content = lastCommand // work around copy
+	//execute command!
+	terminal.markLastCommandExecuted()
 
 	// Process UpdateTerminal.Output
 	if command.UpdateTerminal.Output != "" {
