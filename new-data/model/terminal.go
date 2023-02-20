@@ -33,6 +33,20 @@ func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	return lastNode, nil
 }
 
+func (t *Terminal) verifyLastCommand() error {
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("verifyLastCommand failed, %s", err)
+	}
+
+	_, ok := lastNode.Content.(TerminalCommand)
+	if !ok {
+		return fmt.Errorf("terminal's last node's content is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	}
+
+	return nil
+}
+
 func (t *Terminal) markLastCommandExecuted() error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
