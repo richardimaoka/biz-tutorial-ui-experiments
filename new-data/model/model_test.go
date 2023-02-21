@@ -21,6 +21,18 @@ func Test_typeInCommandSuccess(t *testing.T) {
 	compareAfterMarshal(t, "testdata/type-in-command.json", result)
 }
 
+// func Test_typeInCommandSuccess2(t *testing.T) {
+// 	result := NewPageState()
+
+// 	action := ActionTerminal{Command: "cd abc", TerminalName: "default", CurrentDirectory: "cd"}
+// 	if err := result.typeIn(&action); err != nil {
+// 		t.Error(err)
+// 		return
+// 	}
+
+// 	compareAfterMarshal(t, "testdata/termina-type-in.json", result)
+// }
+
 func Test_typeInCommandFailure(t *testing.T) {
 	result := NewPageState()
 
