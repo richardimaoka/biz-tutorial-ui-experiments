@@ -25,6 +25,7 @@ func (t *Terminal) typeInCommand(command *ActionCommand) {
 	t.Nodes = append(t.Nodes, &node)
 }
 
+// pre-condition check = isLastCommandExecutable()
 func (t *Terminal) markLastCommandExecuted() error {
 	lastNode, err := t.getLastNode()
 	if err != nil {

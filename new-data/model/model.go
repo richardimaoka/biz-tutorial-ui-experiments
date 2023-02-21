@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -254,30 +253,10 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 		return fmt.Errorf("failed run command, terminal with name = %s not found", command.TerminalName)
 	}
 
-	// pre-condition - find target terminal's last command
-	// if err := terminal.preCondition(TerminalCommand); err != nil {}
-	// lastCommand := p.lastCommand(command.TerminalName)
-	if len(terminal.Nodes) == 0 {
-		return fmt.Errorf("failed to run command, terminal '%s' has zero nodes, impossible run anything", command.TerminalName)
+	// pre-condition -terminal's last command executable
+	if err := terminal.isLastCommandExecutable(); err != nil {
+		return fmt.Errorf("failed run command, %s", err)
 	}
-	lastNode := terminal.Nodes[len(terminal.Nodes)-1]
-	if lastNode == nil {
-		return fmt.Errorf("failed to run command, terminal '%s' has last command as nil", command.TerminalName)
-	}
-	lastCommand, ok := lastNode.Content.(TerminalCommand)
-	if !ok {
-		return fmt.Errorf("failed to run command, terminal %s's last node's content is not TerminalCommand but %v", command.TerminalName, reflect.TypeOf(lastNode.Content))
-	}
-	if lastCommand.Command != &command.Command {
-		return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
-	}
-	//lastCommand, err := terminal.getLastCommand()
-	// if err != nil {
-	// 	return fmt.Errorf("failed to run command, %s", err)
-	// }
-	// if lastCommand.Command != &command.Command {
-	// 	return fmt.Errorf("failed to run command, terminal %s's last command unmatched with given command", command.TerminalName)
-	// }
 
 	// 1.3 pre-conditions for TerminalCommand.UpdateSourceCode
 
@@ -334,7 +313,9 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// p.updateTerminal(command.UpdateTerminal)
 
 	//execute command!
-	terminal.markLastCommandExecuted()
+	if err := terminal.markLastCommandExecuted(); err != nil {
+		return err
+	}
 
 	// Process UpdateTerminal.Output
 	if command.UpdateTerminal.Output != "" {
