@@ -69,17 +69,30 @@ type ManualUpdate struct {
 
 func (c *ManualUpdate) IsAction() {}
 
-// type CdCommand struct {
-// 	directoryPath string
-// }
+type IActionCommand interface {
+	Command() string
+}
 
-// type MkdirCommand struct {
-// 	directoryPath string
-// }
+type CommandCd struct {
+	command       string
+	DirectoryPath string
+}
 
-// type OutputCommand struct {
-// 	output string
-// }
+func (c CommandCd) Command() string { return c.command }
+
+type MkdirCommand struct {
+	command       string
+	DirectoryPath string
+}
+
+func (c MkdirCommand) Command() string { return c.command }
+
+type OutputCommand struct {
+	command string
+	Output  string
+}
+
+func (c OutputCommand) Command() string { return c.command }
 
 // type FileCreateCommand struct {
 // }
