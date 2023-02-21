@@ -5,6 +5,16 @@ import (
 	"reflect"
 )
 
+func newTerminal(name string) *Terminal {
+	return &Terminal{
+		Name: &name,
+	}
+}
+
+func (t *Terminal) changeCurrentDirectory(cd UpdateTerminal) {
+	t.CurrentDirectoryPath = &cd.CurrentDirectoryPath
+}
+
 //no pre-condition required, always succeed
 func (t *Terminal) typeInCommand(command *ActionCommand) {
 	// append terminal node
