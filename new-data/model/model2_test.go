@@ -5,8 +5,8 @@ import "testing"
 func Test_typeInCommand(t *testing.T) {
 	result := NewPageState()
 
-	cmd := ActionTerminal{Command: "cd abc", TerminalName: "default", CurrentDirectory: "abc"}
-	if err := result.typeInTerminalCommand(&cmd); err != nil {
+	action := ActionTerminal{Command: "cd abc", TerminalName: "default", CurrentDirectory: "abc"}
+	if err := result.typeIn(&action); err != nil {
 		t.Error(err)
 		return
 	}
