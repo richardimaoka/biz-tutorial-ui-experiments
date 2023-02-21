@@ -11,5 +11,21 @@ func Test_typeInCommand(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "testdata/type-in-command.json", result)
+	compareAfterMarshal(t, "testdata/terminal-type-in.json", result)
+}
+
+func Test_executeCd(t *testing.T) {
+	result := NewPageState()
+
+	action := ActionTerminal{Command: "cd abc", TerminalName: "default", CurrentDirectory: "abc"}
+	if err := result.typeIn(&action); err != nil {
+		t.Error(err)
+		return
+	}
+	if err := result.executeActionTerminal(&action); err != nil {
+		t.Error(err)
+		return
+	}
+
+	compareAfterMarshal(t, "testdata/terminal-cd.json", result)
 }

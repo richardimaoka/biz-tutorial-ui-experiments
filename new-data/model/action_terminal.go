@@ -39,9 +39,12 @@ func (t *Terminal) writeOutput2(action ActionTerminal) {
 }
 
 // assuming typeIn() is called earlier
-func (t *Terminal) execute(action ActionTerminal) {
+func (t *Terminal) Execute(action ActionTerminal) error {
 	//action.validate()
 	//t.validate(action)
+	if err := t.markLastCommandExecuted(); err != nil {
+		return err
+	}
 
 	if action.Output != "" {
 		t.writeOutput2(action)
@@ -50,4 +53,6 @@ func (t *Terminal) execute(action ActionTerminal) {
 	if action.CurrentDirectory != "" {
 		t.changeDirectory(action)
 	}
+
+	return nil
 }

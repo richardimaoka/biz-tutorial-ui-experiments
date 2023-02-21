@@ -1,7 +1,7 @@
 {
-  "step": "001",
-  "nextStep": "002",
-  "prevStep": "000",
+  "step": "002",
+  "nextStep": "003",
+  "prevStep": "001",
   "terminals": [
     {
       "currentDirectory": null,
