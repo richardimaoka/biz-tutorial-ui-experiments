@@ -21,18 +21,6 @@ func Test_typeInCommandSuccess(t *testing.T) {
 	compareAfterMarshal(t, "testdata/type-in-command.json", result)
 }
 
-// func Test_typeInCommandSuccess2(t *testing.T) {
-// 	result := NewPageState()
-
-// 	action := ActionTerminal{Command: "cd abc", TerminalName: "default", CurrentDirectory: "cd"}
-// 	if err := result.typeIn(&action); err != nil {
-// 		t.Error(err)
-// 		return
-// 	}
-
-// 	compareAfterMarshal(t, "testdata/termina-type-in.json", result)
-// }
-
 func Test_typeInCommandFailure(t *testing.T) {
 	result := NewPageState()
 
@@ -147,60 +135,5 @@ func Test_calcNextStep(t *testing.T) {
 				t.Errorf("expected %s, but result %s", test.Expected, result)
 			}
 		})
-	}
-}
-
-// func Test_TypeInTerminalCommand2(t *testing.T) {
-// 	page := NewPageState()
-// 	command := ActionCommand{
-// 		Command:      "mkdir protoc-go-experiments",
-// 		TerminalName: "default",
-// 	}
-
-// 	err := page.typeInTerminalCommand(&command)
-
-// 	if err != nil {
-// 		t.Errorf("%s", err)
-// 	}
-
-// 	if *step.StepNum != 2 {
-// 		t.Errorf("StepNum = %d, which is not incremented", *step.StepNum)
-// 	}
-
-// 	if *step.NextStepNum != 3 {
-// 		t.Errorf("NextStepNum = %d, which is not incremented", *step.StepNum)
-// 	}
-// }
-
-func Test_TypeInTerminalCommand(t *testing.T) {
-	stepNum := 1
-	nextStepNum := 2
-	terminalName := "default"
-
-	step := Step{
-		StepNum:     &stepNum,
-		NextStepNum: &nextStepNum,
-		Terminals: []*Terminal{
-			{
-				Name: &terminalName,
-			},
-		},
-	}
-
-	err := step.typeInTerminalCommand(&ActionCommand{
-		Command:      "mkdir protoc-go-experiments",
-		TerminalName: "default",
-	})
-
-	if err != nil {
-		t.Errorf("%s", err)
-	}
-
-	if *step.StepNum != 2 {
-		t.Errorf("StepNum = %d, which is not incremented", *step.StepNum)
-	}
-
-	if *step.NextStepNum != 3 {
-		t.Errorf("NextStepNum = %d, which is not incremented", *step.StepNum)
 	}
 }

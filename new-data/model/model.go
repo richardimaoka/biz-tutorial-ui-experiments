@@ -3,7 +3,6 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -68,34 +67,6 @@ type ManualUpdate struct {
 
 func (c *ManualUpdate) IsAction() {}
 
-type IActionCommand interface {
-	Command() string
-}
-
-type CommandCd struct {
-	command       string
-	DirectoryPath string
-}
-
-func (c CommandCd) Command() string { return c.command }
-
-type MkdirCommand struct {
-	command       string
-	DirectoryPath string
-}
-
-func (c MkdirCommand) Command() string { return c.command }
-
-type OutputCommand struct {
-	command string
-	Output  string
-}
-
-func (c OutputCommand) Command() string { return c.command }
-
-// type FileCreateCommand struct {
-// }
-
 func (o TerminalOutput) MarshalJSON() ([]byte, error) {
 	extendedOutput := struct {
 		ContentType string  `json:"contentType"`
@@ -121,23 +92,6 @@ func (ut UpdateTerminal) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(m)
 
-}
-
-func NewStep() *Step {
-	stepNum := 0
-	nextStepNum := 1
-	terminalName := "default"
-
-	return &Step{
-		StepNum:     &stepNum,
-		NextStepNum: &nextStepNum,
-		Terminals: []*Terminal{
-			{
-				Name: &terminalName,
-			},
-		},
-		SourceCode: &SourceCode{},
-	}
 }
 
 func NewPageState() *PageState {
@@ -347,156 +301,6 @@ func (a AddDirectory) toFileNode() *FileNode {
 		IsUpdated: &trueValue,
 	}
 	return &fileNode
-}
-
-//TODO: remove
-func (step *Step) typeInTerminalCommand(command *ActionCommand) error {
-	for _, t := range step.Terminals {
-		if *t.Name == command.TerminalName {
-			*step.StepNum++
-			*step.NextStepNum++
-
-			falseValue := false
-			t.Nodes = append(t.Nodes, &TerminalNode{
-				Content: TerminalCommand{
-					Command:         &command.Command,
-					BeforeExecution: &falseValue,
-				},
-			})
-
-			return nil
-		}
-	}
-
-	return fmt.Errorf("typeInTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
-}
-
-func (step *Step) runTerminalCommand(command *ActionCommand) error {
-	for _, t := range step.Terminals {
-		if *t.Name == command.TerminalName {
-			*step.StepNum++
-			*step.NextStepNum++
-
-			// Process UpdateTerminal
-			if command.UpdateTerminal.Output != "" {
-				t.Nodes = append(t.Nodes, &TerminalNode{
-					Content: TerminalOutput{
-						Output: &command.Command,
-					},
-				})
-			}
-
-			if len(command.UpdateTerminal.CurrentDirectory) > 0 {
-				t.CurrentDirectory = []*string{}
-				for _, d := range command.UpdateTerminal.CurrentDirectory {
-					t.CurrentDirectory = append(t.CurrentDirectory, &d)
-				}
-			}
-
-			// Process UpdateSourceCode
-			if len(command.UpdateSourceCode.AddDirectories) > 0 {
-				for i, d := range command.UpdateSourceCode.AddDirectories {
-					if len(d.FilePath) == 0 {
-						return fmt.Errorf("AddDirectories has %s element with empty filePath", ordinal(i))
-					}
-
-					dType := FileNodeTypeDirectory
-					offset := len(d.FilePath)
-					trueValue := true
-					dirName := d.FilePath[len(d.FilePath)-1]
-
-					filePath := []*string{}
-					for _, p := range d.FilePath {
-						filePath = append(filePath, &p)
-					}
-
-					step.SourceCode.FileTree = append(
-						step.SourceCode.FileTree,
-						&FileNode{
-							NodeType:  &dType,
-							Name:      &dirName,
-							FilePath:  filePath,
-							Offset:    &offset,
-							IsUpdated: &trueValue,
-						},
-					)
-				}
-			}
-
-			//TODO: sort FileTree
-
-			return nil
-		}
-	}
-
-	return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
-}
-
-func (step *Step) ProcessActionCommand(command *ActionCommand, filePrefix string) error {
-	//step 1 type in terminal command
-	err := step.typeInTerminalCommand(command)
-	if err != nil {
-		return err
-	}
-
-	err = step.writeFile(filePrefix)
-	if err != nil {
-		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
-	}
-
-	//step 2 run terminal command
-	err = step.runTerminalCommand(command)
-	if err != nil {
-		return err
-	}
-
-	err = step.writeFile(filePrefix)
-	if err != nil {
-		return fmt.Errorf("ProcessActionCommand() failed, %s", err)
-	}
-
-	return nil
-}
-
-func (s *Step) writeFile(filePrefix string) error {
-	bytes, err := json.MarshalIndent(s, "", "  ")
-	if err != nil {
-		return fmt.Errorf("writeFile() failed, %s", err)
-	}
-
-	fileName := fmt.Sprintf("%s%03d.json", filePrefix, *s.StepNum)
-	if os.WriteFile(fileName, bytes, 0644) != nil {
-		return fmt.Errorf("writeFile() failed, %s", err)
-	}
-
-	return nil
-}
-
-func Process() error {
-	filePrefix := "data2/step"
-
-	step := NewStep()
-	step.writeFile(filePrefix)
-
-	for i := 0; i <= 100; i++ {
-		actionFile := fmt.Sprintf("data2/action%03d.json", i)
-		bytes, err := os.ReadFile(actionFile)
-		if err != nil {
-			return nil //no file found, end of processing
-		}
-
-		cmd, err := readActionFromBytes(bytes)
-		if err != nil {
-			return fmt.Errorf("failure in %s, %s", actionFile, err)
-		}
-
-		err = step.ProcessActionCommand(cmd, filePrefix)
-		if err != nil {
-			return err
-		}
-	}
-
-	return fmt.Errorf("loop count 100, too big!!")
 }
 
 func ordinal(x int) string {
