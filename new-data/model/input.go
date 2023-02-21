@@ -36,7 +36,7 @@ func toActionJsonBytes(flatJsonBytes []byte) ([]byte, error) {
 	}
 
 	// unmarshal to action
-	action, err := UnmarshalToAction(unflattenedJsonBytes)
+	action, err := unmarshalToAction(unflattenedJsonBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal, %s", err)
 	}
@@ -130,6 +130,7 @@ func SplitActionListFile(targetDir string) error {
 	return nil
 }
 
+// all input_flat00x files
 func ListInputFlatFiles(targetDir string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
@@ -146,6 +147,7 @@ func ListInputFlatFiles(targetDir string) ([]string, error) {
 	return files, nil
 }
 
+// generate action00x.json files from input_flat00x.json files
 func GenerateInputActionFiles(targetDir string) error {
 	inputFlatFiles, err := ListInputFlatFiles(targetDir)
 	if err != nil {
@@ -167,4 +169,55 @@ func GenerateInputActionFiles(targetDir string) error {
 	}
 
 	return nil
+}
+
+func unmarshalToAction(jsonBytes []byte) (Action, error) {
+	errorPreceding := "Error in unmarshalToAction"
+
+	actionTypeField := "actionType"
+	actionType, err := extractTypeName(jsonBytes, actionTypeField)
+	if err != nil {
+		return nil, fmt.Errorf("%s, extracting action type failed, %s", errorPreceding, err)
+	}
+
+	switch actionType {
+	case "ActionCommand":
+		var command ActionCommand
+		err = json.Unmarshal(jsonBytes, &command)
+		if err != nil {
+			return nil, fmt.Errorf("%s, unmarshaling action to ActionCommand failed, %s", errorPreceding, err)
+		}
+		return &command, nil
+	case "ManualUpdate":
+		var manual ManualUpdate
+		err = json.Unmarshal(jsonBytes, &manual)
+		if err != nil {
+			return nil, fmt.Errorf("%s, unmarshaling action to ManualUpdate failed, %s", errorPreceding, err)
+		}
+		return &manual, nil
+	default:
+		return nil, fmt.Errorf("%s, %s = %s is not a valid action type", errorPreceding, actionTypeField, actionType)
+	}
+}
+
+func unmarshalToAction2(jsonBytes []byte) (*ActionTerminal, error) {
+	errorPreceding := "Error in unmarshalTo"
+
+	actionTypeField := "actionType"
+	actionType, err := extractTypeName(jsonBytes, actionTypeField)
+	if err != nil {
+		return nil, fmt.Errorf("%s, extracting action type failed, %s", errorPreceding, err)
+	}
+
+	switch actionType {
+	case "ActionTerminal":
+		var action ActionTerminal
+		err = json.Unmarshal(jsonBytes, &action)
+		if err != nil {
+			return nil, fmt.Errorf("%s, unmarshaling action to ActionTerminal failed, %s", errorPreceding, err)
+		}
+		return &action, nil
+	default:
+		return nil, fmt.Errorf("%s, %s = %s is not a valid action type", errorPreceding, actionTypeField, actionType)
+	}
 }
