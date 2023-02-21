@@ -11,7 +11,7 @@ func Test_typeInCommand(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "testdata/terminal-type-in.json", result)
+	compareAfterMarshal(t, "testdata/terminal-cd-type-in.json", result)
 }
 
 func Test_executeCd(t *testing.T) {
@@ -27,5 +27,5 @@ func Test_executeCd(t *testing.T) {
 		return
 	}
 
-	compareAfterMarshal(t, "testdata/terminal-cd.json", result)
+	compareAfterMarshal(t, "testdata/terminal-cd-executed.json", result)
 }
