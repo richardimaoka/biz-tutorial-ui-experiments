@@ -313,6 +313,7 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 	// p.updateTerminal(command.UpdateTerminal)
 
 	//execute command!
+	// if err := terminal.executeEffect(); err != nil {
 	if err := terminal.markLastCommandExecuted(); err != nil {
 		return err
 	}
