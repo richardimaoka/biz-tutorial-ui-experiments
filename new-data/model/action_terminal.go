@@ -3,8 +3,8 @@ package model
 type ActionTerminal struct {
 	Command          string
 	TerminalName     string
-	Output           string
-	CurrentDirectory string
+	Output           string //if "", no output after execution
+	CurrentDirectory string //if "", current directory is not changed after execution
 }
 
 //no pre-condition required, always succeed
