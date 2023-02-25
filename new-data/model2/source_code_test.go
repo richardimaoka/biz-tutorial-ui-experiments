@@ -1,6 +1,7 @@
 package model2
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -26,28 +27,37 @@ func TestAll(t *testing.T) {
 
 	var entries []Entry = []Entry{
 		{operations: []Operation{}, resultFile: "testdata/new-source-code.json"},
+		{operations: []Operation{
+			{filePath: "", nodeType: FileNodeTypeDirectory, expectSuccess: false}, // "" is a wrong file path
+		}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
 	}
 
-	for _, e := range entries {
+	for i, e := range entries {
 		sc := newSourceCode()
-		for _, op := range e.operations {
+		for j, op := range e.operations {
 			switch op.nodeType {
 			case FileNodeTypeDirectory:
 				err := sc.addDirectory(op.filePath)
 				resultSuccess := err == nil
 				if resultSuccess != op.expectSuccess {
-					t.Errorf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg2 := fmt.Sprintf("operation = %+v", op)
+					errMsg3 := fmt.Sprintf("entry = %+v", e)
+					t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
 					continue
 				}
 			case FileNodeTypeFile:
 				err := sc.addFile(op.filePath)
 				resultSuccess := err == nil
 				if resultSuccess != op.expectSuccess {
-					t.Errorf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg2 := fmt.Sprintf("operation = %+v", op)
+					errMsg3 := fmt.Sprintf("entry = %+v", e)
+					t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
 					continue
 				}
 			default:
-				t.Errorf("wrong op.nodeType = %s", op.nodeType)
+				t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.nodeType)
 				continue
 			}
 		}
