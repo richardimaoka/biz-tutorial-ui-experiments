@@ -10,33 +10,6 @@ type AddDirectory struct {
 	FilePath string
 }
 
-func (a AddDirectory) filePathPtrSlice() []*string {
-	split := strings.Split(a.FilePath, "/")
-
-	var filePathSlice []*string
-	for _, v := range split {
-		filePathSlice = append(filePathSlice, &v)
-	}
-
-	return filePathSlice
-}
-
-func (a AddDirectory) toFileNode() *FileNode {
-	dType := FileNodeTypeDirectory
-	split := a.filePathPtrSlice()
-	offset := len(split) - 1
-	trueValue := true
-
-	fileNode := FileNode{
-		NodeType:  &dType,
-		Name:      split[len(split)-1],
-		FilePath:  split,
-		Offset:    &offset,
-		IsUpdated: &trueValue,
-	}
-	return &fileNode
-}
-
 func lessFilePath(a, b []*string) bool {
 	if len(a) == 0 && len(b) == 0 {
 		return false //even if len(b) == 0
@@ -55,6 +28,11 @@ func lessFilePath(a, b []*string) bool {
 	}
 }
 
+func parentDirectoryPath(filePath string) string {
+	split := strings.Split(filePath, "/")
+	return strings.Join(split[:len(split)-1], "")
+}
+
 func (s *SourceCode) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
@@ -69,11 +47,6 @@ func (s *SourceCode) findFileNode(filePath string) *FileNode {
 	}
 
 	return nil
-}
-
-func parentDirectoryPath(filePath string) string {
-	split := strings.Split(filePath, "/")
-	return strings.Join(split[:len(split)-1], "")
 }
 
 func (s *SourceCode) canAddDirectory(directoryPath string) error {
@@ -113,17 +86,3 @@ func (s *SourceCode) addDirectory(directoryPath string) error {
 
 	return nil
 }
-
-// func (s *SourceCode) addDirectory(directoryPath string) error {
-// 	if s.findFileNode(directoryPath) != nil {
-// 		return fmt.Errorf("filePath = %s already exists", directoryPath)
-// 	}
-// 	if !s.existsParentDir(directoryPath) {
-// 		return fmt.Errorf("parent directory = %s does not exist", directoryPath)
-// 	}
-
-// 	s.FileTree = append(s.FileTree, add.toFileNode())
-// 	s.sortFileTree()
-
-// 	return nil
-// }
