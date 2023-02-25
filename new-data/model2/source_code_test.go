@@ -21,142 +21,87 @@ func TestAll(t *testing.T) {
 	}
 
 	type Entry struct {
+		name       string
 		operations []Operation
 		resultFile string
 	}
 
 	var entries []Entry = []Entry{
-		{operations: []Operation{}, resultFile: "testdata/new-source-code.json"},
-		{operations: []Operation{
-			{filePath: "", nodeType: FileNodeTypeDirectory, expectSuccess: false}, // "" is a wrong file path
-		}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
+		{name: "create SourceCode",
+			operations: []Operation{}, // no operation
+			resultFile: "testdata/new-source-code.json"},
+
+		{name: "error on adding dir with empty file path",
+			operations: []Operation{
+				{filePath: "", nodeType: FileNodeTypeDirectory, expectSuccess: false}, // "" is a wrong file path
+			}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
+
+		{name: "add a single dir",
+			operations: []Operation{
+				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+			}, resultFile: "testdata/add-directory1.json"},
+
+		{name: "add a dir and its child dir",
+			operations: []Operation{
+				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello/world", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+			}, resultFile: "testdata/add-directory2.json"},
+
+		{name: "add a dir and its child dir and another dir",
+			operations: []Operation{
+				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello/world", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "aloha", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+			}, resultFile: "testdata/add-directory3.json"},
+
+		{name: "add a file",
+			operations: []Operation{
+				{filePath: "hello.txt", nodeType: FileNodeTypeFile, expectSuccess: true},
+			}, resultFile: "testdata/add-file1.json"},
+
+		{name: "error adding a file",
+			operations: []Operation{
+				{filePath: "hello/world.txt", nodeType: FileNodeTypeFile, expectSuccess: false},
+			}, resultFile: "testdata/new-source-code.json"},
+
+		{name: "add two files",
+			operations: []Operation{
+				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello/world.txt", nodeType: FileNodeTypeFile, expectSuccess: true},
+			}, resultFile: "testdata/add-file2.json"},
 	}
 
 	for i, e := range entries {
-		sc := newSourceCode()
-		for j, op := range e.operations {
-			switch op.nodeType {
-			case FileNodeTypeDirectory:
-				err := sc.addDirectory(op.filePath)
-				resultSuccess := err == nil
-				if resultSuccess != op.expectSuccess {
-					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
-					errMsg2 := fmt.Sprintf("operation = %+v", op)
-					errMsg3 := fmt.Sprintf("entry = %+v", e)
-					t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
-					continue
+		t.Run(e.name, func(t *testing.T) {
+			sc := newSourceCode()
+			for j, op := range e.operations {
+				switch op.nodeType {
+				case FileNodeTypeDirectory:
+					err := sc.addDirectory(op.filePath)
+					resultSuccess := err == nil
+					if resultSuccess != op.expectSuccess {
+						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+						errMsg2 := fmt.Sprintf("operation = %+v", op)
+						errMsg3 := fmt.Sprintf("entry = %+v", e)
+						t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
+						return
+					}
+				case FileNodeTypeFile:
+					err := sc.addFile(op.filePath)
+					resultSuccess := err == nil
+					if resultSuccess != op.expectSuccess {
+						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+						errMsg2 := fmt.Sprintf("operation = %+v", op)
+						errMsg3 := fmt.Sprintf("entry = %+v", e)
+						t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
+						return
+					}
+				default:
+					t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.nodeType)
+					return
 				}
-			case FileNodeTypeFile:
-				err := sc.addFile(op.filePath)
-				resultSuccess := err == nil
-				if resultSuccess != op.expectSuccess {
-					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
-					errMsg2 := fmt.Sprintf("operation = %+v", op)
-					errMsg3 := fmt.Sprintf("entry = %+v", e)
-					t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
-					continue
-				}
-			default:
-				t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.nodeType)
-				continue
 			}
-		}
-		compareAfterMarshal(t, e.resultFile, sc)
+			compareAfterMarshal(t, e.resultFile, sc)
+		})
 	}
-}
-
-func TestNewSourceCode(t *testing.T) {
-	sc := newSourceCode()
-	compareAfterMarshal(t, "testdata/new-source-code.json", sc)
-}
-
-func TestAddDirectoryFailed(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addDirectory(""); err == nil {
-		t.Error("error expected")
-		return
-	}
-
-	if err := sc.addDirectory("abc/"); err == nil {
-		t.Error("error expected")
-		return
-	}
-	// json should be same as initial state
-	compareAfterMarshal(t, "testdata/new-source-code.json", sc)
-}
-
-func TestAddDirectory1(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addDirectory("hello"); err != nil {
-		t.Error(err)
-		return
-	}
-	compareAfterMarshal(t, "testdata/add-directory1.json", sc)
-}
-
-func TestAddDirectory2(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addDirectory("hello"); err != nil {
-		t.Error(err)
-		return
-	}
-	if err := sc.addDirectory("hello/world"); err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, "testdata/add-directory2.json", sc)
-}
-
-func TestAddDirectory3(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addDirectory("hello"); err != nil {
-		t.Error(err)
-		return
-	}
-	if err := sc.addDirectory("hello/world"); err != nil {
-		t.Error(err)
-		return
-	}
-	if err := sc.addDirectory("aloha"); err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, "testdata/add-directory3.json", sc)
-}
-
-func TestAddFile1(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addFile("hello.txt"); err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, "testdata/add-file1.json", sc)
-}
-
-func TestAddFileFailure(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addFile("hello/world.txt"); err == nil {
-		t.Error("error expected")
-		return
-	}
-
-	// json should be same as initial state
-	compareAfterMarshal(t, "testdata/new-source-code.json", sc)
-}
-
-func TestAddFile2(t *testing.T) {
-	sc := newSourceCode()
-	if err := sc.addDirectory("hello"); err != nil {
-		t.Error(err)
-		return
-	}
-	if err := sc.addFile("hello/world.txt"); err != nil {
-		t.Error(err)
-		return
-	}
-
-	compareAfterMarshal(t, "testdata/add-file2.json", sc)
 }
