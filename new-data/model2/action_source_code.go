@@ -71,28 +71,59 @@ func (s *SourceCode) findFileNode(filePath string) *FileNode {
 	return nil
 }
 
-func (s *SourceCode) existsParentDir(filePath string) bool {
+func parentDirectoryPath(filePath string) string {
 	split := strings.Split(filePath, "/")
-	parentPathSlice := split[:len(split)-1]
+	return strings.Join(split[:len(split)-1], "")
+}
 
-	if len(parentPathSlice) == 0 {
-		return true
+func (s *SourceCode) canAddDirectory(directoryPath string) error {
+	if directoryPath == "" {
+		return fmt.Errorf("cannot add directory with empty path")
+	}
+	if strings.HasSuffix(directoryPath, "/") {
+		return fmt.Errorf("directory path = %s ends in slash", directoryPath)
+	}
+
+	if s.findFileNode(directoryPath) != nil {
+		return fmt.Errorf("file path = %s already exists", directoryPath)
+	}
+
+	parentPath := parentDirectoryPath(directoryPath)
+	if parentPath == "" {
+		return nil //parent dir = root dir
+	}
+
+	node := s.findFileNode(parentPath)
+	if node.NodeType == nil {
+		return fmt.Errorf("parent path = %s has nil node type", parentPath)
+	} else if *node.NodeType == FileNodeTypeFile {
+		return fmt.Errorf("parent path = %s is a file node, not directory", parentPath)
 	} else {
-		parentPath := strings.Join(parentPathSlice, "/")
-		return s.findFileNode(parentPath) != nil
+		return nil
 	}
 }
 
-func (s *SourceCode) addDirectory(add AddDirectory) error {
-	if s.findFileNode(add.FilePath) != nil {
-		return fmt.Errorf("filePath = %s already exists", add.FilePath)
-	}
-	if !s.existsParentDir(add.FilePath) {
-		return fmt.Errorf("filePath = %s already exists", add.FilePath)
+func (s *SourceCode) addDirectory(directoryPath string) error {
+	if err := s.canAddDirectory(directoryPath); err != nil {
+		return fmt.Errorf("addDirectory failed, %s", err)
 	}
 
-	s.FileTree = append(s.FileTree, add.toFileNode())
+	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
 	s.sortFileTree()
 
 	return nil
 }
+
+// func (s *SourceCode) addDirectory(directoryPath string) error {
+// 	if s.findFileNode(directoryPath) != nil {
+// 		return fmt.Errorf("filePath = %s already exists", directoryPath)
+// 	}
+// 	if !s.existsParentDir(directoryPath) {
+// 		return fmt.Errorf("parent directory = %s does not exist", directoryPath)
+// 	}
+
+// 	s.FileTree = append(s.FileTree, add.toFileNode())
+// 	s.sortFileTree()
+
+// 	return nil
+// }

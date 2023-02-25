@@ -14,8 +14,8 @@ func filePathPtrSlice(filePath string) []*string {
 	split := strings.Split(filePath, "/")
 
 	var filePathSlice []*string
-	for _, v := range split {
-		filePathSlice = append(filePathSlice, &v)
+	for i := range split {
+		filePathSlice = append(filePathSlice, &split[i]) // cannot use v of `for i, v := range ...` because v has the same address throughout the loop
 	}
 
 	return filePathSlice
