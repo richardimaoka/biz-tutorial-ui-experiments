@@ -1,6 +1,7 @@
 package model2
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -60,7 +61,22 @@ func (s *SourceCode) sortFileTree() {
 	})
 }
 
+func (s *SourceCode) filePathExists(add AddDirectory) bool {
+	for _, f := range s.FileTree {
+		if add.FilePath == f.FilePathString() {
+			return true
+		}
+	}
+	return false
+}
+
 func (s *SourceCode) addDirectory(add AddDirectory) error {
+	if s.filePathExists(add) {
+		return fmt.Errorf("filePath = %s already exists", add.FilePath)
+	}
+
 	s.FileTree = append(s.FileTree, add.toFileNode())
+	s.sortFileTree()
+
 	return nil
 }
