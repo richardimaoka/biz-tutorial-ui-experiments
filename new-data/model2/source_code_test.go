@@ -75,32 +75,27 @@ func TestAll(t *testing.T) {
 		t.Run(e.name, func(t *testing.T) {
 			sc := newSourceCode()
 			for j, op := range e.operations {
+				var err error
 				switch op.nodeType {
 				case FileNodeTypeDirectory:
-					err := sc.addDirectory(op.filePath)
-					resultSuccess := err == nil
-					if resultSuccess != op.expectSuccess {
-						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
-						errMsg2 := fmt.Sprintf("operation = %+v", op)
-						errMsg3 := fmt.Sprintf("entry = %+v", e)
-						t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
-						return
-					}
+					err = sc.addDirectory(op.filePath)
 				case FileNodeTypeFile:
-					err := sc.addFile(op.filePath)
-					resultSuccess := err == nil
-					if resultSuccess != op.expectSuccess {
-						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
-						errMsg2 := fmt.Sprintf("operation = %+v", op)
-						errMsg3 := fmt.Sprintf("entry = %+v", e)
-						t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
-						return
-					}
+					err = sc.addFile(op.filePath)
 				default:
 					t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.nodeType)
 					return
 				}
+
+				resultSuccess := err == nil
+				if resultSuccess != op.expectSuccess {
+					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg2 := fmt.Sprintf("operation = %+v", op)
+					errMsg3 := fmt.Sprintf("entry = %+v", e)
+					t.Errorf("entry %d, op %d faild:\n%s\n%s\n%s", i, j, errMsg1, errMsg2, errMsg3)
+					return
+				}
 			}
+
 			compareAfterMarshal(t, e.resultFile, sc)
 		})
 	}
