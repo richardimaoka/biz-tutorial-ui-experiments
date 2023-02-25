@@ -10,8 +10,8 @@ type AddDirectory struct {
 	FilePath string
 }
 
-func splitFilePath(filePath string) []*string {
-	split := strings.Split(filePath, "/")
+func (a AddDirectory) filePathPtrSlice() []*string {
+	split := strings.Split(a.FilePath, "/")
 
 	var filePathSlice []*string
 	for _, v := range split {
@@ -23,7 +23,7 @@ func splitFilePath(filePath string) []*string {
 
 func (a AddDirectory) toFileNode() *FileNode {
 	dType := FileNodeTypeDirectory
-	split := splitFilePath(a.FilePath)
+	split := a.filePathPtrSlice()
 	offset := len(split) - 1
 	trueValue := true
 
@@ -37,7 +37,7 @@ func (a AddDirectory) toFileNode() *FileNode {
 	return &fileNode
 }
 
-func filePathLess(a, b []*string) bool {
+func lessFilePath(a, b []*string) bool {
 	if len(a) == 0 && len(b) == 0 {
 		return false //even if len(b) == 0
 	} else if /* len (a) != 0 && */ len(b) == 0 {
@@ -49,7 +49,7 @@ func filePathLess(a, b []*string) bool {
 	// now len(a) != 0 AND len(b) != 0
 
 	if a[0] == b[0] {
-		return filePathLess(a[1:], b[1:])
+		return lessFilePath(a[1:], b[1:])
 	} else {
 		return *a[0] < *b[0]
 	}
@@ -57,21 +57,37 @@ func filePathLess(a, b []*string) bool {
 
 func (s *SourceCode) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
-		return filePathLess(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
+		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
 	})
 }
 
-func (s *SourceCode) filePathExists(add AddDirectory) bool {
-	for _, f := range s.FileTree {
-		if add.FilePath == f.FilePathString() {
-			return true
+func (s *SourceCode) findFileNode(filePath string) *FileNode {
+	for _, fn := range s.FileTree {
+		if filePath == fn.FilePathString() {
+			return fn
 		}
 	}
-	return false
+
+	return nil
+}
+
+func (s *SourceCode) existsParentDir(filePath string) bool {
+	split := strings.Split(filePath, "/")
+	parentPathSlice := split[:len(split)-1]
+
+	if len(parentPathSlice) == 0 {
+		return true
+	} else {
+		parentPath := strings.Join(parentPathSlice, "/")
+		return s.findFileNode(parentPath) != nil
+	}
 }
 
 func (s *SourceCode) addDirectory(add AddDirectory) error {
-	if s.filePathExists(add) {
+	if s.findFileNode(add.FilePath) != nil {
+		return fmt.Errorf("filePath = %s already exists", add.FilePath)
+	}
+	if !s.existsParentDir(add.FilePath) {
 		return fmt.Errorf("filePath = %s already exists", add.FilePath)
 	}
 
