@@ -1,5 +1,10 @@
 package model2
 
+import (
+	"fmt"
+	"reflect"
+)
+
 type ActionTerminal struct {
 	Command          string
 	TerminalName     string
@@ -36,6 +41,22 @@ func (t *Terminal) writeOutput(action ActionTerminal) {
 
 	// works even if Nodes is nil
 	t.Nodes = append(t.Nodes, &node)
+}
+
+// pre-condition check = isLastCommandExecutable()
+func (t *Terminal) markLastCommandExecuted() error {
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("%s", err)
+	}
+
+	lastCommand, ok := lastNode.Content.(TerminalCommand)
+	if !ok {
+		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	}
+
+	lastNode.Content = lastCommand.toExecutedCommand()
+	return nil
 }
 
 // assuming typeIn() is called earlier
