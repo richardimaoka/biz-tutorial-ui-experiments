@@ -4,6 +4,57 @@ import (
 	"testing"
 )
 
+func statusString(expectSuccess bool) string {
+	if expectSuccess {
+		return "success"
+	} else {
+		return "failure"
+	}
+}
+
+func TestAll(t *testing.T) {
+	type Operation struct {
+		filePath      string
+		nodeType      FileNodeType
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		operations []Operation
+		resultFile string
+	}
+
+	var entries []Entry = []Entry{
+		{operations: []Operation{}, resultFile: "testdata/new-source-code.json"},
+	}
+
+	for _, e := range entries {
+		sc := newSourceCode()
+		for _, op := range e.operations {
+			switch op.nodeType {
+			case FileNodeTypeDirectory:
+				err := sc.addDirectory(op.filePath)
+				resultSuccess := err == nil
+				if resultSuccess != op.expectSuccess {
+					t.Errorf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					continue
+				}
+			case FileNodeTypeFile:
+				err := sc.addFile(op.filePath)
+				resultSuccess := err == nil
+				if resultSuccess != op.expectSuccess {
+					t.Errorf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					continue
+				}
+			default:
+				t.Errorf("wrong op.nodeType = %s", op.nodeType)
+				continue
+			}
+		}
+		compareAfterMarshal(t, e.resultFile, sc)
+	}
+}
+
 func TestNewSourceCode(t *testing.T) {
 	sc := newSourceCode()
 	compareAfterMarshal(t, "testdata/new-source-code.json", sc)
