@@ -1,4 +1,4 @@
-package model
+package model2
 
 type ActionTerminal struct {
 	Command          string
@@ -27,7 +27,7 @@ func (t *Terminal) changeDirectory(action ActionTerminal) {
 }
 
 //no pre-condition required, always succeed
-func (t *Terminal) writeOutput2(action ActionTerminal) {
+func (t *Terminal) writeOutput(action ActionTerminal) {
 	node := TerminalNode{
 		Content: TerminalOutput{
 			Output: &action.Output,
@@ -47,7 +47,7 @@ func (t *Terminal) Execute(action ActionTerminal) error {
 	}
 
 	if action.Output != "" {
-		t.writeOutput2(action)
+		t.writeOutput(action)
 	}
 
 	if action.CurrentDirectory != "" {
