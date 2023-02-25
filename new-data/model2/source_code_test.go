@@ -1,8 +1,6 @@
 package model2
 
 import (
-	"fmt"
-	"strings"
 	"testing"
 )
 
@@ -35,22 +33,7 @@ func TestAddDirectory1(t *testing.T) {
 	compareAfterMarshal(t, "testdata/add-directory1.json", sc)
 }
 
-func filePathPtrSlice2(filePath string) []*string {
-	split := strings.Split(filePath, "/")
-	fmt.Printf("filePathPtrSlice2 split = %v\n", split)
-
-	var filePathSlice []*string
-	for i, _ := range split {
-		filePathSlice = append(filePathSlice, &split[i])
-		fmt.Printf("filePathSlice = %v\n", filePathSlice)
-	}
-
-	return filePathSlice
-}
-
 func TestAddDirectory2(t *testing.T) {
-	filePathPtrSlice2("hello/world/goodmorning")
-
 	sc := newSourceCode()
 	if err := sc.addDirectory("hello"); err != nil {
 		t.Error(err)
@@ -61,13 +44,10 @@ func TestAddDirectory2(t *testing.T) {
 		return
 	}
 
-	// json should be same as initial state
 	compareAfterMarshal(t, "testdata/add-directory2.json", sc)
 }
 
 func TestAddDirectory3(t *testing.T) {
-	filePathPtrSlice2("hello/world/goodmorning")
-
 	sc := newSourceCode()
 	if err := sc.addDirectory("hello"); err != nil {
 		t.Error(err)
@@ -82,6 +62,40 @@ func TestAddDirectory3(t *testing.T) {
 		return
 	}
 
-	// json should be same as initial state
 	compareAfterMarshal(t, "testdata/add-directory3.json", sc)
+}
+
+func TestAddFile1(t *testing.T) {
+	sc := newSourceCode()
+	if err := sc.addFile("hello.txt"); err != nil {
+		t.Error(err)
+		return
+	}
+
+	compareAfterMarshal(t, "testdata/add-file1.json", sc)
+}
+
+func TestAddFileFailure(t *testing.T) {
+	sc := newSourceCode()
+	if err := sc.addFile("hello/world.txt"); err == nil {
+		t.Error("error expected")
+		return
+	}
+
+	// json should be same as initial state
+	compareAfterMarshal(t, "testdata/new-source-code.json", sc)
+}
+
+func TestAddFile2(t *testing.T) {
+	sc := newSourceCode()
+	if err := sc.addDirectory("hello"); err != nil {
+		t.Error(err)
+		return
+	}
+	if err := sc.addFile("hello/world.txt"); err != nil {
+		t.Error(err)
+		return
+	}
+
+	compareAfterMarshal(t, "testdata/add-file2.json", sc)
 }

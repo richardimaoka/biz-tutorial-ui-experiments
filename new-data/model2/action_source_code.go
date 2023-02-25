@@ -49,6 +49,24 @@ func (s *SourceCode) findFileNode(filePath string) *FileNode {
 	return nil
 }
 
+func (s *SourceCode) hasParentDir(filePath string) error {
+	parentPath := parentDirectoryPath(filePath)
+	if parentPath == "" {
+		return nil //parent dir = root dir
+	}
+
+	parentNode := s.findFileNode(parentPath)
+	if parentNode == nil {
+		return fmt.Errorf("parent path = %s has no directory", parentPath)
+	} else if parentNode.NodeType == nil {
+		return fmt.Errorf("parent path = %s has nil node type", parentPath)
+	} else if *parentNode.NodeType == FileNodeTypeFile {
+		return fmt.Errorf("parent path = %s is a file node, not directory", parentPath)
+	} else {
+		return nil
+	}
+}
+
 func (s *SourceCode) canAddDirectory(directoryPath string) error {
 	if directoryPath == "" {
 		return fmt.Errorf("cannot add directory with empty path")
@@ -61,19 +79,28 @@ func (s *SourceCode) canAddDirectory(directoryPath string) error {
 		return fmt.Errorf("file path = %s already exists", directoryPath)
 	}
 
-	parentPath := parentDirectoryPath(directoryPath)
-	if parentPath == "" {
-		return nil //parent dir = root dir
+	if err := s.hasParentDir(directoryPath); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SourceCode) canAddFile(filePath string) error {
+	if filePath == "" {
+		return fmt.Errorf("cannot add file with empty path")
+	}
+	if strings.HasSuffix(filePath, "/") {
+		return fmt.Errorf("file path = %s ends in slash", filePath)
 	}
 
-	node := s.findFileNode(parentPath)
-	if node.NodeType == nil {
-		return fmt.Errorf("parent path = %s has nil node type", parentPath)
-	} else if *node.NodeType == FileNodeTypeFile {
-		return fmt.Errorf("parent path = %s is a file node, not directory", parentPath)
-	} else {
-		return nil
+	if s.findFileNode(filePath) != nil {
+		return fmt.Errorf("file path = %s already exists", filePath)
 	}
+
+	if err := s.hasParentDir(filePath); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *SourceCode) addDirectory(directoryPath string) error {
@@ -82,6 +109,17 @@ func (s *SourceCode) addDirectory(directoryPath string) error {
 	}
 
 	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
+	s.sortFileTree()
+
+	return nil
+}
+
+func (s *SourceCode) addFile(filePath string) error {
+	if err := s.canAddFile(filePath); err != nil {
+		return fmt.Errorf("addFile failed, %s", err)
+	}
+
+	s.FileTree = append(s.FileTree, fileNode(filePath))
 	s.sortFileTree()
 
 	return nil
