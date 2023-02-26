@@ -53,7 +53,7 @@ func (s *SourceCodeExtended) hasParentDir(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
+func (s *SourceCodeExtended) canAddDirectoryNode(directoryPath string) error {
 	if err := validateFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot add directory, %s", err)
 	}
@@ -68,7 +68,7 @@ func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canDeleteDirectory(directoryPath string) error {
+func (s *SourceCodeExtended) canDeleteDirectoryNode(directoryPath string) error {
 	if err := validateFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot delete directory, %s", err)
 	}
@@ -80,7 +80,7 @@ func (s *SourceCodeExtended) canDeleteDirectory(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canAddFile(filePath string) error {
+func (s *SourceCodeExtended) canAddFileNode(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file, %s", err)
 	}
@@ -95,7 +95,7 @@ func (s *SourceCodeExtended) canAddFile(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
+func (s *SourceCodeExtended) canDeleteFileNode(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot delete file, %s", err)
 	}
@@ -144,7 +144,7 @@ func NewSourceCode() *SourceCodeExtended {
 }
 
 func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
-	if err := s.canAddDirectory(directoryPath); err != nil {
+	if err := s.canAddDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("AddDirectoryNode failed, %s", err)
 	}
 
@@ -156,7 +156,7 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 }
 
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
-	if err := s.canDeleteDirectory(filePath); err != nil {
+	if err := s.canDeleteDirectoryNode(filePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
 
@@ -174,7 +174,7 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 }
 
 func (s *SourceCodeExtended) AddFileNode(filePath string) error {
-	if err := s.canAddFile(filePath); err != nil {
+	if err := s.canAddFileNode(filePath); err != nil {
 		return fmt.Errorf("AddFileNode failed, %s", err)
 	}
 
@@ -186,7 +186,7 @@ func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 }
 
 func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
-	if err := s.canDeleteFile(filePath); err != nil {
+	if err := s.canDeleteFileNode(filePath); err != nil {
 		return fmt.Errorf("DeleteFileNode failed, %s", err)
 	}
 
