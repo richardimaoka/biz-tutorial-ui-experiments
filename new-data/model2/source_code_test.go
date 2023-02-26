@@ -115,11 +115,11 @@ func runEntries(t *testing.T, entries []Entry) {
 				var err error
 				switch op.operationType {
 				case OpAddDirectory:
-					err = sc.addDirectory(op.filePath)
+					err = sc.AddDirectoryNode(op.filePath)
 				case OpAddFile:
-					err = sc.addFile(op.filePath)
+					err = sc.AddFileNode(op.filePath)
 				case OpDeleteFile:
-					err = sc.deleteFile(op.filePath)
+					err = sc.DeleteFileNode(op.filePath)
 				default:
 					t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.operationType)
 					return

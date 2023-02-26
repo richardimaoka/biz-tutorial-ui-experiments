@@ -105,7 +105,9 @@ func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) addDirectory(directoryPath string) error {
+// public methods
+
+func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectory(directoryPath); err != nil {
 		return fmt.Errorf("addDirectory failed, %s", err)
 	}
@@ -116,7 +118,7 @@ func (s *SourceCodeExtended) addDirectory(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) addFile(filePath string) error {
+func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 	if err := s.canAddFile(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
@@ -127,7 +129,7 @@ func (s *SourceCodeExtended) addFile(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) addFileContent(filePath, content string) error {
+func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
 	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
@@ -138,7 +140,7 @@ func (s *SourceCodeExtended) addFileContent(filePath, content string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) deleteFile(filePath string) error {
+func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFile(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
