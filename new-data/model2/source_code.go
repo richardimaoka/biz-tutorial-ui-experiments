@@ -1,5 +1,10 @@
 package model2
 
-func newSourceCode() *SourceCode {
-	return &SourceCode{}
+type SourceCodeExtended struct {
+	SourceCode
+	FileContents map[string]OpenFile `json:"fileContents"`
+}
+
+func newSourceCode() *SourceCodeExtended {
+	return &SourceCodeExtended{}
 }

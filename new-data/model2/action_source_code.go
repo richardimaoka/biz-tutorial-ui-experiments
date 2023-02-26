@@ -33,13 +33,13 @@ func parentDirectoryPath(filePath string) string {
 	return strings.Join(split[:len(split)-1], "")
 }
 
-func (s *SourceCode) sortFileTree() {
+func (s *SourceCodeExtended) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
 	})
 }
 
-func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
+func (s *SourceCodeExtended) findFileNode(filePath string) (int, *FileNode) {
 	for i, fn := range s.FileTree {
 		if filePath == fn.FilePathString() {
 			return i, fn
@@ -49,7 +49,7 @@ func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
 	return -1, nil
 }
 
-func (s *SourceCode) hasParentDir(filePath string) error {
+func (s *SourceCodeExtended) hasParentDir(filePath string) error {
 	parentPath := parentDirectoryPath(filePath)
 	if parentPath == "" {
 		return nil //parent dir = root dir
@@ -67,7 +67,7 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 	}
 }
 
-func (s *SourceCode) canAddDirectory(directoryPath string) error {
+func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
 	if directoryPath == "" {
 		return fmt.Errorf("cannot add directory with empty path")
 	}
@@ -85,7 +85,7 @@ func (s *SourceCode) canAddDirectory(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCode) canAddFile(filePath string) error {
+func (s *SourceCodeExtended) canAddFile(filePath string) error {
 	if filePath == "" {
 		return fmt.Errorf("cannot add file with empty path")
 	}
@@ -103,7 +103,7 @@ func (s *SourceCode) canAddFile(filePath string) error {
 	return nil
 }
 
-func (s *SourceCode) canDeleteFile(filePath string) error {
+func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
 	if filePath == "" {
 		return fmt.Errorf("cannot delete file with empty path")
 	}
@@ -127,7 +127,7 @@ func (s *SourceCode) canDeleteFile(filePath string) error {
 	}
 }
 
-func (s *SourceCode) addDirectory(directoryPath string) error {
+func (s *SourceCodeExtended) addDirectory(directoryPath string) error {
 	if err := s.canAddDirectory(directoryPath); err != nil {
 		return fmt.Errorf("addDirectory failed, %s", err)
 	}
@@ -138,7 +138,7 @@ func (s *SourceCode) addDirectory(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCode) addFile(filePath string) error {
+func (s *SourceCodeExtended) addFile(filePath string) error {
 	if err := s.canAddFile(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
@@ -149,7 +149,7 @@ func (s *SourceCode) addFile(filePath string) error {
 	return nil
 }
 
-func (s *SourceCode) deleteFile(filePath string) error {
+func (s *SourceCodeExtended) deleteFile(filePath string) error {
 	if err := s.canDeleteFile(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}

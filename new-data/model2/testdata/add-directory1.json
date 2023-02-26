@@ -8,5 +8,6 @@
       "filePath": ["hello"]
     }
   ],
-  "openFile": null
+  "openFile": null,
+  "fileContents": null
 }

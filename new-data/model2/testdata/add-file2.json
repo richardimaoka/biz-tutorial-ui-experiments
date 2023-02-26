@@ -15,5 +15,6 @@
       "filePath": ["hello", "world.txt"]
     }
   ],
-  "openFile": null
+  "openFile": null,
+  "fileContents": null
 }

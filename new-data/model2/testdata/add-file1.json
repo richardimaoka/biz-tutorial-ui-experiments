@@ -8,5 +8,6 @@
       "filePath": ["hello.txt"]
     }
   ],
-  "openFile": null
+  "openFile": null,
+  "fileContents": null
 }
