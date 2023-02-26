@@ -90,13 +90,21 @@ func TestFileCases(t *testing.T) {
 				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
 			}, resultFile: "testdata/add-file2.json"},
 
-		{name: "add_and_remove_a_file",
+		{name: "add_and_delete_a_file",
 			operations: []Operation{
 				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
 				{filePath: "hello.txt", operationType: OpDeleteFile, expectSuccess: true},
 			}, resultFile: "testdata/new-source-code.json"},
 
-		{name: "add_and_remove_a_nested_file",
+		{name: "add_three_files_and_delete_one",
+			operations: []Operation{
+				{filePath: "goodmorning.txt", operationType: OpAddFile, expectSuccess: true},
+				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
+				{filePath: "evening.txt", operationType: OpAddFile, expectSuccess: true},
+				{filePath: "goodmorning.txt", operationType: OpDeleteFile, expectSuccess: true},
+			}, resultFile: "testdata/add-file3.json"},
+
+		{name: "add_and_delete_a_nested_file",
 			operations: []Operation{
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},

@@ -1,0 +1,20 @@
+{
+  "fileTree": [
+    {
+      "nodeType": "FILE",
+      "offset": 0,
+      "isUpdated": true,
+      "name": "evening.txt",
+      "filePath": ["evening.txt"]
+    },
+    {
+      "nodeType": "FILE",
+      "offset": 0,
+      "isUpdated": true,
+      "name": "hello.txt",
+      "filePath": ["hello.txt"]
+    }
+  ],
+  "openFile": null,
+  "fileContents": null
+}
