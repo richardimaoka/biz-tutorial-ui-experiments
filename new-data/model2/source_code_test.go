@@ -110,7 +110,7 @@ func TestFileCases(t *testing.T) {
 func runEntries(t *testing.T, entries []Entry) {
 	for i, e := range entries {
 		t.Run(e.name, func(t *testing.T) {
-			sc := newSourceCode()
+			sc := NewSourceCode()
 			for j, op := range e.operations {
 				var err error
 				switch op.operationType {

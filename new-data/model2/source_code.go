@@ -10,10 +10,6 @@ type SourceCodeExtended struct {
 	FileContents map[string]OpenFile `json:"fileContents"`
 }
 
-func newSourceCode() *SourceCodeExtended {
-	return &SourceCodeExtended{}
-}
-
 func (s *SourceCodeExtended) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
@@ -123,6 +119,9 @@ func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
 }
 
 // public methods
+func NewSourceCode() *SourceCodeExtended {
+	return &SourceCodeExtended{}
+}
 
 func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectory(directoryPath); err != nil {
