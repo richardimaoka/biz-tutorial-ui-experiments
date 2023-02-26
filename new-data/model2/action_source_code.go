@@ -24,22 +24,31 @@ func (s *SourceCodeExtended) findFileNode(filePath string) (int, *FileNode) {
 	return -1, nil
 }
 
+func (s *SourceCodeExtended) validateNode(filePath string, expectedNodeType FileNodeType) error {
+	_, node := s.findFileNode(filePath)
+	if node == nil {
+		return fmt.Errorf("filePath = %s has no node", filePath)
+	} else if node.NodeType == nil {
+		return fmt.Errorf("filePath = %s has nil node type", filePath)
+	} else if *node.NodeType != FileNodeTypeDirectory {
+		return fmt.Errorf("filePath = %s has node type = %s, but expected %s", filePath, node.NodeType, expectedNodeType)
+	} else {
+		return nil
+	}
+}
+
 func (s *SourceCodeExtended) hasParentDir(filePath string) error {
 	parentPath := parentDirectoryPath(filePath)
 	if parentPath == "" {
 		return nil //parent dir = root dir
 	}
 
-	_, parentNode := s.findFileNode(parentPath)
-	if parentNode == nil {
-		return fmt.Errorf("parent path = %s has no directory", parentPath)
-	} else if parentNode.NodeType == nil {
-		return fmt.Errorf("parent path = %s has nil node type", parentPath)
-	} else if *parentNode.NodeType == FileNodeTypeFile {
-		return fmt.Errorf("parent path = %s is a file node, not directory", parentPath)
-	} else {
-		return nil
+	err := s.validateNode(parentPath, FileNodeTypeDirectory)
+	if err != nil {
+		return fmt.Errorf("no parent dir, %s", err)
 	}
+
+	return nil
 }
 
 func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
@@ -77,20 +86,11 @@ func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
 		return fmt.Errorf("cannot delete file, %s", err)
 	}
 
-	_, node := s.findFileNode(filePath)
-	if node == nil {
-		return fmt.Errorf("cannot add file, file path = %s does not exists", filePath)
+	if err := s.validateNode(filePath, FileNodeTypeFile); err != nil {
+		return fmt.Errorf("cannot delete non-existent file %s", err)
 	}
 
-	if node.NodeType == nil {
-		return fmt.Errorf("file path = %s has nil node type", filePath)
-	} else if *node.NodeType == FileNodeTypeDirectory {
-		return fmt.Errorf("file path = %s is a directory, not file", filePath)
-	} else if *node.NodeType == FileNodeTypeFile {
-		return nil
-	} else {
-		return fmt.Errorf("file path = %s has unkown node type = %s", filePath, *node.NodeType)
-	}
+	return nil
 }
 
 func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
