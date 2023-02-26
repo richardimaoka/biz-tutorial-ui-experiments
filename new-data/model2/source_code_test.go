@@ -84,12 +84,6 @@ func TestFileCases(t *testing.T) {
 				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
 			}, resultFile: "testdata/add-file2.json"},
 
-		{name: "add_two_files",
-			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
-			}, resultFile: "testdata/add-file2.json"},
-
 		{name: "add_and_delete_a_file",
 			operations: []Operation{
 				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
@@ -109,7 +103,7 @@ func TestFileCases(t *testing.T) {
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
 				{filePath: "hello/world.txt", operationType: OpDeleteFile, expectSuccess: true},
-			}, resultFile: "testdata/add-directory1.json"},
+			}, resultFile: "testdata/add-delete.json"},
 	}
 
 	runEntries(t, entries)

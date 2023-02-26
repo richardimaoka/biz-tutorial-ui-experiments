@@ -118,6 +118,13 @@ func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
 	return nil
 }
 
+func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
+	falseValue := false
+	for _, v := range s.FileTree {
+		v.IsUpdated = &falseValue
+	}
+}
+
 // public methods
 func NewSourceCode() *SourceCodeExtended {
 	return &SourceCodeExtended{}
@@ -128,6 +135,7 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 		return fmt.Errorf("addDirectory failed, %s", err)
 	}
 
+	s.setAllIsUpdatedFalse()
 	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
 	s.sortFileTree()
 
@@ -139,6 +147,7 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
+	s.setAllIsUpdatedFalse()
 	i, _ := s.findFileNode(filePath)
 	if len(s.FileTree) == 1 && i != -1 {
 		s.FileTree = nil
@@ -155,6 +164,7 @@ func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
+	s.setAllIsUpdatedFalse()
 	s.FileTree = append(s.FileTree, fileNode(filePath))
 	s.sortFileTree()
 
@@ -166,6 +176,7 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
+	s.setAllIsUpdatedFalse()
 	i, _ := s.findFileNode(filePath)
 	if len(s.FileTree) == 1 && i != -1 {
 		s.FileTree = nil
