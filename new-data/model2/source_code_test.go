@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+type OperationType string
+
+const (
+	OpAddDirectory OperationType = "Add Directory"
+	OpAddFile      OperationType = "Add File"
+)
+
+type Operation struct {
+	filePath      string
+	operationType OperationType
+	expectSuccess bool
+}
+
+type Entry struct {
+	name       string
+	operations []Operation
+	resultFile string
+}
+
 func statusString(expectSuccess bool) string {
 	if expectSuccess {
 		return "success"
@@ -13,25 +32,7 @@ func statusString(expectSuccess bool) string {
 	}
 }
 
-func TestAll(t *testing.T) {
-	type OperationType string
-	const (
-		OpAddDirectory OperationType = "Add Directory"
-		OpAddFile      OperationType = "Add File"
-	)
-
-	type Operation struct {
-		filePath      string
-		operationType OperationType
-		expectSuccess bool
-	}
-
-	type Entry struct {
-		name       string
-		operations []Operation
-		resultFile string
-	}
-
+func TestDirectoryCases(t *testing.T) {
 	var entries []Entry = []Entry{
 		{name: "create SourceCode",
 			operations: []Operation{}, // no operation
@@ -59,7 +60,13 @@ func TestAll(t *testing.T) {
 				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "aloha", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory3.json"},
+	}
 
+	runEntries(t, entries)
+}
+
+func TestFileCases(t *testing.T) {
+	var entries []Entry = []Entry{
 		{name: "add a file",
 			operations: []Operation{
 				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
@@ -83,6 +90,10 @@ func TestAll(t *testing.T) {
 			}, resultFile: "testdata/add-file2.json"},
 	}
 
+	runEntries(t, entries)
+}
+
+func runEntries(t *testing.T, entries []Entry) {
 	for i, e := range entries {
 		t.Run(e.name, func(t *testing.T) {
 			sc := newSourceCode()
@@ -107,7 +118,6 @@ func TestAll(t *testing.T) {
 					return
 				}
 			}
-
 			compareAfterMarshal(t, e.resultFile, sc)
 		})
 	}
