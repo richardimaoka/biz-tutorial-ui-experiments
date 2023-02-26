@@ -10,5 +10,6 @@ func openFile(filePath string, content string) *OpenFile {
 		Content:       &content,
 		IsFullContent: &trueValue,
 	}
+
 	return &file
 }

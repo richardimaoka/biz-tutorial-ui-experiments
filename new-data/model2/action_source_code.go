@@ -127,6 +127,21 @@ func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
 	}
 }
 
+func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
+	if filePath == "" {
+		return fmt.Errorf("cannot add file with empty path")
+	}
+	if strings.HasSuffix(filePath, "/") {
+		return fmt.Errorf("file path = %s ends in slash", filePath)
+	}
+
+	if _, ok := s.FileContents[filePath]; ok {
+		return fmt.Errorf("file path = %s already exists", filePath)
+	}
+
+	return nil
+}
+
 func (s *SourceCodeExtended) addDirectory(directoryPath string) error {
 	if err := s.canAddDirectory(directoryPath); err != nil {
 		return fmt.Errorf("addDirectory failed, %s", err)
@@ -140,6 +155,17 @@ func (s *SourceCodeExtended) addDirectory(directoryPath string) error {
 
 func (s *SourceCodeExtended) addFile(filePath string) error {
 	if err := s.canAddFile(filePath); err != nil {
+		return fmt.Errorf("addFile failed, %s", err)
+	}
+
+	s.FileTree = append(s.FileTree, fileNode(filePath))
+	s.sortFileTree()
+
+	return nil
+}
+
+func (s *SourceCodeExtended) addFileContent(filePath, content string) error {
+	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
