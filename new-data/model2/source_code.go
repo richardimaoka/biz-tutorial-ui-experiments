@@ -73,7 +73,7 @@ func (s *SourceCodeExtended) canDeleteDirectory(directoryPath string) error {
 	}
 
 	if err := s.validateNode(directoryPath, FileNodeTypeDirectory); err != nil {
-		return fmt.Errorf("cannot delete non-existent file %s", err)
+		return fmt.Errorf("cannot delete non-existent directory %s", err)
 	}
 
 	return nil
@@ -118,6 +118,18 @@ func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
 	return nil
 }
 
+func (s *SourceCodeExtended) canDeleteFileContent(filePath string) error {
+	if err := validateFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot delete file content, %s", err)
+	}
+
+	if _, ok := s.FileContents[filePath]; !ok {
+		return fmt.Errorf("cannot delete non-existent file content = %s", filePath)
+	}
+
+	return nil
+}
+
 func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
 	falseValue := false
 	for _, v := range s.FileTree {
@@ -142,6 +154,7 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
+//TODO: delete a directory holding dirs and files
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	if err := s.canDeleteDirectory(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
