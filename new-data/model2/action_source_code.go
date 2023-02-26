@@ -66,6 +66,18 @@ func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
 	return nil
 }
 
+func (s *SourceCodeExtended) canDeleteDirectory(directoryPath string) error {
+	if err := validateFilePath(directoryPath); err != nil {
+		return fmt.Errorf("cannot delete directory, %s", err)
+	}
+
+	if err := s.validateNode(directoryPath, FileNodeTypeDirectory); err != nil {
+		return fmt.Errorf("cannot delete non-existent file %s", err)
+	}
+
+	return nil
+}
+
 func (s *SourceCodeExtended) canAddFile(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file, %s", err)
@@ -118,19 +130,24 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) AddFileNode(filePath string) error {
-	if err := s.canAddFile(filePath); err != nil {
+func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
+	if err := s.canDeleteDirectory(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
-	s.FileTree = append(s.FileTree, fileNode(filePath))
+	i, _ := s.findFileNode(filePath)
+	if len(s.FileTree) == 1 && i != -1 {
+		s.FileTree = nil
+	} else {
+		s.FileTree = append(s.FileTree[:i], s.FileTree[i+1:]...)
+	}
 	s.sortFileTree()
 
 	return nil
 }
 
-func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
-	if err := s.canAddFileContent(filePath); err != nil {
+func (s *SourceCodeExtended) AddFileNode(filePath string) error {
+	if err := s.canAddFile(filePath); err != nil {
 		return fmt.Errorf("addFile failed, %s", err)
 	}
 
@@ -151,6 +168,17 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	} else {
 		s.FileTree = append(s.FileTree[:i], s.FileTree[i+1:]...)
 	}
+	s.sortFileTree()
+
+	return nil
+}
+
+func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
+	if err := s.canAddFileContent(filePath); err != nil {
+		return fmt.Errorf("addFile failed, %s", err)
+	}
+
+	s.FileTree = append(s.FileTree, fileNode(filePath))
 	s.sortFileTree()
 
 	return nil
