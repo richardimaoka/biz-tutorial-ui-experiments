@@ -8,9 +8,10 @@ import (
 type OperationType string
 
 const (
-	OpAddDirectory OperationType = "Add Directory"
-	OpAddFile      OperationType = "Add File"
-	OpDeleteFile   OperationType = "Delete File"
+	OpAddDirectory    OperationType = "Add Directory"
+	OpDeleteDirectory OperationType = "Delete Directory"
+	OpAddFile         OperationType = "Add File"
+	OpDeleteFile      OperationType = "Delete File"
 )
 
 type Operation struct {
@@ -33,29 +34,29 @@ func statusString(expectSuccess bool) string {
 	}
 }
 
-func TestDirectoryCases(t *testing.T) {
+func TestAddDirectoryCases(t *testing.T) {
 	var entries []Entry = []Entry{
 		{name: "create_SourceCode",
 			operations: []Operation{}, // no operation
 			resultFile: "testdata/new-source-code.json"},
 
-		{name: "error_on_adding_dir_with_empty_file_path",
+		{name: "error_add_dir_empty_file_path",
 			operations: []Operation{
 				{filePath: "", operationType: OpAddDirectory, expectSuccess: false}, // "" is a wrong file path
 			}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
 
-		{name: "add_a_single_dir",
+		{name: "add_single_dir",
 			operations: []Operation{
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory1.json"},
 
-		{name: "add_a_dir_and_its_child_dir",
+		{name: "add_dir_and_child_dir",
 			operations: []Operation{
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory2.json"},
 
-		{name: "add_a_dir_and_its_child_dir_and_another_dir",
+		{name: "add_dir_and_child_dir_and_another_dir",
 			operations: []Operation{
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
@@ -66,6 +67,24 @@ func TestDirectoryCases(t *testing.T) {
 	runEntries(t, entries)
 }
 
+func TestDeleteDirectoryCases(t *testing.T) {
+	var entries []Entry = []Entry{
+		{name: "add_and_delete_dir",
+			operations: []Operation{
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello", operationType: OpDeleteDirectory, expectSuccess: true},
+			}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
+
+		{name: "add_nested_dirs_and_delete_dir",
+			operations: []Operation{
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
+			}, resultFile: "testdata/delete-directory1.json"},
+	}
+
+	runEntries(t, entries)
+}
 func TestFileCases(t *testing.T) {
 	var entries []Entry = []Entry{
 		{name: "add_a_file",
@@ -118,6 +137,8 @@ func runEntries(t *testing.T, entries []Entry) {
 				switch op.operationType {
 				case OpAddDirectory:
 					err = sc.AddDirectoryNode(op.filePath)
+				case OpDeleteDirectory:
+					err = sc.DeleteDirectoryNode(op.filePath)
 				case OpAddFile:
 					err = sc.AddFileNode(op.filePath)
 				case OpDeleteFile:
@@ -129,16 +150,16 @@ func runEntries(t *testing.T, entries []Entry) {
 
 				resultSuccess := err == nil
 				if resultSuccess != op.expectSuccess {
-					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s", statusString(op.expectSuccess), statusString(resultSuccess))
+					errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s\n", statusString(op.expectSuccess), statusString(resultSuccess))
 
 					var errMsg2 string = ""
 					if op.expectSuccess {
-						errMsg2 = "error: " + err.Error()
+						errMsg2 = "error: " + err.Error() + "\n"
 					}
 
-					errMsg3 := fmt.Sprintf("operation = %+v", op)
+					errMsg3 := fmt.Sprintf("operation = %+v\n", op)
 					errMsg4 := fmt.Sprintf("entry = %+v", e)
-					t.Errorf("%s\n%s\n%s\n%s", errMsg1, errMsg2, errMsg3, errMsg4)
+					t.Errorf("%s%s%s%s", errMsg1, errMsg2, errMsg3, errMsg4)
 					return
 				}
 			}

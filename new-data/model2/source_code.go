@@ -73,7 +73,7 @@ func (s *SourceCodeExtended) canDeleteDirectory(directoryPath string) error {
 	}
 
 	if err := s.validateNode(directoryPath, FileNodeTypeDirectory); err != nil {
-		return fmt.Errorf("cannot delete non-existent directory %s", err)
+		return fmt.Errorf("cannot delete directory, %s", err)
 	}
 
 	return nil
@@ -100,7 +100,7 @@ func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
 	}
 
 	if err := s.validateNode(filePath, FileNodeTypeFile); err != nil {
-		return fmt.Errorf("cannot delete non-existent file %s", err)
+		return fmt.Errorf("cannot delete file, %s", err)
 	}
 
 	return nil
@@ -124,7 +124,7 @@ func (s *SourceCodeExtended) canDeleteFileContent(filePath string) error {
 	}
 
 	if _, ok := s.FileContents[filePath]; !ok {
-		return fmt.Errorf("cannot delete non-existent file content = %s", filePath)
+		return fmt.Errorf("cannot delete file content, file path = %s is non-existent", filePath)
 	}
 
 	return nil
@@ -144,7 +144,7 @@ func NewSourceCode() *SourceCodeExtended {
 
 func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectory(directoryPath); err != nil {
-		return fmt.Errorf("addDirectory failed, %s", err)
+		return fmt.Errorf("AddDirectoryNode failed, %s", err)
 	}
 
 	s.setAllIsUpdatedFalse()
@@ -157,7 +157,7 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 //TODO: delete a directory holding dirs and files
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	if err := s.canDeleteDirectory(filePath); err != nil {
-		return fmt.Errorf("addFile failed, %s", err)
+		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
 
 	s.setAllIsUpdatedFalse()
@@ -174,7 +174,7 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 
 func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 	if err := s.canAddFile(filePath); err != nil {
-		return fmt.Errorf("addFile failed, %s", err)
+		return fmt.Errorf("AddFileNode failed, %s", err)
 	}
 
 	s.setAllIsUpdatedFalse()
@@ -186,7 +186,7 @@ func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 
 func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFile(filePath); err != nil {
-		return fmt.Errorf("addFile failed, %s", err)
+		return fmt.Errorf("DeleteFileNode failed, %s", err)
 	}
 
 	s.setAllIsUpdatedFalse()
@@ -203,7 +203,7 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 
 func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
 	if err := s.canAddFileContent(filePath); err != nil {
-		return fmt.Errorf("addFile failed, %s", err)
+		return fmt.Errorf("AddFileContent failed, %s", err)
 	}
 
 	s.FileTree = append(s.FileTree, fileNode(filePath))
