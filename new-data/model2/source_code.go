@@ -3,6 +3,7 @@ package model2
 import (
 	"fmt"
 	"sort"
+	"strings"
 )
 
 type SourceCodeExtended struct {
@@ -156,17 +157,21 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 
 //TODO: delete a directory holding dirs and files
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
+	fmt.Println("DeleteDirectoryNode filePath =", filePath)
 	if err := s.canDeleteDirectory(filePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
 
 	s.setAllIsUpdatedFalse()
-	i, _ := s.findFileNode(filePath)
-	if len(s.FileTree) == 1 && i != -1 {
-		s.FileTree = nil
-	} else {
-		s.FileTree = append(s.FileTree[:i], s.FileTree[i+1:]...)
+	var newFileTree []*FileNode
+	for _, v := range s.FileTree {
+		fmt.Println(v.FilePathString(), "HasPrefix = ", strings.HasPrefix(v.FilePathString(), filePath))
+		if !strings.HasPrefix(v.FilePathString(), filePath) {
+			newFileTree = append(newFileTree, v)
+		}
 	}
+	fmt.Printf("%+v\n", newFileTree)
+	s.FileTree = newFileTree
 	s.sortFileTree()
 
 	return nil

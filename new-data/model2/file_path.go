@@ -36,7 +36,7 @@ func filePathPtrSlice(filePath string) []*string {
 
 func parentDirectoryPath(filePath string) string {
 	split := strings.Split(filePath, "/")
-	return strings.Join(split[:len(split)-1], "")
+	return strings.Join(split[:len(split)-1], "/")
 }
 
 func validateFilePath(filePath string) error {

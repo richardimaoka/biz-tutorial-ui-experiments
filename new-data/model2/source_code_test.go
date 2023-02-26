@@ -75,12 +75,31 @@ func TestDeleteDirectoryCases(t *testing.T) {
 				{filePath: "hello", operationType: OpDeleteDirectory, expectSuccess: true},
 			}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
 
-		{name: "add_nested_dirs_and_delete_dir",
+		{name: "add_nested_dirs_and_delete_child",
 			operations: []Operation{
 				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
 			}, resultFile: "testdata/delete-directory1.json"},
+
+		{name: "add_nested_dirs_and_delete_middle",
+			operations: []Operation{
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world/japan", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "goodmorning", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "goodmorning/hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "goodmorning/hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
+			}, resultFile: "testdata/delete-directory2.json"},
+
+		{name: "add_deep_nested_dirs_and_delete_parent",
+			operations: []Operation{
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world/japan", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello", operationType: OpDeleteDirectory, expectSuccess: true},
+			}, resultFile: "testdata/new-source-code.json"},
 	}
 
 	runEntries(t, entries)
