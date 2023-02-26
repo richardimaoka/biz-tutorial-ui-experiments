@@ -14,9 +14,15 @@ func statusString(expectSuccess bool) string {
 }
 
 func TestAll(t *testing.T) {
+	type OperationType string
+	const (
+		OpAddDirectory OperationType = "Add Directory"
+		OpAddFile      OperationType = "Add File"
+	)
+
 	type Operation struct {
 		filePath      string
-		nodeType      FileNodeType
+		operationType OperationType
 		expectSuccess bool
 	}
 
@@ -33,41 +39,47 @@ func TestAll(t *testing.T) {
 
 		{name: "error on adding dir with empty file path",
 			operations: []Operation{
-				{filePath: "", nodeType: FileNodeTypeDirectory, expectSuccess: false}, // "" is a wrong file path
+				{filePath: "", operationType: OpAddDirectory, expectSuccess: false}, // "" is a wrong file path
 			}, resultFile: "testdata/new-source-code.json"}, // json should be same as initial state
 
 		{name: "add a single dir",
 			operations: []Operation{
-				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory1.json"},
 
 		{name: "add a dir and its child dir",
 			operations: []Operation{
-				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
-				{filePath: "hello/world", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory2.json"},
 
 		{name: "add a dir and its child dir and another dir",
 			operations: []Operation{
-				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
-				{filePath: "hello/world", nodeType: FileNodeTypeDirectory, expectSuccess: true},
-				{filePath: "aloha", nodeType: FileNodeTypeDirectory, expectSuccess: true},
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "aloha", operationType: OpAddDirectory, expectSuccess: true},
 			}, resultFile: "testdata/add-directory3.json"},
 
 		{name: "add a file",
 			operations: []Operation{
-				{filePath: "hello.txt", nodeType: FileNodeTypeFile, expectSuccess: true},
+				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
 			}, resultFile: "testdata/add-file1.json"},
 
 		{name: "error adding a file",
 			operations: []Operation{
-				{filePath: "hello/world.txt", nodeType: FileNodeTypeFile, expectSuccess: false},
+				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: false},
 			}, resultFile: "testdata/new-source-code.json"},
 
 		{name: "add two files",
 			operations: []Operation{
-				{filePath: "hello", nodeType: FileNodeTypeDirectory, expectSuccess: true},
-				{filePath: "hello/world.txt", nodeType: FileNodeTypeFile, expectSuccess: true},
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
+			}, resultFile: "testdata/add-file2.json"},
+
+		{name: "add two files",
+			operations: []Operation{
+				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
 			}, resultFile: "testdata/add-file2.json"},
 	}
 
@@ -76,13 +88,13 @@ func TestAll(t *testing.T) {
 			sc := newSourceCode()
 			for j, op := range e.operations {
 				var err error
-				switch op.nodeType {
-				case FileNodeTypeDirectory:
+				switch op.operationType {
+				case OpAddDirectory:
 					err = sc.addDirectory(op.filePath)
-				case FileNodeTypeFile:
+				case OpAddFile:
 					err = sc.addFile(op.filePath)
 				default:
-					t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.nodeType)
+					t.Fatalf("entry %d, op %d faild:\nwrong op.nodeType = %s", i, j, op.operationType)
 					return
 				}
 
