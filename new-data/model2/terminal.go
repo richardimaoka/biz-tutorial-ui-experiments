@@ -5,22 +5,6 @@ import (
 	"reflect"
 )
 
-// pre-condition check = isLastCommandExecutable()
-func (t *Terminal) markLastCommandExecuted() error {
-	lastNode, err := t.getLastNode()
-	if err != nil {
-		return fmt.Errorf("%s", err)
-	}
-
-	lastCommand, ok := lastNode.Content.(TerminalCommand)
-	if !ok {
-		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
-	}
-
-	lastNode.Content = lastCommand.toExecutedCommand()
-	return nil
-}
-
 func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	if len(t.Nodes) == 0 {
 		return nil, fmt.Errorf("terminal has zero nodes")
@@ -34,7 +18,7 @@ func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	return lastNode, nil
 }
 
-func (t *Terminal) isLastCommandExecutable() error {
+func (t *Terminal) isLastCommandExecutable(command string) error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
 		return fmt.Errorf("failed to terminal's last node, %s", err)
@@ -43,6 +27,10 @@ func (t *Terminal) isLastCommandExecutable() error {
 	cmd, ok := lastNode.Content.(TerminalCommand)
 	if !ok {
 		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	}
+
+	if *cmd.Command != command {
+		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
 	}
 
 	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
@@ -80,7 +68,7 @@ func (t *Terminal) ChangeCurrentDirectory(filePath string) {
 }
 
 //no pre-condition required, always succeed
-func (t *Terminal) writeOutput(output string) {
+func (t *Terminal) WriteOutput(output string) {
 	node := TerminalNode{
 		Content: TerminalOutput{
 			Output: &output,
@@ -91,21 +79,17 @@ func (t *Terminal) writeOutput(output string) {
 	t.Nodes = append(t.Nodes, &node)
 }
 
-// assuming TypeInCommand() is called earlier
-func (t *Terminal) Execute(action ActionTerminal) error {
-	//action.validate()
-	//t.validate(action)
-	if err := t.markLastCommandExecuted(); err != nil {
-		return err
+func (t *Terminal) MarkLastCommandExecuted(command string) error {
+	if err := t.isLastCommandExecutable(command); err != nil {
+		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
 	}
 
-	if action.Output != "" {
-		t.writeOutput(action.Output)
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
 	}
 
-	if action.CurrentDirectory != "" {
-		t.ChangeCurrentDirectory(action.CurrentDirectory)
-	}
-
+	falseValue := false
+	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
 	return nil
 }
