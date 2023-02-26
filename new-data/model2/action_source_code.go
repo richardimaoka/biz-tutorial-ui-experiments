@@ -39,14 +39,14 @@ func (s *SourceCode) sortFileTree() {
 	})
 }
 
-func (s *SourceCode) findFileNode(filePath string) *FileNode {
-	for _, fn := range s.FileTree {
+func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
+	for i, fn := range s.FileTree {
 		if filePath == fn.FilePathString() {
-			return fn
+			return i, fn
 		}
 	}
 
-	return nil
+	return -1, nil
 }
 
 func (s *SourceCode) hasParentDir(filePath string) error {
@@ -55,7 +55,7 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 		return nil //parent dir = root dir
 	}
 
-	parentNode := s.findFileNode(parentPath)
+	_, parentNode := s.findFileNode(parentPath)
 	if parentNode == nil {
 		return fmt.Errorf("parent path = %s has no directory", parentPath)
 	} else if parentNode.NodeType == nil {
@@ -75,7 +75,7 @@ func (s *SourceCode) canAddDirectory(directoryPath string) error {
 		return fmt.Errorf("directory path = %s ends in slash", directoryPath)
 	}
 
-	if s.findFileNode(directoryPath) != nil {
+	if _, node := s.findFileNode(directoryPath); node != nil {
 		return fmt.Errorf("file path = %s already exists", directoryPath)
 	}
 
@@ -93,7 +93,7 @@ func (s *SourceCode) canAddFile(filePath string) error {
 		return fmt.Errorf("file path = %s ends in slash", filePath)
 	}
 
-	if s.findFileNode(filePath) != nil {
+	if _, node := s.findFileNode(filePath); node != nil {
 		return fmt.Errorf("file path = %s already exists", filePath)
 	}
 
@@ -101,6 +101,30 @@ func (s *SourceCode) canAddFile(filePath string) error {
 		return err
 	}
 	return nil
+}
+
+func (s *SourceCode) canDeleteFile(filePath string) error {
+	if filePath == "" {
+		return fmt.Errorf("cannot delete file with empty path")
+	}
+	if strings.HasSuffix(filePath, "/") {
+		return fmt.Errorf("file path = %s ends in slash", filePath)
+	}
+
+	_, node := s.findFileNode(filePath)
+	if node == nil {
+		return fmt.Errorf("file path = %s does not exists", filePath)
+	}
+
+	if node.NodeType == nil {
+		return fmt.Errorf("file path = %s has nil node type", filePath)
+	} else if *node.NodeType == FileNodeTypeDirectory {
+		return fmt.Errorf("file path = %s is a directory, not file", filePath)
+	} else if *node.NodeType == FileNodeTypeFile {
+		return nil
+	} else {
+		return fmt.Errorf("file path = %s has unkown node type = %s", filePath, *node.NodeType)
+	}
 }
 
 func (s *SourceCode) addDirectory(directoryPath string) error {
@@ -120,6 +144,22 @@ func (s *SourceCode) addFile(filePath string) error {
 	}
 
 	s.FileTree = append(s.FileTree, fileNode(filePath))
+	s.sortFileTree()
+
+	return nil
+}
+
+func (s *SourceCode) deleteFile(filePath string) error {
+	if err := s.canDeleteFile(filePath); err != nil {
+		return fmt.Errorf("addFile failed, %s", err)
+	}
+
+	i, _ := s.findFileNode(filePath)
+	if len(s.FileTree) == 1 && i != -1 {
+		s.FileTree = nil
+	} else {
+		s.FileTree = append(s.FileTree[:i], s.FileTree[i+1:]...)
+	}
 	s.sortFileTree()
 
 	return nil
