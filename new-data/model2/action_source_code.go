@@ -33,6 +33,16 @@ func parentDirectoryPath(filePath string) string {
 	return strings.Join(split[:len(split)-1], "")
 }
 
+func validateFilePath(filePath string) error {
+	if filePath == "" {
+		return fmt.Errorf("empty path")
+	}
+	if strings.HasSuffix(filePath, "/") {
+		return fmt.Errorf("directory path = %s ends in slash", filePath)
+	}
+	return nil
+}
+
 func (s *SourceCodeExtended) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
@@ -68,15 +78,12 @@ func (s *SourceCodeExtended) hasParentDir(filePath string) error {
 }
 
 func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
-	if directoryPath == "" {
-		return fmt.Errorf("cannot add directory with empty path")
-	}
-	if strings.HasSuffix(directoryPath, "/") {
-		return fmt.Errorf("directory path = %s ends in slash", directoryPath)
+	if err := validateFilePath(directoryPath); err != nil {
+		return fmt.Errorf("cannot add directory, %s", err)
 	}
 
 	if _, node := s.findFileNode(directoryPath); node != nil {
-		return fmt.Errorf("file path = %s already exists", directoryPath)
+		return fmt.Errorf("cannot add directory, file path = %s already exists", directoryPath)
 	}
 
 	if err := s.hasParentDir(directoryPath); err != nil {
@@ -86,34 +93,28 @@ func (s *SourceCodeExtended) canAddDirectory(directoryPath string) error {
 }
 
 func (s *SourceCodeExtended) canAddFile(filePath string) error {
-	if filePath == "" {
-		return fmt.Errorf("cannot add file with empty path")
-	}
-	if strings.HasSuffix(filePath, "/") {
-		return fmt.Errorf("file path = %s ends in slash", filePath)
+	if err := validateFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot add file, %s", err)
 	}
 
 	if _, node := s.findFileNode(filePath); node != nil {
-		return fmt.Errorf("file path = %s already exists", filePath)
+		return fmt.Errorf("cannot add file, file path = %s already exists", filePath)
 	}
 
 	if err := s.hasParentDir(filePath); err != nil {
-		return err
+		return fmt.Errorf("cannot add file, %s", err)
 	}
 	return nil
 }
 
 func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
-	if filePath == "" {
-		return fmt.Errorf("cannot delete file with empty path")
-	}
-	if strings.HasSuffix(filePath, "/") {
-		return fmt.Errorf("file path = %s ends in slash", filePath)
+	if err := validateFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot delete file, %s", err)
 	}
 
 	_, node := s.findFileNode(filePath)
 	if node == nil {
-		return fmt.Errorf("file path = %s does not exists", filePath)
+		return fmt.Errorf("cannot add file, file path = %s does not exists", filePath)
 	}
 
 	if node.NodeType == nil {
@@ -128,15 +129,12 @@ func (s *SourceCodeExtended) canDeleteFile(filePath string) error {
 }
 
 func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
-	if filePath == "" {
-		return fmt.Errorf("cannot add file with empty path")
-	}
-	if strings.HasSuffix(filePath, "/") {
-		return fmt.Errorf("file path = %s ends in slash", filePath)
+	if err := validateFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot add file content, %s", err)
 	}
 
 	if _, ok := s.FileContents[filePath]; ok {
-		return fmt.Errorf("file path = %s already exists", filePath)
+		return fmt.Errorf("cannot add file content, file path = %s already exists", filePath)
 	}
 
 	return nil
