@@ -2,17 +2,6 @@ package model2
 
 import "strings"
 
-func filePathPtrSlice(filePath string) []*string {
-	split := strings.Split(filePath, "/")
-
-	var filePathSlice []*string
-	for i := range split {
-		filePathSlice = append(filePathSlice, &split[i]) // cannot use v of `for i, v := range ...` because v has the same address throughout the loop
-	}
-
-	return filePathSlice
-}
-
 func directoryNode(filePath string) *FileNode {
 	nodeType := FileNodeTypeDirectory
 	split := filePathPtrSlice(filePath)
