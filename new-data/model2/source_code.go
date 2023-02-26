@@ -131,6 +131,18 @@ func (s *SourceCodeExtended) canDeleteFileContent(filePath string) error {
 	return nil
 }
 
+func (s *SourceCodeExtended) canUpdateFileContent(filePath string) error {
+	if err := validateFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot update file content, %s", err)
+	}
+
+	if _, ok := s.FileContents[filePath]; !ok {
+		return fmt.Errorf("cannot update file content, file path = %s is non-existent", filePath)
+	}
+
+	return nil
+}
+
 func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
 	falseValue := false
 	for _, v := range s.FileTree {
@@ -218,5 +230,14 @@ func (s *SourceCodeExtended) DeleteFileContent(filePath, content string) error {
 	}
 
 	delete(s.FileContents, filePath)
+	return nil
+}
+
+func (s *SourceCodeExtended) UpdateFileContent(filePath, content string) error {
+	if err := s.canUpdateFileContent(filePath); err != nil {
+		return fmt.Errorf("UpdateFileContent failed, %s", err)
+	}
+
+	s.FileContents[filePath] = *openFile(filePath, content)
 	return nil
 }
