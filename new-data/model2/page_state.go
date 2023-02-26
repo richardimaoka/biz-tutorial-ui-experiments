@@ -47,7 +47,7 @@ func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
 	// pre-condition - find command's target terminal
 	terminal := p.getTerminal(terminalName)
 	if terminal == nil {
-		return fmt.Errorf("failed to type in command, terminal with name = %s not found", command.TerminalName)
+		return fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
 	}
 
 	// type in command
@@ -57,5 +57,51 @@ func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
 	p.gotoNextStep(nextNextStep)
 
 	return nil
+}
 
+func (p *PageState) RunTerminalCommand(command, terminalName string) error {
+	// 1.1 pre-conditions for next step
+	nextNextStep, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return fmt.Errorf("failed to run command, %s", err)
+	}
+
+	// pre-condition - find command's target terminal
+	terminal := p.getTerminal(terminalName)
+	if terminal == nil {
+		return fmt.Errorf("failed run command, terminal with name = %s not found", terminalName)
+	}
+
+	// 1.3 pre-conditions for TerminalCommand.UpdateSourceCode
+
+	// pre-condition AddFiles does not have a matching node in fileTree, and the parent dir
+	// pre-condition UpdateFiles has matching node in fileTree
+	// pre-condition DeleteFiles has matching node in fileTree
+
+	// 2.1 Terminal update
+	// p.updateTerminal(command.UpdateTerminal)
+
+	//execute command!
+	// if err := terminal.executeEffect(); err != nil {
+
+	// Process UpdateTerminal.Output
+
+	// 2.2 SourceCode update
+
+	// if len(command.UpdateTerminal.CurrentDirectory) > 0 {
+	// 	terminal.CurrentDirectory = []*string{}
+	// 	for _, d := range command.UpdateTerminal.CurrentDirectory {
+	// 		terminal.CurrentDirectory = append(terminal.CurrentDirectory, &d)
+	// 	}
+	// }
+
+	// Process UpdateSourceCode.AddDirectories
+
+	//TODO: sort FileTree
+
+	// update step
+	p.gotoNextStep(nextNextStep)
+
+	// return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
+	return nil
 }
