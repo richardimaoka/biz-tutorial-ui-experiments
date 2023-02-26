@@ -157,7 +157,6 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 
 //TODO: delete a directory holding dirs and files
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
-	fmt.Println("DeleteDirectoryNode filePath =", filePath)
 	if err := s.canDeleteDirectory(filePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
@@ -165,12 +164,10 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	s.setAllIsUpdatedFalse()
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
-		fmt.Println(v.FilePathString(), "HasPrefix = ", strings.HasPrefix(v.FilePathString(), filePath))
 		if !strings.HasPrefix(v.FilePathString(), filePath) {
 			newFileTree = append(newFileTree, v)
 		}
 	}
-	fmt.Printf("%+v\n", newFileTree)
 	s.FileTree = newFileTree
 	s.sortFileTree()
 
@@ -211,8 +208,15 @@ func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
 		return fmt.Errorf("AddFileContent failed, %s", err)
 	}
 
-	s.FileTree = append(s.FileTree, fileNode(filePath))
-	s.sortFileTree()
+	s.FileContents[filePath] = *openFile(filePath, content)
+	return nil
+}
 
+func (s *SourceCodeExtended) DeleteFileContent(filePath, content string) error {
+	if err := s.canDeleteFileContent(filePath); err != nil {
+		return fmt.Errorf("DeleteFileContent failed, %s", err)
+	}
+
+	delete(s.FileContents, filePath)
 	return nil
 }

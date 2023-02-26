@@ -89,7 +89,7 @@ func TestDeleteDirectoryCases(t *testing.T) {
 				{filePath: "hello/world/japan", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "goodmorning", operationType: OpAddDirectory, expectSuccess: true},
 				{filePath: "goodmorning/hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "goodmorning/hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{filePath: "goodmorning/hello/world", operationType: OpAddDirectory, expectSuccess: true}, //this is not affected by the following deletion op
 				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
 			}, resultFile: "testdata/delete-directory2.json"},
 
