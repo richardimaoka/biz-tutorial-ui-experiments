@@ -15,10 +15,3 @@ func (c TerminalCommand) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(extendedCommand)
 }
-
-func (c TerminalCommand) toExecutedCommand() TerminalCommand {
-	falseValue := false
-	c.BeforeExecution = &falseValue
-
-	return c //return copy
-}

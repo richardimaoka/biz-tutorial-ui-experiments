@@ -155,7 +155,6 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-//TODO: delete a directory holding dirs and files
 func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	if err := s.canDeleteDirectory(filePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
@@ -192,12 +191,13 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	}
 
 	s.setAllIsUpdatedFalse()
-	i, _ := s.findFileNode(filePath)
-	if len(s.FileTree) == 1 && i != -1 {
-		s.FileTree = nil
-	} else {
-		s.FileTree = append(s.FileTree[:i], s.FileTree[i+1:]...)
+	var newFileTree []*FileNode
+	for _, v := range s.FileTree {
+		if v.FilePathString() != filePath {
+			newFileTree = append(newFileTree, v)
+		}
 	}
+	s.FileTree = newFileTree
 	s.sortFileTree()
 
 	return nil
