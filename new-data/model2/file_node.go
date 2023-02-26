@@ -2,14 +2,6 @@ package model2
 
 import "strings"
 
-func (f *FileNode) FilePathString() string {
-	var s []string
-	for _, v := range f.FilePath {
-		s = append(s, *v)
-	}
-	return strings.Join(s, "/")
-}
-
 func filePathPtrSlice(filePath string) []*string {
 	split := strings.Split(filePath, "/")
 
@@ -51,4 +43,12 @@ func fileNode(filePath string) *FileNode {
 		IsUpdated: &trueValue,
 	}
 	return &node
+}
+
+func (f *FileNode) FilePathString() string {
+	var s []string
+	for _, v := range f.FilePath {
+		s = append(s, *v)
+	}
+	return strings.Join(s, "/")
 }
