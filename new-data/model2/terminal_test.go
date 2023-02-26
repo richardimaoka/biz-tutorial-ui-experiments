@@ -4,5 +4,5 @@ import "testing"
 
 func TestTerminal(t *testing.T) {
 	terminal := NewTerminal("default")
-	terminal.TypeInCommand("echo abc")
+	compareAfterMarshal(t, "testdata/terminal/new-terminal.json", terminal)
 }
