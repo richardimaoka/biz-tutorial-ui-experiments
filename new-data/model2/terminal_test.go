@@ -1,5 +1,8 @@
 package model2
 
-type TestEntry struct {
-	field int
+import "testing"
+
+func TestTerminal(t *testing.T) {
+	terminal := NewTerminal("default")
+	terminal.TypeInCommand("echo abc")
 }
