@@ -30,7 +30,7 @@ func (s *SourceCodeExtended) validateNode(filePath string, expectedNodeType File
 		return fmt.Errorf("filePath = %s has no node", filePath)
 	} else if node.NodeType == nil {
 		return fmt.Errorf("filePath = %s has nil node type", filePath)
-	} else if *node.NodeType != FileNodeTypeDirectory {
+	} else if *node.NodeType != expectedNodeType {
 		return fmt.Errorf("filePath = %s has node type = %s, but expected %s", filePath, node.NodeType, expectedNodeType)
 	} else {
 		return nil
