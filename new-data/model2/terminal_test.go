@@ -41,6 +41,7 @@ func TestTerminalTypeinFail(t *testing.T) {
 		t.Fatalf("error expected")
 	}
 
+	// not changed from the initial command
 	compareAfterMarshal(t, "testdata/terminal/type-in-command1.json", terminal)
 }
 

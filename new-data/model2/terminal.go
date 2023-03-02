@@ -18,28 +18,6 @@ func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	return lastNode, nil
 }
 
-func (t *Terminal) isLastCommandExecutable(command string) error {
-	lastNode, err := t.getLastNode()
-	if err != nil {
-		return fmt.Errorf("failed to terminal's last node, %s", err)
-	}
-
-	cmd, ok := lastNode.Content.(TerminalCommand)
-	if !ok {
-		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
-	}
-
-	if *cmd.Command != command {
-		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
-	}
-
-	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
-		return fmt.Errorf("terminal's last command is not ready for execution")
-	}
-
-	return nil
-}
-
 func (t *Terminal) canTypeInCommand() error {
 	if len(t.Nodes) == 0 {
 		return nil //allow typing in initial command
@@ -61,6 +39,28 @@ func (t *Terminal) canTypeInCommand() error {
 	default:
 		return nil
 	}
+}
+
+func (t *Terminal) isLastCommandExecutable(command string) error {
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("failed get to terminal's last node, %s", err)
+	}
+
+	cmd, ok := lastNode.Content.(TerminalCommand)
+	if !ok {
+		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+	}
+
+	if *cmd.Command != command {
+		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
+	}
+
+	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
+		return fmt.Errorf("terminal's last command is not ready for execution")
+	}
+
+	return nil
 }
 
 func (t *Terminal) canWriteOutput() error {
@@ -117,7 +117,6 @@ func (t *Terminal) TypeInCommand(command string) error {
 	return nil
 }
 
-//no pre-condition required, always succeed
 func (t *Terminal) WriteOutput(output string) error {
 	if err := t.canWriteOutput(); err != nil {
 		return fmt.Errorf("WriteOutput failed, %s", err)
