@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "echo abcde",
+  "output": "abcde",
+  "currentDirectory": ""
+}
