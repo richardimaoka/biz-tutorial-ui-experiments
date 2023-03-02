@@ -7,14 +7,13 @@
       "content": {
         "contentType": "TerminalCommand",
         "beforeExecution": false,
-        "command": "mkdir abc"
+        "command": "echo abc"
       }
     },
     {
       "content": {
-        "contentType": "TerminalCommand",
-        "beforeExecution": true,
-        "command": "mkdir cde"
+        "contentType": "TerminalOutput",
+        "output": "abc"
       }
     }
   ]

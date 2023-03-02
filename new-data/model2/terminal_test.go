@@ -24,26 +24,11 @@ func TestTerminalTypein2(t *testing.T) {
 	if err := terminal.MarkLastCommandExecuted("mkdir abc"); err != nil {
 		t.Fatalf("no error expected, but %s", err)
 	}
-	if err := terminal.TypeInCommand("mkdir cde"); err == nil {
-		t.Fatalf("error expected")
+	if err := terminal.TypeInCommand("mkdir cde"); err != nil {
+		t.Fatalf("no error expected, but %s", err)
 	}
 
 	compareAfterMarshal(t, "testdata/terminal/type-in-command2.json", terminal)
-}
-
-func TestTerminalTypein3(t *testing.T) {
-	terminal := NewTerminal("default")
-	if err := terminal.TypeInCommand("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.MarkLastCommandExecuted("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.TypeInCommand("mkdir cde"); err == nil {
-		t.Fatalf("error expected")
-	}
-
-	compareAfterMarshal(t, "testdata/terminal/type-in-command3.json", terminal)
 }
 
 func TestTerminalTypeinFail(t *testing.T) {
@@ -71,5 +56,5 @@ func TestTerminalWriteOutput1(t *testing.T) {
 		t.Fatalf("no error expected, but %s", err)
 	}
 
-	compareAfterMarshal(t, "testdata/terminal/type-in-command2.json", terminal)
+	compareAfterMarshal(t, "testdata/terminal/write-output.json", terminal)
 }
