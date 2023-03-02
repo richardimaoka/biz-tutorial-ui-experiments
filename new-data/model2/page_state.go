@@ -35,16 +35,21 @@ func (p *PageState) gotoNextStep(nextNextStep string) {
 	p.NextStep = &nextNextStep
 }
 
+func (p *PageState) canTypeInTerminalCommand() error {
+	_, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // public methods
 
 func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
-	// pre-condition - next step calculation
-	nextNextStep, err := calcNextStep(*p.NextStep)
-	if err != nil {
+	if err := p.canTypeInTerminalCommand(); err != nil {
 		return fmt.Errorf("failed to type in command, %s", err)
 	}
 
-	// pre-condition - find command's target terminal
 	terminal := p.getTerminal(terminalName)
 	if terminal == nil {
 		return fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
@@ -54,6 +59,10 @@ func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
 	terminal.TypeInCommand(command)
 
 	// update step
+	nextNextStep, err := calcNextStep(*p.NextStep)
+	if err != nil {
+		return fmt.Errorf("failed to type in command, calc next step failed %s", err)
+	}
 	p.gotoNextStep(nextNextStep)
 
 	return nil
