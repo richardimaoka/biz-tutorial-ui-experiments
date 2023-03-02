@@ -1,0 +1,14 @@
+{
+  "currentDirectory": null,
+  "currentDirectoryPath": null,
+  "name": "default",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": true,
+        "command": "mkdir abc"
+      }
+    }
+  ]
+}

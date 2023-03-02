@@ -40,6 +40,52 @@ func (t *Terminal) isLastCommandExecutable(command string) error {
 	return nil
 }
 
+func (t *Terminal) canTypeInCommand() error {
+	if len(t.Nodes) == 0 {
+		return nil //allow typing in initial command
+	}
+
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("cannot type in command, failed to find terminal's last node, %s", err)
+	}
+
+	switch v := lastNode.Content.(type) {
+	case TerminalCommand:
+		if *v.BeforeExecution {
+			return fmt.Errorf("cannot type in command, last command has beforeExecution = true")
+		}
+		return nil
+	case TerminalOutput:
+		return nil
+	default:
+		return nil
+	}
+}
+
+func (t *Terminal) canWriteOutput() error {
+	if len(t.Nodes) == 0 {
+		return nil // allow writing initial output
+	}
+
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return fmt.Errorf("cannot write output, failed to find terminal's last node, %s", err)
+	}
+
+	switch v := lastNode.Content.(type) {
+	case TerminalCommand:
+		if *v.BeforeExecution {
+			return fmt.Errorf("cannot write output, last command has beforeExecution = true")
+		}
+		return nil
+	case TerminalOutput:
+		return nil
+	default:
+		return nil
+	}
+}
+
 // public methods
 
 func NewTerminal(name string) *Terminal {
@@ -49,7 +95,15 @@ func NewTerminal(name string) *Terminal {
 }
 
 //no pre-condition required, always succeed
-func (t *Terminal) TypeInCommand(command string) {
+func (t *Terminal) ChangeCurrentDirectory(filePath string) {
+	t.CurrentDirectoryPath = &filePath
+}
+
+func (t *Terminal) TypeInCommand(command string) error {
+	if err := t.canTypeInCommand(); err != nil {
+		return fmt.Errorf("TypeInCommand failed, %s", err)
+	}
+
 	trueValue := true
 	node := TerminalNode{
 		Content: TerminalCommand{
@@ -60,15 +114,15 @@ func (t *Terminal) TypeInCommand(command string) {
 
 	// works even if Nodes is nil
 	t.Nodes = append(t.Nodes, &node)
+	return nil
 }
 
 //no pre-condition required, always succeed
-func (t *Terminal) ChangeCurrentDirectory(filePath string) {
-	t.CurrentDirectoryPath = &filePath
-}
+func (t *Terminal) WriteOutput(output string) error {
+	if err := t.canWriteOutput(); err != nil {
+		return fmt.Errorf("WriteOutput failed, %s", err)
+	}
 
-//no pre-condition required, always succeed
-func (t *Terminal) WriteOutput(output string) {
 	node := TerminalNode{
 		Content: TerminalOutput{
 			Output: &output,
@@ -77,6 +131,7 @@ func (t *Terminal) WriteOutput(output string) {
 
 	// works even if Nodes is nil
 	t.Nodes = append(t.Nodes, &node)
+	return nil
 }
 
 func (t *Terminal) MarkLastCommandExecuted(command string) error {

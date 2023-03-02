@@ -1,0 +1,20 @@
+{
+  "currentDirectory": null,
+  "currentDirectoryPath": null,
+  "name": "default",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "echo abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "abc"
+      }
+    }
+  ]
+}
