@@ -7,6 +7,18 @@ func TestTerminal(t *testing.T) {
 	compareAfterMarshal(t, "testdata/terminal/new-terminal.json", terminal)
 }
 
+func TestTerminalCd1(t *testing.T) {
+	terminal := NewTerminal("default")
+	terminal.ChangeCurrentDirectory("hello")
+	compareAfterMarshal(t, "testdata/terminal/cd1.json", terminal)
+}
+
+func TestTerminalCd2(t *testing.T) {
+	terminal := NewTerminal("default")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+	compareAfterMarshal(t, "testdata/terminal/cd2.json", terminal)
+}
+
 func TestTerminalTypein1(t *testing.T) {
 	terminal := NewTerminal("default")
 	if err := terminal.TypeInCommand("mkdir abc"); err != nil {
