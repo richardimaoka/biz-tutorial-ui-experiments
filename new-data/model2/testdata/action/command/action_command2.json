@@ -1,7 +1,7 @@
 {
   "actionType": "ActionCommand",
   "terminalName": "default",
-  "command": "cd hello/world",
-  "output": null,
-  "currentDirectory": "hello/world"
+  "command": "echo abc",
+  "output": "abc",
+  "currentDirectory": null
 }
