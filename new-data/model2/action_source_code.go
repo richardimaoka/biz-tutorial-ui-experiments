@@ -1,24 +1,24 @@
 package model2
 
-type AddDirectory struct {
+type DirectoryAdd struct {
 	FilePath string `json:"filePath"`
 }
 
-type DeleteDirectory struct {
+type DirectoryDelete struct {
 	FilePath string `json:"filePath"`
 }
 
-type AddFile struct {
+type FileAdd struct {
 	FilePath      string `json:"filePath"`
 	Content       string `json:"content"`
 	IsFullContent bool   `json:"isFullContent"`
 }
 
-type UpdateFile struct {
+type FileUpdate struct {
 	FilePath string `json:"filePath"`
 	Content  string `json:"content"`
 }
 
-type DeleteFile struct {
+type FileDelete struct {
 	FilePath string `json:"filePath"`
 }

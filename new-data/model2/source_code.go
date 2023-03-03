@@ -164,7 +164,7 @@ func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
 
 // public methods
 func NewSourceCode() *SourceCodeExtended {
-	return &SourceCodeExtended{}
+	return &SourceCodeExtended{FileContents: make(map[string]OpenFile)}
 }
 
 func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
@@ -227,7 +227,7 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) AddFileContent(filePath, content string) error {
+func (s *SourceCodeExtended) AddFileContent(filePath, content string, isFullContent bool) error {
 	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("AddFileContent failed, %s", err)
 	}
