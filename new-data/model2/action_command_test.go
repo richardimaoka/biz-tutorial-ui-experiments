@@ -56,7 +56,7 @@ func TestActionCommandTerminal2(t *testing.T) {
 func TestActionCommandTerminal3(t *testing.T) {
 	changeDirectory := "hello/world"
 	cmd := ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: &changeDirectory}
-	terminal := NewTerminal("default")
+	terminal := NewTerminal("another")
 
 	if err := terminal.TypeInCommand(cmd.Command); err != nil {
 		t.Fatal(err)
