@@ -97,7 +97,6 @@ func NewTerminal(name string) *Terminal {
 //no pre-condition required, always succeed
 func (t *Terminal) ChangeCurrentDirectory(filePath string) {
 	t.CurrentDirectory = &filePath
-	t.CurrentDirectoryPath = &filePath
 }
 
 func (t *Terminal) TypeInCommand(command string) error {
