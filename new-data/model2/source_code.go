@@ -13,7 +13,7 @@ type SourceCodeExtended struct {
 
 func (s *SourceCodeExtended) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
-		return lessFilePath(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
+		return lessFilePathInner(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
 	})
 }
 

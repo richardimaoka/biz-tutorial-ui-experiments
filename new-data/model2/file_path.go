@@ -15,10 +15,10 @@ func toStrPtrArray(arr []string) []*string {
 	return ptrSlice
 }
 
-func lessFilePath2(a, b string) bool {
+func LessFilePath(a, b string) bool {
 	splitA := toStrPtrArray(strings.Split(a, "/"))
 	splitB := toStrPtrArray(strings.Split(b, "/"))
-	return lessFilePath(splitA, splitB)
+	return lessFilePathInner(splitA, splitB)
 }
 
 // for debugging
@@ -33,7 +33,7 @@ func printStrPtrArray(a, b []*string) {
 	fmt.Println()
 }
 
-func lessFilePath(a, b []*string) bool {
+func lessFilePathInner(a, b []*string) bool {
 	if len(a) == 0 && len(b) == 0 {
 		// a == b. even if len(b) == 0
 		return false
@@ -48,7 +48,7 @@ func lessFilePath(a, b []*string) bool {
 	// now len(a) != 0 AND len(b) != 0
 
 	if *a[0] == *b[0] {
-		return lessFilePath(a[1:], b[1:])
+		return lessFilePathInner(a[1:], b[1:])
 	} else {
 		return *a[0] < *b[0]
 	}

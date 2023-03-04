@@ -52,7 +52,7 @@ func TestFilePathLessFile(t *testing.T) {
 	}
 
 	for _, e := range entries {
-		if lessFilePath2(e.path1, e.path2) != e.less {
+		if LessFilePath(e.path1, e.path2) != e.less {
 			t.Errorf(
 				"%s %s %s is expected, but they did not make it",
 				e.path1,
