@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+func lessFilePath2(a, b string) bool {
+	return a < b
+}
+
 func lessFilePath(a, b []*string) bool {
 	if len(a) == 0 && len(b) == 0 {
 		return false //even if len(b) == 0
