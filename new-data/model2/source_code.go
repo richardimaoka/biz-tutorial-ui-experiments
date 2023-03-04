@@ -13,13 +13,15 @@ type SourceCodeExtended struct {
 
 func (s *SourceCodeExtended) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
-		return lessFilePathInner(s.FileTree[i].FilePath, s.FileTree[j].FilePath)
+		iFilePath := s.FileTree[i].FilePath
+		jFilePath := s.FileTree[j].FilePath
+		return LessFilePath(*iFilePath, *jFilePath)
 	})
 }
 
 func (s *SourceCodeExtended) findFileNode(filePath string) (int, *FileNode) {
 	for i, fn := range s.FileTree {
-		if filePath == fn.FilePathString() {
+		if filePath == *fn.FilePath {
 			return i, fn
 		}
 	}
@@ -187,7 +189,7 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	s.setAllIsUpdatedFalse()
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
-		if !strings.HasPrefix(v.FilePathString(), filePath) {
+		if !strings.HasPrefix(*v.FilePath, filePath) {
 			newFileTree = append(newFileTree, v)
 		}
 	}
@@ -217,7 +219,7 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	s.setAllIsUpdatedFalse()
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
-		if v.FilePathString() != filePath {
+		if *v.FilePath != filePath {
 			newFileTree = append(newFileTree, v)
 		}
 	}
