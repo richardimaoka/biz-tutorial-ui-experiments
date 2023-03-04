@@ -3,7 +3,6 @@ package model2
 import (
 	"fmt"
 	"reflect"
-	"strings"
 )
 
 func (t *Terminal) getLastNode() (*TerminalNode, error) {
@@ -97,11 +96,7 @@ func NewTerminal(name string) *Terminal {
 
 //no pre-condition required, always succeed
 func (t *Terminal) ChangeCurrentDirectory(filePath string) {
-	split := strings.Split(filePath, "/")
-	t.CurrentDirectory = nil
-	for i := range split {
-		t.CurrentDirectory = append(t.CurrentDirectory, &split[i])
-	}
+	t.CurrentDirectory = &filePath
 	t.CurrentDirectoryPath = &filePath
 }
 

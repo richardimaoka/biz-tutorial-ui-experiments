@@ -63,7 +63,7 @@ type Step struct {
 
 type Terminal struct {
 	Name             *string         `json:"name"`
-	CurrentDirectory []*string       `json:"currentDirectory"`
+	CurrentDirectory *string       `json:"currentDirectory"`
 	CurrentDirectoryPath *string     `json:"currentDirectoryPath"`
 	Nodes            []*TerminalNode `json:"nodes"`
 }

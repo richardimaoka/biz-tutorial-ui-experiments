@@ -1,5 +1,5 @@
 {
-  "currentDirectory": ["hello", "world"],
+  "currentDirectory": "hello/world",
   "currentDirectoryPath": "hello/world",
   "name": "another",
   "nodes": [
