@@ -5,28 +5,28 @@
       "offset": 0,
       "isUpdated": false,
       "name": "goodmorning",
-      "filePath": ["goodmorning"]
+      "filePath": "goodmorning"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 1,
       "isUpdated": false,
       "name": "hello",
-      "filePath": ["goodmorning", "hello"]
+      "filePath": "goodmorning/hello"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 2,
       "isUpdated": false,
       "name": "world",
-      "filePath": ["goodmorning", "hello", "world"]
+      "filePath": "goodmorning/hello/world"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 0,
       "isUpdated": false,
       "name": "hello",
-      "filePath": ["hello"]
+      "filePath": "hello"
     }
   ],
   "openFile": null,

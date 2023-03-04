@@ -5,14 +5,14 @@
       "offset": 0,
       "isUpdated": false,
       "name": "hello",
-      "filePath": ["hello"]
+      "filePath": "hello"
     },
     {
       "nodeType": "FILE",
       "offset": 1,
       "isUpdated": true,
       "name": "world.txt",
-      "filePath": ["hello", "world.txt"]
+      "filePath": "hello/world.txt"
     }
   ],
   "openFile": null,

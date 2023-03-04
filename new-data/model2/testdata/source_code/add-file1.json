@@ -5,7 +5,7 @@
       "offset": 0,
       "isUpdated": true,
       "name": "hello.txt",
-      "filePath": ["hello.txt"]
+      "filePath": "hello.txt"
     }
   ],
   "openFile": null,

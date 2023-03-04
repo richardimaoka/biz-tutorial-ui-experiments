@@ -5,14 +5,14 @@
       "offset": 0,
       "isUpdated": false,
       "name": "hello",
-      "filePath": ["hello"]
+      "filePath": "hello"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 1,
       "isUpdated": true,
       "name": "world",
-      "filePath": ["hello", "world"]
+      "filePath": "hello/world"
     }
   ],
   "openFile": null,
