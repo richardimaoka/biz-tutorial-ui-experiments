@@ -9,14 +9,6 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func prettyString(m map[string]interface{}) string {
-	jsonString, err := json.MarshalIndent(m, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-	return string(jsonString)
-}
-
 func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	var resultMap map[string]interface{}
 	err := json.Unmarshal(resultBytes, &resultMap)
