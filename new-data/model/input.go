@@ -13,24 +13,9 @@ const (
 	actionListPrefix = "action_input_list"
 )
 
-func toUnflattenBytes(flatJsonBytes []byte) ([]byte, error) {
-	var unflatJsonObj map[string]interface{}
-	err := Unflatten(flatJsonBytes, &unflatJsonObj)
-	if err != nil {
-		return nil, fmt.Errorf("unflattening failed, %s", err)
-	}
-
-	unflatJsonBytes, err := json.Marshal(unflatJsonObj)
-	if err != nil {
-		return nil, fmt.Errorf("marshaling to unflattened JSON bytes failed, %s", err)
-	}
-
-	return unflatJsonBytes, nil
-}
-
 func toActionJsonBytes(flatJsonBytes []byte) ([]byte, error) {
 	// pre-process JSON bytes
-	unflattenedJsonBytes, err := toUnflattenBytes(flatJsonBytes)
+	unflattenedJsonBytes, err := ToUnflattenBytes(flatJsonBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unflatten, %s", err)
 	}
