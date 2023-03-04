@@ -2,6 +2,7 @@ package model2
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
 
@@ -16,24 +17,24 @@ func prettyString(m map[string]interface{}) string {
 	return string(jsonString)
 }
 
-func compareJsonBytes(t *testing.T, expectedBytes, resultBytes []byte) {
+func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	var resultMap map[string]interface{}
 	err := json.Unmarshal(resultBytes, &resultMap)
 	if err != nil {
-		t.Errorf("failed to unmarshal result json")
-		return
+		return fmt.Errorf("failed to unmarshal result json %s", err)
 	}
 
 	var expectedMap map[string]interface{}
 	err = json.Unmarshal(expectedBytes, &expectedMap)
 	if err != nil {
-		t.Errorf("failed to unmarshal expected json")
-		return
+		return fmt.Errorf("failed to unmarshal expected json %s", err)
 	}
 
 	if diff := cmp.Diff(expectedMap, resultMap); diff != "" {
-		t.Errorf("mismatch (-expected +result):\n%s", diff)
+		return fmt.Errorf("mismatch (-expected +result):\n%s", diff)
 	}
+
+	return nil
 }
 
 func compareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
@@ -49,5 +50,7 @@ func compareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 		return
 	}
 
-	compareJsonBytes(t, expectedBytes, resultBytes)
+	if err := compareJsonBytes(expectedBytes, resultBytes); err != nil {
+		t.Fatalf("failed to compare after marshal where expected file = %s, %s", expectedJsonFile, err)
+	}
 }

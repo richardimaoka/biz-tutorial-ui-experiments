@@ -26,7 +26,7 @@ type FileNode struct {
 }
 
 type OpenFile struct {
-	FilePath      []*string        `json:"filePath"`
+	FilePath      *string        `json:"filePath"`
 	FileName      *string          `json:"fileName"`
 	Content       *string          `json:"content"`
 	IsFullContent *bool            `json:"isFullContent"`

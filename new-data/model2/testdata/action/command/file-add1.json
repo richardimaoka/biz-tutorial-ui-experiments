@@ -11,7 +11,7 @@
   "openFile": null,
   "fileContents": {
     "hello.txt": {
-      "filePath": ["hello.txt"],
+      "filePath": "hello.txt",
       "fileName": "hello.txt",
       "isFullContent": true,
       "language": null,

@@ -5,7 +5,7 @@ func openFile(filePath string, content string) *OpenFile {
 	trueValue := true
 
 	file := OpenFile{
-		FilePath:      split,
+		FilePath:      &filePath,
 		FileName:      split[len(split)-1],
 		Content:       &content,
 		IsFullContent: &trueValue,
