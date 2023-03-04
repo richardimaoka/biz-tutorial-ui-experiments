@@ -5,22 +5,49 @@ import (
 	"strings"
 )
 
+//TODO: actually no need to convert to ptrs
+func toStrPtrArray(arr []string) []*string {
+	var ptrSlice []*string
+	for i := range arr {
+		ptrSlice = append(ptrSlice, &arr[i]) // cannot use v of `for i, v := range ...` because v has the same address throughout the loop
+	}
+
+	return ptrSlice
+}
+
 func lessFilePath2(a, b string) bool {
-	return a < b
+	splitA := toStrPtrArray(strings.Split(a, "/"))
+	splitB := toStrPtrArray(strings.Split(b, "/"))
+	return lessFilePath(splitA, splitB)
+}
+
+// for debugging
+func printStrPtrArray(a, b []*string) {
+	for _, v := range a {
+		fmt.Print(*v, ", ")
+	}
+	fmt.Print("vs. ")
+	for _, v := range b {
+		fmt.Print(*v, ", ")
+	}
+	fmt.Println()
 }
 
 func lessFilePath(a, b []*string) bool {
 	if len(a) == 0 && len(b) == 0 {
-		return false //even if len(b) == 0
+		// a == b. even if len(b) == 0
+		return false
 	} else if /* len (a) != 0 && */ len(b) == 0 {
-		return false //here, len(a) != 0
-	} else if len(a) == 0 /* && len (b) != 0 */ {
-		return false //even if len(b) == 0
+		// e.g. a = "aaa/b.txt", b = "aaa"
+		return false
+	} else if len(a) == 0 /* len (b) != 0 && */ {
+		// e.g. a = "aaa", b = "aaa/abc"
+		return true
 	}
 
 	// now len(a) != 0 AND len(b) != 0
 
-	if a[0] == b[0] {
+	if *a[0] == *b[0] {
 		return lessFilePath(a[1:], b[1:])
 	} else {
 		return *a[0] < *b[0]
