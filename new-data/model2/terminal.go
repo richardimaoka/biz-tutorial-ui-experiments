@@ -41,7 +41,7 @@ func (t *Terminal) canTypeInCommand() error {
 	}
 }
 
-func (t *Terminal) isLastCommandExecutable(command string) error {
+func (t *Terminal) canMarkLastCommandExecuted(command string) error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
 		return fmt.Errorf("failed get to terminal's last node, %s", err)
@@ -134,7 +134,7 @@ func (t *Terminal) WriteOutput(output string) error {
 }
 
 func (t *Terminal) MarkLastCommandExecuted(command string) error {
-	if err := t.isLastCommandExecutable(command); err != nil {
+	if err := t.canMarkLastCommandExecuted(command); err != nil {
 		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
 	}
 
