@@ -84,25 +84,25 @@ func TestSourceCode(t *testing.T) {
 
 		{name: "error_add_dir_empty_file_path",
 			operations: []Operation{
-				{filePath: "", operationType: OpAddDirectory, expectSuccess: false}, // "" is a wrong file path
+				{expectSuccess: false, operationType: OpAddDirectory, filePath: ""}, // "" is a wrong file path
 			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
 		{name: "add_single_dir",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 			}, resultFile: "testdata/source_code/add-directory1.json"},
 
 		{name: "add_dir_and_child_dir",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 			}, resultFile: "testdata/source_code/add-directory2.json"},
 
 		{name: "add_dir_and_child_dir_and_another_dir",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "aloha", operationType: OpAddDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
 			}, resultFile: "testdata/source_code/add-directory3.json"},
 	}
 	t.Run("add_directory", func(t *testing.T) { runEntries(t, entries) })
@@ -110,34 +110,34 @@ func TestSourceCode(t *testing.T) {
 	entries = []Entry{
 		{name: "add_and_delete_dir",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello", operationType: OpDeleteDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello"},
 			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
 		{name: "add_nested_dirs_and_delete_child",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello/world"},
 			}, resultFile: "testdata/source_code/delete-directory1.json"},
 
 		{name: "add_nested_dirs_and_delete_middle",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world/japan", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "goodmorning", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "goodmorning/hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "goodmorning/hello/world", operationType: OpAddDirectory, expectSuccess: true}, //this is not affected by the following deletion op
-				{filePath: "hello/world", operationType: OpDeleteDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world/japan"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"}, //this is not affected by the following deletion op
+				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello/world"},
 			}, resultFile: "testdata/source_code/delete-directory2.json"},
 
 		{name: "add_deep_nested_dirs_and_delete_parent",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world/japan", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello", operationType: OpDeleteDirectory, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world/japan"},
+				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello"},
 			}, resultFile: "testdata/source_code/new-source-code.json"},
 	}
 	t.Run("delete_directory", func(t *testing.T) { runEntries(t, entries) })
@@ -145,39 +145,39 @@ func TestSourceCode(t *testing.T) {
 	entries = []Entry{
 		{name: "add_a_file",
 			operations: []Operation{
-				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello.txt"},
 			}, resultFile: "testdata/source_code/add-file1.json"},
 
 		{name: "error_adding_a_file",
 			operations: []Operation{
-				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: false},
+				{expectSuccess: false, operationType: OpAddFile, filePath: "hello/world.txt"},
 			}, resultFile: "testdata/source_code/new-source-code.json"},
 
 		{name: "add_two_files",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world.txt"},
 			}, resultFile: "testdata/source_code/add-file2.json"},
 
 		{name: "add_and_delete_a_file",
 			operations: []Operation{
-				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
-				{filePath: "hello.txt", operationType: OpDeleteFile, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello.txt"},
+				{expectSuccess: true, operationType: OpDeleteFile, filePath: "hello.txt"},
 			}, resultFile: "testdata/source_code/new-source-code.json"},
 
 		{name: "add_three_files_and_delete_one",
 			operations: []Operation{
-				{filePath: "goodmorning.txt", operationType: OpAddFile, expectSuccess: true},
-				{filePath: "hello.txt", operationType: OpAddFile, expectSuccess: true},
-				{filePath: "evening.txt", operationType: OpAddFile, expectSuccess: true},
-				{filePath: "goodmorning.txt", operationType: OpDeleteFile, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "goodmorning.txt"},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello.txt"},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "evening.txt"},
+				{expectSuccess: true, operationType: OpDeleteFile, filePath: "goodmorning.txt"},
 			}, resultFile: "testdata/source_code/add-file3.json"},
 
 		{name: "add_and_delete_a_nested_file",
 			operations: []Operation{
-				{filePath: "hello", operationType: OpAddDirectory, expectSuccess: true},
-				{filePath: "hello/world.txt", operationType: OpAddFile, expectSuccess: true},
-				{filePath: "hello/world.txt", operationType: OpDeleteFile, expectSuccess: true},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world.txt"},
+				{expectSuccess: true, operationType: OpDeleteFile, filePath: "hello/world.txt"},
 			}, resultFile: "testdata/source_code/add-delete.json"},
 	}
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
