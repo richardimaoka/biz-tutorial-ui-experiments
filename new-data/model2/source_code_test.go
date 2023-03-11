@@ -152,12 +152,12 @@ func TestSourceCode(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world/japan"},
-				// TODO: below "goodmorning.*" dirs are note affected
-				// {expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning"},
-				// {expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello"},
-				// {expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
+				// below "goodmorning.*" dirs are note affected
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello"},
-			}, resultFile: "testdata/source_code/new-source-code.json"},
+			}, resultFile: "testdata/source_code/delete-directory3.json"},
 	}
 	t.Run("delete_directory", func(t *testing.T) { runEntries(t, entries) })
 
