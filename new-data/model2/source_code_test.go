@@ -78,32 +78,46 @@ func TestSourceCode(t *testing.T) {
 	}
 
 	entries = []Entry{
-		{name: "create_SourceCode",
+		{name: "dir_create_SourceCode",
 			operations: []Operation{}, // no operation
 			resultFile: "testdata/source_code/new-source-code.json"},
 
-		{name: "error_add_dir_empty_file_path",
-			operations: []Operation{
-				{expectSuccess: false, operationType: OpAddDirectory, filePath: ""}, // "" is a wrong file path
-			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
-
-		{name: "add_single_dir",
+		{name: "add_dir_single",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 			}, resultFile: "testdata/source_code/add-directory1.json"},
 
-		{name: "add_dir_and_child_dir",
+		{name: "add_dir_nested",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 			}, resultFile: "testdata/source_code/add-directory2.json"},
 
-		{name: "add_dir_and_child_dir_and_another_dir",
+		{name: "add_dir_multiple",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
 			}, resultFile: "testdata/source_code/add-directory3.json"},
+
+		{name: "add_dir_error_empty",
+			operations: []Operation{
+				{expectSuccess: false, operationType: OpAddDirectory, filePath: ""}, // "" is a wrong file path
+			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+
+		{name: "add_dir_error_duplicate1",
+			operations: []Operation{
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello"},
+			}, resultFile: "testdata/source_code/add-directory2.json"}, // json should be same as initial state
+
+		{name: "add_dir_error_duplicate2",
+			operations: []Operation{
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world"},
+			}, resultFile: "testdata/source_code/add-directory2.json"}, // json should be same as initial state
 	}
 	t.Run("add_directory", func(t *testing.T) { runEntries(t, entries) })
 
