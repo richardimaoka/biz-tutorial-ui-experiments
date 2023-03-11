@@ -42,10 +42,6 @@ type PageState struct {
 	Terminals  []*Terminal `json:"terminals"`
 }
 
-type SourceCode struct {
-	FileTree []*FileNode `json:"fileTree"`
-	OpenFile *OpenFile   `json:"openFile"`
-}
 
 type Step struct {
 	StepNum     *int        `json:"stepNum"`

@@ -6,12 +6,7 @@ import (
 	"strings"
 )
 
-type SourceCodeExtended struct {
-	SourceCode
-	FileContents map[string]OpenFile `json:"fileContents"`
-}
-
-func (s *SourceCodeExtended) sortFileTree() {
+func (s *SourceCode) sortFileTree() {
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		iFilePath := s.FileTree[i].FilePath
 		jFilePath := s.FileTree[j].FilePath
@@ -19,7 +14,7 @@ func (s *SourceCodeExtended) sortFileTree() {
 	})
 }
 
-func (s *SourceCodeExtended) findFileNode(filePath string) (int, *FileNode) {
+func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
 	for i, fn := range s.FileTree {
 		if filePath == *fn.FilePath {
 			return i, fn
@@ -28,7 +23,7 @@ func (s *SourceCodeExtended) findFileNode(filePath string) (int, *FileNode) {
 	return -1, nil
 }
 
-func (s *SourceCodeExtended) validateNode(filePath string, expectedNodeType FileNodeType) error {
+func (s *SourceCode) validateNode(filePath string, expectedNodeType FileNodeType) error {
 	_, node := s.findFileNode(filePath)
 	if node == nil {
 		return fmt.Errorf("filePath = %s has no node", filePath)
@@ -41,7 +36,7 @@ func (s *SourceCodeExtended) validateNode(filePath string, expectedNodeType File
 	}
 }
 
-func (s *SourceCodeExtended) hasParentDir(filePath string) error {
+func (s *SourceCode) hasParentDir(filePath string) error {
 	parentPath := parentDirectoryPath(filePath)
 	if parentPath == "" {
 		return nil //parent dir = root dir
@@ -55,7 +50,7 @@ func (s *SourceCodeExtended) hasParentDir(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canAddDirectoryNode(directoryPath string) error {
+func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
 	if err := validateFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot add directory node, %s", err)
 	}
@@ -70,7 +65,7 @@ func (s *SourceCodeExtended) canAddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canDeleteDirectoryNode(directoryPath string) error {
+func (s *SourceCode) canDeleteDirectoryNode(directoryPath string) error {
 	if err := validateFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot delete directory node, %s", err)
 	}
@@ -82,7 +77,7 @@ func (s *SourceCodeExtended) canDeleteDirectoryNode(directoryPath string) error 
 	return nil
 }
 
-func (s *SourceCodeExtended) canAddFileNode(filePath string) error {
+func (s *SourceCode) canAddFileNode(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file node, %s", err)
 	}
@@ -97,7 +92,7 @@ func (s *SourceCodeExtended) canAddFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canDeleteFileNode(filePath string) error {
+func (s *SourceCode) canDeleteFileNode(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot delete file node, %s", err)
 	}
@@ -109,7 +104,7 @@ func (s *SourceCodeExtended) canDeleteFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canUpdateFileNode(filePath string) error {
+func (s *SourceCode) canUpdateFileNode(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot update file node, %s", err)
 	}
@@ -121,7 +116,7 @@ func (s *SourceCodeExtended) canUpdateFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
+func (s *SourceCode) canAddFileContent(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file content, %s", err)
 	}
@@ -133,7 +128,7 @@ func (s *SourceCodeExtended) canAddFileContent(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canDeleteFileContent(filePath string) error {
+func (s *SourceCode) canDeleteFileContent(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot delete file content, %s", err)
 	}
@@ -145,7 +140,7 @@ func (s *SourceCodeExtended) canDeleteFileContent(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) canUpdateFileContent(filePath string) error {
+func (s *SourceCode) canUpdateFileContent(filePath string) error {
 	if err := validateFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot update file content, %s", err)
 	}
@@ -157,7 +152,7 @@ func (s *SourceCodeExtended) canUpdateFileContent(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
+func (s *SourceCode) setAllIsUpdatedFalse() {
 	falseValue := false
 	for _, v := range s.FileTree {
 		v.IsUpdated = &falseValue
@@ -165,11 +160,11 @@ func (s *SourceCodeExtended) setAllIsUpdatedFalse() {
 }
 
 // public methods
-func NewSourceCode() *SourceCodeExtended {
-	return &SourceCodeExtended{FileContents: make(map[string]OpenFile)}
+func NewSourceCode() *SourceCode {
+	return &SourceCode{FileContents: make(map[string]OpenFile)}
 }
 
-func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
+func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("AddDirectoryNode failed, %s", err)
 	}
@@ -181,7 +176,7 @@ func (s *SourceCodeExtended) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
+func (s *SourceCode) DeleteDirectoryNode(filePath string) error {
 	if err := s.canDeleteDirectoryNode(filePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
@@ -199,7 +194,7 @@ func (s *SourceCodeExtended) DeleteDirectoryNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) AddFileNode(filePath string) error {
+func (s *SourceCode) AddFileNode(filePath string) error {
 	if err := s.canAddFileNode(filePath); err != nil {
 		return fmt.Errorf("AddFileNode failed, %s", err)
 	}
@@ -211,7 +206,7 @@ func (s *SourceCodeExtended) AddFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
+func (s *SourceCode) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFileNode(filePath); err != nil {
 		return fmt.Errorf("DeleteFileNode failed, %s", err)
 	}
@@ -229,7 +224,7 @@ func (s *SourceCodeExtended) DeleteFileNode(filePath string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) AddFileContent(filePath, content string, isFullContent bool) error {
+func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool) error {
 	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("AddFileContent failed, %s", err)
 	}
@@ -238,7 +233,7 @@ func (s *SourceCodeExtended) AddFileContent(filePath, content string, isFullCont
 	return nil
 }
 
-func (s *SourceCodeExtended) DeleteFileContent(filePath, content string) error {
+func (s *SourceCode) DeleteFileContent(filePath, content string) error {
 	if err := s.canDeleteFileContent(filePath); err != nil {
 		return fmt.Errorf("DeleteFileContent failed, %s", err)
 	}
@@ -247,7 +242,7 @@ func (s *SourceCodeExtended) DeleteFileContent(filePath, content string) error {
 	return nil
 }
 
-func (s *SourceCodeExtended) UpdateFileContent(filePath, content string) error {
+func (s *SourceCode) UpdateFileContent(filePath, content string) error {
 	if err := s.canUpdateFileContent(filePath); err != nil {
 		return fmt.Errorf("UpdateFileContent failed, %s", err)
 	}
