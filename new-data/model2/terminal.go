@@ -41,26 +41,26 @@ func (t *Terminal) canTypeInCommand() error {
 	}
 }
 
-func (t *Terminal) canMarkLastCommandExecuted(command string) error {
+func (t *Terminal) canMarkLastCommandExecuted(command string) (*TerminalNode, error) {
 	lastNode, err := t.getLastNode()
 	if err != nil {
-		return fmt.Errorf("failed get to terminal's last node, %s", err)
+		return nil, fmt.Errorf("failed get to terminal's last node, %s", err)
 	}
 
 	cmd, ok := lastNode.Content.(TerminalCommand)
 	if !ok {
-		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+		return nil, fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
 	}
 
 	if *cmd.Command != command {
-		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
+		return nil, fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
 	}
 
 	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
-		return fmt.Errorf("terminal's last command is not ready for execution")
+		return nil, fmt.Errorf("terminal's last command is not ready for execution")
 	}
 
-	return nil
+	return lastNode, nil
 }
 
 func (t *Terminal) canWriteOutput() error {
@@ -86,6 +86,30 @@ func (t *Terminal) canWriteOutput() error {
 	}
 }
 
+func (t *Terminal) typeInCommand(command string) {
+	trueValue := true
+	node := TerminalNode{
+		Content: TerminalCommand{
+			Command:         &command,
+			BeforeExecution: &trueValue,
+		},
+	}
+
+	// works even if Nodes is nil
+	t.Nodes = append(t.Nodes, &node)
+}
+
+func (t *Terminal) writeOutput(output string) {
+	node := TerminalNode{
+		Content: TerminalOutput{
+			Output: &output,
+		},
+	}
+
+	// works even if Nodes is nil
+	t.Nodes = append(t.Nodes, &node)
+}
+
 // public methods
 
 func NewTerminal(name string) *Terminal {
@@ -104,16 +128,7 @@ func (t *Terminal) TypeInCommand(command string) error {
 		return fmt.Errorf("TypeInCommand failed, %s", err)
 	}
 
-	trueValue := true
-	node := TerminalNode{
-		Content: TerminalCommand{
-			Command:         &command,
-			BeforeExecution: &trueValue,
-		},
-	}
-
-	// works even if Nodes is nil
-	t.Nodes = append(t.Nodes, &node)
+	t.typeInCommand(command)
 	return nil
 }
 
@@ -122,28 +137,16 @@ func (t *Terminal) WriteOutput(output string) error {
 		return fmt.Errorf("WriteOutput failed, %s", err)
 	}
 
-	node := TerminalNode{
-		Content: TerminalOutput{
-			Output: &output,
-		},
-	}
-
-	// works even if Nodes is nil
-	t.Nodes = append(t.Nodes, &node)
+	t.writeOutput(output)
 	return nil
 }
 
 func (t *Terminal) MarkLastCommandExecuted(command string) error {
-	if err := t.canMarkLastCommandExecuted(command); err != nil {
-		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
-	}
-
-	lastNode, err := t.getLastNode()
+	lastNode, err := t.canMarkLastCommandExecuted(command)
 	if err != nil {
 		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
 	}
 
-	falseValue := false
-	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
+	lastNode.markCommandExecuted(command)
 	return nil
 }
