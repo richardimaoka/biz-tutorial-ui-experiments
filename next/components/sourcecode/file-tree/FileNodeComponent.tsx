@@ -25,7 +25,7 @@ export const FileNodeComponent = (
   const isCurrentDirectory =
     fragment.filePath &&
     props.currentDirectory &&
-    fragment.filePath.join("/") === props.currentDirectory;
+    fragment.filePath === props.currentDirectory;
 
   return (
     <div

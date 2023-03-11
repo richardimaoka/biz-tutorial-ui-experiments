@@ -20,13 +20,13 @@ type FileHighlight struct {
 type FileNode struct {
 	NodeType  *FileNodeType `json:"nodeType"`
 	Name      *string       `json:"name"`
-	FilePath  []*string     `json:"filePath"`
+	FilePath  *string       `json:"filePath"`
 	Offset    *int          `json:"offset"`
 	IsUpdated *bool         `json:"isUpdated"`
 }
 
 type OpenFile struct {
-	FilePath      []*string        `json:"filePath"`
+	FilePath      *string          `json:"filePath"`
 	FileName      *string          `json:"fileName"`
 	Content       *string          `json:"content"`
 	IsFullContent *bool            `json:"isFullContent"`

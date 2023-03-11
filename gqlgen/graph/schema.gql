@@ -34,7 +34,7 @@ type FileHighlight {
 }
 
 type OpenFile {
-  filePath: [String]
+  filePath: String
   fileName: String
   content: String
   isFullContent: Boolean
@@ -50,7 +50,7 @@ enum FileNodeType {
 type FileNode {
   nodeType: FileNodeType
   name: String
-  filePath: [String]
+  filePath: String
   offset: Int
   isUpdated: Boolean
 }

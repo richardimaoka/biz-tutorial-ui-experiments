@@ -28,7 +28,7 @@ export type FileHighlight = {
 
 export type FileNode = {
   __typename: "FileNode";
-  filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  filePath?: Maybe<Scalars["String"]>;
   isUpdated?: Maybe<Scalars["Boolean"]>;
   name?: Maybe<Scalars["String"]>;
   nodeType?: Maybe<FileNodeType>;
@@ -41,7 +41,7 @@ export type OpenFile = {
   __typename: "OpenFile";
   content?: Maybe<Scalars["String"]>;
   fileName?: Maybe<Scalars["String"]>;
-  filePath?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  filePath?: Maybe<Scalars["String"]>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]>;
   language?: Maybe<Scalars["String"]>;
@@ -132,7 +132,7 @@ export type SourceCodeViewer_FragmentFragment = ({
 export type FileNodeComponent_FragmentFragment = ({
   __typename: "FileNode";
   name?: string | null;
-  filePath?: Array<string | null> | null;
+  filePath?: string | null;
   offset?: number | null;
   isUpdated?: boolean | null;
 } & {
@@ -149,7 +149,7 @@ export type FileNodeIcon_FragmentFragment = {
 export type FileTreeComponent_FragmentFragment = {
   __typename: "SourceCode";
   fileTree?: Array<
-    | ({ __typename: "FileNode"; filePath?: Array<string | null> | null } & {
+    | ({ __typename: "FileNode"; filePath?: string | null } & {
         " $fragmentRefs"?: {
           FileNodeComponent_FragmentFragment: FileNodeComponent_FragmentFragment;
         };

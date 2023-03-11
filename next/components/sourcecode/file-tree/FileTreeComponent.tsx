@@ -64,7 +64,7 @@ export const FileTreeComponent = (
           (elem) =>
             elem && (
               <FileNodeComponent
-                key={elem.filePath ? elem.filePath.join("/") : ""}
+                key={elem.filePath ? elem.filePath : ""}
                 fragment={elem}
                 currentDirectory={props.currentDirectory}
               />

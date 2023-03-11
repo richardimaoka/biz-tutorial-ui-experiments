@@ -716,9 +716,9 @@ func (ec *executionContext) _FileNode_filePath(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FileNode_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -839,9 +839,9 @@ func (ec *executionContext) _OpenFile_filePath(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_OpenFile_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
