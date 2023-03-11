@@ -18,6 +18,13 @@
       "nodeType": "FILE",
       "offset": 2,
       "isUpdated": true,
+      "name": "america.txt",
+      "filePath": "hello/world/america.txt"
+    },
+    {
+      "nodeType": "FILE",
+      "offset": 2,
+      "isUpdated": false,
       "name": "japan.txt",
       "filePath": "hello/world/japan.txt"
     }
