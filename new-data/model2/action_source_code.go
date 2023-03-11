@@ -22,3 +22,11 @@ type FileUpdate struct {
 type FileDelete struct {
 	FilePath string `json:"filePath"`
 }
+
+type SourceCodeEffect struct {
+	DirectoriesToAdd    []DirectoryAdd
+	DirectoriesToDelete []DirectoryDelete
+	FilesToAdd          []FileAdd
+	FilesToUpdate       []FileUpdate
+	FilesToDelete       []FileDelete
+}

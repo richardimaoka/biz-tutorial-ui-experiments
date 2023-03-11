@@ -160,6 +160,7 @@ func (s *SourceCode) setAllIsUpdatedFalse() {
 }
 
 // public methods
+
 func NewSourceCode() *SourceCode {
 	return &SourceCode{FileContents: make(map[string]OpenFile)}
 }
@@ -248,5 +249,19 @@ func (s *SourceCode) UpdateFileContent(filePath, content string) error {
 	}
 
 	s.FileContents[filePath] = *openFile(filePath, content)
+	return nil
+}
+
+func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
+	errors := []string{}
+	for _, d := range effect.DirectoriesToAdd {
+		if err := s.AddDirectoryNode(d.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
+	}
+
 	return nil
 }
