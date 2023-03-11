@@ -94,32 +94,10 @@ func (p *PageState) RunTerminalCommand(command, terminalName string) error {
 		return fmt.Errorf("failed run command, terminal with name = %s not found", terminalName)
 	}
 
-	// 1.3 pre-conditions for TerminalCommand.UpdateSourceCode
+	// terminal.MarkLastCommandExecuted()
 
-	// pre-condition AddFiles does not have a matching node in fileTree, and the parent dir
-	// pre-condition UpdateFiles has matching node in fileTree
-	// pre-condition DeleteFiles has matching node in fileTree
-
-	// 2.1 Terminal update
-	// p.updateTerminal(command.UpdateTerminal)
-
-	//execute command!
-	// if err := terminal.executeEffect(); err != nil {
-
-	// Process UpdateTerminal.Output
-
-	// 2.2 SourceCode update
-
-	// if len(command.UpdateTerminal.CurrentDirectory) > 0 {
-	// 	terminal.CurrentDirectory = []*string{}
-	// 	for _, d := range command.UpdateTerminal.CurrentDirectory {
-	// 		terminal.CurrentDirectory = append(terminal.CurrentDirectory, &d)
-	// 	}
-	// }
-
-	// Process UpdateSourceCode.AddDirectories
-
-	//TODO: sort FileTree
+	// terminal.ApplyEffect()
+	// SourceCode.ApplyEffect
 
 	// update step
 	p.gotoNextStep()
