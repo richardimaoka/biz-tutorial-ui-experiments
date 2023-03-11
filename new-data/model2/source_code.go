@@ -159,6 +159,54 @@ func (s *SourceCode) setAllIsUpdatedFalse() {
 	}
 }
 
+func (s *SourceCode) addDirectoryNode(directoryPath string) {
+	s.setAllIsUpdatedFalse()
+	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
+	s.sortFileTree()
+}
+
+func (s *SourceCode) deleteDirectoryNode(filePath string) {
+	s.setAllIsUpdatedFalse()
+	var newFileTree []*FileNode
+	for _, v := range s.FileTree {
+		if !strings.HasPrefix(*v.FilePath, filePath) {
+			newFileTree = append(newFileTree, v)
+		}
+	}
+	s.FileTree = newFileTree
+	s.sortFileTree()
+}
+
+func (s *SourceCode) addFileNode(filePath string) {
+	s.setAllIsUpdatedFalse()
+	s.FileTree = append(s.FileTree, fileNode(filePath))
+	s.sortFileTree()
+}
+
+func (s *SourceCode) deleteFileNode(filePath string) {
+	s.setAllIsUpdatedFalse()
+	var newFileTree []*FileNode
+	for _, v := range s.FileTree {
+		if *v.FilePath != filePath {
+			newFileTree = append(newFileTree, v)
+		}
+	}
+	s.FileTree = newFileTree
+	s.sortFileTree()
+}
+
+func (s *SourceCode) addFileContent(filePath, content string, isFullContent bool) {
+	s.FileContents[filePath] = *openFile(filePath, content)
+}
+
+func (s *SourceCode) deleteFileContent(filePath string) {
+	delete(s.FileContents, filePath)
+}
+
+func (s *SourceCode) updateFileContent(filePath, content string) {
+	s.FileContents[filePath] = *openFile(filePath, content)
+}
+
 // public methods
 
 func NewSourceCode() *SourceCode {
@@ -169,29 +217,15 @@ func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("AddDirectoryNode failed, %s", err)
 	}
-
-	s.setAllIsUpdatedFalse()
-	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
-	s.sortFileTree()
-
+	s.addDirectoryNode(directoryPath)
 	return nil
 }
 
-func (s *SourceCode) DeleteDirectoryNode(filePath string) error {
-	if err := s.canDeleteDirectoryNode(filePath); err != nil {
+func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
+	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
-
-	s.setAllIsUpdatedFalse()
-	var newFileTree []*FileNode
-	for _, v := range s.FileTree {
-		if !strings.HasPrefix(*v.FilePath, filePath) {
-			newFileTree = append(newFileTree, v)
-		}
-	}
-	s.FileTree = newFileTree
-	s.sortFileTree()
-
+	s.deleteDirectoryNode(directoryPath)
 	return nil
 }
 
@@ -199,11 +233,7 @@ func (s *SourceCode) AddFileNode(filePath string) error {
 	if err := s.canAddFileNode(filePath); err != nil {
 		return fmt.Errorf("AddFileNode failed, %s", err)
 	}
-
-	s.setAllIsUpdatedFalse()
-	s.FileTree = append(s.FileTree, fileNode(filePath))
-	s.sortFileTree()
-
+	s.addFileNode(filePath)
 	return nil
 }
 
@@ -211,17 +241,7 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFileNode(filePath); err != nil {
 		return fmt.Errorf("DeleteFileNode failed, %s", err)
 	}
-
-	s.setAllIsUpdatedFalse()
-	var newFileTree []*FileNode
-	for _, v := range s.FileTree {
-		if *v.FilePath != filePath {
-			newFileTree = append(newFileTree, v)
-		}
-	}
-	s.FileTree = newFileTree
-	s.sortFileTree()
-
+	s.deleteFileNode(filePath)
 	return nil
 }
 
@@ -229,8 +249,7 @@ func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool
 	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("AddFileContent failed, %s", err)
 	}
-
-	s.FileContents[filePath] = *openFile(filePath, content)
+	s.addFileContent(filePath, content, isFullContent)
 	return nil
 }
 
@@ -238,8 +257,7 @@ func (s *SourceCode) DeleteFileContent(filePath string) error {
 	if err := s.canDeleteFileContent(filePath); err != nil {
 		return fmt.Errorf("DeleteFileContent failed, %s", err)
 	}
-
-	delete(s.FileContents, filePath)
+	s.deleteFileContent(filePath)
 	return nil
 }
 
@@ -247,8 +265,7 @@ func (s *SourceCode) UpdateFileContent(filePath, content string) error {
 	if err := s.canUpdateFileContent(filePath); err != nil {
 		return fmt.Errorf("UpdateFileContent failed, %s", err)
 	}
-
-	s.FileContents[filePath] = *openFile(filePath, content)
+	s.updateFileContent(filePath, content)
 	return nil
 }
 
