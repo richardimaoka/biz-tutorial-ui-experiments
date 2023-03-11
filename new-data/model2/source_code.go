@@ -234,7 +234,7 @@ func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool
 	return nil
 }
 
-func (s *SourceCode) DeleteFileContent(filePath, content string) error {
+func (s *SourceCode) DeleteFileContent(filePath string) error {
 	if err := s.canDeleteFileContent(filePath); err != nil {
 		return fmt.Errorf("DeleteFileContent failed, %s", err)
 	}
@@ -253,6 +253,7 @@ func (s *SourceCode) UpdateFileContent(filePath, content string) error {
 }
 
 func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
+	// Add directories
 	errors := []string{}
 	for _, d := range effect.DirectoriesToAdd {
 		if err := s.AddDirectoryNode(d.FilePath); err != nil {
@@ -263,5 +264,54 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
 
+	// Delete directories
+	// if you come here, len(errors) = 0
+	for _, d := range effect.DirectoriesToDelete {
+		if err := s.DeleteDirectoryNode(d.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
+	}
+
+	// Add files
+	// if you come here, len(errors) = 0
+	for _, f := range effect.FilesToAdd {
+		if err := s.AddFileNode(f.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+		if err := s.AddFileContent(f.FilePath, f.Content, f.IsFullContent); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
+	}
+
+	// Update files
+	// if you come here, len(errors) = 0
+	for _, f := range effect.FilesToUpdate {
+		if err := s.UpdateFileContent(f.FilePath, f.Content); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
+	}
+
+	// Delete files
+	// if you come here, len(errors) = 0
+	for _, f := range effect.FilesToDelete {
+		if err := s.DeleteFileContent(f.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+		if err := s.DeleteFileNode(f.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
+	}
 	return nil
 }
