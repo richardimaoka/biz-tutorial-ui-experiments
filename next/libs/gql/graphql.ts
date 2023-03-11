@@ -77,7 +77,7 @@ export type SourceCode = {
 };
 
 export type SourceCodeOpenFileArgs = {
-  filePath?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  filePath?: InputMaybe<Scalars["String"]>;
 };
 
 export type Terminal = {
