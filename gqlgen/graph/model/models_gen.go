@@ -49,7 +49,7 @@ type SourceCode struct {
 
 type Terminal struct {
 	Name             *string         `json:"name"`
-	CurrentDirectory []*string       `json:"currentDirectory"`
+	CurrentDirectory *string         `json:"currentDirectory"`
 	Nodes            []*TerminalNode `json:"nodes"`
 }
 

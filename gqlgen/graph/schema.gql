@@ -24,7 +24,7 @@ type TerminalNode {
 
 type Terminal {
   name: String
-  currentDirectory: [String]
+  currentDirectory: String
   nodes: [TerminalNode]
 }
 

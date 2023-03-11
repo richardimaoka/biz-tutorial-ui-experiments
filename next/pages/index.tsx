@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
-import next from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
-import { nonNullArray } from "../libs/nonNullArray";
 
 const PageQuery = graphql(/* GraphQL */ `
   query PageQuery($step: String) {
@@ -44,7 +42,7 @@ export default function Home() {
   const [currentTerminalIndex] = useState(0);
   const currentTerminal = terminals && terminals[currentTerminalIndex];
   const currentDirectory = currentTerminal?.currentDirectory
-    ? nonNullArray(currentTerminal?.currentDirectory)
+    ? currentTerminal.currentDirectory
     : undefined;
 
   // console.log("rendering home", prevStep, step, nextStep);

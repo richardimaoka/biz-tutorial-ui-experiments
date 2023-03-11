@@ -15,7 +15,7 @@ const SourceCodeViewer_Fragment = graphql(`
 
 export interface SourceCodeViewerProps {
   fragment: FragmentType<typeof SourceCodeViewer_Fragment>;
-  currentDirectory?: string[];
+  currentDirectory?: string;
 }
 
 const EmptyFileContentPane = () => (

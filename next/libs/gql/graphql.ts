@@ -82,7 +82,7 @@ export type SourceCodeOpenFileArgs = {
 
 export type Terminal = {
   __typename: "Terminal";
-  currentDirectory?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  currentDirectory?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   nodes?: Maybe<Array<Maybe<TerminalNode>>>;
 };
@@ -201,7 +201,7 @@ export type TerminalCommandWriting_FragmentFragment = {
 
 export type TerminalComponent_FragmentFragment = {
   __typename: "Terminal";
-  currentDirectory?: Array<string | null> | null;
+  currentDirectory?: string | null;
   nodes?: Array<
     | ({ __typename: "TerminalNode"; index?: number | null } & {
         " $fragmentRefs"?: {
@@ -256,7 +256,7 @@ export type PageQueryQuery = {
       | ({
           __typename: "Terminal";
           name?: string | null;
-          currentDirectory?: Array<string | null> | null;
+          currentDirectory?: string | null;
         } & {
           " $fragmentRefs"?: {
             TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
