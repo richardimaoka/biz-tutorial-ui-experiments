@@ -186,9 +186,7 @@ func (s *SourceCode) addDirectoryNode(directoryPath string) {
 	s.sortFileTree()
 }
 
-func (s *SourceCode) deleteDirectoryNode(filePath string) {
-	s.setAllIsUpdatedFalse()
-
+func (s *SourceCode) popNode(filePath string) {
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
 		if !strings.HasPrefix(*v.FilePath, filePath) {
@@ -196,7 +194,11 @@ func (s *SourceCode) deleteDirectoryNode(filePath string) {
 		}
 	}
 	s.FileTree = newFileTree
+}
 
+func (s *SourceCode) deleteDirectoryNode(filePath string) {
+	s.setAllIsUpdatedFalse()
+	s.popNode(filePath)
 	s.sortFileTree()
 }
 
@@ -209,14 +211,7 @@ func (s *SourceCode) addFileNode(filePath string) {
 
 func (s *SourceCode) deleteFileNode(filePath string) {
 	s.setAllIsUpdatedFalse()
-
-	var newFileTree []*FileNode
-	for _, v := range s.FileTree {
-		if *v.FilePath != filePath {
-			newFileTree = append(newFileTree, v)
-		}
-	}
-	s.FileTree = newFileTree
+	s.popNode(filePath)
 	s.sortFileTree()
 }
 
