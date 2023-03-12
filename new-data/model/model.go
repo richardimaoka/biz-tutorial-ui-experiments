@@ -269,8 +269,6 @@ func (p *PageState) runTerminalCommand(command *ActionCommand) error {
 		}
 	}
 
-	//TODO: sort FileTree
-
 	// update step
 	p.gotoNextStep(nextNextStep)
 

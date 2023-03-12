@@ -299,6 +299,8 @@ func TestSourceCode_Contents(t *testing.T) {
 					var err error
 					switch v := op.operation.(type) {
 					case FileAdd:
+						// TODO: replace this with AddFile
+						// because AddFileContent has a contract with AddFileNode, so cannot independently test AddFileContent
 						if err := sc.AddFileNode(v.FilePath); err != nil {
 							t.Fatal(err)
 						}
@@ -340,6 +342,8 @@ func TestSourceCode_Contents(t *testing.T) {
 			operations: []Operation{
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
 			}, resultFile: "testdata/source_code/contents/add-file2.json"},
+
+		//TODO: fill the same cases as node tests
 		//add file next_to
 		//error add file duplicate1
 		//error add file duplicate2
