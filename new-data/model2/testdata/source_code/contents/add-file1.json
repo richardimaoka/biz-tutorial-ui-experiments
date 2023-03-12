@@ -1,0 +1,22 @@
+{
+  "fileTree": [
+    {
+      "nodeType": "FILE",
+      "offset": 0,
+      "isUpdated": true,
+      "name": "new.txt",
+      "filePath": "new.txt"
+    }
+  ],
+  "openFile": null,
+  "fileContents": {
+    "new.txt": {
+      "fileName": "new.txt",
+      "filePath": "new.txt",
+      "content": "hello",
+      "isFullContent": true,
+      "language": null,
+      "highlight": null
+    }
+  }
+}

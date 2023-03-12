@@ -2,6 +2,7 @@ package model2
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func statusString(expectSuccess bool) string {
 	}
 }
 
-func TestSourceCode(t *testing.T) {
+func TestSourceCode_FileNodes(t *testing.T) {
 	type OperationType string
 
 	const (
@@ -269,4 +270,66 @@ func TestSourceCode(t *testing.T) {
 			}, resultFile: "testdata/source_code/delete-file2.json"},
 	}
 	t.Run("delete_file", func(t *testing.T) { runEntries(t, entries) })
+}
+
+func TestSourceCode_Contents(t *testing.T) {
+	type Operation struct {
+		operation     FileSystemOperation
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		name       string
+		operations []Operation
+		resultFile string
+	}
+
+	var entries []Entry
+
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for i, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				sc := NewSourceCode()
+				for j, op := range e.operations {
+					var err error
+					switch v := op.operation.(type) {
+					case FileAdd:
+						if err := sc.AddFileNode(v.FilePath); err != nil {
+							t.Fatal(err)
+						}
+						if err := sc.AddFileContent(v.FilePath, v.Content, v.IsFullContent); err != nil {
+							t.Fatal(err)
+						}
+					default:
+						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
+						return
+					}
+
+					resultSuccess := err == nil
+					if resultSuccess != op.expectSuccess {
+						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s\n", statusString(op.expectSuccess), statusString(resultSuccess))
+
+						var errMsg2 string = ""
+						if op.expectSuccess {
+							errMsg2 = "error:     " + err.Error() + "\n"
+						}
+
+						errMsg3 := fmt.Sprintf("operation: %+v\n", op)
+						t.Errorf("%s%s%s", errMsg1, errMsg2, errMsg3)
+						return
+					}
+				}
+
+				compareAfterMarshal(t, e.resultFile, sc)
+			})
+		}
+	}
+
+	entries = []Entry{
+		{name: "add_file_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: FileAdd{FilePath: "new.txt", Content: "hello", IsFullContent: true}},
+			}, resultFile: "testdata/source_code/contents/add-file1.json"},
+	}
+	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
 }
