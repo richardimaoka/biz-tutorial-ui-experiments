@@ -159,13 +159,7 @@ func (s *SourceCode) setAllIsUpdatedFalse() {
 	}
 }
 
-func (s *SourceCode) appendDirectoryNode(directoryPath string) {
-	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
-}
-
-func (s *SourceCode) addDirectoryNode(directoryPath string) {
-	s.setAllIsUpdatedFalse()
-
+func (s *SourceCode) addMissingParentDirs(directoryPath string) {
 	splitPath := strings.Split(directoryPath, "/")
 	incremental := []string{}
 	for i, c := range splitPath {
@@ -179,13 +173,22 @@ func (s *SourceCode) addDirectoryNode(directoryPath string) {
 			s.appendDirectoryNode(incrementalPath)
 		}
 	}
+}
 
+func (s *SourceCode) appendDirectoryNode(directoryPath string) {
+	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
+}
+
+func (s *SourceCode) addDirectoryNode(directoryPath string) {
+	s.setAllIsUpdatedFalse()
+	s.addMissingParentDirs(directoryPath)
 	s.appendDirectoryNode(directoryPath)
 	s.sortFileTree()
 }
 
 func (s *SourceCode) deleteDirectoryNode(filePath string) {
 	s.setAllIsUpdatedFalse()
+
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
 		if !strings.HasPrefix(*v.FilePath, filePath) {
@@ -193,32 +196,20 @@ func (s *SourceCode) deleteDirectoryNode(filePath string) {
 		}
 	}
 	s.FileTree = newFileTree
+
 	s.sortFileTree()
 }
 
 func (s *SourceCode) addFileNode(filePath string) {
 	s.setAllIsUpdatedFalse()
-
-	splitPath := strings.Split(filePath, "/")
-	incremental := []string{}
-	for i, c := range splitPath {
-		// skip the last in splitPath
-		if i == len(splitPath)-1 {
-			continue
-		}
-		incremental = append(incremental, c)
-		incrementalPath := strings.Join(incremental, "/")
-		if found, _ := s.findFileNode(incrementalPath); found == -1 {
-			s.appendDirectoryNode(incrementalPath)
-		}
-	}
-
+	s.addMissingParentDirs(filePath)
 	s.FileTree = append(s.FileTree, fileNode(filePath))
 	s.sortFileTree()
 }
 
 func (s *SourceCode) deleteFileNode(filePath string) {
 	s.setAllIsUpdatedFalse()
+
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
 		if *v.FilePath != filePath {
@@ -247,6 +238,7 @@ func NewSourceCode() *SourceCode {
 	return &SourceCode{FileContents: make(map[string]OpenFile)}
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	if err := s.canAddDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("AddDirectoryNode failed, %s", err)
@@ -255,6 +247,7 @@ func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
 	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
@@ -263,6 +256,7 @@ func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) AddFileNode(filePath string) error {
 	if err := s.canAddFileNode(filePath); err != nil {
 		return fmt.Errorf("AddFileNode failed, %s", err)
@@ -271,6 +265,7 @@ func (s *SourceCode) AddFileNode(filePath string) error {
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFileNode(filePath); err != nil {
 		return fmt.Errorf("DeleteFileNode failed, %s", err)
@@ -279,6 +274,7 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool) error {
 	if err := s.canAddFileContent(filePath); err != nil {
 		return fmt.Errorf("AddFileContent failed, %s", err)
@@ -287,6 +283,7 @@ func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) DeleteFileContent(filePath string) error {
 	if err := s.canDeleteFileContent(filePath); err != nil {
 		return fmt.Errorf("DeleteFileContent failed, %s", err)
@@ -295,11 +292,26 @@ func (s *SourceCode) DeleteFileContent(filePath string) error {
 	return nil
 }
 
+//TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) UpdateFileContent(filePath, content string) error {
 	if err := s.canUpdateFileContent(filePath); err != nil {
 		return fmt.Errorf("UpdateFileContent failed, %s", err)
 	}
 	s.updateFileContent(filePath, content)
+	return nil
+}
+
+func (s *SourceCode) AddFile(op FileAdd) error {
+	if err := s.canAddFileNode(op.FilePath); err != nil {
+		return fmt.Errorf("AddFile failed, %s", err)
+	}
+	if err := s.canAddFileContent(op.FilePath); err != nil {
+		return fmt.Errorf("AddFile failed, %s", err)
+	}
+
+	s.addFileNode(op.FilePath)
+	s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
+
 	return nil
 }
 
