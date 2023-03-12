@@ -86,25 +86,25 @@ func TestSourceCode_FileNodes(t *testing.T) {
 		{name: "add_dir_single",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
-			}, resultFile: "testdata/source_code/add-directory1.json"},
+			}, resultFile: "testdata/source_code/nodes/add-directory1.json"},
 
 		{name: "add_dir_nested",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-			}, resultFile: "testdata/source_code/add-directory2.json"},
+			}, resultFile: "testdata/source_code/nodes/add-directory2.json"},
 
 		{name: "add_dir_nested2",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-			}, resultFile: "testdata/source_code/add-directory3.json"},
+			}, resultFile: "testdata/source_code/nodes/add-directory3.json"},
 
 		{name: "add_dir_multiple",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
-			}, resultFile: "testdata/source_code/add-directory4.json"},
+			}, resultFile: "testdata/source_code/nodes/add-directory4.json"},
 
 		{name: "error_add_dir_empty",
 			operations: []Operation{
@@ -119,7 +119,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world/japan"},
-			}, resultFile: "testdata/source_code/add-directory5.json"},
+			}, resultFile: "testdata/source_code/nodes/add-directory5.json"},
 	}
 	t.Run("add_directory", func(t *testing.T) { runEntries(t, entries) })
 
@@ -135,7 +135,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello/world"},
-			}, resultFile: "testdata/source_code/delete-directory1.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-directory1.json"},
 
 		{name: "delete_dir_nested_middle",
 			operations: []Operation{
@@ -147,7 +147,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello/world"},
-			}, resultFile: "testdata/source_code/delete-directory2.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-directory2.json"},
 
 		{name: "delete_dir_nested_parent",
 			operations: []Operation{
@@ -159,7 +159,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "hello"},
-			}, resultFile: "testdata/source_code/delete-directory3.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-directory3.json"},
 
 		{name: "error_delete_dir_non_existent",
 			operations: []Operation{
@@ -169,7 +169,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: false, operationType: OpDeleteDirectory, filePath: "goodmorning/hello/universe"},
 				{expectSuccess: false, operationType: OpDeleteDirectory, filePath: "goodmorning/vonjour/world"},
-			}, resultFile: "testdata/source_code/delete-directory4.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-directory4.json"},
 
 		{name: "error_delete_dir_twice",
 			operations: []Operation{
@@ -179,7 +179,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: true, operationType: OpDeleteDirectory, filePath: "goodmorning/hello/world"},
 				{expectSuccess: false, operationType: OpDeleteDirectory, filePath: "goodmorning/hello/world"},
-			}, resultFile: "testdata/source_code/delete-directory5.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-directory5.json"},
 	}
 	t.Run("delete_directory", func(t *testing.T) { runEntries(t, entries) })
 
@@ -187,25 +187,25 @@ func TestSourceCode_FileNodes(t *testing.T) {
 		{name: "add_file_single",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello.txt"},
-			}, resultFile: "testdata/source_code/add-file1.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file1.json"},
 
 		{name: "add_file_nested",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world.txt"},
-			}, resultFile: "testdata/source_code/add-file2.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file2.json"},
 
 		{name: "add_file_nested2",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
-			}, resultFile: "testdata/source_code/add-file3.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file3.json"},
 
 		{name: "add_file_nested3",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
-			}, resultFile: "testdata/source_code/add-file4.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file4.json"},
 
 		{name: "add_file_next_to",
 			operations: []Operation{
@@ -213,13 +213,13 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/america.txt"},
-			}, resultFile: "testdata/source_code/add-file5.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file5.json"},
 
 		{name: "error_add_file_duplicate1",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello.txt"},
 				{expectSuccess: false, operationType: OpAddFile, filePath: "hello.txt"},
-			}, resultFile: "testdata/source_code/add-file1.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file1.json"},
 
 		{name: "error_add_file_duplicate2",
 			operations: []Operation{
@@ -227,7 +227,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world.txt"},
 				{expectSuccess: false, operationType: OpAddFile, filePath: "hello/world.txt"},
 				{expectSuccess: false, operationType: OpAddFile, filePath: "hello"},
-			}, resultFile: "testdata/source_code/add-file2.json"},
+			}, resultFile: "testdata/source_code/nodes/add-file2.json"},
 	}
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
 
@@ -244,7 +244,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: true, operationType: OpDeleteFile, filePath: "hello/world/japan.txt"},
-			}, resultFile: "testdata/source_code/delete-file1.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-file1.json"},
 
 		{name: "delete_file_next_to",
 			operations: []Operation{
@@ -253,7 +253,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/america.txt"},
 				{expectSuccess: true, operationType: OpDeleteFile, filePath: "hello/world/japan.txt"},
-			}, resultFile: "testdata/source_code/delete-file2.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-file2.json"},
 
 		{name: "error_delete_file_non_existent",
 			operations: []Operation{
@@ -262,7 +262,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/america.txt"},
 				{expectSuccess: false, operationType: OpDeleteFile, filePath: "hello/world/france.txt"},
-			}, resultFile: "testdata/source_code/delete-file3.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-file3.json"},
 
 		{name: "error_delete_file_twice",
 			operations: []Operation{
@@ -272,7 +272,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/america.txt"},
 				{expectSuccess: true, operationType: OpDeleteFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: false, operationType: OpDeleteFile, filePath: "hello/world/japan.txt"},
-			}, resultFile: "testdata/source_code/delete-file2.json"},
+			}, resultFile: "testdata/source_code/nodes/delete-file2.json"},
 	}
 	t.Run("delete_file", func(t *testing.T) { runEntries(t, entries) })
 }
