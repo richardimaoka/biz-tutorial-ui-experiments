@@ -60,7 +60,7 @@ func parentDirectoryPath(filePath string) string {
 	return strings.Join(split[:len(split)-1], "/")
 }
 
-func validateFilePath(filePath string) error {
+func isValidFilePath(filePath string) error {
 	if filePath == "" {
 		return fmt.Errorf("empty path")
 	}

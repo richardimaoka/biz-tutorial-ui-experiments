@@ -51,7 +51,7 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 }
 
 func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
-	if err := validateFilePath(directoryPath); err != nil {
+	if err := isValidFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot add directory node, %s", err)
 	}
 
@@ -66,7 +66,7 @@ func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
 }
 
 func (s *SourceCode) canDeleteDirectoryNode(directoryPath string) error {
-	if err := validateFilePath(directoryPath); err != nil {
+	if err := isValidFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot delete directory node, %s", err)
 	}
 
@@ -78,7 +78,7 @@ func (s *SourceCode) canDeleteDirectoryNode(directoryPath string) error {
 }
 
 func (s *SourceCode) canAddFileNode(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file node, %s", err)
 	}
 
@@ -93,7 +93,7 @@ func (s *SourceCode) canAddFileNode(filePath string) error {
 }
 
 func (s *SourceCode) canDeleteFileNode(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot delete file node, %s", err)
 	}
 
@@ -105,7 +105,7 @@ func (s *SourceCode) canDeleteFileNode(filePath string) error {
 }
 
 func (s *SourceCode) canUpdateFileNode(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot update file node, %s", err)
 	}
 
@@ -117,7 +117,7 @@ func (s *SourceCode) canUpdateFileNode(filePath string) error {
 }
 
 func (s *SourceCode) canAddFileContent(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file content, %s", err)
 	}
 
@@ -129,7 +129,7 @@ func (s *SourceCode) canAddFileContent(filePath string) error {
 }
 
 func (s *SourceCode) canDeleteFileContent(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot delete file content, %s", err)
 	}
 
@@ -141,7 +141,7 @@ func (s *SourceCode) canDeleteFileContent(filePath string) error {
 }
 
 func (s *SourceCode) canUpdateFileContent(filePath string) error {
-	if err := validateFilePath(filePath); err != nil {
+	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot update file content, %s", err)
 	}
 
