@@ -94,12 +94,17 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 			}, resultFile: "testdata/source_code/add-directory2.json"},
 
+		{name: "add_dir_nested2",
+			operations: []Operation{
+				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+			}, resultFile: "testdata/source_code/add-directory3.json"},
+
 		{name: "add_dir_multiple",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
-			}, resultFile: "testdata/source_code/add-directory3.json"},
+			}, resultFile: "testdata/source_code/add-directory4.json"},
 
 		{name: "error_add_dir_empty",
 			operations: []Operation{
@@ -114,7 +119,7 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world/japan"},
-			}, resultFile: "testdata/source_code/add-directory4.json"},
+			}, resultFile: "testdata/source_code/add-directory5.json"},
 	}
 	t.Run("add_directory", func(t *testing.T) { runEntries(t, entries) })
 

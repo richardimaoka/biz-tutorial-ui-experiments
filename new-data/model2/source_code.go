@@ -59,9 +59,9 @@ func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
 		return fmt.Errorf("cannot add directory node, file path = %s already exists", directoryPath)
 	}
 
-	if err := s.hasParentDir(directoryPath); err != nil {
-		return err
-	}
+	// if err := s.hasParentDir(directoryPath); err != nil {
+	// 	return err
+	// }
 	return nil
 }
 
@@ -165,6 +165,21 @@ func (s *SourceCode) appendDirectoryNode(directoryPath string) {
 
 func (s *SourceCode) addDirectoryNode(directoryPath string) {
 	s.setAllIsUpdatedFalse()
+
+	splitPath := strings.Split(directoryPath, "/")
+	incremental := []string{}
+	for i, c := range splitPath {
+		// skip the last in splitPath
+		if i == len(splitPath)-1 {
+			continue
+		}
+		incremental = append(incremental, c)
+		incrementalPath := strings.Join(incremental, "/")
+		if found, _ := s.findFileNode(incrementalPath); found == -1 {
+			s.appendDirectoryNode(incrementalPath)
+		}
+	}
+
 	s.appendDirectoryNode(directoryPath)
 	s.sortFileTree()
 }

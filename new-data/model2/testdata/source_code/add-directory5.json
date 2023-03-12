@@ -3,16 +3,23 @@
     {
       "nodeType": "DIRECTORY",
       "offset": 0,
-      "isUpdated": true,
+      "isUpdated": false,
       "name": "hello",
       "filePath": "hello"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 1,
-      "isUpdated": true,
+      "isUpdated": false,
       "name": "world",
       "filePath": "hello/world"
+    },
+    {
+      "nodeType": "FILE",
+      "offset": 2,
+      "isUpdated": true,
+      "name": "japan",
+      "filePath": "hello/world/japan"
     }
   ],
   "openFile": null,
