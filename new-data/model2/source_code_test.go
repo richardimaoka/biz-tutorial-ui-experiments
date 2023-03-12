@@ -299,12 +299,7 @@ func TestSourceCode_Contents(t *testing.T) {
 					var err error
 					switch v := op.operation.(type) {
 					case FileAdd:
-						// TODO: replace this with AddFile
-						// because AddFileContent has a contract with AddFileNode, so cannot independently test AddFileContent
-						if err := sc.AddFileNode(v.FilePath); err != nil {
-							t.Fatal(err)
-						}
-						if err := sc.AddFileContent(v.FilePath, v.Content, v.IsFullContent); err != nil {
+						if err := sc.AddFile(v); err != nil {
 							t.Fatal(err)
 						}
 					default:

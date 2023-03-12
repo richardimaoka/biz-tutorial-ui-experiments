@@ -269,32 +269,29 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 	return nil
 }
 
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool) error {
-	if err := s.canAddFileContent(filePath); err != nil {
-		return fmt.Errorf("AddFileContent failed, %s", err)
-	}
-	s.addFileContent(filePath, content, isFullContent)
-	return nil
-}
+// func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool) error {
+// 	if err := s.canAddFileContent(filePath); err != nil {
+// 		return fmt.Errorf("AddFileContent failed, %s", err)
+// 	}
+// 	s.addFileContent(filePath, content, isFullContent)
+// 	return nil
+// }
 
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) DeleteFileContent(filePath string) error {
-	if err := s.canDeleteFileContent(filePath); err != nil {
-		return fmt.Errorf("DeleteFileContent failed, %s", err)
-	}
-	s.deleteFileContent(filePath)
-	return nil
-}
+// func (s *SourceCode) DeleteFileContent(filePath string) error {
+// 	if err := s.canDeleteFileContent(filePath); err != nil {
+// 		return fmt.Errorf("DeleteFileContent failed, %s", err)
+// 	}
+// 	s.deleteFileContent(filePath)
+// 	return nil
+// }
 
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) UpdateFileContent(filePath, content string) error {
-	if err := s.canUpdateFileContent(filePath); err != nil {
-		return fmt.Errorf("UpdateFileContent failed, %s", err)
-	}
-	s.updateFileContent(filePath, content)
-	return nil
-}
+// func (s *SourceCode) UpdateFileContent(filePath, content string) error {
+// 	if err := s.canUpdateFileContent(filePath); err != nil {
+// 		return fmt.Errorf("UpdateFileContent failed, %s", err)
+// 	}
+// 	s.updateFileContent(filePath, content)
+// 	return nil
+// }
 
 func (s *SourceCode) AddFile(op FileAdd) error {
 	if err := s.canAddFileNode(op.FilePath); err != nil {
@@ -310,6 +307,34 @@ func (s *SourceCode) AddFile(op FileAdd) error {
 	return nil
 }
 
+func (s *SourceCode) UpdateFile(op FileUpdate) error {
+	if err := s.canUpdateFileNode(op.FilePath); err != nil {
+		return fmt.Errorf("UpdateFile failed, %s", err)
+	}
+	if err := s.canUpdateFileContent(op.FilePath); err != nil {
+		return fmt.Errorf("UpdateFile failed, %s", err)
+	}
+
+	s.updateFileContent(op.FilePath, op.Content)
+
+	return nil
+}
+
+func (s *SourceCode) DeleteFile(op FileDelete) error {
+	if err := s.canDeleteFileNode(op.FilePath); err != nil {
+		return fmt.Errorf("DeleteFile failed, %s", err)
+	}
+	if err := s.canDeleteFileContent(op.FilePath); err != nil {
+		return fmt.Errorf("DeleteFile failed, %s", err)
+	}
+
+	s.deleteFileContent(op.FilePath)
+	s.deleteFileNode(op.FilePath)
+
+	return nil
+}
+
+//TODO: backup current source code
 func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	// Add directories
 	errors := []string{}
@@ -321,9 +346,9 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+	// if you come here, len(errors) = 0
 
 	// Delete directories
-	// if you come here, len(errors) = 0
 	for _, d := range effect.DirectoriesToDelete {
 		if err := s.DeleteDirectoryNode(d.FilePath); err != nil {
 			errors = append(errors, err.Error())
@@ -332,44 +357,40 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+	// if you come here, len(errors) = 0
 
 	// Add files
-	// if you come here, len(errors) = 0
 	for _, f := range effect.FilesToAdd {
-		if err := s.AddFileNode(f.FilePath); err != nil {
-			errors = append(errors, err.Error())
-		}
-		if err := s.AddFileContent(f.FilePath, f.Content, f.IsFullContent); err != nil {
+		if err := s.AddFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+	// if you come here, len(errors) = 0
 
 	// Update files
-	// if you come here, len(errors) = 0
 	for _, f := range effect.FilesToUpdate {
-		if err := s.UpdateFileContent(f.FilePath, f.Content); err != nil {
+		if err := s.UpdateFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+	// if you come here, len(errors) = 0
 
 	// Delete files
-	// if you come here, len(errors) = 0
 	for _, f := range effect.FilesToDelete {
-		if err := s.DeleteFileContent(f.FilePath); err != nil {
-			errors = append(errors, err.Error())
-		}
-		if err := s.DeleteFileNode(f.FilePath); err != nil {
+		if err := s.DeleteFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+	// if you come here, len(errors) = 0
+
 	return nil
 }
