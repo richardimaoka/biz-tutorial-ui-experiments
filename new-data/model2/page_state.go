@@ -50,6 +50,10 @@ func (p *PageState) canTypeInTerminalCommand(terminalName string) (*Terminal, st
 		return nil, "", fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
 	}
 
+	if err := terminal.canTypeInCommand(); err != nil {
+		return nil, "", fmt.Errorf("failed to type in command, %s", err)
+	}
+
 	return terminal, nextNextStep, nil
 }
 
