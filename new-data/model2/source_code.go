@@ -23,7 +23,7 @@ func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
 	return -1, nil
 }
 
-func (s *SourceCode) validateNode(filePath string, expectedNodeType FileNodeType) error {
+func (s *SourceCode) isValidNode(filePath string, expectedNodeType FileNodeType) error {
 	_, node := s.findFileNode(filePath)
 	if node == nil {
 		return fmt.Errorf("filePath = %s has no node", filePath)
@@ -42,7 +42,7 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 		return nil //parent dir = root dir
 	}
 
-	err := s.validateNode(parentPath, FileNodeTypeDirectory)
+	err := s.isValidNode(parentPath, FileNodeTypeDirectory)
 	if err != nil {
 		return fmt.Errorf("no parent dir, %s", err)
 	}
@@ -70,7 +70,7 @@ func (s *SourceCode) canDeleteDirectoryNode(directoryPath string) error {
 		return fmt.Errorf("cannot delete directory node, %s", err)
 	}
 
-	if err := s.validateNode(directoryPath, FileNodeTypeDirectory); err != nil {
+	if err := s.isValidNode(directoryPath, FileNodeTypeDirectory); err != nil {
 		return fmt.Errorf("cannot delete directory node, %s", err)
 	}
 
@@ -97,7 +97,7 @@ func (s *SourceCode) canDeleteFileNode(filePath string) error {
 		return fmt.Errorf("cannot delete file node, %s", err)
 	}
 
-	if err := s.validateNode(filePath, FileNodeTypeFile); err != nil {
+	if err := s.isValidNode(filePath, FileNodeTypeFile); err != nil {
 		return fmt.Errorf("cannot delete file node, %s", err)
 	}
 
@@ -109,7 +109,7 @@ func (s *SourceCode) canUpdateFileNode(filePath string) error {
 		return fmt.Errorf("cannot update file node, %s", err)
 	}
 
-	if err := s.validateNode(filePath, FileNodeTypeFile); err != nil {
+	if err := s.isValidNode(filePath, FileNodeTypeFile); err != nil {
 		return fmt.Errorf("cannot update file node, %s", err)
 	}
 
