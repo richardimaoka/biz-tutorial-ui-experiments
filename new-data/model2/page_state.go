@@ -73,25 +73,17 @@ func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
 
 func (p *PageState) RunTerminalCommand(command, terminalName string) error {
 	// 1.1 pre-conditions for next step
-	// nextNextStep, err := calcNextStep(*p.NextStep)
+	// terminal, lastNode, nextNextStep, err := p.canRunTerminalCommand(terminalName)
 	// if err != nil {
-	// 	return fmt.Errorf("failed to run command, %s", err)
+	// 	return fmt.Errorf("failed to type in command, %s", err)
 	// }
 
-	// pre-condition - find command's target terminal
-	terminal := p.getTerminal(terminalName)
-	if terminal == nil {
-		return fmt.Errorf("failed run command, terminal with name = %s not found", terminalName)
-	}
-
-	// terminal.MarkLastCommandExecuted()
+	// lastNode.markCommandExecuted(command)
 
 	// terminal.ApplyEffect()
-	// SourceCode.ApplyEffect
+	// SourceCode.ApplyEffect()
 
-	// update step
-	// p.gotoNextStep()
+	// p.gotoNextStep(nextNextStep)
 
-	// return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
 	return nil
 }
