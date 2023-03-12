@@ -333,7 +333,7 @@ func TestSourceCode_Contents(t *testing.T) {
 	entries = []Entry{
 		{name: "add_file_single",
 			operations: []Operation{
-				{expectSuccess: true, operation: FileAdd{FilePath: "new.txt", Content: "hello", IsFullContent: true}},
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
 			}, resultFile: "testdata/source_code/contents/add-file1.json"},
 	}
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })

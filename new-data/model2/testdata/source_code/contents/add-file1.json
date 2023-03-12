@@ -1,19 +1,33 @@
 {
   "fileTree": [
     {
-      "nodeType": "FILE",
+      "nodeType": "DIRECTORY",
       "offset": 0,
       "isUpdated": true,
+      "name": "hello",
+      "filePath": "hello"
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "offset": 1,
+      "isUpdated": true,
+      "name": "world",
+      "filePath": "hello/world"
+    },
+    {
+      "nodeType": "FILE",
+      "offset": 2,
+      "isUpdated": true,
       "name": "new.txt",
-      "filePath": "new.txt"
+      "filePath": "hello/world/new.txt"
     }
   ],
   "openFile": null,
   "fileContents": {
-    "new.txt": {
+    "hello/world/new.txt": {
       "fileName": "new.txt",
-      "filePath": "new.txt",
-      "content": "hello",
+      "filePath": "hello/world/new.txt",
+      "content": "hello new world",
       "isFullContent": true,
       "language": null,
       "highlight": null
