@@ -197,18 +197,18 @@ func TestSourceCode_FileNodes(t *testing.T) {
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 			}, resultFile: "testdata/source_code/add-file3.json"},
 
+		{name: "add_file_nested3",
+			operations: []Operation{
+				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
+			}, resultFile: "testdata/source_code/add-file4.json"},
+
 		{name: "add_file_next_to",
 			operations: []Operation{
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
 				{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan.txt"},
 				{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/america.txt"},
-			}, resultFile: "testdata/source_code/add-file4.json"},
-
-		{name: "error_add_file_no_dir",
-			operations: []Operation{
-				{expectSuccess: false, operationType: OpAddFile, filePath: "hello/world.txt"},
-			}, resultFile: "testdata/source_code/new-source-code.json"},
+			}, resultFile: "testdata/source_code/add-file5.json"},
 
 		{name: "error_add_file_duplicate1",
 			operations: []Operation{

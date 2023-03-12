@@ -3,14 +3,14 @@
     {
       "nodeType": "DIRECTORY",
       "offset": 0,
-      "isUpdated": true,
+      "isUpdated": false,
       "name": "hello",
       "filePath": "hello"
     },
     {
       "nodeType": "DIRECTORY",
       "offset": 1,
-      "isUpdated": true,
+      "isUpdated": false,
       "name": "world",
       "filePath": "hello/world"
     },
@@ -18,6 +18,13 @@
       "nodeType": "FILE",
       "offset": 2,
       "isUpdated": true,
+      "name": "america.txt",
+      "filePath": "hello/world/america.txt"
+    },
+    {
+      "nodeType": "FILE",
+      "offset": 2,
+      "isUpdated": false,
       "name": "japan.txt",
       "filePath": "hello/world/japan.txt"
     }
