@@ -333,8 +333,27 @@ func TestSourceCode_Contents(t *testing.T) {
 	entries = []Entry{
 		{name: "add_file_single",
 			operations: []Operation{
-				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
 			}, resultFile: "testdata/source_code/contents/add-file1.json"},
+
+		{name: "add_file_nested",
+			operations: []Operation{
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+			}, resultFile: "testdata/source_code/contents/add-file2.json"},
+		//add file next_to
+		//error add file duplicate1
+		//error add file duplicate2
+
+		//delete dir nested leaf
+		//delete dir nested middle
+		//delete dir nested parent
+
+		//delete file single
+		//delete file nested
+		//error delete file dir
+		//error delete file non_existent
+		//error delete file twice
 	}
+
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
 }
