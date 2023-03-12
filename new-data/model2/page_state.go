@@ -19,6 +19,10 @@ func calcNextStep(stepNumString string) (string, error) {
 	return fmt.Sprintf("%03d", stepNum+1), nil
 }
 
+func (p *PageState) canCalcNextStep() (string, error) {
+	return calcNextStep(*p.NextStep)
+}
+
 func (p *PageState) getTerminal(terminalName string) *Terminal {
 	var terminal *Terminal // nil as zero value
 	for _, t := range p.Terminals {
@@ -29,54 +33,36 @@ func (p *PageState) getTerminal(terminalName string) *Terminal {
 	return terminal
 }
 
-func (p *PageState) gotoNextStep() error {
-	nextNextStep, err := calcNextStep(*p.NextStep)
-	if err != nil {
-		return err
-	}
-
+func (p *PageState) gotoNextStep(nextNextStep string) {
 	p.PrevStep = p.Step
 	p.Step = p.NextStep
 	p.NextStep = &nextNextStep
-
-	return nil
 }
 
-func (p *PageState) canTypeInTerminalCommand(terminalName string) error {
-	_, err := calcNextStep(*p.NextStep)
+func (p *PageState) canTypeInTerminalCommand(terminalName string) (*Terminal, string, error) {
+	nextNextStep, err := p.canCalcNextStep()
 	if err != nil {
-		return err
+		return nil, "", err
 	}
 
 	terminal := p.getTerminal(terminalName)
 	if terminal == nil {
-		return fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
+		return nil, "", fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
 	}
 
-	return nil
+	return terminal, nextNextStep, nil
 }
 
 // public methods
 
 func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
-	if err := p.canTypeInTerminalCommand(terminalName); err != nil {
+	terminal, nextNextStep, err := p.canTypeInTerminalCommand(terminalName)
+	if err != nil {
 		return fmt.Errorf("failed to type in command, %s", err)
 	}
 
-	terminal := p.getTerminal(terminalName)
-	if terminal == nil {
-		return fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
-	}
-
-	// type in command
-	if err := terminal.TypeInCommand(command); err != nil {
-		return fmt.Errorf("failed to type in command, %s", err)
-	}
-
-	// update step
-	if err := p.gotoNextStep(); err != nil {
-		return fmt.Errorf("failed to type in command, calc next step failed %s", err)
-	}
+	terminal.typeInCommand(command)
+	p.gotoNextStep(nextNextStep)
 
 	return nil
 }
@@ -100,7 +86,7 @@ func (p *PageState) RunTerminalCommand(command, terminalName string) error {
 	// SourceCode.ApplyEffect
 
 	// update step
-	p.gotoNextStep()
+	// p.gotoNextStep()
 
 	// return fmt.Errorf("runTerminalCommand() failed, terminal with name = %s not found", command.TerminalName)
 	return nil
