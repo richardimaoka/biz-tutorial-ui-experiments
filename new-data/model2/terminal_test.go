@@ -107,44 +107,51 @@ func TestTerminal(t *testing.T) {
 	}
 
 	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
-}
 
-func TestTerminalTypein1(t *testing.T) {
-	terminal := NewTerminal("default")
-	if err := terminal.TypeInCommand("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
+	entries = []Entry{
+		{name: "type_in_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
+			},
+			resultFile: "testdata/terminal/type-in-command1.json"},
+
+		{name: "error_type_in_continuous",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
+				{expectSuccess: false, operation: TypeInCommand{Command: "mkdir efg"}},
+			},
+			resultFile: "testdata/terminal/type-in-command1.json"},
 	}
 
-	compareAfterMarshal(t, "testdata/terminal/type-in-command1.json", terminal)
-}
+	t.Run("type_in", func(t *testing.T) { runEntries(t, entries) })
 
-func TestTerminalTypein2(t *testing.T) {
-	terminal := NewTerminal("default")
-	if err := terminal.TypeInCommand("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.MarkLastCommandExecuted("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.TypeInCommand("mkdir cde"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
+	entries = []Entry{
+		{name: "mark_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+			},
+			resultFile: "testdata/terminal/mark-last-command-executed1.json"},
+
+		{name: "mark_and_typein",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir efg"}},
+			},
+			resultFile: "testdata/terminal/mark-last-command-executed2.json"},
+
+		{name: "mark_two",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir efg"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir efg"}},
+			},
+			resultFile: "testdata/terminal/mark-last-command-executed3.json"},
 	}
 
-	compareAfterMarshal(t, "testdata/terminal/type-in-command2.json", terminal)
-}
-
-func TestTerminalTypeinFail(t *testing.T) {
-
-	terminal := NewTerminal("default")
-	if err := terminal.TypeInCommand("mkdir abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.TypeInCommand("mkdir cde"); err == nil {
-		t.Fatalf("error expected")
-	}
-
-	// not changed from the initial command
-	compareAfterMarshal(t, "testdata/terminal/type-in-command1.json", terminal)
+	t.Run("mark_last_command_executed", func(t *testing.T) { runEntries(t, entries) })
 }
 
 func TestTerminalWriteOutput1(t *testing.T) {
