@@ -37,10 +37,8 @@ type FileDelete struct {
 
 func (o FileDelete) IsFileSystemOperation() {}
 
-type SourceCodeEffect struct {
-	DirectoriesToAdd    []DirectoryAdd
-	DirectoriesToDelete []DirectoryDelete
-	FilesToAdd          []FileAdd
-	FilesToUpdate       []FileUpdate
-	FilesToDelete       []FileDelete
+type GitDiff struct {
+	Added   []FileAdd
+	Updated []FileUpdate
+	Deleted []FileDelete
 }

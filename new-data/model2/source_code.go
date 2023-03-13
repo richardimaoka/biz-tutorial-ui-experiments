@@ -338,32 +338,10 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 //or run pre-condition check
 //  if all elements satisfies per-element canXxx,
 //  and no duplicate or overlapping element (no dupe as a whole SourceCodeEffect)
-func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
-	// Add directories
+func (s *SourceCode) ApplyEffect(diff GitDiff) error {
 	errors := []string{}
-	for _, d := range effect.DirectoriesToAdd {
-		if err := s.AddDirectoryNode(d.FilePath); err != nil {
-			errors = append(errors, err.Error())
-		}
-	}
-	if len(errors) != 0 {
-		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
-	}
-	// if you come here, len(errors) = 0
-
-	// Delete directories
-	for _, d := range effect.DirectoriesToDelete {
-		if err := s.DeleteDirectoryNode(d.FilePath); err != nil {
-			errors = append(errors, err.Error())
-		}
-	}
-	if len(errors) != 0 {
-		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
-	}
-	// if you come here, len(errors) = 0
-
 	// Add files
-	for _, f := range effect.FilesToAdd {
+	for _, f := range diff.Added {
 		if err := s.AddFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
@@ -374,7 +352,7 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	// if you come here, len(errors) = 0
 
 	// Update files
-	for _, f := range effect.FilesToUpdate {
+	for _, f := range diff.Updated {
 		if err := s.UpdateFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
@@ -385,7 +363,7 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	// if you come here, len(errors) = 0
 
 	// Delete files
-	for _, f := range effect.FilesToDelete {
+	for _, f := range diff.Deleted {
 		if err := s.DeleteFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
@@ -393,7 +371,6 @@ func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
-	// if you come here, len(errors) = 0
 
 	return nil
 }
