@@ -88,14 +88,13 @@ func TestTerminal(t *testing.T) {
 		}
 	}
 
-	entries = []Entry{}
+	entries = []Entry{
+		{name: "dir_create_terminal",
+			operations: []Operation{}, // no operation
+			resultFile: "testdata/terminal/new-terminal.json"},
+	}
 
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
-}
-
-func TestTerminalNew(t *testing.T) {
-	terminal := NewTerminal("default")
-	compareAfterMarshal(t, "testdata/terminal/new-terminal.json", terminal)
 }
 
 func TestTerminalCd1(t *testing.T) {
