@@ -89,24 +89,24 @@ func TestTerminal(t *testing.T) {
 	}
 
 	entries = []Entry{
-		{name: "dir_create_terminal",
+		{name: "new_terminal",
 			operations: []Operation{}, // no operation
 			resultFile: "testdata/terminal/new-terminal.json"},
+
+		{name: "cd1",
+			operations: []Operation{
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
+			},
+			resultFile: "testdata/terminal/cd1.json"},
+
+		{name: "cd2",
+			operations: []Operation{
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
+			},
+			resultFile: "testdata/terminal/cd2.json"},
 	}
 
-	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
-}
-
-func TestTerminalCd1(t *testing.T) {
-	terminal := NewTerminal("default")
-	terminal.ChangeCurrentDirectory("hello")
-	compareAfterMarshal(t, "testdata/terminal/cd1.json", terminal)
-}
-
-func TestTerminalCd2(t *testing.T) {
-	terminal := NewTerminal("default")
-	terminal.ChangeCurrentDirectory("hello/world/thunder")
-	compareAfterMarshal(t, "testdata/terminal/cd2.json", terminal)
+	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
 }
 
 func TestTerminalTypein1(t *testing.T) {
