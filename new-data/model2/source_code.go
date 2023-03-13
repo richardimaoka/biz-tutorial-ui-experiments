@@ -335,6 +335,9 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 }
 
 //TODO: backup current source code
+//or run pre-condition check
+//  if all elements satisfies per-element canXxx,
+//  and no duplicate or overlapping element (no dupe as a whole SourceCodeEffect)
 func (s *SourceCode) ApplyEffect(effect SourceCodeEffect) error {
 	// Add directories
 	errors := []string{}
