@@ -64,21 +64,8 @@ func TestTerminal(t *testing.T) {
 		{name: "new_terminal",
 			operations: []Operation{}, // no operation
 			resultFile: "testdata/terminal/new-terminal.json"},
-
-		{name: "cd1",
-			operations: []Operation{
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
-			},
-			resultFile: "testdata/terminal/cd1.json"},
-
-		{name: "cd2",
-			operations: []Operation{
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
-			},
-			resultFile: "testdata/terminal/cd2.json"},
 	}
-
-	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
+	t.Run("new_terminal", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
 		{name: "type_in_single",
@@ -94,7 +81,6 @@ func TestTerminal(t *testing.T) {
 			},
 			resultFile: "testdata/terminal/type-in-command1.json"},
 	}
-
 	t.Run("type_in", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
@@ -122,7 +108,6 @@ func TestTerminal(t *testing.T) {
 			},
 			resultFile: "testdata/terminal/mark-last-command-executed3.json"},
 	}
-
 	t.Run("mark_last_command_executed", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
@@ -153,4 +138,36 @@ func TestTerminal(t *testing.T) {
 			resultFile: "testdata/terminal/write-output3.json"},
 	}
 	t.Run("write_output", func(t *testing.T) { runEntries(t, entries) })
+
+	entries = []Entry{
+		{name: "cd1",
+			operations: []Operation{
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
+			},
+			resultFile: "testdata/terminal/cd1.json"},
+
+		{name: "cd2",
+			operations: []Operation{
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
+			},
+			resultFile: "testdata/terminal/cd2.json"},
+
+		{name: "cd1",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "cd hello"}},
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
+			},
+			resultFile: "testdata/terminal/cd3.json"},
+
+		{name: "cd2",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello/world/thunder"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "cd hello/world/thunder"}},
+				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
+			},
+			resultFile: "testdata/terminal/cd4.json"},
+	}
+	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
+
 }
