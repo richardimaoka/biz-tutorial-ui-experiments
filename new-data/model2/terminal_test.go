@@ -124,19 +124,33 @@ func TestTerminal(t *testing.T) {
 	}
 
 	t.Run("mark_last_command_executed", func(t *testing.T) { runEntries(t, entries) })
-}
 
-func TestTerminalWriteOutput1(t *testing.T) {
-	terminal := NewTerminal("default")
-	if err := terminal.TypeInCommand("echo abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.MarkLastCommandExecuted("echo abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
-	if err := terminal.WriteOutput("abc"); err != nil {
-		t.Fatalf("no error expected, but %s", err)
-	}
+	entries = []Entry{
+		{name: "output1",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo abc"}},
+				{expectSuccess: true, operation: WriteOutput{Output: "abc"}},
+			},
+			resultFile: "testdata/terminal/write-output1.json"},
 
-	compareAfterMarshal(t, "testdata/terminal/write-output.json", terminal)
+		{name: "write_output2",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo abc"}},
+				{expectSuccess: true, operation: WriteOutput{Output: "abc"}},
+				{expectSuccess: true, operation: TypeInCommand{Command: "echo efg"}},
+				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo efg"}},
+				{expectSuccess: true, operation: WriteOutput{Output: "efg"}},
+			},
+			resultFile: "testdata/terminal/write-output2.json"},
+
+		{name: "error_output_should_follow_execution",
+			operations: []Operation{
+				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
+				{expectSuccess: false, operation: WriteOutput{Output: "abc"}},
+			},
+			resultFile: "testdata/terminal/write-output3.json"},
+	}
+	t.Run("write_output", func(t *testing.T) { runEntries(t, entries) })
 }
