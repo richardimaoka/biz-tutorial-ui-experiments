@@ -50,6 +50,8 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 	return nil
 }
 
+// canXxxYyyNode pre-condition checks
+
 func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
 	if err := isValidFilePath(directoryPath); err != nil {
 		return fmt.Errorf("cannot add directory node, %s", err)
@@ -116,6 +118,8 @@ func (s *SourceCode) canUpdateFileNode(filePath string) error {
 	return nil
 }
 
+// canXxxFileContent pre-condition checks
+
 func (s *SourceCode) canAddFileContent(filePath string) error {
 	if err := isValidFilePath(filePath); err != nil {
 		return fmt.Errorf("cannot add file content, %s", err)
@@ -147,6 +151,41 @@ func (s *SourceCode) canUpdateFileContent(filePath string) error {
 
 	if _, ok := s.FileContents[filePath]; !ok {
 		return fmt.Errorf("cannot update file content, file path = %s is non-existent", filePath)
+	}
+
+	return nil
+}
+
+// canXxxFile pre-condition checks
+
+func (s *SourceCode) canAddFile(op FileAdd) error {
+	if err := s.canAddFileNode(op.FilePath); err != nil {
+		return err
+	}
+	if err := s.canAddFileContent(op.FilePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *SourceCode) canUpdateFile(op FileUpdate) error {
+	if err := s.canUpdateFileNode(op.FilePath); err != nil {
+		return err
+	}
+	if err := s.canUpdateFileContent(op.FilePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *SourceCode) canDeleteFile(op FileDelete) error {
+	if err := s.canDeleteFileNode(op.FilePath); err != nil {
+		return err
+	}
+	if err := s.canDeleteFileContent(op.FilePath); err != nil {
+		return err
 	}
 
 	return nil
@@ -270,10 +309,7 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 }
 
 func (s *SourceCode) AddFile(op FileAdd) error {
-	if err := s.canAddFileNode(op.FilePath); err != nil {
-		return fmt.Errorf("AddFile failed, %s", err)
-	}
-	if err := s.canAddFileContent(op.FilePath); err != nil {
+	if err := s.canAddFile(op); err != nil {
 		return fmt.Errorf("AddFile failed, %s", err)
 	}
 
@@ -284,10 +320,7 @@ func (s *SourceCode) AddFile(op FileAdd) error {
 }
 
 func (s *SourceCode) UpdateFile(op FileUpdate) error {
-	if err := s.canUpdateFileNode(op.FilePath); err != nil {
-		return fmt.Errorf("UpdateFile failed, %s", err)
-	}
-	if err := s.canUpdateFileContent(op.FilePath); err != nil {
+	if err := s.canUpdateFile(op); err != nil {
 		return fmt.Errorf("UpdateFile failed, %s", err)
 	}
 
@@ -297,10 +330,7 @@ func (s *SourceCode) UpdateFile(op FileUpdate) error {
 }
 
 func (s *SourceCode) DeleteFile(op FileDelete) error {
-	if err := s.canDeleteFileNode(op.FilePath); err != nil {
-		return fmt.Errorf("DeleteFile failed, %s", err)
-	}
-	if err := s.canDeleteFileContent(op.FilePath); err != nil {
+	if err := s.canDeleteFile(op); err != nil {
 		return fmt.Errorf("DeleteFile failed, %s", err)
 	}
 
