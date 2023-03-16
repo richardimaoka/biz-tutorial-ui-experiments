@@ -402,6 +402,11 @@ func TestSourceCode_Diff(t *testing.T) {
 	}
 
 	entries = []Entry{
+		{name: "add_file_single",
+			operations: []Operation{
+				{expectSuccess: true, diff: GitDiff{Added: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
+			}, resultFile: "testdata/source_code/diff/add-file1.json",
+		},
 		//error delete file twice
 	}
 
