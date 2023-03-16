@@ -356,3 +356,54 @@ func TestSourceCode_Contents(t *testing.T) {
 
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
 }
+
+func TestSourceCode_Diff(t *testing.T) {
+	type Operation struct {
+		diff          GitDiff
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		name       string
+		operations []Operation
+		resultFile string
+	}
+
+	var entries []Entry
+
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for _, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				sc := NewSourceCode()
+				for _, op := range e.operations {
+					var err error
+					if err := sc.ApplyEffect(op.diff); err != nil {
+						t.Fatal(err)
+					}
+
+					resultSuccess := err == nil
+					if resultSuccess != op.expectSuccess {
+						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s\n", statusString(op.expectSuccess), statusString(resultSuccess))
+
+						var errMsg2 string = ""
+						if op.expectSuccess {
+							errMsg2 = "error:     " + err.Error() + "\n"
+						}
+
+						errMsg3 := fmt.Sprintf("operation: %+v\n", op)
+						t.Errorf("%s%s%s", errMsg1, errMsg2, errMsg3)
+						return
+					}
+				}
+
+				compareAfterMarshal(t, e.resultFile, sc)
+			})
+		}
+	}
+
+	entries = []Entry{
+		//error delete file twice
+	}
+
+	t.Run("diff", func(t *testing.T) { runEntries(t, entries) })
+}
