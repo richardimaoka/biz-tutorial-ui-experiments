@@ -269,30 +269,6 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 	return nil
 }
 
-// func (s *SourceCode) AddFileContent(filePath, content string, isFullContent bool) error {
-// 	if err := s.canAddFileContent(filePath); err != nil {
-// 		return fmt.Errorf("AddFileContent failed, %s", err)
-// 	}
-// 	s.addFileContent(filePath, content, isFullContent)
-// 	return nil
-// }
-
-// func (s *SourceCode) DeleteFileContent(filePath string) error {
-// 	if err := s.canDeleteFileContent(filePath); err != nil {
-// 		return fmt.Errorf("DeleteFileContent failed, %s", err)
-// 	}
-// 	s.deleteFileContent(filePath)
-// 	return nil
-// }
-
-// func (s *SourceCode) UpdateFileContent(filePath, content string) error {
-// 	if err := s.canUpdateFileContent(filePath); err != nil {
-// 		return fmt.Errorf("UpdateFileContent failed, %s", err)
-// 	}
-// 	s.updateFileContent(filePath, content)
-// 	return nil
-// }
-
 func (s *SourceCode) AddFile(op FileAdd) error {
 	if err := s.canAddFileNode(op.FilePath); err != nil {
 		return fmt.Errorf("AddFile failed, %s", err)
