@@ -352,46 +352,47 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 	return nil
 }
 
-//TODO: run pre-condition check
-//  if all elements satisfies per-element canXxx,
-//  and no duplicate or overlapping element (no dupe as a whole SourceCodeEffect)
 func (s *SourceCode) ApplyDiff(diff GitDiff) error {
+	// pre-condition check, dupe in diff
 	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
 		return fmt.Errorf("failed to apply diff, duplicate file paths in added files = %+v", diffDuplicate)
 	}
 
+	// pre-condition check, each element's pre-condition check
 	errors := []string{}
-	// Add files
 	for _, f := range diff.Added {
-		if err := s.AddFile(f); err != nil {
+		if err := s.canAddFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
-	if len(errors) != 0 {
-		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
-	}
-	// if you come here, len(errors) = 0
-
-	// Update files
 	for _, f := range diff.Updated {
-		if err := s.UpdateFile(f); err != nil {
+		if err := s.canUpdateFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
-	if len(errors) != 0 {
-		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
-	}
-	// if you come here, len(errors) = 0
-
-	// Delete files
 	for _, f := range diff.Deleted {
-		if err := s.DeleteFile(f); err != nil {
+		if err := s.canDeleteFile(f); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
 	if len(errors) != 0 {
 		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
 	}
+
+	// apply diff
+	s.setAllIsUpdatedFalse()
+	for _, op := range diff.Added {
+		s.addFileNode(op.FilePath)
+		s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
+	}
+	for _, op := range diff.Updated {
+		s.updateFileContent(op.FilePath, op.Content)
+	}
+	for _, op := range diff.Deleted {
+		s.deleteFileContent(op.FilePath)
+		s.deleteFileNode(op.FilePath)
+	}
+	s.sortFileTree()
 
 	return nil
 }
