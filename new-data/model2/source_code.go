@@ -236,22 +236,16 @@ func (s *SourceCode) popNode(filePath string) {
 }
 
 func (s *SourceCode) deleteDirectoryNode(filePath string) {
-	s.setAllIsUpdatedFalse()
 	s.popNode(filePath)
-	s.sortFileTree()
 }
 
 func (s *SourceCode) addFileNode(filePath string) {
-	s.setAllIsUpdatedFalse()
 	s.addMissingParentDirs(filePath)
 	s.FileTree = append(s.FileTree, fileNode(filePath))
-	s.sortFileTree()
 }
 
 func (s *SourceCode) deleteFileNode(filePath string) {
-	s.setAllIsUpdatedFalse()
 	s.popNode(filePath)
-	s.sortFileTree()
 }
 
 func (s *SourceCode) addFileContent(filePath, content string, isFullContent bool) {
@@ -286,7 +280,11 @@ func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
 	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
+
+	s.setAllIsUpdatedFalse()
 	s.deleteDirectoryNode(directoryPath)
+	s.sortFileTree()
+
 	return nil
 }
 
@@ -295,7 +293,11 @@ func (s *SourceCode) AddFileNode(filePath string) error {
 	if err := s.canAddFileNode(filePath); err != nil {
 		return fmt.Errorf("AddFileNode failed, %s", err)
 	}
+
+	s.setAllIsUpdatedFalse()
 	s.addFileNode(filePath)
+	s.sortFileTree()
+
 	return nil
 }
 
@@ -304,7 +306,11 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 	if err := s.canDeleteFileNode(filePath); err != nil {
 		return fmt.Errorf("DeleteFileNode failed, %s", err)
 	}
+
+	s.setAllIsUpdatedFalse()
 	s.deleteFileNode(filePath)
+	s.sortFileTree()
+
 	return nil
 }
 
@@ -313,7 +319,10 @@ func (s *SourceCode) AddFile(op FileAdd) error {
 		return fmt.Errorf("AddFile failed, %s", err)
 	}
 
+	s.setAllIsUpdatedFalse()
 	s.addFileNode(op.FilePath)
+	s.sortFileTree()
+
 	s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
 
 	return nil
@@ -335,7 +344,10 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 	}
 
 	s.deleteFileContent(op.FilePath)
+
+	s.setAllIsUpdatedFalse()
 	s.deleteFileNode(op.FilePath)
+	s.sortFileTree()
 
 	return nil
 }
