@@ -413,7 +413,7 @@ func TestSourceCode_Diff(t *testing.T) {
 
 		{name: "error_dupe",
 			operations: []Operation{
-				{expectSuccess: true, diff: GitDiff{Added: []FileAdd{
+				{expectSuccess: false, diff: GitDiff{Added: []FileAdd{
 					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
 					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
 				}}},
