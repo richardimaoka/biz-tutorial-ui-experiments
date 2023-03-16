@@ -376,10 +376,7 @@ func TestSourceCode_Diff(t *testing.T) {
 			t.Run(e.name, func(t *testing.T) {
 				sc := NewSourceCode()
 				for _, op := range e.operations {
-					var err error
-					if err := sc.ApplyEffect(op.diff); err != nil {
-						t.Fatal(err)
-					}
+					err := sc.ApplyDiff(op.diff)
 
 					resultSuccess := err == nil
 					if resultSuccess != op.expectSuccess {
@@ -407,7 +404,21 @@ func TestSourceCode_Diff(t *testing.T) {
 				{expectSuccess: true, diff: GitDiff{Added: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
 			}, resultFile: "testdata/source_code/diff/add-file1.json",
 		},
-		//error delete file twice
+
+		{name: "empty",
+			operations: []Operation{
+				{expectSuccess: true, diff: GitDiff{}},
+			}, resultFile: "testdata/source_code/new-source-code.json",
+		},
+
+		{name: "error_dupe",
+			operations: []Operation{
+				{expectSuccess: true, diff: GitDiff{Added: []FileAdd{
+					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+				}}},
+			}, resultFile: "testdata/source_code/new-source-code.json",
+		},
 	}
 
 	t.Run("diff", func(t *testing.T) { runEntries(t, entries) })

@@ -334,11 +334,14 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 	return nil
 }
 
-//TODO: backup current source code
-//or run pre-condition check
+//TODO: run pre-condition check
 //  if all elements satisfies per-element canXxx,
 //  and no duplicate or overlapping element (no dupe as a whole SourceCodeEffect)
-func (s *SourceCode) ApplyEffect(diff GitDiff) error {
+func (s *SourceCode) ApplyDiff(diff GitDiff) error {
+	if addDupe := findDuplicate(diff.Added); len(addDupe) > 0 {
+		return fmt.Errorf("failed to apply diff, duplicate file paths in added files = %+v", addDupe)
+	}
+
 	errors := []string{}
 	// Add files
 	for _, f := range diff.Added {

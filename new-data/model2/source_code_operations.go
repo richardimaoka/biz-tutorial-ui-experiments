@@ -42,3 +42,23 @@ type GitDiff struct {
 	Updated []FileUpdate
 	Deleted []FileDelete
 }
+
+func findDuplicate(operations []FileAdd) map[string]int {
+	var found = make(map[string]int)
+	for _, o := range operations {
+		if count, ok := found[o.FilePath]; ok {
+			found[o.FilePath] = count + 1
+		} else {
+			found[o.FilePath] = 1
+		}
+	}
+
+	var duplicate = make(map[string]int)
+	for k, v := range found {
+		if v > 1 {
+			duplicate[k] = v
+		}
+	}
+
+	return duplicate
+}
