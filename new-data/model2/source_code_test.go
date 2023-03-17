@@ -298,10 +298,10 @@ func TestSourceCode_Contents(t *testing.T) {
 				for j, op := range e.operations {
 					var err error
 					switch v := op.operation.(type) {
+					case DirectoryAdd:
+						err = sc.AddDirectoryNode(v.FilePath)
 					case FileAdd:
-						if err := sc.AddFile(v); err != nil {
-							t.Fatal(err)
-						}
+						err = sc.AddFile(v)
 					default:
 						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
 						return
@@ -326,6 +326,55 @@ func TestSourceCode_Contents(t *testing.T) {
 			})
 		}
 	}
+
+	entries = []Entry{
+		{name: "new",
+			operations: []Operation{}, resultFile: "testdata/source_code/new-source-code.json"},
+	}
+
+	t.Run("new_source_code", func(t *testing.T) { runEntries(t, entries) })
+
+	entries = []Entry{
+		{name: "add_dir_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+			}, resultFile: "testdata/source_code/nodes/add-directory1.json"},
+
+		// {name: "add_dir_nested",
+		// 	operations: []Operation{
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+		// 	}, resultFile: "testdata/source_code/nodes/add-directory2.json"},
+
+		// {name: "add_dir_nested2",
+		// 	operations: []Operation{
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+		// 	}, resultFile: "testdata/source_code/nodes/add-directory3.json"},
+
+		// {name: "add_dir_multiple",
+		// 	operations: []Operation{
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
+		// 	}, resultFile: "testdata/source_code/nodes/add-directory4.json"},
+
+		// {name: "error_add_dir_empty",
+		// 	operations: []Operation{
+		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: ""}, // "" is a wrong file path
+		// 	}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+
+		// {name: "error_add_dir_duplicate",
+		// 	operations: []Operation{
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
+		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
+		// 		{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan"},
+		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello"},
+		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world"},
+		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world/japan"},
+		// 	}, resultFile: "testdata/source_code/nodes/add-directory5.json"},
+	}
+
+	t.Run("add_dir", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
 		{name: "add_file_single",
