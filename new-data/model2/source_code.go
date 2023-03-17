@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+func (s *SourceCode) preMutation() {
+	//set all IsUpdated to false
+	falseValue := false
+	for _, v := range s.FileTree {
+		v.IsUpdated = &falseValue
+	}
+}
+
 func (s *SourceCode) postMutation() {
 	// soft fileTree
 	sort.Slice(s.FileTree, func(i, j int) bool {
@@ -51,7 +59,7 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 	return nil
 }
 
-// canXxxYyyNode pre-condition checks
+// canXxxYyy pre-condition checks
 
 func (s *SourceCode) canAddDirectory(directoryPath string) error {
 	if err := isValidFilePath(directoryPath); err != nil {
@@ -118,8 +126,6 @@ func (s *SourceCode) canUpdateFileNode(filePath string) error {
 
 	return nil
 }
-
-// canXxxFileContent pre-condition checks
 
 func (s *SourceCode) canAddFileContent(filePath string) error {
 	if err := isValidFilePath(filePath); err != nil {
@@ -192,14 +198,6 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 	return nil
 }
 
-func (s *SourceCode) preMutation() {
-	//set all IsUpdated to false
-	falseValue := false
-	for _, v := range s.FileTree {
-		v.IsUpdated = &falseValue
-	}
-}
-
 func (s *SourceCode) addMissingParentDirs(directoryPath string) {
 	splitPath := strings.Split(directoryPath, "/")
 	incremental := []string{}
@@ -221,10 +219,8 @@ func (s *SourceCode) appendDirectoryNode(directoryPath string) {
 }
 
 func (s *SourceCode) addDirectoryNode(directoryPath string) {
-	s.preMutation()
 	s.addMissingParentDirs(directoryPath)
 	s.appendDirectoryNode(directoryPath)
-	s.postMutation()
 }
 
 func (s *SourceCode) popNode(filePath string) {
@@ -272,7 +268,11 @@ func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
 	if err := s.canAddDirectory(op.FilePath); err != nil {
 		return fmt.Errorf("AddDirectory failed, %s", err)
 	}
+
+	s.preMutation()
 	s.addDirectoryNode(op.FilePath)
+	s.postMutation()
+
 	return nil
 }
 
@@ -295,9 +295,8 @@ func (s *SourceCode) AddFile(op FileAdd) error {
 
 	s.preMutation()
 	s.addFileNode(op.FilePath)
-	s.postMutation()
-
 	s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
+	s.postMutation()
 
 	return nil
 }
@@ -307,6 +306,7 @@ func (s *SourceCode) UpdateFile(op FileUpdate) error {
 		return fmt.Errorf("UpdateFile failed, %s", err)
 	}
 
+	//no need to execute preMutation() / postMutation()
 	s.updateFileContent(op.FilePath, op.Content)
 
 	return nil
@@ -317,9 +317,8 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 		return fmt.Errorf("DeleteFile failed, %s", err)
 	}
 
-	s.deleteFileContent(op.FilePath)
-
 	s.preMutation()
+	s.deleteFileContent(op.FilePath)
 	s.deleteFileNode(op.FilePath)
 	s.postMutation()
 
