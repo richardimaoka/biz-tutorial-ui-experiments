@@ -23,5 +23,14 @@
     }
   ],
   "openFile": null,
-  "fileContents": {}
+  "fileContents": {
+    "hello/world/japan.txt": {
+      "fileName": "japan.txt",
+      "filePath": "hello/world/japan.txt",
+      "content": "",
+      "isFullContent": true,
+      "language": null,
+      "highlight": null
+    }
+  }
 }

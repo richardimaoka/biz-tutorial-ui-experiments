@@ -17,16 +17,9 @@
     {
       "nodeType": "FILE",
       "offset": 2,
-      "isUpdated": true,
+      "isUpdated": false,
       "name": "america.txt",
       "filePath": "hello/world/america.txt"
-    },
-    {
-      "nodeType": "FILE",
-      "offset": 2,
-      "isUpdated": false,
-      "name": "japan.txt",
-      "filePath": "hello/world/japan.txt"
     }
   ],
   "openFile": null,
@@ -34,14 +27,6 @@
     "hello/world/america.txt": {
       "fileName": "america.txt",
       "filePath": "hello/world/america.txt",
-      "content": "",
-      "isFullContent": true,
-      "language": null,
-      "highlight": null
-    },
-    "hello/world/japan.txt": {
-      "fileName": "japan.txt",
-      "filePath": "hello/world/japan.txt",
       "content": "",
       "isFullContent": true,
       "language": null,
