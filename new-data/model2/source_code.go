@@ -6,23 +6,6 @@ import (
 	"strings"
 )
 
-func (s *SourceCode) preMutation() {
-	//set all IsUpdated to false
-	falseValue := false
-	for _, v := range s.FileTree {
-		v.IsUpdated = &falseValue
-	}
-}
-
-func (s *SourceCode) postMutation() {
-	// soft fileTree
-	sort.Slice(s.FileTree, func(i, j int) bool {
-		iFilePath := s.FileTree[i].FilePath
-		jFilePath := s.FileTree[j].FilePath
-		return LessFilePath(*iFilePath, *jFilePath)
-	})
-}
-
 func (s *SourceCode) findFileNode(filePath string) (int, *FileNode) {
 	for i, fn := range s.FileTree {
 		if filePath == *fn.FilePath {
@@ -198,6 +181,55 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 	return nil
 }
 
+func (s *SourceCode) canApplyDiff(diff GitDiff) error {
+	// pre-condition check, dupe in diff
+	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
+		return fmt.Errorf("duplicate file paths in added files = %+v", diffDuplicate)
+	}
+
+	// pre-condition check, each element's pre-condition check
+	errors := []string{}
+	for _, f := range diff.Added {
+		if err := s.canAddFile(f); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, f := range diff.Updated {
+		if err := s.canUpdateFile(f); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, f := range diff.Deleted {
+		if err := s.canDeleteFile(f); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf(strings.Join(errors, ", "))
+	}
+
+	return nil
+}
+
+// internal mutation methods
+
+func (s *SourceCode) preMutation() {
+	//set all IsUpdated to false
+	falseValue := false
+	for _, v := range s.FileTree {
+		v.IsUpdated = &falseValue
+	}
+}
+
+func (s *SourceCode) postMutation() {
+	// soft fileTree
+	sort.Slice(s.FileTree, func(i, j int) bool {
+		iFilePath := s.FileTree[i].FilePath
+		jFilePath := s.FileTree[j].FilePath
+		return LessFilePath(*iFilePath, *jFilePath)
+	})
+}
+
 func (s *SourceCode) addMissingParentDirs(directoryPath string) {
 	splitPath := strings.Split(directoryPath, "/")
 	incremental := []string{}
@@ -214,15 +246,6 @@ func (s *SourceCode) addMissingParentDirs(directoryPath string) {
 	}
 }
 
-func (s *SourceCode) appendDirectoryNode(directoryPath string) {
-	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
-}
-
-func (s *SourceCode) addDirectoryNode(directoryPath string) {
-	s.addMissingParentDirs(directoryPath)
-	s.appendDirectoryNode(directoryPath)
-}
-
 func (s *SourceCode) popNode(filePath string) {
 	var newFileTree []*FileNode
 	for _, v := range s.FileTree {
@@ -231,6 +254,15 @@ func (s *SourceCode) popNode(filePath string) {
 		}
 	}
 	s.FileTree = newFileTree
+}
+
+func (s *SourceCode) appendDirectoryNode(directoryPath string) {
+	s.FileTree = append(s.FileTree, directoryNode(directoryPath))
+}
+
+func (s *SourceCode) addDirectoryNode(directoryPath string) {
+	s.addMissingParentDirs(directoryPath)
+	s.appendDirectoryNode(directoryPath)
 }
 
 func (s *SourceCode) deleteDirectoryNode(filePath string) {
@@ -256,6 +288,20 @@ func (s *SourceCode) deleteFileContent(filePath string) {
 
 func (s *SourceCode) updateFileContent(filePath, content string) {
 	s.FileContents[filePath] = *openFile(filePath, content)
+}
+
+func (s *SourceCode) applyDiff(diff GitDiff) {
+	for _, op := range diff.Added {
+		s.addFileNode(op.FilePath)
+		s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
+	}
+	for _, op := range diff.Updated {
+		s.updateFileContent(op.FilePath, op.Content)
+	}
+	for _, op := range diff.Deleted {
+		s.deleteFileContent(op.FilePath)
+		s.deleteFileNode(op.FilePath)
+	}
 }
 
 // public methods
@@ -326,45 +372,12 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 }
 
 func (s *SourceCode) ApplyDiff(diff GitDiff) error {
-	// pre-condition check, dupe in diff
-	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
-		return fmt.Errorf("failed to apply diff, duplicate file paths in added files = %+v", diffDuplicate)
+	if err := s.canApplyDiff(diff); err != nil {
+		return fmt.Errorf("failed to apply diff, %s", err)
 	}
 
-	// pre-condition check, each element's pre-condition check
-	errors := []string{}
-	for _, f := range diff.Added {
-		if err := s.canAddFile(f); err != nil {
-			errors = append(errors, err.Error())
-		}
-	}
-	for _, f := range diff.Updated {
-		if err := s.canUpdateFile(f); err != nil {
-			errors = append(errors, err.Error())
-		}
-	}
-	for _, f := range diff.Deleted {
-		if err := s.canDeleteFile(f); err != nil {
-			errors = append(errors, err.Error())
-		}
-	}
-	if len(errors) != 0 {
-		return fmt.Errorf("failed to apply effect: %s", strings.Join(errors, ", "))
-	}
-
-	// apply diff
 	s.preMutation()
-	for _, op := range diff.Added {
-		s.addFileNode(op.FilePath)
-		s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
-	}
-	for _, op := range diff.Updated {
-		s.updateFileContent(op.FilePath, op.Content)
-	}
-	for _, op := range diff.Deleted {
-		s.deleteFileContent(op.FilePath)
-		s.deleteFileNode(op.FilePath)
-	}
+	s.applyDiff(diff)
 	s.postMutation()
 
 	return nil
