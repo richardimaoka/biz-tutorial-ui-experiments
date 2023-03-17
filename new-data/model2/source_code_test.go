@@ -299,7 +299,7 @@ func TestSourceCode_Contents(t *testing.T) {
 					var err error
 					switch v := op.operation.(type) {
 					case DirectoryAdd:
-						err = sc.AddDirectoryNode(v.FilePath)
+						err = sc.AddDirectory(v)
 					case FileAdd:
 						err = sc.AddFile(v)
 					default:

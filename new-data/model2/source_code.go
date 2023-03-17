@@ -275,6 +275,14 @@ func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
+func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
+	if err := s.canAddDirectoryNode(op.FilePath); err != nil {
+		return fmt.Errorf("AddDirectory failed, %s", err)
+	}
+	s.addDirectoryNode(op.FilePath)
+	return nil
+}
+
 //TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
 	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
