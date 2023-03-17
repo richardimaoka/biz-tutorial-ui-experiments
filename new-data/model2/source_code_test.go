@@ -300,9 +300,14 @@ func TestSourceCode_Contents(t *testing.T) {
 					switch v := op.operation.(type) {
 					case DirectoryAdd:
 						err = sc.AddDirectory(v)
+					case DirectoryDelete:
+						err = sc.DeleteDirectory(v)
 					case FileAdd:
-						fmt.Println(v)
 						err = sc.AddFile(v)
+					case FileUpdate:
+						err = sc.UpdateFile(v)
+					case FileDelete:
+						err = sc.DeleteFile(v)
 					default:
 						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
 						return
@@ -354,7 +359,6 @@ func TestSourceCode_Contents(t *testing.T) {
 
 		{name: "add_dir_multiple",
 			operations: []Operation{
-				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
 				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
 				{expectSuccess: true, operation: DirectoryAdd{FilePath: "aloha"}},
 			}, resultFile: "testdata/source_code/contents/add-directory4.json"},
@@ -366,7 +370,6 @@ func TestSourceCode_Contents(t *testing.T) {
 
 		{name: "error_add_dir_duplicate",
 			operations: []Operation{
-				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
 				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan", Content: "hello", IsFullContent: true}},
 				{expectSuccess: false, operation: DirectoryAdd{FilePath: "hello"}},
@@ -378,6 +381,65 @@ func TestSourceCode_Contents(t *testing.T) {
 	t.Run("add_dir", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
+		{name: "delete_dir_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello"}},
+			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+
+		{name: "delete_dir_nested_leaf",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello/world"}},
+			}, resultFile: "testdata/source_code/nodes/delete-directory1.json"},
+
+		{name: "delete_dir_nested_middle",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world/japan"}},
+				// below "goodmorning.*" dirs are note affected
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+				{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello/world"}},
+			}, resultFile: "testdata/source_code/nodes/delete-directory2.json"},
+
+		{name: "delete_dir_nested_parent",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world/japan"}},
+				// below "goodmorning.*" dirs are note affected
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+				{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello"}},
+			}, resultFile: "testdata/source_code/nodes/delete-directory3.json"},
+
+		{name: "error_delete_dir_non_existent",
+			operations: []Operation{
+				// below "goodmorning.*" dirs are note affected
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+				{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
+				{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
+			}, resultFile: "testdata/source_code/nodes/delete-directory4.json"},
+
+		{name: "error_delete_dir_twice",
+			operations: []Operation{
+				// below "goodmorning.*" dirs are note affected
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+				{expectSuccess: true, operation: DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+				{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+			}, resultFile: "testdata/source_code/nodes/delete-directory5.json"},
+	}
+	t.Run("delete_directory", func(t *testing.T) { runEntries(t, entries) })
+
+	// entries = []Entry{
+	entries = []Entry{
 		{name: "add_file_single",
 			operations: []Operation{
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
@@ -387,24 +449,106 @@ func TestSourceCode_Contents(t *testing.T) {
 			operations: []Operation{
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
 			}, resultFile: "testdata/source_code/contents/add-file2.json"},
-
-		//TODO: fill the same cases as node tests
-		//add file next_to
-		//error add file duplicate1
-		//error add file duplicate2
-
-		//delete dir nested leaf
-		//delete dir nested middle
-		//delete dir nested parent
-
-		//delete file single
-		//delete file nested
-		//error delete file dir
-		//error delete file non_existent
-		//error delete file twice
 	}
 
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
+
+	entries = []Entry{
+		{name: "add_file_single",
+			operations: []Operation{
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
+			}, resultFile: "testdata/source_code/contents/add-file1.json"},
+
+		{name: "add_file_nested",
+			operations: []Operation{
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+			}, resultFile: "testdata/source_code/contents/add-file2.json"},
+		// 	{name: "add_file_nested",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world.txt"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file2.json"},
+
+		// 	{name: "add_file_nested2",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file3.json"},
+
+		// 	{name: "add_file_nested3",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file4.json"},
+
+		// 	{name: "add_file_next_to",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/america.txt"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file5.json"},
+
+		// 	{name: "error_add_file_duplicate1",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello.txt"},
+		// 			{expectSuccess: false, operation: OpAddFile, filePath: "hello.txt"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file1.json"},
+
+		// 	{name: "error_add_file_duplicate2",
+		// 		operations: []Operation{
+		// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+		// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world.txt"},
+		// 			{expectSuccess: false, operation: OpAddFile, filePath: "hello/world.txt"},
+		// 			{expectSuccess: false, operation: OpAddFile, filePath: "hello"},
+		// 		}, resultFile: "testdata/source_code/nodes/add-file2.json"},
+	}
+	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
+
+	// entries = []Entry{
+	// 	{name: "delete_file_single",
+	// 		operations: []Operation{
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello.txt"},
+	// 			{expectSuccess: true, operation: OpDeleteFile, filePath: "hello.txt"},
+	// 		}, resultFile: "testdata/source_code/new-source-code.json"},
+
+	// 	{name: "delete_file_nested",
+	// 		operations: []Operation{
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+	// 			{expectSuccess: true, operation: OpDeleteFile, filePath: "hello/world/japan.txt"},
+	// 		}, resultFile: "testdata/source_code/nodes/delete-file1.json"},
+
+	// 	{name: "delete_file_next_to",
+	// 		operations: []Operation{
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/america.txt"},
+	// 			{expectSuccess: true, operation: OpDeleteFile, filePath: "hello/world/japan.txt"},
+	// 		}, resultFile: "testdata/source_code/nodes/delete-file2.json"},
+
+	// 	{name: "error_delete_file_non_existent",
+	// 		operations: []Operation{
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/america.txt"},
+	// 			{expectSuccess: false, operation: OpDeleteFile, filePath: "hello/world/france.txt"},
+	// 		}, resultFile: "testdata/source_code/nodes/delete-file3.json"},
+
+	// 	{name: "error_delete_file_twice",
+	// 		operations: []Operation{
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello"},
+	// 			{expectSuccess: true, operation: OpAddDirectory, filePath: "hello/world"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/japan.txt"},
+	// 			{expectSuccess: true, operation: OpAddFile, filePath: "hello/world/america.txt"},
+	// 			{expectSuccess: true, operation: OpDeleteFile, filePath: "hello/world/japan.txt"},
+	// 			{expectSuccess: false, operation: OpDeleteFile, filePath: "hello/world/japan.txt"},
+	// 		}, resultFile: "testdata/source_code/nodes/delete-file2.json"},
+	// }
+	// t.Run("delete_file", func(t *testing.T) { runEntries(t, entries) })
 }
 
 func TestSourceCode_Diff(t *testing.T) {

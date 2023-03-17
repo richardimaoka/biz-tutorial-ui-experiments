@@ -275,14 +275,6 @@ func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
-	if err := s.canAddDirectoryNode(op.FilePath); err != nil {
-		return fmt.Errorf("AddDirectory failed, %s", err)
-	}
-	s.addDirectoryNode(op.FilePath)
-	return nil
-}
-
 //TODO: remove, consolidate to XxxFile(op FileOp)
 func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
 	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
@@ -317,6 +309,26 @@ func (s *SourceCode) DeleteFileNode(filePath string) error {
 
 	s.setAllIsUpdatedFalse()
 	s.deleteFileNode(filePath)
+	s.sortFileTree()
+
+	return nil
+}
+
+func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
+	if err := s.canAddDirectoryNode(op.FilePath); err != nil {
+		return fmt.Errorf("AddDirectory failed, %s", err)
+	}
+	s.addDirectoryNode(op.FilePath)
+	return nil
+}
+
+func (s *SourceCode) DeleteDirectory(op DirectoryDelete) error {
+	if err := s.canDeleteDirectoryNode(op.FilePath); err != nil {
+		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
+	}
+
+	s.setAllIsUpdatedFalse()
+	s.deleteDirectoryNode(op.FilePath)
 	s.sortFileTree()
 
 	return nil
