@@ -52,13 +52,13 @@ func (s *SourceCode) hasParentDir(filePath string) error {
 
 // canXxxYyyNode pre-condition checks
 
-func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
+func (s *SourceCode) canAddDirectory(directoryPath string) error {
 	if err := isValidFilePath(directoryPath); err != nil {
-		return fmt.Errorf("cannot add directory node, %s", err)
+		return fmt.Errorf("cannot add directory, %s", err)
 	}
 
 	if _, node := s.findFileNode(directoryPath); node != nil {
-		return fmt.Errorf("cannot add directory node, file path = %s already exists", directoryPath)
+		return fmt.Errorf("cannot add directory, file path = %s already exists", directoryPath)
 	}
 
 	// if err := s.hasParentDir(directoryPath); err != nil {
@@ -67,13 +67,13 @@ func (s *SourceCode) canAddDirectoryNode(directoryPath string) error {
 	return nil
 }
 
-func (s *SourceCode) canDeleteDirectoryNode(directoryPath string) error {
+func (s *SourceCode) canDeleteDirectory(directoryPath string) error {
 	if err := isValidFilePath(directoryPath); err != nil {
-		return fmt.Errorf("cannot delete directory node, %s", err)
+		return fmt.Errorf("cannot delete directory, %s", err)
 	}
 
 	if err := s.isValidNode(directoryPath, FileNodeTypeDirectory); err != nil {
-		return fmt.Errorf("cannot delete directory node, %s", err)
+		return fmt.Errorf("cannot delete directory, %s", err)
 	}
 
 	return nil
@@ -267,7 +267,7 @@ func NewSourceCode() *SourceCode {
 }
 
 func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
-	if err := s.canAddDirectoryNode(op.FilePath); err != nil {
+	if err := s.canAddDirectory(op.FilePath); err != nil {
 		return fmt.Errorf("AddDirectory failed, %s", err)
 	}
 	s.addDirectoryNode(op.FilePath)
@@ -275,7 +275,7 @@ func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
 }
 
 func (s *SourceCode) DeleteDirectory(op DirectoryDelete) error {
-	if err := s.canDeleteDirectoryNode(op.FilePath); err != nil {
+	if err := s.canDeleteDirectory(op.FilePath); err != nil {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
 
