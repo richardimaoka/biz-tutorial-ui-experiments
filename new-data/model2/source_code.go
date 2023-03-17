@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-func (s *SourceCode) sortFileTree() {
+func (s *SourceCode) postMutation() {
+	// soft fileTree
 	sort.Slice(s.FileTree, func(i, j int) bool {
 		iFilePath := s.FileTree[i].FilePath
 		jFilePath := s.FileTree[j].FilePath
@@ -191,7 +192,8 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 	return nil
 }
 
-func (s *SourceCode) setAllIsUpdatedFalse() {
+func (s *SourceCode) preMutation() {
+	//set all IsUpdated to false
 	falseValue := false
 	for _, v := range s.FileTree {
 		v.IsUpdated = &falseValue
@@ -219,10 +221,10 @@ func (s *SourceCode) appendDirectoryNode(directoryPath string) {
 }
 
 func (s *SourceCode) addDirectoryNode(directoryPath string) {
-	s.setAllIsUpdatedFalse()
+	s.preMutation()
 	s.addMissingParentDirs(directoryPath)
 	s.appendDirectoryNode(directoryPath)
-	s.sortFileTree()
+	s.postMutation()
 }
 
 func (s *SourceCode) popNode(filePath string) {
@@ -279,9 +281,9 @@ func (s *SourceCode) DeleteDirectory(op DirectoryDelete) error {
 		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
 	}
 
-	s.setAllIsUpdatedFalse()
+	s.preMutation()
 	s.deleteDirectoryNode(op.FilePath)
-	s.sortFileTree()
+	s.postMutation()
 
 	return nil
 }
@@ -291,9 +293,9 @@ func (s *SourceCode) AddFile(op FileAdd) error {
 		return fmt.Errorf("AddFile failed, %s", err)
 	}
 
-	s.setAllIsUpdatedFalse()
+	s.preMutation()
 	s.addFileNode(op.FilePath)
-	s.sortFileTree()
+	s.postMutation()
 
 	s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
 
@@ -317,9 +319,9 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 
 	s.deleteFileContent(op.FilePath)
 
-	s.setAllIsUpdatedFalse()
+	s.preMutation()
 	s.deleteFileNode(op.FilePath)
-	s.sortFileTree()
+	s.postMutation()
 
 	return nil
 }
@@ -352,7 +354,7 @@ func (s *SourceCode) ApplyDiff(diff GitDiff) error {
 	}
 
 	// apply diff
-	s.setAllIsUpdatedFalse()
+	s.preMutation()
 	for _, op := range diff.Added {
 		s.addFileNode(op.FilePath)
 		s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
@@ -364,7 +366,7 @@ func (s *SourceCode) ApplyDiff(diff GitDiff) error {
 		s.deleteFileContent(op.FilePath)
 		s.deleteFileNode(op.FilePath)
 	}
-	s.sortFileTree()
+	s.postMutation()
 
 	return nil
 }
