@@ -301,6 +301,7 @@ func TestSourceCode_Contents(t *testing.T) {
 					case DirectoryAdd:
 						err = sc.AddDirectory(v)
 					case FileAdd:
+						fmt.Println(v)
 						err = sc.AddFile(v)
 					default:
 						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
@@ -338,40 +339,40 @@ func TestSourceCode_Contents(t *testing.T) {
 		{name: "add_dir_single",
 			operations: []Operation{
 				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
-			}, resultFile: "testdata/source_code/nodes/add-directory1.json"},
+			}, resultFile: "testdata/source_code/contents/add-directory1.json"},
 
-		// {name: "add_dir_nested",
-		// 	operations: []Operation{
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-		// 	}, resultFile: "testdata/source_code/nodes/add-directory2.json"},
+		{name: "add_dir_nested",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+			}, resultFile: "testdata/source_code/contents/add-directory2.json"},
 
-		// {name: "add_dir_nested2",
-		// 	operations: []Operation{
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-		// 	}, resultFile: "testdata/source_code/nodes/add-directory3.json"},
+		{name: "add_dir_nested2",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+			}, resultFile: "testdata/source_code/contents/add-directory3.json"},
 
-		// {name: "add_dir_multiple",
-		// 	operations: []Operation{
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "aloha"},
-		// 	}, resultFile: "testdata/source_code/nodes/add-directory4.json"},
+		{name: "add_dir_multiple",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "aloha"}},
+			}, resultFile: "testdata/source_code/contents/add-directory4.json"},
 
-		// {name: "error_add_dir_empty",
-		// 	operations: []Operation{
-		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: ""}, // "" is a wrong file path
-		// 	}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+		{name: "error_add_dir_empty",
+			operations: []Operation{
+				{expectSuccess: false, operation: DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
+			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
-		// {name: "error_add_dir_duplicate",
-		// 	operations: []Operation{
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello"},
-		// 		{expectSuccess: true, operationType: OpAddDirectory, filePath: "hello/world"},
-		// 		{expectSuccess: true, operationType: OpAddFile, filePath: "hello/world/japan"},
-		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello"},
-		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world"},
-		// 		{expectSuccess: false, operationType: OpAddDirectory, filePath: "hello/world/japan"},
-		// 	}, resultFile: "testdata/source_code/nodes/add-directory5.json"},
+		{name: "error_add_dir_duplicate",
+			operations: []Operation{
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan", Content: "hello", IsFullContent: true}},
+				{expectSuccess: false, operation: DirectoryAdd{FilePath: "hello"}},
+				{expectSuccess: false, operation: DirectoryAdd{FilePath: "hello/world"}},
+				{expectSuccess: false, operation: DirectoryAdd{FilePath: "hello/world/japan"}},
+			}, resultFile: "testdata/source_code/contents/add-directory5.json"},
 	}
 
 	t.Run("add_dir", func(t *testing.T) { runEntries(t, entries) })
