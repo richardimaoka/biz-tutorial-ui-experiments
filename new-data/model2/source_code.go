@@ -266,54 +266,6 @@ func NewSourceCode() *SourceCode {
 	return &SourceCode{FileContents: make(map[string]OpenFile)}
 }
 
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) AddDirectoryNode(directoryPath string) error {
-	if err := s.canAddDirectoryNode(directoryPath); err != nil {
-		return fmt.Errorf("AddDirectoryNode failed, %s", err)
-	}
-	s.addDirectoryNode(directoryPath)
-	return nil
-}
-
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) DeleteDirectoryNode(directoryPath string) error {
-	if err := s.canDeleteDirectoryNode(directoryPath); err != nil {
-		return fmt.Errorf("DeleteDirectoryNode failed, %s", err)
-	}
-
-	s.setAllIsUpdatedFalse()
-	s.deleteDirectoryNode(directoryPath)
-	s.sortFileTree()
-
-	return nil
-}
-
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) AddFileNode(filePath string) error {
-	if err := s.canAddFileNode(filePath); err != nil {
-		return fmt.Errorf("AddFileNode failed, %s", err)
-	}
-
-	s.setAllIsUpdatedFalse()
-	s.addFileNode(filePath)
-	s.sortFileTree()
-
-	return nil
-}
-
-//TODO: remove, consolidate to XxxFile(op FileOp)
-func (s *SourceCode) DeleteFileNode(filePath string) error {
-	if err := s.canDeleteFileNode(filePath); err != nil {
-		return fmt.Errorf("DeleteFileNode failed, %s", err)
-	}
-
-	s.setAllIsUpdatedFalse()
-	s.deleteFileNode(filePath)
-	s.sortFileTree()
-
-	return nil
-}
-
 func (s *SourceCode) AddDirectory(op DirectoryAdd) error {
 	if err := s.canAddDirectoryNode(op.FilePath); err != nil {
 		return fmt.Errorf("AddDirectory failed, %s", err)
