@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/model"
-)
+import "fmt"
 
 func main() {
 	// err := model.Process()
@@ -12,10 +10,11 @@ func main() {
 
 	// actionListParse()
 
-	err := model.SplitActionListFile("data2")
-	if err != nil {
-		panic(err)
-	}
+	// err := model.SplitActionListFile("data2")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
+	fmt.Println("main")
 	return
 }
