@@ -1,4 +1,4 @@
-package model2
+package model
 
 func (n *TerminalNode) markCommandExecuted(command string) {
 	falseValue := false

@@ -1,4 +1,4 @@
-package model2
+package model
 
 type SourceCode struct {
 	FileTree     []*FileNode         `json:"fileTree"`

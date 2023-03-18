@@ -1,4 +1,4 @@
-package model2
+package model
 
 func openFile(filePath string, content string) *OpenFile {
 	split := filePathPtrSlice(filePath)

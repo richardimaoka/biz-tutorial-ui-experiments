@@ -1,4 +1,4 @@
-package model2
+package model
 
 func directoryNode(filePath string) *FileNode {
 	nodeType := FileNodeTypeDirectory
