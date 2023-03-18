@@ -2,12 +2,18 @@ package model2
 
 import "encoding/json"
 
+type Action interface {
+	IsAction()
+}
+
 type ActionCommand struct {
 	Command          string  `json:"command"`
 	TerminalName     string  `json:"terminalName"`
 	Output           *string `json:"output"`           //if zero value, no output after execution
 	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 }
+
+func (c *ActionCommand) IsAction() {}
 
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	typeName := "ActionCommand"
