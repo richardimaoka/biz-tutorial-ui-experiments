@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "command": "mkdir outdir",
+  "terminalName": "default",
+  "updateTerminal.currentDirectoryPath": "",
+  "updateTerminal.output": ""
+}

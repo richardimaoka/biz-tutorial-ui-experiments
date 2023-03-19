@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "command": "rm -rf github.com",
+  "terminalName": "default",
+  "updateTerminal.currentDirectoryPath": "",
+  "updateTerminal.output": ""
+}
