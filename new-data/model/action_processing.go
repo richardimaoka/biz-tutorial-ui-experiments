@@ -24,9 +24,25 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 			return nil, err
 		}
 		return &action, nil
+	case "ManualUpdate":
+		var action ManualUpdate
+		err := json.Unmarshal(bytes, &action)
+		if err != nil {
+			return nil, err
+		}
+		return &action, nil
 	default:
 		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s", typeName)
 	}
+}
+
+func reMarshalAction(bytes []byte) ([]byte, error) {
+	action, err := readActionFromBytes(bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(action)
 }
 
 // map[string]interface{} represents JSON obj
@@ -75,12 +91,12 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	for i, jsonObj := range jsonArray {
 		jsonBytes, err := json.MarshalIndent(jsonObj, "", "  ")
 		if err != nil {
-			return fmt.Errorf("marshaling flat JSON failed, %s", err)
+			return fmt.Errorf("marshaling JSON failed, %s", err)
 		}
 
 		targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, i)
 		if err = os.WriteFile(targetFile, jsonBytes, 0644); err != nil {
-			return fmt.Errorf("%s, writing flat JSON to %s failed, %s", errorPreceding, targetFile, err)
+			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
 
