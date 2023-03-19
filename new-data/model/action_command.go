@@ -16,6 +16,11 @@ type ActionCommand struct {
 
 func (c *ActionCommand) IsAction() {}
 
+type ManualUpdate struct {
+}
+
+func (c *ManualUpdate) IsAction() {}
+
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	typeName := "ActionCommand"
 
