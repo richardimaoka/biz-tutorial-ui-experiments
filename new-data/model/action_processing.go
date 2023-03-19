@@ -87,11 +87,11 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	return nil
 }
 
-func Processin() {
+func Processing() error {
 	// by-hand csv -> json conversion, and save action-list.json
-	//if err := SplitActionListFile("target", "filename"); err != nil {
-	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
-	// }
+	if err := SplitActionList("data/action_list.json", "data/input", "action"); err != nil {
+		return err
+	}
 
 	// files, err := listFilePaths()
 	// 	if err != nil {
@@ -102,4 +102,6 @@ func Processin() {
 	// }
 
 	// GenerateInputActionFiles("")
+
+	return nil
 }

@@ -2,7 +2,7 @@
   "ActionType": "ManualUpdate",
   "Command": "",
   "TerminalName": "",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

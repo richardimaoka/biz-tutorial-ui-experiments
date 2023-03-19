@@ -2,6 +2,6 @@
   "actionType": "ActionCommand",
   "command": "cat \u003c\u003c EOF \u003e helloworld/greeting.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }\nEOF",
   "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": ""
+  "currentDirectory": null,
+  "output": null
 }

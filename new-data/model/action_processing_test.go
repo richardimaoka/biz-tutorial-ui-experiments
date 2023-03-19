@@ -24,7 +24,7 @@ func TestActionProcessing(t *testing.T) {
 	dataDir := "../data"
 	targetDir := fmt.Sprintf("%s/test", dataDir)
 	targetPrefix := "input"
-	actionListFile := "testdata/action_list.json"
+	actionListFile := "testdata/action/action_list.json"
 
 	// initial setup
 	if _, err := os.Stat(dataDir); os.IsNotExist(err) {
@@ -39,7 +39,9 @@ func TestActionProcessing(t *testing.T) {
 	}
 
 	// the function to test
-	SplitActionList(actionListFile, targetDir, targetPrefix)
+	if err := SplitActionList(actionListFile, targetDir, targetPrefix); err != nil {
+		t.Fatal(err)
+	}
 
 	// from here checking result
 	expectedFiles, err := FilesInDir("testdata/action/input", targetPrefix)
@@ -60,17 +62,17 @@ func TestActionProcessing(t *testing.T) {
 		expectedBytes, err := os.ReadFile(expectedFiles[i])
 		if err != nil {
 			t.Errorf("failed to read %s", expectedFiles[i])
-			return
+			continue
 		}
 
 		resultBytes, err := os.ReadFile(resultFiles[i])
 		if err != nil {
 			t.Errorf("failed to read %s", resultFiles[i])
-			return
+			continue
 		}
 
 		if err := compareJsonBytes(expectedBytes, resultBytes); err != nil {
-			t.Fatalf("failed to compare files = %s vs. %s", expectedFiles[i], resultFiles[i])
+			t.Errorf("failed to compare files = %s vs. %s, %s", expectedFiles[i], resultFiles[i], err)
 		}
 	}
 }

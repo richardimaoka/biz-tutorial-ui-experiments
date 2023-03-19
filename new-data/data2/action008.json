@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "protoc --go_out=. helloworld.proto",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

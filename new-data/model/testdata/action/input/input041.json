@@ -2,6 +2,6 @@
   "actionType": "ActionCommand",
   "command": "rm helloworld/greeting.pb.go\nrm helloworld/helloworld.pb.go\nrm helloworld/subdir/subhello.pb.go",
   "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": ""
+  "currentDirectory": null,
+  "output": null
 }

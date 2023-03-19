@@ -1,12 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/new-data/model"
+)
 
 func main() {
-	// err := model.Process()
-	// if err != nil {
-	// 	panic(err)
-	// }
+
+	err := model.Processing()
+	if err != nil {
+		panic(err)
+	}
 
 	// actionListParse()
 

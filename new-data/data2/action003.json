@@ -2,8 +2,8 @@
   "ActionType": "ActionCommand",
   "Command": "cd helloworld # protoc-go-experiments/helloworld",
   "TerminalName": "default",
-  "UpdateTerminal": {
-    "currentDirectoryPath": "protoc-go-experiments/helloworld"
+  ": {
+    "currentDirectory": "protoc-go-experiments/helloworld"
   },
   "UpdateSourceCode": {
     "AddDirectories": null,

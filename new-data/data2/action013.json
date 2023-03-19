@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "mkdir outdir",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

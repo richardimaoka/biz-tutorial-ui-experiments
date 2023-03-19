@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "protoc \\\n  --proto_path=. \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
   "TerminalName": "default",
-  "UpdateTerminal": {
+  ": {
     "output": "greeting.proto: File not found.\nhelloworld/helloworld.proto: Import \"greeting.proto\" was not found or had errors.\nhelloworld/helloworld.proto:19:3: \"Greeting\" seems to be defined in \"helloworld/greeting.proto\",\n  which is not imported by \"helloworld/helloworld.proto\".\n  To use it here, please add the necessary import."
   },
   "UpdateSourceCode": {

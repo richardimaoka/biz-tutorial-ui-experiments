@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "rm helloworld/helloworld.pb.go",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

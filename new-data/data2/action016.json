@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "cd ../",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

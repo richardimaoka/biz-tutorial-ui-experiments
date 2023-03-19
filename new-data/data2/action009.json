@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "rm -rf github.com",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": null,
     "DeleteDirectories": null,

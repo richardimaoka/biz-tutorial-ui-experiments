@@ -2,6 +2,6 @@
   "actionType": "ActionCommand",
   "command": "protoc --go_out=. helloworld.proto",
   "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": ""
+  "currentDirectory": null,
+  "output": null
 }

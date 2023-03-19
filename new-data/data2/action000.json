@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "mkdir protoc-go-experiments",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": [{ "filePath": "protoc-go-experiments" }],
     "DeleteDirectories": null,

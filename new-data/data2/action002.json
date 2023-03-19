@@ -2,7 +2,7 @@
   "ActionType": "ActionCommand",
   "Command": "mkdir helloworld",
   "TerminalName": "default",
-  "UpdateTerminal": {},
+  ": {},
   "UpdateSourceCode": {
     "AddDirectories": [
       {
