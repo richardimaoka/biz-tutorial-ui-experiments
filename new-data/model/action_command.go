@@ -33,3 +33,12 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(m)
 }
+
+func (c ManualUpdate) MarshalJSON() ([]byte, error) {
+	typeName := "ManualUpdate"
+
+	m := make(map[string]*string)
+	m["actionType"] = &typeName
+
+	return json.Marshal(m)
+}

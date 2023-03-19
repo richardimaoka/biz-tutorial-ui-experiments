@@ -94,8 +94,12 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 			return fmt.Errorf("marshaling JSON failed, %s", err)
 		}
 
+		actionBytes, err := reMarshalAction(jsonBytes)
+		if err != nil {
+			return fmt.Errorf("re-marshaling JSON failed, %s", err)
+		}
 		targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, i)
-		if err = os.WriteFile(targetFile, jsonBytes, 0644); err != nil {
+		if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
