@@ -10,7 +10,7 @@ import (
 // arbitrary JSON obj representation in Go map
 type JsonObj map[string]interface{}
 
-func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
+func readActionFromBytes(bytes []byte) (Action, error) {
 	typeName, err := extractTypeName(bytes, "actionType")
 	if err != nil {
 		return nil, fmt.Errorf("readActionFromBytes() failed to extract actionType %s", err)
