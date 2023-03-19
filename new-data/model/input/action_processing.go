@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // map[string]interface{} represents JSON obj
@@ -20,6 +21,23 @@ func readActionList(actionListFile string) ([]map[string]interface{}, error) {
 	}
 
 	return unmarshalled, nil
+}
+
+// all input_flat00x files
+func FilesInDir(targetDir, prefix string) ([]string, error) {
+	entries, err := os.ReadDir(targetDir)
+	if err != nil {
+		return nil, err
+	}
+
+	var files []string
+	for _, e := range entries {
+		if strings.HasPrefix(e.Name(), prefix) && strings.HasSuffix(e.Name(), "json") {
+			files = append(files, targetDir+"/"+e.Name())
+		}
+	}
+
+	return files, nil
 }
 
 func SplitActionListFile(actionListFile, targetDir, targetPrefix string) error {
