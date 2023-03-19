@@ -9,6 +9,46 @@ import (
 
 // arbitrary JSON obj representation in Go map
 type JsonObj map[string]interface{}
+type Action interface {
+	IsAction()
+}
+
+// ActionCommand represents each row of spreadsheet where type = "ActionCommand"
+type ActionCommand struct {
+	Command          string  `json:"command"`
+	TerminalName     string  `json:"terminalName"`
+	Output           *string `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+}
+
+func (c *ActionCommand) IsAction() {}
+
+type ManualUpdate struct {
+}
+
+func (c *ManualUpdate) IsAction() {}
+
+func (c ActionCommand) MarshalJSON() ([]byte, error) {
+	typeName := "ActionCommand"
+
+	m := make(map[string]*string)
+	m["actionType"] = &typeName
+	m["command"] = &c.Command
+	m["terminalName"] = &c.TerminalName
+	m["output"] = c.Output
+	m["currentDirectory"] = c.CurrentDirectory
+
+	return json.Marshal(m)
+}
+
+func (c ManualUpdate) MarshalJSON() ([]byte, error) {
+	typeName := "ManualUpdate"
+
+	m := make(map[string]*string)
+	m["actionType"] = &typeName
+
+	return json.Marshal(m)
+}
 
 func readActionFromBytes(bytes []byte) (Action, error) {
 	typeName, err := extractTypeName(bytes, "actionType")
@@ -61,6 +101,15 @@ func readActionList(actionListFile string) ([]JsonObj, error) {
 	return unmarshalled, nil
 }
 
+func applyAction(bytes []byte) error {
+	// action, err := readActionFromBytes(bytes)
+	// if err != nil {
+	// 	return err
+	// }
+
+	return nil
+}
+
 // all input_flat00x files
 func FilesInDir(targetDir, prefix string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
@@ -103,15 +152,6 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
-
-	return nil
-}
-
-func applyAction(bytes []byte) error {
-	// action, err := readActionFromBytes(bytes)
-	// if err != nil {
-	// 	return err
-	// }
 
 	return nil
 }
