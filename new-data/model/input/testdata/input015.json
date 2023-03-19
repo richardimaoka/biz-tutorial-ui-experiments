@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm -rf outdir",
-  "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": ""
-}

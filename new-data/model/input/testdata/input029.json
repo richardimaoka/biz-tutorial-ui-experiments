@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
-  "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": "Greeting\" seems to be defined in \"greeting.proto\", which is not imported by \"helloworld.proto\".\nTo use it here, please add the necessary import."
-}

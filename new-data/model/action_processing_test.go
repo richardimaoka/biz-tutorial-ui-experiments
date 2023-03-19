@@ -1,35 +1,13 @@
-package input
+package model
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
 )
 
-func compareJsonBytes(expectedBytes, resultBytes []byte) error {
-	var resultMap map[string]interface{}
-	err := json.Unmarshal(resultBytes, &resultMap)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal result json %s", err)
-	}
-
-	var expectedMap map[string]interface{}
-	err = json.Unmarshal(expectedBytes, &expectedMap)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal expected json %s", err)
-	}
-
-	if diff := cmp.Diff(expectedMap, resultMap); diff != "" {
-		return fmt.Errorf("mismatch (-expected +result):\n%s", diff)
-	}
-
-	return nil
-}
 func TestFilesInDir(t *testing.T) {
-	dir := "testdata"
+	dir := "testdata/action/input"
 	prefix := "input"
 
 	resultFiles, err := FilesInDir(dir, prefix)
@@ -43,7 +21,7 @@ func TestFilesInDir(t *testing.T) {
 }
 
 func TestActionProcessing(t *testing.T) {
-	dataDir := "../../data"
+	dataDir := "../data"
 	targetDir := fmt.Sprintf("%s/test", dataDir)
 	targetPrefix := "input"
 	actionListFile := "testdata/action_list.json"
@@ -54,7 +32,6 @@ func TestActionProcessing(t *testing.T) {
 			t.Fatalf("failed to create %s", dataDir)
 		}
 	}
-
 	if _, err := os.Stat(targetDir); os.IsNotExist(err) {
 		if err := os.Mkdir(targetDir, 0755); err != nil {
 			t.Fatalf("failed to create %s", targetDir)
@@ -65,7 +42,7 @@ func TestActionProcessing(t *testing.T) {
 	SplitActionListFile(actionListFile, targetDir, targetPrefix)
 
 	// from here checking result
-	expectedFiles, err := FilesInDir("testdata", targetPrefix)
+	expectedFiles, err := FilesInDir("testdata/action/input", targetPrefix)
 	if err != nil {
 		t.Fatalf("error reading files in testdata with prefix = %s", targetPrefix)
 	}

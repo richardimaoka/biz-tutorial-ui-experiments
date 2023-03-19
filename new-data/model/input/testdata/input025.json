@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm helloworld/greeting.pb.go",
-  "terminalName": "default",
-  "updateTerminal.currentDirectoryPath": "",
-  "updateTerminal.output": ""
-}
