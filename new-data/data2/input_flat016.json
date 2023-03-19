@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "cd ../",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}

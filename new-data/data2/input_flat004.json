@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat \u003c\u003c EOF \u003e helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}

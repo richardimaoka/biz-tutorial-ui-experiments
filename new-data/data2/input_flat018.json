@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm -rf helloworld/helloworld.pb.go",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}

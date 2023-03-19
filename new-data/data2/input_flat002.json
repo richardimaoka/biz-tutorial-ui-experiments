@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "mkdir helloworld",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}

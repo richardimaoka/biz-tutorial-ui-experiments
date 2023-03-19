@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "mkdir protoc-go-experiments",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}

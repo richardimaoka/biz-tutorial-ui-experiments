@@ -1,7 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm -rf github.com",
-  "terminalName": "default",
-  "currentDirectory": null,
-  "output": null
-}
