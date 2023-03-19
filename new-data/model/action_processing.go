@@ -7,15 +7,37 @@ import (
 	"strings"
 )
 
+// arbitrary JSON obj representation in Go map
+type JsonObj map[string]interface{}
+
+func readActionFromBytes(bytes []byte) (*ActionCommand, error) {
+	typeName, err := extractTypeName(bytes, "actionType")
+	if err != nil {
+		return nil, fmt.Errorf("readActionFromBytes() failed to extract actionType %s", err)
+	}
+
+	switch typeName {
+	case "ActionCommand":
+		var action ActionCommand
+		err := json.Unmarshal(bytes, &action)
+		if err != nil {
+			return nil, err
+		}
+		return &action, nil
+	default:
+		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s", typeName)
+	}
+}
+
 // map[string]interface{} represents JSON obj
 // return a slice of map[string]interface{} (i.e.) []map[string]interface{}
-func readActionList(actionListFile string) ([]map[string]interface{}, error) {
+func readActionList(actionListFile string) ([]JsonObj, error) {
 	bytes, err := os.ReadFile(actionListFile)
 	if err != nil {
 		return nil, fmt.Errorf("reading %s failed, %s", actionListFile, err)
 	}
 
-	var unmarshalled []map[string]interface{}
+	var unmarshalled []JsonObj
 	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
 		return nil, fmt.Errorf("unmarshaling %s failed, %s", actionListFile, err)
 	}
@@ -40,7 +62,7 @@ func FilesInDir(targetDir, prefix string) ([]string, error) {
 	return files, nil
 }
 
-func SplitActionListFile(actionListFile, targetDir, targetPrefix string) error {
+func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
 	// read and process the whole file
@@ -67,9 +89,14 @@ func SplitActionListFile(actionListFile, targetDir, targetPrefix string) error {
 
 func Processin() {
 	// by-hand csv -> json conversion, and save action-list.json
-	// SplitActionListFile("target", "filename")
+	//if err := SplitActionListFile("target", "filename"); err != nil {
+	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
+	// }
 
-	// files := listFilePaths()
+	// files, err := listFilePaths()
+	// 	if err != nil {
+	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
+	// }
 	// for i, f := range files {
 	// 	converted := convert(f)
 	// }

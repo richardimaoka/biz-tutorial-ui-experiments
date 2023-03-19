@@ -39,7 +39,7 @@ func TestActionProcessing(t *testing.T) {
 	}
 
 	// the function to test
-	SplitActionListFile(actionListFile, targetDir, targetPrefix)
+	SplitActionList(actionListFile, targetDir, targetPrefix)
 
 	// from here checking result
 	expectedFiles, err := FilesInDir("testdata/action/input", targetPrefix)
