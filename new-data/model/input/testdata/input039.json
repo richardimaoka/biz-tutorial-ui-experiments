@@ -1,0 +1,7 @@
+{
+  "actionType": "ActionCommand",
+  "command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
+  "terminalName": "default",
+  "updateTerminal.currentDirectoryPath": "",
+  "updateTerminal.output": ""
+}
