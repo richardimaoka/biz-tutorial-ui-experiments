@@ -6,6 +6,7 @@ type Action interface {
 	IsAction()
 }
 
+// ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
 	Command          string  `json:"command"`
 	TerminalName     string  `json:"terminalName"`

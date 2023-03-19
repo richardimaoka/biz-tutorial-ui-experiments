@@ -4,21 +4,27 @@ import (
 	"testing"
 )
 
-func TestActionCommand1(t *testing.T) {
-	cmd := ActionCommand{TerminalName: "default", Command: "mkdir hello"}
-	compareAfterMarshal(t, "testdata/action/command/action_command1.json", cmd)
+func address(s string) *string {
+	return &s
 }
 
-func TestActionCommand2(t *testing.T) {
-	output := "abc"
-	cmd := ActionCommand{TerminalName: "default", Command: "echo abc", Output: &output}
-	compareAfterMarshal(t, "testdata/action/command/action_command2.json", cmd)
-}
+func TestActionCommands(t *testing.T) {
+	type Entry struct {
+		command      ActionCommand
+		expectedFile string
+	}
 
-func TestActionCommand3(t *testing.T) {
-	changeDirectory := "hello/world"
-	cmd := ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: &changeDirectory}
-	compareAfterMarshal(t, "testdata/action/command/action_command3.json", cmd)
+	entries := []Entry{
+		{expectedFile: "testdata/action/command/action_command1.json", command: ActionCommand{TerminalName: "default", Command: "mkdir hello"}},
+		{expectedFile: "testdata/action/command/action_command2.json", command: ActionCommand{TerminalName: "default", Command: "echo abc", Output: address("abc")}},
+		{expectedFile: "testdata/action/command/action_command3.json", command: ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: address("hello/world")}},
+	}
+
+	for _, e := range entries {
+		t.Run("test_action_command_marshaling", func(t *testing.T) {
+			compareAfterMarshal(t, e.expectedFile, e.command)
+		})
+	}
 }
 
 func TestActionCommandTerminal1(t *testing.T) {
