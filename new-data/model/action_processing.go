@@ -42,7 +42,7 @@ func reMarshalAction(bytes []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	return json.Marshal(action)
+	return json.MarshalIndent(action, "", "  ")
 }
 
 // map[string]interface{} represents JSON obj
@@ -107,19 +107,35 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	return nil
 }
 
+func applyAction(bytes []byte) error {
+	// action, err := readActionFromBytes(bytes)
+	// if err != nil {
+	// 	return err
+	// }
+
+	return nil
+}
+
 func Processing() error {
-	// by-hand csv -> json conversion, and save action-list.json
-	if err := SplitActionList("data/action_list.json", "data/input", "action"); err != nil {
+	// 1. prereuisite: by-hand csv -> json conversion, and save action-list.json
+
+	inputDir := "data/input"
+	prefix := "action"
+
+	// 2. split action-list.json
+	if err := SplitActionList("data/action_list.json", inputDir, prefix); err != nil {
 		return err
 	}
 
-	// files, err := listFilePaths()
-	// 	if err != nil {
-	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
-	// }
-	// for i, f := range files {
-	// 	converted := convert(f)
-	// }
+	files, err := FilesInDir(inputDir, prefix)
+	if err != nil {
+		return err
+	}
+
+	// 3.
+	for _, f := range files {
+		fmt.Println(f)
+	}
 
 	// GenerateInputActionFiles("")
 
