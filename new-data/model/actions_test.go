@@ -71,16 +71,18 @@ func TestFilesInDir(t *testing.T) {
 	}
 }
 
-func TestActionProcessing(t *testing.T) {
+func TestSplitActoinList(t *testing.T) {
 	targetPrefix := "input"
 	actionListFile := "testdata/action/action_list.json"
 
 	// the function to test
+
 	if err := SplitActionList(actionListFile, testDir, targetPrefix); err != nil {
 		t.Fatal(err)
 	}
 
-	// from here checking result
+	// expectation and results
+
 	expectedFiles, err := FilesInDir("testdata/action/input", targetPrefix)
 	if err != nil {
 		t.Fatalf("error reading files in testdata with prefix = %s", targetPrefix)
@@ -90,6 +92,8 @@ func TestActionProcessing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error reading files in %s with prefix = %s", testDir, targetPrefix)
 	}
+
+	// run check result
 
 	if len(expectedFiles) != len(resultFiles) {
 		t.Fatalf("expected %d files but result is %d files", len(expectedFiles), len(resultFiles))
@@ -112,6 +116,24 @@ func TestActionProcessing(t *testing.T) {
 			t.Errorf("failed to compare files = %s vs. %s, %s", expectedFiles[i], resultFiles[i], err)
 		}
 	}
+}
+
+func TestReadOperationFromBytes(t *testing.T) {
+	// file := fmt.Sprintf("testdata/action/source_code_ops", "file-add1.json")
+	// op := FileAdd{FilePath: "protoc-go-experiments/helloworld/greeting.pb"}
+	// seqNo := 26
+	// bytes, err := os.ReadFile(file)
+	// if err != nil {
+	// 	t.Fatalf("failed to read %s", file)
+	// }
+	// resultSeqNo, resultOp, err := readOperationFromBytes(bytes)
+	// if err != nil {
+	// 	t.Fatalf("failed to read op from %s", file)
+	// }
+	// compareJsonBytes(t, by, resultOp)
+}
+
+func TestEnrichActionFiles(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
