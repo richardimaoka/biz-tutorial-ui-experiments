@@ -88,7 +88,73 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 		}
 		return &action, nil
 	default:
-		return nil, fmt.Errorf("readActionFromBytes() found invalid typeName = %s", typeName)
+		return nil, fmt.Errorf("readActionFromBytes() found invalid actionType = %s", typeName)
+	}
+}
+
+func readOperationFromBytes(bytes []byte) (int, FileSystemOperation, error) {
+	typeName, err := extractTypeName(bytes, "operationType")
+	if err != nil {
+		return 0, nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
+	}
+
+	type extractSeqNo struct {
+		seqNo int
+	}
+
+	switch typeName {
+	case "FileAdd":
+		var op FileAdd
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return 0, nil, err
+		}
+		var n extractSeqNo
+		if err := json.Unmarshal(bytes, &n); err != nil {
+			return 0, nil, err
+		}
+		return n.seqNo, &op, nil
+	case "FileUpdate":
+		var op FileUpdate
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return 0, nil, err
+		}
+		var n extractSeqNo
+		if err := json.Unmarshal(bytes, &n); err != nil {
+			return 0, nil, err
+		}
+		return n.seqNo, &op, nil
+	case "FileDelete":
+		var op FileDelete
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return 0, nil, err
+		}
+		var n extractSeqNo
+		if err := json.Unmarshal(bytes, &n); err != nil {
+			return 0, nil, err
+		}
+		return n.seqNo, &op, nil
+	case "DirectoryAdd":
+		var op DirectoryAdd
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return 0, nil, err
+		}
+		var n extractSeqNo
+		if err := json.Unmarshal(bytes, &n); err != nil {
+			return 0, nil, err
+		}
+		return n.seqNo, &op, nil
+	case "DirectoryDelete":
+		var op DirectoryDelete
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return 0, nil, err
+		}
+		var n extractSeqNo
+		if err := json.Unmarshal(bytes, &n); err != nil {
+			return 0, nil, err
+		}
+		return n.seqNo, &op, nil
+	default:
+		return 0, nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
 	}
 }
 
@@ -163,10 +229,41 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 		if err != nil {
 			return fmt.Errorf("re-marshaling JSON failed, %s", err)
 		}
+
 		targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, i)
 		if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
+	}
+
+	return nil
+}
+
+func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
+	errorPreceding := "Error in EnrichActionFiles for filename = " + opsListFile
+
+	// read and process the whole file
+	jsonArray, err := readActionList(opsListFile)
+	if err != nil {
+		return fmt.Errorf("%s, %s", errorPreceding, err)
+	}
+
+	// write each array element into file
+	for _, jsonObj := range jsonArray {
+		jsonBytes, err := json.MarshalIndent(jsonObj, "", "  ")
+		if err != nil {
+			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
+		}
+
+		_, _, err = readOperationFromBytes(jsonBytes)
+		if err != nil {
+			return fmt.Errorf("%s, read operation failed, %s", errorPreceding, err)
+		}
+
+		// targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
+		// if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
+		// 	return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
+		// }
 	}
 
 	return nil
@@ -183,12 +280,17 @@ func Processing() error {
 		return err
 	}
 
+	// 3. enrich action files
+	// enrichDir := "data/enriched"
+	// if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichDir, prefix); err != nil {
+	// 	return err
+	// }
+
+	// 4.
 	files, err := FilesInDir(inputDir, prefix)
 	if err != nil {
 		return err
 	}
-
-	// 3.
 	for _, f := range files {
 		fmt.Println(f)
 	}
