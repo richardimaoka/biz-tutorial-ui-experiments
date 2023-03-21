@@ -2,9 +2,13 @@ package model
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
+)
+
+const (
+	dataDir string = "../data"
+	testDir string = "../data/test"
 )
 
 func address(s string) *string {
@@ -68,25 +72,11 @@ func TestFilesInDir(t *testing.T) {
 }
 
 func TestActionProcessing(t *testing.T) {
-	dataDir := "../data"
-	targetDir := fmt.Sprintf("%s/test", dataDir)
 	targetPrefix := "input"
 	actionListFile := "testdata/action/action_list.json"
 
-	// initial setup
-	if _, err := os.Stat(dataDir); os.IsNotExist(err) {
-		if err := os.Mkdir(dataDir, 0755); err != nil {
-			t.Fatalf("failed to create %s", dataDir)
-		}
-	}
-	if _, err := os.Stat(targetDir); os.IsNotExist(err) {
-		if err := os.Mkdir(targetDir, 0755); err != nil {
-			t.Fatalf("failed to create %s", targetDir)
-		}
-	}
-
 	// the function to test
-	if err := SplitActionList(actionListFile, targetDir, targetPrefix); err != nil {
+	if err := SplitActionList(actionListFile, testDir, targetPrefix); err != nil {
 		t.Fatal(err)
 	}
 
@@ -96,9 +86,9 @@ func TestActionProcessing(t *testing.T) {
 		t.Fatalf("error reading files in testdata with prefix = %s", targetPrefix)
 	}
 
-	resultFiles, err := FilesInDir(targetDir, targetPrefix)
+	resultFiles, err := FilesInDir(testDir, targetPrefix)
 	if err != nil {
-		t.Fatalf("error reading files in %s with prefix = %s", targetDir, targetPrefix)
+		t.Fatalf("error reading files in %s with prefix = %s", testDir, targetPrefix)
 	}
 
 	if len(expectedFiles) != len(resultFiles) {
@@ -122,4 +112,22 @@ func TestActionProcessing(t *testing.T) {
 			t.Errorf("failed to compare files = %s vs. %s, %s", expectedFiles[i], resultFiles[i], err)
 		}
 	}
+}
+
+func TestMain(m *testing.M) {
+	// initial setup
+	if _, err := os.Stat(dataDir); os.IsNotExist(err) {
+		if err := os.Mkdir(dataDir, 0755); err != nil {
+			panic("failed to create " + dataDir)
+		}
+	}
+	if _, err := os.Stat(testDir); os.IsNotExist(err) {
+		if err := os.Mkdir(testDir, 0755); err != nil {
+			panic("failed to create " + testDir)
+		}
+	}
+
+	exitVal := m.Run()
+
+	os.Exit(exitVal)
 }
