@@ -3,6 +3,6 @@
   "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定",
   "currentDirectory": null,
   "output": "Missing output directives.",
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }

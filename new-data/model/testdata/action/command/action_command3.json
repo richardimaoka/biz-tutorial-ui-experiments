@@ -3,6 +3,5 @@
   "terminalName": "another",
   "command": "cd hello/world",
   "output": null,
-  "currentDirectory": "hello/world",
-  "sourceCodeDiff": null
+  "currentDirectory": "hello/world"
 }

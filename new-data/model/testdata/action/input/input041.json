@@ -3,6 +3,6 @@
   "command": "rm helloworld/greeting.pb.go\nrm helloworld/helloworld.pb.go\nrm helloworld/subdir/subhello.pb.go",
   "currentDirectory": null,
   "output": null,
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }

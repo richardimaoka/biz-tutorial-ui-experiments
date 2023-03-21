@@ -1,0 +1,308 @@
+[
+  {
+    "seqNo": 0,
+    "operation": "DirectoryAdd",
+    "filePath": "protoc-go-experiments",
+    "content": ""
+  },
+  {
+    "seqNo": 2,
+    "operation": "DirectoryAdd",
+    "filePath": "protoc-go-experiments/helloworld",
+    "content": ""
+  },
+  {
+    "seqNo": 4,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}"
+  },
+  {
+    "seqNo": 7,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}"
+  },
+  {
+    "seqNo": 8,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/github.com/__github_username/protoc-go-experiments/helloworld/helloworld.pb.go",
+    "content": "***"
+  },
+  {
+    "seqNo": 9,
+    "operation": "DirectoryDelete",
+    "filePath": "protoc-go-experiments/helloworld/github.com",
+    "content": ""
+  },
+  {
+    "seqNo": 10,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 11,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 13,
+    "operation": "DirectoryAdd",
+    "filePath": "protoc-go-experiments/helloworld/outdir",
+    "content": ""
+  },
+  {
+    "seqNo": 14,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/outdir/helloworld.pb.go",
+    "content": "***"
+  },
+  {
+    "seqNo": 15,
+    "operation": "DirectoryDelete",
+    "filePath": "protoc-go-experiments/helloworld/outdir",
+    "content": ""
+  },
+  {
+    "seqNo": 18,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb.go",
+    "content": "***"
+  },
+  {
+    "seqNo": 19,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb.go",
+    "content": ""
+  },
+  {
+    "seqNo": 20,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }"
+  },
+  {
+    "seqNo": 21,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 21,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 22,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 23,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 24,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld/subdir\";\n\n// The greeting service definition.\nservice SubGreeter {\n  // Sends a greeting\n  rpc SayHello(SubHelloRequest) returns (SubHelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage SubHelloRequest { string name = 1; }\n\n// The response message containing the greetings\nmessage SubHelloReply { string message = 1; }"
+  },
+  {
+    "seqNo": 25,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 25,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 25,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 26,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 27,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 28,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 29,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}"
+  },
+  {
+    "seqNo": 31,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}"
+  },
+  {
+    "seqNo": 33,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"helloworld/greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}"
+  },
+  {
+    "seqNo": 34,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 34,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 34,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 35,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 36,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 37,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 38,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}"
+  },
+  {
+    "seqNo": 39,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 39,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 39,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/subdir/subhello.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 40,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/greeting.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 40,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 40,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/subdir/subhello.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 41,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 41,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 41,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": "***"
+  },
+  {
+    "seqNo": 42,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 42,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 42,
+    "operation": "FileDelete",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 45,
+    "operation": "FileUpdate",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+    "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"helloworld/greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}"
+  },
+  {
+    "seqNo": 46,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 46,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+    "content": ""
+  },
+  {
+    "seqNo": 46,
+    "operation": "FileAdd",
+    "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+    "content": ""
+  }
+]

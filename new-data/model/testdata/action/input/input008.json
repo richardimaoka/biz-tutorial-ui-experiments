@@ -3,6 +3,6 @@
   "command": "protoc --go_out=. helloworld.proto",
   "currentDirectory": null,
   "output": null,
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }

@@ -3,6 +3,5 @@
   "terminalName": "default",
   "command": "echo abc",
   "output": "abc",
-  "currentDirectory": null,
-  "sourceCodeDiff": null
+  "currentDirectory": null
 }

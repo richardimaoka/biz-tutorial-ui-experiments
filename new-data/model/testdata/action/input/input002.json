@@ -3,6 +3,6 @@
   "command": "mkdir helloworld",
   "currentDirectory": null,
   "output": null,
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }

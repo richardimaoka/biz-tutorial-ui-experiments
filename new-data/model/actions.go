@@ -9,17 +9,19 @@ import (
 
 // arbitrary JSON obj representation in Go map
 type JsonObj map[string]interface{}
+
 type Action interface {
 	IsAction()
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command          string   `json:"command"`
-	TerminalName     string   `json:"terminalName"`
-	Output           *string  `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string  `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-	SourceCodeDiff   *GitDiff `json:"sourceCodeDiff"`
+	Command          string         `json:"command"`
+	TerminalName     string         `json:"terminalName"`
+	Output           *string        `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string        `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	FileDiff         *GitDiff       `json:"fileDiff"`
+	DirectoryDiff    *DirectoryDiff `json:"directoryDiff"`
 }
 
 func (c *ActionCommand) IsAction() {}
@@ -28,6 +30,8 @@ type ManualUpdate struct {
 }
 
 func (c *ManualUpdate) IsAction() {}
+
+// methods
 
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	typeName := "ActionCommand"
@@ -38,7 +42,14 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	m["terminalName"] = &c.TerminalName
 	m["output"] = c.Output
 	m["currentDirectory"] = c.CurrentDirectory
-	m["sourceCodeDiff"] = c.SourceCodeDiff
+
+	if c.FileDiff != nil && c.DirectoryDiff != nil {
+		return nil, fmt.Errorf("ActionCommand's FileDiff and DirectoryDiff cannot co-exist")
+	} else if c.FileDiff != nil {
+		m["fileDiff"] = c.FileDiff
+	} else if c.DirectoryDiff != nil {
+		m["directoryDiff"] = c.DirectoryDiff
+	}
 
 	return json.Marshal(m)
 }

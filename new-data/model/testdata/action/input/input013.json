@@ -3,6 +3,6 @@
   "command": "mkdir outdir",
   "currentDirectory": null,
   "output": null,
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }

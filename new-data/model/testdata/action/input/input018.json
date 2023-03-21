@@ -3,6 +3,6 @@
   "command": "rm -rf helloworld/helloworld.pb.go",
   "currentDirectory": null,
   "output": null,
-  "sourceCodeDiff": null,
+
   "terminalName": "default"
 }
