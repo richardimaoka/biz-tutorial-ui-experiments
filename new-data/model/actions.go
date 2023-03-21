@@ -76,6 +76,9 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 		if err != nil {
 			return nil, err
 		}
+		if action.FileDiff != nil && action.DirectoryDiff != nil {
+			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
+		}
 		return &action, nil
 	case "ManualUpdate":
 		var action ManualUpdate
