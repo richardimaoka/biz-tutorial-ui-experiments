@@ -1,7 +1,8 @@
 {
   "actionType": "ActionCommand",
   "command": "protoc --go_out=. helloworld.proto",
-  "terminalName": "default",
   "currentDirectory": null,
-  "output": null
+  "output": null,
+  "sourceCodeDiff": null,
+  "terminalName": "default"
 }

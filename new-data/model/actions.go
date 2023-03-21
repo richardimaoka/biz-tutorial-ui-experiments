@@ -15,10 +15,11 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command          string  `json:"command"`
-	TerminalName     string  `json:"terminalName"`
-	Output           *string `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	Command          string   `json:"command"`
+	TerminalName     string   `json:"terminalName"`
+	Output           *string  `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string  `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	SourceCodeDiff   *GitDiff `json:"sourceCodeDiff"`
 }
 
 func (c *ActionCommand) IsAction() {}
@@ -31,12 +32,13 @@ func (c *ManualUpdate) IsAction() {}
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	typeName := "ActionCommand"
 
-	m := make(map[string]*string)
+	m := make(map[string]interface{})
 	m["actionType"] = &typeName
 	m["command"] = &c.Command
 	m["terminalName"] = &c.TerminalName
 	m["output"] = c.Output
 	m["currentDirectory"] = c.CurrentDirectory
+	m["sourceCodeDiff"] = c.SourceCodeDiff
 
 	return json.Marshal(m)
 }

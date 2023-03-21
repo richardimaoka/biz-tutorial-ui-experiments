@@ -3,5 +3,6 @@
   "terminalName": "default",
   "command": "mkdir hello",
   "output": null,
-  "currentDirectory": null
+  "currentDirectory": null,
+  "sourceCodeDiff": null
 }

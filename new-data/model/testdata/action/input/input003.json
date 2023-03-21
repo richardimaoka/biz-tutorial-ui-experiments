@@ -1,7 +1,8 @@
 {
   "actionType": "ActionCommand",
   "command": "cd helloworld # protoc-go-experiments/helloworld",
-  "terminalName": "default",
   "currentDirectory": "protoc-go-experiments/helloworld",
-  "output": null
+  "output": null,
+  "terminalName": "default",
+  "sourceCodeDiff": null
 }

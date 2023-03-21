@@ -1,7 +1,8 @@
 {
   "actionType": "ActionCommand",
   "command": "cd protoc-go-experiments",
-  "terminalName": "default",
   "currentDirectory": "protoc-go-experiments",
-  "output": null
+  "output": null,
+  "sourceCodeDiff": null,
+  "terminalName": "default"
 }
