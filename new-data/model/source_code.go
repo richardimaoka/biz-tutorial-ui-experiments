@@ -184,7 +184,7 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 func (s *SourceCode) canApplyDiff(diff GitDiff) error {
 	// pre-condition check, dupe in diff
 	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
-		return fmt.Errorf("duplicate file paths in added files = %+v", diffDuplicate)
+		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
 	}
 
 	// pre-condition check, each element's pre-condition check
