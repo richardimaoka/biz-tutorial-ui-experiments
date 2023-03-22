@@ -1,5 +1,9 @@
 package model
 
+import (
+	"encoding/json"
+)
+
 type FileSystemOperation interface {
 	IsFileSystemOperation()
 }
@@ -38,14 +42,67 @@ type FileDelete struct {
 func (o FileDelete) IsFileSystemOperation() {}
 
 type GitDiff struct {
-	Added   []FileAdd
-	Updated []FileUpdate
-	Deleted []FileDelete
+	Added   []FileAdd    `json:"added"`
+	Updated []FileUpdate `json:"updated"`
+	Deleted []FileDelete `json:"deleted"`
 }
 
 type DirectoryDiff struct {
-	Added   []DirectoryAdd
-	Deleted []DirectoryDelete
+	Added   []DirectoryAdd    `json:"added"`
+	Deleted []DirectoryDelete `json:"deleted"`
+}
+
+//marshal DirectoryAdd to json string
+func (o DirectoryAdd) MarshalJSON() ([]byte, error) {
+	typeName := "DirectoryAdd"
+	m := make(map[string]interface{})
+	m["operationType"] = &typeName
+	m["filePath"] = o.FilePath
+
+	return json.Marshal(m)
+}
+
+func (o DirectoryDelete) MarshalJSON() ([]byte, error) {
+	typeName := "DirectoryDelete"
+
+	m := make(map[string]interface{})
+	m["operationType"] = &typeName
+	m["filePath"] = o.FilePath
+
+	return json.Marshal(m)
+}
+
+func (o FileAdd) MarshalJSON() ([]byte, error) {
+	typeName := "FileAdd"
+
+	m := make(map[string]interface{})
+	m["operationType"] = &typeName
+	m["filePath"] = o.FilePath
+	m["content"] = o.Content
+	m["isFullContent"] = o.IsFullContent
+
+	return json.Marshal(m)
+}
+
+func (o FileUpdate) MarshalJSON() ([]byte, error) {
+	typeName := "FileUpdate"
+
+	m := make(map[string]interface{})
+	m["operationType"] = &typeName
+	m["filePath"] = o.FilePath
+	m["content"] = o.Content
+
+	return json.Marshal(m)
+}
+
+func (o FileDelete) MarshalJSON() ([]byte, error) {
+	typeName := "FileDelete"
+
+	m := make(map[string]interface{})
+	m["operationType"] = &typeName
+	m["filePath"] = o.FilePath
+
+	return json.Marshal(m)
 }
 
 func (d GitDiff) size() int {
