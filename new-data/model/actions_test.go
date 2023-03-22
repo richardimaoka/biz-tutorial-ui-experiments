@@ -139,6 +139,57 @@ func TestEnrichActionCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	compareAfterMarshal(t, "testdata/action/enrich/action1.json", action)
+
+}
+
+//generate table-based tese cases for actions.enrich() method with all the operations
+func TestEnrichOperatoins(t *testing.T) {
+	type Operation struct {
+		operation     FileSystemOperation
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		name       string
+		command    ActionCommand
+		operations []Operation
+		resultFile string
+	}
+
+	var entries []Entry
+
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for _, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				for _, op := range e.operations {
+					err := e.command.enrich(op.operation)
+
+					resultSuccess := err == nil
+					if resultSuccess != op.expectSuccess {
+						t.Errorf("operation %t is expected, but result is %t\n", op.expectSuccess, resultSuccess)
+						if op.expectSuccess {
+							t.Errorf("error:     %s\n", err.Error())
+						}
+						t.Errorf("operation: %+v\n", op)
+						return
+					}
+				}
+
+				compareAfterMarshal(t, e.resultFile, e.command)
+			})
+		}
+	}
+
+	entries = []Entry{
+		{name: "add_file_single",
+			resultFile: "testdata/action/enrich/action1.json",
+			command:    ActionCommand{TerminalName: "default", Command: "git apply 324x435d"},
+			operations: []Operation{
+				{expectSuccess: true, operation: FileAdd{Content: "***", IsFullContent: false, FilePath: "protoc-go-experiments/helloworld/greeting.pb"}},
+			},
+		},
+	}
+	t.Run("add_files", func(t *testing.T) { runEntries(t, entries) })
 }
 
 func TestMain(m *testing.M) {
