@@ -13,6 +13,7 @@ type JsonObj map[string]interface{}
 type Action interface {
 	IsAction()
 	WriteJsonToFile(filepath string) error
+	Enrich(operation FileSystemOperation) error
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -66,11 +67,11 @@ func (c *ActionCommand) WriteJsonToFile(filePath string) error {
 	return nil
 }
 
-func (c *ActionCommand) enrich(op FileSystemOperation) error {
+func (c *ActionCommand) Enrich(op FileSystemOperation) error {
 	switch v := op.(type) {
 	case FileAdd:
 		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.enrich() found FileAdd operation while DirectoryDiff is not nil")
+			return fmt.Errorf("ActionCommand.Enrich() found FileAdd operation while DirectoryDiff is not nil")
 		}
 		if c.FileDiff == nil {
 			c.FileDiff = &GitDiff{}
@@ -78,7 +79,7 @@ func (c *ActionCommand) enrich(op FileSystemOperation) error {
 		c.FileDiff.Added = append(c.FileDiff.Added, v)
 	case FileDelete:
 		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.enrich() found FileDelete operation while DirectoryDiff is not nil")
+			return fmt.Errorf("ActionCommand.Enrich() found FileDelete operation while DirectoryDiff is not nil")
 		}
 		if c.FileDiff == nil {
 			c.FileDiff = &GitDiff{}
@@ -86,7 +87,7 @@ func (c *ActionCommand) enrich(op FileSystemOperation) error {
 		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
 	case FileUpdate:
 		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.enrich() found FileUpdate operation while DirectoryDiff is not nil")
+			return fmt.Errorf("ActionCommand.Enrich() found FileUpdate operation while DirectoryDiff is not nil")
 		}
 		if c.FileDiff == nil {
 			c.FileDiff = &GitDiff{}
@@ -94,7 +95,7 @@ func (c *ActionCommand) enrich(op FileSystemOperation) error {
 		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
 	case DirectoryAdd:
 		if c.FileDiff != nil {
-			return fmt.Errorf("ActionCommand.enrich() found DirectoryAdd operation while GitDiff is not nil")
+			return fmt.Errorf("ActionCommand.Enrich() found DirectoryAdd operation while GitDiff is not nil")
 		}
 		if c.DirectoryDiff == nil {
 			c.DirectoryDiff = &DirectoryDiff{}
@@ -102,14 +103,14 @@ func (c *ActionCommand) enrich(op FileSystemOperation) error {
 		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
 	case DirectoryDelete:
 		if c.FileDiff != nil {
-			return fmt.Errorf("ActionCommand.enrich() found DirectoryDelete operation while GitDiff is not nil")
+			return fmt.Errorf("ActionCommand.Enrich() found DirectoryDelete operation while GitDiff is not nil")
 		}
 		if c.DirectoryDiff == nil {
 			c.DirectoryDiff = &DirectoryDiff{}
 		}
 		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
 	default:
-		return fmt.Errorf("ActionCommand.enrich() found invalid operation type = %T", op)
+		return fmt.Errorf("ActionCommand.Enrich() found invalid operation type = %T", op)
 	}
 
 	return nil
@@ -132,6 +133,55 @@ func (c *ManualUpdate) WriteJsonToFile(filePath string) error {
 	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c *ManualUpdate) Enrich(op FileSystemOperation) error {
+	// switch v := op.(type) {
+	// case FileAdd:
+	// 	if c.DirectoryDiff != nil {
+	// 		return fmt.Errorf("ActionCommand.enrich() found FileAdd operation while DirectoryDiff is not nil")
+	// 	}
+	// 	if c.FileDiff == nil {
+	// 		c.FileDiff = &GitDiff{}
+	// 	}
+	// 	c.FileDiff.Added = append(c.FileDiff.Added, v)
+	// case FileDelete:
+	// 	if c.DirectoryDiff != nil {
+	// 		return fmt.Errorf("ActionCommand.enrich() found FileDelete operation while DirectoryDiff is not nil")
+	// 	}
+	// 	if c.FileDiff == nil {
+	// 		c.FileDiff = &GitDiff{}
+	// 	}
+	// 	c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
+	// case FileUpdate:
+	// 	if c.DirectoryDiff != nil {
+	// 		return fmt.Errorf("ActionCommand.enrich() found FileUpdate operation while DirectoryDiff is not nil")
+	// 	}
+	// 	if c.FileDiff == nil {
+	// 		c.FileDiff = &GitDiff{}
+	// 	}
+	// 	c.FileDiff.Updated = append(c.FileDiff.Updated, v)
+	// case DirectoryAdd:
+	// 	if c.FileDiff != nil {
+	// 		return fmt.Errorf("ActionCommand.enrich() found DirectoryAdd operation while GitDiff is not nil")
+	// 	}
+	// 	if c.DirectoryDiff == nil {
+	// 		c.DirectoryDiff = &DirectoryDiff{}
+	// 	}
+	// 	c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
+	// case DirectoryDelete:
+	// 	if c.FileDiff != nil {
+	// 		return fmt.Errorf("ActionCommand.enrich() found DirectoryDelete operation while GitDiff is not nil")
+	// 	}
+	// 	if c.DirectoryDiff == nil {
+	// 		c.DirectoryDiff = &DirectoryDiff{}
+	// 	}
+	// 	c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
+	// default:
+	// 	return fmt.Errorf("ActionCommand.enrich() found invalid operation type = %T", op)
+	// }
+
 	return nil
 }
 
@@ -164,69 +214,53 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 	}
 }
 
-func readOperationFromBytes(bytes []byte) (int, FileSystemOperation, error) {
+func readActionFromFile(filePath string) (Action, error) {
+	jsonBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return readActionFromBytes(jsonBytes)
+}
+
+func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
 	typeName, err := extractTypeName(bytes, "operationType")
 	if err != nil {
-		return 0, nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
-	}
-
-	type extractSeqNo struct {
-		seqNo int
+		return nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
 	}
 
 	switch typeName {
 	case "FileAdd":
 		var op FileAdd
 		if err := json.Unmarshal(bytes, &op); err != nil {
-			return 0, nil, err
+			return nil, err
 		}
-		var n extractSeqNo
-		if err := json.Unmarshal(bytes, &n); err != nil {
-			return 0, nil, err
-		}
-		return n.seqNo, &op, nil
+		return &op, nil
 	case "FileUpdate":
 		var op FileUpdate
 		if err := json.Unmarshal(bytes, &op); err != nil {
-			return 0, nil, err
+			return nil, err
 		}
-		var n extractSeqNo
-		if err := json.Unmarshal(bytes, &n); err != nil {
-			return 0, nil, err
-		}
-		return n.seqNo, &op, nil
+		return &op, nil
 	case "FileDelete":
 		var op FileDelete
 		if err := json.Unmarshal(bytes, &op); err != nil {
-			return 0, nil, err
+			return nil, err
 		}
-		var n extractSeqNo
-		if err := json.Unmarshal(bytes, &n); err != nil {
-			return 0, nil, err
-		}
-		return n.seqNo, &op, nil
+		return &op, nil
 	case "DirectoryAdd":
 		var op DirectoryAdd
 		if err := json.Unmarshal(bytes, &op); err != nil {
-			return 0, nil, err
+			return nil, err
 		}
-		var n extractSeqNo
-		if err := json.Unmarshal(bytes, &n); err != nil {
-			return 0, nil, err
-		}
-		return n.seqNo, &op, nil
+		return &op, nil
 	case "DirectoryDelete":
 		var op DirectoryDelete
 		if err := json.Unmarshal(bytes, &op); err != nil {
-			return 0, nil, err
+			return nil, err
 		}
-		var n extractSeqNo
-		if err := json.Unmarshal(bytes, &n); err != nil {
-			return 0, nil, err
-		}
-		return n.seqNo, &op, nil
+		return &op, nil
 	default:
-		return 0, nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
+		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
 	}
 }
 
@@ -292,7 +326,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 
 	// write each array element into file
 	for i, jsonObj := range jsonArray {
-		jsonBytes, err := json.MarshalIndent(jsonObj, "", "  ")
+		jsonBytes, err := json.Marshal(jsonObj)
 		if err != nil {
 			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
 		}
@@ -323,59 +357,54 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 
 	// write each array element into file
 	for _, jsonObj := range jsonArray {
-		_, err := json.MarshalIndent(jsonObj, "", "  ")
+		opBytes, err := json.Marshal(jsonObj)
 		if err != nil {
 			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
 		}
 
-		// op :=  ...
-		// action := ...
-		// action.enrich(op)
-		// actionBytes :=
-		// os.WriteFile(targetFile, actionBytes, 0644)
+		operation, err := readOperationFromBytes(opBytes)
+		if err != nil {
+			return fmt.Errorf("%s, reading operation failed, %s", errorPreceding, err)
+		}
 
-		// seqNo, op, err := readOperationFromBytes(opBytes)
-		// if err != nil {
-		// 	return fmt.Errorf("%s, read operation failed, %s", errorPreceding, err)
-		// }
+		seqNo, ok := jsonObj["seqNo"]
+		if !ok {
+			return fmt.Errorf("%s, seqNo not found in JSON, %s", errorPreceding, err)
+		}
+		actionFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
 
-		// actionBytes, err := os.ReadFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo))
-		// if err != nil {
-		// 	return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-		// }
+		action, err := readActionFromFile(actionFile)
+		if err != nil {
+			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+		}
 
-		// action, err := readActionFromBytes(actionBytes)
-		// if err != nil {
-		// 	return nil, err
-		// }
+		if err := action.Enrich(operation); err != nil {
+			return fmt.Errorf("%s, enriching action failed, %s", errorPreceding, err)
+		}
 
-		// // targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
-		// if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
-		// 	return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
-		// }
+		action.WriteJsonToFile(actionFile)
 	}
 
 	return nil
 }
 
 func Processing() error {
-	// 1. prereuisite: by-hand csv -> json conversion, and save action-list.json
+	// 0. prereuisite: by-hand csv -> json conversion, and save action-list.json
 
+	// 1. split action-list.json
 	inputDir := "data/input"
 	prefix := "action"
-
-	// 2. split action-list.json
 	if err := SplitActionList("data/action_list.json", inputDir, prefix); err != nil {
 		return err
 	}
 
-	// 3. enrich action files
+	// 2. enrich action files
 	// enrichDir := "data/enriched"
 	// if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichDir, prefix); err != nil {
 	// 	return err
 	// }
 
-	// 4.
+	// 3.
 	files, err := FilesInDir(inputDir, prefix)
 	if err != nil {
 		return err

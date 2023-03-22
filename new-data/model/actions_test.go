@@ -133,17 +133,8 @@ func TestReadOperationFromBytes(t *testing.T) {
 	// compareJsonBytes(t, by, resultOp)
 }
 
-func TestEnrichActionCommand(t *testing.T) {
-	action := ActionCommand{TerminalName: "default", Command: "git apply 324x435d"}
-	if err := action.enrich(FileAdd{FilePath: "protoc-go-experiments/helloworld/greeting.pb", Content: "***", IsFullContent: false}); err != nil {
-		t.Fatal(err)
-	}
-	compareAfterMarshal(t, "testdata/action/enrich/action1.json", action)
-
-}
-
 //generate table-based tese cases for actions.enrich() method with all the operations
-func TestEnrichOperatoins(t *testing.T) {
+func TestEnrichActionCommand(t *testing.T) {
 	type Operation struct {
 		operation     FileSystemOperation
 		expectSuccess bool
@@ -162,7 +153,7 @@ func TestEnrichOperatoins(t *testing.T) {
 		for _, e := range testEntries {
 			t.Run(e.name, func(t *testing.T) {
 				for _, op := range e.operations {
-					err := e.command.enrich(op.operation)
+					err := e.command.Enrich(op.operation)
 
 					resultSuccess := err == nil
 					if resultSuccess != op.expectSuccess {
