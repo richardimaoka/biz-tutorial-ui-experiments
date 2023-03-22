@@ -12,6 +12,7 @@ type JsonObj map[string]interface{}
 
 type Action interface {
 	IsAction()
+	WriteJsonToFile(filepath string) error
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -52,6 +53,17 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(m)
+}
+
+func (c *ActionCommand) WriteJsonToFile(filePath string) error {
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *ActionCommand) enrich(op FileSystemOperation) error {
@@ -110,6 +122,17 @@ func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	m["actionType"] = &typeName
 
 	return json.Marshal(m)
+}
+
+func (c *ManualUpdate) WriteJsonToFile(filePath string) error {
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
+		return err
+	}
+	return nil
 }
 
 func readActionFromBytes(bytes []byte) (Action, error) {
@@ -271,16 +294,17 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	for i, jsonObj := range jsonArray {
 		jsonBytes, err := json.MarshalIndent(jsonObj, "", "  ")
 		if err != nil {
-			return fmt.Errorf("marshaling JSON failed, %s", err)
+			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
 		}
 
-		actionBytes, err := reMarshalAction(jsonBytes)
+		// unmarshal to action once, to control the re-marshaling behavior
+		action, err := readActionFromBytes(jsonBytes)
 		if err != nil {
-			return fmt.Errorf("re-marshaling JSON failed, %s", err)
+			return fmt.Errorf("%s, reading actoin failed, %s", errorPreceding, err)
 		}
 
 		targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, i)
-		if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
+		if action.WriteJsonToFile(targetFile) != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
@@ -303,6 +327,12 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 		if err != nil {
 			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
 		}
+
+		// op :=  ...
+		// action := ...
+		// action.enrich(op)
+		// actionBytes :=
+		// os.WriteFile(targetFile, actionBytes, 0644)
 
 		// seqNo, op, err := readOperationFromBytes(opBytes)
 		// if err != nil {
