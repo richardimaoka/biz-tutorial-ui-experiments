@@ -133,7 +133,12 @@ func TestReadOperationFromBytes(t *testing.T) {
 	// compareJsonBytes(t, by, resultOp)
 }
 
-func TestEnrichActionFiles(t *testing.T) {
+func TestEnrichActionCommand(t *testing.T) {
+	action := ActionCommand{TerminalName: "default", Command: "git apply 324x435d"}
+	if err := action.enrich(FileAdd{FilePath: "protoc-go-experiments/helloworld/greeting.pb", Content: "***", IsFullContent: false}); err != nil {
+		t.Fatal(err)
+	}
+	compareAfterMarshal(t, "testdata/action/enrich/action1.json", action)
 }
 
 func TestMain(m *testing.M) {

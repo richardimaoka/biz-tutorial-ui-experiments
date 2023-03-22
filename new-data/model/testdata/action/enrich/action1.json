@@ -1,0 +1,19 @@
+{
+  "actionType": "ActionCommand",
+  "command": "git apply 324x435d",
+  "currentDirectory": null,
+  "output": null,
+  "terminalName": "default",
+  "fileDiff": {
+    "added": [
+      {
+        "content": "***",
+        "isFullContent": false,
+        "operationType": "FileAdd",
+        "filePath": "protoc-go-experiments/helloworld/greeting.pb"
+      }
+    ],
+    "deleted": null,
+    "updated": null
+  }
+}

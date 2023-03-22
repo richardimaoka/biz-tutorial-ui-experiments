@@ -54,6 +54,55 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
+func (c *ActionCommand) enrich(op FileSystemOperation) error {
+	switch v := op.(type) {
+	case FileAdd:
+		if c.DirectoryDiff != nil {
+			return fmt.Errorf("ActionCommand.enrich() found FileAdd operation while DirectoryDiff is not nil")
+		}
+		if c.FileDiff == nil {
+			c.FileDiff = &GitDiff{}
+		}
+		c.FileDiff.Added = append(c.FileDiff.Added, v)
+	case FileDelete:
+		if c.DirectoryDiff != nil {
+			return fmt.Errorf("ActionCommand.enrich() found FileDelete operation while DirectoryDiff is not nil")
+		}
+		if c.FileDiff == nil {
+			c.FileDiff = &GitDiff{}
+		}
+		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
+	case FileUpdate:
+		if c.DirectoryDiff != nil {
+			return fmt.Errorf("ActionCommand.enrich() found FileUpdate operation while DirectoryDiff is not nil")
+		}
+		if c.FileDiff == nil {
+			c.FileDiff = &GitDiff{}
+		}
+		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
+	case DirectoryAdd:
+		if c.FileDiff != nil {
+			return fmt.Errorf("ActionCommand.enrich() found DirectoryAdd operation while GitDiff is not nil")
+		}
+		if c.DirectoryDiff == nil {
+			c.DirectoryDiff = &DirectoryDiff{}
+		}
+		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
+	case DirectoryDelete:
+		if c.FileDiff != nil {
+			return fmt.Errorf("ActionCommand.enrich() found DirectoryDelete operation while GitDiff is not nil")
+		}
+		if c.DirectoryDiff == nil {
+			c.DirectoryDiff = &DirectoryDiff{}
+		}
+		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
+	default:
+		return fmt.Errorf("ActionCommand.enrich() found invalid operation type = %T", op)
+	}
+
+	return nil
+}
+
 func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	typeName := "ManualUpdate"
 
@@ -250,17 +299,27 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 
 	// write each array element into file
 	for _, jsonObj := range jsonArray {
-		jsonBytes, err := json.MarshalIndent(jsonObj, "", "  ")
+		_, err := json.MarshalIndent(jsonObj, "", "  ")
 		if err != nil {
 			return fmt.Errorf("%s, marshaling JSON failed, %s", errorPreceding, err)
 		}
 
-		_, _, err = readOperationFromBytes(jsonBytes)
-		if err != nil {
-			return fmt.Errorf("%s, read operation failed, %s", errorPreceding, err)
-		}
+		// seqNo, op, err := readOperationFromBytes(opBytes)
+		// if err != nil {
+		// 	return fmt.Errorf("%s, read operation failed, %s", errorPreceding, err)
+		// }
 
-		// targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
+		// actionBytes, err := os.ReadFile(fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo))
+		// if err != nil {
+		// 	return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+		// }
+
+		// action, err := readActionFromBytes(actionBytes)
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// // targetFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
 		// if err = os.WriteFile(targetFile, actionBytes, 0644); err != nil {
 		// 	return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		// }
