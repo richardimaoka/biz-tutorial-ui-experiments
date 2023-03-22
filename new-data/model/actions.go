@@ -57,7 +57,7 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ActionCommand) WriteJsonToFile(filePath string) error {
-	bytes, err := json.Marshal(c)
+	bytes, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ManualUpdate) WriteJsonToFile(filePath string) error {
-	bytes, err := json.Marshal(c)
+	bytes, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -234,31 +234,31 @@ func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
 		if err := json.Unmarshal(bytes, &op); err != nil {
 			return nil, err
 		}
-		return &op, nil
+		return op, nil
 	case "FileUpdate":
 		var op FileUpdate
 		if err := json.Unmarshal(bytes, &op); err != nil {
 			return nil, err
 		}
-		return &op, nil
+		return op, nil
 	case "FileDelete":
 		var op FileDelete
 		if err := json.Unmarshal(bytes, &op); err != nil {
 			return nil, err
 		}
-		return &op, nil
+		return op, nil
 	case "DirectoryAdd":
 		var op DirectoryAdd
 		if err := json.Unmarshal(bytes, &op); err != nil {
 			return nil, err
 		}
-		return &op, nil
+		return op, nil
 	case "DirectoryDelete":
 		var op DirectoryDelete
 		if err := json.Unmarshal(bytes, &op); err != nil {
 			return nil, err
 		}
-		return &op, nil
+		return op, nil
 	default:
 		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
 	}
@@ -367,12 +367,12 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 			return fmt.Errorf("%s, reading operation failed, %s", errorPreceding, err)
 		}
 
-		seqNo, ok := jsonObj["seqNo"]
+		seqNo, ok := jsonObj["seqNo"].(float64)
 		if !ok {
-			return fmt.Errorf("%s, seqNo not found in JSON, %s", errorPreceding, err)
+			return fmt.Errorf("%s, seqNo not found or not number in JSON = %s, %s", errorPreceding, opBytes, err)
 		}
-		actionFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, seqNo)
 
+		actionFile := fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, int(seqNo))
 		action, err := readActionFromFile(actionFile)
 		if err != nil {
 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
@@ -382,7 +382,9 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 			return fmt.Errorf("%s, enriching action failed, %s", errorPreceding, err)
 		}
 
-		action.WriteJsonToFile(actionFile)
+		if err := action.WriteJsonToFile(actionFile); err != nil {
+			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, actionFile, err)
+		}
 	}
 
 	return nil
@@ -399,19 +401,18 @@ func Processing() error {
 	}
 
 	// 2. enrich action files
-	// enrichDir := "data/enriched"
-	// if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichDir, prefix); err != nil {
-	// 	return err
-	// }
-
-	// 3.
-	files, err := FilesInDir(inputDir, prefix)
-	if err != nil {
+	if err := EnrichActionFiles("data/source_code_ops.json", inputDir, prefix); err != nil {
 		return err
 	}
-	for _, f := range files {
-		fmt.Println(f)
-	}
+
+	// 3.
+	// files, err := FilesInDir(inputDir, prefix)
+	// if err != nil {
+	// 	return err
+	// }
+	// for _, f := range files {
+	// 	fmt.Println(f)
+	// }
 
 	// GenerateInputActionFiles("")
 
