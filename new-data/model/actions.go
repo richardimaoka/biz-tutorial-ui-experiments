@@ -273,17 +273,15 @@ func reMarshalAction(bytes []byte) ([]byte, error) {
 	return json.MarshalIndent(action, "", "  ")
 }
 
-// map[string]interface{} represents JSON obj
-// return a slice of map[string]interface{} (i.e.) []map[string]interface{}
-func readActionList(actionListFile string) ([]JsonObj, error) {
-	bytes, err := os.ReadFile(actionListFile)
+func jsonArrayFromFile(filename string) ([]JsonObj, error) {
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("reading %s failed, %s", actionListFile, err)
+		return nil, fmt.Errorf("reading %s failed, %s", filename, err)
 	}
 
 	var unmarshalled []JsonObj
 	if err := json.Unmarshal(bytes, &unmarshalled); err != nil {
-		return nil, fmt.Errorf("unmarshaling %s failed, %s", actionListFile, err)
+		return nil, fmt.Errorf("unmarshaling %s failed, %s", filename, err)
 	}
 
 	return unmarshalled, nil
@@ -319,7 +317,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
 	// read and process the whole file
-	jsonArray, err := readActionList(actionListFile)
+	jsonArray, err := jsonArrayFromFile(actionListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
@@ -350,7 +348,7 @@ func EnrichActionFiles(opsListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in EnrichActionFiles for filename = " + opsListFile
 
 	// read and process the whole file
-	jsonArray, err := readActionList(opsListFile)
+	jsonArray, err := jsonArrayFromFile(opsListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
