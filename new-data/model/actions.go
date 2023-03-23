@@ -29,6 +29,8 @@ type ActionCommand struct {
 func (c *ActionCommand) IsAction() {}
 
 type ManualUpdate struct {
+	FileDiff      GitDiff       `json:"fileDiff"`
+	DirectoryDiff DirectoryDiff `json:"directoryDiff"`
 }
 
 func (c *ManualUpdate) IsAction() {}
@@ -120,50 +122,35 @@ func (c *ManualUpdate) WriteJsonToFile(filePath string) error {
 }
 
 func (c *ManualUpdate) Enrich(op FileSystemOperation) error {
-	// switch v := op.(type) {
-	// case FileAdd:
-	// 	if c.DirectoryDiff != nil {
-	// 		return fmt.Errorf("ActionCommand.enrich() found FileAdd operation while DirectoryDiff is not nil")
-	// 	}
-	// 	if c.FileDiff == nil {
-	// 		c.FileDiff = &GitDiff{}
-	// 	}
-	// 	c.FileDiff.Added = append(c.FileDiff.Added, v)
-	// case FileDelete:
-	// 	if c.DirectoryDiff != nil {
-	// 		return fmt.Errorf("ActionCommand.enrich() found FileDelete operation while DirectoryDiff is not nil")
-	// 	}
-	// 	if c.FileDiff == nil {
-	// 		c.FileDiff = &GitDiff{}
-	// 	}
-	// 	c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
-	// case FileUpdate:
-	// 	if c.DirectoryDiff != nil {
-	// 		return fmt.Errorf("ActionCommand.enrich() found FileUpdate operation while DirectoryDiff is not nil")
-	// 	}
-	// 	if c.FileDiff == nil {
-	// 		c.FileDiff = &GitDiff{}
-	// 	}
-	// 	c.FileDiff.Updated = append(c.FileDiff.Updated, v)
-	// case DirectoryAdd:
-	// 	if c.FileDiff != nil {
-	// 		return fmt.Errorf("ActionCommand.enrich() found DirectoryAdd operation while GitDiff is not nil")
-	// 	}
-	// 	if c.DirectoryDiff == nil {
-	// 		c.DirectoryDiff = &DirectoryDiff{}
-	// 	}
-	// 	c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
-	// case DirectoryDelete:
-	// 	if c.FileDiff != nil {
-	// 		return fmt.Errorf("ActionCommand.enrich() found DirectoryDelete operation while GitDiff is not nil")
-	// 	}
-	// 	if c.DirectoryDiff == nil {
-	// 		c.DirectoryDiff = &DirectoryDiff{}
-	// 	}
-	// 	c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
-	// default:
-	// 	return fmt.Errorf("ActionCommand.enrich() found invalid operation type = %T", op)
-	// }
+	switch v := op.(type) {
+	case FileAdd:
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ManualUpdate.Enrich() received FileAdd operation while DirectoryDiff is populated")
+		}
+		c.FileDiff.Added = append(c.FileDiff.Added, v)
+	case FileDelete:
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
+		}
+		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
+	case FileUpdate:
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
+		}
+		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
+	case DirectoryAdd:
+		if c.FileDiff.size() > 0 {
+			return fmt.Errorf("ManualUpdate.Enrich() received DirectoryAdd operation while GitDiff is populated")
+		}
+		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
+	case DirectoryDelete:
+		if c.FileDiff.size() > 0 {
+			return fmt.Errorf("ManualUpdate.Enrich() received DirectoryDelete operation while GitDiff is populated")
+		}
+		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
+	default:
+		return fmt.Errorf("ManualUpdate.Enrich() received invalid operation type = %T", op)
+	}
 
 	return nil
 }
@@ -270,16 +257,6 @@ func jsonArrayFromFile(filename string) ([]JsonObj, error) {
 	return unmarshalled, nil
 }
 
-func applyAction(bytes []byte) error {
-	// action, err := readActionFromBytes(bytes)
-	// if err != nil {
-	// 	return err
-	// }
-
-	return nil
-}
-
-// all input_flat00x files
 func FilesInDir(targetDir, prefix string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
@@ -399,6 +376,30 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	return nil
 }
 
+func ApplyActions(actionDir, actionPrefix string) error {
+	errorPreceding := "Error in ApplyActions"
+
+	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	if err != nil {
+		return fmt.Errorf("%s, %s", errorPreceding, err)
+	}
+
+	// pageState := NewPageState()
+	for _, file := range actionFiles {
+		action, err := readActionFromFile(file)
+		if err != nil {
+			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+		}
+
+		fmt.Println(action)
+		// if err := pageState.processAction(action); err != nil {
+		// 	return fmt.Errorf("%s, applying action failed, %s", errorPreceding, err)
+		// }
+	}
+
+	return nil
+}
+
 func Processing() error {
 	// 0. prereuisite: by-hand csv -> json conversion, and save action-list.json
 
@@ -415,16 +416,10 @@ func Processing() error {
 		return err
 	}
 
-	// 3.
-	// files, err := FilesInDir(inputDir, prefix)
-	// if err != nil {
-	// 	return err
-	// }
-	// for _, f := range files {
-	// 	fmt.Println(f)
-	// }
-
-	// GenerateInputActionFiles("")
+	// 3. apply action files
+	if err := ApplyActions(enrichedDir, prefix); err != nil {
+		return err
+	}
 
 	return nil
 }
