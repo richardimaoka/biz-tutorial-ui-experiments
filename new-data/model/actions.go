@@ -18,12 +18,12 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command          string         `json:"command"`
-	TerminalName     string         `json:"terminalName"`
-	Output           *string        `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string        `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-	FileDiff         *GitDiff       `json:"fileDiff"`
-	DirectoryDiff    *DirectoryDiff `json:"directoryDiff"`
+	Command          string        `json:"command"`
+	TerminalName     string        `json:"terminalName"`
+	Output           *string       `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string       `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	FileDiff         GitDiff       `json:"fileDiff"`
+	DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
 }
 
 func (c *ActionCommand) IsAction() {}
@@ -45,11 +45,11 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	m["output"] = c.Output
 	m["currentDirectory"] = c.CurrentDirectory
 
-	if c.FileDiff != nil && c.DirectoryDiff != nil {
+	if c.FileDiff.size() > 0 && c.DirectoryDiff.size() > 0 {
 		return nil, fmt.Errorf("ActionCommand's FileDiff and DirectoryDiff cannot co-exist")
-	} else if c.FileDiff != nil {
+	} else if c.FileDiff.size() > 0 {
 		m["fileDiff"] = c.FileDiff
-	} else if c.DirectoryDiff != nil {
+	} else if c.DirectoryDiff.size() > 0 {
 		m["directoryDiff"] = c.DirectoryDiff
 	}
 
@@ -70,47 +70,32 @@ func (c *ActionCommand) WriteJsonToFile(filePath string) error {
 func (c *ActionCommand) Enrich(op FileSystemOperation) error {
 	switch v := op.(type) {
 	case FileAdd:
-		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.Enrich() found FileAdd operation while DirectoryDiff is not nil")
-		}
-		if c.FileDiff == nil {
-			c.FileDiff = &GitDiff{}
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ActionCommand.Enrich() received FileAdd operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Added = append(c.FileDiff.Added, v)
 	case FileDelete:
-		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.Enrich() found FileDelete operation while DirectoryDiff is not nil")
-		}
-		if c.FileDiff == nil {
-			c.FileDiff = &GitDiff{}
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
 	case FileUpdate:
-		if c.DirectoryDiff != nil {
-			return fmt.Errorf("ActionCommand.Enrich() found FileUpdate operation while DirectoryDiff is not nil")
-		}
-		if c.FileDiff == nil {
-			c.FileDiff = &GitDiff{}
+		if c.DirectoryDiff.size() > 0 {
+			return fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
 	case DirectoryAdd:
-		if c.FileDiff != nil {
-			return fmt.Errorf("ActionCommand.Enrich() found DirectoryAdd operation while GitDiff is not nil")
-		}
-		if c.DirectoryDiff == nil {
-			c.DirectoryDiff = &DirectoryDiff{}
+		if c.FileDiff.size() > 0 {
+			return fmt.Errorf("ActionCommand.Enrich() received DirectoryAdd operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
 	case DirectoryDelete:
-		if c.FileDiff != nil {
-			return fmt.Errorf("ActionCommand.Enrich() found DirectoryDelete operation while GitDiff is not nil")
-		}
-		if c.DirectoryDiff == nil {
-			c.DirectoryDiff = &DirectoryDiff{}
+		if c.FileDiff.size() > 0 {
+			return fmt.Errorf("ActionCommand.Enrich() received DirectoryDelete operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
 	default:
-		return fmt.Errorf("ActionCommand.Enrich() found invalid operation type = %T", op)
+		return fmt.Errorf("ActionCommand.Enrich() received invalid operation type = %T", op)
 	}
 
 	return nil
@@ -198,7 +183,7 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 		if err != nil {
 			return nil, err
 		}
-		if action.FileDiff != nil && action.DirectoryDiff != nil {
+		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
 			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
 		}
 		return &action, nil
