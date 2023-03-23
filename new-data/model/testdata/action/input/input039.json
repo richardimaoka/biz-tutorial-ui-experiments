@@ -1,8 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm greeting.pb.go\nrm helloworld.pb.go\nrm -rf subdir",
-  "currentDirectory": null,
-  "output": null,
-
-  "terminalName": "default"
-}

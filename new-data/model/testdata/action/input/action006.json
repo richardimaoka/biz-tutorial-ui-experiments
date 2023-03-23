@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "command": "protoc --go_out=. helloworld.proto",
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  },
+  "output": "protoc-gen-go: unable to determine Go import path for \"helloworld.proto\"\n\nPlease specify either:\n• a \"go_package\" option in the .proto source file, or\n• a \"M\" argument on the command line.\n\nSee https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information.",
+  "terminalName": "default"
+}

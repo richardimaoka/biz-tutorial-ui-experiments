@@ -59,20 +59,20 @@ func TestActionCommandUnmarshal(t *testing.T) {
 
 func TestFilesInDir(t *testing.T) {
 	dir := "testdata/action/input"
-	prefix := "input"
+	prefix := "action"
 
 	resultFiles, err := FilesInDir(dir, prefix)
 	if err != nil {
 		t.Fatalf("error reading files in %s with prefix = %s", dir, prefix)
 	}
 
-	if len(resultFiles) != 46 {
-		t.Errorf("expected 46 but got %d", len(resultFiles))
+	if len(resultFiles) != 47 {
+		t.Errorf("expected 47 but got %d", len(resultFiles))
 	}
 }
 
 func TestSplitActoinList(t *testing.T) {
-	targetPrefix := "input"
+	targetPrefix := "action"
 	actionListFile := "testdata/action/action_list.json"
 
 	// the function to test

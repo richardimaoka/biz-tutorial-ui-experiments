@@ -1,8 +1,6 @@
 {
   "actionType": "ActionCommand",
-  "terminalName": "default",
-  "command": "echo abc",
-  "output": "abc",
+  "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto helloworld/subdir/*.proto",
   "currentDirectory": null,
   "directoryDiff": {
     "added": null,
@@ -12,5 +10,7 @@
     "added": null,
     "updated": null,
     "deleted": null
-  }
+  },
+  "output": null,
+  "terminalName": "default"
 }

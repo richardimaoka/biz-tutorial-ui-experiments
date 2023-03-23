@@ -1,9 +1,7 @@
 {
   "actionType": "ActionCommand",
-  "terminalName": "another",
-  "command": "cd hello/world",
-  "output": null,
-  "currentDirectory": "hello/world",
+  "command": "protoc \\\n  --go_out=. --go_opt=paths=source_relative \\\n  helloworld/*.proto",
+  "currentDirectory": null,
   "directoryDiff": {
     "added": null,
     "deleted": null
@@ -12,5 +10,7 @@
     "added": null,
     "updated": null,
     "deleted": null
-  }
+  },
+  "output": null,
+  "terminalName": "default"
 }

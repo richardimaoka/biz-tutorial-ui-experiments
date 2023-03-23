@@ -1,8 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm helloworld/greeting.pb.go",
-  "currentDirectory": null,
-  "output": null,
-
-  "terminalName": "default"
-}

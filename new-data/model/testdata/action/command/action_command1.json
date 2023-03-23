@@ -3,5 +3,14 @@
   "terminalName": "default",
   "command": "mkdir hello",
   "output": null,
-  "currentDirectory": null
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  }
 }

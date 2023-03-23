@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "command": "cat \u003c\u003c EOF \u003e helloworld/greeting.proto\nsyntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }\nEOF",
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  },
+  "output": null,
+  "terminalName": "default"
+}

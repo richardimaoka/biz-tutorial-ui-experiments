@@ -1,8 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "rm helloworld/subdir/subhello.pb.go",
-  "currentDirectory": null,
-  "output": null,
-
-  "terminalName": "default"
-}

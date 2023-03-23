@@ -1,8 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "command": "mkdir outdir",
-  "currentDirectory": null,
-  "output": null,
-
-  "terminalName": "default"
-}
