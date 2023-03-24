@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// arbitrary JSON obj representation in Go map
+type JsonObj map[string]interface{}
+
 func jsonArrayFromFile(filename string) ([]JsonObj, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {

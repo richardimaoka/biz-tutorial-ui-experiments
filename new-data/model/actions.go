@@ -6,12 +6,13 @@ import (
 	"os"
 )
 
-// arbitrary JSON obj representation in Go map
-type JsonObj map[string]interface{}
-
 type Action interface {
 	WriteJsonToFile(filepath string) error
 	Enrich(operation FileSystemOperation) error
+}
+
+type ActionEffect interface {
+	append(op FileSystemOperation) (ActionEffect, error)
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -84,6 +85,9 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 // }
 
 func (c *ActionCommand) Enrich(op FileSystemOperation) error {
+	// if err := c.diff.append(op); err != nil {
+	// 	return fmt.Errorf("Enrich failed, cannot mix up file and directory operations, %s", err)
+	// }
 	switch v := op.(type) {
 	case FileAdd:
 		if c.DirectoryDiff.size() > 0 {
