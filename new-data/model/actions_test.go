@@ -30,6 +30,7 @@ func TestActionCommandUnmarshal(t *testing.T) {
 		"testdata/action/command/action_command1.json",
 		"testdata/action/command/action_command2.json",
 		"testdata/action/command/action_command3.json",
+		"testdata/action/command/action_command4.json",
 	}
 
 	for _, f := range files {

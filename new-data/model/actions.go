@@ -44,6 +44,33 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	m["fileDiff"] = c.FileDiff
 	m["directoryDiff"] = c.DirectoryDiff
 
+	if c.effect != nil {
+		switch v := c.effect.(type) {
+		case GitDiff:
+			m["fileDiff"] = v
+		case DirectoryDiff:
+			m["directoryDiff"] = v
+		}
+	}
+
+	return json.Marshal(m)
+}
+
+func (c ManualUpdate) MarshalJSON() ([]byte, error) {
+	typeName := "ManualUpdate"
+
+	m := make(map[string]interface{})
+	m["actionType"] = &typeName
+
+	if c.effect != nil {
+		switch v := c.effect.(type) {
+		case GitDiff:
+			m["fileDiff"] = v
+		case DirectoryDiff:
+			m["directoryDiff"] = v
+		}
+	}
+
 	return json.Marshal(m)
 }
 
@@ -56,14 +83,16 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() expected type name to be ActionCommand, got %s", typeName)
 	}
 
-	type subset struct {
-		Command          string      `json:"command"`
-		TerminalName     string      `json:"terminalName"`
-		Output           *string     `json:"output"`
-		CurrentDirectory *string     `json:"currentDirectory"`
-		Effect           interface{} `json:"effect"`
+	type skelton struct {
+		Command          string        `json:"command"`
+		TerminalName     string        `json:"terminalName"`
+		Output           *string       `json:"output"`
+		CurrentDirectory *string       `json:"currentDirectory"`
+		FileDiff         GitDiff       `json:"fileDiff"`
+		DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
+		Effect           interface{}   `json:"effect"`
 	}
-	var s subset
+	var s skelton
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
@@ -72,6 +101,8 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 	c.TerminalName = s.TerminalName
 	c.Output = s.Output
 	c.CurrentDirectory = s.CurrentDirectory
+	c.FileDiff = s.FileDiff
+	c.DirectoryDiff = s.DirectoryDiff
 
 	if s.Effect != nil {
 		remarshaledEffect, err := json.Marshal(s.Effect)
@@ -118,15 +149,6 @@ func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c ManualUpdate) MarshalJSON() ([]byte, error) {
-	typeName := "ManualUpdate"
-
-	m := make(map[string]*string)
-	m["actionType"] = &typeName
-
-	return json.Marshal(m)
-}
-
 func (m ManualUpdate) WriteJsonToFile(filePath string) error {
 	bytes, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
@@ -150,6 +172,11 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 }
 
 func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
+	var err error
+	if c.effect, err = AppendDiffEffect(c.effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
+	}
+
 	switch v := op.(type) {
 	case FileAdd:
 		if c.DirectoryDiff.size() > 0 {
@@ -187,6 +214,11 @@ func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
+	var err error
+	if m.effect, err = AppendDiffEffect(m.effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
+	}
+
 	switch v := op.(type) {
 	case FileAdd:
 		if m.DirectoryDiff.size() > 0 {
