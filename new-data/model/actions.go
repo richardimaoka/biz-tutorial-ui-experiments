@@ -8,11 +8,7 @@ import (
 
 type Action interface {
 	WriteJsonToFile(filepath string) error
-	Enrich(operation FileSystemOperation) error
-}
-
-type ActionEffect interface {
-	append(op FileSystemOperation) (ActionEffect, error)
+	Enrich(operation FileSystemOperation) (Action, error)
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -80,79 +76,78 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 	return nil
 }
 
-// func enrichAction(action Action, operation FileSystemOperation) Action {
-// 	action.effect = action.effect.append(operation)
-// }
-
-func (c *ActionCommand) Enrich(op FileSystemOperation) error {
-	// if err := c.diff.append(op); err != nil {
-	// 	return fmt.Errorf("Enrich failed, cannot mix up file and directory operations, %s", err)
-	// }
+func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 	switch v := op.(type) {
 	case FileAdd:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ActionCommand.Enrich() received FileAdd operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ActionCommand.Enrich() received FileAdd operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Added = append(c.FileDiff.Added, v)
+		return c, nil
 	case FileDelete:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
+		return c, nil
 	case FileUpdate:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
+		return c, nil
 	case DirectoryAdd:
 		if c.FileDiff.size() > 0 {
-			return fmt.Errorf("ActionCommand.Enrich() received DirectoryAdd operation while GitDiff is populated")
+			return nil, fmt.Errorf("ActionCommand.Enrich() received DirectoryAdd operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
+		return c, nil
 	case DirectoryDelete:
 		if c.FileDiff.size() > 0 {
-			return fmt.Errorf("ActionCommand.Enrich() received DirectoryDelete operation while GitDiff is populated")
+			return nil, fmt.Errorf("ActionCommand.Enrich() received DirectoryDelete operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
+		return c, nil
 	default:
-		return fmt.Errorf("ActionCommand.Enrich() received invalid operation type = %T", op)
+		return nil, fmt.Errorf("ActionCommand.Enrich() received invalid operation type = %T", op)
 	}
-
-	return nil
 }
 
-func (c *ManualUpdate) Enrich(op FileSystemOperation) error {
+func (c ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
 	switch v := op.(type) {
 	case FileAdd:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ManualUpdate.Enrich() received FileAdd operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileAdd operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Added = append(c.FileDiff.Added, v)
+		return c, nil
 	case FileDelete:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
+		return c, nil
 	case FileUpdate:
 		if c.DirectoryDiff.size() > 0 {
-			return fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
+			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
 		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
+		return c, nil
 	case DirectoryAdd:
 		if c.FileDiff.size() > 0 {
-			return fmt.Errorf("ManualUpdate.Enrich() received DirectoryAdd operation while GitDiff is populated")
+			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryAdd operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
+		return c, nil
 	case DirectoryDelete:
 		if c.FileDiff.size() > 0 {
-			return fmt.Errorf("ManualUpdate.Enrich() received DirectoryDelete operation while GitDiff is populated")
+			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryDelete operation while GitDiff is populated")
 		}
 		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
+		return c, nil
 	default:
-		return fmt.Errorf("ManualUpdate.Enrich() received invalid operation type = %T", op)
+		return nil, fmt.Errorf("ManualUpdate.Enrich() received invalid operation type = %T", op)
 	}
-
-	return nil
 }
 
 func readActionFromBytes(bytes []byte) (Action, error) {
@@ -171,14 +166,17 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
 			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
 		}
-		return &action, nil
+		return action, nil
 	case "ManualUpdate":
 		var action ManualUpdate
 		err := json.Unmarshal(bytes, &action)
 		if err != nil {
 			return nil, err
 		}
-		return &action, nil
+		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
+			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
+		}
+		return action, nil
 	default:
 		return nil, fmt.Errorf("readActionFromBytes() found invalid actionType = %s", typeName)
 	}

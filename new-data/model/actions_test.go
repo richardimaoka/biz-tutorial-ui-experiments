@@ -67,8 +67,10 @@ func TestEnrichActionCommand(t *testing.T) {
 	runEntries := func(t *testing.T, testEntries []Entry) {
 		for _, e := range testEntries {
 			t.Run(e.name, func(t *testing.T) {
+				var action Action = e.command
+				var err error
 				for _, op := range e.operations {
-					err := e.command.Enrich(op.operation)
+					action, err = action.Enrich(op.operation)
 
 					resultSuccess := err == nil
 					if resultSuccess != op.expectSuccess {
@@ -81,7 +83,7 @@ func TestEnrichActionCommand(t *testing.T) {
 					}
 				}
 
-				compareAfterMarshal(t, e.resultFile, e.command)
+				compareAfterMarshal(t, e.resultFile, action)
 			})
 		}
 	}

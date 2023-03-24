@@ -127,8 +127,10 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 			return fmt.Errorf("%s, seqNo = %d is out of range, %s", errorPreceding, seqNoInt, err)
 		}
 
-		if err := actions[seqNoInt].Enrich(operation); err != nil {
+		if enriched, err := actions[seqNoInt].Enrich(operation); err != nil {
 			return fmt.Errorf("%s, enriching action %d failed, %s", errorPreceding, seqNoInt, err)
+		} else {
+			actions[seqNoInt] = enriched
 		}
 	}
 
