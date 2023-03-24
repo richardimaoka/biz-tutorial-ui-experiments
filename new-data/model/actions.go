@@ -41,14 +41,19 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	if c.FileDiff.size() > 0 && c.DirectoryDiff.size() > 0 {
 		return nil, fmt.Errorf("ActionCommand's FileDiff and DirectoryDiff cannot co-exist")
 	}
-	m["fileDiff"] = c.FileDiff
-	m["directoryDiff"] = c.DirectoryDiff
+	// m["fileDiff"] = c.FileDiff
+	// m["directoryDiff"] = c.DirectoryDiff
 
-	if c.effect != nil {
+	if c.effect == nil {
+		m["fileDiff"] = GitDiff{}
+		m["directoryDiff"] = DirectoryDiff{}
+	} else {
 		switch v := c.effect.(type) {
 		case GitDiff:
 			m["fileDiff"] = v
+			m["directoryDiff"] = DirectoryDiff{}
 		case DirectoryDiff:
+			m["fileDiff"] = GitDiff{}
 			m["directoryDiff"] = v
 		}
 	}
@@ -104,17 +109,23 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 	c.FileDiff = s.FileDiff
 	c.DirectoryDiff = s.DirectoryDiff
 
-	if s.Effect != nil {
-		remarshaledEffect, err := json.Marshal(s.Effect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
-		}
-
-		c.effect, err = unmarshalDiffEffect(remarshaledEffect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
-		}
+	if s.FileDiff.size() > 0 {
+		c.effect = s.FileDiff
+	} else if s.DirectoryDiff.size() > 0 {
+		c.effect = s.DirectoryDiff
 	}
+
+	// if s.Effect != nil {
+	// 	remarshaledEffect, err := json.Marshal(s.Effect)
+	// 	if err != nil {
+	// 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
+	// 	}
+
+	// 	c.effect, err = unmarshalDiffEffect(remarshaledEffect)
+	// 	if err != nil {
+	// 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
+	// 	}
+	// }
 	return nil
 }
 
@@ -135,17 +146,17 @@ func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	if s.Effect != nil {
-		remarshaledEffect, err := json.Marshal(s.Effect)
-		if err != nil {
-			return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to re-marshal effect: %s", err)
-		}
+	// if s.Effect != nil {
+	// 	remarshaledEffect, err := json.Marshal(s.Effect)
+	// 	if err != nil {
+	// 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to re-marshal effect: %s", err)
+	// 	}
 
-		m.effect, err = unmarshalDiffEffect(remarshaledEffect)
-		if err != nil {
-			return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal effect: %s", err)
-		}
-	}
+	// 	m.effect, err = unmarshalDiffEffect(remarshaledEffect)
+	// 	if err != nil {
+	// 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal effect: %s", err)
+	// 	}
+	// }
 	return nil
 }
 
