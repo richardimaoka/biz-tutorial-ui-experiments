@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type FileSystemOperation interface {
@@ -12,13 +13,9 @@ type DirectoryAdd struct {
 	FilePath string `json:"filePath"`
 }
 
-func (o DirectoryAdd) IsFileSystemOperation() {}
-
 type DirectoryDelete struct {
 	FilePath string `json:"filePath"`
 }
-
-func (o DirectoryDelete) IsFileSystemOperation() {}
 
 type FileAdd struct {
 	FilePath      string `json:"filePath"`
@@ -26,31 +23,20 @@ type FileAdd struct {
 	IsFullContent bool   `json:"isFullContent"`
 }
 
-func (o FileAdd) IsFileSystemOperation() {}
-
 type FileUpdate struct {
 	FilePath string `json:"filePath"`
 	Content  string `json:"content"`
 }
 
-func (o FileUpdate) IsFileSystemOperation() {}
-
 type FileDelete struct {
 	FilePath string `json:"filePath"`
 }
 
-func (o FileDelete) IsFileSystemOperation() {}
-
-type GitDiff struct {
-	Added   []FileAdd    `json:"added"`
-	Updated []FileUpdate `json:"updated"`
-	Deleted []FileDelete `json:"deleted"`
-}
-
-type DirectoryDiff struct {
-	Added   []DirectoryAdd    `json:"added"`
-	Deleted []DirectoryDelete `json:"deleted"`
-}
+func (o DirectoryAdd) IsFileSystemOperation()    {}
+func (o DirectoryDelete) IsFileSystemOperation() {}
+func (o FileAdd) IsFileSystemOperation()         {}
+func (o FileUpdate) IsFileSystemOperation()      {}
+func (o FileDelete) IsFileSystemOperation()      {}
 
 //marshal DirectoryAdd to json string
 func (o DirectoryAdd) MarshalJSON() ([]byte, error) {
@@ -105,8 +91,65 @@ func (o FileDelete) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
+func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
+	typeName, err := extractTypeName(bytes, "operationType")
+	if err != nil {
+		return nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
+	}
+
+	switch typeName {
+	case "FileAdd":
+		var op FileAdd
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return nil, err
+		}
+		return op, nil
+	case "FileUpdate":
+		var op FileUpdate
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return nil, err
+		}
+		return op, nil
+	case "FileDelete":
+		var op FileDelete
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return nil, err
+		}
+		return op, nil
+	case "DirectoryAdd":
+		var op DirectoryAdd
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return nil, err
+		}
+		return op, nil
+	case "DirectoryDelete":
+		var op DirectoryDelete
+		if err := json.Unmarshal(bytes, &op); err != nil {
+			return nil, err
+		}
+		return op, nil
+	default:
+		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
+	}
+}
+
+type GitDiff struct {
+	Added   []FileAdd    `json:"added"`
+	Updated []FileUpdate `json:"updated"`
+	Deleted []FileDelete `json:"deleted"`
+}
+
+type DirectoryDiff struct {
+	Added   []DirectoryAdd    `json:"added"`
+	Deleted []DirectoryDelete `json:"deleted"`
+}
+
 func (d GitDiff) size() int {
 	return len(d.Added) + len(d.Updated) + len(d.Deleted)
+}
+
+func (d DirectoryDiff) size() int {
+	return len(d.Added) + len(d.Deleted)
 }
 
 func (d GitDiff) findDuplicate() GitDiff {
@@ -158,10 +201,6 @@ func (d GitDiff) findDuplicate() GitDiff {
 	}
 
 	return diffDuplicate
-}
-
-func (d DirectoryDiff) size() int {
-	return len(d.Added) + len(d.Deleted)
 }
 
 func (d DirectoryDiff) findDuplicate() DirectoryDiff {

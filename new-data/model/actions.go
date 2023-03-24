@@ -192,48 +192,6 @@ func readActionFromFile(filePath string) (Action, error) {
 	return readActionFromBytes(jsonBytes)
 }
 
-func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
-	typeName, err := extractTypeName(bytes, "operationType")
-	if err != nil {
-		return nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
-	}
-
-	switch typeName {
-	case "FileAdd":
-		var op FileAdd
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
-	case "FileUpdate":
-		var op FileUpdate
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
-	case "FileDelete":
-		var op FileDelete
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
-	case "DirectoryAdd":
-		var op DirectoryAdd
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
-	case "DirectoryDelete":
-		var op DirectoryDelete
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
-	default:
-		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
-	}
-}
-
 func jsonArrayFromFile(filename string) ([]JsonObj, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
