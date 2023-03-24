@@ -1,6 +1,13 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type DiffEffect interface {
+	IsDiffEffect()
+}
 
 type GitDiff struct {
 	Added   []FileAdd    `json:"added"`
@@ -12,6 +19,9 @@ type DirectoryDiff struct {
 	Added   []DirectoryAdd    `json:"added"`
 	Deleted []DirectoryDelete `json:"deleted"`
 }
+
+func (d GitDiff) IsDiffEffect()       {}
+func (d DirectoryDiff) IsDiffEffect() {}
 
 func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 	switch v := op.(type) {
@@ -139,4 +149,24 @@ func (d DirectoryDiff) findDuplicate() DirectoryDiff {
 	}
 
 	return diffDuplicate
+}
+
+func unmarshalDiffEffect(jsonBytes []byte) (DiffEffect, error) {
+	diffType, err := extractTypeName(jsonBytes, "diffType")
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalDiffEffect() failed to extract diffType: %s", err)
+	}
+
+	switch diffType {
+	case "GitDiff":
+		var diffEffect GitDiff
+		err := json.Unmarshal(jsonBytes, &diffEffect)
+		return diffEffect, err
+	case "DirectoryDiff":
+		var diffEffect DirectoryDiff
+		err := json.Unmarshal(jsonBytes, &diffEffect)
+		return diffEffect, err
+	default:
+		return nil, fmt.Errorf("unmarshalDiffEffect() found invalid  diffType = %s", diffType)
+	}
 }
