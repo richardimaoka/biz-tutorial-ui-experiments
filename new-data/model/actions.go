@@ -79,6 +79,10 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 	return nil
 }
 
+// func enrichAction(action Action, operation FileSystemOperation) Action {
+// 	action.effect = action.effect.append(operation)
+// }
+
 func (c *ActionCommand) Enrich(op FileSystemOperation) error {
 	switch v := op.(type) {
 	case FileAdd:

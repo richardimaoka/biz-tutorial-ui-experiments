@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type GitDiff struct {
 	Added   []FileAdd    `json:"added"`
 	Updated []FileUpdate `json:"updated"`
@@ -9,6 +11,32 @@ type GitDiff struct {
 type DirectoryDiff struct {
 	Added   []DirectoryAdd    `json:"added"`
 	Deleted []DirectoryDelete `json:"deleted"`
+}
+
+func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
+	switch v := op.(type) {
+	case FileAdd:
+		d.Added = append(d.Added, v)
+	case FileUpdate:
+		d.Updated = append(d.Updated, v)
+	case FileDelete:
+		d.Deleted = append(d.Deleted, v)
+	default:
+		return GitDiff{}, fmt.Errorf("GitDiff.append() received invalid operation type = %T", op)
+	}
+	return d, nil
+}
+
+func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
+	switch v := op.(type) {
+	case DirectoryAdd:
+		d.Added = append(d.Added, v)
+	case DirectoryDelete:
+		d.Deleted = append(d.Deleted, v)
+	default:
+		return DirectoryDiff{}, fmt.Errorf("DirectoryDiff.append() received invalid operation type = %T", op)
+	}
+	return d, nil
 }
 
 func (d GitDiff) size() int {
