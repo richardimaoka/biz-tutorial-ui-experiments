@@ -10,7 +10,6 @@ import (
 type JsonObj map[string]interface{}
 
 type Action interface {
-	IsAction()
 	WriteJsonToFile(filepath string) error
 	Enrich(operation FileSystemOperation) error
 }
@@ -29,9 +28,6 @@ type ManualUpdate struct {
 	FileDiff      GitDiff       `json:"fileDiff"`
 	DirectoryDiff DirectoryDiff `json:"directoryDiff"`
 }
-
-func (c ActionCommand) IsAction() {}
-func (c ManualUpdate) IsAction()  {}
 
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	typeName := "ActionCommand"

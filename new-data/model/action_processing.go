@@ -141,25 +141,24 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 }
 
 func ApplyActions(actionDir, actionPrefix string) error {
-	errorPreceding := "Error in ApplyActions"
+	// errorPreceding := "Error in ApplyActions"
 
-	actionFiles, err := FilesInDir(actionDir, actionPrefix)
-	if err != nil {
-		return fmt.Errorf("%s, %s", errorPreceding, err)
-	}
+	// actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	// if err != nil {
+	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
+	// }
 
-	// pageState := NewPageState()
-	for _, file := range actionFiles {
-		action, err := readActionFromFile(file)
-		if err != nil {
-			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-		}
+	// // pageState := NewPageState()
+	// for _, file := range actionFiles {
+	// 	action, err := readActionFromFile(file)
+	// 	if err != nil {
+	// 		return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+	// 	}
 
-		action.IsAction()
-		// if err := pageState.processAction(action); err != nil {
-		// 	return fmt.Errorf("%s, applying action failed, %s", errorPreceding, err)
-		// }
-	}
+	// 	// if err := pageState.processAction(action); err != nil {
+	// 	// 	return fmt.Errorf("%s, applying action failed, %s", errorPreceding, err)
+	// 	// }
+	// }
 
 	return nil
 }
