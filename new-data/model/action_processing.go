@@ -10,7 +10,7 @@ import (
 // arbitrary JSON obj representation in Go map
 type JsonObj map[string]interface{}
 
-func jsonArrayFromFile(filename string) ([]JsonObj, error) {
+func readJsonArray(filename string) ([]JsonObj, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("reading %s failed, %s", filename, err)
@@ -48,7 +48,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
 	// read and process the whole file
-	jsonArray, err := jsonArrayFromFile(actionListFile)
+	jsonArray, err := readJsonArray(actionListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
@@ -99,7 +99,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	}
 
 	// read operations and enrich actions
-	jsonOpsArray, err := jsonArrayFromFile(opsListFile)
+	jsonOpsArray, err := readJsonArray(opsListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
