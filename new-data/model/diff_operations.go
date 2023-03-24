@@ -27,26 +27,71 @@ func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 	switch v := op.(type) {
 	case FileAdd:
 		d.Added = append(d.Added, v)
+		return d, nil
 	case FileUpdate:
 		d.Updated = append(d.Updated, v)
+		return d, nil
 	case FileDelete:
 		d.Deleted = append(d.Deleted, v)
+		return d, nil
 	default:
 		return GitDiff{}, fmt.Errorf("GitDiff.append() received invalid operation type = %T", op)
 	}
-	return d, nil
 }
 
 func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 	switch v := op.(type) {
 	case DirectoryAdd:
 		d.Added = append(d.Added, v)
+		return d, nil
 	case DirectoryDelete:
 		d.Deleted = append(d.Deleted, v)
+		return d, nil
 	default:
 		return DirectoryDiff{}, fmt.Errorf("DirectoryDiff.append() received invalid operation type = %T", op)
 	}
-	return d, nil
+}
+
+func InitializeDiffEffect(op FileSystemOperation) DiffEffect {
+	switch v := op.(type) {
+	case FileAdd:
+		return GitDiff{
+			Added: []FileAdd{v},
+		}
+	case FileUpdate:
+		return GitDiff{
+			Updated: []FileUpdate{v},
+		}
+	case FileDelete:
+		return GitDiff{
+			Deleted: []FileDelete{v},
+		}
+	case DirectoryAdd:
+		return DirectoryDiff{
+			Added: []DirectoryAdd{v},
+		}
+	case DirectoryDelete:
+		return DirectoryDiff{
+			Deleted: []DirectoryDelete{v},
+		}
+	default:
+		return nil
+	}
+}
+
+func AppendDiffEffect(d DiffEffect, op FileSystemOperation) (DiffEffect, error) {
+	if d == nil {
+		return InitializeDiffEffect(op), nil
+	} else {
+		switch v := d.(type) {
+		case GitDiff:
+			return v.append(op)
+		case DirectoryDiff:
+			return v.append(op)
+		default:
+			return nil, fmt.Errorf("AppendDiffEffect() received invalid DiffEffect type = %T", d)
+		}
+	}
 }
 
 func (d GitDiff) size() int {
