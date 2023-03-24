@@ -91,7 +91,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 		if expectedFileName != file {
 			return fmt.Errorf("%s, expected file %s, got %s", errorPreceding, expectedFileName, file)
 		}
-		action, err := readActionFromFile(file)
+		action, err := readAction(file)
 		if err != nil {
 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
 		}
@@ -155,7 +155,7 @@ func ApplyActions(actionDir, actionPrefix string) error {
 
 	// // pageState := NewPageState()
 	// for _, file := range actionFiles {
-	// 	action, err := readActionFromFile(file)
+	// 	action, err := readAction(file)
 	// 	if err != nil {
 	// 		return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
 	// 	}

@@ -182,7 +182,7 @@ func unmarshalAction(bytes []byte) (Action, error) {
 	}
 }
 
-func readActionFromFile(filePath string) (Action, error) {
+func readAction(filePath string) (Action, error) {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
