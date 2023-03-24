@@ -19,11 +19,13 @@ type ActionCommand struct {
 	CurrentDirectory *string       `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 	FileDiff         GitDiff       `json:"fileDiff"`
 	DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
+	effect           DiffEffect
 }
 
 type ManualUpdate struct {
 	FileDiff      GitDiff       `json:"fileDiff"`
 	DirectoryDiff DirectoryDiff `json:"directoryDiff"`
+	effect        DiffEffect
 }
 
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
@@ -45,6 +47,77 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
+func (c *ActionCommand) UnmarshalJSON(data []byte) error {
+	typeName, err := extractTypeName(data, "actionType")
+	if err != nil {
+		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to extract type name: %s", err)
+	}
+	if typeName != "ActionCommand" {
+		return fmt.Errorf("ActionCommand.UnmarshalJSON() expected type name to be ActionCommand, got %s", typeName)
+	}
+
+	type subset struct {
+		Command          string      `json:"command"`
+		TerminalName     string      `json:"terminalName"`
+		Output           *string     `json:"output"`
+		CurrentDirectory *string     `json:"currentDirectory"`
+		Effect           interface{} `json:"effect"`
+	}
+	var s subset
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
+	}
+
+	c.Command = s.Command
+	c.TerminalName = s.TerminalName
+	c.Output = s.Output
+	c.CurrentDirectory = s.CurrentDirectory
+
+	if s.Effect != nil {
+		remarshaledEffect, err := json.Marshal(s.Effect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
+		}
+
+		c.effect, err = unmarshalDiffEffect(remarshaledEffect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
+		}
+	}
+	return nil
+}
+
+func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
+	typeName, err := extractTypeName(data, "actionType")
+	if err != nil {
+		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to extract type name: %s", err)
+	}
+	if typeName != "ManualUpdate" {
+		return fmt.Errorf("ManualUpdate.UnmarshalJSON() expected type name to be ManualUpdate, got %s", typeName)
+	}
+
+	type subset struct {
+		Effect interface{} `json:"effect"`
+	}
+	var s subset
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
+	}
+
+	if s.Effect != nil {
+		remarshaledEffect, err := json.Marshal(s.Effect)
+		if err != nil {
+			return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to re-marshal effect: %s", err)
+		}
+
+		m.effect, err = unmarshalDiffEffect(remarshaledEffect)
+		if err != nil {
+			return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal effect: %s", err)
+		}
+	}
+	return nil
+}
+
 func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	typeName := "ManualUpdate"
 
@@ -54,8 +127,8 @@ func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-func (c ManualUpdate) WriteJsonToFile(filePath string) error {
-	bytes, err := json.MarshalIndent(c, "", "  ")
+func (m ManualUpdate) WriteJsonToFile(filePath string) error {
+	bytes, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -113,38 +186,38 @@ func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 	}
 }
 
-func (c ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
+func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
 	switch v := op.(type) {
 	case FileAdd:
-		if c.DirectoryDiff.size() > 0 {
+		if m.DirectoryDiff.size() > 0 {
 			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileAdd operation while DirectoryDiff is populated")
 		}
-		c.FileDiff.Added = append(c.FileDiff.Added, v)
-		return c, nil
+		m.FileDiff.Added = append(m.FileDiff.Added, v)
+		return m, nil
 	case FileDelete:
-		if c.DirectoryDiff.size() > 0 {
+		if m.DirectoryDiff.size() > 0 {
 			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
-		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
-		return c, nil
+		m.FileDiff.Deleted = append(m.FileDiff.Deleted, v)
+		return m, nil
 	case FileUpdate:
-		if c.DirectoryDiff.size() > 0 {
+		if m.DirectoryDiff.size() > 0 {
 			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
 		}
-		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
-		return c, nil
+		m.FileDiff.Updated = append(m.FileDiff.Updated, v)
+		return m, nil
 	case DirectoryAdd:
-		if c.FileDiff.size() > 0 {
+		if m.FileDiff.size() > 0 {
 			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryAdd operation while GitDiff is populated")
 		}
-		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
-		return c, nil
+		m.DirectoryDiff.Added = append(m.DirectoryDiff.Added, v)
+		return m, nil
 	case DirectoryDelete:
-		if c.FileDiff.size() > 0 {
+		if m.FileDiff.size() > 0 {
 			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryDelete operation while GitDiff is populated")
 		}
-		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
-		return c, nil
+		m.DirectoryDiff.Deleted = append(m.DirectoryDiff.Deleted, v)
+		return m, nil
 	default:
 		return nil, fmt.Errorf("ManualUpdate.Enrich() received invalid operation type = %T", op)
 	}
