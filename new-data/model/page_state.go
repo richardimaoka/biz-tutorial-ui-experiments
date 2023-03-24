@@ -87,3 +87,14 @@ func (p *PageState) RunTerminalCommand(command, terminalName string) error {
 
 	return nil
 }
+
+// run Action and write json to files
+// func (p *PageState) runAction(action Action, targetDir, prefix string) error {
+// 	filename := fmt.Sprintf("%s/%s%s.json", targetDir, prefix, p.Step)
+
+// 	switch v := action.(type) {
+// 	case ActionCommand:
+
+// 	}
+// 	return nil
+// }

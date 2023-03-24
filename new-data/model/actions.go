@@ -26,14 +26,14 @@ type ActionCommand struct {
 	DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
 }
 
-func (c *ActionCommand) IsAction() {}
+func (c ActionCommand) IsAction() {}
 
 type ManualUpdate struct {
 	FileDiff      GitDiff       `json:"fileDiff"`
 	DirectoryDiff DirectoryDiff `json:"directoryDiff"`
 }
 
-func (c *ManualUpdate) IsAction() {}
+func (c ManualUpdate) IsAction() {}
 
 // methods
 
@@ -56,7 +56,7 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-func (c *ActionCommand) WriteJsonToFile(filePath string) error {
+func (c ActionCommand) WriteJsonToFile(filePath string) error {
 	bytes, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return err
@@ -110,7 +110,7 @@ func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-func (c *ManualUpdate) WriteJsonToFile(filePath string) error {
+func (c ManualUpdate) WriteJsonToFile(filePath string) error {
 	bytes, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return err
@@ -232,15 +232,6 @@ func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
 	default:
 		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
 	}
-}
-
-func reMarshalAction(bytes []byte) ([]byte, error) {
-	action, err := readActionFromBytes(bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	return json.MarshalIndent(action, "", "  ")
 }
 
 func jsonArrayFromFile(filename string) ([]JsonObj, error) {
@@ -391,7 +382,7 @@ func ApplyActions(actionDir, actionPrefix string) error {
 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
 		}
 
-		fmt.Println(action)
+		action.IsAction()
 		// if err := pageState.processAction(action); err != nil {
 		// 	return fmt.Errorf("%s, applying action failed, %s", errorPreceding, err)
 		// }
