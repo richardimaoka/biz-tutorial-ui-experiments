@@ -150,10 +150,10 @@ func (c ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
 	}
 }
 
-func readActionFromBytes(bytes []byte) (Action, error) {
+func unmarshalAction(bytes []byte) (Action, error) {
 	typeName, err := extractTypeName(bytes, "actionType")
 	if err != nil {
-		return nil, fmt.Errorf("readActionFromBytes() failed to extract actionType %s", err)
+		return nil, fmt.Errorf("unmarshalAction() failed to extract actionType %s", err)
 	}
 
 	switch typeName {
@@ -164,7 +164,7 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 			return nil, err
 		}
 		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
+			return nil, fmt.Errorf("unmarshalAction() failed as FileDiff and DirectoryDiff cannot co-exist")
 		}
 		return action, nil
 	case "ManualUpdate":
@@ -174,11 +174,11 @@ func readActionFromBytes(bytes []byte) (Action, error) {
 			return nil, err
 		}
 		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("readActionFromBytes() failed as FileDiff and DirectoryDiff cannot co-exist")
+			return nil, fmt.Errorf("unmarshalAction() failed as FileDiff and DirectoryDiff cannot co-exist")
 		}
 		return action, nil
 	default:
-		return nil, fmt.Errorf("readActionFromBytes() found invalid actionType = %s", typeName)
+		return nil, fmt.Errorf("unmarshalAction() found invalid actionType = %s", typeName)
 	}
 }
 
@@ -187,5 +187,5 @@ func readActionFromFile(filePath string) (Action, error) {
 	if err != nil {
 		return nil, err
 	}
-	return readActionFromBytes(jsonBytes)
+	return unmarshalAction(jsonBytes)
 }

@@ -61,7 +61,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 		}
 
 		// unmarshal to action once, to control the re-marshaling behavior
-		action, err := readActionFromBytes(jsonBytes)
+		action, err := unmarshalAction(jsonBytes)
 		if err != nil {
 			return fmt.Errorf("%s, reading actoin failed, %s", errorPreceding, err)
 		}
@@ -109,7 +109,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 		if err != nil {
 			return fmt.Errorf("%s, marshaling operation JSON failed, %s", errorPreceding, err)
 		}
-		operation, err := readOperationFromBytes(opBytes)
+		operation, err := unmarshalFileSystemOperation(opBytes)
 		if err != nil {
 			return fmt.Errorf("%s, reading operation failed, %s", errorPreceding, err)
 		}

@@ -91,10 +91,10 @@ func (o FileDelete) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
+func unmarshalFileSystemOperation(bytes []byte) (FileSystemOperation, error) {
 	typeName, err := extractTypeName(bytes, "operationType")
 	if err != nil {
-		return nil, fmt.Errorf("readActionFromBytes() failed to extract operationType %s", err)
+		return nil, fmt.Errorf("unmarshalAction() failed to extract operationType %s", err)
 	}
 
 	switch typeName {
@@ -129,6 +129,6 @@ func readOperationFromBytes(bytes []byte) (FileSystemOperation, error) {
 		}
 		return op, nil
 	default:
-		return nil, fmt.Errorf("readOperationFromBytes() found invalid operationType = %s", typeName)
+		return nil, fmt.Errorf("unmarshalFileSystemOperation() found invalid operationType = %s", typeName)
 	}
 }
