@@ -53,29 +53,27 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() expected type name to be ActionCommand, got %s", typeName)
 	}
 
-	type skelton struct {
+	var interim struct {
 		Command          string      `json:"command"`
 		TerminalName     string      `json:"terminalName"`
 		Output           *string     `json:"output"`
 		CurrentDirectory *string     `json:"currentDirectory"`
 		Effect           interface{} `json:"effect"`
 	}
-	var s skelton
-	if err := json.Unmarshal(data, &s); err != nil {
+	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	a.Command = s.Command
-	a.TerminalName = s.TerminalName
-	a.Output = s.Output
-	a.CurrentDirectory = s.CurrentDirectory
+	a.Command = interim.Command
+	a.TerminalName = interim.TerminalName
+	a.Output = interim.Output
+	a.CurrentDirectory = interim.CurrentDirectory
 
-	if s.Effect != nil {
-		remarshaledEffect, err := json.Marshal(s.Effect)
+	if interim.Effect != nil {
+		remarshaledEffect, err := json.Marshal(interim.Effect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
 		}
-
 		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
@@ -93,20 +91,18 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() expected type name to be ManualUpdate, got %s", typeName)
 	}
 
-	type skelton struct {
+	var interim struct {
 		Effect interface{} `json:"effect"`
 	}
-	var s skelton
-	if err := json.Unmarshal(data, &s); err != nil {
+	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	if s.Effect != nil {
-		remarshaledEffect, err := json.Marshal(s.Effect)
+	if interim.Effect != nil {
+		remarshaledEffect, err := json.Marshal(interim.Effect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
 		}
-
 		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
