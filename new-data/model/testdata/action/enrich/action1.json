@@ -18,6 +18,7 @@
     "updated": null
   },
   "directoryDiff": {
+    "diffType": "DirectoryDiff",
     "added": null,
     "deleted": null
   }

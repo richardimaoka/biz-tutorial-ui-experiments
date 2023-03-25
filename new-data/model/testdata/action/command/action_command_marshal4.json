@@ -5,6 +5,7 @@
   "output": null,
   "currentDirectory": "hello/world",
   "directoryDiff": {
+    "diffType": "DirectoryDiff",
     "added": null,
     "deleted": null
   },

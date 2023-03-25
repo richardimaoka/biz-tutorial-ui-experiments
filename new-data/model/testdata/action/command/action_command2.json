@@ -5,6 +5,7 @@
   "output": "abc",
   "currentDirectory": null,
   "directoryDiff": {
+    "diffType": "DirectoryDiff",
     "added": null,
     "deleted": null
   },

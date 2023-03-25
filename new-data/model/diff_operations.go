@@ -23,6 +23,37 @@ type DirectoryDiff struct {
 func (d GitDiff) IsDiffEffect()       {}
 func (d DirectoryDiff) IsDiffEffect() {}
 
+func (d GitDiff) size() int {
+	return len(d.Added) + len(d.Updated) + len(d.Deleted)
+}
+
+func (d DirectoryDiff) size() int {
+	return len(d.Added) + len(d.Deleted)
+}
+
+func (d GitDiff) MarshalJSON() ([]byte, error) {
+	typeName := "GitDiff"
+
+	m := make(map[string]interface{})
+	m["diffType"] = &typeName
+	m["added"] = d.Added
+	m["updated"] = d.Updated
+	m["deleted"] = d.Deleted
+
+	return json.Marshal(m)
+}
+
+func (d DirectoryDiff) MarshalJSON() ([]byte, error) {
+	typeName := "DirectoryDiff"
+
+	m := make(map[string]interface{})
+	m["diffType"] = &typeName
+	m["added"] = d.Added
+	m["deleted"] = d.Deleted
+
+	return json.Marshal(m)
+}
+
 func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 	switch v := op.(type) {
 	case FileAdd:
@@ -39,29 +70,6 @@ func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 	}
 }
 
-func (d GitDiff) MarshalJSON() ([]byte, error) {
-	typeName := "GitDiff"
-
-	m := make(map[string]interface{})
-	m["diffType"] = &typeName
-	m["added"] = d.Added
-	m["updated"] = d.Updated
-	m["deleted"] = d.Deleted
-
-	return json.Marshal(m)
-}
-
-func (d DirectoryDiff) MarshalJSON() ([]byte, error) {
-	// typeName := "GitDiff"
-
-	m := make(map[string]interface{})
-	// m["diffType"] = &typeName
-	m["added"] = d.Added
-	m["deleted"] = d.Deleted
-
-	return json.Marshal(m)
-}
-
 func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 	switch v := op.(type) {
 	case DirectoryAdd:
@@ -72,33 +80,6 @@ func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 		return d, nil
 	default:
 		return DirectoryDiff{}, fmt.Errorf("DirectoryDiff.append() received invalid operation type = %T", op)
-	}
-}
-
-func InitializeDiffEffect(op FileSystemOperation) DiffEffect {
-	switch v := op.(type) {
-	case FileAdd:
-		return GitDiff{
-			Added: []FileAdd{v},
-		}
-	case FileUpdate:
-		return GitDiff{
-			Updated: []FileUpdate{v},
-		}
-	case FileDelete:
-		return GitDiff{
-			Deleted: []FileDelete{v},
-		}
-	case DirectoryAdd:
-		return DirectoryDiff{
-			Added: []DirectoryAdd{v},
-		}
-	case DirectoryDelete:
-		return DirectoryDiff{
-			Deleted: []DirectoryDelete{v},
-		}
-	default:
-		return nil
 	}
 }
 
@@ -115,14 +96,6 @@ func AppendDiffEffect(d DiffEffect, op FileSystemOperation) (DiffEffect, error) 
 			return nil, fmt.Errorf("AppendDiffEffect() received invalid DiffEffect type = %T", d)
 		}
 	}
-}
-
-func (d GitDiff) size() int {
-	return len(d.Added) + len(d.Updated) + len(d.Deleted)
-}
-
-func (d DirectoryDiff) size() int {
-	return len(d.Added) + len(d.Deleted)
 }
 
 func (d GitDiff) findDuplicate() GitDiff {
@@ -236,5 +209,32 @@ func unmarshalDiffEffect(jsonBytes []byte) (DiffEffect, error) {
 		return diffEffect, err
 	default:
 		return nil, fmt.Errorf("unmarshalDiffEffect() found invalid  diffType = %s", diffType)
+	}
+}
+
+func InitializeDiffEffect(op FileSystemOperation) DiffEffect {
+	switch v := op.(type) {
+	case FileAdd:
+		return GitDiff{
+			Added: []FileAdd{v},
+		}
+	case FileUpdate:
+		return GitDiff{
+			Updated: []FileUpdate{v},
+		}
+	case FileDelete:
+		return GitDiff{
+			Deleted: []FileDelete{v},
+		}
+	case DirectoryAdd:
+		return DirectoryDiff{
+			Added: []DirectoryAdd{v},
+		}
+	case DirectoryDelete:
+		return DirectoryDiff{
+			Deleted: []DirectoryDelete{v},
+		}
+	default:
+		return nil
 	}
 }
