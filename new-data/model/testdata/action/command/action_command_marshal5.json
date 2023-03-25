@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "another",
+  "command": "complex_command",
+  "output": "some output",
+  "currentDirectory": "hello/world",
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  }
+}

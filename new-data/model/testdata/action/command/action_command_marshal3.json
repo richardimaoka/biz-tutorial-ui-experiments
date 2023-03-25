@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "echo abc",
+  "output": "abc",
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  }
+}

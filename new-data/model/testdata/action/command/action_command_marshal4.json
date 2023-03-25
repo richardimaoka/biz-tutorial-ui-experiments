@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "another",
+  "command": "cd hello/world",
+  "output": null,
+  "currentDirectory": "hello/world",
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  }
+}

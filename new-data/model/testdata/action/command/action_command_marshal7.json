@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "with_dir_effect",
+  "output": null,
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  }
+}

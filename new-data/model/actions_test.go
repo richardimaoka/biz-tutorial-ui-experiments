@@ -8,14 +8,46 @@ import (
 
 func TestActionCommandMarshal(t *testing.T) {
 	type Entry struct {
+		name         string
 		command      ActionCommand
 		expectedFile string
 	}
 
 	entries := []Entry{
-		{expectedFile: "testdata/action/command/action_command1.json", command: ActionCommand{TerminalName: "default", Command: "mkdir hello"}},
-		{expectedFile: "testdata/action/command/action_command2.json", command: ActionCommand{TerminalName: "default", Command: "echo abc", Output: address("abc")}},
-		{expectedFile: "testdata/action/command/action_command3.json", command: ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: address("hello/world")}},
+		{name: "command_only",
+			expectedFile: "testdata/action/command/action_command_marshal1.json",
+			command:      ActionCommand{TerminalName: "default", Command: "mkdir hello"}},
+		{name: "another_terminal",
+			expectedFile: "testdata/action/command/action_command_marshal2.json",
+			command:      ActionCommand{TerminalName: "another", Command: "mkdir hello"}},
+		{name: "command_output",
+			expectedFile: "testdata/action/command/action_command_marshal3.json",
+			command:      ActionCommand{TerminalName: "default", Command: "echo abc", Output: address("abc")}},
+		{name: "command_cd",
+			expectedFile: "testdata/action/command/action_command_marshal4.json",
+			command:      ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: address("hello/world")}},
+		{name: "command_cd_output",
+			expectedFile: "testdata/action/command/action_command_marshal5.json",
+			command:      ActionCommand{TerminalName: "another", Command: "complex_command", Output: address("some output"), CurrentDirectory: address("hello/world")}},
+		{name: "command_file_effect",
+			expectedFile: "testdata/action/command/action_command_marshal6.json",
+			command: ActionCommand{
+				TerminalName: "default",
+				Command:      "with_file_effect",
+				FileDiff: GitDiff{
+					Added:   []FileAdd{{FilePath: "a/b/c", Content: "file content", IsFullContent: true}},
+					Deleted: []FileDelete{{FilePath: "a/b/d"}, {FilePath: "a/b/e"}},
+				},
+			},
+		},
+		{name: "command_directory_effect",
+			expectedFile: "testdata/action/command/action_command_marshal7.json",
+			command: ActionCommand{
+				TerminalName:  "default",
+				Command:       "with_dir_effect",
+				DirectoryDiff: DirectoryDiff{},
+			},
+		},
 	}
 
 	for _, e := range entries {

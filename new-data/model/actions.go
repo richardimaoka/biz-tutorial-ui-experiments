@@ -41,22 +41,22 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	if c.FileDiff.size() > 0 && c.DirectoryDiff.size() > 0 {
 		return nil, fmt.Errorf("ActionCommand's FileDiff and DirectoryDiff cannot co-exist")
 	}
-	// m["fileDiff"] = c.FileDiff
-	// m["directoryDiff"] = c.DirectoryDiff
+	m["fileDiff"] = c.FileDiff
+	m["directoryDiff"] = c.DirectoryDiff
 
-	if c.effect == nil {
-		m["fileDiff"] = GitDiff{}
-		m["directoryDiff"] = DirectoryDiff{}
-	} else {
-		switch v := c.effect.(type) {
-		case GitDiff:
-			m["fileDiff"] = v
-			m["directoryDiff"] = DirectoryDiff{}
-		case DirectoryDiff:
-			m["fileDiff"] = GitDiff{}
-			m["directoryDiff"] = v
-		}
-	}
+	// if c.effect == nil {
+	// 	m["fileDiff"] = GitDiff{}
+	// 	m["directoryDiff"] = DirectoryDiff{}
+	// } else {
+	// 	switch v := c.effect.(type) {
+	// 	case GitDiff:
+	// 		m["fileDiff"] = v
+	// 		m["directoryDiff"] = DirectoryDiff{}
+	// 	case DirectoryDiff:
+	// 		m["fileDiff"] = GitDiff{}
+	// 		m["directoryDiff"] = v
+	// 	}
+	// }
 
 	return json.Marshal(m)
 }

@@ -1,0 +1,32 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "with_file_effect",
+  "output": null,
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": [
+      {
+        "operationType": "FileAdd",
+        "filePath": "a/b/c",
+        "content": "file content",
+        "isFullContent": true
+      }
+    ],
+    "updated": null,
+    "deleted": [
+      {
+        "operationType": "FileDelete",
+        "filePath": "a/b/d"
+      },
+      {
+        "operationType": "FileDelete",
+        "filePath": "a/b/e"
+      }
+    ]
+  }
+}
