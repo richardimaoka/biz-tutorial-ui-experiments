@@ -4,6 +4,7 @@
   "command": "mkdir hello",
   "output": null,
   "currentDirectory": null,
+  "effect": null,
   "directoryDiff": {
     "diffType": "DirectoryDiff",
     "added": null,

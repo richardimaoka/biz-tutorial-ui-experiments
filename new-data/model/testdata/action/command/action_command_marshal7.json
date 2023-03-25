@@ -4,6 +4,7 @@
   "command": "with_dir_effect",
   "output": null,
   "currentDirectory": null,
+  "effect": null,
   "directoryDiff": {
     "diffType": "DirectoryDiff",
     "added": null,

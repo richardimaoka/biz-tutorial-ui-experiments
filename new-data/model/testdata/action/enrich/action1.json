@@ -4,6 +4,7 @@
   "currentDirectory": null,
   "output": null,
   "terminalName": "default",
+  "effect": null,
   "fileDiff": {
     "diffType": "GitDiff",
     "added": [

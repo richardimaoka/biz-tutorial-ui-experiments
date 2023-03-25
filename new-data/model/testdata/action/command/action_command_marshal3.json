@@ -4,6 +4,7 @@
   "command": "echo abc",
   "output": "abc",
   "currentDirectory": null,
+  "effect": null,
   "directoryDiff": {
     "diffType": "DirectoryDiff",
     "added": null,

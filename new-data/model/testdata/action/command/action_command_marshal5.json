@@ -4,6 +4,7 @@
   "command": "complex_command",
   "output": "some output",
   "currentDirectory": "hello/world",
+  "effect": null,
   "directoryDiff": {
     "diffType": "DirectoryDiff",
     "added": null,
