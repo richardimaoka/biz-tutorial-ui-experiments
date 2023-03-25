@@ -43,9 +43,11 @@ func TestActionCommandMarshal(t *testing.T) {
 		{name: "command_directory_effect",
 			expectedFile: "testdata/action/command/action_command_marshal7.json",
 			command: ActionCommand{
-				TerminalName:  "default",
-				Command:       "with_dir_effect",
-				DirectoryDiff: DirectoryDiff{},
+				TerminalName: "default",
+				Command:      "with_dir_effect",
+				DirectoryDiff: DirectoryDiff{
+					Deleted: []DirectoryDelete{{FilePath: "a/b/d"}, {FilePath: "a/b/e"}},
+				},
 			},
 		},
 	}

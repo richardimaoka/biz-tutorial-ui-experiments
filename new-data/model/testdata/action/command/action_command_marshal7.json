@@ -7,7 +7,16 @@
   "directoryDiff": {
     "diffType": "DirectoryDiff",
     "added": null,
-    "deleted": null
+    "deleted": [
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/d"
+      },
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/e"
+      }
+    ]
   },
   "fileDiff": {
     "diffType": "GitDiff",
