@@ -13,13 +13,11 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command          string        `json:"command"`
-	TerminalName     string        `json:"terminalName"`
-	Output           *string       `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string       `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-	FileDiff         GitDiff       `json:"fileDiff"`
-	DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
-	Effect           DiffEffect    `json:"effect"`
+	Command          string     `json:"command"`
+	TerminalName     string     `json:"terminalName"`
+	Output           *string    `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	Effect           DiffEffect `json:"effect"`
 }
 
 type ManualUpdate struct {
@@ -33,28 +31,7 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 	m["terminalName"] = &c.TerminalName
 	m["output"] = c.Output
 	m["currentDirectory"] = c.CurrentDirectory
-
-	if c.FileDiff.size() > 0 && c.DirectoryDiff.size() > 0 {
-		return nil, fmt.Errorf("ActionCommand's FileDiff and DirectoryDiff cannot co-exist")
-	}
-	m["fileDiff"] = c.FileDiff
-	m["directoryDiff"] = c.DirectoryDiff
-
 	m["effect"] = c.Effect
-
-	// if c.effect == nil {
-	// 	m["fileDiff"] = GitDiff{}
-	// 	m["directoryDiff"] = DirectoryDiff{}
-	// } else {
-	// 	switch v := c.effect.(type) {
-	// 	case GitDiff:
-	// 		m["fileDiff"] = v
-	// 		m["directoryDiff"] = DirectoryDiff{}
-	// 	case DirectoryDiff:
-	// 		m["fileDiff"] = GitDiff{}
-	// 		m["directoryDiff"] = v
-	// 	}
-	// }
 
 	return json.Marshal(m)
 }
@@ -77,13 +54,11 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 	}
 
 	type skelton struct {
-		Command          string        `json:"command"`
-		TerminalName     string        `json:"terminalName"`
-		Output           *string       `json:"output"`
-		CurrentDirectory *string       `json:"currentDirectory"`
-		FileDiff         GitDiff       `json:"fileDiff"`
-		DirectoryDiff    DirectoryDiff `json:"directoryDiff"`
-		Effect           interface{}   `json:"effect"`
+		Command          string      `json:"command"`
+		TerminalName     string      `json:"terminalName"`
+		Output           *string     `json:"output"`
+		CurrentDirectory *string     `json:"currentDirectory"`
+		Effect           interface{} `json:"effect"`
 	}
 	var s skelton
 	if err := json.Unmarshal(data, &s); err != nil {
@@ -94,26 +69,18 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 	c.TerminalName = s.TerminalName
 	c.Output = s.Output
 	c.CurrentDirectory = s.CurrentDirectory
-	c.FileDiff = s.FileDiff
-	c.DirectoryDiff = s.DirectoryDiff
 
-	// if s.FileDiff.size() > 0 {
-	// 	c.Effect = s.FileDiff
-	// } else if s.DirectoryDiff.size() > 0 {
-	// 	c.Effect = s.DirectoryDiff
-	// }
+	if s.Effect != nil {
+		remarshaledEffect, err := json.Marshal(s.Effect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
+		}
 
-	// if s.Effect != nil {
-	// 	remarshaledEffect, err := json.Marshal(s.Effect)
-	// 	if err != nil {
-	// 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
-	// 	}
-
-	// 	c.effect, err = unmarshalDiffEffect(remarshaledEffect)
-	// 	if err != nil {
-	// 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
-	// 	}
-	// }
+		c.Effect, err = unmarshalDiffEffect(remarshaledEffect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
+		}
+	}
 	return nil
 }
 
@@ -126,25 +93,25 @@ func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() expected type name to be ManualUpdate, got %s", typeName)
 	}
 
-	type subset struct {
+	type skelton struct {
 		Effect interface{} `json:"effect"`
 	}
-	var s subset
+	var s skelton
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	// if s.Effect != nil {
-	// 	remarshaledEffect, err := json.Marshal(s.Effect)
-	// 	if err != nil {
-	// 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to re-marshal effect: %s", err)
-	// 	}
+	if s.Effect != nil {
+		remarshaledEffect, err := json.Marshal(s.Effect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
+		}
 
-	// 	m.effect, err = unmarshalDiffEffect(remarshaledEffect)
-	// 	if err != nil {
-	// 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal effect: %s", err)
-	// 	}
-	// }
+		m.Effect, err = unmarshalDiffEffect(remarshaledEffect)
+		if err != nil {
+			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
+		}
+	}
 	return nil
 }
 
@@ -171,45 +138,11 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 }
 
 func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
-	// var err error
-	// if c.effect, err = AppendDiffEffect(c.effect, op); err != nil {
-	// 	return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	// }
-
-	switch v := op.(type) {
-	case FileAdd:
-		if c.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ActionCommand.Enrich() received FileAdd operation while DirectoryDiff is populated")
-		}
-		c.FileDiff.Added = append(c.FileDiff.Added, v)
-		return c, nil
-	case FileDelete:
-		if c.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
-		}
-		c.FileDiff.Deleted = append(c.FileDiff.Deleted, v)
-		return c, nil
-	case FileUpdate:
-		if c.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ActionCommand.Enrich() received FileDelete operation while DirectoryDiff is populated")
-		}
-		c.FileDiff.Updated = append(c.FileDiff.Updated, v)
-		return c, nil
-	case DirectoryAdd:
-		if c.FileDiff.size() > 0 {
-			return nil, fmt.Errorf("ActionCommand.Enrich() received DirectoryAdd operation while GitDiff is populated")
-		}
-		c.DirectoryDiff.Added = append(c.DirectoryDiff.Added, v)
-		return c, nil
-	case DirectoryDelete:
-		if c.FileDiff.size() > 0 {
-			return nil, fmt.Errorf("ActionCommand.Enrich() received DirectoryDelete operation while GitDiff is populated")
-		}
-		c.DirectoryDiff.Deleted = append(c.DirectoryDiff.Deleted, v)
-		return c, nil
-	default:
-		return nil, fmt.Errorf("ActionCommand.Enrich() received invalid operation type = %T", op)
+	var err error
+	if c.Effect, err = AppendDiffEffect(c.Effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
 	}
+	return c, nil
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
@@ -230,13 +163,7 @@ func unmarshalAction(bytes []byte) (Action, error) {
 	case "ActionCommand":
 		var action ActionCommand
 		err := json.Unmarshal(bytes, &action)
-		if err != nil {
-			return nil, err
-		}
-		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("unmarshalAction() failed as FileDiff and DirectoryDiff cannot co-exist")
-		}
-		return action, nil
+		return action, err
 	case "ManualUpdate":
 		var action ManualUpdate
 		err := json.Unmarshal(bytes, &action)

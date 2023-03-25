@@ -4,13 +4,7 @@
   "command": "cd hello/world",
   "output": null,
   "currentDirectory": "hello/world",
-  "effect": null,
-  "directoryDiff": {
-    "diffType": "DirectoryDiff",
-    "added": null,
-    "deleted": null
-  },
-  "fileDiff": {
+  "effect": {
     "diffType": "GitDiff",
     "added": [
       {

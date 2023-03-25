@@ -4,8 +4,7 @@
   "currentDirectory": null,
   "output": null,
   "terminalName": "default",
-  "effect": null,
-  "fileDiff": {
+  "effect": {
     "diffType": "GitDiff",
     "added": [
       {
@@ -17,10 +16,5 @@
     ],
     "deleted": null,
     "updated": null
-  },
-  "directoryDiff": {
-    "diffType": "DirectoryDiff",
-    "added": null,
-    "deleted": null
   }
 }

@@ -4,16 +4,5 @@
   "command": "complex_command",
   "output": "some output",
   "currentDirectory": "hello/world",
-  "effect": null,
-  "directoryDiff": {
-    "diffType": "DirectoryDiff",
-    "added": null,
-    "deleted": null
-  },
-  "fileDiff": {
-    "diffType": "GitDiff",
-    "added": null,
-    "updated": null,
-    "deleted": null
-  }
+  "effect": null
 }

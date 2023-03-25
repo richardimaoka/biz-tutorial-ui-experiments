@@ -4,16 +4,5 @@
   "command": "echo abc",
   "output": "abc",
   "currentDirectory": null,
-  "effect": null,
-  "directoryDiff": {
-    "diffType": "DirectoryDiff",
-    "added": null,
-    "deleted": null
-  },
-  "fileDiff": {
-    "diffType": "GitDiff",
-    "added": null,
-    "updated": null,
-    "deleted": null
-  }
+  "effect": null
 }

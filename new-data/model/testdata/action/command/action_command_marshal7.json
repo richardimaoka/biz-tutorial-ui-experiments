@@ -4,8 +4,7 @@
   "command": "with_dir_effect",
   "output": null,
   "currentDirectory": null,
-  "effect": null,
-  "directoryDiff": {
+  "effect": {
     "diffType": "DirectoryDiff",
     "added": null,
     "deleted": [
@@ -18,11 +17,5 @@
         "filePath": "a/b/e"
       }
     ]
-  },
-  "fileDiff": {
-    "diffType": "GitDiff",
-    "added": null,
-    "updated": null,
-    "deleted": null
   }
 }

@@ -34,7 +34,7 @@ func TestActionCommandMarshal(t *testing.T) {
 			command: ActionCommand{
 				TerminalName: "default",
 				Command:      "with_file_effect",
-				FileDiff: GitDiff{
+				Effect: GitDiff{
 					Added:   []FileAdd{{FilePath: "a/b/c", Content: "file content", IsFullContent: true}},
 					Deleted: []FileDelete{{FilePath: "a/b/d"}, {FilePath: "a/b/e"}},
 				},
@@ -45,7 +45,7 @@ func TestActionCommandMarshal(t *testing.T) {
 			command: ActionCommand{
 				TerminalName: "default",
 				Command:      "with_dir_effect",
-				DirectoryDiff: DirectoryDiff{
+				Effect: DirectoryDiff{
 					Deleted: []DirectoryDelete{{FilePath: "a/b/d"}, {FilePath: "a/b/e"}},
 				},
 			},
