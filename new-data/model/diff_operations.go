@@ -40,10 +40,10 @@ func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 }
 
 func (d GitDiff) MarshalJSON() ([]byte, error) {
-	// typeName := "GitDiff"
+	typeName := "GitDiff"
 
 	m := make(map[string]interface{})
-	// m["diffType"] = &typeName
+	m["diffType"] = &typeName
 	m["added"] = d.Added
 	m["updated"] = d.Updated
 	m["deleted"] = d.Deleted

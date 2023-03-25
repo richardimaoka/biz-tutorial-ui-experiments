@@ -5,6 +5,7 @@
   "output": null,
   "terminalName": "default",
   "fileDiff": {
+    "diffType": "GitDiff",
     "added": [
       {
         "content": "***",

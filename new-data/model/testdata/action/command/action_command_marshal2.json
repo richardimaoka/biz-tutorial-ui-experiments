@@ -9,6 +9,7 @@
     "deleted": null
   },
   "fileDiff": {
+    "diffType": "GitDiff",
     "added": null,
     "updated": null,
     "deleted": null
