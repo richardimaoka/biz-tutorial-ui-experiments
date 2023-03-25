@@ -39,6 +39,29 @@ func (d GitDiff) append(op FileSystemOperation) (GitDiff, error) {
 	}
 }
 
+func (d GitDiff) MarshalJSON() ([]byte, error) {
+	// typeName := "GitDiff"
+
+	m := make(map[string]interface{})
+	// m["diffType"] = &typeName
+	m["added"] = d.Added
+	m["updated"] = d.Updated
+	m["deleted"] = d.Deleted
+
+	return json.Marshal(m)
+}
+
+func (d DirectoryDiff) MarshalJSON() ([]byte, error) {
+	// typeName := "GitDiff"
+
+	m := make(map[string]interface{})
+	// m["diffType"] = &typeName
+	m["added"] = d.Added
+	m["deleted"] = d.Deleted
+
+	return json.Marshal(m)
+}
+
 func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 	switch v := op.(type) {
 	case DirectoryAdd:

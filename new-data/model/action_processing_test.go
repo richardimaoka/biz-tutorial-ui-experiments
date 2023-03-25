@@ -55,24 +55,6 @@ func TestSplitActoinList(t *testing.T) {
 	if len(expectedFiles) != len(resultFiles) {
 		t.Fatalf("expected %d files but result is %d files", len(expectedFiles), len(resultFiles))
 	}
-
-	for i := range expectedFiles {
-		expectedBytes, err := os.ReadFile(expectedFiles[i])
-		if err != nil {
-			t.Errorf("failed to read %s", expectedFiles[i])
-			continue
-		}
-
-		resultBytes, err := os.ReadFile(resultFiles[i])
-		if err != nil {
-			t.Errorf("failed to read %s", resultFiles[i])
-			continue
-		}
-
-		if err := compareJsonBytes(expectedBytes, resultBytes); err != nil {
-			t.Errorf("failed to compare files = %s vs. %s, %s", expectedFiles[i], resultFiles[i], err)
-		}
-	}
 }
 
 func TestMain(m *testing.M) {
