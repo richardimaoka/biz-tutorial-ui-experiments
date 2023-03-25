@@ -24,27 +24,27 @@ type ManualUpdate struct {
 	Effect DiffEffect `json:"effect"`
 }
 
-func (c ActionCommand) MarshalJSON() ([]byte, error) {
+func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ActionCommand"
-	m["command"] = &c.Command
-	m["terminalName"] = &c.TerminalName
-	m["output"] = c.Output
-	m["currentDirectory"] = c.CurrentDirectory
-	m["effect"] = c.Effect
+	m["command"] = &a.Command
+	m["terminalName"] = &a.TerminalName
+	m["output"] = a.Output
+	m["currentDirectory"] = a.CurrentDirectory
+	m["effect"] = a.Effect
 
 	return json.Marshal(m)
 }
 
-func (c ManualUpdate) MarshalJSON() ([]byte, error) {
+func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ManualUpdate"
-	m["effect"] = c.Effect
+	m["effect"] = a.Effect
 
 	return json.Marshal(m)
 }
 
-func (c *ActionCommand) UnmarshalJSON(data []byte) error {
+func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 	typeName, err := extractTypeName(data, "actionType")
 	if err != nil {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to extract type name: %s", err)
@@ -65,10 +65,10 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	c.Command = s.Command
-	c.TerminalName = s.TerminalName
-	c.Output = s.Output
-	c.CurrentDirectory = s.CurrentDirectory
+	a.Command = s.Command
+	a.TerminalName = s.TerminalName
+	a.Output = s.Output
+	a.CurrentDirectory = s.CurrentDirectory
 
 	if s.Effect != nil {
 		remarshaledEffect, err := json.Marshal(s.Effect)
@@ -76,7 +76,7 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
 		}
 
-		c.Effect, err = unmarshalDiffEffect(remarshaledEffect)
+		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
 		}
@@ -84,7 +84,7 @@ func (c *ActionCommand) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
+func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 	typeName, err := extractTypeName(data, "actionType")
 	if err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to extract type name: %s", err)
@@ -107,7 +107,7 @@ func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
 		}
 
-		m.Effect, err = unmarshalDiffEffect(remarshaledEffect)
+		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
 		}
@@ -115,8 +115,8 @@ func (m *ManualUpdate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (m ManualUpdate) WriteJsonToFile(filePath string) error {
-	bytes, err := json.MarshalIndent(m, "", "  ")
+func (a ManualUpdate) WriteJsonToFile(filePath string) error {
+	bytes, err := json.MarshalIndent(a, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -126,8 +126,8 @@ func (m ManualUpdate) WriteJsonToFile(filePath string) error {
 	return nil
 }
 
-func (c ActionCommand) WriteJsonToFile(filePath string) error {
-	bytes, err := json.MarshalIndent(c, "", "  ")
+func (a ActionCommand) WriteJsonToFile(filePath string) error {
+	bytes, err := json.MarshalIndent(a, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -137,12 +137,12 @@ func (c ActionCommand) WriteJsonToFile(filePath string) error {
 	return nil
 }
 
-func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
+func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 	var err error
-	if c.Effect, err = AppendDiffEffect(c.Effect, op); err != nil {
+	if a.Effect, err = AppendDiffEffect(a.Effect, op); err != nil {
 		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
 	}
-	return c, nil
+	return a, nil
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
