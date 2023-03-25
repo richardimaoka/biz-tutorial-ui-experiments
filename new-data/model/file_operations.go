@@ -100,34 +100,24 @@ func unmarshalFileSystemOperation(bytes []byte) (FileSystemOperation, error) {
 	switch typeName {
 	case "FileAdd":
 		var op FileAdd
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
+		err := json.Unmarshal(bytes, &op)
+		return op, err
 	case "FileUpdate":
 		var op FileUpdate
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
+		err := json.Unmarshal(bytes, &op)
+		return op, err
 	case "FileDelete":
 		var op FileDelete
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
+		err := json.Unmarshal(bytes, &op)
+		return op, err
 	case "DirectoryAdd":
 		var op DirectoryAdd
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
+		err := json.Unmarshal(bytes, &op)
+		return op, err
 	case "DirectoryDelete":
 		var op DirectoryDelete
-		if err := json.Unmarshal(bytes, &op); err != nil {
-			return nil, err
-		}
-		return op, nil
+		err := json.Unmarshal(bytes, &op)
+		return op, err
 	default:
 		return nil, fmt.Errorf("unmarshalFileSystemOperation() found invalid operationType = %s", typeName)
 	}
