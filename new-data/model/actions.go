@@ -23,9 +23,7 @@ type ActionCommand struct {
 }
 
 type ManualUpdate struct {
-	FileDiff      GitDiff       `json:"fileDiff"`
-	DirectoryDiff DirectoryDiff `json:"directoryDiff"`
-	Effect        DiffEffect    `json:"effect"`
+	Effect DiffEffect `json:"effect"`
 }
 
 func (c ActionCommand) MarshalJSON() ([]byte, error) {
@@ -64,15 +62,7 @@ func (c ActionCommand) MarshalJSON() ([]byte, error) {
 func (c ManualUpdate) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ManualUpdate"
-
-	// if c.Effect != nil {
-	// 	switch v := c.Effect.(type) {
-	// 	case GitDiff:
-	// 		m["fileDiff"] = v
-	// 	case DirectoryDiff:
-	// 		m["directoryDiff"] = v
-	// 	}
-	// }
+	m["effect"] = c.Effect
 
 	return json.Marshal(m)
 }
@@ -223,45 +213,11 @@ func (c ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
-	// var err error
-	// if m.effect, err = AppendDiffEffect(m.effect, op); err != nil {
-	// 	return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	// }
-
-	switch v := op.(type) {
-	case FileAdd:
-		if m.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileAdd operation while DirectoryDiff is populated")
-		}
-		m.FileDiff.Added = append(m.FileDiff.Added, v)
-		return m, nil
-	case FileDelete:
-		if m.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
-		}
-		m.FileDiff.Deleted = append(m.FileDiff.Deleted, v)
-		return m, nil
-	case FileUpdate:
-		if m.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("ManualUpdate.Enrich() received FileDelete operation while DirectoryDiff is populated")
-		}
-		m.FileDiff.Updated = append(m.FileDiff.Updated, v)
-		return m, nil
-	case DirectoryAdd:
-		if m.FileDiff.size() > 0 {
-			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryAdd operation while GitDiff is populated")
-		}
-		m.DirectoryDiff.Added = append(m.DirectoryDiff.Added, v)
-		return m, nil
-	case DirectoryDelete:
-		if m.FileDiff.size() > 0 {
-			return nil, fmt.Errorf("ManualUpdate.Enrich() received DirectoryDelete operation while GitDiff is populated")
-		}
-		m.DirectoryDiff.Deleted = append(m.DirectoryDiff.Deleted, v)
-		return m, nil
-	default:
-		return nil, fmt.Errorf("ManualUpdate.Enrich() received invalid operation type = %T", op)
+	var err error
+	if m.Effect, err = AppendDiffEffect(m.Effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
 	}
+	return m, nil
 }
 
 func unmarshalAction(bytes []byte) (Action, error) {
@@ -284,13 +240,7 @@ func unmarshalAction(bytes []byte) (Action, error) {
 	case "ManualUpdate":
 		var action ManualUpdate
 		err := json.Unmarshal(bytes, &action)
-		if err != nil {
-			return nil, err
-		}
-		if action.FileDiff.size() > 0 && action.DirectoryDiff.size() > 0 {
-			return nil, fmt.Errorf("unmarshalAction() failed as FileDiff and DirectoryDiff cannot co-exist")
-		}
-		return action, nil
+		return action, err
 	default:
 		return nil, fmt.Errorf("unmarshalAction() found invalid actionType = %s", typeName)
 	}
