@@ -44,6 +44,10 @@ func targetFileName(targetDir, targetPrefix string, index int) string {
 	return fmt.Sprintf("%s/%s%03d.json", targetDir, targetPrefix, index)
 }
 
+func stateFileName(targetDir, targetPrefix, step string) string {
+	return fmt.Sprintf("%s/%s-%s.json", targetDir, targetPrefix, step)
+}
+
 func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
@@ -145,25 +149,37 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	return nil
 }
 
-func ApplyActions(actionDir, actionPrefix string) error {
-	// errorPreceding := "Error in ApplyActions"
+func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error {
+	errorPreceding := "Error in ApplyActions"
 
-	// actionFiles, err := FilesInDir(actionDir, actionPrefix)
-	// if err != nil {
-	// 	return fmt.Errorf("%s, %s", errorPreceding, err)
-	// }
+	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	if err != nil {
+		return fmt.Errorf("%s, %s", errorPreceding, err)
+	}
 
-	// // pageState := NewPageState()
-	// for _, file := range actionFiles {
-	// 	action, err := readAction(file)
-	// 	if err != nil {
-	// 		return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-	// 	}
+	pageState := NewPageState()
+	for _, file := range actionFiles {
+		action, err := readAction(file)
+		if err != nil {
+			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+		}
 
-	// 	// if err := pageState.processAction(action); err != nil {
-	// 	// 	return fmt.Errorf("%s, applying action failed, %s", errorPreceding, err)
-	// 	// }
-	// }
+		switch v := action.(type) {
+		case ActionCommand:
+			pageState.TypeInCommand(v)
+			fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
+			if err := pageState.WriteJsonToFile(fileName); err != nil {
+				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+			}
+
+			pageState.ExecuteLastCommand(v)
+			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
+			if err := pageState.WriteJsonToFile(fileName); err != nil {
+				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+			}
+		case ManualUpdate:
+		}
+	}
 
 	return nil
 }
@@ -185,9 +201,9 @@ func Processing() error {
 	}
 
 	// 3. apply action files
-	if err := ApplyActions(enrichedDir, prefix); err != nil {
-		return err
-	}
+	// if err := ApplyActions(enrichedDir, prefix); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

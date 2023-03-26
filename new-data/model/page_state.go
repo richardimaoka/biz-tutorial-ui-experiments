@@ -1,7 +1,9 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -76,6 +78,28 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 }
 
 // public methods
+
+func (p *PageState) WriteJsonToFile(filePath string) error {
+	bytes, err := json.MarshalIndent(p, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
+		return err
+	}
+	return nil
+}
+
+func NewPageState() *PageState {
+	zeroString := "000"
+	return &PageState{
+		Step:       &zeroString,
+		PrevStep:   nil,
+		NextStep:   nil,
+		Terminals:  []*Terminal{NewTerminal("default")},
+		SourceCode: NewSourceCode(),
+	}
+}
 
 func (p *PageState) TypeInCommand(command ActionCommand) error {
 	// precondition
