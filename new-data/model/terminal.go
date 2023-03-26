@@ -7,12 +7,12 @@ import (
 
 func (t *Terminal) getLastNode() (*TerminalNode, error) {
 	if len(t.Nodes) == 0 {
-		return nil, fmt.Errorf("terminal has zero nodes")
+		return nil, fmt.Errorf("getLastNode failed, terminal has zero nodes")
 	}
 
 	lastNode := t.Nodes[len(t.Nodes)-1]
 	if lastNode == nil {
-		return nil, fmt.Errorf("terminal' last node = nil")
+		return nil, fmt.Errorf("getLastNode failed, terminal' last node = nil")
 	}
 
 	return lastNode, nil
@@ -44,20 +44,20 @@ func (t *Terminal) canTypeInCommand() error {
 func (t *Terminal) canMarkLastCommandExecuted(command string) error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
-		return fmt.Errorf("failed get to terminal's last node, %s", err)
+		return fmt.Errorf("cannot mark last command executed, failed get to terminal's last node, %s", err)
 	}
 
 	cmd, ok := lastNode.Content.(TerminalCommand)
 	if !ok {
-		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+		return fmt.Errorf("cannot mark last command executed, terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
 	}
 
 	if *cmd.Command != command {
-		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
+		return fmt.Errorf("cannot mark last command executed, terminal's last command = %s, not %s", *cmd.Command, command)
 	}
 
 	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
-		return fmt.Errorf("terminal's last command is not ready for execution")
+		return fmt.Errorf("cannot mark last command executed, terminal's last command is not ready for execution")
 	}
 
 	return nil
