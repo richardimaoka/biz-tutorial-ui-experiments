@@ -68,9 +68,11 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		}
 	}
 
-	// if command.Effect != nil && p.SourceCode.canApplyDiff(command.Effect) != nil {
-	// 	return nil, nil, err
-	// }
+	if command.Effect != nil {
+		if err := p.SourceCode.canApplyDiff(command.Effect); err != nil {
+			return nil, fmt.Errorf("cannot execute last command, %s", err)
+		}
+	}
 
 	return terminal, nil
 }

@@ -169,6 +169,11 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	}
 
 	pageState := NewPageState()
+	fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
+	if err := WriteJsonToFile(pageState, fileName); err != nil {
+		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+	}
+
 	for _, file := range actionFiles {
 		action, err := readAction(file)
 		if err != nil {
@@ -178,7 +183,7 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 		switch v := action.(type) {
 		case ActionCommand:
 			pageState.TypeInCommand(v)
-			fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
+			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
 			if err := WriteJsonToFile(pageState, fileName); err != nil {
 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 			}
