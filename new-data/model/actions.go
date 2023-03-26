@@ -7,7 +7,6 @@ import (
 )
 
 type Action interface {
-	WriteJsonToFile(filepath string) error
 	Enrich(operation FileSystemOperation) (Action, error)
 }
 
@@ -107,28 +106,6 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 		if err != nil {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
 		}
-	}
-	return nil
-}
-
-func (a ManualUpdate) WriteJsonToFile(filePath string) error {
-	bytes, err := json.MarshalIndent(a, "", "  ")
-	if err != nil {
-		return err
-	}
-	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a ActionCommand) WriteJsonToFile(filePath string) error {
-	bytes, err := json.MarshalIndent(a, "", "  ")
-	if err != nil {
-		return err
-	}
-	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
-		return err
 	}
 	return nil
 }

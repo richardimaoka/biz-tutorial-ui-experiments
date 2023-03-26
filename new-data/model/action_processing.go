@@ -48,6 +48,17 @@ func stateFileName(targetDir, targetPrefix, step string) string {
 	return fmt.Sprintf("%s/%s-%s.json", targetDir, targetPrefix, step)
 }
 
+func WriteJsonToFile(v any, filePath string) error {
+	bytes, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
+		return err
+	}
+	return nil
+}
+
 func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
@@ -71,7 +82,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 		}
 
 		targetFile := targetFileName(targetDir, targetPrefix, i)
-		if action.WriteJsonToFile(targetFile) != nil {
+		if WriteJsonToFile(action, targetFile) != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
@@ -141,7 +152,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	// write enriched actions to files
 	for i, action := range actions {
 		targetFile := targetFileName(targetDir, actionPrefix, i)
-		if err := action.WriteJsonToFile(targetFile); err != nil {
+		if err := WriteJsonToFile(action, targetFile); err != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, targetFile, err)
 		}
 	}
@@ -168,13 +179,13 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 		case ActionCommand:
 			pageState.TypeInCommand(v)
 			fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
-			if err := pageState.WriteJsonToFile(fileName); err != nil {
+			if err := WriteJsonToFile(pageState, fileName); err != nil {
 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 			}
 
 			pageState.ExecuteLastCommand(v)
 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
-			if err := pageState.WriteJsonToFile(fileName); err != nil {
+			if err := WriteJsonToFile(pageState, fileName); err != nil {
 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 			}
 		case ManualUpdate:
