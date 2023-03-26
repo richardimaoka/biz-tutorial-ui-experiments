@@ -181,7 +181,7 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 	return nil
 }
 
-func (s *SourceCode) canApplyDiff(diff GitDiff) error {
+func (s *SourceCode) canApplyGitDiff(diff GitDiff) error {
 	// pre-condition check, dupe in diff
 	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
 		return fmt.Errorf("cannot apply diff, duplicate file paths in diff = %+v", diffDuplicate)
@@ -201,6 +201,31 @@ func (s *SourceCode) canApplyDiff(diff GitDiff) error {
 	}
 	for _, f := range diff.Deleted {
 		if err := s.canDeleteFile(f); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("cannot apply diff, %s", strings.Join(errors, ", "))
+	}
+
+	return nil
+}
+
+func (s *SourceCode) canApplyDirectoryDiff(diff DirectoryDiff) error {
+	// pre-condition check, dupe in diff
+	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
+		return fmt.Errorf("cannot apply diff, duplicate file paths in diff = %+v", diffDuplicate)
+	}
+
+	// pre-condition check, each element's pre-condition check
+	errors := []string{}
+	for _, op := range diff.Added {
+		if err := s.canAddDirectory(op.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.Deleted {
+		if err := s.canDeleteDirectory(op.FilePath); err != nil {
 			errors = append(errors, err.Error())
 		}
 	}
@@ -372,7 +397,7 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 }
 
 func (s *SourceCode) ApplyDiff(diff GitDiff) error {
-	if err := s.canApplyDiff(diff); err != nil {
+	if err := s.canApplyGitDiff(diff); err != nil {
 		return fmt.Errorf("failed to apply diff, %s", err)
 	}
 
