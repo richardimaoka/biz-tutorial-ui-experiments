@@ -150,10 +150,10 @@ func (s *SourceCode) canUpdateFileContent(filePath string) error {
 
 func (s *SourceCode) canAddFile(op FileAdd) error {
 	if err := s.canAddFileNode(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot add file, %s", err)
 	}
 	if err := s.canAddFileContent(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot add file, %s", err)
 	}
 
 	return nil
@@ -161,10 +161,10 @@ func (s *SourceCode) canAddFile(op FileAdd) error {
 
 func (s *SourceCode) canUpdateFile(op FileUpdate) error {
 	if err := s.canUpdateFileNode(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot update file, %s", err)
 	}
 	if err := s.canUpdateFileContent(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot update file, %s", err)
 	}
 
 	return nil
@@ -172,10 +172,10 @@ func (s *SourceCode) canUpdateFile(op FileUpdate) error {
 
 func (s *SourceCode) canDeleteFile(op FileDelete) error {
 	if err := s.canDeleteFileNode(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot delete file, %s", err)
 	}
 	if err := s.canDeleteFileContent(op.FilePath); err != nil {
-		return err
+		return fmt.Errorf("cannot delete file, %s", err)
 	}
 
 	return nil
@@ -184,7 +184,7 @@ func (s *SourceCode) canDeleteFile(op FileDelete) error {
 func (s *SourceCode) canApplyDiff(diff GitDiff) error {
 	// pre-condition check, dupe in diff
 	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
-		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
+		return fmt.Errorf("cannot apply diff, duplicate file paths in diff = %+v", diffDuplicate)
 	}
 
 	// pre-condition check, each element's pre-condition check
@@ -205,7 +205,7 @@ func (s *SourceCode) canApplyDiff(diff GitDiff) error {
 		}
 	}
 	if len(errors) != 0 {
-		return fmt.Errorf(strings.Join(errors, ", "))
+		return fmt.Errorf("cannot apply diff, %s", strings.Join(errors, ", "))
 	}
 
 	return nil
