@@ -52,19 +52,20 @@ func (p *PageState) canTypeInTerminalCommand(command ActionCommand) (*Terminal, 
 	return terminal, nil
 }
 
-func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, *TerminalNode, error) {
+func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, error) {
 	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
-		return nil, nil, fmt.Errorf("terminal with name = %s not found", command.TerminalName)
+		return nil, fmt.Errorf("terminal with name = %s not found", command.TerminalName)
 	}
 
-	lastNode, err := terminal.canMarkLastCommandExecuted(command.Command)
-	if err != nil {
-		return nil, nil, err
+	if err := terminal.canMarkLastCommandExecuted(command.Command); err != nil {
+		return nil, err
 	}
 
-	if command.Output != nil && terminal.canWriteOutput() != nil {
-		return nil, nil, err
+	if command.Output != nil {
+		if err := terminal.canWriteOutput(); err != nil {
+			return nil, err
+		}
 	}
 
 	// terminal.ChangeCurrentDirectory() always succeed
@@ -73,22 +74,23 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, *Te
 	// 	return nil, nil, err
 	// }
 
-	return terminal, lastNode, nil
+	return terminal, nil
 }
 
 // public methods
 
 func (p *PageState) TypeInTerminalCommand(command ActionCommand) error {
+	// precondition
 	nextNextStep, err := p.canCalcNextStep()
 	if err != nil {
 		return err
 	}
-
 	terminal, err := p.canTypeInTerminalCommand(command)
 	if err != nil {
 		return fmt.Errorf("failed to type in command, %s", err)
 	}
 
+	// mutation
 	terminal.typeInCommand(command.Command)
 	p.gotoNextStep(nextNextStep)
 
@@ -96,26 +98,24 @@ func (p *PageState) TypeInTerminalCommand(command ActionCommand) error {
 }
 
 func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
+	// precondition
 	nextNextStep, err := p.canCalcNextStep()
 	if err != nil {
 		return err
 	}
-
-	terminal, lastNode, err := p.canExecuteLastCommand(command)
+	terminal, err := p.canExecuteLastCommand(command)
 	if err != nil {
 		return fmt.Errorf("failed to type in command, %s", err)
 	}
 
-	lastNode.markCommandExecuted(command.Command)
-
+	// mutation
+	terminal.markCommandExecuted(command.Command)
 	if command.Output != nil {
 		terminal.writeOutput(*command.Output)
 	}
-
 	if command.CurrentDirectory != nil {
 		terminal.ChangeCurrentDirectory(*command.CurrentDirectory)
 	}
-
 	p.gotoNextStep(nextNextStep)
 
 	return nil

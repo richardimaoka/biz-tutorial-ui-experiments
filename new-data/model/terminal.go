@@ -41,26 +41,26 @@ func (t *Terminal) canTypeInCommand() error {
 	}
 }
 
-func (t *Terminal) canMarkLastCommandExecuted(command string) (*TerminalNode, error) {
+func (t *Terminal) canMarkLastCommandExecuted(command string) error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
-		return nil, fmt.Errorf("failed get to terminal's last node, %s", err)
+		return fmt.Errorf("failed get to terminal's last node, %s", err)
 	}
 
 	cmd, ok := lastNode.Content.(TerminalCommand)
 	if !ok {
-		return nil, fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+		return fmt.Errorf("terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
 	}
 
 	if *cmd.Command != command {
-		return nil, fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
+		return fmt.Errorf("terminal's last command = %s, not %s", *cmd.Command, command)
 	}
 
 	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
-		return nil, fmt.Errorf("terminal's last command is not ready for execution")
+		return fmt.Errorf("terminal's last command is not ready for execution")
 	}
 
-	return lastNode, nil
+	return nil
 }
 
 func (t *Terminal) canWriteOutput() error {
@@ -110,6 +110,17 @@ func (t *Terminal) writeOutput(output string) {
 	t.Nodes = append(t.Nodes, &node)
 }
 
+// precondition: canMarkLastCommandExecuted(command) is called
+func (t *Terminal) markCommandExecuted(command string) {
+	lastNode, err := t.getLastNode()
+	if err != nil {
+		return //if canMarkLastCommandExecuted(command) is successfully called, this should never happen
+	}
+
+	falseValue := false
+	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
+}
+
 // public methods
 
 func NewTerminal(name string) *Terminal {
@@ -142,11 +153,10 @@ func (t *Terminal) WriteOutput(output string) error {
 }
 
 func (t *Terminal) MarkLastCommandExecuted(command string) error {
-	lastNode, err := t.canMarkLastCommandExecuted(command)
-	if err != nil {
+	if err := t.canMarkLastCommandExecuted(command); err != nil {
 		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
 	}
 
-	lastNode.markCommandExecuted(command)
+	t.markCommandExecuted(command)
 	return nil
 }
