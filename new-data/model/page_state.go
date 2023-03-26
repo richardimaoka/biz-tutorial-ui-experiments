@@ -39,14 +39,14 @@ func (p *PageState) gotoNextStep(nextNextStep string) {
 	p.NextStep = &nextNextStep
 }
 
-func (p *PageState) canTypeInTerminalCommand(command ActionCommand) (*Terminal, error) {
+func (p *PageState) canTypeInCommand(command ActionCommand) (*Terminal, error) {
 	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
 		return nil, fmt.Errorf("cannot type in command, terminal with name = %s not found", command.TerminalName)
 	}
 
 	if err := terminal.canTypeInCommand(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot type in command, %s", err)
 	}
 
 	return terminal, nil
@@ -55,20 +55,18 @@ func (p *PageState) canTypeInTerminalCommand(command ActionCommand) (*Terminal, 
 func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, error) {
 	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
-		return nil, fmt.Errorf("terminal with name = %s not found", command.TerminalName)
+		return nil, fmt.Errorf("cannot execute last command, terminal with name = %s not found", command.TerminalName)
 	}
 
 	if err := terminal.canMarkLastCommandExecuted(command.Command); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot execute last command, %s", err)
 	}
 
 	if command.Output != nil {
 		if err := terminal.canWriteOutput(); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("cannot execute last command, %s", err)
 		}
 	}
-
-	// terminal.ChangeCurrentDirectory() always succeed
 
 	// if command.Effect != nil && p.SourceCode.canApplyDiff(command.Effect) != nil {
 	// 	return nil, nil, err
@@ -79,15 +77,15 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 
 // public methods
 
-func (p *PageState) TypeInTerminalCommand(command ActionCommand) error {
+func (p *PageState) TypeInCommand(command ActionCommand) error {
 	// precondition
 	nextNextStep, err := p.canCalcNextStep()
 	if err != nil {
-		return err
+		return fmt.Errorf("TypeInCommand failed, %s", err)
 	}
-	terminal, err := p.canTypeInTerminalCommand(command)
+	terminal, err := p.canTypeInCommand(command)
 	if err != nil {
-		return fmt.Errorf("failed to type in command, %s", err)
+		return fmt.Errorf("TypeInCommand failed, %s", err)
 	}
 
 	// mutation
@@ -101,11 +99,11 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	// precondition
 	nextNextStep, err := p.canCalcNextStep()
 	if err != nil {
-		return err
+		return fmt.Errorf("ExecuteLastCommand failed, %s", err)
 	}
 	terminal, err := p.canExecuteLastCommand(command)
 	if err != nil {
-		return fmt.Errorf("failed to type in command, %s", err)
+		return fmt.Errorf("ExecuteLastCommand failed, %s", err)
 	}
 
 	// mutation
