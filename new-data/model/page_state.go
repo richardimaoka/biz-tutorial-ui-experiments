@@ -79,10 +79,11 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 
 func NewPageState() *PageState {
 	zeroString := "000"
+	oneString := "001"
 	return &PageState{
 		Step:       &zeroString,
 		PrevStep:   nil,
-		NextStep:   nil,
+		NextStep:   &oneString,
 		Terminals:  []*Terminal{NewTerminal("default")},
 		SourceCode: NewSourceCode(),
 	}

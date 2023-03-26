@@ -212,9 +212,9 @@ func Processing() error {
 	}
 
 	// 3. apply action files
-	// if err := ApplyActions(enrichedDir, prefix); err != nil {
-	// 	return err
-	// }
+	if err := ApplyActions(enrichedDir, prefix, "data/state", "state"); err != nil {
+		return err
+	}
 
 	return nil
 }
