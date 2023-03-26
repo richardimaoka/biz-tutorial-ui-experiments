@@ -114,6 +114,7 @@ func (t *Terminal) writeOutput(output string) {
 func (t *Terminal) markCommandExecuted(command string) {
 	lastNode, err := t.getLastNode()
 	if err != nil {
+		fmt.Println("**********************************this happeneddd********")
 		return //if canMarkLastCommandExecuted(command) is successfully called, this should never happen
 	}
 

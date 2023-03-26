@@ -62,11 +62,12 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		return nil, fmt.Errorf("cannot execute last command, %s", err)
 	}
 
-	if command.Output != nil {
-		if err := terminal.canWriteOutput(); err != nil {
-			return nil, fmt.Errorf("cannot execute last command, %s", err)
-		}
-	}
+	// TODO: completely remove this block and clean up canWriteOutput() since markLastCommandExecuted() is not called at this point,  canWriteOutput() will always fail
+	// if command.Output != nil {
+	// 	if err := terminal.canWriteOutput(); err != nil {
+	// 		return nil, fmt.Errorf("cannot execute last command, %s", err)
+	// 	}
+	// }
 
 	if command.Effect != nil {
 		if err := p.SourceCode.canApplyDiff(command.Effect); err != nil {
@@ -75,6 +76,11 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 	}
 
 	return terminal, nil
+}
+
+// function to check if pageState can apply diff
+func (p *PageState) canApplyDiff(diff DiffEffect) error {
+	return p.SourceCode.canApplyDiff(diff)
 }
 
 // public methods
@@ -127,6 +133,9 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	}
 	if command.CurrentDirectory != nil {
 		terminal.ChangeCurrentDirectory(*command.CurrentDirectory)
+	}
+	if command.Effect != nil {
+		p.SourceCode.applyDiff(command.Effect)
 	}
 	p.gotoNextStep(nextNextStep)
 
