@@ -236,6 +236,17 @@ func (s *SourceCode) canApplyDirectoryDiff(diff DirectoryDiff) error {
 	return nil
 }
 
+func (s *SourceCode) canApplyDiff(diff DiffEffect) error {
+	switch diff := diff.(type) {
+	case GitDiff:
+		return s.canApplyGitDiff(diff)
+	case DirectoryDiff:
+		return s.canApplyDirectoryDiff(diff)
+	default:
+		return fmt.Errorf("cannot apply diff, unknown diff type = %T", diff)
+	}
+}
+
 // internal mutation methods
 
 func (s *SourceCode) preMutation() {
@@ -315,7 +326,7 @@ func (s *SourceCode) updateFileContent(filePath, content string) {
 	s.FileContents[filePath] = *openFile(filePath, content)
 }
 
-func (s *SourceCode) applyDiff(diff GitDiff) {
+func (s *SourceCode) applyGitDiff(diff GitDiff) {
 	for _, op := range diff.Added {
 		s.addFileNode(op.FilePath)
 		s.addFileContent(op.FilePath, op.Content, op.IsFullContent)
@@ -326,6 +337,27 @@ func (s *SourceCode) applyDiff(diff GitDiff) {
 	for _, op := range diff.Deleted {
 		s.deleteFileContent(op.FilePath)
 		s.deleteFileNode(op.FilePath)
+	}
+}
+
+func (s *SourceCode) applyDirectoryDiff(diff DirectoryDiff) {
+	for _, op := range diff.Added {
+		s.addDirectoryNode(op.FilePath)
+	}
+	for _, op := range diff.Deleted {
+		s.deleteDirectoryNode(op.FilePath)
+	}
+}
+
+//precondition: canApplyDiff has been called
+func (s *SourceCode) applyDiff(diff DiffEffect) {
+	switch diff := diff.(type) {
+	case GitDiff:
+		s.applyGitDiff(diff)
+	case DirectoryDiff:
+		s.applyDirectoryDiff(diff)
+	default:
+		return // if precondition is met, this should never happen
 	}
 }
 
@@ -396,8 +428,8 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 	return nil
 }
 
-func (s *SourceCode) ApplyDiff(diff GitDiff) error {
-	if err := s.canApplyGitDiff(diff); err != nil {
+func (s *SourceCode) ApplyDiff(diff DiffEffect) error {
+	if err := s.canApplyDiff(diff); err != nil {
 		return fmt.Errorf("failed to apply diff, %s", err)
 	}
 
