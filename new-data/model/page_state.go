@@ -39,62 +39,84 @@ func (p *PageState) gotoNextStep(nextNextStep string) {
 	p.NextStep = &nextNextStep
 }
 
-func (p *PageState) canTypeInTerminalCommand(terminalName string) (*Terminal, string, error) {
-	nextNextStep, err := p.canCalcNextStep()
-	if err != nil {
-		return nil, "", err
-	}
-
-	terminal := p.getTerminal(terminalName)
+func (p *PageState) canTypeInTerminalCommand(command ActionCommand) (*Terminal, error) {
+	terminal := p.getTerminal(command.TerminalName)
 	if terminal == nil {
-		return nil, "", fmt.Errorf("failed to type in command, terminal with name = %s not found", terminalName)
+		return nil, fmt.Errorf("cannot type in command, terminal with name = %s not found", command.TerminalName)
 	}
 
 	if err := terminal.canTypeInCommand(); err != nil {
-		return nil, "", fmt.Errorf("failed to type in command, %s", err)
+		return nil, err
 	}
 
-	return terminal, nextNextStep, nil
+	return terminal, nil
+}
+
+func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, *TerminalNode, error) {
+	terminal := p.getTerminal(command.TerminalName)
+	if terminal == nil {
+		return nil, nil, fmt.Errorf("terminal with name = %s not found", command.TerminalName)
+	}
+
+	lastNode, err := terminal.canMarkLastCommandExecuted(command.Command)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if command.Output != nil && terminal.canWriteOutput() != nil {
+		return nil, nil, err
+	}
+
+	// terminal.ChangeCurrentDirectory() always succeed
+
+	// if command.Effect != nil && p.SourceCode.canApplyDiff(command.Effect) != nil {
+	// 	return nil, nil, err
+	// }
+
+	return terminal, lastNode, nil
 }
 
 // public methods
 
-func (p *PageState) TypeInTerminalCommand(command, terminalName string) error {
-	terminal, nextNextStep, err := p.canTypeInTerminalCommand(terminalName)
+func (p *PageState) TypeInTerminalCommand(command ActionCommand) error {
+	nextNextStep, err := p.canCalcNextStep()
+	if err != nil {
+		return err
+	}
+
+	terminal, err := p.canTypeInTerminalCommand(command)
 	if err != nil {
 		return fmt.Errorf("failed to type in command, %s", err)
 	}
 
-	terminal.typeInCommand(command)
+	terminal.typeInCommand(command.Command)
 	p.gotoNextStep(nextNextStep)
 
 	return nil
 }
 
-func (p *PageState) RunTerminalCommand(command, terminalName string) error {
-	// 1.1 pre-conditions for next step
-	// terminal, lastNode, nextNextStep, err := p.canRunTerminalCommand(terminalName)
-	// if err != nil {
-	// 	return fmt.Errorf("failed to type in command, %s", err)
-	// }
+func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
+	nextNextStep, err := p.canCalcNextStep()
+	if err != nil {
+		return err
+	}
 
-	// lastNode.markCommandExecuted(command)
+	terminal, lastNode, err := p.canExecuteLastCommand(command)
+	if err != nil {
+		return fmt.Errorf("failed to type in command, %s", err)
+	}
 
-	// terminal.ApplyEffect()
-	// SourceCode.ApplyEffect()
+	lastNode.markCommandExecuted(command.Command)
 
-	// p.gotoNextStep(nextNextStep)
+	if command.Output != nil {
+		terminal.writeOutput(*command.Output)
+	}
+
+	if command.CurrentDirectory != nil {
+		terminal.ChangeCurrentDirectory(*command.CurrentDirectory)
+	}
+
+	p.gotoNextStep(nextNextStep)
 
 	return nil
 }
-
-// run Action and write json to files
-// func (p *PageState) runAction(action Action, targetDir, prefix string) error {
-// 	filename := fmt.Sprintf("%s/%s%s.json", targetDir, prefix, p.Step)
-
-// 	switch v := action.(type) {
-// 	case ActionCommand:
-
-// 	}
-// 	return nil
-// }
