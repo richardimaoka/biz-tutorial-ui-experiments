@@ -25,12 +25,6 @@ export const TerminalComponent = (
 
   useEffect(() => {
     if (ref) {
-      const lastElement = fragment.nodes?.length
-        ? fragment.nodes?.length - 1
-        : null;
-      console.log(
-        `ref:  ${ref.current?.className} where last element = ${lastElement}`
-      );
       ref.current?.scrollIntoView({ behavior: "smooth" });
     }
   });
