@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { useEffect, useRef } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { TerminalNodeComponent } from "./TerminalNodeComponent";
 
@@ -20,6 +21,19 @@ export const TerminalComponent = (
   props: TerminalComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalComponent_Fragment, props.fragment);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref) {
+      const lastElement = fragment.nodes?.length
+        ? fragment.nodes?.length - 1
+        : null;
+      console.log(
+        `ref:  ${ref.current?.className} where last element = ${lastElement}`
+      );
+      ref.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  });
 
   return (
     <div
@@ -48,11 +62,13 @@ export const TerminalComponent = (
       {fragment.nodes?.map(
         (elem, index) =>
           elem && (
-            <TerminalNodeComponent
-              key={elem.index}
-              fragment={elem}
-              isLastElement={fragment.nodes?.length === index + 1}
-            />
+            //trick to use ref for my own JSX component
+            <div ref={ref} key={index} className={`${index}-element`}>
+              <TerminalNodeComponent
+                fragment={elem}
+                isLastElement={fragment.nodes?.length === index + 1}
+              />
+            </div>
           )
       )}
     </div>
