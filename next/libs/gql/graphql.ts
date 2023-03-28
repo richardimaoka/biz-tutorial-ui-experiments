@@ -194,11 +194,6 @@ export type TerminalCommand_FragmentFragment = {
   beforeExecution?: boolean | null;
 } & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
 
-export type TerminalCommandWriting_FragmentFragment = {
-  __typename: "TerminalCommand";
-  command?: string | null;
-} & { " $fragmentName"?: "TerminalCommandWriting_FragmentFragment" };
-
 export type TerminalComponent_FragmentFragment = {
   __typename: "Terminal";
   currentDirectory?: string | null;
@@ -496,25 +491,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
     ...FileContentPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
-export const TerminalCommandWriting_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalCommandWriting_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "TerminalCommand" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "command" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalCommandWriting_FragmentFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
