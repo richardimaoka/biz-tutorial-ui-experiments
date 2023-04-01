@@ -27,3 +27,11 @@ type WriteOutput struct {
 }
 
 func (o WriteOutput) IsTerminalOperation() {}
+
+type ExecuteCommand struct {
+	Command          string `json:"command"`
+	Output           string `json:"output"`
+	CurrentDirectory string `json:"currentDirectory"`
+}
+
+func (o ExecuteCommand) IsTerminalOperation() {}
