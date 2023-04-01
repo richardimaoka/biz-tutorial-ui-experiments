@@ -35,6 +35,8 @@ func TestTerminal(t *testing.T) {
 						err = terminal.MarkLastCommandExecuted(v.Command)
 					case WriteOutput:
 						err = terminal.WriteOutput(v.Output)
+					case ExecuteCommand:
+						err = terminal.ExecuteCommand(v.Command, v.CurrentDirectory, v.Output)
 					default:
 						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
 						return
