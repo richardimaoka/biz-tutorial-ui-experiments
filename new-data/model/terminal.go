@@ -41,23 +41,23 @@ func (t *Terminal) canTypeInCommand() error {
 	}
 }
 
-func (t *Terminal) canMarkLastCommandExecuted(command string) error {
+func (t *Terminal) canExecuteCommand(command string) error {
 	lastNode, err := t.getLastNode()
 	if err != nil {
-		return fmt.Errorf("cannot mark last command executed, failed get to terminal's last node, %s", err)
+		return fmt.Errorf("cannot execute command, failed get to terminal's last node, %s", err)
 	}
 
 	cmd, ok := lastNode.Content.(TerminalCommand)
 	if !ok {
-		return fmt.Errorf("cannot mark last command executed, terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
+		return fmt.Errorf("cannot execute command, terminal's last node is not TerminalCommand but %v", reflect.TypeOf(lastNode.Content))
 	}
 
 	if *cmd.Command != command {
-		return fmt.Errorf("cannot mark last command executed, terminal's last command = %s, not %s", *cmd.Command, command)
+		return fmt.Errorf("cannot execute command, terminal's last command = %s, not %s", *cmd.Command, command)
 	}
 
 	if cmd.BeforeExecution == nil || *cmd.BeforeExecution == false {
-		return fmt.Errorf("cannot mark last command executed, terminal's last command is not ready for execution")
+		return fmt.Errorf("cannot execute command, terminal's last command is not ready for execution")
 	}
 
 	return nil
@@ -103,10 +103,10 @@ func (t *Terminal) markCommandExecuted(command string) {
 	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
 }
 
-func (t *Terminal) executeCommand(command string, filepath, output *string) {
+func (t *Terminal) executeCommand(command string, currentDirectory, output *string) {
 	t.markCommandExecuted(command)
-	if filepath != nil {
-		t.changeCurrentDirectory(*filepath)
+	if currentDirectory != nil {
+		t.changeCurrentDirectory(*currentDirectory)
 	}
 	if output != nil {
 		t.writeOutput(*output)
@@ -130,11 +130,11 @@ func (t *Terminal) TypeInCommand(command string) error {
 	return nil
 }
 
-func (t *Terminal) ExecuteCommand(command string, filepath, output *string) error {
-	if err := t.canMarkLastCommandExecuted(command); err != nil {
+func (t *Terminal) ExecuteCommand(command string, currentDirectory, output *string) error {
+	if err := t.canExecuteCommand(command); err != nil {
 		return fmt.Errorf("ExecuteCommand failed, %s", err)
 	}
 
-	t.executeCommand(command, filepath, output)
+	t.executeCommand(command, currentDirectory, output)
 	return nil
 }

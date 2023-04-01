@@ -55,18 +55,9 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		return nil, fmt.Errorf("cannot execute last command, terminal with name = %s not found", command.TerminalName)
 	}
 
-	if err := terminal.canMarkLastCommandExecuted(command.Command); err != nil {
+	if err := terminal.canExecuteCommand(command.Command); err != nil {
 		return nil, fmt.Errorf("cannot execute last command, %s", err)
 	}
-
-	// TODO: bundle ChangeCurrentDirectory, WriteOutput, MarkLastCommandExecuted into one method
-	// canWriteOutput() will always fail at this point
-	//
-	// if command.Output != nil {
-	// 	if err := terminal.canWriteOutput(); err != nil {
-	// 		return nil, fmt.Errorf("cannot execute last command, %s", err)
-	// 	}
-	// }
 
 	if command.Effect != nil {
 		if err := p.SourceCode.canApplyDiff(command.Effect); err != nil {
