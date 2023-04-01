@@ -63,29 +63,6 @@ func (t *Terminal) canMarkLastCommandExecuted(command string) error {
 	return nil
 }
 
-func (t *Terminal) canWriteOutput() error {
-	if len(t.Nodes) == 0 {
-		return nil // allow writing initial output
-	}
-
-	lastNode, err := t.getLastNode()
-	if err != nil {
-		return fmt.Errorf("cannot write output, failed to find terminal's last node, %s", err)
-	}
-
-	switch v := lastNode.Content.(type) {
-	case TerminalCommand:
-		if *v.BeforeExecution {
-			return fmt.Errorf("cannot write output, last command has beforeExecution = true")
-		}
-		return nil
-	case TerminalOutput:
-		return nil
-	default:
-		return nil
-	}
-}
-
 func (t *Terminal) typeInCommand(command string) {
 	trueValue := true
 	node := TerminalNode{
@@ -97,6 +74,10 @@ func (t *Terminal) typeInCommand(command string) {
 
 	// works even if Nodes is nil
 	t.Nodes = append(t.Nodes, &node)
+}
+
+func (t *Terminal) changeCurrentDirectory(filePath string) {
+	t.CurrentDirectory = &filePath
 }
 
 func (t *Terminal) writeOutput(output string) {
@@ -114,7 +95,7 @@ func (t *Terminal) writeOutput(output string) {
 func (t *Terminal) markCommandExecuted(command string) {
 	lastNode, err := t.getLastNode()
 	if err != nil {
-		fmt.Println("**********************************this happeneddd********")
+		fmt.Println("**********************************this happeneddd unexpectedly!!!********")
 		return //if canMarkLastCommandExecuted(command) is successfully called, this should never happen
 	}
 
@@ -125,7 +106,7 @@ func (t *Terminal) markCommandExecuted(command string) {
 func (t *Terminal) executeCommand(command string, filepath, output *string) {
 	t.markCommandExecuted(command)
 	if filepath != nil {
-		t.ChangeCurrentDirectory(*filepath)
+		t.changeCurrentDirectory(*filepath)
 	}
 	if output != nil {
 		t.writeOutput(*output)
@@ -147,12 +128,6 @@ func (t *Terminal) TypeInCommand(command string) error {
 
 	t.typeInCommand(command)
 	return nil
-}
-
-// TODO: bundle ChangeCurrentDirectory, WriteOutput, MarkLastCommandExecuted into one method
-// no pre-condition required, always succeed
-func (t *Terminal) ChangeCurrentDirectory(filePath string) {
-	t.CurrentDirectory = &filePath
 }
 
 func (t *Terminal) ExecuteCommand(command string, filepath, output *string) error {
