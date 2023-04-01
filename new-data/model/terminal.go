@@ -122,6 +122,16 @@ func (t *Terminal) markCommandExecuted(command string) {
 	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
 }
 
+func (t *Terminal) executeCommand(command string, filepath, output *string) {
+	t.markCommandExecuted(command)
+	if filepath != nil {
+		t.ChangeCurrentDirectory(*filepath)
+	}
+	if output != nil {
+		t.writeOutput(*output)
+	}
+}
+
 // public methods
 
 func NewTerminal(name string) *Terminal {
@@ -160,5 +170,14 @@ func (t *Terminal) MarkLastCommandExecuted(command string) error {
 	}
 
 	t.markCommandExecuted(command)
+	return nil
+}
+
+func (t *Terminal) ExecuteCommand(command string, filepath, output *string) error {
+	if err := t.canMarkLastCommandExecuted(command); err != nil {
+		return fmt.Errorf("ExecuteCommand failed, %s", err)
+	}
+
+	t.executeCommand(command, filepath, output)
 	return nil
 }
