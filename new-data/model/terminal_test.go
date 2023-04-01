@@ -89,14 +89,14 @@ func TestTerminal(t *testing.T) {
 		{name: "mark_single",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "mkdir abc"}},
 			},
 			resultFile: "testdata/terminal/mark-last-command-executed1.json"},
 
 		{name: "mark_and_typein",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "mkdir abc"}},
 				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir efg"}},
 			},
 			resultFile: "testdata/terminal/mark-last-command-executed2.json"},
@@ -104,9 +104,9 @@ func TestTerminal(t *testing.T) {
 		{name: "mark_two",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir abc"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir abc"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "mkdir abc"}},
 				{expectSuccess: true, operation: TypeInCommand{Command: "mkdir efg"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "mkdir efg"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "mkdir efg"}},
 			},
 			resultFile: "testdata/terminal/mark-last-command-executed3.json"},
 	}
@@ -116,59 +116,35 @@ func TestTerminal(t *testing.T) {
 		{name: "output1",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo abc"}},
-				{expectSuccess: true, operation: WriteOutput{Output: "abc"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: address("abc")}},
 			},
 			resultFile: "testdata/terminal/write-output1.json"},
 
 		{name: "write_output2",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo abc"}},
-				{expectSuccess: true, operation: WriteOutput{Output: "abc"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: address("abc")}},
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo efg"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "echo efg"}},
-				{expectSuccess: true, operation: WriteOutput{Output: "efg"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo efg", Output: address("efg")}},
 			},
 			resultFile: "testdata/terminal/write-output2.json"},
-
-		{name: "error_output_should_follow_execution",
-			operations: []Operation{
-				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
-				{expectSuccess: false, operation: WriteOutput{Output: "abc"}},
-			},
-			resultFile: "testdata/terminal/write-output3.json"},
 	}
 	t.Run("write_output", func(t *testing.T) { runEntries(t, entries) })
 
 	entries = []Entry{
 		{name: "cd1",
 			operations: []Operation{
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
+				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello", CurrentDirectory: address("hello")}},
 			},
 			resultFile: "testdata/terminal/cd1.json"},
 
 		{name: "cd2",
 			operations: []Operation{
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
+				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello/world/thunder"}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello/world/thunder", CurrentDirectory: address("hello/world/thunder")}},
 			},
 			resultFile: "testdata/terminal/cd2.json"},
-
-		{name: "cd1",
-			operations: []Operation{
-				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "cd hello"}},
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello"}},
-			},
-			resultFile: "testdata/terminal/cd3.json"},
-
-		{name: "cd2",
-			operations: []Operation{
-				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello/world/thunder"}},
-				{expectSuccess: true, operation: MarkLastCommandExecuted{Command: "cd hello/world/thunder"}},
-				{expectSuccess: true, operation: ChangeDirectory{FilePath: "hello/world/thunder"}},
-			},
-			resultFile: "testdata/terminal/cd4.json"},
 	}
 	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
 

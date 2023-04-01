@@ -1,5 +1,13 @@
 {
   "currentDirectory": "hello/world/thunder",
   "name": "default",
-  "nodes": null
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "cd hello/world/thunder"
+      }
+    }
+  ]
 }

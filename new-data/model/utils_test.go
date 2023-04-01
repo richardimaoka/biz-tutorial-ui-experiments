@@ -9,6 +9,10 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+func address(s string) *string {
+	return &s
+}
+
 func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	var resultMap map[string]interface{}
 	err := json.Unmarshal(resultBytes, &resultMap)

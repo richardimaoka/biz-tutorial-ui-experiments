@@ -10,10 +10,6 @@ const (
 	testDir string = "../data/test"
 )
 
-func address(s string) *string {
-	return &s
-}
-
 func TestFilesInDir(t *testing.T) {
 	dir := "testdata/action/input"
 	prefix := "action"
