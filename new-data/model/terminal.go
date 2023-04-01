@@ -130,11 +130,6 @@ func NewTerminal(name string) *Terminal {
 	}
 }
 
-//no pre-condition required, always succeed
-func (t *Terminal) ChangeCurrentDirectory(filePath string) {
-	t.CurrentDirectory = &filePath
-}
-
 func (t *Terminal) TypeInCommand(command string) error {
 	if err := t.canTypeInCommand(); err != nil {
 		return fmt.Errorf("TypeInCommand failed, %s", err)
@@ -142,6 +137,12 @@ func (t *Terminal) TypeInCommand(command string) error {
 
 	t.typeInCommand(command)
 	return nil
+}
+
+// TODO: bundle ChangeCurrentDirectory, WriteOutput, MarkLastCommandExecuted into one method
+// no pre-condition required, always succeed
+func (t *Terminal) ChangeCurrentDirectory(filePath string) {
+	t.CurrentDirectory = &filePath
 }
 
 func (t *Terminal) WriteOutput(output string) error {

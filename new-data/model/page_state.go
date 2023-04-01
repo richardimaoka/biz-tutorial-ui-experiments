@@ -59,7 +59,9 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		return nil, fmt.Errorf("cannot execute last command, %s", err)
 	}
 
-	// TODO: completely remove this block and clean up canWriteOutput() since markLastCommandExecuted() is not called at this point,  canWriteOutput() will always fail
+	// TODO: bundle ChangeCurrentDirectory, WriteOutput, MarkLastCommandExecuted into one method
+	// canWriteOutput() will always fail at this point
+	//
 	// if command.Output != nil {
 	// 	if err := terminal.canWriteOutput(); err != nil {
 	// 		return nil, fmt.Errorf("cannot execute last command, %s", err)
