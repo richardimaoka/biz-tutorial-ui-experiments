@@ -5,7 +5,8 @@ import (
 	"strconv"
 )
 
-func calcNextStep(stepNumString string) (string, error) {
+func (p *PageState) canCalcNextStep() (string, error) {
+	stepNumString := *p.NextStep
 	stepNum, err := strconv.Atoi(stepNumString)
 	if err != nil {
 		return "", fmt.Errorf("next step calc failed, as step %s is not number format", stepNumString)
@@ -17,10 +18,6 @@ func calcNextStep(stepNumString string) (string, error) {
 	}
 
 	return fmt.Sprintf("%03d", stepNum+1), nil
-}
-
-func (p *PageState) canCalcNextStep() (string, error) {
-	return calcNextStep(*p.NextStep)
 }
 
 func (p *PageState) getTerminal(terminalName string) *Terminal {
