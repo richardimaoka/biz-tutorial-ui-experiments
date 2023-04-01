@@ -155,24 +155,6 @@ func (t *Terminal) ChangeCurrentDirectory(filePath string) {
 	t.CurrentDirectory = &filePath
 }
 
-func (t *Terminal) WriteOutput(output string) error {
-	if err := t.canWriteOutput(); err != nil {
-		return fmt.Errorf("WriteOutput failed, %s", err)
-	}
-
-	t.writeOutput(output)
-	return nil
-}
-
-func (t *Terminal) MarkLastCommandExecuted(command string) error {
-	if err := t.canMarkLastCommandExecuted(command); err != nil {
-		return fmt.Errorf("MarkLastCommandExecuted failed, %s", err)
-	}
-
-	t.markCommandExecuted(command)
-	return nil
-}
-
 func (t *Terminal) ExecuteCommand(command string, filepath, output *string) error {
 	if err := t.canMarkLastCommandExecuted(command); err != nil {
 		return fmt.Errorf("ExecuteCommand failed, %s", err)
