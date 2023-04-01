@@ -27,14 +27,8 @@ func TestTerminal(t *testing.T) {
 				for j, op := range e.operations {
 					var err error
 					switch v := op.operation.(type) {
-					case ChangeDirectory:
-						terminal.ChangeCurrentDirectory(v.FilePath)
 					case TypeInCommand:
 						err = terminal.TypeInCommand(v.Command)
-					case MarkLastCommandExecuted:
-						err = terminal.MarkLastCommandExecuted(v.Command)
-					case WriteOutput:
-						err = terminal.WriteOutput(v.Output)
 					case ExecuteCommand:
 						err = terminal.ExecuteCommand(v.Command, v.CurrentDirectory, v.Output)
 					default:
