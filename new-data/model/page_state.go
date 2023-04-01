@@ -133,8 +133,10 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	if command.CurrentDirectory != nil {
 		terminal.ChangeCurrentDirectory(*command.CurrentDirectory)
 	}
+	p.SourceCode.preMutation()
 	if command.Effect != nil {
 		p.SourceCode.applyDiff(command.Effect)
+		p.SourceCode.postMutation()
 	}
 	p.gotoNextStep(nextNextStep)
 
