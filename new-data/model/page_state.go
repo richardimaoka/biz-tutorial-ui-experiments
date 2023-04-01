@@ -126,13 +126,7 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	}
 
 	// mutation
-	terminal.markCommandExecuted(command.Command)
-	if command.Output != nil {
-		terminal.writeOutput(*command.Output)
-	}
-	if command.CurrentDirectory != nil {
-		terminal.ChangeCurrentDirectory(*command.CurrentDirectory)
-	}
+	terminal.executeCommand(command.Command, command.Output, command.CurrentDirectory)
 	p.SourceCode.preMutation()
 	if command.Effect != nil {
 		p.SourceCode.applyDiff(command.Effect)
