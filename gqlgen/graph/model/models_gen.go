@@ -35,11 +35,12 @@ type OpenFile struct {
 }
 
 type PageState struct {
-	Step       *string     `json:"step"`
-	NextStep   *string     `json:"nextStep"`
-	PrevStep   *string     `json:"prevStep"`
-	SourceCode *SourceCode `json:"sourceCode"`
-	Terminals  []*Terminal `json:"terminals"`
+	Step         *string     `json:"step"`
+	NextStep     *string     `json:"nextStep"`
+	PrevStep     *string     `json:"prevStep"`
+	AutoNextStep *bool       `json:"autoNextStep"`
+	SourceCode   *SourceCode `json:"sourceCode"`
+	Terminals    []*Terminal `json:"terminals"`
 }
 
 type Terminal struct {

@@ -49,6 +49,7 @@ export type OpenFile = {
 
 export type PageState = {
   __typename: "PageState";
+  autoNextStep?: Maybe<Scalars["Boolean"]>;
   nextStep?: Maybe<Scalars["String"]>;
   prevStep?: Maybe<Scalars["String"]>;
   sourceCode?: Maybe<SourceCode>;

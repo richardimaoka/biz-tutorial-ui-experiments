@@ -63,6 +63,7 @@ type PageState {
   step: String
   nextStep: String
   prevStep: String
+  autoNextStep: Boolean
   sourceCode: SourceCode
   terminals: [Terminal]
 }
