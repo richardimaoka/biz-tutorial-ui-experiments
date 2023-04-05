@@ -106,7 +106,6 @@ export type TerminalElement =
 export type TerminalNode = {
   __typename: "TerminalNode";
   content?: Maybe<TerminalElement>;
-  index?: Maybe<Scalars["Int"]>;
 };
 
 export type TerminalOutput = {
@@ -198,7 +197,7 @@ export type TerminalComponent_FragmentFragment = {
   __typename: "Terminal";
   currentDirectory?: string | null;
   nodes?: Array<
-    | ({ __typename: "TerminalNode"; index?: number | null } & {
+    | ({ __typename: "TerminalNode" } & {
         " $fragmentRefs"?: {
           TerminalNodeComponent_FragmentFragment: TerminalNodeComponent_FragmentFragment;
         };
@@ -209,7 +208,6 @@ export type TerminalComponent_FragmentFragment = {
 
 export type TerminalNodeComponent_FragmentFragment = {
   __typename: "TerminalNode";
-  index?: number | null;
   content?:
     | ({ __typename: "TerminalCommand" } & {
         " $fragmentRefs"?: {
@@ -543,7 +541,6 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "index" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "content" },
@@ -619,7 +616,6 @@ export const TerminalComponent_FragmentFragmentDoc = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "index" } },
                 {
                   kind: "FragmentSpread",
                   name: {

@@ -7,7 +7,6 @@ const TerminalComponent_Fragment = graphql(`
   fragment TerminalComponent_Fragment on Terminal {
     currentDirectory
     nodes {
-      index
       ...TerminalNodeComponent_Fragment
     }
   }

@@ -4,7 +4,6 @@ import { TerminalOutputComponent } from "./TerminalOutputComponent";
 
 const TerminalNodeComponent_Fragment = graphql(`
   fragment TerminalNodeComponent_Fragment on TerminalNode {
-    index
     content {
       __typename
       ... on TerminalCommand {
