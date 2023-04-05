@@ -239,6 +239,7 @@ export type PageQueryQuery = {
     __typename: "PageState";
     nextStep?: string | null;
     prevStep?: string | null;
+    autoNextStep?: boolean | null;
     sourceCode?:
       | ({ __typename: "SourceCode" } & {
           " $fragmentRefs"?: {
@@ -668,6 +669,10 @@ export const PageQueryDocument = {
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "nextStep" } },
                 { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "autoNextStep" },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "sourceCode" },
