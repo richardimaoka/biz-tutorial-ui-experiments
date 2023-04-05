@@ -215,10 +215,11 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 }
 
 func Processing() error {
-	// 0. prereuisite: by-hand csv -> json conversion, and save action-list.json
-
 	// 1. split action-list.json
 	inputDir := "data/input"
+	if os.MkdirAll(inputDir, 0755) != nil {
+		return fmt.Errorf("mkdir %s failed", inputDir)
+	}
 	prefix := "action"
 	if err := SplitActionList("data/action_list.json", inputDir, prefix); err != nil {
 		return err
@@ -226,12 +227,19 @@ func Processing() error {
 
 	// 2. enrich action files
 	enrichedDir := "data/enriched"
+	if os.MkdirAll(enrichedDir, 0755) != nil {
+		return fmt.Errorf("mkdir %s failed", enrichedDir)
+	}
 	if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichedDir, prefix); err != nil {
 		return err
 	}
 
 	// 3. apply action files
-	if err := ApplyActions(enrichedDir, prefix, "data/state", "state"); err != nil {
+	stateDir := "data/state"
+	if os.MkdirAll(stateDir, 0755) != nil {
+		return fmt.Errorf("mkdir %s failed", stateDir)
+	}
+	if err := ApplyActions(enrichedDir, prefix, stateDir, "state"); err != nil {
 		return err
 	}
 

@@ -57,7 +57,7 @@ func server() {
 }
 
 func processing() {
-	fmt.Println("running main")
+	fmt.Println("running processing")
 	err := model.Processing()
 	if err != nil {
 		log.Fatal(err)
