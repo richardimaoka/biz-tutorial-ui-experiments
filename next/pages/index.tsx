@@ -13,7 +13,6 @@ const PageQuery = graphql(/* GraphQL */ `
     pageState(step: $step) {
       nextStep
       prevStep
-      autoNextStep
       sourceCode {
         ...SourceCodeViewer_Fragment
       }
@@ -38,7 +37,6 @@ export default function Home() {
   const currentPage = data?.pageState;
   const nextStep = currentPage?.nextStep;
   const prevStep = currentPage?.prevStep;
-  const autoNextStep = currentPage?.autoNextStep;
 
   const terminals = currentPage?.terminals;
   const [currentTerminalIndex] = useState(0);
@@ -86,10 +84,6 @@ export default function Home() {
         .catch((error) => console.log(error));
     }
   }, [client, nextStep, prevStep]);
-
-  useEffect(() => {
-    autoNextStep && router.push(`./?step=${nextStep}`);
-  }, [autoNextStep]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;

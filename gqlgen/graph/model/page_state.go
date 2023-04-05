@@ -100,7 +100,6 @@ func (p *PageState) TypeInCommand(command ActionCommand) error {
 
 	// mutation
 	terminal.typeInCommand(command.Command)
-	p.AutoNextStep = nil
 	p.gotoNextStep(nextNextStep)
 
 	return nil
@@ -124,8 +123,6 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 		p.SourceCode.applyDiff(command.Effect)
 		p.SourceCode.postMutation()
 	}
-	trueValue := true
-	p.AutoNextStep = &trueValue
 	p.gotoNextStep(nextNextStep)
 
 	return nil
