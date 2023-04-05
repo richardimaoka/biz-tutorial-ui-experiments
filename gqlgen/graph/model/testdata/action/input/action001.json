@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "command": "cd protoc-go-experiments",
+  "currentDirectory": "protoc-go-experiments",
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  },
+  "output": null,
+  "terminalName": "default"
+}

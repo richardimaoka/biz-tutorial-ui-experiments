@@ -1,0 +1,20 @@
+{
+  "fileTree": [
+    {
+      "nodeType": "DIRECTORY",
+      "offset": 0,
+      "isUpdated": false,
+      "name": "goodmorning",
+      "filePath": "goodmorning"
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "offset": 1,
+      "isUpdated": false,
+      "name": "hello",
+      "filePath": "goodmorning/hello"
+    }
+  ],
+  "openFile": null,
+  "fileContents": {}
+}

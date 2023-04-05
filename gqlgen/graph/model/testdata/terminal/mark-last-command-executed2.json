@@ -1,0 +1,20 @@
+{
+  "currentDirectory": null,
+  "name": "default",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "mkdir abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": true,
+        "command": "mkdir efg"
+      }
+    }
+  ]
+}

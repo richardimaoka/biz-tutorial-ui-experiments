@@ -1,0 +1,13 @@
+{
+  "currentDirectory": "hello",
+  "name": "default",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "cd hello"
+      }
+    }
+  ]
+}

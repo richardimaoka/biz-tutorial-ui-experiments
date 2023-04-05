@@ -18,7 +18,6 @@ type TerminalOutput {
 union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
 
 type TerminalNode {
-  index: Int
   content: TerminalElement
 }
 

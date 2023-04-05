@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,12 +12,13 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/gorilla/websocket"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/rs/cors"
 )
 
 const defaultPort = "8080"
 
-func main() {
+func server() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -51,5 +53,30 @@ func main() {
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func processing() {
+	fmt.Println("running main")
+	err := model.Processing()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// actionListParse()
+
+	// err := model.SplitActionListFile("data2")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	return
+}
+
+func main() {
+	if len(os.Args) > 1 && os.Args[1] == "processing" {
+		processing()
+	} else {
+		server()
 	}
 }

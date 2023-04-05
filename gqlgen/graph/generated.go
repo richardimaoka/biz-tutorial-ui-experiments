@@ -100,7 +100,6 @@ type ComplexityRoot struct {
 
 	TerminalNode struct {
 		Content func(childComplexity int) int
-		Index   func(childComplexity int) int
 	}
 
 	TerminalOutput struct {
@@ -345,13 +344,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalNode.Content(childComplexity), true
-
-	case "TerminalNode.index":
-		if e.complexity.TerminalNode.Index == nil {
-			break
-		}
-
-		return e.complexity.TerminalNode.Index(childComplexity), true
 
 	case "TerminalOutput.output":
 		if e.complexity.TerminalOutput.Output == nil {
@@ -1777,8 +1769,6 @@ func (ec *executionContext) fieldContext_Terminal_nodes(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "index":
-				return ec.fieldContext_TerminalNode_index(ctx, field)
 			case "content":
 				return ec.fieldContext_TerminalNode_content(ctx, field)
 			}
@@ -1912,47 +1902,6 @@ func (ec *executionContext) fieldContext_TerminalCommandSet_commands(ctx context
 				return ec.fieldContext_TerminalCommand_command(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TerminalCommand", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TerminalNode_index(ctx context.Context, field graphql.CollectedField, obj *model.TerminalNode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalNode_index(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Index, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TerminalNode_index(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TerminalNode",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4215,10 +4164,6 @@ func (ec *executionContext) _TerminalNode(ctx context.Context, sel ast.Selection
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TerminalNode")
-		case "index":
-
-			out.Values[i] = ec._TerminalNode_index(ctx, field, obj)
-
 		case "content":
 
 			out.Values[i] = ec._TerminalNode_content(ctx, field, obj)
