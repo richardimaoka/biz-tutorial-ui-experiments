@@ -100,7 +100,7 @@ export default function Home() {
           <div
             css={css`
               width: 680px;
-              margin: 0 auto;
+              /* margin: 0 auto; */
               background-color: white;
             `}
           >
