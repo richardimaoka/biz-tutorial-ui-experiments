@@ -12,13 +12,18 @@ const TerminalCommand_Fragment = graphql(`
 
 export interface TerminalCommandComponentProps {
   fragment: FragmentType<typeof TerminalCommand_Fragment>;
+  scrollIntoView: () => void;
 }
 
 interface CodeComponentProps {
   command: string | null | undefined;
+  scrollIntoView: () => void;
 }
 
-const TypeInCodeComponent = ({ command }: CodeComponentProps) => {
+const TypeInCodeComponent = ({
+  command,
+  scrollIntoView,
+}: CodeComponentProps) => {
   const [writtenLength, setWrittenLength] = useState(0);
 
   useEffect(() => {
@@ -32,6 +37,7 @@ const TypeInCodeComponent = ({ command }: CodeComponentProps) => {
         setWrittenLength(nextLength);
       }, 20);
     }
+    scrollIntoView();
   });
   return <code>{command?.substring(0, writtenLength)}</code>;
 };
@@ -40,6 +46,7 @@ export const TerminalCommandComponent = (
   props: TerminalCommandComponentProps
 ): JSX.Element => {
   const fragment = useFragment(TerminalCommand_Fragment, props.fragment);
+  const scrollIntoView = props.scrollIntoView;
 
   const router = useRouter();
   const { skipAnimation } = router.query;
@@ -56,7 +63,10 @@ export const TerminalCommandComponent = (
       `}
     >
       {fragment.beforeExecution && animate ? (
-        <TypeInCodeComponent command={fragment.command} />
+        <TypeInCodeComponent
+          command={fragment.command}
+          scrollIntoView={scrollIntoView}
+        />
       ) : (
         <code>{fragment.command}</code>
       )}

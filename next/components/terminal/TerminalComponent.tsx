@@ -21,12 +21,13 @@ export const TerminalComponent = (
 ): JSX.Element => {
   const fragment = useFragment(TerminalComponent_Fragment, props.fragment);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
+  const scrollIntoView = () => {
     if (ref) {
       ref.current?.scrollIntoView({ behavior: "smooth" });
     }
-  });
+  };
+
+  useEffect(scrollIntoView);
 
   return (
     <div
@@ -60,6 +61,7 @@ export const TerminalComponent = (
               <TerminalNodeComponent
                 fragment={elem}
                 isLastElement={fragment.nodes?.length === index + 1}
+                scrollIntoView={scrollIntoView}
               />
             </div>
           )
