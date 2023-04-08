@@ -37,7 +37,6 @@ type Config struct {
 
 type ResolverRoot interface {
 	Query() QueryResolver
-	SourceCode() SourceCodeResolver
 }
 
 type DirectiveRoot struct {
@@ -80,8 +79,7 @@ type ComplexityRoot struct {
 	}
 
 	SourceCode struct {
-		DefaultOpenFile func(childComplexity int) int
-		FileTree        func(childComplexity int) int
+		FileTree func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -111,9 +109,6 @@ type ComplexityRoot struct {
 type QueryResolver interface {
 	PageState(ctx context.Context, step *string) (*model.PageState, error)
 	Terminal(ctx context.Context, step int) (*model.Terminal, error)
-}
-type SourceCodeResolver interface {
-	DefaultOpenFile(ctx context.Context, obj *model.SourceCode) (*model.OpenFile, error)
 }
 
 type executableSchema struct {
@@ -280,13 +275,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Terminal(childComplexity, args["step"].(int)), true
-
-	case "SourceCode.defaultOpenFile":
-		if e.complexity.SourceCode.DefaultOpenFile == nil {
-			break
-		}
-
-		return e.complexity.SourceCode.DefaultOpenFile(childComplexity), true
 
 	case "SourceCode.fileTree":
 		if e.complexity.SourceCode.FileTree == nil {
@@ -1205,8 +1193,6 @@ func (ec *executionContext) fieldContext_PageState_sourceCode(ctx context.Contex
 			switch field.Name {
 			case "fileTree":
 				return ec.fieldContext_SourceCode_fileTree(ctx, field)
-			case "defaultOpenFile":
-				return ec.fieldContext_SourceCode_defaultOpenFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
 		},
@@ -1564,61 +1550,6 @@ func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context
 				return ec.fieldContext_FileNode_isUpdated(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type FileNode", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _SourceCode_defaultOpenFile(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SourceCode_defaultOpenFile(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.SourceCode().DefaultOpenFile(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.OpenFile)
-	fc.Result = res
-	return ec.marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_SourceCode_defaultOpenFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SourceCode",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "filePath":
-				return ec.fieldContext_OpenFile_filePath(ctx, field)
-			case "fileName":
-				return ec.fieldContext_OpenFile_fileName(ctx, field)
-			case "content":
-				return ec.fieldContext_OpenFile_content(ctx, field)
-			case "isFullContent":
-				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
-			case "language":
-				return ec.fieldContext_OpenFile_language(ctx, field)
-			case "highlight":
-				return ec.fieldContext_OpenFile_highlight(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
 	}
 	return fc, nil
@@ -4025,23 +3956,6 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)
 
-		case "defaultOpenFile":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._SourceCode_defaultOpenFile(ctx, field, obj)
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4958,13 +4872,6 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx context.Context, sel ast.SelectionSet, v *model.OpenFile) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._OpenFile(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOPageState2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageState(ctx context.Context, sel ast.SelectionSet, v *model.PageState) graphql.Marshaler {
