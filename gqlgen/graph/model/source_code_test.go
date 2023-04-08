@@ -195,7 +195,7 @@ func TestSourceCode_Contents(t *testing.T) {
 			operations: []Operation{
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/america.txt"}},
-			}, resultFile: "testdata/source_code/add-file5.json"},
+			}, resultFile: "testdata/source_code/add-file4.json"},
 
 		{name: "error_add_file_duplicate1",
 			operations: []Operation{
@@ -208,7 +208,7 @@ func TestSourceCode_Contents(t *testing.T) {
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world.txt"}},
 				{expectSuccess: false, operation: FileAdd{FilePath: "hello/world.txt"}},
 				{expectSuccess: false, operation: FileAdd{FilePath: "hello"}},
-			}, resultFile: "testdata/source_code/add-file6.json"},
+			}, resultFile: "testdata/source_code/add-file5.json"},
 	}
 	t.Run("add_file", func(t *testing.T) { runEntries(t, entries) })
 
