@@ -60,10 +60,19 @@ func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal
 	return &terminal, nil
 }
 
+// DefaultOpenFile is the resolver for the defaultOpenFile field.
+func (r *sourceCodeResolver) DefaultOpenFile(ctx context.Context, obj *model.SourceCode) (*model.OpenFile, error) {
+	panic(fmt.Errorf("not implemented: DefaultOpenFile - defaultOpenFile"))
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// SourceCode returns SourceCodeResolver implementation.
+func (r *Resolver) SourceCode() SourceCodeResolver { return &sourceCodeResolver{r} }
+
 type queryResolver struct{ *Resolver }
+type sourceCodeResolver struct{ *Resolver }
 
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
