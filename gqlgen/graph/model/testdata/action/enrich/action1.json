@@ -2,7 +2,7 @@
   "actionType": "ActionCommand",
   "command": "git apply 324x435d",
   "currentDirectory": null,
-  "openFilePath": null,
+  "defaultOpenFilePath": null,
   "output": null,
   "terminalName": "default",
   "effect": {

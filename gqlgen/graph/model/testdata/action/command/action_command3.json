@@ -2,7 +2,7 @@
   "actionType": "ActionCommand",
   "terminalName": "another",
   "command": "cd hello/world",
-  "openFilePath": null,
+  "defaultOpenFilePath": null,
   "output": null,
   "currentDirectory": "hello/world",
   "effect": null

@@ -12,17 +12,17 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command          string     `json:"command"`
-	TerminalName     string     `json:"terminalName"`
-	Output           *string    `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-	Effect           DiffEffect `json:"effect"`
-	OpenFilePath     *string    `json:"openFilePath"`
+	Command             string     `json:"command"`
+	TerminalName        string     `json:"terminalName"`
+	Output              *string    `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory    *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	Effect              DiffEffect `json:"effect"`
+	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
 type ManualUpdate struct {
-	Effect       DiffEffect `json:"effect"`
-	OpenFilePath *string    `json:"openFilePath"`
+	Effect              DiffEffect `json:"effect"`
+	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
 func (a ActionCommand) MarshalJSON() ([]byte, error) {
@@ -33,7 +33,7 @@ func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m["output"] = a.Output
 	m["currentDirectory"] = a.CurrentDirectory
 	m["effect"] = a.Effect
-	m["openFilePath"] = a.OpenFilePath
+	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
 }
@@ -42,7 +42,7 @@ func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ManualUpdate"
 	m["effect"] = a.Effect
-	m["openFilePath"] = a.OpenFilePath
+	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
 }
