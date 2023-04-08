@@ -22,7 +22,7 @@
       "filePath": "hello/world/new.txt"
     }
   ],
-  "openFile": null,
+
   "fileContents": {
     "hello/world/new.txt": {
       "fileName": "new.txt",
