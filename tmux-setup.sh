@@ -31,6 +31,6 @@ tmux select-layout even-vertical   # to avoid 'no space for new pane'
 # tmux select-layout even-vertical   # to avoid 'no space for new pane' 
 
 # open editors
-tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .) && (cd new-data && code .)' C-m
+tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .)' C-m
 
 tmux attach -t "$SESSION"
