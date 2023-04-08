@@ -17,10 +17,12 @@ type ActionCommand struct {
 	Output           *string    `json:"output"`           //if zero value, no output after execution
 	CurrentDirectory *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 	Effect           DiffEffect `json:"effect"`
+	OpenFilePath     *string    `json:"openFilePath"`
 }
 
 type ManualUpdate struct {
-	Effect DiffEffect `json:"effect"`
+	Effect       DiffEffect `json:"effect"`
+	OpenFilePath *string    `json:"openFilePath"`
 }
 
 func (a ActionCommand) MarshalJSON() ([]byte, error) {
@@ -31,6 +33,7 @@ func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m["output"] = a.Output
 	m["currentDirectory"] = a.CurrentDirectory
 	m["effect"] = a.Effect
+	m["openFilePath"] = a.OpenFilePath
 
 	return json.Marshal(m)
 }
@@ -39,6 +42,7 @@ func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ManualUpdate"
 	m["effect"] = a.Effect
+	m["openFilePath"] = a.OpenFilePath
 
 	return json.Marshal(m)
 }

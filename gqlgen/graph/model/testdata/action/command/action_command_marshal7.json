@@ -3,6 +3,7 @@
   "terminalName": "default",
   "command": "with_dir_effect",
   "output": null,
+  "openFilePath": null,
   "currentDirectory": null,
   "effect": {
     "diffType": "DirectoryDiff",

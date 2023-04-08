@@ -2,6 +2,7 @@
   "actionType": "ActionCommand",
   "terminalName": "another",
   "command": "mkdir hello",
+  "openFilePath": null,
   "output": null,
   "currentDirectory": null,
   "effect": null

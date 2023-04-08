@@ -2,6 +2,7 @@
   "actionType": "ActionCommand",
   "terminalName": "default",
   "command": "with_file_effect",
+  "openFilePath": null,
   "output": null,
   "currentDirectory": null,
   "effect": {

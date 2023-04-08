@@ -2,6 +2,7 @@
   "actionType": "ActionCommand",
   "terminalName": "another",
   "command": "complex_command",
+  "openFilePath": null,
   "output": "some output",
   "currentDirectory": "hello/world",
   "effect": null
