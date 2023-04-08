@@ -56,7 +56,7 @@ type FileNode {
 
 type SourceCode {
   fileTree: [FileNode]
-  openFile(filePath: String): OpenFile
+  openFile(filePath: String!): OpenFile
 }
 
 type PageState {
