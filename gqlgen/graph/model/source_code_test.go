@@ -191,11 +191,6 @@ func TestSourceCode_Contents(t *testing.T) {
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
 			}, resultFile: "testdata/source_code/add-file3.json"},
 
-		{name: "add_file_nested3",
-			operations: []Operation{
-				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
-			}, resultFile: "testdata/source_code/add-file4.json"},
-
 		{name: "add_file_next_to",
 			operations: []Operation{
 				{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
