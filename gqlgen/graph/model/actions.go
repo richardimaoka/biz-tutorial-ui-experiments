@@ -47,6 +47,26 @@ func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
+func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
+	var err error
+	if a.Effect, err = AppendDiffEffect(a.Effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
+	}
+	return a, nil
+}
+
+func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
+	var err error
+	if m.Effect, err = AppendDiffEffect(m.Effect, op); err != nil {
+		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
+	}
+	return m, nil
+}
+
+// ------------------------------
+// JSON marshal/unmarshal
+// ------------------------------
+
 func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 	typeName, err := extractTypeName(data, "actionType")
 	if err != nil {
@@ -114,22 +134,6 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
-}
-
-func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
-	var err error
-	if a.Effect, err = AppendDiffEffect(a.Effect, op); err != nil {
-		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	}
-	return a, nil
-}
-
-func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
-	var err error
-	if m.Effect, err = AppendDiffEffect(m.Effect, op); err != nil {
-		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	}
-	return m, nil
 }
 
 func unmarshalAction(bytes []byte) (Action, error) {
