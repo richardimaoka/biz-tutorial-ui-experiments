@@ -72,12 +72,13 @@ export type QueryTerminalArgs = {
 
 export type SourceCode = {
   __typename: "SourceCode";
+  defaultOpenFile?: Maybe<OpenFile>;
   fileTree?: Maybe<Array<Maybe<FileNode>>>;
   openFile?: Maybe<OpenFile>;
 };
 
 export type SourceCodeOpenFileArgs = {
-  filePath?: InputMaybe<Scalars["String"]>;
+  filePath: Scalars["String"];
 };
 
 export type Terminal = {
@@ -111,6 +112,13 @@ export type TerminalNode = {
 export type TerminalOutput = {
   __typename: "TerminalOutput";
   output?: Maybe<Scalars["String"]>;
+};
+
+export type TerminalSimple = {
+  __typename: "TerminalSimple";
+  currentDirectory?: Maybe<Scalars["String"]>;
+  elements?: Maybe<Array<Maybe<TerminalOutput>>>;
+  name?: Maybe<Scalars["String"]>;
 };
 
 export type SourceCodeViewer_FragmentFragment = ({
@@ -472,6 +480,17 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
           {
             kind: "Field",
             name: { kind: "Name", value: "openFile" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "filePath" },
+                value: {
+                  kind: "StringValue",
+                  value: "something",
+                  block: false,
+                },
+              },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [

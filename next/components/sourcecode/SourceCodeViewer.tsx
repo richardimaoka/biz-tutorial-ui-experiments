@@ -7,7 +7,7 @@ import { FileContentPane } from "./open-file/FileContentPane";
 const SourceCodeViewer_Fragment = graphql(`
   fragment SourceCodeViewer_Fragment on SourceCode {
     ...FileTreePane_Fragment
-    openFile {
+    openFile(filePath: "something") {
       ...FileContentPane_Fragment
     }
   }
