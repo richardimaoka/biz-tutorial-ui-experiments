@@ -271,6 +271,9 @@ func (s *SourceCode) preMutation() {
 	for _, v := range s.FileTree {
 		v.IsUpdated = &falseValue
 	}
+
+	//clear default open file
+	s.DefaultOpenFile = nil
 }
 
 func (s *SourceCode) postMutation() {
