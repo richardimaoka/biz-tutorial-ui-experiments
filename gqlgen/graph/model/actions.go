@@ -57,11 +57,12 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 	}
 
 	var interim struct {
-		Command          string      `json:"command"`
-		TerminalName     string      `json:"terminalName"`
-		Output           *string     `json:"output"`
-		CurrentDirectory *string     `json:"currentDirectory"`
-		Effect           interface{} `json:"effect"`
+		Command             string      `json:"command"`
+		TerminalName        string      `json:"terminalName"`
+		Output              *string     `json:"output"`
+		CurrentDirectory    *string     `json:"currentDirectory"`
+		Effect              interface{} `json:"effect"`
+		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
@@ -71,6 +72,7 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 	a.TerminalName = interim.TerminalName
 	a.Output = interim.Output
 	a.CurrentDirectory = interim.CurrentDirectory
+	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
 
 	if interim.Effect != nil {
 		remarshaledEffect, err := json.Marshal(interim.Effect)
