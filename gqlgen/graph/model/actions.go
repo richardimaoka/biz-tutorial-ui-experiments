@@ -28,12 +28,13 @@ type ManualUpdate struct {
 func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ActionCommand"
+	m["effect"] = a.Effect
+	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
+
 	m["command"] = &a.Command
 	m["terminalName"] = &a.TerminalName
 	m["output"] = a.Output
 	m["currentDirectory"] = a.CurrentDirectory
-	m["effect"] = a.Effect
-	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
 }

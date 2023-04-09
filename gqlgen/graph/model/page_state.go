@@ -137,3 +137,24 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 
 	return nil
 }
+
+func (p *PageState) ApplyManualUpdate(update ManualUpdate) error {
+	// precondition
+	nextNextStep, err := p.canCalcNextStep()
+	if err != nil {
+		return fmt.Errorf("ExecuteLastCommand failed, %s", err)
+	}
+
+	// mutation
+	p.SourceCode.preMutation()
+	if update.Effect != nil {
+		p.SourceCode.applyDiff(update.Effect)
+		p.SourceCode.postMutation()
+	}
+	if update.DefaultOpenFilePath != nil {
+		p.SourceCode.setDefaultOpenFile(*update.DefaultOpenFilePath)
+	}
+	p.gotoNextStep(nextNextStep)
+
+	return nil
+}

@@ -207,6 +207,13 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 			}
 			// log.Printf("ApplyActions: executed command  %d from %s, step = %s", i, file, *pageState.Step)
 		case ManualUpdate:
+			if err := pageState.ApplyManualUpdate(v); err != nil {
+				return fmt.Errorf("%s, %s", errorPreceding, err)
+			}
+			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
+			if err := WriteJsonToFile(pageState, fileName); err != nil {
+				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+			}
 		}
 	}
 	log.Printf("ApplyActions: wrote %s states to %s", *pageState.Step, targetDir)
