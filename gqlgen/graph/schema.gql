@@ -27,6 +27,13 @@ type Terminal {
   nodes: [TerminalNode] # To make frontend pattern-matching easier, we return a list of concrete object types, instead of list of unions
 }
 
+# experimental
+type TerminalSimple {
+  name: String
+  currentDirectory: String
+  elements: [TerminalOutput]
+}
+
 type FileHighlight {
   fromLine: Int
   toLine: Int
