@@ -316,3 +316,71 @@ func TestSourceCode_Diff(t *testing.T) {
 
 	t.Run("diff", func(t *testing.T) { runEntries(t, entries) })
 }
+
+func TestSourceCode_SetDefaultOpenFile(t *testing.T) {
+	type Entry struct {
+		name                string
+		prepOps             []FileSystemOperation
+		defaultOpenFilePath string
+		resultFile          string
+		expectSuccess       bool
+	}
+
+	var entries []Entry
+
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for _, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				sc := NewSourceCode()
+				for _, op := range e.prepOps {
+					switch v := op.(type) {
+					case DirectoryAdd:
+						if sc.AddDirectory(v) != nil {
+							t.Fatalf("op type = %v, %+v failed", op, reflect.TypeOf(op))
+						}
+					case DirectoryDelete:
+						if sc.DeleteDirectory(v) != nil {
+							t.Fatalf("op type = %v, %+v failed", op, reflect.TypeOf(op))
+						}
+					case FileAdd:
+						if sc.AddFile(v) != nil {
+							t.Fatalf("op type = %v, %+v failed", op, reflect.TypeOf(op))
+						}
+					case FileUpdate:
+						if sc.UpdateFile(v) != nil {
+							t.Fatalf("op type = %v, %+v failed", op, reflect.TypeOf(op))
+						}
+					case FileDelete:
+						if sc.DeleteFile(v) != nil {
+							t.Fatalf("op type = %v, %+v failed", op, reflect.TypeOf(op))
+						}
+					default:
+						t.Fatalf("entry %+v faild:\nwrong operation type = %v", e, reflect.TypeOf(v))
+						return
+					}
+				}
+
+				err := sc.SetDefaultOpenFile(e.defaultOpenFilePath)
+				isSuccess := err == nil
+				if isSuccess != e.expectSuccess {
+					t.Fatalf("entry %t is expected, but result is %t\n", e.expectSuccess, isSuccess)
+					return
+				}
+				compareAfterMarshal(t, e.resultFile, sc)
+			})
+		}
+	}
+
+	entries = []Entry{
+		{name: "set1",
+			prepOps: []FileSystemOperation{
+				FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+			},
+			defaultOpenFilePath: "hello.txt",
+			resultFile:          "testdata/source_code/set-default-open-file1.json",
+			expectSuccess:       true,
+		},
+	}
+
+	t.Run("set_default_open_file", func(t *testing.T) { runEntries(t, entries) })
+}

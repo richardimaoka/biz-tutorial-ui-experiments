@@ -247,6 +247,22 @@ func (s *SourceCode) canApplyDiff(diff DiffEffect) error {
 	}
 }
 
+func (s *SourceCode) canSetDefaultOpenFile(filePath string) error {
+	if err := isValidFilePath(filePath); err != nil {
+		return fmt.Errorf("cannot set default open file, %s", err)
+	}
+
+	if err := s.isValidNode(filePath, FileNodeTypeFile); err != nil {
+		return fmt.Errorf("cannot set default open file, file path = %s is non-existent", filePath)
+	}
+
+	if _, ok := s.FileContents[filePath]; !ok {
+		return fmt.Errorf("cannot set default open file, file content = %s is non-existent", filePath)
+	}
+
+	return nil
+}
+
 // internal mutation methods
 
 func (s *SourceCode) preMutation() {
@@ -349,6 +365,11 @@ func (s *SourceCode) applyDirectoryDiff(diff DirectoryDiff) {
 	}
 }
 
+func (s *SourceCode) setDefaultOpenFile(filePath string) {
+	content := s.FileContents[filePath]
+	s.DefaultOpenFile = &content
+}
+
 //precondition: canApplyDiff has been called
 func (s *SourceCode) applyDiff(diff DiffEffect) {
 	switch diff := diff.(type) {
@@ -430,12 +451,22 @@ func (s *SourceCode) DeleteFile(op FileDelete) error {
 
 func (s *SourceCode) ApplyDiff(diff DiffEffect) error {
 	if err := s.canApplyDiff(diff); err != nil {
-		return fmt.Errorf("failed to apply diff, %s", err)
+		return fmt.Errorf("ApplyDiff failed, %s", err)
 	}
 
 	s.preMutation()
 	s.applyDiff(diff)
 	s.postMutation()
+
+	return nil
+}
+
+func (s *SourceCode) SetDefaultOpenFile(filePath string) error {
+	if err := s.canSetDefaultOpenFile(filePath); err != nil {
+		return fmt.Errorf("SetDefaultOpenFile failed, %s", err)
+	}
+
+	s.setDefaultOpenFile(filePath)
 
 	return nil
 }
