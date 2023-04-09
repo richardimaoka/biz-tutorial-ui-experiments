@@ -23,6 +23,7 @@
     }
   ],
 
+  "defaultOpenFile": null,
   "fileContents": {
     "hello/world/japan.txt": {
       "fileName": "japan.txt",

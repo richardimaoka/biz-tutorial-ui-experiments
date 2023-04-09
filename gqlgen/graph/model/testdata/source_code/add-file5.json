@@ -15,6 +15,7 @@
       "filePath": "hello/world.txt"
     }
   ],
+  "defaultOpenFile": null,
 
   "fileContents": {
     "hello/world.txt": {

@@ -8,7 +8,7 @@
       "filePath": "hello.txt"
     }
   ],
-
+  "defaultOpenFile": null,
   "fileContents": {
     "hello.txt": {
       "fileName": "hello.txt",

@@ -23,6 +23,7 @@
     }
   ],
 
+  "defaultOpenFile": null,
   "fileContents": {
     "hello/world/new.txt": {
       "fileName": "new.txt",

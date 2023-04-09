@@ -29,6 +29,7 @@
       "filePath": "hello/world/japan.txt"
     }
   ],
+  "defaultOpenFile": null,
 
   "fileContents": {
     "hello/world/america.txt": {
