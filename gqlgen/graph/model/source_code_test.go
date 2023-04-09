@@ -6,14 +6,6 @@ import (
 	"testing"
 )
 
-func statusString(expectSuccess bool) string {
-	if expectSuccess {
-		return "success"
-	} else {
-		return "failure"
-	}
-}
-
 func TestSourceCode_Contents(t *testing.T) {
 	type Operation struct {
 		operation     FileSystemOperation
@@ -52,7 +44,7 @@ func TestSourceCode_Contents(t *testing.T) {
 
 					resultSuccess := err == nil
 					if resultSuccess != op.expectSuccess {
-						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s\n", statusString(op.expectSuccess), statusString(resultSuccess))
+						errMsg1 := fmt.Sprintf("operation %t is expected, but result is %t\n", op.expectSuccess, resultSuccess)
 
 						var errMsg2 string = ""
 						if op.expectSuccess {
@@ -273,7 +265,7 @@ func TestSourceCode_Diff(t *testing.T) {
 
 					resultSuccess := err == nil
 					if resultSuccess != op.expectSuccess {
-						errMsg1 := fmt.Sprintf("operation %s is expected, but result is %s\n", statusString(op.expectSuccess), statusString(resultSuccess))
+						errMsg1 := fmt.Sprintf("operation %t is expected, but result is %t\n", op.expectSuccess, resultSuccess)
 
 						var errMsg2 string = ""
 						if op.expectSuccess {
