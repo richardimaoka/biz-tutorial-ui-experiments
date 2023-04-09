@@ -64,7 +64,7 @@ type FileNode {
 type SourceCode {
   fileTree: [FileNode]
   # openFile(filePath: String!): OpenFile
-  # defaultOpenFile: OpenFile
+  defaultOpenFile: OpenFile
 }
 
 type PageState {
