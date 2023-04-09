@@ -30,7 +30,7 @@ func TestTerminal(t *testing.T) {
 					case TypeInCommand:
 						err = terminal.TypeInCommand(v.Command)
 					case ExecuteCommand:
-						err = terminal.ExecuteCommand(v.Command, v.CurrentDirectory, v.Output)
+						err = terminal.ExecuteCommand(v.Command, v.Output, v.CurrentDirectory)
 					default:
 						t.Fatalf("entry %d, op %d faild:\nwrong op.operation has type = %v", i, j, reflect.TypeOf(v))
 						return
@@ -141,5 +141,4 @@ func TestTerminal(t *testing.T) {
 			resultFile: "testdata/terminal/cd2.json"},
 	}
 	t.Run("cd", func(t *testing.T) { runEntries(t, entries) })
-
 }

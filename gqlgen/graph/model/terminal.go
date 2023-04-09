@@ -103,7 +103,7 @@ func (t *Terminal) markCommandExecuted(command string) {
 	lastNode.Content = TerminalCommand{Command: &command, BeforeExecution: &falseValue}
 }
 
-func (t *Terminal) executeCommand(command string, currentDirectory, output *string) {
+func (t *Terminal) executeCommand(command string, output, currentDirectory *string) {
 	t.markCommandExecuted(command)
 	if currentDirectory != nil {
 		t.changeCurrentDirectory(*currentDirectory)

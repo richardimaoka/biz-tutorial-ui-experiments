@@ -65,6 +65,12 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		}
 	}
 
+	if command.DefaultOpenFilePath != nil {
+		if err := p.SourceCode.canSetDefaultOpenFile(*command.DefaultOpenFilePath); err != nil {
+			return nil, fmt.Errorf("cannot execute last command, %s", err)
+		}
+	}
+
 	return terminal, nil
 }
 
@@ -122,6 +128,9 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	if command.Effect != nil {
 		p.SourceCode.applyDiff(command.Effect)
 		p.SourceCode.postMutation()
+	}
+	if command.DefaultOpenFilePath != nil {
+		p.SourceCode.setDefaultOpenFile(*command.DefaultOpenFilePath)
 	}
 	p.gotoNextStep(nextNextStep)
 
