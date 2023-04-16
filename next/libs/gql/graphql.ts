@@ -123,7 +123,7 @@ export type TerminalSimple = {
 
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
-  openFile?:
+  defaultOpenFile?:
     | ({ __typename: "OpenFile" } & {
         " $fragmentRefs"?: {
           FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
@@ -479,18 +479,7 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
           },
           {
             kind: "Field",
-            name: { kind: "Name", value: "openFile" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "filePath" },
-                value: {
-                  kind: "StringValue",
-                  value: "something",
-                  block: false,
-                },
-              },
-            ],
+            name: { kind: "Name", value: "defaultOpenFile" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [

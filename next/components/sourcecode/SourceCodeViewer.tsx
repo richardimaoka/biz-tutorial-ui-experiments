@@ -7,7 +7,7 @@ import { FileContentPane } from "./open-file/FileContentPane";
 const SourceCodeViewer_Fragment = graphql(`
   fragment SourceCodeViewer_Fragment on SourceCode {
     ...FileTreePane_Fragment
-    openFile(filePath: "something") {
+    defaultOpenFile {
       ...FileContentPane_Fragment
     }
   }
@@ -55,9 +55,9 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           overflow: hidden; //necessary for wider-than-width source code
         `}
       >
-        {fragment.openFile ? (
+        {fragment.defaultOpenFile ? (
           <FileContentPane
-            fragment={fragment.openFile}
+            fragment={fragment.defaultOpenFile}
             sourceCodeHeight={sourceCodeHeight}
           />
         ) : (

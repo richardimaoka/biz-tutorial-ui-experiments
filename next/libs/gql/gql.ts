@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-  '\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: "something") {\n      ...FileContentPane_Fragment\n    }\n  }\n':
+  "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
   "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
     types.FileNodeComponent_FragmentFragmentDoc,
@@ -61,8 +61,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: "something") {\n      ...FileContentPane_Fragment\n    }\n  }\n'
-): (typeof documents)['\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: "something") {\n      ...FileContentPane_Fragment\n    }\n  }\n'];
+  source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n"
+): (typeof documents)["\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

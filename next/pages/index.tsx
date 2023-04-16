@@ -26,6 +26,7 @@ const PageQuery = graphql(/* GraphQL */ `
 `);
 
 export default function Home() {
+  // const [openFilePath, setOpenFilePath] = useState<string>("");
   const router = useRouter();
   const { step } = router.query;
   const stepVariable = typeof step === "string" ? step : undefined;
