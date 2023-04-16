@@ -62,6 +62,7 @@ func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal
 
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath string) (*model.OpenFile, error) {
+	// this needs to know step ...
 	return nil, nil
 	// panic(fmt.Errorf("not implemented: OpenFile - openFile"))
 }
