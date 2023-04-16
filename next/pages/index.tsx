@@ -108,6 +108,7 @@ export default function Home() {
             {currentPage?.sourceCode && (
               <SourceCodeViewer
                 fragment={currentPage.sourceCode}
+                step={stepVariable}
                 currentDirectory={currentDirectory}
               />
             )}

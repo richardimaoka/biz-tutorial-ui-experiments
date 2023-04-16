@@ -1,9 +1,10 @@
 import { css } from "@emotion/react";
 
+import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { FileTreePane } from "./file-tree/FileTreePane";
 import { FileContentPane } from "./open-file/FileContentPane";
-import { useEffect, useMemo, useState } from "react";
 
 const SourceCodeViewer_Fragment = graphql(`
   fragment SourceCodeViewer_Fragment on SourceCode {
@@ -11,14 +12,24 @@ const SourceCodeViewer_Fragment = graphql(`
     defaultOpenFile {
       ...FileContentPane_Fragment
     }
-    openFile(filePath: "") {
-      ...FileContentPane_Fragment
+  }
+`);
+
+const OpenFileQuery = graphql(/* GraphQL */ `
+  query OpenFileQuery($step: String, $openFilePath: String!) {
+    pageState(step: $step) {
+      sourceCode {
+        openFile(filePath: $openFilePath) {
+          ...FileContentPane_Fragment
+        }
+      }
     }
   }
 `);
 
 export interface SourceCodeViewerProps {
   fragment: FragmentType<typeof SourceCodeViewer_Fragment>;
+  step: string | undefined;
   currentDirectory?: string;
 }
 
@@ -36,10 +47,10 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
   const [openFilePath, setOpenFilePath] = useState<string>("");
-  const openFile = useMemo(() => {
-    //console("openFile useMemo", fragment.defaultOpenFile, fragment.openFile")
-    return fragment.defaultOpenFile || fragment.openFile;
-  }, [fragment.defaultOpenFile]);
+  const { data } = useQuery(OpenFileQuery, {
+    variables: { step: props.step, openFilePath: openFilePath },
+  });
+  const openFile = data?.pageState?.sourceCode?.openFile;
 
   useEffect(() => {
     console.log("openFilePath useEffect", openFilePath);

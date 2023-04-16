@@ -130,18 +130,33 @@ export type SourceCodeViewer_FragmentFragment = ({
         };
       })
     | null;
-  openFile?:
-    | ({ __typename: "OpenFile" } & {
-        " $fragmentRefs"?: {
-          FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
-        };
-      })
-    | null;
 } & {
   " $fragmentRefs"?: {
     FileTreePane_FragmentFragment: FileTreePane_FragmentFragment;
   };
 }) & { " $fragmentName"?: "SourceCodeViewer_FragmentFragment" };
+
+export type OpenFileQueryQueryVariables = Exact<{
+  step?: InputMaybe<Scalars["String"]>;
+  openFilePath: Scalars["String"];
+}>;
+
+export type OpenFileQueryQuery = {
+  __typename: "Query";
+  pageState?: {
+    __typename: "PageState";
+    sourceCode?: {
+      __typename: "SourceCode";
+      openFile?:
+        | ({ __typename: "OpenFile" } & {
+            " $fragmentRefs"?: {
+              FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
+            };
+          })
+        | null;
+    } | null;
+  } | null;
+};
 
 export type FileNodeComponent_FragmentFragment = ({
   __typename: "FileNode";
@@ -497,26 +512,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
               ],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "openFile" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "filePath" },
-                value: { kind: "StringValue", value: "", block: false },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "FileContentPane_Fragment" },
-                },
-              ],
-            },
-          },
         ],
       },
     },
@@ -667,6 +662,97 @@ export const TerminalComponent_FragmentFragmentDoc = {
     ...TerminalNodeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
+export const OpenFileQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "OpenFileQuery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "openFilePath" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pageState" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "step" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "step" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sourceCode" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "openFile" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "filePath" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "openFilePath" },
+                            },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: {
+                                kind: "Name",
+                                value: "FileContentPane_Fragment",
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...FileContentPane_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<OpenFileQueryQuery, OpenFileQueryQueryVariables>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [
