@@ -473,3 +473,7 @@ func (s *SourceCode) SetDefaultOpenFile(filePath string) error {
 
 	return nil
 }
+
+func (s *SourceCode) SetStep(step string) {
+	s.Step = step
+}

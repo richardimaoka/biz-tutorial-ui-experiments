@@ -107,6 +107,7 @@ func (p *PageState) TypeInCommand(command ActionCommand) error {
 
 	// mutation
 	terminal.typeInCommand(command.Command)
+	p.SourceCode.SetStep(*p.NextStep)
 	p.gotoNextStep(nextNextStep)
 
 	return nil
@@ -129,6 +130,7 @@ func (p *PageState) ExecuteLastCommand(command ActionCommand) error {
 	if command.Effect != nil {
 		p.SourceCode.applyDiff(command.Effect)
 		p.SourceCode.postMutation()
+		p.SourceCode.SetStep(*p.NextStep)
 	}
 	if command.DefaultOpenFilePath != nil {
 		p.SourceCode.setDefaultOpenFile(*command.DefaultOpenFilePath)
@@ -150,6 +152,7 @@ func (p *PageState) ApplyManualUpdate(update ManualUpdate) error {
 	if update.Effect != nil {
 		p.SourceCode.applyDiff(update.Effect)
 		p.SourceCode.postMutation()
+		p.SourceCode.SetStep(*p.NextStep)
 	}
 	if update.DefaultOpenFilePath != nil {
 		p.SourceCode.setDefaultOpenFile(*update.DefaultOpenFilePath)

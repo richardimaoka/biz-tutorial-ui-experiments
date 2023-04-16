@@ -1,4 +1,5 @@
 {
+  "step": "",
   "fileTree": [
     {
       "nodeType": "DIRECTORY",
@@ -22,7 +23,6 @@
       "filePath": "hello/world/japan.txt"
     }
   ],
-
   "defaultOpenFile": null,
   "fileContents": {
     "hello/world/japan.txt": {

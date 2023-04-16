@@ -1,4 +1,5 @@
 {
+  "step": "",
   "fileTree": [
     {
       "nodeType": "FILE",
@@ -8,7 +9,6 @@
       "filePath": "hello.txt"
     }
   ],
-
   "defaultOpenFile": null,
   "fileContents": {
     "hello.txt": {
