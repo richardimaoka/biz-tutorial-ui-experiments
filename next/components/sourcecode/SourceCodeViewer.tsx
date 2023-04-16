@@ -3,11 +3,15 @@ import { css } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { FileTreePane } from "./file-tree/FileTreePane";
 import { FileContentPane } from "./open-file/FileContentPane";
+import { useEffect, useMemo, useState } from "react";
 
 const SourceCodeViewer_Fragment = graphql(`
   fragment SourceCodeViewer_Fragment on SourceCode {
     ...FileTreePane_Fragment
     defaultOpenFile {
+      ...FileContentPane_Fragment
+    }
+    openFile(filePath: "") {
       ...FileContentPane_Fragment
     }
   }
@@ -31,7 +35,15 @@ const EmptyFileContentPane = () => (
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
+  const [openFilePath, setOpenFilePath] = useState<string>("");
+  const openFile = useMemo(() => {
+    //console("openFile useMemo", fragment.defaultOpenFile, fragment.openFile")
+    return fragment.defaultOpenFile || fragment.openFile;
+  }, [fragment.defaultOpenFile]);
 
+  useEffect(() => {
+    console.log("openFilePath useEffect", openFilePath);
+  });
   return (
     <div
       css={css`
@@ -47,6 +59,7 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           fragment={fragment}
           sourceCodeHeight={sourceCodeHeight}
           currentDirectory={props.currentDirectory}
+          updateOpenFilePath={setOpenFilePath}
         />
       </div>
       <div
@@ -55,9 +68,9 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           overflow: hidden; //necessary for wider-than-width source code
         `}
       >
-        {fragment.defaultOpenFile ? (
+        {openFile ? (
           <FileContentPane
-            fragment={fragment.defaultOpenFile}
+            fragment={openFile}
             sourceCodeHeight={sourceCodeHeight}
           />
         ) : (
