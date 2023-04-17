@@ -12,8 +12,8 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	Command             string     `json:"command"`
 	TerminalName        string     `json:"terminalName"`
+	Command             string     `json:"command"`
 	Output              *string    `json:"output"`           //if zero value, no output after execution
 	CurrentDirectory    *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 	Effect              DiffEffect `json:"effect"`

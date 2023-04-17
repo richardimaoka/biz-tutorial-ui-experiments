@@ -8,9 +8,28 @@ import (
 	"strconv"
 )
 
+type NextAction interface {
+	IsNextAction()
+}
+
 type TerminalElement interface {
 	IsTerminalElement()
 }
+
+type ActionManual struct {
+	Comment *string `json:"comment"`
+}
+
+func (ActionManual) IsNextAction() {}
+
+type ActionTerminal struct {
+	Command          *string `json:"command"`
+	TerminalName     *string `json:"terminalName"`
+	Output           *string `json:"output"`
+	CurrentDirectory *string `json:"currentDirectory"`
+}
+
+func (ActionTerminal) IsNextAction() {}
 
 type FileHighlight struct {
 	FromLine *int `json:"fromLine"`
@@ -40,6 +59,7 @@ type PageState struct {
 	PrevStep   *string     `json:"prevStep"`
 	SourceCode *SourceCode `json:"sourceCode"`
 	Terminals  []*Terminal `json:"terminals"`
+	NextAction NextAction  `json:"nextAction"`
 }
 
 type Terminal struct {

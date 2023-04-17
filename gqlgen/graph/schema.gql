@@ -17,6 +17,20 @@ type TerminalOutput {
 
 union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
 
+# TODO: replace with ActionCommand
+type ActionTerminal {
+  command: String
+  terminalName: String
+  output: String
+  currentDirectory: String
+}
+
+type ActionManual {
+  comment: String
+}
+
+union NextAction = ActionTerminal | ActionManual
+
 type TerminalNode {
   content: TerminalElement
 }
@@ -73,6 +87,7 @@ type PageState {
   prevStep: String
   sourceCode: SourceCode
   terminals: [Terminal]
+  nextAction: NextAction
 }
 
 type Query {

@@ -44,6 +44,17 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ActionManual struct {
+		Comment func(childComplexity int) int
+	}
+
+	ActionTerminal struct {
+		Command          func(childComplexity int) int
+		CurrentDirectory func(childComplexity int) int
+		Output           func(childComplexity int) int
+		TerminalName     func(childComplexity int) int
+	}
+
 	FileHighlight struct {
 		FromLine func(childComplexity int) int
 		ToLine   func(childComplexity int) int
@@ -67,6 +78,7 @@ type ComplexityRoot struct {
 	}
 
 	PageState struct {
+		NextAction func(childComplexity int) int
 		NextStep   func(childComplexity int) int
 		PrevStep   func(childComplexity int) int
 		SourceCode func(childComplexity int) int
@@ -137,6 +149,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "ActionManual.comment":
+		if e.complexity.ActionManual.Comment == nil {
+			break
+		}
+
+		return e.complexity.ActionManual.Comment(childComplexity), true
+
+	case "ActionTerminal.command":
+		if e.complexity.ActionTerminal.Command == nil {
+			break
+		}
+
+		return e.complexity.ActionTerminal.Command(childComplexity), true
+
+	case "ActionTerminal.currentDirectory":
+		if e.complexity.ActionTerminal.CurrentDirectory == nil {
+			break
+		}
+
+		return e.complexity.ActionTerminal.CurrentDirectory(childComplexity), true
+
+	case "ActionTerminal.output":
+		if e.complexity.ActionTerminal.Output == nil {
+			break
+		}
+
+		return e.complexity.ActionTerminal.Output(childComplexity), true
+
+	case "ActionTerminal.terminalName":
+		if e.complexity.ActionTerminal.TerminalName == nil {
+			break
+		}
+
+		return e.complexity.ActionTerminal.TerminalName(childComplexity), true
 
 	case "FileHighlight.fromLine":
 		if e.complexity.FileHighlight.FromLine == nil {
@@ -228,6 +275,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Language(childComplexity), true
+
+	case "PageState.nextAction":
+		if e.complexity.PageState.NextAction == nil {
+			break
+		}
+
+		return e.complexity.PageState.NextAction(childComplexity), true
 
 	case "PageState.nextStep":
 		if e.complexity.PageState.NextStep == nil {
@@ -559,6 +613,211 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ActionManual_comment(ctx context.Context, field graphql.CollectedField, obj *model.ActionManual) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ActionManual_comment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Comment, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ActionManual_comment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionManual",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActionTerminal_command(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ActionTerminal_command(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Command, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ActionTerminal_command(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionTerminal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActionTerminal_terminalName(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ActionTerminal_terminalName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TerminalName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ActionTerminal_terminalName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionTerminal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActionTerminal_output(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ActionTerminal_output(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Output, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ActionTerminal_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionTerminal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActionTerminal_currentDirectory(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ActionTerminal_currentDirectory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CurrentDirectory, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ActionTerminal_currentDirectory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionTerminal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _FileHighlight_fromLine(ctx context.Context, field graphql.CollectedField, obj *model.FileHighlight) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_FileHighlight_fromLine(ctx, field)
@@ -1320,6 +1579,47 @@ func (ec *executionContext) fieldContext_PageState_terminals(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _PageState_nextAction(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageState_nextAction(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NextAction, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.NextAction)
+	fc.Result = res
+	return ec.marshalONextAction2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageState_nextAction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageState",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type NextAction does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_pageState(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_pageState(ctx, field)
 	if err != nil {
@@ -1366,6 +1666,8 @@ func (ec *executionContext) fieldContext_Query_pageState(ctx context.Context, fi
 				return ec.fieldContext_PageState_sourceCode(ctx, field)
 			case "terminals":
 				return ec.fieldContext_PageState_terminals(ctx, field)
+			case "nextAction":
+				return ec.fieldContext_PageState_nextAction(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PageState", field.Name)
 		},
@@ -3989,6 +4291,29 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSet, obj model.NextAction) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.ActionTerminal:
+		return ec._ActionTerminal(ctx, sel, &obj)
+	case *model.ActionTerminal:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ActionTerminal(ctx, sel, obj)
+	case model.ActionManual:
+		return ec._ActionManual(ctx, sel, &obj)
+	case *model.ActionManual:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ActionManual(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.SelectionSet, obj model.TerminalElement) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -4022,6 +4347,68 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var actionManualImplementors = []string{"ActionManual", "NextAction"}
+
+func (ec *executionContext) _ActionManual(ctx context.Context, sel ast.SelectionSet, obj *model.ActionManual) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, actionManualImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ActionManual")
+		case "comment":
+
+			out.Values[i] = ec._ActionManual_comment(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var actionTerminalImplementors = []string{"ActionTerminal", "NextAction"}
+
+func (ec *executionContext) _ActionTerminal(ctx context.Context, sel ast.SelectionSet, obj *model.ActionTerminal) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, actionTerminalImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ActionTerminal")
+		case "command":
+
+			out.Values[i] = ec._ActionTerminal_command(ctx, field, obj)
+
+		case "terminalName":
+
+			out.Values[i] = ec._ActionTerminal_terminalName(ctx, field, obj)
+
+		case "output":
+
+			out.Values[i] = ec._ActionTerminal_output(ctx, field, obj)
+
+		case "currentDirectory":
+
+			out.Values[i] = ec._ActionTerminal_currentDirectory(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
 
 var fileHighlightImplementors = []string{"FileHighlight"}
 
@@ -4167,6 +4554,10 @@ func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet
 		case "terminals":
 
 			out.Values[i] = ec._PageState_terminals(ctx, field, obj)
+
+		case "nextAction":
+
+			out.Values[i] = ec._PageState_nextAction(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5245,6 +5636,13 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
+}
+
+func (ec *executionContext) marshalONextAction2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v model.NextAction) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._NextAction(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx context.Context, sel ast.SelectionSet, v *model.OpenFile) graphql.Marshaler {
