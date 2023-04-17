@@ -62,9 +62,26 @@ func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal
 
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath string) (*model.OpenFile, error) {
-	fmt.Printf("OpenFile: %s %s\n", obj.Step, filePath)
-	return nil, nil
-	// panic(fmt.Errorf("not implemented: OpenFile - openFile"))
+	filename := fmt.Sprintf("data/state/state-%s.json", obj.Step)
+	log.Printf("OpenFile() reading data from %s", filename)
+
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var pageState model.PageState
+	err = json.Unmarshal(data, &pageState)
+	if err != nil {
+		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
+	}
+
+	openFile, ok := pageState.SourceCode.FileContents[filePath]
+	if !ok {
+		return nil, fmt.Errorf("internal server error - cannot load openFile %s", filePath)
+	}
+	fmt.Print("oooopenfile", openFile)
+	return &openFile, nil
 }
 
 // Query returns QueryResolver implementation.
