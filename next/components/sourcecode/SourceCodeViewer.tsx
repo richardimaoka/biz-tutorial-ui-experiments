@@ -52,9 +52,6 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   });
   const openFile = data?.pageState?.sourceCode?.openFile;
 
-  useEffect(() => {
-    console.log("openFilePath useEffect", openFilePath);
-  });
   return (
     <div
       css={css`

@@ -17,7 +17,7 @@ const documents = {
     types.SourceCodeViewer_FragmentFragmentDoc,
   "\n  query OpenFileQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      sourceCode {\n        openFile(filePath: $openFilePath) {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n":
     types.OpenFileQueryDocument,
-  "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
+  "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
     types.FileNodeComponent_FragmentFragmentDoc,
   "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n":
     types.FileNodeIcon_FragmentFragmentDoc,
@@ -75,8 +75,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"
-): (typeof documents)["\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"];
+  source: "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"
+): (typeof documents)["\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

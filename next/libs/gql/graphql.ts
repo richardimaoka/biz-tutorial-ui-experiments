@@ -160,6 +160,7 @@ export type OpenFileQueryQuery = {
 
 export type FileNodeComponent_FragmentFragment = ({
   __typename: "FileNode";
+  nodeType?: FileNodeType | null;
   name?: string | null;
   filePath?: string | null;
   offset?: number | null;
@@ -326,6 +327,7 @@ export const FileNodeComponent_FragmentFragmentDoc = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileNodeIcon_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
           { kind: "Field", name: { kind: "Name", value: "name" } },
           { kind: "Field", name: { kind: "Name", value: "filePath" } },
           { kind: "Field", name: { kind: "Name", value: "offset" } },

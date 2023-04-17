@@ -80,7 +80,6 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 	if !ok {
 		return nil, fmt.Errorf("internal server error - cannot load openFile %s", filePath)
 	}
-	fmt.Print("oooopenfile", openFile)
 	return &openFile, nil
 }
 

@@ -5,6 +5,7 @@ import { FileNodeIcon } from "./FileNodeIcon";
 const FileNodeComponent_Fragment = graphql(`
   fragment FileNodeComponent_Fragment on FileNode {
     ...FileNodeIcon_Fragment
+    nodeType
     name
     filePath
     offset
@@ -29,8 +30,7 @@ export const FileNodeComponent = (
     fragment.filePath === props.currentDirectory;
 
   const onClick = () => {
-    console.log("FileNodeComponent onClick", fragment.filePath);
-    if (fragment.filePath) props.updateOpenFilePath(fragment.filePath);
+    fragment.filePath && props.updateOpenFilePath(fragment.filePath);
   };
 
   return (
@@ -45,7 +45,7 @@ export const FileNodeComponent = (
         padding-right: 8px;
         padding-left: ${8 * offset + 8}px;
       `}
-      onClick={onClick}
+      onClick={fragment.nodeType === "FILE" ? onClick : undefined}
     >
       <FileNodeIcon fragment={fragment} />
       <div
