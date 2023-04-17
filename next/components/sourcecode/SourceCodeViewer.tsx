@@ -47,6 +47,7 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
   const [openFilePath, setOpenFilePath] = useState<string>("");
+
   const { data } = useQuery(OpenFileQuery, {
     variables: { step: props.step, openFilePath: openFilePath },
   });
