@@ -39,6 +39,24 @@ export default function Home() {
   const nextStep = currentPage?.nextStep;
   const prevStep = currentPage?.prevStep;
 
+  // CONSIDERING HOW TO IMPLEMENT SERVER-SIDE defaultOpenFile...
+  //
+  // 1. useState style
+  //   this is not going to work, as rendering always triggered twice,
+  //   by page's GraphQL query -> setState
+  // x const [openFile, setOpenFile] = useState<OpenFile>(null);
+  //
+  // const defaultOpenFile = data?.defaultOpenFile
+  //
+  // 2. useMemo style
+  //    this is not going to work either, as useMemo is called only at rendering
+  //    so something e.g. useState should trigger rendering
+  // x const openFile = useMemo(() => {
+  // }, [defaultOpenFile, openFilePath]);
+  //
+  // 3. server-side rendering, where step and defaultOpenFile are query params
+  //    maybe this works???
+
   const terminals = currentPage?.terminals;
   const [currentTerminalIndex] = useState(0);
   const currentTerminal = terminals && terminals[currentTerminalIndex];
@@ -48,6 +66,7 @@ export default function Home() {
 
   // console.log("rendering home", prevStep, step, nextStep);
 
+  // Keyboard navigation to go to next/prev step
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
