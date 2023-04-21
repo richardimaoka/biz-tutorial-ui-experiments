@@ -221,16 +221,27 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	return nil
 }
 
+func processInDir(dir string, f func() error) error {
+	if dir == "" {
+		return fmt.Errorf("dir is empty")
+	} else if strings.HasPrefix(dir, ".") {
+		return fmt.Errorf("dir = %s starts with '.' which is not allowed", dir)
+	}
+
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("mkdir %s failed", dir)
+	}
+	return f()
+}
+
 func Processing() error {
+	prefix := "action"
+
 	// 1. split action-list.json
 	inputDir := "data/input"
-	if os.MkdirAll(inputDir, 0755) != nil {
-		return fmt.Errorf("mkdir %s failed", inputDir)
-	}
-	prefix := "action"
-	if err := SplitActionList("data/action_list.json", inputDir, prefix); err != nil {
-		return err
-	}
+	processInDir(inputDir, func() error {
+		return SplitActionList("data/action_list.json", inputDir, "action")
+	})
 
 	// 2. enrich action files
 	enrichedDir := "data/enriched"
