@@ -221,43 +221,33 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	return nil
 }
 
-func processInDir(dir string, f func() error) error {
-	if dir == "" {
-		return fmt.Errorf("dir is empty")
-	} else if strings.HasPrefix(dir, ".") {
-		return fmt.Errorf("dir = %s starts with '.' which is not allowed", dir)
-	}
-
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("mkdir %s failed", dir)
-	}
-	return f()
-}
-
 func Processing() error {
-	prefix := "action"
+	actionPrefix := "action"
 
 	// 1. split action-list.json
 	inputDir := "data/input"
-	processInDir(inputDir, func() error {
-		return SplitActionList("data/action_list.json", inputDir, "action")
-	})
+	if err := os.MkdirAll(inputDir, 0755); err != nil {
+		return err
+	}
+	if err := SplitActionList("data/action_list.json", inputDir, actionPrefix); err != nil {
+		return err
+	}
 
 	// 2. enrich action files
 	enrichedDir := "data/enriched"
-	if os.MkdirAll(enrichedDir, 0755) != nil {
-		return fmt.Errorf("mkdir %s failed", enrichedDir)
+	if err := os.MkdirAll(enrichedDir, 0755); err != nil {
+		return err
 	}
-	if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichedDir, prefix); err != nil {
+	if err := EnrichActionFiles("data/source_code_ops.json", inputDir, enrichedDir, actionPrefix); err != nil {
 		return err
 	}
 
 	// 3. apply action files
 	stateDir := "data/state"
-	if os.MkdirAll(stateDir, 0755) != nil {
-		return fmt.Errorf("mkdir %s failed", stateDir)
+	if err := os.MkdirAll(stateDir, 0755); err != nil {
+		return err
 	}
-	if err := ApplyActions(enrichedDir, prefix, stateDir, "state"); err != nil {
+	if err := ApplyActions(enrichedDir, actionPrefix, stateDir, "state"); err != nil {
 		return err
 	}
 
