@@ -1,0 +1,18 @@
+[
+  {
+    "name": "add_dir_single",
+    "operations": [
+      {
+        "success": true,
+        "type": "add_dir",
+        "path": "dir1",
+        "files": [
+          {
+            "name": "file1",
+            "content": "file1"
+          }
+        ]
+      }
+    ]
+  }
+]
