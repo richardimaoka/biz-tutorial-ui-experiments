@@ -53,8 +53,9 @@ export default function Home() {
   // x const openFile = useMemo(() => {
   // }, [defaultOpenFile, openFilePath]);
   //
-  // 3. server-side rendering, where step and defaultOpenFile are query params
-  //    maybe this works???
+  // 3. server-side rendering style, where step and defaultOpenFile are query params
+  //    maybe this works??? declaretive style?
+  //    using <Link to=="" /> avoids communication to server?
 
   const terminals = currentPage?.terminals;
   const [currentTerminalIndex] = useState(0);
