@@ -1,6 +1,6 @@
 package model
 
-type TerminalElement2 interface {
+type terminalElement2 interface {
 	String() string
 	ToTerminalElement() TerminalElement
 }
@@ -26,14 +26,14 @@ func (t *terminalCommand) ToTerminalElement() TerminalElement {
 type Terminal2 struct {
 	terminalName     string
 	currentDirectory string
-	elements         []TerminalElement2
+	elements         []terminalElement2
 }
 
 func NewTerminal2(terminalName string) *Terminal2 {
 	return &Terminal2{
 		terminalName:     terminalName,
 		currentDirectory: "",
-		elements:         []TerminalElement2{},
+		elements:         []terminalElement2{},
 	}
 }
 
