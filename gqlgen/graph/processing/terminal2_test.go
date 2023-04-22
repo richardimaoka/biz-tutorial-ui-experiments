@@ -4,17 +4,6 @@ import (
 	"testing"
 )
 
-/*
-   write command
-	 write command x 2
-	 write command, then output
-	 change current directory
-	 clone, mutate and check if origianl not mutaed
-
-
-
-*/
-
 // test case for Terminal2's WriteCommand method
 func TestTerminal2(t *testing.T) {
 	terminal := NewTerminal2("default")
@@ -55,4 +44,19 @@ func TestTerminal2_ChangeCurrentDirectory2(t *testing.T) {
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/cd2.json", result)
+}
+
+func TestTerminal2_Clone(t *testing.T) {
+	terminal := NewTerminal2("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+
+	terminalOriginal := terminal.Clone()
+
+	terminal.WriteCommand("echo def")
+	terminal.WriteOutput("def")
+	terminal.WriteCommand("cd hello/world/thunder")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+	result := terminalOriginal.ToTerminal()
+	compareAfterMarshal(t, "testdata/terminal2/clone.json", result)
 }

@@ -57,7 +57,11 @@ func NewTerminal2(terminalName string) *Terminal2 {
 }
 
 func (t *Terminal2) Clone() *Terminal2 {
-	return nil
+	return &Terminal2{
+		terminalName:     t.terminalName,
+		currentDirectory: t.currentDirectory,
+		elements:         t.elements,
+	}
 }
 
 func (t *Terminal2) ToTerminal() *model.Terminal {
