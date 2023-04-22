@@ -5,6 +5,44 @@ import (
 	"strings"
 )
 
+type fileNodeType string
+
+const (
+	FileNodeTypeFile      fileNodeType = "FILE"
+	FileNodeTypeDirectory fileNodeType = "DIRECTORY"
+)
+
+type fileTreeNode interface {
+	NodeType() fileNodeType
+	FilePath() string
+}
+
+type fileNode struct {
+	filePath string
+	content  string
+}
+
+func (f *fileNode) NodeType() fileNodeType {
+	return FileNodeTypeFile
+}
+
+func (f *fileNode) FilePath() string {
+	return f.filePath
+}
+
+type directoryNode struct {
+	filePath string
+	content  string
+}
+
+func (f *directoryNode) NodeType() fileNodeType {
+	return FileNodeTypeDirectory
+}
+
+func (f *directoryNode) FilePath() string {
+	return f.filePath
+}
+
 func isValidFilePath(filePath string) error {
 	if filePath == "" {
 		return fmt.Errorf("empty path")
