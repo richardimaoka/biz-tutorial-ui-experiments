@@ -49,10 +49,7 @@ type ComplexityRoot struct {
 	}
 
 	ActionTerminal struct {
-		Command          func(childComplexity int) int
-		CurrentDirectory func(childComplexity int) int
-		Output           func(childComplexity int) int
-		TerminalName     func(childComplexity int) int
+		Command func(childComplexity int) int
 	}
 
 	FileHighlight struct {
@@ -163,27 +160,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ActionTerminal.Command(childComplexity), true
-
-	case "ActionTerminal.currentDirectory":
-		if e.complexity.ActionTerminal.CurrentDirectory == nil {
-			break
-		}
-
-		return e.complexity.ActionTerminal.CurrentDirectory(childComplexity), true
-
-	case "ActionTerminal.output":
-		if e.complexity.ActionTerminal.Output == nil {
-			break
-		}
-
-		return e.complexity.ActionTerminal.Output(childComplexity), true
-
-	case "ActionTerminal.terminalName":
-		if e.complexity.ActionTerminal.TerminalName == nil {
-			break
-		}
-
-		return e.complexity.ActionTerminal.TerminalName(childComplexity), true
 
 	case "FileHighlight.fromLine":
 		if e.complexity.FileHighlight.FromLine == nil {
@@ -684,129 +660,6 @@ func (ec *executionContext) _ActionTerminal_command(ctx context.Context, field g
 }
 
 func (ec *executionContext) fieldContext_ActionTerminal_command(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ActionTerminal",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ActionTerminal_terminalName(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ActionTerminal_terminalName(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TerminalName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ActionTerminal_terminalName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ActionTerminal",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ActionTerminal_output(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ActionTerminal_output(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Output, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ActionTerminal_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ActionTerminal",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ActionTerminal_currentDirectory(ctx context.Context, field graphql.CollectedField, obj *model.ActionTerminal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ActionTerminal_currentDirectory(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CurrentDirectory, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ActionTerminal_currentDirectory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ActionTerminal",
 		Field:      field,
@@ -4386,18 +4239,6 @@ func (ec *executionContext) _ActionTerminal(ctx context.Context, sel ast.Selecti
 		case "command":
 
 			out.Values[i] = ec._ActionTerminal_command(ctx, field, obj)
-
-		case "terminalName":
-
-			out.Values[i] = ec._ActionTerminal_terminalName(ctx, field, obj)
-
-		case "output":
-
-			out.Values[i] = ec._ActionTerminal_output(ctx, field, obj)
-
-		case "currentDirectory":
-
-			out.Values[i] = ec._ActionTerminal_currentDirectory(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

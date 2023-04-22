@@ -28,9 +28,6 @@ export type ActionManual = {
 export type ActionTerminal = {
   __typename: "ActionTerminal";
   command?: Maybe<Scalars["String"]>;
-  currentDirectory?: Maybe<Scalars["String"]>;
-  output?: Maybe<Scalars["String"]>;
-  terminalName?: Maybe<Scalars["String"]>;
 };
 
 export type FileHighlight = {

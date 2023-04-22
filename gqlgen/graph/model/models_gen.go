@@ -23,10 +23,7 @@ type ActionManual struct {
 func (ActionManual) IsNextAction() {}
 
 type ActionTerminal struct {
-	Command          *string `json:"command"`
-	TerminalName     *string `json:"terminalName"`
-	Output           *string `json:"output"`
-	CurrentDirectory *string `json:"currentDirectory"`
+	Command *string `json:"command"`
 }
 
 func (ActionTerminal) IsNextAction() {}

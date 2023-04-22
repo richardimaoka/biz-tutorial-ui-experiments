@@ -20,9 +20,6 @@ union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
 # TODO: replace with ActionCommand
 type ActionTerminal {
   command: String
-  terminalName: String
-  output: String
-  currentDirectory: String
 }
 
 type ActionManual {
