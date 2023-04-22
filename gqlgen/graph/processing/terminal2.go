@@ -54,8 +54,9 @@ func (t *TerminalProcessor) WriteCommand(command string) {
 
 func (t *TerminalProcessor) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
 	t.elements = append(t.elements, &terminalCommand{
-		//TODO: reflect promptExpression and promptSymbol
-		command: command,
+		promptExpression: promptExpression,
+		promptSymbol:     promptSymbol,
+		command:          command,
 	})
 }
 

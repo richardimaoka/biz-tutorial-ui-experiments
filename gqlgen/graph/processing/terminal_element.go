@@ -9,7 +9,7 @@ type terminalElement interface {
 
 type terminalCommand struct {
 	promptExpression string
-	promptSymbol     string
+	promptSymbol     rune
 	command          string
 }
 
