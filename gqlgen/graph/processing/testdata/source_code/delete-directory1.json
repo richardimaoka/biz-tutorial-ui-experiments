@@ -1,0 +1,14 @@
+{
+  "step": "",
+  "fileTree": [
+    {
+      "nodeType": "DIRECTORY",
+      "offset": 0,
+      "isUpdated": false,
+      "name": "hello",
+      "filePath": "hello"
+    }
+  ],
+  "defaultOpenFile": null,
+  "fileContents": {}
+}

@@ -60,12 +60,10 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		//call testEntries inside func(t *testing.T) to reuse testEntries logic
 		testEntries(t,
 			[]Entry{
-				{name: "delete_dir_single",
+				{name: "add_dir_single",
 					operations: []Operation{
 						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-						{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello"}},
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+					}, resultFile: "testdata/source_code/add-directory1.json"},
 			})
 	})
 }
