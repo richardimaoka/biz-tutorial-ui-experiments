@@ -1,8 +1,12 @@
-package model
+package processing
+
+import (
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+)
 
 type terminalElement2 interface {
 	String() string
-	ToTerminalElement() TerminalElement
+	ToTerminalElement() model.TerminalElement
 }
 
 type terminalCommand struct {
@@ -15,9 +19,9 @@ func (t *terminalCommand) String() string {
 	return t.command
 }
 
-func (t *terminalCommand) ToTerminalElement() TerminalElement {
+func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
 	falseValue := false
-	return &TerminalCommand{
+	return &model.TerminalCommand{
 		BeforeExecution: &falseValue,
 		Command:         &t.command,
 	}
@@ -41,20 +45,20 @@ func (t *Terminal2) Clone() *Terminal2 {
 	return nil
 }
 
-func (t *Terminal2) ToTerminal() *Terminal {
+func (t *Terminal2) ToTerminal() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
 		currentDirectory = &t.currentDirectory
 	}
 
-	var nodes []*TerminalNode
+	var nodes []*model.TerminalNode
 	for _, e := range t.elements {
-		nodes = append(nodes, &TerminalNode{
+		nodes = append(nodes, &model.TerminalNode{
 			Content: e.ToTerminalElement(),
 		})
 	}
 
-	return &Terminal{
+	return &model.Terminal{
 		Name:             &t.terminalName,
 		CurrentDirectory: currentDirectory,
 		Nodes:            nodes,
