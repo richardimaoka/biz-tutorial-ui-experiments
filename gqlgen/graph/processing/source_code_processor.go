@@ -2,6 +2,7 @@ package processing
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -24,6 +25,18 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	}
+
+	currentPath := []string{}
+	split := strings.Split(op.FilePath, "/")
+
+	childDir := split[0]
+	currentPath = append(currentPath, childDir)
+
+	_, exists := p.fileTree[childDir]
+	if exists {
+		errorFilePath := strings.Join(currentPath, "/")
+		return fmt.Errorf("cannot add directory %s, path = %s already exists", op.FilePath, errorFilePath)
 	}
 
 	p.fileTree[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, children: make(map[string]fileTreeNode)}
