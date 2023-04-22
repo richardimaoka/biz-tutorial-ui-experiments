@@ -73,6 +73,7 @@ func (t *Terminal2) WriteCommand(command string) {
 
 func (t *Terminal2) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
 	t.elements = append(t.elements, &terminalCommand{
+		//TODO: reflect promptExpression and promptSymbol
 		command: command,
 	})
 }

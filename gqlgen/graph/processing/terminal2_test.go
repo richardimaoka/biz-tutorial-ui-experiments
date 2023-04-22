@@ -27,4 +27,8 @@ func TestTerminal2_WriteCommand(t *testing.T) {
 	terminal.WriteCommand("mkdir abc")
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/write-command1.json", result)
+
+	terminal.WriteCommand("mkdir def")
+	result = terminal.ToTerminal()
+	compareAfterMarshal(t, "testdata/terminal2/write-command2.json", result)
 }
