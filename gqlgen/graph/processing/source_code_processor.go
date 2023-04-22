@@ -27,19 +27,21 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
+	currentTree := p.fileTree
 	currentPath := []string{}
 	split := strings.Split(op.FilePath, "/")
 
-	childDir := split[0]
+	i := 0
+	childDir := split[i]
 	currentPath = append(currentPath, childDir)
 
-	_, exists := p.fileTree[childDir]
+	_, exists := currentTree[childDir]
 	if exists {
 		errorFilePath := strings.Join(currentPath, "/")
 		return fmt.Errorf("cannot add directory %s, path = %s already exists", op.FilePath, errorFilePath)
 	}
 
-	p.fileTree[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, children: make(map[string]fileTreeNode)}
+	currentTree[childDir] = &directoryProcessorNode{filePath: op.FilePath, children: make(map[string]fileTreeNode)}
 
 	// // 2. depth search
 	// currentTree := p.fileTree
