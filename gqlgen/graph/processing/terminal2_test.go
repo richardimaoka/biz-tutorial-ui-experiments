@@ -32,3 +32,11 @@ func TestTerminal2_WriteCommand(t *testing.T) {
 	result = terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/write-command2.json", result)
 }
+
+func TestTerminal2_WriteOutput(t *testing.T) {
+	terminal := NewTerminal2("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+	result := terminal.ToTerminal()
+	compareAfterMarshal(t, "testdata/terminal2/write-output1.json", result)
+}

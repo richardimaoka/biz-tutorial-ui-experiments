@@ -4,7 +4,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-type terminalElement2 interface {
+type terminalElement interface {
 	String() string
 	ToTerminalElement() model.TerminalElement
 }
@@ -15,8 +15,17 @@ type terminalCommand struct {
 	command          string
 }
 
+type terminalOutput struct {
+	output string
+}
+
 func (t *terminalCommand) String() string {
+	//TODO: reflect promptExpression and promptSymbol
 	return t.command
+}
+
+func (t *terminalOutput) String() string {
+	return t.output
 }
 
 func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
@@ -27,17 +36,23 @@ func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
 	}
 }
 
+func (t *terminalOutput) ToTerminalElement() model.TerminalElement {
+	return &model.TerminalOutput{
+		Output: &t.output,
+	}
+}
+
 type Terminal2 struct {
 	terminalName     string
 	currentDirectory string
-	elements         []terminalElement2
+	elements         []terminalElement
 }
 
 func NewTerminal2(terminalName string) *Terminal2 {
 	return &Terminal2{
 		terminalName:     terminalName,
 		currentDirectory: "",
-		elements:         []terminalElement2{},
+		elements:         []terminalElement{},
 	}
 }
 
@@ -78,8 +93,10 @@ func (t *Terminal2) WriteCommandWithPrompt(promptExpression string, promptSymbol
 	})
 }
 
-func (t *Terminal2) WriteCommandOutput(output string) error {
-	return nil
+func (t *Terminal2) WriteOutput(output string) {
+	t.elements = append(t.elements, &terminalOutput{
+		output: output,
+	})
 }
 
 func (t *Terminal2) ChangeCurrentDirectory(dir string) error {
