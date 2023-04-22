@@ -2,6 +2,25 @@ package model
 
 type TerminalElement2 interface {
 	String() string
+	ToTerminalElement() TerminalElement
+}
+
+type terminalCommand struct {
+	promptExpression string
+	promptSymbol     string
+	command          string
+}
+
+func (t *terminalCommand) String() string {
+	return t.command
+}
+
+func (t *terminalCommand) ToTerminalElement() TerminalElement {
+	falseValue := false
+	return &TerminalCommand{
+		BeforeExecution: &falseValue,
+		Command:         &t.command,
+	}
 }
 
 type Terminal2 struct {
@@ -28,22 +47,30 @@ func (t *Terminal2) ToTerminal() *Terminal {
 		currentDirectory = &t.currentDirectory
 	}
 
+	var nodes []*TerminalNode
+	for _, e := range t.elements {
+		nodes = append(nodes, &TerminalNode{
+			Content: e.ToTerminalElement(),
+		})
+	}
+
 	return &Terminal{
 		Name:             &t.terminalName,
 		CurrentDirectory: currentDirectory,
-		Nodes:            nil,
+		Nodes:            nodes,
 	}
 }
 
-func (t *Terminal2) WriteCommand(commandPrefix, command string) *Terminal2 {
+func (t *Terminal2) WriteCommand(command string) {
 	defaultPromptExpression := ""
 	defaultPromptSymbol := '$'
 	t.WriteCommandWithPrompt(defaultPromptExpression, defaultPromptSymbol, command)
-	return nil
 }
 
-func (t *Terminal2) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) *Terminal2 {
-	return nil
+func (t *Terminal2) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
+	t.elements = append(t.elements, &terminalCommand{
+		command: command,
+	})
 }
 
 func (t *Terminal2) WriteCommandOutput(output string) error {

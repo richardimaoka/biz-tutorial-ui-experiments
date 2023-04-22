@@ -5,7 +5,7 @@
     {
       "content": {
         "contentType": "TerminalCommand",
-        "beforeExecution": true,
+        "beforeExecution": false,
         "command": "mkdir abc"
       }
     }
