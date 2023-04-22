@@ -26,26 +26,6 @@ func (t *TerminalProcessor) Clone() *TerminalProcessor {
 	}
 }
 
-func (t *TerminalProcessor) ToTerminal() *model.Terminal {
-	var currentDirectory *string
-	if t.currentDirectory != "" {
-		currentDirectory = &t.currentDirectory
-	}
-
-	var nodes []*model.TerminalNode
-	for _, e := range t.elements {
-		nodes = append(nodes, &model.TerminalNode{
-			Content: e.ToTerminalElement(),
-		})
-	}
-
-	return &model.Terminal{
-		Name:             &t.terminalName,
-		CurrentDirectory: currentDirectory,
-		Nodes:            nodes,
-	}
-}
-
 func (t *TerminalProcessor) WriteCommand(command string) {
 	defaultPromptExpression := ""
 	defaultPromptSymbol := '$'
@@ -68,4 +48,24 @@ func (t *TerminalProcessor) WriteOutput(output string) {
 
 func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
+}
+
+func (t *TerminalProcessor) ToTerminal() *model.Terminal {
+	var currentDirectory *string
+	if t.currentDirectory != "" {
+		currentDirectory = &t.currentDirectory
+	}
+
+	var nodes []*model.TerminalNode
+	for _, e := range t.elements {
+		nodes = append(nodes, &model.TerminalNode{
+			Content: e.ToTerminalElement(),
+		})
+	}
+
+	return &model.Terminal{
+		Name:             &t.terminalName,
+		CurrentDirectory: currentDirectory,
+		Nodes:            nodes,
+	}
 }
