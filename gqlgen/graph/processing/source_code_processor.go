@@ -26,7 +26,7 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	p.fileTree[op.FilePath] = &directoryNode{filePath: op.FilePath, children: make(map[string]fileNode)}
+	p.fileTree[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, children: make(map[string]fileTreeNode)}
 
 	// // 2. depth search
 	// currentTree := p.fileTree
@@ -70,6 +70,20 @@ func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
 
 func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 	return nil
+}
+
+func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
+	fileTree := []*model.FileNode{}
+	for _, v := range p.fileTree {
+		fileTree = append(fileTree, createDirectoryNode(v.FilePath()))
+	}
+
+	fileContents := make(map[string]model.OpenFile)
+	return &model.SourceCode{
+		Step:         "",
+		FileTree:     fileTree,
+		FileContents: fileContents,
+	}
 }
 
 /*
