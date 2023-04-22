@@ -4,15 +4,15 @@ import (
 	"testing"
 )
 
-// test case for Terminal2's WriteCommand method
+// test case for TerminalProcessor's WriteCommand method
 func TestTerminal2(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/new-terminal.json", result)
 }
 
 func TestTerminal2_WriteCommand(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("mkdir abc")
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/write-command1.json", result)
@@ -23,7 +23,7 @@ func TestTerminal2_WriteCommand(t *testing.T) {
 }
 
 func TestTerminal2_WriteOutput(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("echo abc")
 	terminal.WriteOutput("abc")
 	result := terminal.ToTerminal()
@@ -31,7 +31,7 @@ func TestTerminal2_WriteOutput(t *testing.T) {
 }
 
 func TestTerminal2_ChangeCurrentDirectory1(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("cd hello")
 	terminal.ChangeCurrentDirectory("hello")
 	result := terminal.ToTerminal()
@@ -39,7 +39,7 @@ func TestTerminal2_ChangeCurrentDirectory1(t *testing.T) {
 }
 
 func TestTerminal2_ChangeCurrentDirectory2(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("cd hello/world/thunder")
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
 	result := terminal.ToTerminal()
@@ -47,7 +47,7 @@ func TestTerminal2_ChangeCurrentDirectory2(t *testing.T) {
 }
 
 func TestTerminal2_Clone(t *testing.T) {
-	terminal := NewTerminal2("default")
+	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("echo abc")
 	terminal.WriteOutput("abc")
 
