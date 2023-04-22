@@ -40,3 +40,19 @@ func TestTerminal2_WriteOutput(t *testing.T) {
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal2/write-output1.json", result)
 }
+
+func TestTerminal2_ChangeCurrentDirectory1(t *testing.T) {
+	terminal := NewTerminal2("default")
+	terminal.WriteCommand("cd hello")
+	terminal.ChangeCurrentDirectory("hello")
+	result := terminal.ToTerminal()
+	compareAfterMarshal(t, "testdata/terminal2/cd1.json", result)
+}
+
+func TestTerminal2_ChangeCurrentDirectory2(t *testing.T) {
+	terminal := NewTerminal2("default")
+	terminal.WriteCommand("cd hello/world/thunder")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+	result := terminal.ToTerminal()
+	compareAfterMarshal(t, "testdata/terminal2/cd2.json", result)
+}

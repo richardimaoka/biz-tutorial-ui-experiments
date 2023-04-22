@@ -99,6 +99,6 @@ func (t *Terminal2) WriteOutput(output string) {
 	})
 }
 
-func (t *Terminal2) ChangeCurrentDirectory(dir string) error {
-	return nil
+func (t *Terminal2) ChangeCurrentDirectory(dir string) {
+	t.currentDirectory = dir
 }
