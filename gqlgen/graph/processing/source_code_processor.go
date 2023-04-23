@@ -27,44 +27,34 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2.1 initialize currentTree to root
-	currentTree := p.fileTree
-	currentPath := []string{}
-
-	// 2.2 traverse p.fileTree up to last-1 depth
+	// 2.2 check intermediate nodes
 	split := strings.Split(op.FilePath, "/")
+	currentPath := []string{}
 	for i := 0; i < len(split)-1; /*up to last-1 depth*/ i++ {
 		childDir := split[i]
 		currentPath = append(currentPath, childDir)
 
-		childNode, exists := currentTree[childDir]
+		childNode, exists := p.fileTree[strings.Join(currentPath, "/")]
 		if exists {
-			// 2.2.1 if child node already exists, it should be directory
-			switch v := childNode.(type) {
-			case *directoryProcessorNode:
-				currentTree = v.children
-			default:
+			if childNode.NodeType() == fileType {
 				return fmt.Errorf("cannot add directory %s, path = %s already exists as a file", op.FilePath, currentPath)
 			}
+			// else NodeType() == directoryType, which is ok
 		} else {
 			// 2.2.2 if child node doesn't exist, add an intermediate directory
 		}
 	}
 
-	// 3. add directory at the last depth
-	childDir := split[len(split)-1]
-	currentPath = append(currentPath, childDir)
-	childNode, exists := currentTree[childDir]
-	if exists {
-		switch childNode.(type) {
-		case *directoryProcessorNode:
-			return fmt.Errorf("cannot add directory %s, path = %s already exists as a directory", op.FilePath, currentPath)
-		default:
-			return fmt.Errorf("cannot add directory %s, path = %s already exists as a file", op.FilePath, currentPath)
-		}
+	// 3. isUpdated to false
+	for _, v := range p.fileTree {
+		v.SetIsUpdated(false)
 	}
 
-	currentTree[childDir] = &directoryProcessorNode{filePath: op.FilePath, children: make(map[string]fileTreeNode)}
+	// 4. add directory at the last depth
+	if childNode, exists := p.fileTree[op.FilePath]; exists {
+		return fmt.Errorf("cannot add directory %s, path = %s already exists as %s", op.FilePath, op.FilePath, childNode.NodeType())
+	}
+	p.fileTree[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 
 	return nil
 }
@@ -85,23 +75,12 @@ func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 	return nil
 }
 
-func recurse(resultNodes []*model.FileNode, currentTree map[string]fileTreeNode) []*model.FileNode {
-	for _, v := range currentTree {
-		switch n := v.(type) {
-		case *directoryProcessorNode:
-			resultNodes = append(resultNodes, createDirectoryNode(n.FilePath()))
-			resultNodes = recurse(resultNodes, n.children)
-		case *fileProcessorNode:
-			resultNodes = append(resultNodes, createFileNode(v.FilePath()))
-		}
-	}
-
-	return resultNodes
-}
-
 func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
 	resultNodes := []*model.FileNode{}
-	resultNodes = recurse(resultNodes, p.fileTree)
+
+	for _, v := range p.fileTree {
+		resultNodes = append(resultNodes, createDirectoryNode(v.FilePath(), v.IsUpdated()))
+	}
 
 	fileContents := make(map[string]model.OpenFile)
 	return &model.SourceCode{

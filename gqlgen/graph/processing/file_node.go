@@ -17,6 +17,7 @@ const (
 type fileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
+	IsUpdated() bool
 	SetIsUpdated(isUpdated bool)
 }
 
@@ -28,32 +29,39 @@ type fileProcessorNode struct {
 
 type directoryProcessorNode struct {
 	filePath  string
-	children  map[string]fileTreeNode
 	isUpdated bool
 }
 
-func (f *fileProcessorNode) NodeType() nodeType {
+func (n *fileProcessorNode) NodeType() nodeType {
 	return fileType
 }
 
-func (f *directoryProcessorNode) NodeType() nodeType {
+func (n *directoryProcessorNode) NodeType() nodeType {
 	return directoryType
 }
 
-func (f *fileProcessorNode) FilePath() string {
-	return f.filePath
+func (n *fileProcessorNode) FilePath() string {
+	return n.filePath
 }
 
-func (f *directoryProcessorNode) FilePath() string {
-	return f.filePath
+func (n *directoryProcessorNode) FilePath() string {
+	return n.filePath
 }
 
-func (f *fileProcessorNode) SetIsUpdated(isUpdated bool) {
-	f.isUpdated = isUpdated
+func (n *fileProcessorNode) IsUpdated() bool {
+	return n.isUpdated
 }
 
-func (f *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
-	f.isUpdated = isUpdated
+func (n *directoryProcessorNode) IsUpdated() bool {
+	return n.isUpdated
+}
+
+func (n *fileProcessorNode) SetIsUpdated(isUpdated bool) {
+	n.isUpdated = isUpdated
+}
+
+func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
+	n.isUpdated = isUpdated
 }
 
 func isValidFilePath(filePath string) error {
@@ -77,18 +85,17 @@ func filePathPtrSlice(filePath string) []*string {
 	return filePathSlice
 }
 
-func createDirectoryNode(filePath string) *model.FileNode {
+func createDirectoryNode(filePath string, isUpdated bool) *model.FileNode {
 	nodeType := model.FileNodeTypeDirectory
 	split := filePathPtrSlice(filePath)
 	offset := len(split) - 1
-	trueValue := true
 
 	node := model.FileNode{
 		NodeType:  &nodeType,
 		Name:      split[len(split)-1],
 		FilePath:  &filePath,
 		Offset:    &offset,
-		IsUpdated: &trueValue,
+		IsUpdated: &isUpdated,
 	}
 	return &node
 }

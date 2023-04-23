@@ -77,10 +77,10 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		//reuse testEntries logic
 		testEntries(t,
 			[]Entry{
-				// {name: "add_dir_single",
-				// 	operations: []Operation{
-				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-				// 	}, resultFile: "testdata/source_code/add-directory1.json"},
+				{name: "add_dir_single",
+					operations: []Operation{
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+					}, resultFile: "testdata/source_code/add-directory1.json"},
 
 				{name: "add_dir_nested",
 					operations: []Operation{
