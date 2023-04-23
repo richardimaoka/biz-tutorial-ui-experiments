@@ -2,6 +2,7 @@ package processing
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
@@ -76,11 +77,24 @@ func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
+	keys := make([]string, 0)
+	for k := range p.fileMap {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return LessFilePath(keys[i], keys[j])
+	})
+
+	return keys
+}
+
 func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
 	resultNodes := []*model.FileNode{}
-
-	for _, v := range p.fileMap {
-		resultNodes = append(resultNodes, createDirectoryNode(v.FilePath(), v.IsUpdated()))
+	keys := p.sortedFileMapKeys()
+	for i := 0; i < len(keys); i++ {
+		node := p.fileMap[keys[i]]
+		resultNodes = append(resultNodes, createDirectoryNode(node.FilePath(), node.IsUpdated()))
 	}
 
 	fileContents := make(map[string]model.OpenFile)

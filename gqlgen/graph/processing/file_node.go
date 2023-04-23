@@ -1,9 +1,6 @@
 package processing
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
@@ -62,27 +59,6 @@ func (n *fileProcessorNode) SetIsUpdated(isUpdated bool) {
 
 func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
 	n.isUpdated = isUpdated
-}
-
-func isValidFilePath(filePath string) error {
-	if filePath == "" {
-		return fmt.Errorf("empty path")
-	}
-	if strings.HasSuffix(filePath, "/") {
-		return fmt.Errorf("directory path = %s ends in slash", filePath)
-	}
-	return nil
-}
-
-func filePathPtrSlice(filePath string) []*string {
-	split := strings.Split(filePath, "/")
-
-	var filePathSlice []*string
-	for i := range split {
-		filePathSlice = append(filePathSlice, &split[i]) // cannot use v of `for i, v := range ...` because v has the same address throughout the loop
-	}
-
-	return filePathSlice
 }
 
 func createDirectoryNode(filePath string, isUpdated bool) *model.FileNode {
