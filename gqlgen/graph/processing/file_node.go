@@ -16,6 +16,7 @@ type fileTreeNode interface {
 	FilePath() string
 	IsUpdated() bool
 	SetIsUpdated(isUpdated bool)
+	//TODO: Clone() fileTreeNode
 }
 
 type fileProcessorNode struct {
