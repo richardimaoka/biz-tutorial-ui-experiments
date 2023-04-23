@@ -92,7 +92,7 @@ func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
 }
 
 func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
-	resultNodes := []*model.FileNode{}
+	var resultNodes []*model.FileNode
 	keys := p.sortedFileMapKeys()
 	for i := 0; i < len(keys); i++ {
 		node := p.fileMap[keys[i]]

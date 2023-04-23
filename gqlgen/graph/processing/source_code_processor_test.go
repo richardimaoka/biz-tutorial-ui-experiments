@@ -59,7 +59,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	}
 
 	// accept testEntries, and run tests on them
-	testEntries := func(t *testing.T, testEntries []Entry) {
+	runEntries := func(t *testing.T, testEntries []Entry) {
 		for _, e := range testEntries {
 			t.Run(e.name, func(t *testing.T) {
 				processor := NewSourceCodeProcessor()
@@ -72,10 +72,16 @@ func Test_SourceCodeProcessor(t *testing.T) {
 			})
 		}
 	}
+	t.Run("new_source_code", func(t *testing.T) {
+		runEntries(t, []Entry{
+			{name: "new",
+				operations: []Operation{}, resultFile: "testdata/source_code/new-source-code.json"},
+		})
+	})
 
 	t.Run("add_directory", func(t *testing.T) {
-		//reuse testEntries logic
-		testEntries(t,
+		//reuse runEntries logic
+		runEntries(t,
 			[]Entry{
 				{name: "add_dir_single",
 					operations: []Operation{
@@ -92,6 +98,18 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					operations: []Operation{
 						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
 					}, resultFile: "testdata/source_code/add-directory3.json"},
+
+				{name: "add_dir_multiple",
+					operations: []Operation{
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "aloha"}},
+					}, resultFile: "testdata/source_code/add-directory4.json"},
+
+				{name: "error_add_dir_empty",
+					operations: []Operation{
+						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
+					}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+
 				// {name: "error_add_dir_duplicate1",
 				// 	operations: []Operation{
 				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
