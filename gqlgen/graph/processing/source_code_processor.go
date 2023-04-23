@@ -10,14 +10,14 @@ import (
 type SourceCodeProcessor struct {
 	step                string
 	defaultOpenFilePath string
-	fileTree            map[string]fileTreeNode
+	fileMap             map[string]fileTreeNode
 }
 
 func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
 		step:                "init",
 		defaultOpenFilePath: "",
-		fileTree:            make(map[string]fileTreeNode),
+		fileMap:             make(map[string]fileTreeNode),
 	}
 }
 
@@ -34,7 +34,7 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		childDir := split[i]
 		currentPath = append(currentPath, childDir)
 
-		childNode, exists := p.fileTree[strings.Join(currentPath, "/")]
+		childNode, exists := p.fileMap[strings.Join(currentPath, "/")]
 		if exists {
 			if childNode.NodeType() == fileType {
 				return fmt.Errorf("cannot add directory %s, path = %s already exists as a file", op.FilePath, currentPath)
@@ -46,15 +46,15 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 	}
 
 	// 3. isUpdated to false
-	for _, v := range p.fileTree {
+	for _, v := range p.fileMap {
 		v.SetIsUpdated(false)
 	}
 
 	// 4. add directory at the last depth
-	if childNode, exists := p.fileTree[op.FilePath]; exists {
+	if childNode, exists := p.fileMap[op.FilePath]; exists {
 		return fmt.Errorf("cannot add directory %s, path = %s already exists as %s", op.FilePath, op.FilePath, childNode.NodeType())
 	}
-	p.fileTree[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
+	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 
 	return nil
 }
@@ -78,7 +78,7 @@ func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
 	resultNodes := []*model.FileNode{}
 
-	for _, v := range p.fileTree {
+	for _, v := range p.fileMap {
 		resultNodes = append(resultNodes, createDirectoryNode(v.FilePath(), v.IsUpdated()))
 	}
 
