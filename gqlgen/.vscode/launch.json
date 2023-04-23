@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch test function",
+      "type": "go",
+      "request": "launch",
+      "mode": "test",
+      "trace": "verbose",
+      "program": "${workspaceFolder}/graph/processing",
+      "args": ["-test.run", "Test_SourceCodeProcessor"]
+    },
+    {
       "name": "Launch file",
       "type": "go",
       "request": "launch",

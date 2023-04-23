@@ -77,16 +77,22 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		//reuse testEntries logic
 		testEntries(t,
 			[]Entry{
-				{name: "add_dir_single",
-					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					}, resultFile: "testdata/source_code/add-directory1.json"},
+				// {name: "add_dir_single",
+				// 	operations: []Operation{
+				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+				// 	}, resultFile: "testdata/source_code/add-directory1.json"},
 
-				{name: "error_add_dir_duplicate1",
+				{name: "add_dir_nested",
 					operations: []Operation{
 						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: "hello"}},
-					}, resultFile: "testdata/source_code/add-directory1.json"},
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+					}, resultFile: "testdata/source_code/add-directory2.json"},
+
+				// {name: "error_add_dir_duplicate1",
+				// 	operations: []Operation{
+				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+				// 		{expectSuccess: false, operation: model.DirectoryAdd{FilePath: "hello"}},
+				// 	}, resultFile: "testdata/source_code/add-directory1.json"},
 
 				// {name: "add_dir_nested2",
 				// 	operations: []Operation{

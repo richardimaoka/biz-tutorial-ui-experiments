@@ -17,16 +17,19 @@ const (
 type fileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
+	SetIsUpdated(isUpdated bool)
 }
 
 type fileProcessorNode struct {
-	filePath string
-	content  string
+	filePath  string
+	content   string
+	isUpdated bool
 }
 
 type directoryProcessorNode struct {
-	filePath string
-	children map[string]fileTreeNode
+	filePath  string
+	children  map[string]fileTreeNode
+	isUpdated bool
 }
 
 func (f *fileProcessorNode) NodeType() nodeType {
@@ -43,6 +46,14 @@ func (f *fileProcessorNode) FilePath() string {
 
 func (f *directoryProcessorNode) FilePath() string {
 	return f.filePath
+}
+
+func (f *fileProcessorNode) SetIsUpdated(isUpdated bool) {
+	f.isUpdated = isUpdated
+}
+
+func (f *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
+	f.isUpdated = isUpdated
 }
 
 func isValidFilePath(filePath string) error {
