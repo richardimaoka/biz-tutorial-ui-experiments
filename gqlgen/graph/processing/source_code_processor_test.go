@@ -88,6 +88,10 @@ func Test_SourceCodeProcessor(t *testing.T) {
 						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
 					}, resultFile: "testdata/source_code/add-directory2.json"},
 
+				{name: "add_dir_nested2",
+					operations: []Operation{
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+					}, resultFile: "testdata/source_code/add-directory3.json"},
 				// {name: "error_add_dir_duplicate1",
 				// 	operations: []Operation{
 				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},

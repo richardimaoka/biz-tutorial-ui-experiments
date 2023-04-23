@@ -27,7 +27,12 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2.2 check intermediate nodes
+	// 2. isUpdated to false
+	for _, v := range p.fileMap {
+		v.SetIsUpdated(false)
+	}
+
+	// 3. check intermediate nodes
 	split := strings.Split(op.FilePath, "/")
 	currentPath := []string{}
 	for i := 0; i < len(split)-1; /*up to last-1 depth*/ i++ {
@@ -41,13 +46,9 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 			}
 			// else NodeType() == directoryType, which is ok
 		} else {
-			// 2.2.2 if child node doesn't exist, add an intermediate directory
+			// if child node doesn't exist, add an intermediate directory
+			p.fileMap[strings.Join(currentPath, "/")] = &directoryProcessorNode{filePath: strings.Join(currentPath, "/"), isUpdated: true}
 		}
-	}
-
-	// 3. isUpdated to false
-	for _, v := range p.fileMap {
-		v.SetIsUpdated(false)
 	}
 
 	// 4. add directory at the last depth
