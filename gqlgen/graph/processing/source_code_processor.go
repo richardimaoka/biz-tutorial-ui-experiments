@@ -82,6 +82,21 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 }
 
 func (p *SourceCodeProcessor) AddFile(op model.FileAdd) error {
+	// 1. validate file path
+	if err := isValidFilePath(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	}
+
+	// 2. check if there no file conflicts
+	if err := p.confirmNoFileConflict(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	}
+
+	// 3 mutation
+	p.setAllIsUpdateFalse()
+	p.addMissingParentDirs(op.FilePath)
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true}
+
 	return nil
 }
 
