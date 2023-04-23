@@ -14,6 +14,46 @@ type SourceCodeProcessor struct {
 	fileMap             map[string]fileTreeNode
 }
 
+func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
+	// 1. check if no intermediate parent is file node
+	split := strings.Split(filePath, "/")
+	parentPath := []string{}
+	for i := 0; i < len(split)-1; /*up to direct parent of filePath*/ i++ {
+		parentPath = append(parentPath, split[i])
+		parentNode, exists := p.fileMap[strings.Join(parentPath, "/")]
+		if exists && parentNode.NodeType() == fileType {
+			return fmt.Errorf("parent path = %s already exists as a file", parentPath)
+		}
+	}
+
+	// 2. check if the last node is non-existent
+	lastNode, exists := p.fileMap[filePath]
+	if exists {
+		return fmt.Errorf("path = %s already exists as a %s", parentPath, lastNode.NodeType())
+	}
+
+	return nil
+}
+
+// this must be called after confirmNoFileConflict(), otherwise behavior is not guaranteed
+func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
+	split := strings.Split(filePath, "/")
+	parentPath := []string{}
+	for i := 0; i < len(split)-1; /*up to direct parent of filePath*/ i++ {
+		parentPath = append(parentPath, split[i])
+		_, exists := p.fileMap[strings.Join(parentPath, "/")]
+		if !exists {
+			p.fileMap[strings.Join(parentPath, "/")] = &directoryProcessorNode{filePath: strings.Join(parentPath, "/"), isUpdated: true}
+		}
+	}
+}
+
+func (p *SourceCodeProcessor) setAllIsUpdateFalse() {
+	for _, v := range p.fileMap {
+		v.SetIsUpdated(false)
+	}
+}
+
 func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
 		step:                "init",
@@ -28,37 +68,15 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2.1. check if there is no intermediate file node in the path
-	split := strings.Split(op.FilePath, "/")
-	currentPath := []string{}
-	for i := 0; i < len(split)-1; /*up to last-1 depth*/ i++ {
-		currentPath = append(currentPath, split[i])
-		currentNode, exists := p.fileMap[strings.Join(currentPath, "/")]
-		if exists && currentNode.NodeType() == fileType {
-			return fmt.Errorf("cannot add directory %s, path = %s already exists as a file", op.FilePath, currentPath)
-		}
+	// 2. check if there no file conflicts
+	if err := p.confirmNoFileConflict(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2.2 check if the last node is non-existent
-	lastNode, exists := p.fileMap[op.FilePath]
-	if exists {
-		return fmt.Errorf("cannot add directory %s, path = %s already exists as a %s", op.FilePath, currentPath, lastNode.NodeType())
-	}
-
-	// 3.1 mutation: isUpdated to false
-	for _, v := range p.fileMap {
-		v.SetIsUpdated(false)
-	}
-
-	// 3.2 mutation: add intermediate and last directories
-	currentPath = []string{}
-	for i := 0; i < len(split); i++ {
-		currentPath = append(currentPath, split[i])
-		_, exists := p.fileMap[strings.Join(currentPath, "/")]
-		if !exists {
-			p.fileMap[strings.Join(currentPath, "/")] = &directoryProcessorNode{filePath: strings.Join(currentPath, "/"), isUpdated: true}
-		}
-	}
+	// 3 mutation
+	p.setAllIsUpdateFalse()
+	p.addMissingParentDirs(op.FilePath)
+	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 
 	return nil
 }
