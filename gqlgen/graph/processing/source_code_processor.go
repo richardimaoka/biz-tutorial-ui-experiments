@@ -118,18 +118,33 @@ func (p *SourceCodeProcessor) AddFile(op model.FileAdd) error {
 }
 
 func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
+	// 1. validate file path
+	if err := isValidFilePath(op.FilePath); err != nil {
+		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
+	}
+
+	// 2. check if there is such a file
+	if err := p.isValidNode(op.FilePath, fileType); err != nil {
+		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
+	}
+
+	// 3 mutation
+	p.setAllIsUpdateFalse()
+
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
-		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
 	// 2. check if there is such a file
 	if err := p.isValidNode(op.FilePath, fileType); err != nil {
-		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
+		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
 	// 3 mutation
@@ -143,10 +158,10 @@ func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
 func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
-		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there is such a file
+	// 2. check if there is such a directory
 	if err := p.isValidNode(op.FilePath, directoryType); err != nil {
 		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
 	}
