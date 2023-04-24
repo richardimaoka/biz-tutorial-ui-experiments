@@ -110,16 +110,16 @@ func Test_SourceCodeProcessor(t *testing.T) {
 						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
 					}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
-				// {name: "error_add_dir_duplicate1",
-				// 	operations: []Operation{
-				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-				// 		{expectSuccess: false, operation: model.DirectoryAdd{FilePath: "hello"}},
-				// 	}, resultFile: "testdata/source_code/add-directory1.json"},
+				{name: "error_add_dir_duplicate1",
+					operations: []Operation{
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: "hello"}},
+					}, resultFile: "testdata/source_code/add-directory1.json"},
 
-				// {name: "add_dir_nested2",
-				// 	operations: []Operation{
-				// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-				// 	}, resultFile: "testdata/source_code/add-directory3.json"},
+				{name: "add_dir_nested2",
+					operations: []Operation{
+						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+					}, resultFile: "testdata/source_code/add-directory3.json"},
 			})
 	})
 
@@ -130,34 +130,34 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
 				}, resultFile: "testdata/source_code/add-file1.json"},
 
-			// {name: "add_file_nested",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
-			// 	}, resultFile: "testdata/source_code/add-file2.json"},
+			{name: "add_file_nested",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+				}, resultFile: "testdata/source_code/add-file2.json"},
 
-			// {name: "add_file_nested2",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-			// 	}, resultFile: "testdata/source_code/add-file3.json"},
+			{name: "add_file_nested2",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+				}, resultFile: "testdata/source_code/add-file3.json"},
 
-			// {name: "add_file_next_to",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
-			// 	}, resultFile: "testdata/source_code/add-file4.json"},
+			{name: "add_file_next_to",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
+				}, resultFile: "testdata/source_code/add-file4.json"},
 
-			// {name: "error_add_file_duplicate1",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
-			// 		{expectSuccess: false, operation: model.FileAdd{FilePath: "hello.txt"}},
-			// 	}, resultFile: "testdata/source_code/add-file1.json"},
+			{name: "error_add_file_duplicate1",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
+					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello.txt"}},
+				}, resultFile: "testdata/source_code/add-file1.json"},
 
-			// {name: "error_add_file_duplicate2",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world.txt"}},
-			// 		{expectSuccess: false, operation: model.FileAdd{FilePath: "hello/world.txt"}},
-			// 		{expectSuccess: false, operation: model.FileAdd{FilePath: "hello"}},
-			// 	}, resultFile: "testdata/source_code/add-file5.json"},
+			{name: "error_add_file_duplicate2",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world.txt"}},
+					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello/world.txt"}},
+					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello"}},
+				}, resultFile: "testdata/source_code/add-file5.json"},
 		})
 	})
 }
