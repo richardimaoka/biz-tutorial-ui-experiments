@@ -67,8 +67,8 @@ func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
 
 func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
 	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutatoin
-	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutatoin
+	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutation
+	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutation
 	nodeType := model.FileNodeTypeFile
 	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
@@ -84,8 +84,8 @@ func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
 
 func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutatoin
-	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutatoin
+	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutation
+	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutation
 	nodeType := model.FileNodeTypeDirectory
 	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
@@ -101,8 +101,8 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 
 func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
 	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath //copy to avoid effect from fileProcessNode's mutatoin
-	content := n.content   //copy to avoid effect from fileProcessNode's mutatoin
+	filePath := n.filePath //copy to avoid effect from fileProcessNode's mutation
+	content := n.content   //copy to avoid effect from fileProcessNode's mutation
 	isFullContent := true
 	split := strings.Split(filePath, "/")
 

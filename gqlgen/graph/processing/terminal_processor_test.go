@@ -11,14 +11,18 @@ func TestTerminal(t *testing.T) {
 	compareAfterMarshal(t, "testdata/terminal/new-terminal.json", result)
 }
 
-func TestTerminal_WriteCommand(t *testing.T) {
+func TestTerminal_WriteCommand1(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("mkdir abc")
 	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal/write-command1.json", result)
+}
 
+func TestTerminal_WriteCommand2(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("mkdir abc")
 	terminal.WriteCommand("mkdir def")
-	result = terminal.ToTerminal()
+	result := terminal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal/write-command2.json", result)
 }
 
@@ -59,4 +63,31 @@ func TestTerminal_Clone(t *testing.T) {
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
 	result := terminalOriginal.ToTerminal()
 	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+}
+
+func TestTerminal_MutationCommand(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("mkdir abc")
+	terminal.WriteCommand("mkdir def")
+	result := terminal.ToTerminal()
+
+	// after terminal is materialized to GraphQL object, mutation should have no effect
+	terminal.elements[0].(*terminalCommand).promptExpression = "mutated-command"
+	terminal.elements[0].(*terminalCommand).promptSymbol = 'G'
+	terminal.elements[0].(*terminalCommand).command = "mkdir ghi"
+
+	compareAfterMarshal(t, "testdata/terminal/write-command2.json", result)
+}
+
+func TestTerminal_MutationOutput(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+
+	result := terminal.ToTerminal()
+
+	// after terminal is materialized to GraphQL object, mutation should have no effect
+	terminal.elements[1].(*terminalOutput).output = "def"
+
+	compareAfterMarshal(t, "testdata/terminal/write-output1.json", result)
 }

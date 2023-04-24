@@ -28,14 +28,16 @@ func (t *terminalOutput) String() string {
 
 func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
 	falseValue := false
+	command := t.command // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalCommand{
 		BeforeExecution: &falseValue,
-		Command:         &t.command,
+		Command:         &command,
 	}
 }
 
 func (t *terminalOutput) ToTerminalElement() model.TerminalElement {
+	output := t.output // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalOutput{
-		Output: &t.output,
+		Output: &output,
 	}
 }
