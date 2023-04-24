@@ -122,6 +122,20 @@ func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
 }
 
 func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
+	// 1. validate file path
+	if err := isValidFilePath(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	}
+
+	// 2. check if there is such a file
+	if err := p.isValidNode(op.FilePath, fileType); err != nil {
+		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
+	}
+
+	// 3 mutation
+	p.setAllIsUpdateFalse()
+
+	delete(p.fileMap, op.FilePath)
 
 	return nil
 }

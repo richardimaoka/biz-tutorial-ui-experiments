@@ -220,4 +220,41 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		})
 	})
 
+	t.Run("delete_file", func(t *testing.T) {
+		runEntries(t, []Entry{
+			{name: "delete_file_single",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt"}},
+					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello.txt"}},
+				}, resultFile: "testdata/source_code/new-source-code.json"},
+
+			{name: "delete_file_nested",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+				}, resultFile: "testdata/source_code/delete-file1.json"},
+
+			{name: "delete_file_next_to",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+				}, resultFile: "testdata/source_code/delete-file2.json"},
+
+			{name: "error_delete_file_non_existent",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: false, operation: model.FileDelete{FilePath: "hello/world/france.txt"}},
+				}, resultFile: "testdata/source_code/delete-file3.json"},
+
+			{name: "error_delete_file_twice",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: false, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+				}, resultFile: "testdata/source_code/delete-file2.json"},
+		})
+	})
 }
