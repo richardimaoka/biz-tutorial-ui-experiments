@@ -15,7 +15,13 @@ type SourceCodeProcessor struct {
 }
 
 func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
-	// 1. check if no intermediate parent is file node
+	// 1. check if node with filePath is non-existent
+	exactMatchNode, exists := p.fileMap[filePath]
+	if exists {
+		return fmt.Errorf("path = %s already exists as a %s", exactMatchNode, exactMatchNode.NodeType())
+	}
+
+	// 2. check if no intermediate parent is a file node
 	split := strings.Split(filePath, "/")
 	parentPath := []string{}
 	for i := 0; i < len(split)-1; /*up to direct parent of filePath*/ i++ {
@@ -26,10 +32,15 @@ func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
 		}
 	}
 
-	// 2. check if the last node is non-existent
-	lastNode, exists := p.fileMap[filePath]
-	if exists {
-		return fmt.Errorf("path = %s already exists as a %s", parentPath, lastNode.NodeType())
+	return nil
+}
+
+func (p *SourceCodeProcessor) isValidNode(filePath string, t nodeType) error {
+	exactMatchNode, exists := p.fileMap[filePath]
+	if !exists {
+		return fmt.Errorf("path = %s doesn't exist", filePath)
+	} else if exactMatchNode.NodeType() != t {
+		return fmt.Errorf("path = %s has wrong node type = %s, expected = %s", filePath, exactMatchNode.NodeType(), t)
 	}
 
 	return nil
@@ -53,6 +64,10 @@ func (p *SourceCodeProcessor) setAllIsUpdateFalse() {
 		v.SetIsUpdated(false)
 	}
 }
+
+//-----------------------------------------------------//
+// public methods below
+//-----------------------------------------------------//
 
 func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
@@ -107,10 +122,26 @@ func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
 }
 
 func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
+
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
+	// 1. validate file path
+	if err := isValidFilePath(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	}
+
+	// 2. check if there is such a file
+	if err := p.isValidNode(op.FilePath, directoryType); err != nil {
+		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
+	}
+
+	// 3 mutation
+	p.setAllIsUpdateFalse()
+
+	delete(p.fileMap, op.FilePath)
+
 	return nil
 }
 
