@@ -141,6 +141,12 @@ func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
 	p.setAllIsUpdateFalse()
 
 	delete(p.fileMap, op.FilePath)
+	// delete op.FilePath's children
+	for k := range p.fileMap {
+		if strings.HasPrefix(k, op.FilePath) {
+			delete(p.fileMap, k)
+		}
+	}
 
 	return nil
 }

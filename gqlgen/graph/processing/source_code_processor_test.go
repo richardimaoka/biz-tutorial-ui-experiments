@@ -176,47 +176,47 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello/world"}},
 				}, resultFile: "testdata/source_code/delete-directory1.json"},
 
-			// {name: "delete_dir_nested_middle",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
-			// 		// below "goodmorning.*" dirs are note affected
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-			// 		{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello/world"}},
-			// 	}, resultFile: "testdata/source_code/delete-directory2.json"},
+			{name: "delete_dir_nested_middle",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
+					// below "goodmorning.*" dirs are note affected
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello/world"}},
+				}, resultFile: "testdata/source_code/delete-directory2.json"},
 
-			// {name: "delete_dir_nested_parent",
-			// 	operations: []Operation{
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
-			// 		// below "goodmorning.*" dirs are note affected
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-			// 		{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello"}},
-			// 	}, resultFile: "testdata/source_code/delete-directory3.json"},
+			{name: "delete_dir_nested_parent",
+				operations: []Operation{
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
+					// below "goodmorning.*" dirs are note affected
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello"}},
+				}, resultFile: "testdata/source_code/delete-directory3.json"},
 
-			// {name: "error_delete_dir_non_existent",
-			// 	operations: []Operation{
-			// 		// below "goodmorning.*" dirs are note affected
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-			// 		{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
-			// 		{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
-			// 	}, resultFile: "testdata/source_code/delete-directory4.json"},
+			{name: "error_delete_dir_non_existent",
+				operations: []Operation{
+					// below "goodmorning.*" dirs are note affected
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
+					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
+				}, resultFile: "testdata/source_code/delete-directory4.json"},
 
-			// {name: "error_delete_dir_twice",
-			// 	operations: []Operation{
-			// 		// below "goodmorning.*" dirs are note affected
-			// 		{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-			// 		{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
-			// 		{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
-			// 	}, resultFile: "testdata/source_code/delete-directory5.json"},
+			{name: "error_delete_dir_twice",
+				operations: []Operation{
+					// below "goodmorning.*" dirs are note affected
+					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+				}, resultFile: "testdata/source_code/delete-directory5.json"},
 		})
 	})
 
