@@ -1,6 +1,8 @@
 package processing
 
 import (
+	"strings"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
@@ -16,6 +18,7 @@ type fileTreeNode interface {
 	FilePath() string
 	IsUpdated() bool
 	SetIsUpdated(isUpdated bool)
+	ToGraphQLNode() *model.FileNode
 	//TODO: Clone() fileTreeNode
 }
 
@@ -62,33 +65,53 @@ func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
 	n.isUpdated = isUpdated
 }
 
-func createDirectoryNode(filePath string, isUpdated bool) *model.FileNode {
-	nodeType := model.FileNodeTypeDirectory
-	split := filePathPtrSlice(filePath)
+func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
+	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
+	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutatoin
+	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutatoin
+	nodeType := model.FileNodeTypeFile
+	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
 
-	node := model.FileNode{
+	return &model.FileNode{
 		NodeType:  &nodeType,
-		Name:      split[len(split)-1],
+		Name:      &split[len(split)-1],
 		FilePath:  &filePath,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}
-	return &node
 }
 
-func createFileNode(filePath string) *model.FileNode {
-	nodeType := model.FileNodeTypeFile
-	split := filePathPtrSlice(filePath)
+func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
+	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
+	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutatoin
+	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutatoin
+	nodeType := model.FileNodeTypeDirectory
+	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
-	trueValue := true
 
-	node := model.FileNode{
+	return &model.FileNode{
 		NodeType:  &nodeType,
-		Name:      split[len(split)-1],
+		Name:      &split[len(split)-1],
 		FilePath:  &filePath,
 		Offset:    &offset,
-		IsUpdated: &trueValue,
+		IsUpdated: &isUpdated,
 	}
-	return &node
+}
+
+func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
+	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
+	filePath := n.filePath //copy to avoid effect from fileProcessNode's mutatoin
+	content := n.content   //copy to avoid effect from fileProcessNode's mutatoin
+	isFullContent := true
+	split := strings.Split(filePath, "/")
+
+	return &model.OpenFile{
+		FilePath:      &filePath,
+		FileName:      &split[len(split)-1],
+		Content:       &content,
+		IsFullContent: &isFullContent,
+		Language:      nil,
+		Highlight:     nil,
+	}
 }

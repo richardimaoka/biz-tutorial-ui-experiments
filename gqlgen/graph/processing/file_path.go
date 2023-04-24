@@ -53,14 +53,3 @@ func isValidFilePath(filePath string) error {
 	}
 	return nil
 }
-
-func filePathPtrSlice(filePath string) []*string {
-	split := strings.Split(filePath, "/")
-
-	var filePathSlice []*string
-	for i := range split {
-		filePathSlice = append(filePathSlice, &split[i]) // cannot use v of `for i, v := range ...` because v has the same address throughout the loop
-	}
-
-	return filePathSlice
-}

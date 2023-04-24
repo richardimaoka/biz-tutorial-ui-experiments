@@ -75,6 +75,7 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 
 	// 3 mutation
 	p.setAllIsUpdateFalse()
+
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 
@@ -94,8 +95,9 @@ func (p *SourceCodeProcessor) AddFile(op model.FileAdd) error {
 
 	// 3 mutation
 	p.setAllIsUpdateFalse()
+
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true}
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 
 	return nil
 }
@@ -126,13 +128,18 @@ func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
 
 func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
 	var resultNodes []*model.FileNode
+	fileContents := make(map[string]model.OpenFile)
+
 	keys := p.sortedFileMapKeys()
 	for i := 0; i < len(keys); i++ {
 		node := p.fileMap[keys[i]]
-		resultNodes = append(resultNodes, createDirectoryNode(node.FilePath(), node.IsUpdated()))
+		resultNodes = append(resultNodes, node.ToGraphQLNode())
+
+		if v, ok := node.(*fileProcessorNode); ok {
+			fileContents[node.FilePath()] = *v.ToGraphQLOpenFile()
+		}
 	}
 
-	fileContents := make(map[string]model.OpenFile)
 	return &model.SourceCode{
 		Step:         "",
 		FileTree:     resultNodes,
