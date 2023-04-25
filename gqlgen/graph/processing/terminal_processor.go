@@ -7,14 +7,14 @@ import (
 type TerminalProcessor struct {
 	terminalName     string
 	currentDirectory string
-	elements         []terminalElement
+	elements         []terminalElementProcessor
 }
 
 func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	return &TerminalProcessor{
 		terminalName:     terminalName,
 		currentDirectory: "",
-		elements:         []terminalElement{},
+		elements:         []terminalElementProcessor{},
 	}
 }
 
@@ -33,7 +33,7 @@ func (t *TerminalProcessor) WriteCommand(command string) {
 }
 
 func (t *TerminalProcessor) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
-	t.elements = append(t.elements, &terminalCommand{
+	t.elements = append(t.elements, &terminalCommandProcessor{
 		promptExpression: promptExpression,
 		promptSymbol:     promptSymbol,
 		command:          command,
@@ -41,7 +41,7 @@ func (t *TerminalProcessor) WriteCommandWithPrompt(promptExpression string, prom
 }
 
 func (t *TerminalProcessor) WriteOutput(output string) {
-	t.elements = append(t.elements, &terminalOutput{
+	t.elements = append(t.elements, &terminalOutputProcessor{
 		output: output,
 	})
 }

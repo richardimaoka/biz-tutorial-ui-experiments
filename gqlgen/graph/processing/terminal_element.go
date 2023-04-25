@@ -2,31 +2,31 @@ package processing
 
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
-type terminalElement interface {
+type terminalElementProcessor interface {
 	String() string
 	ToTerminalElement() model.TerminalElement
 }
 
-type terminalCommand struct {
+type terminalCommandProcessor struct {
 	promptExpression string
 	promptSymbol     rune
 	command          string
 }
 
-type terminalOutput struct {
+type terminalOutputProcessor struct {
 	output string
 }
 
-func (t *terminalCommand) String() string {
+func (t *terminalCommandProcessor) String() string {
 	//TODO: reflect promptExpression and promptSymbol
 	return t.command
 }
 
-func (t *terminalOutput) String() string {
+func (t *terminalOutputProcessor) String() string {
 	return t.output
 }
 
-func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
+func (t *terminalCommandProcessor) ToTerminalElement() model.TerminalElement {
 	falseValue := false
 	command := t.command // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalCommand{
@@ -35,7 +35,7 @@ func (t *terminalCommand) ToTerminalElement() model.TerminalElement {
 	}
 }
 
-func (t *terminalOutput) ToTerminalElement() model.TerminalElement {
+func (t *terminalOutputProcessor) ToTerminalElement() model.TerminalElement {
 	output := t.output // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalOutput{
 		Output: &output,
