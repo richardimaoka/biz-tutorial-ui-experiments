@@ -2,7 +2,7 @@ package processing
 
 import "testing"
 
-func TestTerminal_MutationCommand(t *testing.T) {
+func TestTerminalElement_MutationCommand(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("mkdir abc")
 	terminal.WriteCommand("mkdir def")
