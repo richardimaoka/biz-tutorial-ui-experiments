@@ -68,7 +68,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					return
 				}
 
-				compareAfterMarshal(t, e.resultFile, processor.ToSourceCode())
+				compareAfterMarshal(t, e.resultFile, processor.ToGraphQLModel())
 			})
 		}
 	}

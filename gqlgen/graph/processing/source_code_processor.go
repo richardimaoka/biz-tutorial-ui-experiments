@@ -192,7 +192,7 @@ func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
 	return keys
 }
 
-func (p *SourceCodeProcessor) ToSourceCode() *model.SourceCode {
+func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
 	fileContents := make(map[string]model.OpenFile)
 

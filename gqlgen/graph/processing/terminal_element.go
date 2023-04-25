@@ -4,7 +4,7 @@ import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
 type terminalElementProcessor interface {
 	String() string
-	ToTerminalElement() model.TerminalElement
+	ToGraphQLModel() model.TerminalElement
 }
 
 type terminalCommandProcessor struct {
@@ -26,7 +26,7 @@ func (t *terminalOutputProcessor) String() string {
 	return t.output
 }
 
-func (t *terminalCommandProcessor) ToTerminalElement() model.TerminalElement {
+func (t *terminalCommandProcessor) ToGraphQLModel() model.TerminalElement {
 	falseValue := false
 	command := t.command // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalCommand{
@@ -35,7 +35,7 @@ func (t *terminalCommandProcessor) ToTerminalElement() model.TerminalElement {
 	}
 }
 
-func (t *terminalOutputProcessor) ToTerminalElement() model.TerminalElement {
+func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
 	output := t.output // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalOutput{
 		Output: &output,

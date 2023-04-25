@@ -50,7 +50,7 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
 }
 
-func (t *TerminalProcessor) ToTerminal() *model.Terminal {
+func (t *TerminalProcessor) ToGraphQLModel() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
 		currentDirectory = &t.currentDirectory
@@ -59,7 +59,7 @@ func (t *TerminalProcessor) ToTerminal() *model.Terminal {
 	var nodes []*model.TerminalNode
 	for _, e := range t.elements {
 		nodes = append(nodes, &model.TerminalNode{
-			Content: e.ToTerminalElement(),
+			Content: e.ToGraphQLModel(),
 		})
 	}
 
