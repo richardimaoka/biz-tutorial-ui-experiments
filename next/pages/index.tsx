@@ -86,6 +86,7 @@ export default function Home() {
   }, [router, step, nextStep, prevStep]);
 
   // Page load optimization:
+  // TODO: if you make the page SSR, you can use prefetch https://nextjs.org/docs/api-reference/next/link
   useEffect(() => {
     if (nextStep) {
       client
