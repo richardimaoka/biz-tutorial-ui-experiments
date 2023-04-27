@@ -18,19 +18,6 @@ func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	}
 }
 
-func (t *TerminalProcessor) Clone() *TerminalProcessor {
-	clonedElements := make([]terminalElementProcessor, 0)
-	for _, e := range t.elements {
-		clonedElements = append(clonedElements, e.Clone())
-	}
-
-	return &TerminalProcessor{
-		terminalName:     t.terminalName,
-		currentDirectory: t.currentDirectory,
-		elements:         clonedElements,
-	}
-}
-
 func (t *TerminalProcessor) WriteCommand(command string) {
 	defaultPromptExpression := ""
 	defaultPromptSymbol := '$'
@@ -58,7 +45,14 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 func (t *TerminalProcessor) ToGraphQLModel() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
-		currentDirectory = &t.currentDirectory
+		copied := t.currentDirectory // copy to avoid effect from receiver's mutation afterwards
+		currentDirectory = &copied
+	}
+
+	var terminalName *string
+	if t.terminalName != "" {
+		copied := t.terminalName // copy to avoid effect from receiver's mutation afterwards
+		terminalName = &copied
 	}
 
 	var nodes []*model.TerminalNode
@@ -69,8 +63,21 @@ func (t *TerminalProcessor) ToGraphQLModel() *model.Terminal {
 	}
 
 	return &model.Terminal{
-		Name:             &t.terminalName,
+		Name:             terminalName,
 		CurrentDirectory: currentDirectory,
 		Nodes:            nodes,
+	}
+}
+
+func (t *TerminalProcessor) Clone() *TerminalProcessor {
+	clonedElements := make([]terminalElementProcessor, 0)
+	for _, e := range t.elements {
+		clonedElements = append(clonedElements, e.Clone())
+	}
+
+	return &TerminalProcessor{
+		terminalName:     t.terminalName,     // copy to avoid effect from receiver's mutation afterwards
+		currentDirectory: t.currentDirectory, // copy to avoid effect from receiver's mutation afterwards
+		elements:         clonedElements,
 	}
 }

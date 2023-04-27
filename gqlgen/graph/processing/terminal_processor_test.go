@@ -61,6 +61,7 @@ func TestTerminal_Clone1(t *testing.T) {
 	terminal.WriteOutput("def")
 	terminal.WriteCommand("cd hello/world/thunder")
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
+
 	result := terminalOriginal.ToGraphQLModel()
 	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
 }
@@ -72,6 +73,8 @@ func TestTerminal_Clone2(t *testing.T) {
 
 	terminalOriginal := terminal.Clone()
 
+	terminal.currentDirectory = "mutated/current/dir"
+	terminal.terminalName = "mutated terminal name"
 	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
 	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
 	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
@@ -79,4 +82,23 @@ func TestTerminal_Clone2(t *testing.T) {
 
 	result := terminalOriginal.ToGraphQLModel()
 	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+}
+
+func TestTerminal_Mutation(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+	terminal.WriteCommand("cd hello/world/thunder")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+
+	result := terminal.ToGraphQLModel()
+
+	terminal.currentDirectory = "mutated/current/dir"
+	terminal.terminalName = "mutated terminal name"
+	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
+	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
+	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
+	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
+
+	compareAfterMarshal(t, "testdata/terminal/mutated.json", result)
 }

@@ -45,15 +45,15 @@ func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
 
 func (t *terminalCommandProcessor) Clone() terminalElementProcessor {
 	return &terminalCommandProcessor{
-		promptExpression: t.promptExpression,
-		promptSymbol:     t.promptSymbol,
-		command:          t.command,
+		promptExpression: t.promptExpression, // copy to avoid effect from receiver's mutation afterwards
+		promptSymbol:     t.promptSymbol,     // copy to avoid effect from receiver's mutation afterwards
+		command:          t.command,          // copy to avoid effect from receiver's mutation afterwards
 	}
 
 }
 
 func (t *terminalOutputProcessor) Clone() terminalElementProcessor {
 	return &terminalOutputProcessor{
-		output: t.output,
+		output: t.output, // copy to avoid effect from receiver's mutation afterwards`
 	}
 }
