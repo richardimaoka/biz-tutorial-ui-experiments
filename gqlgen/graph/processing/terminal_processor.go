@@ -45,13 +45,13 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 func (t *TerminalProcessor) ToGraphQLModel() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
-		copied := t.currentDirectory // copy to avoid effect from receiver's mutation afterwards
+		copied := t.currentDirectory // copy to avoid receiver's mutation effect afterwards
 		currentDirectory = &copied
 	}
 
 	var terminalName *string
 	if t.terminalName != "" {
-		copied := t.terminalName // copy to avoid effect from receiver's mutation afterwards
+		copied := t.terminalName // copy to avoid receiver's mutation effect afterwards
 		terminalName = &copied
 	}
 
@@ -76,8 +76,8 @@ func (t *TerminalProcessor) Clone() *TerminalProcessor {
 	}
 
 	return &TerminalProcessor{
-		terminalName:     t.terminalName,     // copy to avoid effect from receiver's mutation afterwards
-		currentDirectory: t.currentDirectory, // copy to avoid effect from receiver's mutation afterwards
+		terminalName:     t.terminalName,     // copy to avoid receiver's mutation effect afterwards
+		currentDirectory: t.currentDirectory, // copy to avoid receiver's mutation effect afterwards
 		elements:         clonedElements,
 	}
 }

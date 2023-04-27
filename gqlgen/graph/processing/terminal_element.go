@@ -29,7 +29,7 @@ func (t *terminalOutputProcessor) String() string {
 
 func (t *terminalCommandProcessor) ToGraphQLModel() model.TerminalElement {
 	falseValue := false
-	command := t.command // copy to avoid effect from receiver's mutation afterwards
+	command := t.command // copy to avoid receiver's mutation effect afterwards
 	return &model.TerminalCommand{
 		BeforeExecution: &falseValue,
 		Command:         &command,
@@ -37,7 +37,7 @@ func (t *terminalCommandProcessor) ToGraphQLModel() model.TerminalElement {
 }
 
 func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
-	output := t.output // copy to avoid effect from receiver's mutation afterwards
+	output := t.output // copy to avoid receiver's mutation effect afterwards
 	return &model.TerminalOutput{
 		Output: &output,
 	}
@@ -45,15 +45,15 @@ func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
 
 func (t *terminalCommandProcessor) Clone() terminalElementProcessor {
 	return &terminalCommandProcessor{
-		promptExpression: t.promptExpression, // copy to avoid effect from receiver's mutation afterwards
-		promptSymbol:     t.promptSymbol,     // copy to avoid effect from receiver's mutation afterwards
-		command:          t.command,          // copy to avoid effect from receiver's mutation afterwards
+		promptExpression: t.promptExpression, // copy to avoid receiver's mutation effect afterwards
+		promptSymbol:     t.promptSymbol,     // copy to avoid receiver's mutation effect afterwards
+		command:          t.command,          // copy to avoid receiver's mutation effect afterwards
 	}
 
 }
 
 func (t *terminalOutputProcessor) Clone() terminalElementProcessor {
 	return &terminalOutputProcessor{
-		output: t.output, // copy to avoid effect from receiver's mutation afterwards`
+		output: t.output, // copy to avoid receiver's mutation effect afterwards`
 	}
 }
