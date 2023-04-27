@@ -62,13 +62,13 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	runEntries := func(t *testing.T, testEntries []Entry) {
 		for _, e := range testEntries {
 			t.Run(e.name, func(t *testing.T) {
-				processor := NewSourceCodeProcessor()
-				if err := applyOperations(processor, e.operations); err != nil {
+				sourceCode := NewSourceCodeProcessor()
+				if err := applyOperations(sourceCode, e.operations); err != nil {
 					t.Errorf(err.Error()) // fail but continue running, as two ops can fail in sequence
 					return
 				}
 
-				compareAfterMarshal(t, e.resultFile, processor.ToGraphQLModel())
+				compareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
 			})
 		}
 	}
@@ -181,7 +181,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
-					// below "goodmorning.*" dirs are note affected
+					// below "goodmorning.*" dirs are not affected
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
 					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
@@ -257,4 +257,25 @@ func Test_SourceCodeProcessor(t *testing.T) {
 				}, resultFile: "testdata/source_code/delete-file2.json"},
 		})
 	})
+}
+
+func TestSourceCode_Mutation(t *testing.T) {
+	sourceCode := NewSourceCodeProcessor()
+	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+
+	// once materialized GraphQL model, mutation afterwards should have no effect
+	result := sourceCode.ToGraphQLModel()
+	compareAfterMarshal(t, "testdata/source_code/mutated.json", result)
+
+	sourceCode.step = "mutated step"
+	sourceCode.defaultOpenFilePath = "mutated/file/path"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).filePath = "mutated/path/to/file"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).isUpdated = true
+	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
+	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
+
+	compareAfterMarshal(t, "testdata/source_code/mutated.json", result)
 }
