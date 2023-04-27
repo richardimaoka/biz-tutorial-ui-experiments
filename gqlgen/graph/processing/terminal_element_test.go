@@ -6,7 +6,9 @@ func TestTerminalElement_MutationCommand(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("mkdir abc")
 	terminal.WriteCommand("mkdir def")
-	result := terminal.ToGraphQLModel()
+
+	result := terminal.ToGraphQLTerminal()
+	compareAfterMarshal(t, "testdata/terminal/write-command2.json", result)
 
 	// after terminal is materialized to GraphQL object, mutation should have no effect
 	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-command"
@@ -21,7 +23,8 @@ func TestTerminalElement_MutationOutput(t *testing.T) {
 	terminal.WriteCommand("echo abc")
 	terminal.WriteOutput("abc")
 
-	result := terminal.ToGraphQLModel()
+	result := terminal.ToGraphQLTerminal()
+	compareAfterMarshal(t, "testdata/terminal/write-output1.json", result)
 
 	// after terminal is materialized to GraphQL object, mutation should have no effect
 	terminal.elements[1].(*terminalOutputProcessor).output = "def"

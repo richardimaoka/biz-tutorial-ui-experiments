@@ -42,7 +42,7 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
 }
 
-func (t *TerminalProcessor) ToGraphQLModel() *model.Terminal {
+func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
 		copied := t.currentDirectory // copy to avoid receiver's mutation effect afterwards
