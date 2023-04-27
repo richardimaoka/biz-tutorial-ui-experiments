@@ -212,3 +212,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 		FileContents: fileContents,
 	}
 }
+
+func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
+	return nil
+}

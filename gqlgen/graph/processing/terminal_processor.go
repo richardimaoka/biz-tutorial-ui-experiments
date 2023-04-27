@@ -19,10 +19,15 @@ func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 }
 
 func (t *TerminalProcessor) Clone() *TerminalProcessor {
+	clonedElements := make([]terminalElementProcessor, 0)
+	for _, e := range t.elements {
+		clonedElements = append(clonedElements, e.Clone())
+	}
+
 	return &TerminalProcessor{
 		terminalName:     t.terminalName,
 		currentDirectory: t.currentDirectory,
-		elements:         t.elements,
+		elements:         clonedElements,
 	}
 }
 

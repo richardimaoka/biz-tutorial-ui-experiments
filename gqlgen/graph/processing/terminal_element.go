@@ -5,6 +5,7 @@ import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 type terminalElementProcessor interface {
 	String() string
 	ToGraphQLModel() model.TerminalElement
+	Clone() terminalElementProcessor
 }
 
 type terminalCommandProcessor struct {
@@ -39,5 +40,20 @@ func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
 	output := t.output // copy to avoid effect from receiver's mutation afterwards
 	return &model.TerminalOutput{
 		Output: &output,
+	}
+}
+
+func (t *terminalCommandProcessor) Clone() terminalElementProcessor {
+	return &terminalCommandProcessor{
+		promptExpression: t.promptExpression,
+		promptSymbol:     t.promptSymbol,
+		command:          t.command,
+	}
+
+}
+
+func (t *terminalOutputProcessor) Clone() terminalElementProcessor {
+	return &terminalOutputProcessor{
+		output: t.output,
 	}
 }
