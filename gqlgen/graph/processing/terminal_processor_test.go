@@ -50,40 +50,6 @@ func TestTerminal_ChangeCurrentDirectory2(t *testing.T) {
 	compareAfterMarshal(t, "testdata/terminal/cd2.json", result)
 }
 
-func TestTerminal_Clone1(t *testing.T) {
-	terminal := NewTerminalProcessor("default")
-	terminal.WriteCommand("echo abc")
-	terminal.WriteOutput("abc")
-
-	terminalOriginal := terminal.Clone()
-
-	terminal.WriteCommand("echo def")
-	terminal.WriteOutput("def")
-	terminal.WriteCommand("cd hello/world/thunder")
-	terminal.ChangeCurrentDirectory("hello/world/thunder")
-
-	result := terminalOriginal.ToGraphQLTerminal()
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
-}
-
-func TestTerminal_Clone2(t *testing.T) {
-	terminal := NewTerminalProcessor("default")
-	terminal.WriteCommand("echo abc")
-	terminal.WriteOutput("abc")
-
-	terminalOriginal := terminal.Clone()
-
-	terminal.currentDirectory = "mutated/current/dir"
-	terminal.terminalName = "mutated terminal name"
-	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
-	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
-	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
-	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
-
-	result := terminalOriginal.ToGraphQLTerminal()
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
-}
-
 func TestTerminal_Mutation(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("echo abc")
@@ -91,7 +57,9 @@ func TestTerminal_Mutation(t *testing.T) {
 	terminal.WriteCommand("cd hello/world/thunder")
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
 
+	// once materialized GraphQL model, mutation afterwards should have no effect
 	result := terminal.ToGraphQLTerminal()
+	compareAfterMarshal(t, "testdata/terminal/mutated.json", result)
 
 	terminal.currentDirectory = "mutated/current/dir"
 	terminal.terminalName = "mutated terminal name"
@@ -101,4 +69,42 @@ func TestTerminal_Mutation(t *testing.T) {
 	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
 
 	compareAfterMarshal(t, "testdata/terminal/mutated.json", result)
+}
+
+// test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter
+func TestTerminal_Clone1(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+
+	terminalOriginal := terminal.Clone()
+	result := terminalOriginal.ToGraphQLTerminal()
+	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+
+	terminal.WriteCommand("echo def")
+	terminal.WriteOutput("def")
+	terminal.WriteCommand("cd hello/world/thunder")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+
+	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+}
+
+// test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter
+func TestTerminal_Clone2(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+
+	terminalOriginal := terminal.Clone()
+	result := terminalOriginal.ToGraphQLTerminal()
+	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+
+	terminal.currentDirectory = "mutated/current/dir"
+	terminal.terminalName = "mutated terminal name"
+	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
+	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
+	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
+	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
+
+	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
 }
