@@ -15,7 +15,7 @@ type SourceCodeProcessor struct {
 }
 
 func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
-	// 1. check if node with filePath is non-existent
+	// 1. check if filePath is non-existent
 	exactMatchNode, exists := p.fileMap[filePath]
 	if exists {
 		return fmt.Errorf("path = %s already exists as a %s", exactMatchNode, exactMatchNode.NodeType())
@@ -60,6 +60,20 @@ func (p *SourceCodeProcessor) canAdd(filePath string) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) error {
+	// 1. validate file path
+	if err := isValidFilePath(filePath); err != nil {
+		return err
+	}
+
+	// 2. check if there is such a file
+	if err := p.isValidNode(filePath, t); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // this must be called after confirmNoFileConflict(), otherwise behavior is not guaranteed
 func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 	split := strings.Split(filePath, "/")
@@ -77,6 +91,18 @@ func (p *SourceCodeProcessor) setAllIsUpdateFalse() {
 	for _, v := range p.fileMap {
 		v.SetIsUpdated(false)
 	}
+}
+
+func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
+	keys := make([]string, 0)
+	for k := range p.fileMap {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return LessFilePath(keys[i], keys[j])
+	})
+
+	return keys
 }
 
 //-----------------------------------------------------//
@@ -120,57 +146,39 @@ func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
 }
 
 func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
-	// 1. validate file path
-	if err := isValidFilePath(op.FilePath); err != nil {
+	// 1. precondition
+	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there is such a file
-	if err := p.isValidNode(op.FilePath, fileType); err != nil {
-		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
-	}
-
-	// 3 mutation
+	// 2. mutation
 	p.setAllIsUpdateFalse()
-
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
-	// 1. validate file path
-	if err := isValidFilePath(op.FilePath); err != nil {
+	// 1. precondition
+	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there is such a file
-	if err := p.isValidNode(op.FilePath, fileType); err != nil {
-		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
-	}
-
-	// 3 mutation
+	// 2. mutation
 	p.setAllIsUpdateFalse()
-
 	delete(p.fileMap, op.FilePath)
 
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
-	// 1. validate file path
-	if err := isValidFilePath(op.FilePath); err != nil {
-		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
+	// 1. precondition
+	if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
+		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there is such a directory
-	if err := p.isValidNode(op.FilePath, directoryType); err != nil {
-		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
-	}
-
-	// 3 mutation
+	// 2. mutation
 	p.setAllIsUpdateFalse()
-
 	delete(p.fileMap, op.FilePath)
 	// delete op.FilePath's children
 	for k := range p.fileMap {
@@ -180,18 +188,6 @@ func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 	}
 
 	return nil
-}
-
-func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
-	keys := make([]string, 0)
-	for k := range p.fileMap {
-		keys = append(keys, k)
-	}
-	sort.Slice(keys, func(i, j int) bool {
-		return LessFilePath(keys[i], keys[j])
-	})
-
-	return keys
 }
 
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
