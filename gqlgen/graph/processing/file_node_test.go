@@ -2,13 +2,11 @@ package processing
 
 import (
 	"testing"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 func TestFileNode_MutateDirectory(t *testing.T) {
 	processor := NewSourceCodeProcessor()
-	processor.AddDirectory(model.DirectoryAdd{FilePath: "hello/world"})
+	processor.AddDirectory(DirectoryAdd{FilePath: "hello/world"})
 	result := processor.fileMap["hello/world"].ToGraphQLNode()
 	compareAfterMarshal(t, "testdata/source_code/file-node-mutation1.json", result)
 
@@ -21,7 +19,7 @@ func TestFileNode_MutateDirectory(t *testing.T) {
 
 func TestFileNode_MutateFile(t *testing.T) {
 	processor := NewSourceCodeProcessor()
-	processor.AddFile(model.FileAdd{FilePath: "hello/world"})
+	processor.AddFile(FileAdd{FilePath: "hello/world"})
 	result := processor.fileMap["hello/world"].ToGraphQLNode()
 	compareAfterMarshal(t, "testdata/source_code/file-node-mutation2.json", result)
 
@@ -35,7 +33,7 @@ func TestFileNode_MutateFile(t *testing.T) {
 
 func TestFileNodeOpenFile_MutateFile(t *testing.T) {
 	processor := NewSourceCodeProcessor()
-	processor.AddFile(model.FileAdd{FilePath: "hello/world"})
+	processor.AddFile(FileAdd{FilePath: "hello/world"})
 	result := processor.fileMap["hello/world"].(*fileProcessorNode).ToGraphQLOpenFile()
 	compareAfterMarshal(t, "testdata/source_code/file-node-mutation-openfile1.json", result)
 

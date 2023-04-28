@@ -47,12 +47,10 @@ func (p *stepProcessor) AutoIncrementStep() error {
 	return nil
 }
 
-//clone function
 func (p *stepProcessor) Clone() *stepProcessor {
-	// copy to avoid receiver's mutation effect afterwards
 	return &stepProcessor{
-		currentStep: p.currentStep,
-		nextStep:    p.nextStep,
-		prevStep:    p.prevStep,
+		currentStep: p.currentStep, // copy to avoid receiver's mutation effect afterwards
+		nextStep:    p.nextStep,    // copy to avoid receiver's mutation effect afterwards
+		prevStep:    p.prevStep,    // copy to avoid receiver's mutation effect afterwards
 	}
 }

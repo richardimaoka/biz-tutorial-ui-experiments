@@ -24,15 +24,15 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		for opNum, op := range operations {
 			var opError error
 			switch v := op.operation.(type) {
-			case model.DirectoryAdd:
+			case DirectoryAdd:
 				opError = processor.AddDirectory(v)
-			case model.DirectoryDelete:
+			case DirectoryDelete:
 				opError = processor.DeleteDirectory(v)
-			case model.FileAdd:
+			case FileAdd:
 				opError = processor.AddFile(v)
 			case model.FileUpdate:
 				opError = processor.UpdateFile(v)
-			case model.FileDelete:
+			case FileDelete:
 				opError = processor.DeleteFile(v)
 			default:
 				return fmt.Errorf("op %d faild:\nwrong operation type = %v", opNum, reflect.TypeOf(v))
@@ -85,40 +85,40 @@ func Test_SourceCodeProcessor(t *testing.T) {
 			[]Entry{
 				{name: "add_dir_single",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
 					}, resultFile: "testdata/source_code/add-directory1.json"},
 
 				{name: "add_dir_nested",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
 					}, resultFile: "testdata/source_code/add-directory2.json"},
 
 				{name: "add_dir_nested2",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
 					}, resultFile: "testdata/source_code/add-directory3.json"},
 
 				{name: "add_dir_multiple",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "aloha"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "aloha"}},
 					}, resultFile: "testdata/source_code/add-directory4.json"},
 
 				{name: "error_add_dir_empty",
 					operations: []Operation{
-						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
+						{expectSuccess: false, operation: DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
 					}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
 				{name: "error_add_dir_duplicate1",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-						{expectSuccess: false, operation: model.DirectoryAdd{FilePath: "hello"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+						{expectSuccess: false, operation: DirectoryAdd{FilePath: "hello"}},
 					}, resultFile: "testdata/source_code/add-directory1.json"},
 
 				{name: "add_dir_nested2",
 					operations: []Operation{
-						{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
+						{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
 					}, resultFile: "testdata/source_code/add-directory3.json"},
 			})
 	})
@@ -127,36 +127,36 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		runEntries(t, []Entry{
 			{name: "add_file_single",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
 				}, resultFile: "testdata/source_code/add-file1.json"},
 
 			{name: "add_file_nested",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
 				}, resultFile: "testdata/source_code/add-file2.json"},
 
 			{name: "add_file_nested2",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
 				}, resultFile: "testdata/source_code/add-file3.json"},
 
 			{name: "add_file_next_to",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/america.txt"}},
 				}, resultFile: "testdata/source_code/add-file4.json"},
 
 			{name: "error_add_file_duplicate1",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
-					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
+					{expectSuccess: false, operation: FileAdd{FilePath: "hello.txt"}},
 				}, resultFile: "testdata/source_code/add-file1.json"},
 
 			{name: "error_add_file_duplicate2",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world.txt"}},
-					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello/world.txt"}},
-					{expectSuccess: false, operation: model.FileAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world.txt"}},
+					{expectSuccess: false, operation: FileAdd{FilePath: "hello/world.txt"}},
+					{expectSuccess: false, operation: FileAdd{FilePath: "hello"}},
 				}, resultFile: "testdata/source_code/add-file5.json"},
 		})
 	})
@@ -165,57 +165,57 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		runEntries(t, []Entry{
 			{name: "delete_dir_single",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello"}},
 				}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
 
 			{name: "delete_dir_nested_leaf",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello/world"}},
 				}, resultFile: "testdata/source_code/delete-directory1.json"},
 
 			{name: "delete_dir_nested_middle",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world/japan"}},
 					// below "goodmorning.*" dirs are not affected
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello/world"}},
 				}, resultFile: "testdata/source_code/delete-directory2.json"},
 
 			{name: "delete_dir_nested_parent",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "hello/world/japan"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "hello/world/japan"}},
 					// below "goodmorning.*" dirs are note affected
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: DirectoryDelete{FilePath: "hello"}},
 				}, resultFile: "testdata/source_code/delete-directory3.json"},
 
 			{name: "error_delete_dir_non_existent",
 				operations: []Operation{
 					// below "goodmorning.*" dirs are note affected
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello"}},
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
-					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
+					{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
 				}, resultFile: "testdata/source_code/delete-directory4.json"},
 
 			{name: "error_delete_dir_twice",
 				operations: []Operation{
 					// below "goodmorning.*" dirs are note affected
-					{expectSuccess: true, operation: model.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-					{expectSuccess: true, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
-					{expectSuccess: false, operation: model.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: true, operation: DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+					{expectSuccess: false, operation: DirectoryDelete{FilePath: "goodmorning/hello/world"}},
 				}, resultFile: "testdata/source_code/delete-directory5.json"},
 		})
 	})
@@ -224,36 +224,36 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		runEntries(t, []Entry{
 			{name: "delete_file_single",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello.txt"}},
-					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello.txt"}},
+					{expectSuccess: true, operation: FileDelete{FilePath: "hello.txt"}},
 				}, resultFile: "testdata/source_code/new-source-code.json"},
 
 			{name: "delete_file_nested",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileDelete{FilePath: "hello/world/japan.txt"}},
 				}, resultFile: "testdata/source_code/delete-file1.json"},
 
 			{name: "delete_file_next_to",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
-					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: true, operation: FileDelete{FilePath: "hello/world/japan.txt"}},
 				}, resultFile: "testdata/source_code/delete-file2.json"},
 
 			{name: "error_delete_file_non_existent",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
-					{expectSuccess: false, operation: model.FileDelete{FilePath: "hello/world/france.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: false, operation: FileDelete{FilePath: "hello/world/france.txt"}},
 				}, resultFile: "testdata/source_code/delete-file3.json"},
 
 			{name: "error_delete_file_twice",
 				operations: []Operation{
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: true, operation: model.FileAdd{FilePath: "hello/world/america.txt"}},
-					{expectSuccess: true, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
-					{expectSuccess: false, operation: model.FileDelete{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: true, operation: FileAdd{FilePath: "hello/world/america.txt"}},
+					{expectSuccess: true, operation: FileDelete{FilePath: "hello/world/japan.txt"}},
+					{expectSuccess: false, operation: FileDelete{FilePath: "hello/world/japan.txt"}},
 				}, resultFile: "testdata/source_code/delete-file2.json"},
 		})
 	})
@@ -261,9 +261,9 @@ func Test_SourceCodeProcessor(t *testing.T) {
 
 func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode := NewSourceCodeProcessor()
-	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
-	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	sourceCode.AddFile(FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once materialized GraphQL model...
 	materialized := sourceCode.ToGraphQLModel()
@@ -286,9 +286,9 @@ func TestSourceCode_Mutation(t *testing.T) {
 
 func TestSourceCode_Clone(t *testing.T) {
 	sourceCode := NewSourceCodeProcessor()
-	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
-	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	sourceCode.AddFile(FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()

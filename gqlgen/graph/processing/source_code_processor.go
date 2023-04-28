@@ -77,7 +77,7 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 	}
 }
 
-func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
+func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
@@ -97,7 +97,7 @@ func (p *SourceCodeProcessor) AddDirectory(op model.DirectoryAdd) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) AddFile(op model.FileAdd) error {
+func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
@@ -136,7 +136,7 @@ func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
+func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
@@ -155,7 +155,7 @@ func (p *SourceCodeProcessor) DeleteFile(op model.FileDelete) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) DeleteDirectory(op model.DirectoryDelete) error {
+func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 	// 1. validate file path
 	if err := isValidFilePath(op.FilePath); err != nil {
 		return fmt.Errorf("cannot delete directory %s, %s", op.FilePath, err)
