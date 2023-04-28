@@ -23,6 +23,14 @@ func (p *stepProcessor) PrevStep() string {
 	return p.prevStep
 }
 
+func NewStepProcessor() *stepProcessor {
+	return &stepProcessor{
+		currentStep: "000",
+		nextStep:    "001",
+		prevStep:    "",
+	}
+}
+
 // increment step to next
 func (p *stepProcessor) IncrementStep(nextNextStep string) {
 	p.prevStep = p.currentStep

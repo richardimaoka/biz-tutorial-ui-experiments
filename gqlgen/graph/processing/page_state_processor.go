@@ -8,15 +8,12 @@ type pageStateInternals struct {
 	step        *stepProcessor
 	terminalMap map[string]*TerminalProcessor
 	sourceCode  *SourceCodeProcessor
-	nextAction  string
+	nextAction  Action
 }
 
 type PageStateProcessor struct {
 	pageStateInternals
 	preserved *pageStateInternals
-}
-
-func InitPageStateProcessor(firstAction string) {
 }
 
 func (p *PageStateProcessor) beginMutation() {
@@ -44,7 +41,23 @@ func (p *PageStateProcessor) rollbackMutation() {
 	p.nextAction = p.preserved.nextAction
 }
 
-func (p *PageStateProcessor) StateTransition(nextNextAction string) {
+//------------------------------------------------------------
+// public methods
+//------------------------------------------------------------
+
+func InitPageStateProcessor(firstAction Action) *PageStateProcessor {
+	return &PageStateProcessor{
+		pageStateInternals: pageStateInternals{
+			step:        NewStepProcessor(),
+			terminalMap: make(map[string]*TerminalProcessor),
+			sourceCode:  NewSourceCodeProcessor(),
+			nextAction:  firstAction,
+		},
+		preserved: nil,
+	}
+}
+
+func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	p.beginMutation()
 	defer p.endMutation()
 
@@ -52,4 +65,6 @@ func (p *PageStateProcessor) StateTransition(nextNextAction string) {
 	if err != nil {
 		p.rollbackMutation()
 	}
+
+	return nil
 }
