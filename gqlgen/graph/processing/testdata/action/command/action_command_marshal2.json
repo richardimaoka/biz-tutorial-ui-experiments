@@ -1,0 +1,9 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "another",
+  "command": "mkdir hello",
+  "defaultOpenFilePath": null,
+  "output": null,
+  "currentDirectory": null,
+  "effect": null
+}

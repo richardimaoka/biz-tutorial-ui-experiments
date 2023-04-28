@@ -1,0 +1,16 @@
+{
+  "actionType": "ActionCommand",
+  "command": "protoc --go_out=. helloworld.proto",
+  "currentDirectory": null,
+  "directoryDiff": {
+    "added": null,
+    "deleted": null
+  },
+  "fileDiff": {
+    "added": null,
+    "updated": null,
+    "deleted": null
+  },
+  "output": null,
+  "terminalName": "default"
+}

@@ -1,0 +1,9 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "another",
+  "command": "cd hello/world",
+  "defaultOpenFilePath": null,
+  "output": null,
+  "currentDirectory": "hello/world",
+  "effect": null
+}

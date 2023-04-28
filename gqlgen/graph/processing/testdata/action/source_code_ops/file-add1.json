@@ -1,0 +1,6 @@
+{
+  "seqNo": 25,
+  "operationType": "FileAdd",
+  "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+  "content": "***"
+}

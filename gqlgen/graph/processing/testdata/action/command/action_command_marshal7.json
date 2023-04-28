@@ -1,0 +1,22 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "with_dir_effect",
+  "output": null,
+  "defaultOpenFilePath": null,
+  "currentDirectory": null,
+  "effect": {
+    "diffType": "DirectoryDiff",
+    "added": null,
+    "deleted": [
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/d"
+      },
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/e"
+      }
+    ]
+  }
+}
