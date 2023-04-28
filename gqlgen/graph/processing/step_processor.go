@@ -1,5 +1,10 @@
 package processing
 
+import (
+	"fmt"
+	"strconv"
+)
+
 type stepProcessor struct {
 	currentStep string
 	nextStep    string
@@ -23,4 +28,19 @@ func (p *stepProcessor) IncrementStep(nextNextStep string) {
 	p.prevStep = p.currentStep
 	p.currentStep = p.nextStep
 	p.nextStep = nextNextStep
+}
+
+func (p *stepProcessor) AutoIncrementStep() error {
+	errorPreceding := "AutoIncrementStep failed"
+	stepNum, err := strconv.Atoi(p.NextStep())
+	if err != nil {
+		return fmt.Errorf("%s, failed, as step %s is not number format", errorPreceding, p.NextStep())
+	}
+
+	formatted := fmt.Sprintf("%03d", stepNum)
+	if p.NextStep() != formatted {
+		return fmt.Errorf("%s, as step %s is expected 3-digit number format %s", errorPreceding, p.NextStep(), formatted)
+	}
+
+	p.IncrementStep(formatted)
 }
