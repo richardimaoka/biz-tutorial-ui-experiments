@@ -34,7 +34,7 @@ func (p *stepProcessor) AutoIncrementStep() error {
 	errorPreceding := "AutoIncrementStep failed"
 	stepNum, err := strconv.Atoi(p.NextStep())
 	if err != nil {
-		return fmt.Errorf("%s, failed, as step %s is not number format", errorPreceding, p.NextStep())
+		return fmt.Errorf("%s, failed, as step %s is not in number format", errorPreceding, p.NextStep())
 	}
 
 	formatted := fmt.Sprintf("%03d", stepNum)
@@ -45,4 +45,14 @@ func (p *stepProcessor) AutoIncrementStep() error {
 	p.IncrementStep(formatted)
 
 	return nil
+}
+
+//clone function
+func (p *stepProcessor) Clone() *stepProcessor {
+	// copy to avoid receiver's mutation effect afterwards
+	return &stepProcessor{
+		currentStep: p.currentStep,
+		nextStep:    p.nextStep,
+		prevStep:    p.prevStep,
+	}
 }
