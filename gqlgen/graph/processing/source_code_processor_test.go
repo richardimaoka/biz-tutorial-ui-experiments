@@ -260,16 +260,16 @@ func Test_SourceCodeProcessor(t *testing.T) {
 }
 
 func TestSourceCode_Mutation(t *testing.T) {
-
 	sourceCode := NewSourceCodeProcessor()
 	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
 	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
 	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
-	// once materialized GraphQL model, mutation afterwards should have no effect
-	result := sourceCode.ToGraphQLModel()
-	compareAfterMarshal(t, "testdata/source_code/mutated.json", result)
+	// once materialized GraphQL model...
+	materialized := sourceCode.ToGraphQLModel()
+	compareAfterMarshal(t, "testdata/source_code/materialized.json", materialized)
 
+	// ...mutation afterwards should have no effect
 	sourceCode.step = "mutated step"
 	sourceCode.defaultOpenFilePath = "mutated/file/path"
 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
@@ -278,7 +278,10 @@ func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
 
-	compareAfterMarshal(t, "testdata/source_code/mutated.json", result)
+	// materialized GraphQL model should not be affected
+	compareAfterMarshal(t,
+		"testdata/source_code/materialized.json",
+		materialized) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
 }
 
 func TestSourceCode_Clone(t *testing.T) {
