@@ -55,6 +55,7 @@ func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 		terminalName = &copied
 	}
 
+	// clone to avoid receiver's mutation effect afterwards
 	var nodes []*model.TerminalNode
 	for _, e := range t.elements {
 		nodes = append(nodes, &model.TerminalNode{
@@ -70,6 +71,7 @@ func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 }
 
 func (t *TerminalProcessor) Clone() *TerminalProcessor {
+	// clone to avoid receiver's mutation effect afterwards
 	clonedElements := make([]terminalElementProcessor, 0)
 	for _, e := range t.elements {
 		clonedElements = append(clonedElements, e.Clone())

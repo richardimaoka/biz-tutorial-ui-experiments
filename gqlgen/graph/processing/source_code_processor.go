@@ -214,6 +214,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 }
 
 func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
+	// clone to avoid receiver's mutation effect afterwards
 	fileMap := make(map[string]fileTreeNode)
 	for k := range p.fileMap {
 		fileMap[k] = p.fileMap[k].Clone()
