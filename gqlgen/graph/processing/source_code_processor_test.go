@@ -334,11 +334,11 @@ func TestSourceCode_Clone(t *testing.T) {
 	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
 	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
-	// once cloned, mutation afterwards should have no effect
+	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()
 	compareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
 
-	// mutation after clone
+	// ... mutation after cloning should have no effect
 	sourceCode.step = "mutated step"
 	sourceCode.defaultOpenFilePath = "mutated/file/path"
 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
@@ -347,5 +347,8 @@ func TestSourceCode_Clone(t *testing.T) {
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
 
-	compareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
+	// cloned source code is not affected
+	compareAfterMarshal(t,
+		"testdata/source_code/cloned.json",
+		sourceCodeCloned.ToGraphQLModel()) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
 }

@@ -79,14 +79,14 @@ func TestTerminal_Clone1(t *testing.T) {
 
 	terminalOriginal := terminal.Clone()
 	result := terminalOriginal.ToGraphQLTerminal()
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+	compareAfterMarshal(t, "testdata/terminal/cloned.json", result)
 
 	terminal.WriteCommand("echo def")
 	terminal.WriteOutput("def")
 	terminal.WriteCommand("cd hello/world/thunder")
 	terminal.ChangeCurrentDirectory("hello/world/thunder")
 
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+	compareAfterMarshal(t, "testdata/terminal/cloned.json", result)
 }
 
 // test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter
@@ -95,16 +95,21 @@ func TestTerminal_Clone2(t *testing.T) {
 	terminal.WriteCommand("echo abc")
 	terminal.WriteOutput("abc")
 
+	// once cloned...
 	terminalOriginal := terminal.Clone()
-	result := terminalOriginal.ToGraphQLTerminal()
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+	compareAfterMarshal(t, "testdata/terminal/cloned.json", terminalOriginal.ToGraphQLTerminal())
 
+	// ... mutation after cloning should have no effect
 	terminal.currentDirectory = "mutated/current/dir"
 	terminal.terminalName = "mutated terminal name"
 	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
 	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
 	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
 	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
-	// TODO: see if terminal elements are really updated
-	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
+
+	// cloned terminal is not affected
+	compareAfterMarshal(t,
+		"testdata/terminal/cloned.json",
+		terminalOriginal.ToGraphQLTerminal(), // by changing this to terminal.ToGraphQLTerminal(), you can confirm mutation actually updated terminal
+	)
 }
