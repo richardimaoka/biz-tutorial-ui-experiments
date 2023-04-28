@@ -43,4 +43,6 @@ func (p *stepProcessor) AutoIncrementStep() error {
 	}
 
 	p.IncrementStep(formatted)
+
+	return nil
 }
