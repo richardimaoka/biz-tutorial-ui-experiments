@@ -214,9 +214,14 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 }
 
 func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
+	fileMap := make(map[string]fileTreeNode)
+	for k := range p.fileMap {
+		fileMap[k] = p.fileMap[k].Clone()
+	}
+
 	return &SourceCodeProcessor{
 		step:                p.step,
 		defaultOpenFilePath: p.defaultOpenFilePath,
-		fileMap:             p.fileMap,
+		fileMap:             fileMap,
 	}
 }

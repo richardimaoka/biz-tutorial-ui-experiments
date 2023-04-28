@@ -19,7 +19,7 @@ type fileTreeNode interface {
 	IsUpdated() bool
 	SetIsUpdated(isUpdated bool)
 	ToGraphQLNode() *model.FileNode
-	//TODO: Clone() fileTreeNode
+	Clone() fileTreeNode
 }
 
 type fileProcessorNode struct {
@@ -97,6 +97,16 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}
+}
+
+func (n *fileProcessorNode) Clone() fileTreeNode {
+	copied := *n // copy to avoid effect from fileProcessNode's mutation
+	return &copied
+}
+
+func (n *directoryProcessorNode) Clone() fileTreeNode {
+	copied := *n // copy to avoid effect from fileProcessNode's mutation
+	return &copied
 }
 
 func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
