@@ -105,6 +105,6 @@ func TestTerminal_Clone2(t *testing.T) {
 	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
 	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
 	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
-
+	// TODO: see if terminal elements are really updated
 	compareAfterMarshal(t, "testdata/terminal/clone.json", result)
 }

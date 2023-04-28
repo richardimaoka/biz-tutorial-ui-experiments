@@ -3,6 +3,7 @@ package processing
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
@@ -260,6 +261,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 }
 
 func TestSourceCode_Mutation(t *testing.T) {
+
 	sourceCode := NewSourceCodeProcessor()
 	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
 	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
@@ -278,4 +280,72 @@ func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
 
 	compareAfterMarshal(t, "testdata/source_code/mutated.json", result)
+}
+
+func testSourceCodeEqual(t *testing.T, sc1, sc2 *SourceCodeProcessor) {
+	errors := []string{}
+
+	if sc1.defaultOpenFilePath != sc2.defaultOpenFilePath {
+		errors = append(errors, fmt.Sprintf("defaultOpenFilePath not equal: %s != %s", sc1.defaultOpenFilePath, sc2.defaultOpenFilePath))
+	}
+
+	if sc1.step != sc2.step {
+		errors = append(errors, fmt.Sprintf("step not equal: %s != %s", sc1.step, sc2.step))
+	}
+
+	fileMapComparison := func(side string, fileMap1, fileMap2 map[string]fileTreeNode) {
+		for k, v1 := range fileMap1 {
+			v2, ok := fileMap2[k]
+			if !ok {
+				errors = append(errors, fmt.Sprintf("fileMap[%s] not found on %s", k, side))
+				continue
+			}
+
+			switch vv1 := v1.(type) {
+			case *fileProcessorNode:
+				vv2, ok := v2.(*fileProcessorNode)
+				if !ok {
+					errors = append(errors, fmt.Sprintf("fileMap[%s] is not a fileProcessorNode on %s", k, side))
+				} else if *vv1 != *vv2 {
+					errors = append(errors, fmt.Sprintf("fileMap[%s] not equal: %v != %v", k, vv1, vv2))
+				}
+			case *directoryProcessorNode:
+				vv2, ok := v2.(*directoryProcessorNode)
+				if !ok {
+					errors = append(errors, fmt.Sprintf("fileMap[%s] is not a directoryProcessorNode on %s", k, side))
+				} else if *vv1 != *vv2 {
+					errors = append(errors, fmt.Sprintf("fileMap[%s] not equal: %v != %v", k, vv1, vv2))
+				}
+			}
+		}
+	}
+
+	fileMapComparison("sc2", sc1.fileMap, sc2.fileMap)
+	fileMapComparison("sc1", sc2.fileMap, sc1.fileMap)
+
+	if len(errors) > 0 {
+		t.Fatalf("%s", strings.Join(errors, ", "))
+	}
+}
+
+func TestSourceCode_Clone(t *testing.T) {
+	sourceCode := NewSourceCodeProcessor()
+	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(model.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(model.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+
+	// once cloned, mutation afterwards should have no effect
+	sourceCodeCloned := sourceCode.Clone()
+	compareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
+
+	// mutation after clone
+	sourceCode.step = "mutated step"
+	sourceCode.defaultOpenFilePath = "mutated/file/path"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).filePath = "mutated/path/to/file"
+	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).isUpdated = true
+	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
+	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
+
+	compareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
 }

@@ -11,7 +11,7 @@
       "mode": "test",
       "trace": "verbose",
       "program": "${workspaceFolder}/graph/processing",
-      "args": ["-test.run", "Test_SourceCodeProcessor"]
+      "args": ["-test.run", "TestSourceCode_Clone"]
     },
     {
       "name": "Launch file",

@@ -214,5 +214,9 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 }
 
 func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
-	return nil
+	return &SourceCodeProcessor{
+		step:                p.step,
+		defaultOpenFilePath: p.defaultOpenFilePath,
+		fileMap:             p.fileMap,
+	}
 }
