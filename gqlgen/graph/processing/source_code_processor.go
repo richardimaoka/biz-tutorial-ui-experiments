@@ -46,6 +46,20 @@ func (p *SourceCodeProcessor) isValidNode(filePath string, t nodeType) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) canAdd(filePath string) error {
+	// 1. validate file path
+	if err := isValidFilePath(filePath); err != nil {
+		return err
+	}
+
+	// 2. check if there no file conflicts
+	if err := p.confirmNoFileConflict(filePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // this must be called after confirmNoFileConflict(), otherwise behavior is not guaranteed
 func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 	split := strings.Split(filePath, "/")
@@ -78,19 +92,13 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 }
 
 func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
-	// 1. validate file path
-	if err := isValidFilePath(op.FilePath); err != nil {
+	// 1. precondition
+	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there no file conflicts
-	if err := p.confirmNoFileConflict(op.FilePath); err != nil {
-		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
-	}
-
-	// 3 mutation
+	// 2 mutation
 	p.setAllIsUpdateFalse()
-
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 
@@ -98,19 +106,13 @@ func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
 }
 
 func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
-	// 1. validate file path
-	if err := isValidFilePath(op.FilePath); err != nil {
-		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
+	// 1. precondition
+	if err := p.canAdd(op.FilePath); err != nil {
+		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 	}
 
-	// 2. check if there no file conflicts
-	if err := p.confirmNoFileConflict(op.FilePath); err != nil {
-		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
-	}
-
-	// 3 mutation
+	// 2 mutation
 	p.setAllIsUpdateFalse()
-
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 
