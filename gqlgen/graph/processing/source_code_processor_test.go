@@ -259,7 +259,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 
 func TestSourceCode_Diff(t *testing.T) {
 	type Operation struct {
-		diff          GitDiff
+		diff          Diff
 		expectSuccess bool
 	}
 
@@ -271,7 +271,7 @@ func TestSourceCode_Diff(t *testing.T) {
 
 	applyOperations := func(processor *SourceCodeProcessor, operations []Operation) error {
 		for opNum, op := range operations {
-			opError := processor.ApplyGitDiff(op.diff)
+			opError := processor.ApplyDiff2(op.diff)
 
 			opSuccess := opError == nil
 			if opSuccess != op.expectSuccess { //if result is not expected
@@ -312,19 +312,19 @@ func TestSourceCode_Diff(t *testing.T) {
 		runEntries(t, []Entry{
 			{name: "add_file_single",
 				operations: []Operation{
-					{expectSuccess: true, diff: GitDiff{Added: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
+					{expectSuccess: true, diff: Diff{FilesAdded: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
 				}, resultFile: "testdata/source_code/diff-file1.json",
 			},
 
 			{name: "empty",
 				operations: []Operation{
-					{expectSuccess: true, diff: GitDiff{}},
+					{expectSuccess: true, diff: Diff{}},
 				}, resultFile: "testdata/source_code/new-source-code.json",
 			},
 
 			{name: "error_dupe",
 				operations: []Operation{
-					{expectSuccess: false, diff: GitDiff{Added: []FileAdd{
+					{expectSuccess: false, diff: Diff{FilesAdded: []FileAdd{
 						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
 						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
 					}}},
