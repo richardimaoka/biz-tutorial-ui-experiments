@@ -46,34 +46,6 @@ func (p *SourceCodeProcessor) isValidNode(filePath string, t nodeType) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) canAdd(filePath string) error {
-	// 1. validate file path
-	if err := isValidFilePath(filePath); err != nil {
-		return err
-	}
-
-	// 2. check if there no file conflicts
-	if err := p.confirmNoFileConflict(filePath); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) error {
-	// 1. validate file path
-	if err := isValidFilePath(filePath); err != nil {
-		return err
-	}
-
-	// 2. check if there is such a file
-	if err := p.isValidNode(filePath, t); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // this must be called after confirmNoFileConflict(), otherwise behavior is not guaranteed
 func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 	split := strings.Split(filePath, "/")
@@ -105,6 +77,67 @@ func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
 	return keys
 }
 
+func (p *SourceCodeProcessor) canAdd(filePath string) error {
+	// 1. validate file path
+	if err := isValidFilePath(filePath); err != nil {
+		return err
+	}
+
+	// 2. check if there no file conflicts
+	if err := p.confirmNoFileConflict(filePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) error {
+	// 1. validate file path
+	if err := isValidFilePath(filePath); err != nil {
+		return err
+	}
+
+	// 2. check if there is such a file
+	if err := p.isValidNode(filePath, t); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
+	p.setAllIsUpdateFalse()
+	p.addMissingParentDirs(op.FilePath)
+	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
+}
+
+func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
+	p.setAllIsUpdateFalse()
+	p.addMissingParentDirs(op.FilePath)
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+}
+
+func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
+	p.setAllIsUpdateFalse()
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+}
+
+func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {
+	p.setAllIsUpdateFalse()
+	delete(p.fileMap, op.FilePath)
+}
+
+func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
+	p.setAllIsUpdateFalse()
+	delete(p.fileMap, op.FilePath)
+	// delete op.FilePath's children
+	for k := range p.fileMap {
+		if strings.HasPrefix(k, op.FilePath) {
+			delete(p.fileMap, k)
+		}
+	}
+}
+
 //-----------------------------------------------------//
 // public methods below
 //-----------------------------------------------------//
@@ -118,77 +151,64 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 }
 
 func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
-	// 1. precondition
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
-	// 2 mutation
-	p.setAllIsUpdateFalse()
-	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
-
+	p.addDirectoryMutation(op)
 	return nil
 }
 
 func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
-	// 1. precondition
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 	}
 
-	// 2 mutation
-	p.setAllIsUpdateFalse()
-	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
-
+	p.addFileMutation(op)
 	return nil
 }
 
-func (p *SourceCodeProcessor) UpdateFile(op model.FileUpdate) error {
-	// 1. precondition
+func (p *SourceCodeProcessor) UpdateFile(op FileUpdate) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
-	// 2. mutation
-	p.setAllIsUpdateFalse()
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
-
+	p.updateFileMutation(op)
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
-	// 1. precondition
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
-	// 2. mutation
-	p.setAllIsUpdateFalse()
-	delete(p.fileMap, op.FilePath)
-
+	p.deleteFileMutation(op)
 	return nil
 }
 
 func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
-	// 1. precondition
 	if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
-	// 2. mutation
-	p.setAllIsUpdateFalse()
-	delete(p.fileMap, op.FilePath)
-	// delete op.FilePath's children
-	for k := range p.fileMap {
-		if strings.HasPrefix(k, op.FilePath) {
-			delete(p.fileMap, k)
-		}
-	}
-
+	p.deleteDirectoryMutation(op)
 	return nil
 }
+
+// func (p *SourceCodeProcessor) ApplyGitDiff(diff GitDiff) error {
+// 	for _, op := range diff.Added {
+// 		if err := p.AddFile(op); err != nil {
+// 			return err
+// 		}
+// 	}
+// 	for _, op := range diff.Updated {
+// 		p.updateFileContent(op.FilePath, op.Content)
+// 	}
+// 	for _, op := range diff.Deleted {
+// 		p.deleteFileContent(op.FilePath)
+// 		p.deleteFileNode(op.FilePath)
+// 	}
+// }
 
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode

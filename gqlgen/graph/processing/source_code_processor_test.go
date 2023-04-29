@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 func Test_SourceCodeProcessor(t *testing.T) {
 	type Operation struct {
-		operation     model.FileSystemOperation
+		operation     FileSystemOperation
 		expectSuccess bool
 	}
 
@@ -30,7 +28,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 				opError = processor.DeleteDirectory(v)
 			case FileAdd:
 				opError = processor.AddFile(v)
-			case model.FileUpdate:
+			case FileUpdate:
 				opError = processor.UpdateFile(v)
 			case FileDelete:
 				opError = processor.DeleteFile(v)
