@@ -12,15 +12,19 @@ type Action interface {
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
-	TerminalName        string     `json:"terminalName"`
-	Command             string     `json:"command"`
-	Output              *string    `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory    *string    `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	// fields for terminal
+	TerminalName     string  `json:"terminalName"`
+	Command          string  `json:"command"`
+	Output           *string `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+
+	// fields for source code
 	Effect              DiffEffect `json:"effect"`
 	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
 type ManualUpdate struct {
+	// fields for source code
 	Effect              DiffEffect `json:"effect"`
 	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
@@ -49,13 +53,16 @@ func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
 func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ActionCommand" // this has to be added
-	m["effect"] = a.Effect
-	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
-	m["command"] = &a.Command
+	// fields for terminal
 	m["terminalName"] = &a.TerminalName
+	m["command"] = &a.Command
 	m["output"] = a.Output
 	m["currentDirectory"] = a.CurrentDirectory
+
+	// fields for source code
+	m["effect"] = a.Effect
+	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
 }
@@ -64,6 +71,8 @@ func (a ActionCommand) MarshalJSON() ([]byte, error) {
 func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	m := make(map[string]interface{})
 	m["actionType"] = "ManualUpdate" // this has to be added
+
+	// fields for source code
 	m["effect"] = a.Effect
 	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
@@ -80,13 +89,19 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() expected type name to be ActionCommand, got %s", typeName)
 	}
 
-	// a different struct is needed to for *typed* reading of JSON
-	// also, if you use the same receiver struct in UnmarshalJSON, then infinite loop
+	// 2. read into a typed struct
+	//    a different struct is needed to for *typed* reading of JSON
+	//    also, if you use the same receiver struct in UnmarshalJSON, then infinite loop
 	var interim struct {
-		Command             string      `json:"command"`
-		TerminalName        string      `json:"terminalName"`
-		Output              *string     `json:"output"`
-		CurrentDirectory    *string     `json:"currentDirectory"`
+		// actionType is removed
+
+		// fields for terminal
+		TerminalName     string  `json:"terminalName"`
+		Command          string  `json:"command"`
+		Output           *string `json:"output"`
+		CurrentDirectory *string `json:"currentDirectory"`
+
+		// fields for source code
 		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
 		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
 	}
@@ -94,11 +109,14 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	// *typed* assignment
-	a.Command = interim.Command
+	// 3. *typed* assignment from here
+	//    fields for source code
 	a.TerminalName = interim.TerminalName
+	a.Command = interim.Command
 	a.Output = interim.Output
 	a.CurrentDirectory = interim.CurrentDirectory
+
+	// fields for source code
 	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
 
 	// Effect needs furether processing based on "diffType"
@@ -117,6 +135,7 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 
 // used in func unmarshalAction()
 func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
+	// 1. actionType check
 	typeName, err := extractTypeName(data, "actionType")
 	if err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to extract type name: %s", err)
@@ -125,16 +144,24 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() expected type name to be ManualUpdate, got %s", typeName)
 	}
 
-	// a different struct is needed to for *typed* reading of JSON
-	// also, if you use the same receiver struct in UnmarshalJSON, then infinite loop
+	// 2. read into a typed struct
+	//    a different struct is needed to for *typed* reading of JSON
+	//    also, if you use the same receiver struct in UnmarshalJSON, then infinite loop
 	var interim struct {
-		Effect interface{} `json:"effect"` // this needs furether processing based on "diffType"
+		// actionType is removed
+
+		// fields for source code
+		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
+		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
 	}
 
-	// Effect needs furether processing based on "diffType"
+	// 3. *typed* assignment from here
+	//    fields for source code
+	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
+	//    Effect needs furether processing based on "diffType"
 	if interim.Effect != nil {
 		remarshaledEffect, err := json.Marshal(interim.Effect)
 		if err != nil {
@@ -145,6 +172,7 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
 		}
 	}
+
 	return nil
 }
 
