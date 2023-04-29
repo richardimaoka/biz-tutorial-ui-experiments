@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+type Diff struct {
+	FilesAdded         []FileAdd         `json:"filesAdded"`
+	FilesUpdated       []FileUpdate      `json:"filesUpdated"`
+	FilesDeleted       []FileDelete      `json:"filesDeleted"`
+	DirectoriesAdded   []DirectoryAdd    `json:"directoriesAdded"`
+	DirectoriesDeleted []DirectoryDelete `json:"directoriesDeleted"`
+}
+
 type DiffEffect interface {
 	IsDiffEffect()
 }
@@ -29,6 +37,14 @@ func (d GitDiff) size() int {
 
 func (d DirectoryDiff) size() int {
 	return len(d.Added) + len(d.Deleted)
+}
+
+func (d Diff) size() int {
+	return len(d.FilesAdded) +
+		len(d.FilesDeleted) +
+		len(d.FilesAdded) +
+		len(d.DirectoriesDeleted) +
+		len(d.DirectoriesAdded)
 }
 
 func (d GitDiff) MarshalJSON() ([]byte, error) {
@@ -137,6 +153,73 @@ func (d DirectoryDiff) findDuplicate() DirectoryDiff {
 		for _, v := range d.Deleted {
 			if v.FilePath == dupePath {
 				diffDuplicate.Deleted = append(diffDuplicate.Deleted, v)
+			}
+		}
+	}
+
+	return diffDuplicate
+}
+
+func (d Diff) findDuplicate() Diff {
+	var filePathUnion []string
+	for _, v := range d.FilesAdded {
+		filePathUnion = append(filePathUnion, v.FilePath)
+	}
+	for _, v := range d.FilesUpdated {
+		filePathUnion = append(filePathUnion, v.FilePath)
+	}
+	for _, v := range d.FilesDeleted {
+		filePathUnion = append(filePathUnion, v.FilePath)
+	}
+	for _, v := range d.DirectoriesAdded {
+		filePathUnion = append(filePathUnion, v.FilePath)
+	}
+	for _, v := range d.DirectoriesDeleted {
+		filePathUnion = append(filePathUnion, v.FilePath)
+	}
+
+	//find duplicate
+	var filePathCount = make(map[string]int)
+	for _, p := range filePathUnion {
+		if count, ok := filePathCount[p]; ok {
+			filePathCount[p] = count + 1
+		} else {
+			filePathCount[p] = 1
+		}
+	}
+	var duplicate = make(map[string]int)
+	for k, v := range filePathCount {
+		if v > 1 {
+			duplicate[k] = v
+		}
+	}
+
+	//duplicate by add, update, and delete operation
+	diffDuplicate := Diff{}
+	for dupePath := range duplicate {
+		for _, v := range d.FilesAdded {
+			if v.FilePath == dupePath {
+				diffDuplicate.FilesAdded = append(diffDuplicate.FilesAdded, v)
+			}
+		}
+		for _, v := range d.FilesUpdated {
+			if v.FilePath == dupePath {
+				diffDuplicate.FilesUpdated = append(diffDuplicate.FilesUpdated, v)
+			}
+		}
+		for _, v := range d.FilesDeleted {
+			if v.FilePath == dupePath {
+				diffDuplicate.FilesDeleted = append(diffDuplicate.FilesDeleted, v)
+			}
+		}
+		for _, v := range d.DirectoriesAdded {
+			if v.FilePath == dupePath {
+				diffDuplicate.DirectoriesAdded = append(diffDuplicate.DirectoriesAdded, v)
+			}
+		}
+		for _, v := range d.DirectoriesDeleted {
+			if v.FilePath == dupePath {
+				diffDuplicate.DirectoriesDeleted = append(diffDuplicate.DirectoriesDeleted, v)
 			}
 		}
 	}
