@@ -257,6 +257,83 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	})
 }
 
+func TestSourceCode_Diff(t *testing.T) {
+	type Operation struct {
+		diff          GitDiff
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		name       string
+		operations []Operation
+		resultFile string
+	}
+
+	applyOperations := func(processor *SourceCodeProcessor, operations []Operation) error {
+		for opNum, op := range operations {
+			opError := processor.ApplyGitDiff(op.diff)
+
+			opSuccess := opError == nil
+			if opSuccess != op.expectSuccess { //if result is not expected
+				if op.expectSuccess {
+					return fmt.Errorf(
+						"operations[%d] success is expected, but result is failure\nerror:     %s\noperation: %+v\n",
+						opNum,
+						opError.Error(),
+						op)
+				} else {
+					return fmt.Errorf(
+						"operations[%d] failure is expected, but result is success\noperation: %+v\n",
+						opNum,
+						op)
+				}
+			}
+		}
+
+		return nil
+	}
+
+	// accept testEntries, and run tests on them
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for _, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				sourceCode := NewSourceCodeProcessor()
+				if err := applyOperations(sourceCode, e.operations); err != nil {
+					t.Errorf(err.Error()) // fail but continue running, as two ops can fail in sequence
+					return
+				}
+
+				compareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
+			})
+		}
+	}
+
+	t.Run("diff", func(t *testing.T) {
+		runEntries(t, []Entry{
+			{name: "add_file_single",
+				operations: []Operation{
+					{expectSuccess: true, diff: GitDiff{Added: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
+				}, resultFile: "testdata/source_code/diff-file1.json",
+			},
+
+			{name: "empty",
+				operations: []Operation{
+					{expectSuccess: true, diff: GitDiff{}},
+				}, resultFile: "testdata/source_code/new-source-code.json",
+			},
+
+			{name: "error_dupe",
+				operations: []Operation{
+					{expectSuccess: false, diff: GitDiff{Added: []FileAdd{
+						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+					}}},
+				}, resultFile: "testdata/source_code/new-source-code.json",
+			},
+		})
+	})
+}
+
 func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode := NewSourceCodeProcessor()
 	sourceCode.AddFile(FileAdd{FilePath: "hello/world/japan.txt"})
