@@ -30,7 +30,7 @@ func TestActionCommandMarshal(t *testing.T) {
 			expectedFile: "testdata/action/command/action_command_marshal5.json",
 			command:      ActionCommand{TerminalName: "another", Command: "complex_command", Output: address("some output"), CurrentDirectory: address("hello/world")}},
 		{name: "command_file_diff",
-			expectedFile: "testdata/action/command/action_command_marshal8.json",
+			expectedFile: "testdata/action/command/action_command_marshal6.json",
 			command: ActionCommand{
 				TerminalName: "default",
 				Command:      "with_file_diff",
@@ -55,7 +55,7 @@ func TestActionCommandUnmarshal(t *testing.T) {
 		"testdata/action/command/action_command1.json",
 		"testdata/action/command/action_command2.json",
 		"testdata/action/command/action_command3.json",
-		"testdata/action/command/action_command5.json",
+		"testdata/action/command/action_command4.json",
 	}
 
 	for _, f := range files {
@@ -102,7 +102,7 @@ func TestEnrichActionCommandDiff(t *testing.T) {
 	t.Run("action_diff", func(t *testing.T) {
 		runEntries(t, []Entry{
 			{name: "add_file_single",
-				resultFile: "testdata/action/enrich/action2.json",
+				resultFile: "testdata/action/enrich/action1.json",
 				action:     &ActionCommand{TerminalName: "default", Command: "git apply 324x435d"},
 				operations: []Operation{
 					{expectSuccess: true, operation: FileAdd{Content: "***", IsFullContent: false, FilePath: "protoc-go-experiments/helloworld/greeting.pb"}},
