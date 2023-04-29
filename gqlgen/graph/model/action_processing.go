@@ -96,7 +96,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) error {
 	errorPreceding := "Error in EnrichActionFiles"
 
-	// load actions into memory
+	// 1. load actions into memory
 	var actions []Action
 
 	actionFiles, err := FilesInDir(actionDir, actionPrefix)
@@ -117,13 +117,14 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	}
 	log.Printf("EnrichActionFiles: read %d actions from %s", len(actions), actionDir)
 
-	// read operations and enrich actions
+	// 2. read operations
 	jsonOpsArray, err := readJsonArray(opsListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 	log.Printf("EnrichActionFiles: read %d operations from %s", len(jsonOpsArray), opsListFile)
 
+	// 3. enrich actions
 	for _, jsonObj := range jsonOpsArray {
 		opBytes, err := json.Marshal(jsonObj)
 		if err != nil {
@@ -154,7 +155,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 		}
 	}
 
-	// write enriched actions to files
+	// 4. write enriched actions to files
 	for i, action := range actions {
 		targetFile := targetFileName(targetDir, actionPrefix, i)
 		if err := WriteJsonToFile(action, targetFile); err != nil {

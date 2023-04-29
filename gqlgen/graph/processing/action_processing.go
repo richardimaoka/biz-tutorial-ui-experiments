@@ -63,14 +63,14 @@ func WriteJsonToFile(v any, filePath string) error {
 func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
-	// read and process the whole file
+	// 1. read and process the whole file
 	jsonArray, err := readJsonArray(actionListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 	log.Printf("SplitActionList: read %d actions from %s", len(jsonArray), actionListFile)
 
-	// write each array element into file
+	// 2. write each array element into file
 	for i, jsonObj := range jsonArray {
 		jsonBytes, err := json.Marshal(jsonObj)
 		if err != nil {
@@ -96,7 +96,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) error {
 	errorPreceding := "Error in EnrichActionFiles"
 
-	// load actions into memory
+	// 1. load actions into memory
 	var actions []Action
 
 	actionFiles, err := FilesInDir(actionDir, actionPrefix)
@@ -117,13 +117,14 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	}
 	log.Printf("EnrichActionFiles: read %d actions from %s", len(actions), actionDir)
 
-	// read operations and enrich actions
+	// 2. read operations
 	jsonOpsArray, err := readJsonArray(opsListFile)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 	log.Printf("EnrichActionFiles: read %d operations from %s", len(jsonOpsArray), opsListFile)
 
+	// 3. enrich actions
 	for _, jsonObj := range jsonOpsArray {
 		opBytes, err := json.Marshal(jsonObj)
 		if err != nil {
@@ -150,7 +151,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 		actions[seqNoInt].Enrich(operation)
 	}
 
-	// write enriched actions to files
+	// 4. write enriched actions to files
 	for i, action := range actions {
 		targetFile := targetFileName(targetDir, actionPrefix, i)
 		if err := WriteJsonToFile(action, targetFile); err != nil {
@@ -162,60 +163,61 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	return nil
 }
 
-// func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error {
-// 	errorPreceding := "Error in ApplyActions"
+func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error {
+	errorPreceding := "Error in ApplyActions"
 
-// 	actionFiles, err := FilesInDir(actionDir, actionPrefix)
-// 	if err != nil {
-// 		return fmt.Errorf("%s, %s", errorPreceding, err)
-// 	}
-// 	log.Printf("ApplyActions: read %d actions from %s", len(actionFiles), actionDir)
+	// load enriched action files
+	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	if err != nil {
+		return fmt.Errorf("%s, %s", errorPreceding, err)
+	}
+	log.Printf("ApplyActions: read %d actions from %s", len(actionFiles), actionDir)
 
-// 	pageState := NewPageState()
-// 	fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
-// 	if err := WriteJsonToFile(pageState, fileName); err != nil {
-// 		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
-// 	}
+	// 	pageState := NewPageState()
+	// 	fileName := stateFileName(targetDir, targetPrefix, *pageState.Step)
+	// 	if err := WriteJsonToFile(pageState, fileName); err != nil {
+	// 		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+	// 	}
 
-// 	for _, file := range actionFiles {
-// 		action, err := readAction(file)
-// 		if err != nil {
-// 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-// 		}
+	// 	for _, file := range actionFiles {
+	// 		action, err := readAction(file)
+	// 		if err != nil {
+	// 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
+	// 		}
 
-// 		switch v := action.(type) {
-// 		case ActionCommand:
-// 			if err := pageState.TypeInCommand(v); err != nil {
-// 				return fmt.Errorf("%s, %s", errorPreceding, err)
-// 			}
-// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
-// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
-// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
-// 			}
-// 			// log.Printf("ApplyActions: typed in command  %d from %s, step = %s", i, file, *pageState.Step)
+	// 		switch v := action.(type) {
+	// 		case ActionCommand:
+	// 			if err := pageState.TypeInCommand(v); err != nil {
+	// 				return fmt.Errorf("%s, %s", errorPreceding, err)
+	// 			}
+	// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
+	// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
+	// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+	// 			}
+	// 			// log.Printf("ApplyActions: typed in command  %d from %s, step = %s", i, file, *pageState.Step)
 
-// 			if err := pageState.ExecuteLastCommand(v); err != nil {
-// 				return fmt.Errorf("%s, %s", errorPreceding, err)
-// 			}
-// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
-// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
-// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
-// 			}
-// 			// log.Printf("ApplyActions: executed command  %d from %s, step = %s", i, file, *pageState.Step)
-// 		case ManualUpdate:
-// 			if err := pageState.ApplyManualUpdate(v); err != nil {
-// 				return fmt.Errorf("%s, %s", errorPreceding, err)
-// 			}
-// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
-// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
-// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
-// 			}
-// 		}
-// 	}
-// 	log.Printf("ApplyActions: wrote %s states to %s", *pageState.Step, targetDir)
+	// 			if err := pageState.ExecuteLastCommand(v); err != nil {
+	// 				return fmt.Errorf("%s, %s", errorPreceding, err)
+	// 			}
+	// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
+	// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
+	// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+	// 			}
+	// 			// log.Printf("ApplyActions: executed command  %d from %s, step = %s", i, file, *pageState.Step)
+	// 		case ManualUpdate:
+	// 			if err := pageState.ApplyManualUpdate(v); err != nil {
+	// 				return fmt.Errorf("%s, %s", errorPreceding, err)
+	// 			}
+	// 			fileName = stateFileName(targetDir, targetPrefix, *pageState.Step)
+	// 			if err := WriteJsonToFile(pageState, fileName); err != nil {
+	// 				return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
+	// 			}
+	// 		}
+	// 	}
+	// 	log.Printf("ApplyActions: wrote %s states to %s", *pageState.Step, targetDir)
 
-// 	return nil
-// }
+	return nil
+}
 
 func Processing() error {
 	actionPrefix := "action"
