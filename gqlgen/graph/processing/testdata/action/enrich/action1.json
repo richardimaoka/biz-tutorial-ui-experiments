@@ -17,5 +17,12 @@
     ],
     "deleted": null,
     "updated": null
+  },
+  "diff": {
+    "directoriesAdded": null,
+    "directoriesDeleted": null,
+    "filesAdded": null,
+    "filesDeleted": null,
+    "filesUpdated": null
   }
 }

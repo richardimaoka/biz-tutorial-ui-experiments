@@ -20,12 +20,14 @@ type ActionCommand struct {
 
 	// fields for source code
 	Effect              DiffEffect `json:"effect"`
+	Diff                Diff       `json:"diff"`
 	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
 type ManualUpdate struct {
 	// fields for source code
 	Effect              DiffEffect `json:"effect"`
+	Diff                Diff       `json:"diff"`
 	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
@@ -35,6 +37,10 @@ func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
 	}
 	return a, nil
+}
+
+func (a *ActionCommand) Enrich2(op FileSystemOperation) {
+	// a.Diff.Append(op)
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
@@ -62,6 +68,7 @@ func (a ActionCommand) MarshalJSON() ([]byte, error) {
 
 	// fields for source code
 	m["effect"] = a.Effect
+	m["diff"] = a.Diff
 	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
@@ -74,6 +81,7 @@ func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 
 	// fields for source code
 	m["effect"] = a.Effect
+	m["diff"] = a.Diff
 	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
 	return json.Marshal(m)
@@ -103,6 +111,7 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 
 		// fields for source code
 		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
+		Diff                Diff        `json:"diff"`
 		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
@@ -118,6 +127,7 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 
 	// fields for source code
 	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
+	a.Diff = interim.Diff
 
 	// Effect needs furether processing based on "diffType"
 	if interim.Effect != nil {
@@ -152,6 +162,7 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 
 		// fields for source code
 		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
+		Diff                Diff        `json:"diff"`
 		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
@@ -161,6 +172,7 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 	// 3. *typed* assignment from here
 	//    fields for source code
 	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
+	a.Diff = interim.Diff
 	//    Effect needs furether processing based on "diffType"
 	if interim.Effect != nil {
 		remarshaledEffect, err := json.Marshal(interim.Effect)

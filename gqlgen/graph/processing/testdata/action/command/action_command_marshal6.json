@@ -26,5 +26,12 @@
         "filePath": "a/b/e"
       }
     ]
+  },
+  "diff": {
+    "directoriesAdded": null,
+    "directoriesDeleted": null,
+    "filesAdded": null,
+    "filesDeleted": null,
+    "filesUpdated": null
   }
 }
