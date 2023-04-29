@@ -166,8 +166,9 @@ func (p *SourceCodeProcessor) canApplyDiff(diff Diff) error {
 		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
 	}
 
-	// 2. each element's pre-condition check
-	//    since there is no dupe, these checks are mutually exclusive
+	// 2. TODO: check if there is no file conflicts -- e.g addFiles cannot mutate parents of addDirs
+
+	// 3. each element's pre-condition check
 	errors := []string{}
 	for _, op := range diff.FilesAdded {
 		if err := p.canAdd(op.FilePath); err != nil {
@@ -228,6 +229,25 @@ func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
 		if strings.HasPrefix(k, op.FilePath) {
 			delete(p.fileMap, k)
 		}
+	}
+}
+
+func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) {
+	// since there is no dupe, these mutations are mutually exclusive
+	for _, op := range diff.FilesAdded {
+		p.addFileMutation(op)
+	}
+	for _, op := range diff.FilesDeleted {
+		p.deleteFileMutation(op)
+	}
+	for _, op := range diff.FilesUpdated {
+		p.updateFileMutation(op)
+	}
+	for _, op := range diff.DirectoriesAdded {
+		p.addDirectoryMutation(op)
+	}
+	for _, op := range diff.DirectoriesDeleted {
+		p.deleteDirectoryMutation(op)
 	}
 }
 
@@ -328,21 +348,16 @@ func (p *SourceCodeProcessor) ApplyDirectoryDiff(diff DirectoryDiff) error {
 	return nil
 }
 
-// func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
-// 	if err := p.canApplyDirectoryDiff(diff); err != nil {
-// 		return fmt.Errorf("cannot apply git diff, %s", err)
-// 	}
+func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
+	if err := p.canApplyDiff(diff); err != nil {
+		return fmt.Errorf("cannot apply diff, %s", err)
+	}
 
-// 	p.setAllIsUpdateFalse()
-// 	for _, op := range diff.Added {
-// 		p.addDirectoryMutation(op)
-// 	}
-// 	for _, op := range diff.Deleted {
-// 		p.deleteDirectoryMutation(op)
-// 	}
+	p.setAllIsUpdateFalse()
+	p.applyDiifMutation(diff)
 
-// 	return nil
-// }
+	return nil
+}
 
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
