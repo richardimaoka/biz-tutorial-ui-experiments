@@ -1,0 +1,23 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "another",
+  "command": "cd hello/world",
+  "defaultOpenFilePath": null,
+  "output": null,
+  "currentDirectory": "hello/world",
+  "effect": null,
+  "diff": {
+    "directoriesAdded": null,
+    "directoriesDeleted": null,
+    "filesAdded": [
+      {
+        "content": "***",
+        "isFullContent": false,
+        "operationType": "FileAdd",
+        "filePath": "protoc-go-experiments/helloworld/greeting.pb"
+      }
+    ],
+    "filesDeleted": null,
+    "filesUpdated": null
+  }
+}

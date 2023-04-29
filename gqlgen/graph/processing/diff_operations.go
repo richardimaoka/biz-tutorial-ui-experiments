@@ -258,7 +258,7 @@ func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 	}
 }
 
-func (d *Diff) append(op FileSystemOperation) {
+func (d *Diff) Append(op FileSystemOperation) {
 	switch v := op.(type) {
 	case FileAdd:
 		d.FilesAdded = append(d.FilesAdded, v)

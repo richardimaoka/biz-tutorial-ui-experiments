@@ -50,6 +50,18 @@ func TestActionCommandMarshal(t *testing.T) {
 				},
 			},
 		},
+		{name: "command_file_diff",
+			expectedFile: "testdata/action/command/action_command_marshal8.json",
+			command: ActionCommand{
+				TerminalName: "default",
+				Command:      "with_file_diff",
+				Diff: Diff{
+					FilesAdded:         []FileAdd{{FilePath: "a/b/c", Content: "file content", IsFullContent: true}},
+					FilesDeleted:       []FileDelete{{FilePath: "a/b/d"}, {FilePath: "a/b/e"}},
+					DirectoriesDeleted: []DirectoryDelete{{FilePath: "aa/b/d"}, {FilePath: "aa/b/e"}},
+				},
+			},
+		},
 	}
 
 	for _, e := range entries {
@@ -65,6 +77,7 @@ func TestActionCommandUnmarshal(t *testing.T) {
 		"testdata/action/command/action_command2.json",
 		"testdata/action/command/action_command3.json",
 		"testdata/action/command/action_command4.json",
+		"testdata/action/command/action_command5.json",
 	}
 
 	for _, f := range files {
@@ -133,4 +146,42 @@ func TestEnrichActionCommand(t *testing.T) {
 		},
 	}
 	t.Run("add_files", func(t *testing.T) { runEntries(t, entries) })
+}
+
+func TestEnrichActionCommandDiff(t *testing.T) {
+	type Operation struct {
+		operation     FileSystemOperation
+		expectSuccess bool
+	}
+
+	type Entry struct {
+		name       string
+		action     Action2
+		operations []Operation
+		resultFile string
+	}
+
+	runEntries := func(t *testing.T, testEntries []Entry) {
+		for _, e := range testEntries {
+			t.Run(e.name, func(t *testing.T) {
+				for _, op := range e.operations {
+					e.action.Enrich2(op.operation)
+				}
+
+				compareAfterMarshal(t, e.resultFile, e.action)
+			})
+		}
+	}
+
+	t.Run("action_diff", func(t *testing.T) {
+		runEntries(t, []Entry{
+			{name: "add_file_single",
+				resultFile: "testdata/action/enrich/action2.json",
+				action:     &ActionCommand{TerminalName: "default", Command: "git apply 324x435d"},
+				operations: []Operation{
+					{expectSuccess: true, operation: FileAdd{Content: "***", IsFullContent: false, FilePath: "protoc-go-experiments/helloworld/greeting.pb"}},
+				},
+			},
+		})
+	})
 }

@@ -10,6 +10,10 @@ type Action interface {
 	Enrich(operation FileSystemOperation) (Action, error)
 }
 
+type Action2 interface {
+	Enrich2(operation FileSystemOperation)
+}
+
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
 type ActionCommand struct {
 	// fields for terminal
@@ -40,7 +44,7 @@ func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
 }
 
 func (a *ActionCommand) Enrich2(op FileSystemOperation) {
-	// a.Diff.Append(op)
+	a.Diff.Append(op)
 }
 
 func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
@@ -49,6 +53,10 @@ func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
 		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
 	}
 	return m, nil
+}
+
+func (a *ManualUpdate) Enrich2(op FileSystemOperation) {
+	a.Diff.Append(op)
 }
 
 // ------------------------------
