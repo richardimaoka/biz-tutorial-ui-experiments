@@ -65,7 +65,7 @@ func (p *PageState) canExecuteLastCommand(command ActionCommand) (*Terminal, err
 		}
 	}
 
-	// TODO: fix issue - if you run this BEFORE executing command, it could fails
+	// TODO: fix issue - if you run this BEFORE executing command, it could fail
 	// if command.DefaultOpenFilePath != nil {
 	// 	if err := p.SourceCode.canSetDefaultOpenFile(*command.DefaultOpenFilePath); err != nil {
 	// 		return nil, fmt.Errorf("cannot execute last command, %s", err)

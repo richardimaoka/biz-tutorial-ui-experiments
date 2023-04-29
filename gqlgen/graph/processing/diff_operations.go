@@ -63,16 +63,16 @@ func (d GitDiff) findDuplicate() GitDiff {
 	}
 
 	//find duplicate
-	var found = make(map[string]int)
+	var filePathCount = make(map[string]int)
 	for _, p := range filePathUnion {
-		if count, ok := found[p]; ok {
-			found[p] = count + 1
+		if count, ok := filePathCount[p]; ok {
+			filePathCount[p] = count + 1
 		} else {
-			found[p] = 1
+			filePathCount[p] = 1
 		}
 	}
 	var duplicate = make(map[string]int)
-	for k, v := range found {
+	for k, v := range filePathCount {
 		if v > 1 {
 			duplicate[k] = v
 		}
@@ -111,16 +111,16 @@ func (d DirectoryDiff) findDuplicate() DirectoryDiff {
 	}
 
 	//find duplicate
-	var found = make(map[string]int)
+	var filePathCount = make(map[string]int)
 	for _, p := range filePathUnion {
-		if count, ok := found[p]; ok {
-			found[p] = count + 1
+		if count, ok := filePathCount[p]; ok {
+			filePathCount[p] = count + 1
 		} else {
-			found[p] = 1
+			filePathCount[p] = 1
 		}
 	}
 	var duplicate = make(map[string]int)
-	for k, v := range found {
+	for k, v := range filePathCount {
 		if v > 1 {
 			duplicate[k] = v
 		}

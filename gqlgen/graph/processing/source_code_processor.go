@@ -135,30 +135,50 @@ func (p *SourceCodeProcessor) canApplyGitDiff(diff GitDiff) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) canApplyDirectoryDiff(diff DirectoryDiff) error {
+	// pre-condition check, dupe in diff
+	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
+		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
+	}
+
+	// pre-condition check, each element's pre-condition check
+	errors := []string{}
+	for _, op := range diff.Added {
+		if err := p.canAdd(op.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.Deleted {
+		if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf("cannot apply diff, %s", strings.Join(errors, ", "))
+	}
+
+	return nil
+}
+
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
-	p.setAllIsUpdateFalse()
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 }
 
 func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
-	p.setAllIsUpdateFalse()
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 }
 
 func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
-	p.setAllIsUpdateFalse()
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 }
 
 func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {
-	p.setAllIsUpdateFalse()
 	delete(p.fileMap, op.FilePath)
 }
 
 func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
-	p.setAllIsUpdateFalse()
 	delete(p.fileMap, op.FilePath)
 	// delete op.FilePath's children
 	for k := range p.fileMap {
@@ -185,6 +205,7 @@ func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
 
+	p.setAllIsUpdateFalse()
 	p.addDirectoryMutation(op)
 	return nil
 }
@@ -194,6 +215,7 @@ func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
 		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 	}
 
+	p.setAllIsUpdateFalse()
 	p.addFileMutation(op)
 	return nil
 }
@@ -203,6 +225,7 @@ func (p *SourceCodeProcessor) UpdateFile(op FileUpdate) error {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
+	p.setAllIsUpdateFalse()
 	p.updateFileMutation(op)
 	return nil
 }
@@ -212,6 +235,7 @@ func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
+	p.setAllIsUpdateFalse()
 	p.deleteFileMutation(op)
 	return nil
 }
@@ -221,6 +245,7 @@ func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
+	p.setAllIsUpdateFalse()
 	p.deleteDirectoryMutation(op)
 	return nil
 }
@@ -229,6 +254,8 @@ func (p *SourceCodeProcessor) ApplyGitDiff(diff GitDiff) error {
 	if err := p.canApplyGitDiff(diff); err != nil {
 		return fmt.Errorf("cannot apply git diff, %s", err)
 	}
+
+	p.setAllIsUpdateFalse()
 	for _, op := range diff.Added {
 		p.addFileMutation(op)
 	}
@@ -238,6 +265,23 @@ func (p *SourceCodeProcessor) ApplyGitDiff(diff GitDiff) error {
 	for _, op := range diff.Deleted {
 		p.deleteFileMutation(op)
 	}
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) ApplyDirectoryDiff(diff DirectoryDiff) error {
+	if err := p.canApplyDirectoryDiff(diff); err != nil {
+		return fmt.Errorf("cannot apply git diff, %s", err)
+	}
+
+	p.setAllIsUpdateFalse()
+	for _, op := range diff.Added {
+		p.addDirectoryMutation(op)
+	}
+	for _, op := range diff.Deleted {
+		p.deleteDirectoryMutation(op)
+	}
+
 	return nil
 }
 
