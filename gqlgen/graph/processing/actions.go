@@ -7,11 +7,7 @@ import (
 )
 
 type Action interface {
-	Enrich(operation FileSystemOperation) (Action, error)
-}
-
-type Action2 interface {
-	Enrich2(operation FileSystemOperation)
+	Enrich(operation FileSystemOperation)
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -35,27 +31,11 @@ type ManualUpdate struct {
 	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
 }
 
-func (a ActionCommand) Enrich(op FileSystemOperation) (Action, error) {
-	var err error
-	if a.Effect, err = AppendDiffEffect(a.Effect, op); err != nil {
-		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	}
-	return a, nil
-}
-
-func (a *ActionCommand) Enrich2(op FileSystemOperation) {
+func (a *ActionCommand) Enrich(op FileSystemOperation) {
 	a.Diff.Append(op)
 }
 
-func (m ManualUpdate) Enrich(op FileSystemOperation) (Action, error) {
-	var err error
-	if m.Effect, err = AppendDiffEffect(m.Effect, op); err != nil {
-		return nil, fmt.Errorf("ActionCommand.Enrich() failed to append diff effect: %s", err)
-	}
-	return m, nil
-}
-
-func (a *ManualUpdate) Enrich2(op FileSystemOperation) {
+func (a *ManualUpdate) Enrich(op FileSystemOperation) {
 	a.Diff.Append(op)
 }
 
@@ -206,26 +186,6 @@ func unmarshalAction(bytes []byte) (Action, error) {
 	case "ActionCommand":
 		var action ActionCommand
 		err := json.Unmarshal(bytes, &action) // calls UnmarshalJSON()
-		return action, err
-	case "ManualUpdate":
-		var action ManualUpdate
-		err := json.Unmarshal(bytes, &action) // calls UnmarshalJSON()
-		return action, err
-	default:
-		return nil, fmt.Errorf("unmarshalAction() found invalid actionType = %s", typeName)
-	}
-}
-
-func unmarshalAction2(bytes []byte) (Action2, error) {
-	typeName, err := extractTypeName(bytes, "actionType")
-	if err != nil {
-		return nil, fmt.Errorf("unmarshalAction() failed to extract actionType %s", err)
-	}
-
-	switch typeName {
-	case "ActionCommand":
-		var action ActionCommand
-		err := json.Unmarshal(bytes, &action) // calls UnmarshalJSON()
 		return &action, err
 	case "ManualUpdate":
 		var action ManualUpdate
@@ -242,12 +202,4 @@ func readAction(filePath string) (Action, error) {
 		return nil, err
 	}
 	return unmarshalAction(jsonBytes)
-}
-
-func readAction2(filePath string) (Action2, error) {
-	jsonBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-	return unmarshalAction2(jsonBytes)
 }

@@ -97,7 +97,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	errorPreceding := "Error in EnrichActionFiles"
 
 	// load actions into memory
-	var actions []Action2
+	var actions []Action
 
 	actionFiles, err := FilesInDir(actionDir, actionPrefix)
 	if err != nil {
@@ -109,7 +109,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 		if expectedFileName != file {
 			return fmt.Errorf("%s, expected file %s, got %s", errorPreceding, expectedFileName, file)
 		}
-		action, err := readAction2(file)
+		action, err := readAction(file)
 		if err != nil {
 			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
 		}
@@ -147,7 +147,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 			return fmt.Errorf("%s, seqNo = %d is out of range, %s", errorPreceding, seqNoInt, err)
 		}
 
-		actions[seqNoInt].Enrich2(operation)
+		actions[seqNoInt].Enrich(operation)
 	}
 
 	// write enriched actions to files

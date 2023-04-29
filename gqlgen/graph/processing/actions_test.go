@@ -82,7 +82,7 @@ func TestEnrichActionCommandDiff(t *testing.T) {
 
 	type Entry struct {
 		name       string
-		action     Action2
+		action     Action
 		operations []Operation
 		resultFile string
 	}
@@ -91,7 +91,7 @@ func TestEnrichActionCommandDiff(t *testing.T) {
 		for _, e := range testEntries {
 			t.Run(e.name, func(t *testing.T) {
 				for _, op := range e.operations {
-					e.action.Enrich2(op.operation)
+					e.action.Enrich(op.operation)
 				}
 
 				compareAfterMarshal(t, e.resultFile, e.action)
