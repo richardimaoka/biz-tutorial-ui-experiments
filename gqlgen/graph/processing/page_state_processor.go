@@ -42,13 +42,38 @@ func (p *PageStateProcessor) rollbackMutation() {
 }
 
 func (p *PageStateProcessor) applyNextAction() error {
-	// if err := p.sourceCode.ApplyDiff(p.nextAction.Effect); err != nil {
-	// }
-	// // this needs to be applied after diff, as the default file might be created in apply diff
-	// if err := p.sourceCode.setDefault(p.nextAction.DefaultOpenFilePath); err != nil {
-	// }
+	switch action := p.nextAction.(type) {
+	case *ActionCommand:
+		// 1.1 source code mutation
+		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
+			return fmt.Errorf("failed to apply next action, %s", err)
+		}
 
-	return nil
+		// 1.2 terminal mutation
+		terminal, ok := p.terminalMap[action.TerminalName]
+		if !ok {
+			return fmt.Errorf("failed to apply next action, terminal [%s] does not exist", action.TerminalName)
+		}
+		terminal.WriteCommand(action.Command)
+		if action.Output != nil {
+			terminal.WriteOutput(*action.Output)
+		}
+		if action.CurrentDirectory != nil {
+			terminal.ChangeCurrentDirectory(*action.CurrentDirectory)
+		}
+
+		return nil
+	case *ManualUpdate:
+		// 2.1 source code mutation
+		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
+			return fmt.Errorf("failed to apply next action, %s", err)
+		}
+
+		return nil
+	default:
+		// this should never happen
+		return fmt.Errorf("unknown action type %T", action)
+	}
 }
 
 //------------------------------------------------------------
