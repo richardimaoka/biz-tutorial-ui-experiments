@@ -216,10 +216,38 @@ func unmarshalAction(bytes []byte) (Action, error) {
 	}
 }
 
+func unmarshalAction2(bytes []byte) (Action2, error) {
+	typeName, err := extractTypeName(bytes, "actionType")
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalAction() failed to extract actionType %s", err)
+	}
+
+	switch typeName {
+	case "ActionCommand":
+		var action ActionCommand
+		err := json.Unmarshal(bytes, &action) // calls UnmarshalJSON()
+		return &action, err
+	case "ManualUpdate":
+		var action ManualUpdate
+		err := json.Unmarshal(bytes, &action) // calls UnmarshalJSON()
+		return &action, err
+	default:
+		return nil, fmt.Errorf("unmarshalAction() found invalid actionType = %s", typeName)
+	}
+}
+
 func readAction(filePath string) (Action, error) {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
 	return unmarshalAction(jsonBytes)
+}
+
+func readAction2(filePath string) (Action2, error) {
+	jsonBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return unmarshalAction2(jsonBytes)
 }

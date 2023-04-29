@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 	"github.com/rs/cors"
 )
 
@@ -56,7 +57,7 @@ func server() {
 	}
 }
 
-func processing() {
+func modelProcessing() {
 	fmt.Println("running processing")
 	err := model.Processing()
 	if err != nil {
@@ -73,9 +74,26 @@ func processing() {
 	return
 }
 
+func process() {
+	fmt.Println("running processing")
+	err := processing.Processing()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// actionListParse()
+
+	// err := model.SplitActionListFile("data2")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	return
+}
+
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "processing" {
-		processing()
+		process()
 	} else {
 		server()
 	}
