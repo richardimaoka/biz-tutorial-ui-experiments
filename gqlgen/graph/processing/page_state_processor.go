@@ -80,7 +80,7 @@ func (p *PageStateProcessor) applyNextAction() error {
 // public methods
 //------------------------------------------------------------
 
-func InitPageStateProcessor(firstAction Action) *PageStateProcessor {
+func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 	//p.canApplyAction(firstAction)
 
 	return &PageStateProcessor{
@@ -91,7 +91,7 @@ func InitPageStateProcessor(firstAction Action) *PageStateProcessor {
 			nextAction:  firstAction,
 		},
 		preserved: nil,
-	}
+	}, nil
 }
 
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
