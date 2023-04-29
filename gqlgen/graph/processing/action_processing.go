@@ -80,7 +80,7 @@ func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 		// unmarshal to action once, to control the re-marshaling behavior
 		action, err := unmarshalAction(jsonBytes)
 		if err != nil {
-			return fmt.Errorf("%s, reading actoin failed, %s", errorPreceding, err)
+			return fmt.Errorf("%s, reading action failed, %s", errorPreceding, err)
 		}
 
 		targetFile := targetFileName(targetDir, targetPrefix, i)
