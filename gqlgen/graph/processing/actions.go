@@ -19,16 +19,14 @@ type ActionCommand struct {
 	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 
 	// fields for source code
-	Effect              DiffEffect `json:"effect"`
-	Diff                Diff       `json:"diff"`
-	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
+	Diff                Diff    `json:"diff"`
+	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 }
 
 type ManualUpdate struct {
 	// fields for source code
-	Effect              DiffEffect `json:"effect"`
-	Diff                Diff       `json:"diff"`
-	DefaultOpenFilePath *string    `json:"defaultOpenFilePath"`
+	Diff                Diff    `json:"diff"`
+	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 }
 
 func (a *ActionCommand) Enrich(op FileSystemOperation) {
@@ -55,7 +53,6 @@ func (a ActionCommand) MarshalJSON() ([]byte, error) {
 	m["currentDirectory"] = a.CurrentDirectory
 
 	// fields for source code
-	m["effect"] = a.Effect
 	m["diff"] = a.Diff
 	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
@@ -68,7 +65,6 @@ func (a ManualUpdate) MarshalJSON() ([]byte, error) {
 	m["actionType"] = "ManualUpdate" // this has to be added
 
 	// fields for source code
-	m["effect"] = a.Effect
 	m["diff"] = a.Diff
 	m["defaultOpenFilePath"] = a.DefaultOpenFilePath
 
@@ -98,9 +94,8 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 		CurrentDirectory *string `json:"currentDirectory"`
 
 		// fields for source code
-		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
-		Diff                Diff        `json:"diff"`
-		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
+		Diff                Diff    `json:"diff"`
+		DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal: %s", err)
@@ -117,17 +112,6 @@ func (a *ActionCommand) UnmarshalJSON(data []byte) error {
 	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
 	a.Diff = interim.Diff
 
-	// Effect needs furether processing based on "diffType"
-	if interim.Effect != nil {
-		remarshaledEffect, err := json.Marshal(interim.Effect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
-		}
-		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
-		}
-	}
 	return nil
 }
 
@@ -149,9 +133,8 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 		// actionType is removed
 
 		// fields for source code
-		Effect              interface{} `json:"effect"` // this needs furether processing based on "diffType"
-		Diff                Diff        `json:"diff"`
-		DefaultOpenFilePath *string     `json:"defaultOpenFilePath"`
+		Diff                Diff    `json:"diff"`
+		DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 	}
 	if err := json.Unmarshal(data, &interim); err != nil {
 		return fmt.Errorf("ManualUpdate.UnmarshalJSON() failed to unmarshal: %s", err)
@@ -161,17 +144,6 @@ func (a *ManualUpdate) UnmarshalJSON(data []byte) error {
 	//    fields for source code
 	a.DefaultOpenFilePath = interim.DefaultOpenFilePath
 	a.Diff = interim.Diff
-	//    Effect needs furether processing based on "diffType"
-	if interim.Effect != nil {
-		remarshaledEffect, err := json.Marshal(interim.Effect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to re-marshal effect: %s", err)
-		}
-		a.Effect, err = unmarshalDiffEffect(remarshaledEffect)
-		if err != nil {
-			return fmt.Errorf("ActionCommand.UnmarshalJSON() failed to unmarshal effect: %s", err)
-		}
-	}
 
 	return nil
 }

@@ -5,7 +5,6 @@
   "defaultOpenFilePath": null,
   "output": "some output",
   "currentDirectory": "hello/world",
-  "effect": null,
   "diff": {
     "directoriesAdded": null,
     "directoriesDeleted": null,
