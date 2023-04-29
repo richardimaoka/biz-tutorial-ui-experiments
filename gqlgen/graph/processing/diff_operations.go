@@ -258,6 +258,21 @@ func (d DirectoryDiff) append(op FileSystemOperation) (DirectoryDiff, error) {
 	}
 }
 
+func (d *Diff) append(op FileSystemOperation) {
+	switch v := op.(type) {
+	case FileAdd:
+		d.FilesAdded = append(d.FilesAdded, v)
+	case FileUpdate:
+		d.FilesUpdated = append(d.FilesUpdated, v)
+	case FileDelete:
+		d.FilesDeleted = append(d.FilesDeleted, v)
+	case DirectoryAdd:
+		d.DirectoriesAdded = append(d.DirectoriesAdded, v)
+	case DirectoryDelete:
+		d.DirectoriesDeleted = append(d.DirectoriesDeleted, v)
+	}
+}
+
 func AppendDiffEffect(d DiffEffect, op FileSystemOperation) (DiffEffect, error) {
 	if d == nil {
 		return InitializeDiffEffect(op), nil
@@ -297,6 +312,33 @@ func InitializeDiffEffect(op FileSystemOperation) DiffEffect {
 		}
 	default:
 		return nil
+	}
+}
+
+func InitializeDiff(op FileSystemOperation) *Diff {
+	switch v := op.(type) {
+	case FileAdd:
+		return &Diff{
+			FilesAdded: []FileAdd{v},
+		}
+	case FileUpdate:
+		return &Diff{
+			FilesUpdated: []FileUpdate{v},
+		}
+	case FileDelete:
+		return &Diff{
+			FilesDeleted: []FileDelete{v},
+		}
+	case DirectoryAdd:
+		return &Diff{
+			DirectoriesAdded: []DirectoryAdd{v},
+		}
+	case DirectoryDelete:
+		return &Diff{
+			DirectoriesDeleted: []DirectoryDelete{v},
+		}
+	default:
+		return nil // this should never happen
 	}
 }
 
