@@ -4,55 +4,48 @@ import (
 	"fmt"
 )
 
-type pageStateInternals struct {
+type PageStateProcessor struct {
 	step        *stepProcessor
 	terminalMap map[string]*TerminalProcessor
 	sourceCode  *SourceCodeProcessor
 	nextAction  Action
+	nextState   *PageStateProcessor
 }
 
-type PageStateProcessor struct {
-	pageStateInternals
-	preserved *pageStateInternals
-}
-
-func (p *PageStateProcessor) beginMutation() {
-	terminalMap := make(map[string]*TerminalProcessor)
+func (p *PageStateProcessor) cloneForNextAction() *PageStateProcessor {
+	clonedTerminalMap := make(map[string]*TerminalProcessor)
 	for k, t := range p.terminalMap {
-		terminalMap[k] = t.Clone()
+		clonedTerminalMap[k] = t.Clone()
 	}
 
-	p.preserved = &pageStateInternals{
-		step:        p.step,
-		terminalMap: terminalMap,
+	return &PageStateProcessor{
+		step:        p.step.Clone(),
+		terminalMap: clonedTerminalMap,
 		sourceCode:  p.sourceCode.Clone(),
-		nextAction:  p.nextAction,
+		// not cloning nextAction & nextState, as they will be set after applyNextAction()
 	}
 }
 
-func (p *PageStateProcessor) endMutation() {
-	p.preserved = nil
-}
+func (p *PageStateProcessor) applyNextAction(nextAction Action) error {
+	errorPreceding := "failed to apply next action"
 
-func (p *PageStateProcessor) rollbackMutation() {
-	p.step = p.preserved.step
-	p.terminalMap = p.preserved.terminalMap
-	p.sourceCode = p.preserved.sourceCode
-	p.nextAction = p.preserved.nextAction
-}
-
-func (p *PageStateProcessor) applyNextAction() error {
-	switch action := p.nextAction.(type) {
+	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
+	switch action := nextAction.(type) {
 	case *ActionCommand:
-		// 1.1 source code mutation
-		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
-			return fmt.Errorf("failed to apply next action, %s", err)
+		// 1.1. step increment
+		if err := p.step.AutoIncrementStep(); err != nil {
+			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
 
-		// 1.2 terminal mutation
+		// 1.2. source code mutation
+		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
+			return fmt.Errorf("%s, %s", errorPreceding, err)
+		}
+
+		// 1.3. terminal mutation
 		terminal, ok := p.terminalMap[action.TerminalName]
 		if !ok {
-			return fmt.Errorf("failed to apply next action, terminal [%s] does not exist", action.TerminalName)
+			return fmt.Errorf("%s, terminal [%s] does not exist", errorPreceding, action.TerminalName)
 		}
 		terminal.WriteCommand(action.Command)
 		if action.Output != nil {
@@ -63,16 +56,23 @@ func (p *PageStateProcessor) applyNextAction() error {
 		}
 
 		return nil
+
 	case *ManualUpdate:
-		// 2.1 source code mutation
+		// 2.1. step increment
+		if err := p.step.AutoIncrementStep(); err != nil {
+			return fmt.Errorf("%s, %s", errorPreceding, err)
+		}
+
+		// 2.2. source code mutation
 		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
-			return fmt.Errorf("failed to apply next action, %s", err)
+			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
 
 		return nil
+
 	default:
 		// this should never happen
-		return fmt.Errorf("unknown action type %T", action)
+		return fmt.Errorf("%s, unknown action type %T", errorPreceding, action)
 	}
 }
 
@@ -81,31 +81,37 @@ func (p *PageStateProcessor) applyNextAction() error {
 //------------------------------------------------------------
 
 func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
-	//p.canApplyAction(firstAction)
+	init := PageStateProcessor{
+		step:        NewStepProcessor(),
+		terminalMap: make(map[string]*TerminalProcessor),
+		sourceCode:  NewSourceCodeProcessor(),
+	}
 
-	return &PageStateProcessor{
-		pageStateInternals: pageStateInternals{
-			step:        NewStepProcessor(),
-			terminalMap: make(map[string]*TerminalProcessor),
-			sourceCode:  NewSourceCodeProcessor(),
-			nextAction:  firstAction,
-		},
-		preserved: nil,
-	}, nil
+	cloned := init.cloneForNextAction()
+	if err := cloned.applyNextAction(firstAction); err != nil {
+		return nil, fmt.Errorf("init page state failed, %s", err)
+	}
+	init.nextAction = firstAction
+	init.nextState = cloned
+
+	return &init, nil
 }
 
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
-	// p.canApplyAction(nextNextAction)
-
-	p.beginMutation()
-	defer p.endMutation()
-
-	if err := p.applyNextAction(); err != nil {
-		p.rollbackMutation()
-		return fmt.Errorf("cannot apply next action %s, %s", p.nextAction, err)
+	// 1. verify nextNextAction
+	cloned := p.cloneForNextAction()
+	if err := cloned.applyNextAction(nextNextAction); err != nil {
+		return fmt.Errorf("state transition failed, %s", err)
 	}
 
+	// 2. transition to nextState
+	p.sourceCode = p.nextState.sourceCode
+	p.terminalMap = p.nextState.terminalMap
+	p.sourceCode = p.nextState.sourceCode
+
+	// 3. update nextAction & nextState
 	p.nextAction = nextNextAction
+	p.nextState = cloned
 
 	return nil
 }
