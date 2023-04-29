@@ -105,6 +105,36 @@ func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) err
 	return nil
 }
 
+func (p *SourceCodeProcessor) canApplyGitDiff(diff GitDiff) error {
+	// pre-condition check, dupe in diff
+	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
+		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
+	}
+
+	// pre-condition check, each element's pre-condition check
+	errors := []string{}
+	for _, f := range diff.Added {
+		if err := p.canAdd(f.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, f := range diff.Updated {
+		if err := p.canDeleteOrUpdate(f.FilePath, fileType); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, f := range diff.Deleted {
+		if err := p.canDeleteOrUpdate(f.FilePath, fileType); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	if len(errors) != 0 {
+		return fmt.Errorf(strings.Join(errors, ", "))
+	}
+
+	return nil
+}
+
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
 	p.setAllIsUpdateFalse()
 	p.addMissingParentDirs(op.FilePath)
@@ -195,20 +225,21 @@ func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 	return nil
 }
 
-// func (p *SourceCodeProcessor) ApplyGitDiff(diff GitDiff) error {
-// 	for _, op := range diff.Added {
-// 		if err := p.AddFile(op); err != nil {
-// 			return err
-// 		}
-// 	}
-// 	for _, op := range diff.Updated {
-// 		p.updateFileContent(op.FilePath, op.Content)
-// 	}
-// 	for _, op := range diff.Deleted {
-// 		p.deleteFileContent(op.FilePath)
-// 		p.deleteFileNode(op.FilePath)
-// 	}
-// }
+func (p *SourceCodeProcessor) ApplyGitDiff(diff GitDiff) error {
+	if err := p.canApplyGitDiff(diff); err != nil {
+		return fmt.Errorf("cannot apply git diff, %s", err)
+	}
+	for _, op := range diff.Added {
+		p.addFileMutation(op)
+	}
+	for _, op := range diff.Updated {
+		p.updateFileMutation(op)
+	}
+	for _, op := range diff.Deleted {
+		p.deleteFileMutation(op)
+	}
+	return nil
+}
 
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
