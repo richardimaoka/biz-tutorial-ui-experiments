@@ -251,6 +251,37 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) {
 	}
 }
 
+func (p *SourceCodeProcessor) applyDiifMutation2(diff Diff) error {
+	// does the order of operations have any implication??
+	for _, op := range diff.DirectoriesDeleted {
+		if err := p.DeleteDirectory(op); err != nil {
+			return err
+		}
+	}
+	for _, op := range diff.DirectoriesAdded {
+		if err := p.AddDirectory(op); err != nil {
+			return err
+		}
+	}
+	for _, op := range diff.FilesDeleted {
+		if err := p.DeleteFile(op); err != nil {
+			return err
+		}
+	}
+	for _, op := range diff.FilesAdded {
+		if err := p.AddFile(op); err != nil {
+			return err
+		}
+	}
+	for _, op := range diff.FilesUpdated {
+		if err := p.UpdateFile(op); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 //-----------------------------------------------------//
 // public methods below
 //-----------------------------------------------------//
@@ -355,6 +386,20 @@ func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
 
 	p.setAllIsUpdateFalse()
 	p.applyDiifMutation(diff)
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) ApplyDiff2(diff Diff) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+	if err := cloned.applyDiifMutation2(diff); err != nil {
+		return fmt.Errorf("cannot apply diff, %s", err)
+	}
+
+	p.step = cloned.step
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
 
 	return nil
 }
