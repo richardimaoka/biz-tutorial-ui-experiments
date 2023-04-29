@@ -1,7 +1,7 @@
 package processing
 
 import (
-	"errors"
+	"fmt"
 )
 
 type pageStateInternals struct {
@@ -41,11 +41,23 @@ func (p *PageStateProcessor) rollbackMutation() {
 	p.nextAction = p.preserved.nextAction
 }
 
+func (p *PageStateProcessor) applyNextAction() error {
+	// if err := p.sourceCode.ApplyDiff(p.nextAction.Effect); err != nil {
+	// }
+	// // this needs to be applied after diff, as the default file might be created in apply diff
+	// if err := p.sourceCode.setDefault(p.nextAction.DefaultOpenFilePath); err != nil {
+	// }
+
+	return nil
+}
+
 //------------------------------------------------------------
 // public methods
 //------------------------------------------------------------
 
 func InitPageStateProcessor(firstAction Action) *PageStateProcessor {
+	//p.canApplyAction(firstAction)
+
 	return &PageStateProcessor{
 		pageStateInternals: pageStateInternals{
 			step:        NewStepProcessor(),
@@ -58,13 +70,17 @@ func InitPageStateProcessor(firstAction Action) *PageStateProcessor {
 }
 
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
+	// p.canApplyAction(nextNextAction)
+
 	p.beginMutation()
 	defer p.endMutation()
 
-	err := errors.New("some error")
-	if err != nil {
+	if err := p.applyNextAction(); err != nil {
 		p.rollbackMutation()
+		return fmt.Errorf("cannot apply next action %s, %s", p.nextAction, err)
 	}
+
+	p.nextAction = nextNextAction
 
 	return nil
 }
