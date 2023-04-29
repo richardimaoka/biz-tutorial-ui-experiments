@@ -271,7 +271,7 @@ func TestSourceCode_Diff(t *testing.T) {
 
 	applyOperations := func(processor *SourceCodeProcessor, operations []Operation) error {
 		for opNum, op := range operations {
-			opError := processor.ApplyDiff2(op.diff)
+			opError := processor.ApplyDiff(op.diff)
 
 			opSuccess := opError == nil
 			if opSuccess != op.expectSuccess { //if result is not expected
