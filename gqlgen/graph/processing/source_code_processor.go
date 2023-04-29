@@ -160,6 +160,49 @@ func (p *SourceCodeProcessor) canApplyDirectoryDiff(diff DirectoryDiff) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) canApplyDiff(diff Diff) error {
+	// 1. check if no dupe
+	if diffDuplicate := diff.findDuplicate(); diffDuplicate.size() > 0 {
+		return fmt.Errorf("duplicate file paths in diff = %+v", diffDuplicate)
+	}
+
+	// 2. each element's pre-condition check
+	//    since there is no dupe, these checks are mutually exclusive
+	errors := []string{}
+	for _, op := range diff.FilesAdded {
+		if err := p.canAdd(op.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.FilesDeleted {
+		if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.FilesUpdated {
+		if err := p.canAdd(op.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.DirectoriesAdded {
+		if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+	for _, op := range diff.DirectoriesDeleted {
+		if err := p.canAdd(op.FilePath); err != nil {
+			errors = append(errors, err.Error())
+		}
+	}
+
+	// 3. report error if any
+	if len(errors) != 0 {
+		return fmt.Errorf("cannot apply diff, %s", strings.Join(errors, ", "))
+	}
+
+	return nil
+}
+
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
 	p.addMissingParentDirs(op.FilePath)
 	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
@@ -284,6 +327,22 @@ func (p *SourceCodeProcessor) ApplyDirectoryDiff(diff DirectoryDiff) error {
 
 	return nil
 }
+
+// func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
+// 	if err := p.canApplyDirectoryDiff(diff); err != nil {
+// 		return fmt.Errorf("cannot apply git diff, %s", err)
+// 	}
+
+// 	p.setAllIsUpdateFalse()
+// 	for _, op := range diff.Added {
+// 		p.addDirectoryMutation(op)
+// 	}
+// 	for _, op := range diff.Deleted {
+// 		p.deleteDirectoryMutation(op)
+// 	}
+
+// 	return nil
+// }
 
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode

@@ -17,12 +17,14 @@ type DiffEffect interface {
 	IsDiffEffect()
 }
 
+// TODO: remove this
 type GitDiff struct {
 	Added   []FileAdd    `json:"added"`
 	Updated []FileUpdate `json:"updated"`
 	Deleted []FileDelete `json:"deleted"`
 }
 
+// TODO: remove this
 type DirectoryDiff struct {
 	Added   []DirectoryAdd    `json:"added"`
 	Deleted []DirectoryDelete `json:"deleted"`
