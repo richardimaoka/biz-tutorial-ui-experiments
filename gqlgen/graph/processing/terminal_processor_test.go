@@ -62,12 +62,9 @@ func TestTerminal_Mutation(t *testing.T) {
 	compareAfterMarshal(t, "testdata/terminal/materialized.json", materialized)
 
 	// ...mutation afterwards should have no effect
-	terminal.currentDirectory = "mutated/current/dir"
-	terminal.terminalName = "mutated terminal name"
-	terminal.elements[0].(*terminalCommandProcessor).promptExpression = "mutated-expression"
-	terminal.elements[0].(*terminalCommandProcessor).promptSymbol = 'X'
-	terminal.elements[0].(*terminalCommandProcessor).command = "mutated-command"
-	terminal.elements[1].(*terminalOutputProcessor).output = "mutated-output"
+	terminal.ChangeCurrentDirectory("mutated/current/dir")
+	terminal.WriteCommand("mutation extra command")
+	terminal.WriteOutput("mutation extra output")
 
 	// materialized GraphQL model should not be affected
 	compareAfterMarshal(t,
