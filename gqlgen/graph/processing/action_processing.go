@@ -182,7 +182,8 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	}
 	log.Printf("%s: read %d actions from %s", errorPreceding, len(actions), actionDir)
 
-	// 2. apply actions
+	// 2.   apply actions
+	// 2.1. initial action
 	pageState, err := InitPageStateProcessor(actions[0])
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
@@ -192,15 +193,22 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 	}
 
-	for i := 1; i < len(actions); i++ {
+	// 2.2. actions up to last - 1
+	for i := 1; i < len(actions)-1; i++ {
 		if err := pageState.StateTransition(actions[i]); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
-
 		fileName := stateFileName(targetDir, targetPrefix, pageState.step.currentStep)
 		if err := WriteJsonToFile(pageState.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 		}
+	}
+
+	// 2.3. last action
+	pageState.LastTransition()
+	fileName = stateFileName(targetDir, targetPrefix, pageState.step.currentStep)
+	if err := WriteJsonToFile(pageState.ToGraphQLPageState(), fileName); err != nil {
+		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 	}
 
 	return nil

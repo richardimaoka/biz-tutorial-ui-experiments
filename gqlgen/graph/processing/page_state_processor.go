@@ -95,6 +95,10 @@ func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	// 1. verify nextNextAction
+	if p.nextState == nil {
+		return fmt.Errorf("state transition failed at step = %s, next transition is nil", p.step.currentStep)
+	}
+
 	cloned := p.nextState.cloneForNextAction()
 	if err := cloned.applyAction(nextNextAction); err != nil {
 		return fmt.Errorf("state transition failed at step = %s, nextNextAction is invalid, %s", p.step.currentStep, err)
@@ -114,10 +118,29 @@ func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	return nil
 }
 
+func (p *PageStateProcessor) LastTransition() {
+	// 1. transition to nextState
+	p.sourceCode = p.nextState.sourceCode
+	p.sourceCode.SetStep(p.step.nextStep)
+	p.terminalMap = p.nextState.terminalMap
+	p.step.IncrementStep("")
+
+	// 2. update step, nextAction & nextState
+	p.nextAction = nil
+	p.nextState = nil
+}
+
 func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 	terminals := []*model.Terminal{}
 	for _, t := range p.terminalMap {
 		terminals = append(terminals, t.ToGraphQLTerminal())
+	}
+
+	var nextAction model.NextAction
+	if p.nextAction != nil {
+		nextAction = p.nextAction.ToGraphQLNextAction()
+	} else {
+		nextAction = nil
 	}
 
 	return &model.PageState{
@@ -126,6 +149,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		PrevStep:   &p.step.prevStep,
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
-		NextAction: p.nextAction.ToGraphQLNextAction(),
+		NextAction: nextAction,
 	}
 }
