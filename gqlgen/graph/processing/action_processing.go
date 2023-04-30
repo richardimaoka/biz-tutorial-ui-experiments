@@ -188,7 +188,7 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 	fileName := stateFileName(targetDir, targetPrefix, pageState.step.currentStep)
-	if err := WriteJsonToFile(pageState, fileName); err != nil {
+	if err := WriteJsonToFile(pageState.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 	}
 
@@ -198,7 +198,7 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 		}
 
 		fileName := stateFileName(targetDir, targetPrefix, pageState.step.currentStep)
-		if err := WriteJsonToFile(pageState, fileName); err != nil {
+		if err := WriteJsonToFile(pageState.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("%s, writing JSON to %s failed, %s", errorPreceding, fileName, err)
 		}
 	}

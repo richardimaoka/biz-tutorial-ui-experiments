@@ -2,6 +2,8 @@ package processing
 
 import (
 	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type PageStateProcessor struct {
@@ -117,4 +119,19 @@ func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	p.nextState = cloned
 
 	return nil
+}
+
+func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
+	terminals := []*model.Terminal{}
+	for _, t := range p.terminalMap {
+		terminals = append(terminals, t.ToGraphQLTerminal())
+	}
+
+	return &model.PageState{
+		Step:       &p.step.currentStep,
+		NextStep:   &p.step.nextStep,
+		PrevStep:   &p.step.prevStep,
+		SourceCode: p.sourceCode.ToGraphQLModel(),
+		Terminals:  terminals,
+	}
 }
