@@ -1,0 +1,21 @@
+{
+  "step": "000",
+  "nextStep": "001",
+  "prevStep": "",
+  "sourceCode": {
+    "step": "",
+    "defaultOpenFile": null,
+    "fileTree": null,
+    "fileContents": {}
+  },
+  "terminals": [
+    {
+      "name": "default",
+      "currentDirectory": null,
+      "nodes": null
+    }
+  ],
+  "nextAction": {
+    "command": "mkdir protoc-go-experiments"
+  }
+}

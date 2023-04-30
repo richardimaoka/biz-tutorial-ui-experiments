@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type Action interface {
 	Enrich(operation FileSystemOperation)
+	ToGraphQLNextAction() model.NextAction
 }
 
 // ActionCommand represents each row of spreadsheet where type = "ActionCommand"
@@ -35,6 +38,19 @@ func (a *ActionCommand) Enrich(op FileSystemOperation) {
 
 func (a *ManualUpdate) Enrich(op FileSystemOperation) {
 	a.Diff.Append(op)
+}
+
+func (a *ActionCommand) ToGraphQLNextAction() model.NextAction {
+	return model.ActionTerminal{
+		Command: &a.Command,
+	}
+}
+
+func (a *ManualUpdate) ToGraphQLNextAction() model.NextAction {
+	fixedComment := "manual action"
+	return model.ActionManual{
+		Comment: &fixedComment,
+	}
 }
 
 // ------------------------------
