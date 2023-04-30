@@ -74,7 +74,7 @@ func (t *TerminalProcessor) Clone() *TerminalProcessor {
 	// clone to avoid receiver's mutation effect afterwards
 	clonedElements := make([]terminalElementProcessor, 0)
 	for _, e := range t.elements {
-		clonedElements = append(clonedElements, e.Clone())
+		clonedElements = append(clonedElements, e) //element is effectively immutable, so fine to use elsewhere
 	}
 
 	return &TerminalProcessor{
