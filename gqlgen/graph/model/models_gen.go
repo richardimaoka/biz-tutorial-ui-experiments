@@ -72,12 +72,6 @@ type TerminalCommand struct {
 
 func (TerminalCommand) IsTerminalElement() {}
 
-type TerminalCommandSet struct {
-	Commands []*TerminalCommand `json:"commands"`
-}
-
-func (TerminalCommandSet) IsTerminalElement() {}
-
 type TerminalNode struct {
 	Content TerminalElement `json:"content"`
 }

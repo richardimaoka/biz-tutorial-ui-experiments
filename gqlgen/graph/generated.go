@@ -105,10 +105,6 @@ type ComplexityRoot struct {
 		Command         func(childComplexity int) int
 	}
 
-	TerminalCommandSet struct {
-		Commands func(childComplexity int) int
-	}
-
 	TerminalNode struct {
 		Content func(childComplexity int) int
 	}
@@ -378,13 +374,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalCommand.Command(childComplexity), true
-
-	case "TerminalCommandSet.commands":
-		if e.complexity.TerminalCommandSet.Commands == nil {
-			break
-		}
-
-		return e.complexity.TerminalCommandSet.Commands(childComplexity), true
 
 	case "TerminalNode.content":
 		if e.complexity.TerminalNode.Content == nil {
@@ -2106,53 +2095,6 @@ func (ec *executionContext) fieldContext_TerminalCommand_command(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TerminalCommandSet_commands(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommandSet) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalCommandSet_commands(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Commands, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.TerminalCommand)
-	fc.Result = res
-	return ec.marshalOTerminalCommand2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TerminalCommandSet_commands(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TerminalCommandSet",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "beforeExecution":
-				return ec.fieldContext_TerminalCommand_beforeExecution(ctx, field)
-			case "command":
-				return ec.fieldContext_TerminalCommand_command(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TerminalCommand", field.Name)
 		},
 	}
 	return fc, nil
@@ -4178,13 +4120,6 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 			return graphql.Null
 		}
 		return ec._TerminalCommand(ctx, sel, obj)
-	case model.TerminalCommandSet:
-		return ec._TerminalCommandSet(ctx, sel, &obj)
-	case *model.TerminalCommandSet:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TerminalCommandSet(ctx, sel, obj)
 	case model.TerminalOutput:
 		return ec._TerminalOutput(ctx, sel, &obj)
 	case *model.TerminalOutput:
@@ -4589,31 +4524,6 @@ func (ec *executionContext) _TerminalCommand(ctx context.Context, sel ast.Select
 		case "command":
 
 			out.Values[i] = ec._TerminalCommand_command(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var terminalCommandSetImplementors = []string{"TerminalCommandSet", "TerminalElement"}
-
-func (ec *executionContext) _TerminalCommandSet(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalCommandSet) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminalCommandSetImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("TerminalCommandSet")
-		case "commands":
-
-			out.Values[i] = ec._TerminalCommandSet_commands(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5569,54 +5479,6 @@ func (ec *executionContext) marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._Terminal(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOTerminalCommand2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx context.Context, sel ast.SelectionSet, v []*model.TerminalCommand) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx context.Context, sel ast.SelectionSet, v *model.TerminalCommand) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TerminalCommand(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTerminalElement2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx context.Context, sel ast.SelectionSet, v model.TerminalElement) graphql.Marshaler {

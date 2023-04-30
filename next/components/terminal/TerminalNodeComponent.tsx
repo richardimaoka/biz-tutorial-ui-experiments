@@ -39,8 +39,6 @@ export const TerminalNodeComponent = (
         );
       case "TerminalOutput":
         return <TerminalOutputComponent fragment={fragment.content} />;
-      case "TerminalCommandSet":
-        return <></>;
     }
   } else {
     return <></>;

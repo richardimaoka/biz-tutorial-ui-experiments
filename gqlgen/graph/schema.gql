@@ -7,17 +7,12 @@ type TerminalCommand {
   command: String
 }
 
-type TerminalCommandSet {
-  commands: [TerminalCommand]
-}
-
 type TerminalOutput {
   output: String
 }
 
-union TerminalElement = TerminalCommand | TerminalCommandSet | TerminalOutput
+union TerminalElement = TerminalCommand | TerminalOutput
 
-# TODO: replace with ActionCommand
 type ActionTerminal {
   command: String
 }

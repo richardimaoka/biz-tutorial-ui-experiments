@@ -107,15 +107,7 @@ export type TerminalCommand = {
   command?: Maybe<Scalars["String"]>;
 };
 
-export type TerminalCommandSet = {
-  __typename: "TerminalCommandSet";
-  commands?: Maybe<Array<Maybe<TerminalCommand>>>;
-};
-
-export type TerminalElement =
-  | TerminalCommand
-  | TerminalCommandSet
-  | TerminalOutput;
+export type TerminalElement = TerminalCommand | TerminalOutput;
 
 export type TerminalNode = {
   __typename: "TerminalNode";
@@ -258,7 +250,6 @@ export type TerminalNodeComponent_FragmentFragment = {
           TerminalCommand_FragmentFragment: TerminalCommand_FragmentFragment;
         };
       })
-    | { __typename: "TerminalCommandSet" }
     | ({ __typename: "TerminalOutput" } & {
         " $fragmentRefs"?: {
           TerminalOutput_FragmentFragment: TerminalOutput_FragmentFragment;
