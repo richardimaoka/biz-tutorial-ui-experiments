@@ -40,17 +40,18 @@ func (p *stepProcessor) IncrementStep(nextNextStep string) {
 
 func (p *stepProcessor) AutoIncrementStep() error {
 	errorPreceding := "AutoIncrementStep failed"
-	stepNum, err := strconv.Atoi(p.NextStep())
+	nextStepNum, err := strconv.Atoi(p.NextStep())
 	if err != nil {
-		return fmt.Errorf("%s, failed, as step %s is not in number format", errorPreceding, p.NextStep())
+		return fmt.Errorf("%s, as step %s is not in number format", errorPreceding, p.NextStep())
 	}
 
-	formatted := fmt.Sprintf("%03d", stepNum)
-	if p.NextStep() != formatted {
-		return fmt.Errorf("%s, as step %s is expected 3-digit number format %s", errorPreceding, p.NextStep(), formatted)
+	nextStepFormatted := fmt.Sprintf("%03d", nextStepNum)
+	if p.NextStep() != nextStepFormatted {
+		return fmt.Errorf("%s, as step %s is expected 3-digit number format %s", errorPreceding, p.NextStep(), nextStepFormatted)
 	}
 
-	p.IncrementStep(formatted)
+	nextNextStepFormatted := fmt.Sprintf("%03d", nextStepNum+1)
+	p.IncrementStep(nextNextStepFormatted)
 
 	return nil
 }

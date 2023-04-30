@@ -1,0 +1,32 @@
+{
+  "step": "002",
+  "nextStep": "003",
+  "prevStep": "001",
+  "sourceCode": {
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "name": "protoc-go-experiments",
+        "filePath": "protoc-go-experiments",
+        "offset": 0,
+        "isUpdated": true
+      }
+    ],
+    "fileContents": {}
+  },
+  "terminals": [
+    {
+      "name": "default",
+      "currentDirectory": null,
+      "nodes": [
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir protoc-go-experiments"
+          }
+        }
+      ]
+    }
+  ]
+}

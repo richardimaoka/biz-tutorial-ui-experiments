@@ -43,6 +43,7 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
+		p.sourceCode.SetStep(p.step.nextStep)
 
 		// 1.3. terminal mutation
 		terminal, ok := p.terminalMap[action.TerminalName]
@@ -69,6 +70,7 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
+		p.sourceCode.SetStep(p.step.nextStep)
 
 		return nil
 

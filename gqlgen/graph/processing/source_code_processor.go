@@ -240,6 +240,10 @@ func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
 	return nil
 }
 
+func (p *SourceCodeProcessor) SetStep(step string) {
+	p.step = step
+}
+
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
 	fileContents := make(map[string]model.OpenFile)
