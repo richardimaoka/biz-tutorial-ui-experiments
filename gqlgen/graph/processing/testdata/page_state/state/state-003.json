@@ -9,7 +9,14 @@
         "name": "protoc-go-experiments",
         "filePath": "protoc-go-experiments",
         "offset": 0,
-        "isUpdated": true
+        "isUpdated": false
+      },
+      {
+        "nodeType": "DIRECTORY",
+        "name": "helloworld",
+        "filePath": "protoc-go-experiments/helloworld",
+        "offset": 1,
+        "isUpdated": false
       }
     ],
     "fileContents": {}
@@ -32,8 +39,18 @@
             "beforeExecution": true,
             "command": "cd protoc-go-experiments"
           }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": true,
+            "command": "mkdir helloworld"
+          }
         }
       ]
     }
-  ]
+  ],
+  "nextAction": {
+    "command": "cd helloworld # protoc-go-experiments/helloworld"
+  }
 }

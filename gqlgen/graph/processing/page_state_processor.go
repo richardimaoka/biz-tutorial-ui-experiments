@@ -34,16 +34,10 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
 	switch action := nextAction.(type) {
 	case *ActionCommand:
-		// 1.1. step increment
-		if err := p.step.AutoIncrementStep(); err != nil {
-			return fmt.Errorf("%s, %s", errorPreceding, err)
-		}
-
-		// 1.2. source code mutation
+		// 1.1. source code mutation
 		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
-		p.sourceCode.SetStep(p.step.currentStep) // currentStep, as it is already incremented
 
 		// 1.3. terminal mutation
 		terminal, ok := p.terminalMap[action.TerminalName]
@@ -57,20 +51,15 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 		if action.CurrentDirectory != nil {
 			terminal.ChangeCurrentDirectory(*action.CurrentDirectory)
 		}
+		p.terminalMap[action.TerminalName] = terminal
 
 		return nil
 
 	case *ManualUpdate:
-		// 2.1. step increment
-		if err := p.step.AutoIncrementStep(); err != nil {
-			return fmt.Errorf("%s, %s", errorPreceding, err)
-		}
-
-		// 2.2. source code mutation
+		// 2. source code mutation
 		if err := p.sourceCode.ApplyDiff(action.Diff); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
-		p.sourceCode.SetStep(p.step.currentStep) // currentStep, as it is already incremented
 
 		return nil
 
@@ -106,15 +95,17 @@ func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	// 1. verify nextNextAction
-	cloned := p.cloneForNextAction()
+	cloned := p.nextState.cloneForNextAction()
 	if err := cloned.applyAction(nextNextAction); err != nil {
 		return fmt.Errorf("state transition failed at step = %s, nextNextAction is invalid, %s", p.step.currentStep, err)
 	}
+	cloned.step.AutoIncrementStep()
 
 	// 2. transition to nextState
 	p.sourceCode = p.nextState.sourceCode
+	p.sourceCode.SetStep(p.step.nextStep)
 	p.terminalMap = p.nextState.terminalMap
-	p.step = p.nextState.step
+	p.step.AutoIncrementStep()
 
 	// 3. update step, nextAction & nextState
 	p.nextAction = nextNextAction
