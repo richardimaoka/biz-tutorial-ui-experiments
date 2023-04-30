@@ -25,6 +25,29 @@ func readJsonArray(filename string) ([]JsonObj, error) {
 	return unmarshalled, nil
 }
 
+func readActionFromFiles(actionDir, actionPrefix string) ([]Action, error) {
+	var actions []Action
+
+	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, file := range actionFiles {
+		expectedFileName := targetFileName(actionDir, actionPrefix, i)
+		if expectedFileName != file {
+			return nil, fmt.Errorf("expected file %s, got %s", expectedFileName, file)
+		}
+		action, err := readAction(file)
+		if err != nil {
+			return nil, fmt.Errorf("reading action file failed, %s", err)
+		}
+		actions = append(actions, action)
+	}
+
+	return actions, nil
+}
+
 func FilesInDir(targetDir, prefix string) ([]string, error) {
 	entries, err := os.ReadDir(targetDir)
 	if err != nil {
@@ -97,23 +120,9 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	errorPreceding := "Error in EnrichActionFiles"
 
 	// 1. load actions into memory
-	var actions []Action
-
-	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	actions, err := readActionFromFiles(actionDir, actionPrefix)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
-	}
-
-	for i, file := range actionFiles {
-		expectedFileName := targetFileName(actionDir, actionPrefix, i)
-		if expectedFileName != file {
-			return fmt.Errorf("%s, expected file %s, got %s", errorPreceding, expectedFileName, file)
-		}
-		action, err := readAction(file)
-		if err != nil {
-			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-		}
-		actions = append(actions, action)
 	}
 	log.Printf("EnrichActionFiles: read %d actions from %s", len(actions), actionDir)
 
@@ -167,23 +176,9 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	errorPreceding := "Error in ApplyActions"
 
 	// 1. load actions into memory
-	var actions []Action
-
-	actionFiles, err := FilesInDir(actionDir, actionPrefix)
+	actions, err := readActionFromFiles(actionDir, actionPrefix)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
-	}
-
-	for i, file := range actionFiles {
-		expectedFileName := targetFileName(actionDir, actionPrefix, i)
-		if expectedFileName != file {
-			return fmt.Errorf("%s, expected file %s, got %s", errorPreceding, expectedFileName, file)
-		}
-		action, err := readAction(file)
-		if err != nil {
-			return fmt.Errorf("%s, reading action file failed, %s", errorPreceding, err)
-		}
-		actions = append(actions, action)
 	}
 	log.Printf("%s: read %d actions from %s", errorPreceding, len(actions), actionDir)
 
@@ -233,13 +228,13 @@ func Processing() error {
 	}
 
 	// 3. apply action files
-	// stateDir := "data/state"
-	// if err := os.MkdirAll(stateDir, 0755); err != nil {
-	// 	return err
-	// }
-	// if err := ApplyActions(enrichedDir, actionPrefix, stateDir, "state"); err != nil {
-	// 	return err
-	// }
+	stateDir := "data/state"
+	if err := os.MkdirAll(stateDir, 0755); err != nil {
+		return err
+	}
+	if err := ApplyActions(enrichedDir, actionPrefix, stateDir, "state"); err != nil {
+		return err
+	}
 
 	return nil
 }
