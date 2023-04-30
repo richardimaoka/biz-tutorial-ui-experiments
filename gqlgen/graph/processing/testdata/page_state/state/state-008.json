@@ -1,0 +1,114 @@
+{
+  "step": "008",
+  "nextStep": "009",
+  "prevStep": "007",
+  "sourceCode": {
+    "step": "008",
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "name": "protoc-go-experiments",
+        "filePath": "protoc-go-experiments",
+        "offset": 0,
+        "isUpdated": false
+      },
+      {
+        "nodeType": "DIRECTORY",
+        "name": "helloworld",
+        "filePath": "protoc-go-experiments/helloworld",
+        "offset": 1,
+        "isUpdated": false
+      },
+      {
+        "nodeType": "FILE",
+        "name": "helloworld.proto",
+        "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+        "offset": 2,
+        "isUpdated": true
+      }
+    ],
+    "defaultOpenFile": null,
+    "fileContents": {
+      "protoc-go-experiments/helloworld/helloworld.proto": {
+        "fileName": "helloworld.proto",
+        "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+        "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}",
+        "isFullContent": true,
+        "language": null,
+        "highlight": null
+      }
+    }
+  },
+  "terminals": [
+    {
+      "name": "default",
+      "currentDirectory": "protoc-go-experiments/helloworld",
+      "nodes": [
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir protoc-go-experiments"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "cd protoc-go-experiments"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir helloworld"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "cd helloworld # protoc-go-experiments/helloworld"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat \u003c\u003c EOF \u003e helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalOutput",
+            "output": "Missing output directives."
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "protoc --go_out=. helloworld.proto"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalOutput",
+            "output": "protoc-gen-go: unable to determine Go import path for \"helloworld.proto\"\n\nPlease specify either:\n• a \"go_package\" option in the .proto source file, or\n• a \"M\" argument on the command line.\n\nSee https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information."
+          }
+        }
+      ]
+    }
+  ],
+  "nextAction": {
+    "command": "protoc --go_out=. helloworld.proto"
+  }
+}
