@@ -17,7 +17,7 @@ func Test_PageState(t *testing.T) {
 	}
 	compareAfterMarshal(t, "testdata/page_state/state/state-000.json", pageState.ToGraphQLPageState())
 
-	for i := 1; i <= 2; i++ {
+	for i := 1; i <= 8; i++ {
 		if err := pageState.StateTransition(actions[i]); err != nil {
 			t.Fatalf("state transition failed, %s", err)
 		}

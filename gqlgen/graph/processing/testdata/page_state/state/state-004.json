@@ -1,9 +1,9 @@
 {
-  "step": "003",
-  "nextStep": "004",
-  "prevStep": "002",
+  "step": "004",
+  "nextStep": "005",
+  "prevStep": "003",
   "sourceCode": {
-    "step": "003",
+    "step": "004",
     "fileTree": [
       {
         "nodeType": "DIRECTORY",
@@ -17,7 +17,7 @@
         "name": "helloworld",
         "filePath": "protoc-go-experiments/helloworld",
         "offset": 1,
-        "isUpdated": true
+        "isUpdated": false
       }
     ],
     "defaultOpenFile": null,
@@ -26,7 +26,7 @@
   "terminals": [
     {
       "name": "default",
-      "currentDirectory": "protoc-go-experiments",
+      "currentDirectory": "protoc-go-experiments/helloworld",
       "nodes": [
         {
           "content": {
@@ -48,11 +48,18 @@
             "beforeExecution": false,
             "command": "mkdir helloworld"
           }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "cd helloworld # protoc-go-experiments/helloworld"
+          }
         }
       ]
     }
   ],
   "nextAction": {
-    "command": "cd helloworld # protoc-go-experiments/helloworld"
+    "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat \u003c\u003c EOF \u003e helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF"
   }
 }
