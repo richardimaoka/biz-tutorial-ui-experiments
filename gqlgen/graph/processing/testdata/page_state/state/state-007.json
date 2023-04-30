@@ -111,6 +111,7 @@
   ],
   "nextAction": {
     "content": {
+      "contentType": "NextActionManual",
       "comment": "manual action"
     }
   }

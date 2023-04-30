@@ -54,6 +54,7 @@
   ],
   "nextAction": {
     "content": {
+      "contentType": "NextActionTerminal",
       "command": "cd helloworld # protoc-go-experiments/helloworld"
     }
   }

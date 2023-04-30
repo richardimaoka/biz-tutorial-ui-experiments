@@ -42,7 +42,7 @@ func (a *ManualUpdate) Enrich(op FileSystemOperation) {
 
 func (a *ActionCommand) ToGraphQLNextAction() model.NextAction {
 	return model.NextAction{
-		Content: model.ActionTerminal{
+		Content: model.NextActionTerminal{
 			Command: &a.Command,
 		},
 	}
@@ -51,7 +51,7 @@ func (a *ActionCommand) ToGraphQLNextAction() model.NextAction {
 func (a *ManualUpdate) ToGraphQLNextAction() model.NextAction {
 	fixedComment := "manual action"
 	return model.NextAction{
-		Content: model.ActionManual{
+		Content: model.NextActionManual{
 			Comment: &fixedComment,
 		},
 	}

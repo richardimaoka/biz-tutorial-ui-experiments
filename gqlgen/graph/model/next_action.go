@@ -34,15 +34,15 @@ func nextActionContentFromBytes(bytes []byte) (NextActionContent, error) {
 	}
 
 	switch typename {
-	case "ActionTerminal":
-		var action ActionTerminal
+	case "NextActionTerminal":
+		var action NextActionTerminal
 		if err := json.Unmarshal(bytes, &action); err != nil {
 			return nil, err
 		}
 		return &action, nil
 
-	case "ActionManual":
-		var action ActionManual
+	case "NextActionManual":
+		var action NextActionManual
 		if err := json.Unmarshal(bytes, &action); err != nil {
 			return nil, err
 		}

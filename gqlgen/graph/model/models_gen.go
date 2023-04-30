@@ -16,18 +16,6 @@ type TerminalElement interface {
 	IsTerminalElement()
 }
 
-type ActionManual struct {
-	Comment *string `json:"comment"`
-}
-
-func (ActionManual) IsNextActionContent() {}
-
-type ActionTerminal struct {
-	Command *string `json:"command"`
-}
-
-func (ActionTerminal) IsNextActionContent() {}
-
 type FileHighlight struct {
 	FromLine *int `json:"fromLine"`
 	ToLine   *int `json:"toLine"`
@@ -44,6 +32,18 @@ type FileNode struct {
 type NextAction struct {
 	Content NextActionContent `json:"content"`
 }
+
+type NextActionManual struct {
+	Comment *string `json:"comment"`
+}
+
+func (NextActionManual) IsNextActionContent() {}
+
+type NextActionTerminal struct {
+	Command *string `json:"command"`
+}
+
+func (NextActionTerminal) IsNextActionContent() {}
 
 type OpenFile struct {
 	FilePath      *string          `json:"filePath"`

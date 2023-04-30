@@ -20,16 +20,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type ActionManual = {
-  __typename: "ActionManual";
-  comment?: Maybe<Scalars["String"]>;
-};
-
-export type ActionTerminal = {
-  __typename: "ActionTerminal";
-  command?: Maybe<Scalars["String"]>;
-};
-
 export type FileHighlight = {
   __typename: "FileHighlight";
   fromLine?: Maybe<Scalars["Int"]>;
@@ -52,7 +42,17 @@ export type NextAction = {
   content?: Maybe<NextActionContent>;
 };
 
-export type NextActionContent = ActionManual | ActionTerminal;
+export type NextActionContent = NextActionManual | NextActionTerminal;
+
+export type NextActionManual = {
+  __typename: "NextActionManual";
+  comment?: Maybe<Scalars["String"]>;
+};
+
+export type NextActionTerminal = {
+  __typename: "NextActionTerminal";
+  command?: Maybe<Scalars["String"]>;
+};
 
 export type OpenFile = {
   __typename: "OpenFile";

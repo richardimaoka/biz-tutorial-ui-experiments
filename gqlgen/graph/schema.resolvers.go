@@ -19,9 +19,9 @@ import (
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
 	if step == nil {
-		filename = "data/tutorial3/state-000.json"
+		filename = "data/state/state-000.json"
 	} else {
-		filename = fmt.Sprintf("data/tutorial3/state-%s.json", *step)
+		filename = fmt.Sprintf("data/state/state-%s.json", *step)
 	}
 
 	log.Printf("reading data from %s", filename)
@@ -33,7 +33,8 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 	var pageState model.PageState
 	err = json.Unmarshal(data, &pageState)
 	if err != nil {
-		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
+		log.Printf("failed to read data from %s, %s", filename, err)
+		return nil, fmt.Errorf("internal server error %s", *step)
 	}
 
 	return &pageState, nil

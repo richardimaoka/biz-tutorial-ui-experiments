@@ -13,15 +13,15 @@ type TerminalOutput {
 
 union TerminalElement = TerminalCommand | TerminalOutput
 
-type ActionTerminal {
+type NextActionTerminal {
   command: String
 }
 
-type ActionManual {
+type NextActionManual {
   comment: String
 }
 
-union NextActionContent = ActionTerminal | ActionManual
+union NextActionContent = NextActionTerminal | NextActionManual
 
 type NextAction {
   content: NextActionContent

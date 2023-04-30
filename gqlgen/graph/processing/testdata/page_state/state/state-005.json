@@ -84,6 +84,7 @@
   ],
   "nextAction": {
     "content": {
+      "contentType": "NextActionTerminal",
       "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定"
     }
   }

@@ -40,6 +40,7 @@
   ],
   "nextAction": {
     "content": {
+      "contentType": "NextActionTerminal",
       "command": "mkdir helloworld"
     }
   }
