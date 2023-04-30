@@ -170,7 +170,7 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 
 func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
-		step:                "init",
+		step:                "",
 		defaultOpenFilePath: "",
 		fileMap:             make(map[string]fileTreeNode),
 	}
@@ -259,7 +259,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	}
 
 	return &model.SourceCode{
-		Step:         "",
+		Step:         p.step,
 		FileTree:     resultNodes,
 		FileContents: fileContents,
 	}
