@@ -26,8 +26,8 @@ func (p *PageStateProcessor) cloneForNextAction() *PageStateProcessor {
 	}
 }
 
-func (p *PageStateProcessor) applyNextAction(nextAction Action) error {
-	errorPreceding := "failed to apply next action"
+func (p *PageStateProcessor) applyAction(nextAction Action) error {
+	errorPreceding := "failed to apply action"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
 	switch action := nextAction.(type) {
@@ -81,14 +81,17 @@ func (p *PageStateProcessor) applyNextAction(nextAction Action) error {
 //------------------------------------------------------------
 
 func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
+	terminalMap := make(map[string]*TerminalProcessor)
+	terminalMap["default"] = NewTerminalProcessor("default")
+
 	init := PageStateProcessor{
 		step:        NewStepProcessor(),
-		terminalMap: make(map[string]*TerminalProcessor),
+		terminalMap: terminalMap,
 		sourceCode:  NewSourceCodeProcessor(),
 	}
 
 	cloned := init.cloneForNextAction()
-	if err := cloned.applyNextAction(firstAction); err != nil {
+	if err := cloned.applyAction(firstAction); err != nil {
 		return nil, fmt.Errorf("init page state failed, %s", err)
 	}
 	init.nextAction = firstAction
@@ -100,16 +103,16 @@ func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 func (p *PageStateProcessor) StateTransition(nextNextAction Action) error {
 	// 1. verify nextNextAction
 	cloned := p.cloneForNextAction()
-	if err := cloned.applyNextAction(nextNextAction); err != nil {
-		return fmt.Errorf("state transition failed, %s", err)
+	if err := cloned.applyAction(nextNextAction); err != nil {
+		return fmt.Errorf("state transition failed at step = %s, nextNextAction is invalid, %s", p.step.currentStep, err)
 	}
 
 	// 2. transition to nextState
 	p.sourceCode = p.nextState.sourceCode
 	p.terminalMap = p.nextState.terminalMap
-	p.sourceCode = p.nextState.sourceCode
+	p.step = p.nextState.step
 
-	// 3. update nextAction & nextState
+	// 3. update step, nextAction & nextState
 	p.nextAction = nextNextAction
 	p.nextState = cloned
 
