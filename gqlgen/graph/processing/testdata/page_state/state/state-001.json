@@ -32,6 +32,8 @@
     }
   ],
   "nextAction": {
-    "command": "cd protoc-go-experiments"
+    "content": {
+      "command": "cd protoc-go-experiments"
+    }
   }
 }

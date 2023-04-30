@@ -110,6 +110,8 @@
     }
   ],
   "nextAction": {
-    "comment": "manual action"
+    "content": {
+      "comment": "manual action"
+    }
   }
 }

@@ -47,7 +47,12 @@ export type FileNode = {
 
 export type FileNodeType = "DIRECTORY" | "FILE";
 
-export type NextAction = ActionManual | ActionTerminal;
+export type NextAction = {
+  __typename: "NextAction";
+  content?: Maybe<NextActionContent>;
+};
+
+export type NextActionContent = ActionManual | ActionTerminal;
 
 export type OpenFile = {
   __typename: "OpenFile";

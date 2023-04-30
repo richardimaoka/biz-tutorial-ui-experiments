@@ -16,6 +16,8 @@
     }
   ],
   "nextAction": {
-    "command": "mkdir protoc-go-experiments"
+    "content": {
+      "command": "mkdir protoc-go-experiments"
+    }
   }
 }

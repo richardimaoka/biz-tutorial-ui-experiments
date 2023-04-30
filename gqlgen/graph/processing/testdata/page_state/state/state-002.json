@@ -39,6 +39,8 @@
     }
   ],
   "nextAction": {
-    "command": "mkdir helloworld"
+    "content": {
+      "command": "mkdir helloworld"
+    }
   }
 }

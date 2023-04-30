@@ -21,7 +21,11 @@ type ActionManual {
   comment: String
 }
 
-union NextAction = ActionTerminal | ActionManual
+union NextActionContent = ActionTerminal | ActionManual
+
+type NextAction {
+  content: NextActionContent
+}
 
 type TerminalNode {
   content: TerminalElement

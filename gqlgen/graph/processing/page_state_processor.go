@@ -140,7 +140,9 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 	if p.nextAction != nil {
 		nextAction = p.nextAction.ToGraphQLNextAction()
 	} else {
-		nextAction = nil
+		nextAction = model.NextAction{
+			Content: nil,
+		}
 	}
 
 	return &model.PageState{
@@ -149,6 +151,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		PrevStep:   &p.step.prevStep,
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
-		NextAction: nextAction,
+		NextAction: &nextAction,
 	}
 }

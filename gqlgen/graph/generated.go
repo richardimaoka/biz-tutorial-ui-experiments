@@ -65,6 +65,10 @@ type ComplexityRoot struct {
 		Offset    func(childComplexity int) int
 	}
 
+	NextAction struct {
+		Content func(childComplexity int) int
+	}
+
 	OpenFile struct {
 		Content       func(childComplexity int) int
 		FileName      func(childComplexity int) int
@@ -205,6 +209,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileNode.Offset(childComplexity), true
+
+	case "NextAction.content":
+		if e.complexity.NextAction.Content == nil {
+			break
+		}
+
+		return e.complexity.NextAction.Content(childComplexity), true
 
 	case "OpenFile.content":
 		if e.complexity.OpenFile.Content == nil {
@@ -948,6 +959,47 @@ func (ec *executionContext) fieldContext_FileNode_isUpdated(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _NextAction_content(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NextAction_content(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Content, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.NextActionContent)
+	fc.Result = res
+	return ec.marshalONextActionContent2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextActionContent(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NextAction_content(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NextAction",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type NextActionContent does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OpenFile_filePath(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_filePath(ctx, field)
 	if err != nil {
@@ -1444,9 +1496,9 @@ func (ec *executionContext) _PageState_nextAction(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(model.NextAction)
+	res := resTmp.(*model.NextAction)
 	fc.Result = res
-	return ec.marshalONextAction2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx, field.Selections, res)
+	return ec.marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PageState_nextAction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1456,7 +1508,11 @@ func (ec *executionContext) fieldContext_PageState_nextAction(ctx context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type NextAction does not have child fields")
+			switch field.Name {
+			case "content":
+				return ec.fieldContext_NextAction_content(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NextAction", field.Name)
 		},
 	}
 	return fc, nil
@@ -4086,7 +4142,7 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
-func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSet, obj model.NextAction) graphql.Marshaler {
+func (ec *executionContext) _NextActionContent(ctx context.Context, sel ast.SelectionSet, obj model.NextActionContent) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
@@ -4136,7 +4192,7 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 
 // region    **************************** object.gotpl ****************************
 
-var actionManualImplementors = []string{"ActionManual", "NextAction"}
+var actionManualImplementors = []string{"ActionManual", "NextActionContent"}
 
 func (ec *executionContext) _ActionManual(ctx context.Context, sel ast.SelectionSet, obj *model.ActionManual) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionManualImplementors)
@@ -4161,7 +4217,7 @@ func (ec *executionContext) _ActionManual(ctx context.Context, sel ast.Selection
 	return out
 }
 
-var actionTerminalImplementors = []string{"ActionTerminal", "NextAction"}
+var actionTerminalImplementors = []string{"ActionTerminal", "NextActionContent"}
 
 func (ec *executionContext) _ActionTerminal(ctx context.Context, sel ast.SelectionSet, obj *model.ActionTerminal) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionTerminalImplementors)
@@ -4244,6 +4300,31 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 		case "isUpdated":
 
 			out.Values[i] = ec._FileNode_isUpdated(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var nextActionImplementors = []string{"NextAction"}
+
+func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSet, obj *model.NextAction) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nextActionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NextAction")
+		case "content":
+
+			out.Values[i] = ec._NextAction_content(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5389,11 +5470,18 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalONextAction2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v model.NextAction) graphql.Marshaler {
+func (ec *executionContext) marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v *model.NextAction) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._NextAction(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalONextActionContent2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextActionContent(ctx context.Context, sel ast.SelectionSet, v model.NextActionContent) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._NextActionContent(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx context.Context, sel ast.SelectionSet, v *model.OpenFile) graphql.Marshaler {

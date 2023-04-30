@@ -109,6 +109,8 @@
     }
   ],
   "nextAction": {
-    "command": "protoc --go_out=. helloworld.proto"
+    "content": {
+      "command": "protoc --go_out=. helloworld.proto"
+    }
   }
 }
