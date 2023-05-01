@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../../libs/gql";
 import { FileNodeIcon } from "./FileNodeIcon";
+import Link from "next/link";
 
 const FileNodeComponent_Fragment = graphql(`
   fragment FileNodeComponent_Fragment on FileNode {
@@ -33,7 +34,7 @@ export const FileNodeComponent = (
     fragment.filePath && props.updateOpenFilePath(fragment.filePath);
   };
 
-  return (
+  const Component = () => (
     <div
       css={css`
         display: flex;
@@ -70,5 +71,14 @@ export const FileNodeComponent = (
         )}
       </div>
     </div>
+  );
+
+  return fragment.nodeType === "FILE" && fragment.filePath ? (
+    // <Link href={`/?openFilePath=${encodeURIComponent(fragment.filePath)}`}>
+    //   <Component />
+    // </Link>
+    <Component />
+  ) : (
+    <Component />
   );
 };
