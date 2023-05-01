@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
 import { Header } from "../components/Header";
@@ -71,25 +70,6 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
   const currentPage = pageState;
   const nextStep = currentPage?.nextStep;
   const prevStep = currentPage?.prevStep;
-
-  // CONSIDERING HOW TO IMPLEMENT SERVER-SIDE defaultOpenFile...
-  //
-  // 1. useState style
-  //   this is not going to work, as rendering always triggered twice,
-  //   by page's GraphQL query -> setState
-  // x const [openFile, setOpenFile] = useState<OpenFile>(null);
-  //
-  // const defaultOpenFile = data?.defaultOpenFile
-  //
-  // 2. useMemo style
-  //    this is not going to work either, as useMemo is called only at rendering
-  //    so something e.g. useState should trigger rendering
-  // x const openFile = useMemo(() => {
-  // }, [defaultOpenFile, openFilePath]);
-  //
-  // 3. server-side rendering style, where step and defaultOpenFile are query params
-  //    maybe this works??? declaretive style?
-  //    using <Link to=="" /> avoids communication to server?
 
   const terminals = currentPage?.terminals;
   const [currentTerminalIndex] = useState(0);
