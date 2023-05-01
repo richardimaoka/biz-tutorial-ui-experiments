@@ -16,6 +16,7 @@ const queryDefinition = graphql(/* GraphQL */ `
     pageState(step: $step) {
       nextStep
       prevStep
+      step
       sourceCode {
         ...SourceCodeViewer_Fragment
       }
@@ -67,10 +68,6 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 export default function Home({ pageState }: IndexSsrPageQuery) {
-  const router = useRouter();
-  const { step } = router.query;
-  const stepVariable = typeof step === "string" ? step : undefined;
-
   const currentPage = pageState;
   const nextStep = currentPage?.nextStep;
   const prevStep = currentPage?.prevStep;
@@ -117,10 +114,10 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
               background-color: white;
             `}
           >
-            {currentPage?.sourceCode && (
+            {currentPage?.sourceCode && currentPage?.step && (
               <SourceCodeViewer
                 fragment={currentPage.sourceCode}
-                step={stepVariable}
+                step={currentPage.step}
                 currentDirectory={currentDirectory}
               />
             )}

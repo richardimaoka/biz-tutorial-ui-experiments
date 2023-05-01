@@ -17,8 +17,7 @@ export interface FileTreeComponentProps {
   currentDirectory?: string;
   sourceCodeHeight: number;
   isFolded: boolean;
-  updateOpenFilePath: (filePath: string) => void;
-  step?: string;
+  step: string;
 }
 
 export const FileTreeComponent = (
@@ -69,7 +68,6 @@ export const FileTreeComponent = (
                 key={elem.filePath ? elem.filePath : ""}
                 fragment={elem}
                 currentDirectory={props.currentDirectory}
-                updateOpenFilePath={props.updateOpenFilePath}
                 step={props.step}
               />
             )

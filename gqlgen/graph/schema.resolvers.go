@@ -91,6 +91,7 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, nil
 	}
 
+	log.Printf("OpenFile() returning file for: %s", *filePath)
 	return &openFile, nil
 }
 

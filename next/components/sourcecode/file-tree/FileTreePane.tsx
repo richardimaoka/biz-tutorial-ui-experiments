@@ -14,8 +14,7 @@ export interface FileTreePaneProps {
   fragment: FragmentType<typeof FileTreePane_Fragment>;
   sourceCodeHeight: number;
   currentDirectory?: string;
-  updateOpenFilePath: (filePath: string) => void;
-  step?: string;
+  step: string;
 }
 
 export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
@@ -35,7 +34,6 @@ export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
         sourceCodeHeight={props.sourceCodeHeight}
         isFolded={isFolded}
         currentDirectory={props.currentDirectory}
-        updateOpenFilePath={props.updateOpenFilePath}
         step={props.step}
       />
     </div>

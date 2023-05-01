@@ -1,7 +1,5 @@
 import { css } from "@emotion/react";
 
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { FileTreePane } from "./file-tree/FileTreePane";
 import { FileContentPane } from "./open-file/FileContentPane";
@@ -15,21 +13,9 @@ const SourceCodeViewer_Fragment = graphql(`
   }
 `);
 
-const OpenFileQuery = graphql(/* GraphQL */ `
-  query OpenFileQuery($step: String, $openFilePath: String!) {
-    pageState(step: $step) {
-      sourceCode {
-        openFile(filePath: $openFilePath) {
-          ...FileContentPane_Fragment
-        }
-      }
-    }
-  }
-`);
-
 export interface SourceCodeViewerProps {
   fragment: FragmentType<typeof SourceCodeViewer_Fragment>;
-  step?: string;
+  step: string;
   currentDirectory?: string;
 }
 
@@ -46,12 +32,6 @@ const EmptyFileContentPane = () => (
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
-  const [openFilePath, setOpenFilePath] = useState<string>("");
-
-  const { data } = useQuery(OpenFileQuery, {
-    variables: { step: props.step, openFilePath: openFilePath },
-  });
-  const openFile = data?.pageState?.sourceCode?.openFile;
 
   return (
     <div
@@ -68,7 +48,6 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           fragment={fragment}
           sourceCodeHeight={sourceCodeHeight}
           currentDirectory={props.currentDirectory}
-          updateOpenFilePath={setOpenFilePath}
           step={props.step}
         />
       </div>
@@ -78,9 +57,9 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           overflow: hidden; //necessary for wider-than-width source code
         `}
       >
-        {openFile ? (
+        {fragment.openFile ? (
           <FileContentPane
-            fragment={openFile}
+            fragment={fragment.openFile}
             sourceCodeHeight={sourceCodeHeight}
           />
         ) : (

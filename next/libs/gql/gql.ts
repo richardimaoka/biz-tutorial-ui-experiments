@@ -15,8 +15,6 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
 const documents = {
   "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
-  "\n  query OpenFileQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      sourceCode {\n        openFile(filePath: $openFilePath) {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n":
-    types.OpenFileQueryDocument,
   "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
     types.FileNodeComponent_FragmentFragmentDoc,
   "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n":
@@ -43,7 +41,7 @@ const documents = {
     types.TerminalOutput_FragmentFragmentDoc,
   "\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.PageQueryDocument,
-  "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
+  "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.IndexSsrPageDocument,
 };
 
@@ -67,12 +65,6 @@ export function graphql(source: string): unknown;
 export function graphql(
   source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"
 ): (typeof documents)["\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query OpenFileQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      sourceCode {\n        openFile(filePath: $openFilePath) {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query OpenFileQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      sourceCode {\n        openFile(filePath: $openFilePath) {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -155,8 +147,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

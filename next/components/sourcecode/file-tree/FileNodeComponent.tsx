@@ -17,8 +17,7 @@ const FileNodeComponent_Fragment = graphql(`
 export interface FileNodeComponentProps {
   fragment: FragmentType<typeof FileNodeComponent_Fragment>;
   currentDirectory?: string;
-  updateOpenFilePath: (filePath: string) => void;
-  step?: string;
+  step: string;
 }
 
 export const FileNodeComponent = (
@@ -30,10 +29,6 @@ export const FileNodeComponent = (
     fragment.filePath &&
     props.currentDirectory &&
     fragment.filePath === props.currentDirectory;
-
-  const onClick = () => {
-    fragment.filePath && props.updateOpenFilePath(fragment.filePath);
-  };
 
   const Component = () => (
     <div
@@ -47,7 +42,6 @@ export const FileNodeComponent = (
         padding-right: 8px;
         padding-left: ${8 * offset + 8}px;
       `}
-      onClick={fragment.nodeType === "FILE" ? onClick : undefined}
     >
       <FileNodeIcon fragment={fragment} />
       <div
