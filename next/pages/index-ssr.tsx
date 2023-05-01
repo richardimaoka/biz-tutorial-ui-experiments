@@ -110,12 +110,12 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
             )}
             {prevStep && (
               <button type="button">
-                <Link href={`./?step=${prevStep}`}>prev step</Link>
+                <Link href={`./index-ssr?step=${prevStep}`}>prev step</Link>
               </button>
             )}
             {nextStep && (
               <button type="button">
-                <Link href={`./?step=${nextStep}`}>next step</Link>
+                <Link href={`./index-ssr?step=${nextStep}`}>next step</Link>
               </button>
             )}
           </div>
