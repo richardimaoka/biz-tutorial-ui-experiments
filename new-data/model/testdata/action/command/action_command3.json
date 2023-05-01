@@ -1,8 +1,0 @@
-{
-  "actionType": "ActionCommand",
-  "terminalName": "another",
-  "command": "cd hello/world",
-  "output": null,
-  "currentDirectory": "hello/world",
-  "effect": null
-}
