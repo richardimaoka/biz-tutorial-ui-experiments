@@ -1,16 +1,15 @@
-import { useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ParsedUrlQuery } from "querystring";
+import { useState } from "react";
 import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
-import { graphql } from "../libs/gql";
 import { client } from "../libs/apolloClient";
-import { GetServerSideProps } from "next";
+import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
-import { ParsedUrlQuery } from "querystring";
 
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($step: String) {
