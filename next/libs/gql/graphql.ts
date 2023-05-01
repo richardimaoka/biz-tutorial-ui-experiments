@@ -133,13 +133,6 @@ export type TerminalSimple = {
 
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
-  defaultOpenFile?:
-    | ({ __typename: "OpenFile" } & {
-        " $fragmentRefs"?: {
-          FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
-        };
-      })
-    | null;
   openFile?:
     | ({ __typename: "OpenFile" } & {
         " $fragmentRefs"?: {
@@ -550,19 +543,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreePane_Fragment" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "defaultOpenFile" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "FileContentPane_Fragment" },
-                },
-              ],
-            },
           },
           {
             kind: "Field",

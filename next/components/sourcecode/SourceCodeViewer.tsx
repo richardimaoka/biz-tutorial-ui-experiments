@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 import { useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { FileTreePane } from "./file-tree/FileTreePane";
 import { FileContentPane } from "./open-file/FileContentPane";
@@ -9,9 +9,6 @@ import { FileContentPane } from "./open-file/FileContentPane";
 const SourceCodeViewer_Fragment = graphql(`
   fragment SourceCodeViewer_Fragment on SourceCode {
     ...FileTreePane_Fragment
-    defaultOpenFile {
-      ...FileContentPane_Fragment
-    }
     openFile(filePath: $openFilePath) {
       ...FileContentPane_Fragment
     }
