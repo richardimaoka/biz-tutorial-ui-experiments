@@ -89,6 +89,7 @@ func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 	}
 	init.nextAction = firstAction
 	init.nextState = cloned
+	init.sourceCode.SetStep(init.step.currentStep)
 
 	return &init, nil
 }
