@@ -9,7 +9,7 @@ import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
 
 const PageQuery = graphql(/* GraphQL */ `
-  query PageQuery($step: String) {
+  query PageQuery($step: String, $openFilePath: String!) {
     pageState(step: $step) {
       nextStep
       prevStep
@@ -31,7 +31,7 @@ export default function Home() {
   const stepVariable = typeof step === "string" ? step : undefined;
 
   const { loading, error, data, client } = useQuery(PageQuery, {
-    variables: { step: stepVariable },
+    variables: { step: stepVariable, openFilePath: "" },
   });
 
   const currentPage = data?.pageState;
@@ -93,7 +93,7 @@ export default function Home() {
       client
         .query({
           query: PageQuery,
-          variables: { step: nextStep },
+          variables: { step: nextStep, openFilePath: "" },
         })
         .catch((error) => console.log(error));
     }
@@ -101,7 +101,7 @@ export default function Home() {
       client
         .query({
           query: PageQuery,
-          variables: { step: prevStep },
+          variables: { step: prevStep, openFilePath: "" },
         })
         .catch((error) => console.log(error));
     }

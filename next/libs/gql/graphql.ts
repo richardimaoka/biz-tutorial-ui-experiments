@@ -140,6 +140,13 @@ export type SourceCodeViewer_FragmentFragment = ({
         };
       })
     | null;
+  openFile?:
+    | ({ __typename: "OpenFile" } & {
+        " $fragmentRefs"?: {
+          FileContentPane_FragmentFragment: FileContentPane_FragmentFragment;
+        };
+      })
+    | null;
 } & {
   " $fragmentRefs"?: {
     FileTreePane_FragmentFragment: FileTreePane_FragmentFragment;
@@ -270,6 +277,7 @@ export type TerminalOutput_FragmentFragment = {
 
 export type PageQueryQueryVariables = Exact<{
   step?: InputMaybe<Scalars["String"]>;
+  openFilePath: Scalars["String"];
 }>;
 
 export type PageQueryQuery = {
@@ -556,6 +564,29 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
               ],
             },
           },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "openFile" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "filePath" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "openFilePath" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "FileContentPane_Fragment" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -809,6 +840,20 @@ export const PageQueryDocument = {
           kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "openFilePath" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
         },
       ],
       selectionSet: {

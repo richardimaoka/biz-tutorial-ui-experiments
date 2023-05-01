@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-  "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n":
+  "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
   "\n  query OpenFileQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      sourceCode {\n        openFile(filePath: $openFilePath) {\n          ...FileContentPane_Fragment\n        }\n      }\n    }\n  }\n":
     types.OpenFileQueryDocument,
@@ -41,7 +41,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
+  "\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.PageQueryDocument,
   "\n  query IndexSsrPage($step: String!, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.IndexSsrPageDocument,
@@ -65,8 +65,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n"
-): (typeof documents)["\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n  }\n"];
+  source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"
+): (typeof documents)["\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    defaultOpenFile {\n      ...FileContentPane_Fragment\n    }\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -149,8 +149,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

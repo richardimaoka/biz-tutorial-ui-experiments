@@ -12,6 +12,9 @@ const SourceCodeViewer_Fragment = graphql(`
     defaultOpenFile {
       ...FileContentPane_Fragment
     }
+    openFile(filePath: $openFilePath) {
+      ...FileContentPane_Fragment
+    }
   }
 `);
 

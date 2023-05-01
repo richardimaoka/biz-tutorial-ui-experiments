@@ -79,7 +79,9 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 
 	openFile, ok := pageState.SourceCode.FileContents[filePath]
 	if !ok {
-		return nil, fmt.Errorf("internal server error - cannot load openFile %s", filePath)
+		log.Printf("OpenFile() file not found: %s", filePath)
+		// return nil openFile, instead of error, so that the entire page can still render
+		return nil, nil
 	}
 	return &openFile, nil
 }
