@@ -7,9 +7,13 @@ import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { graphql } from "../libs/gql";
+import { client } from "../libs/apolloClient";
+import { GetServerSideProps } from "next";
+import { IndexSsrPageQuery } from "../libs/gql/graphql";
+import { ParsedUrlQuery } from "querystring";
 
-const PageQuery = graphql(/* GraphQL */ `
-  query PageQuery($step: String) {
+const queryDefinition = graphql(/* GraphQL */ `
+  query IndexSsrPage($step: String) {
     pageState(step: $step) {
       nextStep
       prevStep
@@ -25,16 +29,30 @@ const PageQuery = graphql(/* GraphQL */ `
   }
 `);
 
-export default function Home() {
+interface PageParams extends ParsedUrlQuery {
+  step: string;
+}
+
+export const getServerSideProps: GetServerSideProps<
+  IndexSsrPageQuery,
+  PageParams
+> = async (context) => {
+  const step = typeof context.query.step == "string" ? context.query.step : "";
+  const { data } = await client.query({
+    query: queryDefinition,
+    variables: { step },
+  });
+  return {
+    props: data,
+  };
+};
+
+export default function Home({ pageState }: IndexSsrPageQuery) {
   const router = useRouter();
   const { step } = router.query;
   const stepVariable = typeof step === "string" ? step : undefined;
 
-  const { loading, error, data, client } = useQuery(PageQuery, {
-    variables: { step: stepVariable },
-  });
-
-  const currentPage = data?.pageState;
+  const currentPage = pageState;
   const nextStep = currentPage?.nextStep;
   const prevStep = currentPage?.prevStep;
 
@@ -64,53 +82,8 @@ export default function Home() {
     ? currentTerminal.currentDirectory
     : undefined;
 
-  // console.log("rendering home", prevStep, step, nextStep);
-
-  // Keyboard navigation to go to next/prev step
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
-        if (event.shiftKey) {
-          prevStep && router.push(`./?step=${prevStep}&skipAnimation=true`);
-        } else {
-          nextStep && router.push(`./?step=${nextStep}`);
-        }
-      }
-    };
-    document.addEventListener("keyup", handleKeyDown);
-
-    // Don't forget to clean up
-    return function cleanup() {
-      document.removeEventListener("keyup", handleKeyDown);
-    };
-  }, [router, step, nextStep, prevStep]);
-
-  // Page load optimization:
-  // TODO: if you make the page SSR, you can use prefetch https://nextjs.org/docs/api-reference/next/link
-  useEffect(() => {
-    if (nextStep) {
-      client
-        .query({
-          query: PageQuery,
-          variables: { step: nextStep },
-        })
-        .catch((error) => console.log(error));
-    }
-    if (prevStep) {
-      client
-        .query({
-          query: PageQuery,
-          variables: { step: prevStep },
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [client, nextStep, prevStep]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
-
   return (
-    data && (
+    currentPage && (
       <>
         <Header />
         <main

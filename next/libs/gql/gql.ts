@@ -41,10 +41,10 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
-    types.IndexSsrPageDocument,
   "\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.PageQueryDocument,
+  "\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
+    types.IndexSsrPageDocument,
 };
 
 /**
@@ -149,14 +149,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query PageQuery($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query IndexSsrPage($step: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
