@@ -12,7 +12,7 @@ import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 
 const queryDefinition = graphql(/* GraphQL */ `
-  query IndexSsrPage($step: String) {
+  query IndexSsrPage($step: String!) {
     pageState(step: $step) {
       nextStep
       prevStep
@@ -30,13 +30,20 @@ const queryDefinition = graphql(/* GraphQL */ `
 
 interface PageParams extends ParsedUrlQuery {
   step: string;
+  openFilePath: string;
 }
+
+const extractString = (queryString: string | string[] | undefined): string => {
+  return typeof queryString == "string" ? queryString : "";
+};
 
 export const getServerSideProps: GetServerSideProps<
   IndexSsrPageQuery,
   PageParams
 > = async (context) => {
-  const step = typeof context.query.step == "string" ? context.query.step : "";
+  const step = extractString(context.query.step);
+  const openFilePath = extractString(context.query.openFilePath);
+
   const { data } = await client.query({
     query: queryDefinition,
     variables: { step },
