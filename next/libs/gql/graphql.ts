@@ -268,6 +268,38 @@ export type TerminalOutput_FragmentFragment = {
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
+export type IndexSsrPageQueryVariables = Exact<{
+  step?: InputMaybe<Scalars["String"]>;
+}>;
+
+export type IndexSsrPageQuery = {
+  __typename: "Query";
+  pageState?: {
+    __typename: "PageState";
+    nextStep?: string | null;
+    prevStep?: string | null;
+    sourceCode?:
+      | ({ __typename: "SourceCode" } & {
+          " $fragmentRefs"?: {
+            SourceCodeViewer_FragmentFragment: SourceCodeViewer_FragmentFragment;
+          };
+        })
+      | null;
+    terminals?: Array<
+      | ({
+          __typename: "Terminal";
+          name?: string | null;
+          currentDirectory?: string | null;
+        } & {
+          " $fragmentRefs"?: {
+            TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
+          };
+        })
+      | null
+    > | null;
+  } | null;
+};
+
 export type PageQueryQueryVariables = Exact<{
   step?: InputMaybe<Scalars["String"]>;
 }>;
@@ -764,6 +796,88 @@ export const OpenFileQueryDocument = {
     ...FileContentPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<OpenFileQueryQuery, OpenFileQueryQueryVariables>;
+export const IndexSsrPageDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "IndexSsrPage" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pageState" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "step" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "step" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sourceCode" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "SourceCodeViewer_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "terminals" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentDirectory" },
+                      },
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalComponent_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...SourceCodeViewer_FragmentFragmentDoc.definitions,
+    ...TerminalComponent_FragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [
