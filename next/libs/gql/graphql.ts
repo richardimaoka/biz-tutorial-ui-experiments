@@ -302,6 +302,7 @@ export type PageQueryQuery = {
 
 export type IndexSsrPageQueryVariables = Exact<{
   step: Scalars["String"];
+  openFilePath: Scalars["String"];
 }>;
 
 export type IndexSsrPageQuery = {
@@ -889,6 +890,20 @@ export const IndexSsrPageDocument = {
         {
           kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "openFilePath" },
+          },
           type: {
             kind: "NonNullType",
             type: {

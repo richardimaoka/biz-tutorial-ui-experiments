@@ -12,7 +12,7 @@ import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 
 const queryDefinition = graphql(/* GraphQL */ `
-  query IndexSsrPage($step: String!) {
+  query IndexSsrPage($step: String!, $openFilePath: String!) {
     pageState(step: $step) {
       nextStep
       prevStep
@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const { data } = await client.query({
     query: queryDefinition,
-    variables: { step },
+    variables: { step, openFilePath },
   });
   return {
     props: data,
