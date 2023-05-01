@@ -18,6 +18,7 @@ export interface FileNodeComponentProps {
   fragment: FragmentType<typeof FileNodeComponent_Fragment>;
   currentDirectory?: string;
   updateOpenFilePath: (filePath: string) => void;
+  step?: string;
 }
 
 export const FileNodeComponent = (
@@ -74,10 +75,16 @@ export const FileNodeComponent = (
   );
 
   return fragment.nodeType === "FILE" && fragment.filePath ? (
-    // <Link href={`/?openFilePath=${encodeURIComponent(fragment.filePath)}`}>
-    //   <Component />
-    // </Link>
-    <Component />
+    <Link
+      style={{
+        textDecoration: "none",
+      }}
+      href={`/?step=${props.step}&openFilePath=${encodeURIComponent(
+        fragment.filePath
+      )}`}
+    >
+      <Component />
+    </Link>
   ) : (
     <Component />
   );

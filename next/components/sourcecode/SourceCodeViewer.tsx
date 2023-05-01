@@ -29,7 +29,7 @@ const OpenFileQuery = graphql(/* GraphQL */ `
 
 export interface SourceCodeViewerProps {
   fragment: FragmentType<typeof SourceCodeViewer_Fragment>;
-  step: string | undefined;
+  step?: string;
   currentDirectory?: string;
 }
 
@@ -69,6 +69,7 @@ export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
           sourceCodeHeight={sourceCodeHeight}
           currentDirectory={props.currentDirectory}
           updateOpenFilePath={setOpenFilePath}
+          step={props.step}
         />
       </div>
       <div
