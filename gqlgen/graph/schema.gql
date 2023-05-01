@@ -73,7 +73,8 @@ type FileNode {
 
 type SourceCode {
   fileTree: [FileNode]
-  openFile(filePath: String!): OpenFile
+  # without passing filePath argument, you get the default OpenFile
+  openFile(filePath: String): OpenFile
   defaultOpenFile: OpenFile
 }
 
@@ -87,6 +88,7 @@ type PageState {
 }
 
 type Query {
+  # without passing step argument, you get the first step state
   pageState(step: String): PageState
   terminal(step: Int!): Terminal
 }

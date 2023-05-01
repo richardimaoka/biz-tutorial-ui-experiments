@@ -62,7 +62,7 @@ func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal
 }
 
 // OpenFile is the resolver for the openFile field.
-func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath string) (*model.OpenFile, error) {
+func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	filename := fmt.Sprintf("data/state/state-%s.json", obj.Step)
 	log.Printf("OpenFile() reading data from %s", filename)
 
@@ -77,12 +77,20 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
 	}
 
-	openFile, ok := pageState.SourceCode.FileContents[filePath]
+	if filePath == nil {
+		log.Printf("returning nil as filePath empty")
+		// return nil openFile, instead of error, so that the entire page can still render
+		// TODO: enable default open file returning, once SourceCode has defaultOpenFilePath set
+		return nil, nil
+	}
+
+	openFile, ok := pageState.SourceCode.FileContents[*filePath]
 	if !ok {
-		log.Printf("OpenFile() file not found: %s", filePath)
+		log.Printf("OpenFile() file not found: %s", *filePath)
 		// return nil openFile, instead of error, so that the entire page can still render
 		return nil, nil
 	}
+
 	return &openFile, nil
 }
 

@@ -95,7 +95,7 @@ type ComplexityRoot struct {
 	SourceCode struct {
 		DefaultOpenFile func(childComplexity int) int
 		FileTree        func(childComplexity int) int
-		OpenFile        func(childComplexity int, filePath string) int
+		OpenFile        func(childComplexity int, filePath *string) int
 	}
 
 	Terminal struct {
@@ -129,7 +129,7 @@ type QueryResolver interface {
 	Terminal(ctx context.Context, step int) (*model.Terminal, error)
 }
 type SourceCodeResolver interface {
-	OpenFile(ctx context.Context, obj *model.SourceCode, filePath string) (*model.OpenFile, error)
+	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
 }
 
 type executableSchema struct {
@@ -349,7 +349,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.SourceCode.OpenFile(childComplexity, args["filePath"].(string)), true
+		return e.complexity.SourceCode.OpenFile(childComplexity, args["filePath"].(*string)), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -540,10 +540,10 @@ func (ec *executionContext) field_Query_terminal_args(ctx context.Context, rawAr
 func (ec *executionContext) field_SourceCode_openFile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 *string
 	if tmp, ok := rawArgs["filePath"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filePath"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1840,7 +1840,7 @@ func (ec *executionContext) _SourceCode_openFile(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.SourceCode().OpenFile(rctx, obj, fc.Args["filePath"].(string))
+		return ec.resolvers.SourceCode().OpenFile(rctx, obj, fc.Args["filePath"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
