@@ -39,8 +39,6 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
-    types.PageQueryDocument,
   "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n":
     types.IndexSsrPageDocument,
 };
@@ -137,12 +135,6 @@ export function graphql(
 export function graphql(
   source: "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n"
 ): (typeof documents)["\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query PageQuery($step: String, $openFilePath: String!) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
