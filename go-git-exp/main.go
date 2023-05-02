@@ -24,29 +24,50 @@ func main() {
 		}
 	}
 
-	itr, err := r.CommitObjects()
-	for {
-		ref, err := itr.Next()
-		if err != nil {
-			break
-		}
-		fmt.Println(ref.Hash)
-		fmt.Println(ref.Author)
-		fmt.Println(ref.Committer)
-		fmt.Println(ref.Message)
-
-		fileItr, err := ref.Files()
-		if err != nil {
-			break
-		}
-		for {
-			file, err := fileItr.Next()
-			if err != nil {
-				break
-			}
-			fmt.Println(file.Name)
-		}
+	head, err := r.Head()
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
+	ref, err := r.CommitObject(head.Hash())
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(ref.Hash)
+	fmt.Println(ref.Author)
+	fmt.Println(ref.Committer)
+	fmt.Println(ref.Message)
+
+	fmt.Println("-------------------")
+
+	tree, err := ref.Tree()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	parent, err := ref.Parent(1)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	parentTree, err := parent.Tree()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	diff, err := tree.Diff(parentTree)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("diff\n", diff.String())
+	fmt.Println("-------------------------------------")
 
 	fmt.Println("r", r)
 }
