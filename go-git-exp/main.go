@@ -8,13 +8,20 @@ import (
 )
 
 func main() {
-	r, err := git.PlainClone("/tmp/foo", false, &git.CloneOptions{
-		URL:      "https://github.com/go-git/go-git",
-		Progress: os.Stdout,
-	})
+	var r *git.Repository
+	r, err := git.PlainOpen("/tmp/foxo")
 
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+
+		r, err = git.PlainClone("/tmp/foo2", false, &git.CloneOptions{
+			URL:      "https://github.com/go-git/go-git",
+			Progress: os.Stdout,
+		})
+
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	fmt.Println("r", r)
