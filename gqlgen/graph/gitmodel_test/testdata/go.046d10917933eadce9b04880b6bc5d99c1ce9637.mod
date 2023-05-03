@@ -1,41 +1,4 @@
-package gitmodel
-
-import (
-	"log"
-
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/storage/memory"
-)
-
-type File struct {
-	path       string
-	commitHash plumbing.Hash
-	Size       int64
-}
-
-func NewFile(repoUrl string, blobHash plumbing.Hash) *File {
-	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
-		URL: repoUrl,
-	})
-	if err != nil {
-		log.Println("error cloning repo")
-		return nil
-	}
-
-	blob, err := r.BlobObject(blobHash)
-	if err != nil {
-		log.Println("error getting blog")
-		return nil
-	}
-
-	log.Println("size", blob.Size)
-
-	return &File{Size: blob.Size}
-}
-
-func (f *File) Contents() *string {
-	s := `module github.com/richardimaoka/gqlgensandbox
+module github.com/richardimaoka/gqlgensandbox
 
 go 1.18
 
@@ -86,6 +49,4 @@ require (
 	google.golang.org/grpc v1.53.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-)`
-	return &s
-}
+)

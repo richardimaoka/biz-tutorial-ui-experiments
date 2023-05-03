@@ -1,22 +1,28 @@
 package gitmodel_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/gitmodel"
 )
 
-func TestActionCommandMarshal(t *testing.T) {
+func TestCommitTest(t *testing.T) {
 	f := gitmodel.NewFile(
 		"https://github.com/richardimaoka/gqlgensandbox",
 		plumbing.NewHash("18ebd6486e9d929f614aba39bd0a2f7bb074d34d"))
-
-	t.Log(f.Size)
-	t.Errorf("test")
 
 	if f.Size == 0 {
 		t.Errorf("size is 0")
 	}
 
+	bytes, err := os.ReadFile("./testdata/go.046d10917933eadce9b04880b6bc5d99c1ce9637.mod")
+	if err != nil {
+		t.Errorf("error reading ./testdata/go.046d10917933eadce9b04880b6bc5d99c1ce9637.mod")
+	}
+
+	if contents := f.Contents(); *contents != string(bytes) {
+		t.Errorf("contents mismatched")
+	}
 }
