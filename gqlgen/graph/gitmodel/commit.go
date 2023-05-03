@@ -7,6 +7,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type File struct {
@@ -55,4 +56,9 @@ func (f *File) Contents() *string {
 
 	contents := string(bytes)
 	return &contents
+}
+
+// File method to return model.FileNode
+func (f *File) File() *model.FileNode {
+	return nil
 }
