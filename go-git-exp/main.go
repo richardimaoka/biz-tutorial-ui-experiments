@@ -48,7 +48,7 @@ func main() {
 		return
 	}
 
-	parent, err := ref.Parent(1)
+	parent, err := ref.Parent(0)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -60,14 +60,21 @@ func main() {
 		return
 	}
 
-	diff, err := tree.Diff(parentTree)
+	changes, err := tree.Diff(parentTree)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("diff\n", diff.String())
-	fmt.Println("-------------------------------------")
+	for _, c := range changes {
+		from, to, err := c.Files()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Printf("from: %s, to: %s\n", from.Name, to.Name)
+	}
 
 	fmt.Println("r", r)
 }
