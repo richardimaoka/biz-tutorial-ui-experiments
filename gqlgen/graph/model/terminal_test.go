@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 func TestTerminal(t *testing.T) {
@@ -51,7 +53,7 @@ func TestTerminal(t *testing.T) {
 					}
 				}
 
-				compareAfterMarshal(t, e.resultFile, terminal)
+				internal.CompareAfterMarshal(t, e.resultFile, terminal)
 			})
 		}
 	}
@@ -110,16 +112,16 @@ func TestTerminal(t *testing.T) {
 		{name: "output1",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
-				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: address("abc")}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: internal.Address("abc")}},
 			},
 			resultFile: "testdata/terminal/write-output1.json"},
 
 		{name: "write_output2",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo abc"}},
-				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: address("abc")}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo abc", Output: internal.Address("abc")}},
 				{expectSuccess: true, operation: TypeInCommand{Command: "echo efg"}},
-				{expectSuccess: true, operation: ExecuteCommand{Command: "echo efg", Output: address("efg")}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "echo efg", Output: internal.Address("efg")}},
 			},
 			resultFile: "testdata/terminal/write-output2.json"},
 	}
@@ -129,14 +131,14 @@ func TestTerminal(t *testing.T) {
 		{name: "cd1",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello"}},
-				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello", CurrentDirectory: address("hello")}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello", CurrentDirectory: internal.Address("hello")}},
 			},
 			resultFile: "testdata/terminal/cd1.json"},
 
 		{name: "cd2",
 			operations: []Operation{
 				{expectSuccess: true, operation: TypeInCommand{Command: "cd hello/world/thunder"}},
-				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello/world/thunder", CurrentDirectory: address("hello/world/thunder")}},
+				{expectSuccess: true, operation: ExecuteCommand{Command: "cd hello/world/thunder", CurrentDirectory: internal.Address("hello/world/thunder")}},
 			},
 			resultFile: "testdata/terminal/cd2.json"},
 	}

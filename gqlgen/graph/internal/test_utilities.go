@@ -1,4 +1,4 @@
-package model
+package internal
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func address(s string) *string {
+func Address(s string) *string {
 	return &s
 }
 
@@ -33,7 +33,7 @@ func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	return nil
 }
 
-func compareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
+func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
 	expectedBytes, err := os.ReadFile(expectedJsonFile)
 	if err != nil {
 		t.Errorf("failed to read %s", expectedJsonFile)

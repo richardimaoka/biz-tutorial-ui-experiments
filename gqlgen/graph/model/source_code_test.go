@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 func TestSourceCode_Contents(t *testing.T) {
@@ -57,7 +59,7 @@ func TestSourceCode_Contents(t *testing.T) {
 					}
 				}
 
-				compareAfterMarshal(t, e.resultFile, sc)
+				internal.CompareAfterMarshal(t, e.resultFile, sc)
 			})
 		}
 	}
@@ -278,7 +280,7 @@ func TestSourceCode_Diff(t *testing.T) {
 					}
 				}
 
-				compareAfterMarshal(t, e.resultFile, sc)
+				internal.CompareAfterMarshal(t, e.resultFile, sc)
 			})
 		}
 	}
@@ -358,7 +360,7 @@ func TestSourceCode_SetDefaultOpenFile(t *testing.T) {
 					t.Fatalf("entry %t is expected, but result is %t\n", e.expectSuccess, isSuccess)
 					return
 				}
-				compareAfterMarshal(t, e.resultFile, sc)
+				internal.CompareAfterMarshal(t, e.resultFile, sc)
 			})
 		}
 	}

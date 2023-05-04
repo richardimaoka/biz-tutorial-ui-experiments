@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 func TestActionCommandMarshal(t *testing.T) {
@@ -22,13 +24,13 @@ func TestActionCommandMarshal(t *testing.T) {
 			command:      ActionCommand{TerminalName: "another", Command: "mkdir hello"}},
 		{name: "command_output",
 			expectedFile: "testdata/action/command/action_command_marshal3.json",
-			command:      ActionCommand{TerminalName: "default", Command: "echo abc", Output: address("abc")}},
+			command:      ActionCommand{TerminalName: "default", Command: "echo abc", Output: internal.Address("abc")}},
 		{name: "command_cd",
 			expectedFile: "testdata/action/command/action_command_marshal4.json",
-			command:      ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: address("hello/world")}},
+			command:      ActionCommand{TerminalName: "another", Command: "cd hello/world", CurrentDirectory: internal.Address("hello/world")}},
 		{name: "command_cd_output",
 			expectedFile: "testdata/action/command/action_command_marshal5.json",
-			command:      ActionCommand{TerminalName: "another", Command: "complex_command", Output: address("some output"), CurrentDirectory: address("hello/world")}},
+			command:      ActionCommand{TerminalName: "another", Command: "complex_command", Output: internal.Address("some output"), CurrentDirectory: internal.Address("hello/world")}},
 		{name: "command_file_effect",
 			expectedFile: "testdata/action/command/action_command_marshal6.json",
 			command: ActionCommand{
@@ -54,7 +56,7 @@ func TestActionCommandMarshal(t *testing.T) {
 
 	for _, e := range entries {
 		t.Run("test_action_command_marshal", func(t *testing.T) {
-			compareAfterMarshal(t, e.expectedFile, e.command)
+			internal.CompareAfterMarshal(t, e.expectedFile, e.command)
 		})
 	}
 }
@@ -78,7 +80,7 @@ func TestActionCommandUnmarshal(t *testing.T) {
 			if err := json.Unmarshal(jsonBytes, &cmd); err != nil {
 				t.Fatalf("failed to unmarshal %s", err)
 			}
-			compareAfterMarshal(t, f, cmd)
+			internal.CompareAfterMarshal(t, f, cmd)
 		})
 	}
 }
@@ -118,7 +120,7 @@ func TestEnrichActionCommand(t *testing.T) {
 					}
 				}
 
-				compareAfterMarshal(t, e.resultFile, action)
+				internal.CompareAfterMarshal(t, e.resultFile, action)
 			})
 		}
 	}
