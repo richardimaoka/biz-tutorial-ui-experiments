@@ -10,8 +10,8 @@
       "request": "launch",
       "mode": "test",
       "trace": "verbose",
-      "program": "${workspaceFolder}/graph/processing",
-      "args": ["-test.run", "Test_PageState"]
+      "program": "${workspaceFolder}/graph/gitmodel_test",
+      "args": ["-test.run", "TestStepFromGit"]
     },
     {
       "name": "Launch file",

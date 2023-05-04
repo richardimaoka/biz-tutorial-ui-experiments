@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 )
 
 func main() {
@@ -24,57 +25,7 @@ func main() {
 		}
 	}
 
-	head, err := r.Head()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	ref, err := r.CommitObject(head.Hash())
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	commit, _ := r.CommitObject(plumbing.NewHash("91a99d0c0558d2fc03c930d19afa97fc141f0c2e"))
 
-	fmt.Println(ref.Hash)
-	fmt.Println(ref.Author)
-	fmt.Println(ref.Committer)
-	fmt.Println(ref.Message)
-
-	fmt.Println("-------------------")
-
-	tree, err := ref.Tree()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	parent, err := ref.Parent(0)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	parentTree, err := parent.Tree()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	changes, err := tree.Diff(parentTree)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	for _, c := range changes {
-		from, to, err := c.Files()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		fmt.Printf("from: %s, to: %s\n", from.Name, to.Name)
-	}
-
-	fmt.Println("r", r)
+	fmt.Println("commit", commit.NumParents())
 }
