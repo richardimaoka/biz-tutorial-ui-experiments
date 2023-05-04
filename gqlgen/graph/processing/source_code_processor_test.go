@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 func Test_SourceCodeProcessor(t *testing.T) {
@@ -66,7 +68,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 					return
 				}
 
-				compareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
+				internal.CompareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
 			})
 		}
 	}
@@ -303,7 +305,7 @@ func TestSourceCode_Diff(t *testing.T) {
 					return
 				}
 
-				compareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
+				internal.CompareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
 			})
 		}
 	}
@@ -342,7 +344,7 @@ func TestSourceCode_Mutation(t *testing.T) {
 
 	// once materialized GraphQL model...
 	materialized := sourceCode.ToGraphQLModel()
-	compareAfterMarshal(t, "testdata/source_code/materialized.json", materialized)
+	internal.CompareAfterMarshal(t, "testdata/source_code/materialized.json", materialized)
 
 	// ...mutation afterwards should have no effect
 	sourceCode.step = "mutated step"
@@ -354,7 +356,7 @@ func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
 
 	// materialized GraphQL model should not be affected
-	compareAfterMarshal(t,
+	internal.CompareAfterMarshal(t,
 		"testdata/source_code/materialized.json",
 		materialized) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
 }
@@ -367,7 +369,7 @@ func TestSourceCode_Clone(t *testing.T) {
 
 	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()
-	compareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
+	internal.CompareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
 
 	// ... mutation after cloning should have no effect
 	sourceCode.step = "mutated step"
@@ -379,7 +381,7 @@ func TestSourceCode_Clone(t *testing.T) {
 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
 
 	// cloned source code is not affected
-	compareAfterMarshal(t,
+	internal.CompareAfterMarshal(t,
 		"testdata/source_code/cloned.json",
 		sourceCodeCloned.ToGraphQLModel()) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
 }
