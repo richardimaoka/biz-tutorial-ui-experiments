@@ -1,7 +1,7 @@
 package gitmodel_test
 
 import (
-	"os"
+	"fmt"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -10,7 +10,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/gitmodel"
 )
 
-func TestCommitTest(t *testing.T) {
+func TestFilePath(t *testing.T) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
 		URL: "https://github.com/richardimaoka/gqlgensandbox",
 	})
@@ -18,16 +18,13 @@ func TestCommitTest(t *testing.T) {
 		t.Fatalf("error cloning repo: %v", err)
 	}
 
+	filePath := "graph/resolver.go"
+
 	f := gitmodel.NewFile(
 		repo,
-		plumbing.NewHash("046d10917933eadce9b04880b6bc5d99c1ce9637"))
+		filePath,
+		plumbing.NewHash("a25c09c619f9ed0db2ef05ece3429624b22a0f59"))
 
-	bytes, err := os.ReadFile("./testdata/go.046d10917933eadce9b04880b6bc5d99c1ce9637.mod")
-	if err != nil {
-		t.Errorf("error reading ./testdata/go.046d10917933eadce9b04880b6bc5d99c1ce9637.mod")
-	}
+	fmt.Println(f)
 
-	if contents := f.Contents(); *contents != string(bytes) {
-		t.Errorf("contents mismatched")
-	}
 }

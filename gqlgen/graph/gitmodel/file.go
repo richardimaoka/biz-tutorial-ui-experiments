@@ -10,7 +10,7 @@ import (
 )
 
 type FileFromGit struct {
-	path           string
+	filePath       string
 	commitHash     plumbing.Hash
 	blobHash       plumbing.Hash
 	repo           *git.Repository
@@ -19,7 +19,7 @@ type FileFromGit struct {
 	IsFullContents bool
 }
 
-func NewFile(repo *git.Repository, blobHash plumbing.Hash) *FileFromGit {
+func NewFile(repo *git.Repository, filePath string, blobHash plumbing.Hash) *FileFromGit {
 	blob, err := repo.BlobObject(blobHash)
 	if err != nil {
 		log.Println("error getting blog")
@@ -28,7 +28,7 @@ func NewFile(repo *git.Repository, blobHash plumbing.Hash) *FileFromGit {
 
 	log.Println("size", blob.Size)
 
-	return &FileFromGit{Size: blob.Size, blobHash: blobHash, repo: repo}
+	return &FileFromGit{Size: blob.Size, blobHash: blobHash, repo: repo, filePath: filePath}
 }
 
 func (f *FileFromGit) Contents() *string {
@@ -61,7 +61,7 @@ func (f *FileFromGit) NodeType() string {
 }
 
 func (f *FileFromGit) FilePath() string {
-	return ""
+	return f.filePath
 }
 
 func (f *FileFromGit) FileNode() *model.FileNode {
