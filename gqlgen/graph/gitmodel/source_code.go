@@ -1,12 +1,23 @@
 package gitmodel
 
-import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+import (
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+)
 
 type SourceCodeFromGit struct {
+	commit object.Commit
 }
 
-func NewSourceCodeFromGit() *SourceCodeFromGit {
+func NewSourceCodeFromGit(repoUrl string, commitHash plumbing.Hash) *SourceCodeFromGit {
 	return &SourceCodeFromGit{}
+}
+
+func (s *SourceCodeFromGit) setFiles() int64 {
+	//sort and set files
+	//files, err := s.commit.Files()
+	return 0
 }
 
 func (s *SourceCodeFromGit) Step() string {
@@ -18,6 +29,6 @@ func (s *SourceCodeFromGit) FileNodes() []*model.FileNode {
 	return []*model.FileNode{}
 }
 
-func (s *SourceCodeFromGit) OpenFile() *model.OpenFile {
+func (s *SourceCodeFromGit) OpenFile(filePath string) *model.OpenFile {
 	return nil
 }
