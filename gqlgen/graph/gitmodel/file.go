@@ -11,12 +11,13 @@ import (
 )
 
 type FileFromGit struct {
-	filePath string
-	blob     *object.Blob
-	commit   *object.Commit
+	filePath  string
+	isUpdated bool
+	blob      *object.Blob
+	commit    *object.Commit
 }
 
-func NewFileFromGit(repo *git.Repository, filePath string, blobHash, commitHash plumbing.Hash) (*FileFromGit, error) {
+func NewFileFromGit(repo *git.Repository, filePath string, isUpdated bool, blobHash, commitHash plumbing.Hash) (*FileFromGit, error) {
 	blob, err := repo.BlobObject(blobHash)
 	if err != nil {
 		return nil, err
@@ -28,9 +29,10 @@ func NewFileFromGit(repo *git.Repository, filePath string, blobHash, commitHash 
 	}
 
 	return &FileFromGit{
-		blob:     blob,
-		commit:   commit,
-		filePath: filePath}, nil
+		filePath:  filePath,
+		isUpdated: isUpdated,
+		blob:      blob,
+		commit:    commit}, nil
 }
 
 func (f *FileFromGit) offset() int {
@@ -64,10 +66,11 @@ func (f *FileFromGit) FileNode() *model.FileNode {
 	offset := f.offset()
 
 	return &model.FileNode{
-		FilePath: &f.filePath, //pointer is safe here, as f.filePath is effectively immutable
-		Name:     &name,
-		NodeType: &nodeType,
-		Offset:   &offset,
+		FilePath:  &f.filePath,  //pointer is safe here, as f.filePath is effectively immutable
+		IsUpdated: &f.isUpdated, //pointer is safe here, as f.filePath is effectively immutable
+		Name:      &name,
+		NodeType:  &nodeType,
+		Offset:    &offset,
 	}
 }
 

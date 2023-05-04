@@ -2,30 +2,36 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/storage/memory"
 )
 
 func main() {
-	var r *git.Repository
-	r, err := git.PlainOpen("/tmp/foo")
-
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
+		URL: "https://github.com/richardimaoka/gqlgensandbox",
+	})
 	if err != nil {
-		fmt.Println(err)
-
-		r, err = git.PlainClone("/tmp/foo", false, &git.CloneOptions{
-			URL:      "https://github.com/richardimaoka/gqlgensandbox",
-			Progress: os.Stdout,
-		})
-
-		if err != nil {
-			panic(err)
-		}
+		log.Fatalf("error cloning repo: %v", err)
 	}
 
-	commit, _ := r.CommitObject(plumbing.NewHash("91a99d0c0558d2fc03c930d19afa97fc141f0c2e"))
+	t1, err := repo.TreeObject(plumbing.NewHash("30419cb45f05d32ce9c8b273fe1a61b7a2c05c26"))
+	if err != nil {
+		panic(fmt.Sprintf("t1:%s", err))
+	}
+	t2, err := repo.TreeObject(plumbing.NewHash("8ac76d64b959641b11dbad47517f4873e71954e0"))
+	if err != nil {
+		panic(fmt.Sprintf("t2:%s", err))
+	}
+	diff, err := t1.Diff(t2)
+	if err != nil {
+		panic(fmt.Sprintf("diff:%s", err))
+	}
 
+	fmt.Println("diff", diff)
+
+	commit, _ := repo.CommitObject(plumbing.NewHash("91a99d0c0558d2fc03c930d19afa97fc141f0c2e"))
 	fmt.Println("commit", commit.NumParents())
 }

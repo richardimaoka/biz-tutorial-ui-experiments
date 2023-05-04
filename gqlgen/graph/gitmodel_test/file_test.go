@@ -20,6 +20,7 @@ func TestFilePath(t *testing.T) {
 
 	type TestCase struct {
 		FilePath        string
+		IsUpdated       bool
 		CommitHash      string
 		BlobHash        string
 		ExpectationFile string
@@ -28,11 +29,13 @@ func TestFilePath(t *testing.T) {
 	testCases := []TestCase{
 		{
 			FilePath:        "graph/resolver.go",
+			IsUpdated:       false,
 			CommitHash:      "4dd8f51d6acbee9d61b24dc26715ecc48a5d2456",
 			BlobHash:        "a25c09c619f9ed0db2ef05ece3429624b22a0f59",
 			ExpectationFile: "testdata/resolver.go.json",
 		}, {
 			FilePath:        "server.go",
+			IsUpdated:       true,
 			CommitHash:      "4dd8f51d6acbee9d61b24dc26715ecc48a5d2456",
 			BlobHash:        "c0f5b2c8f1bf0ebbf713cc213b378af90a14f061",
 			ExpectationFile: "testdata/server.go.json",
@@ -44,6 +47,7 @@ func TestFilePath(t *testing.T) {
 			f, err := gitmodel.NewFileFromGit(
 				repo,
 				c.FilePath,
+				c.IsUpdated,
 				plumbing.NewHash(c.BlobHash),
 				plumbing.NewHash(c.CommitHash))
 
