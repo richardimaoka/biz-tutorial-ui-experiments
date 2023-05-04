@@ -1,7 +1,7 @@
 {
   "nodeType": "FILE",
-  "name": "test",
-  "filePath": "/test",
+  "name": "resolver.go",
+  "filePath": "graph/resolver.go",
   "offset": 1,
   "isUpdated": false
 }

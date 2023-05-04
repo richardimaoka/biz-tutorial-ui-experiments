@@ -19,16 +19,15 @@ type FileFromGit struct {
 	IsFullContents bool
 }
 
-func NewFile(repo *git.Repository, filePath string, blobHash plumbing.Hash) *FileFromGit {
+func NewFileFromGit(repo *git.Repository, filePath string, blobHash plumbing.Hash) (*FileFromGit, error) {
 	blob, err := repo.BlobObject(blobHash)
 	if err != nil {
-		log.Println("error getting blog")
-		return nil
+		return nil, err
 	}
 
 	log.Println("size", blob.Size)
 
-	return &FileFromGit{Size: blob.Size, blobHash: blobHash, repo: repo, filePath: filePath}
+	return &FileFromGit{Size: blob.Size, blobHash: blobHash, repo: repo, filePath: filePath}, nil
 }
 
 func (f *FileFromGit) Contents() *string {
@@ -51,21 +50,10 @@ func (f *FileFromGit) Contents() *string {
 	return &contents
 }
 
-// File method to return model.FileNode
-func (f *FileFromGit) IsUpdated() bool {
-	return false
-}
-
-func (f *FileFromGit) NodeType() string {
-	return ""
-}
-
-func (f *FileFromGit) FilePath() string {
-	return f.filePath
-}
-
 func (f *FileFromGit) FileNode() *model.FileNode {
-	return nil
+	return &model.FileNode{
+		FilePath: &f.filePath, //pointer is safe here, as f.filePath is effectively immutable
+	}
 }
 
 func (f *FileFromGit) OpenFile() *model.OpenFile {
