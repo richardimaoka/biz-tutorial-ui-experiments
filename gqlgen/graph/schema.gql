@@ -91,5 +91,4 @@ type PageState {
 type Query {
   # without passing step argument, you get the first step state
   pageState(step: String): PageState
-  terminal(step: Int!): Terminal
 }

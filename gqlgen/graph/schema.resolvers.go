@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -38,27 +37,6 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 	}
 
 	return &pageState, nil
-}
-
-// Terminal is the resolver for the terminal field.
-func (r *queryResolver) Terminal(ctx context.Context, step int) (*model.Terminal, error) {
-	filename := fmt.Sprintf("data/tutorial2/terminal%03d.json", step)
-	log.Printf("reading data from %s", filename)
-
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("%s not found", filename))
-	}
-
-	var terminal model.Terminal
-
-	err = json.Unmarshal(data, &terminal)
-	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return nil, errors.New("internal server error")
-	}
-
-	return &terminal, nil
 }
 
 // OpenFile is the resolver for the openFile field.
@@ -110,4 +88,5 @@ type sourceCodeResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+
 type mutationResolver struct{ *Resolver }

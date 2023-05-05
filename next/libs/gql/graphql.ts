@@ -77,15 +77,10 @@ export type PageState = {
 export type Query = {
   __typename: "Query";
   pageState?: Maybe<PageState>;
-  terminal?: Maybe<Terminal>;
 };
 
 export type QueryPageStateArgs = {
   step?: InputMaybe<Scalars["String"]>;
-};
-
-export type QueryTerminalArgs = {
-  step: Scalars["Int"];
 };
 
 export type SourceCode = {
