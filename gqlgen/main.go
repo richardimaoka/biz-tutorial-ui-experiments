@@ -12,7 +12,6 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/gorilla/websocket"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 	"github.com/rs/cors"
 )
@@ -55,23 +54,6 @@ func server() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func modelProcessing() {
-	fmt.Println("running processing")
-	err := model.Processing()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// actionListParse()
-
-	// err := model.SplitActionListFile("data2")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	return
 }
 
 func process() {
