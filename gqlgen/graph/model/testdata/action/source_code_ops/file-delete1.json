@@ -1,6 +1,0 @@
-{
-  "seqNo": 26,
-  "operation": "FileDelete",
-  "filePath": "protoc-go-experiments/helloworld/greeting.pb",
-  "content": ""
-}
