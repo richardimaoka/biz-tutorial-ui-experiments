@@ -1,38 +1,21 @@
 package gitmodel
 
 import (
-	"io"
 	"strings"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type FileFromGit struct {
 	filePath  string
 	isUpdated bool
-	blob      *object.Blob
-	commit    *object.Commit
 }
 
-func NewFileFromGit(repo *git.Repository, filePath string, isUpdated bool, blobHash, commitHash plumbing.Hash) (*FileFromGit, error) {
-	blob, err := repo.BlobObject(blobHash)
-	if err != nil {
-		return nil, err
-	}
-
-	commit, err := repo.CommitObject(commitHash)
-	if err != nil {
-		return nil, err
-	}
+func NewFileFromGit(filePath string, isUpdated bool) (*FileFromGit, error) {
 
 	return &FileFromGit{
 		filePath:  filePath,
-		isUpdated: isUpdated,
-		blob:      blob,
-		commit:    commit}, nil
+		isUpdated: isUpdated}, nil
 }
 
 func (f *FileFromGit) offset() int {
@@ -43,21 +26,6 @@ func (f *FileFromGit) offset() int {
 func (f *FileFromGit) name() string {
 	split := strings.Split(f.filePath, "/")
 	return split[len(split)-1]
-}
-
-func (f *FileFromGit) Contents() *string {
-	reader, err := f.blob.Reader()
-	if err != nil {
-		return nil
-	}
-
-	bytes, err := io.ReadAll(reader)
-	if err != nil {
-		return nil
-	}
-
-	contents := string(bytes)
-	return &contents
 }
 
 func (f *FileFromGit) FileNode() *model.FileNode {
