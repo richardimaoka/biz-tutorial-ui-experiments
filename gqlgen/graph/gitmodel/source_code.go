@@ -7,7 +7,8 @@ import (
 )
 
 type SourceCodeFromGit struct {
-	commit object.Commit
+	commitHash plumbing.Hash
+	commit     object.Commit
 }
 
 func NewSourceCodeFromGit(repoUrl string, commitHash plumbing.Hash) *SourceCodeFromGit {
