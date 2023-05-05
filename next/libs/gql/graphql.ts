@@ -88,6 +88,7 @@ export type SourceCode = {
   defaultOpenFile?: Maybe<OpenFile>;
   fileTree?: Maybe<Array<Maybe<FileNode>>>;
   openFile?: Maybe<OpenFile>;
+  step?: Maybe<Scalars["String"]>;
 };
 
 export type SourceCodeOpenFileArgs = {

@@ -95,6 +95,7 @@ type ComplexityRoot struct {
 		DefaultOpenFile func(childComplexity int) int
 		FileTree        func(childComplexity int) int
 		OpenFile        func(childComplexity int, filePath *string) int
+		Step            func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -336,6 +337,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SourceCode.OpenFile(childComplexity, args["filePath"].(*string)), true
+
+	case "SourceCode.step":
+		if e.complexity.SourceCode.Step == nil {
+			break
+		}
+
+		return e.complexity.SourceCode.Step(childComplexity), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -1382,6 +1390,8 @@ func (ec *executionContext) fieldContext_PageState_sourceCode(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "step":
+				return ec.fieldContext_SourceCode_step(ctx, field)
 			case "fileTree":
 				return ec.fieldContext_SourceCode_fileTree(ctx, field)
 			case "openFile":
@@ -1679,6 +1689,47 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode_step(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode_step(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Step, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4410,6 +4461,10 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("SourceCode")
+		case "step":
+
+			out.Values[i] = ec._SourceCode_step(ctx, field, obj)
+
 		case "fileTree":
 
 			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)
@@ -5379,6 +5434,16 @@ func (ec *executionContext) marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaoka�
 		return graphql.Null
 	}
 	return ec._SourceCode(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	return res
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

@@ -72,9 +72,8 @@ type FileNode {
 }
 
 type SourceCode {
-  # TODO - step: String
+  step: String
   fileTree: [FileNode]
-  # without passing filePath argument, you get the default OpenFile
   openFile(filePath: String): OpenFile
   defaultOpenFile: OpenFile
 }
