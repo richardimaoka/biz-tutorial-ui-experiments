@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 // test case for TerminalProcessor's WriteCommand method
@@ -52,7 +53,7 @@ func TestTerminal_ChangeCurrentDirectory2(t *testing.T) {
 	internal.CompareAfterMarshal(t, "testdata/terminal/cd2.json", result)
 }
 
-func TestTerminal_Mutation(t *testing.T) {
+func TestTerminal_Mutation1(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	terminal.WriteCommand("echo abc")
 	terminal.WriteOutput("abc")
@@ -63,15 +64,38 @@ func TestTerminal_Mutation(t *testing.T) {
 	materialized := terminal.ToGraphQLTerminal()
 	internal.CompareAfterMarshal(t, "testdata/terminal/materialized.json", materialized)
 
-	// ...mutation afterwards should have no effect
+	// ...mutation to Terminal should have no effect ...
 	terminal.ChangeCurrentDirectory("mutated/current/dir")
 	terminal.WriteCommand("mutation extra command")
 	terminal.WriteOutput("mutation extra output")
 
-	// materialized GraphQL model should not be affected
+	// ...on materialized GraphQL model
 	internal.CompareAfterMarshal(t,
 		"testdata/terminal/materialized.json",
-		materialized) // by changing this to terminal.ToGraphQLTerminal(), you can confirm mutation actually updated terminal
+		materialized)
+}
+
+func TestTerminal_Mutation2(t *testing.T) {
+	terminal := NewTerminalProcessor("default")
+	terminal.WriteCommand("echo abc")
+	terminal.WriteOutput("abc")
+	terminal.WriteCommand("cd hello/world/thunder")
+	terminal.ChangeCurrentDirectory("hello/world/thunder")
+
+	// once materialized GraphQL model...
+	materialized := terminal.ToGraphQLTerminal()
+	internal.CompareAfterMarshal(t, "testdata/terminal/materialized.json", materialized)
+
+	// ...mutation to materialized GraphQL model should have no effect...
+	ptr1 := materialized.Nodes[0].Content.(*model.TerminalCommand).Command
+	*ptr1 = "mutation extra command"
+	ptr2 := materialized.Nodes[1].Content.(*model.TerminalOutput).Output
+	*ptr2 = "mutation extra output"
+
+	// ...on Terminal
+	internal.CompareAfterMarshal(t,
+		"testdata/terminal/materialized.json",
+		terminal.ToGraphQLTerminal())
 }
 
 // test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter

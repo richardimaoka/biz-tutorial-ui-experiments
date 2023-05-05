@@ -28,14 +28,16 @@ func (t *terminalOutputProcessor) String() string {
 
 func (t *terminalCommandProcessor) ToGraphQLModel() model.TerminalElement {
 	falseValue := false
+	command := t.command // copy to avoid effect from returned model.TerminalElement's mutation
 	return &model.TerminalCommand{
 		BeforeExecution: &falseValue,
-		Command:         &t.command, // t is effectively immutable, so no need to copy
+		Command:         &command,
 	}
 }
 
 func (t *terminalOutputProcessor) ToGraphQLModel() model.TerminalElement {
+	output := t.output // copy to avoid effect from returned model.TerminalElement's mutation
 	return &model.TerminalOutput{
-		Output: &t.output, // t is effectively immutable, so no need to copy
+		Output: &output,
 	}
 }
