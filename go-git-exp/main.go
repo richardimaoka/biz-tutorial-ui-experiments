@@ -21,6 +21,16 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("t1:%s", err))
 	}
+	iter := t1.Files()
+	for {
+		file, err := iter.Next()
+		if err != nil {
+			break
+		}
+
+		fmt.Println("file", file.Name)
+	}
+
 	t2, err := repo.TreeObject(plumbing.NewHash("8ac76d64b959641b11dbad47517f4873e71954e0"))
 	if err != nil {
 		panic(fmt.Sprintf("t2:%s", err))
