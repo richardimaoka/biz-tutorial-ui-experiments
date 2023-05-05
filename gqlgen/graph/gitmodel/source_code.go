@@ -54,7 +54,7 @@ func (s *SourceCodeFromGit) Step() string {
 
 //method to return file node array
 func (s *SourceCodeFromGit) FileNodes() []*model.FileNode {
-	return []*model.FileNode{}
+	return s.fileNodes
 }
 
 func (s *SourceCodeFromGit) OpenFile(filePath string) *model.OpenFile {
@@ -62,5 +62,8 @@ func (s *SourceCodeFromGit) OpenFile(filePath string) *model.OpenFile {
 }
 
 func (s *SourceCodeFromGit) ToGraphQLSourceCode() *model.SourceCode {
-	return nil
+	return &model.SourceCode{
+		Step:     s.commitHash.String(),
+		FileTree: s.fileNodes,
+	}
 }

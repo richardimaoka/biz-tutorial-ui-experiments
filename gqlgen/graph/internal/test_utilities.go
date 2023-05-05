@@ -52,7 +52,7 @@ func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 }
 
 func WriteGoldenFile(t *testing.T, filePath string, v any) {
-	jsonBytes, err := json.Marshal(v)
+	jsonBytes, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		t.Fatalf("error writing golden file %s: %v", filePath, err)
 	}

@@ -2,7 +2,6 @@ package gitmodel_test
 
 import (
 	"flag"
-	"fmt"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -46,9 +45,9 @@ func TestSourceCodeFromGit(t *testing.T) {
 			}
 
 			if *update {
-				internal.WriteGoldenFile(t, c.ExpectationFile, sc)
+				internal.WriteGoldenFile(t, c.ExpectationFile, sc.ToGraphQLSourceCode())
 			}
+
 		})
 	}
-	fmt.Println(testCases)
 }
