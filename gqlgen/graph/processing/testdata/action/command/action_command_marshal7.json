@@ -1,0 +1,24 @@
+{
+  "actionType": "ActionCommand",
+  "terminalName": "default",
+  "command": "with_dir_diff",
+  "output": null,
+  "defaultOpenFilePath": null,
+  "currentDirectory": null,
+  "diff": {
+    "filesAdded": null,
+    "filesDeleted": null,
+    "filesUpdated": null,
+    "directoriesAdded": null,
+    "directoriesDeleted": [
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/d"
+      },
+      {
+        "operationType": "DirectoryDelete",
+        "filePath": "a/b/e"
+      }
+    ]
+  }
+}
