@@ -28,10 +28,7 @@ func TestFilePath(t *testing.T) {
 
 	for _, c := range testCases {
 		t.Run(c.FilePath, func(t *testing.T) {
-			f, err := gitmodel.NewFileFromGit(c.FilePath, c.IsUpdated)
-			if err != nil {
-				t.Fatalf("error creating file: %v", err)
-			}
+			f := gitmodel.NewFileFromGit(c.FilePath, c.IsUpdated)
 			internal.CompareAfterMarshal(t, c.ExpectationFile, f.FileNode())
 		})
 	}

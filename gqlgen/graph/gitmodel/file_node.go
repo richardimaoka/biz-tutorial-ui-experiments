@@ -11,11 +11,11 @@ type FileFromGit struct {
 	isUpdated bool
 }
 
-func NewFileFromGit(filePath string, isUpdated bool) (*FileFromGit, error) {
+func NewFileFromGit(filePath string, isUpdated bool) *FileFromGit {
 
 	return &FileFromGit{
 		filePath:  filePath,
-		isUpdated: isUpdated}, nil
+		isUpdated: isUpdated}
 }
 
 func (f *FileFromGit) offset() int {
