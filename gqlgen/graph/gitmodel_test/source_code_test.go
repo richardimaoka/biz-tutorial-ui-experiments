@@ -1,16 +1,15 @@
 package gitmodel_test
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/gitmodel"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 var update = flag.Bool("update", false, "update golden files")
@@ -47,13 +46,7 @@ func TestSourceCodeFromGit(t *testing.T) {
 			}
 
 			if *update {
-				bytes, err := json.Marshal(sc.ToGraphQLSourceCode())
-				if err != nil {
-					t.Fatalf("error marshaling source code while updating golden file %s: %v", c.ExpectationFile, err)
-				}
-				if err := os.WriteFile(c.ExpectationFile, bytes, 0644); err != nil {
-					t.Fatalf("error writing golden file %s: %v", c.ExpectationFile, err)
-				}
+				internal.WriteGoldenFile(t, c.ExpectationFile, sc)
 			}
 		})
 	}

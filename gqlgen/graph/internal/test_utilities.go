@@ -50,3 +50,14 @@ func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 		t.Fatalf("failed to compare after marshal where expected file = %s, %s", expectedJsonFile, err)
 	}
 }
+
+func WriteGoldenFile(t *testing.T, filePath string, v any) {
+	jsonBytes, err := json.Marshal(v)
+	if err != nil {
+		t.Fatalf("error writing golden file %s: %v", filePath, err)
+	}
+
+	if err := os.WriteFile(filePath, jsonBytes, 0644); err != nil {
+		t.Fatalf("error writing golden file %s: %v", filePath, err)
+	}
+}
