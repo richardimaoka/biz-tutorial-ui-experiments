@@ -44,31 +44,29 @@ type SourceCodeOpenFileEffect struct {
 // }
 
 func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
-	jsonBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("ReadTerminalEffects failed to read file: %w", err)
-	}
-
 	var effects []TerminalEffect
-	err = json.Unmarshal(jsonBytes, &effects)
-	if err != nil {
-		return nil, fmt.Errorf("ReadTerminalEffects failed to unmarshal: %w", err)
-	}
-
-	return effects, nil
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
+	err := jsonRead("ReadTerminalEffects", filePath, unmarshaller)
+	return effects, err
 }
 
 func ReadSourceCodeUnitEffect(filePath string) ([]SourceCodeUnitEffect, error) {
+	var effects []SourceCodeUnitEffect
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
+	err := jsonRead("ReadSourceCodeUnitEffect", filePath, unmarshaller)
+	return effects, err
+}
+
+func jsonRead(callerName, filePath string, unmarshaller func(jsonBytes []byte) error) error {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("ReadSourceCodeUnitEffect failed to read file: %w", err)
+		return fmt.Errorf("%s failed to read file, %s", callerName, err)
 	}
 
-	var effects []SourceCodeUnitEffect
-	err = json.Unmarshal(jsonBytes, &effects)
+	err = unmarshaller(jsonBytes)
 	if err != nil {
-		return nil, fmt.Errorf("ReadSourceCodeUnitEffect failed to unmarshal: %w", err)
+		return fmt.Errorf("%s failed to unmarshal, %s", callerName, err)
 	}
 
-	return effects, nil
+	return nil
 }
