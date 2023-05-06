@@ -10,14 +10,6 @@ type TerminalProcessor struct {
 	elements         []terminalElementProcessor
 }
 
-type TerminalEffect struct {
-	SeqNo            int     `json:"seqNo"`
-	TerminalName     string  `json:"terminalName"`
-	Command          string  `json:"command"`
-	Output           *string `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-}
-
 func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	return &TerminalProcessor{
 		terminalName:     terminalName,
