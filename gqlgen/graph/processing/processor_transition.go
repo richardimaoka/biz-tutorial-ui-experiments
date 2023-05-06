@@ -3,7 +3,6 @@ package processing
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 )
 
 type ProcessorEffect struct {
@@ -11,14 +10,6 @@ type ProcessorEffect struct {
 	SeqNo            int               `json:"seqNo"`
 	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
 	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
-}
-
-type TerminalEffect struct {
-	SeqNo            int     `json:"seqNo"`
-	TerminalName     string  `json:"terminalName"`
-	Command          string  `json:"command"`
-	Output           *string `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 }
 
 type SourceCodeEffect struct {
@@ -156,18 +147,4 @@ func ReadFileEffects(filePath string) ([]FileEffect, error) {
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadSourceCodeUnitEffect", filePath, unmarshaller)
 	return effects, err
-}
-
-func jsonRead(callerName, filePath string, unmarshaller func(jsonBytes []byte) error) error {
-	jsonBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		return fmt.Errorf("%s failed to read file, %s", callerName, err)
-	}
-
-	err = unmarshaller(jsonBytes)
-	if err != nil {
-		return fmt.Errorf("%s failed to unmarshal, %s", callerName, err)
-	}
-
-	return nil
 }
