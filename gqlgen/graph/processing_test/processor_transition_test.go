@@ -9,7 +9,7 @@ import (
 )
 
 var terminalEffectsFile = "testdata/terminal_effects.json"
-var sourceCodeUnitEffectsFile = "testdata/source_code_unit_effects.json"
+var fileEffectsFile = "testdata/file_effects.json"
 
 var update = flag.Bool("update", false, "update golden files")
 
@@ -21,7 +21,7 @@ func Test_ReadTerminaEffects(t *testing.T) {
 }
 
 func Test_ReadSourceCodeUnitEffects(t *testing.T) {
-	_, err := processing.ReadSourceCodeUnitEffect(sourceCodeUnitEffectsFile)
+	_, err := processing.ReadFileEffects(fileEffectsFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func Test_ReadSourceCodeUnitEffects(t *testing.T) {
 
 func Test_MergeEffects(t *testing.T) {
 	terminalEffects, _ := processing.ReadTerminalEffects(terminalEffectsFile)
-	sourceCodeUnitEffects, _ := processing.ReadSourceCodeUnitEffect(sourceCodeUnitEffectsFile)
+	sourceCodeUnitEffects, _ := processing.ReadFileEffects(fileEffectsFile)
 
 	transitions, err := processing.MergeEffects(terminalEffects, sourceCodeUnitEffects)
 	if err != nil {

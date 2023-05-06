@@ -151,7 +151,7 @@ func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	return effects, err
 }
 
-func ReadSourceCodeUnitEffect(filePath string) ([]FileEffect, error) {
+func ReadFileEffects(filePath string) ([]FileEffect, error) {
 	var effects []FileEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadSourceCodeUnitEffect", filePath, unmarshaller)
