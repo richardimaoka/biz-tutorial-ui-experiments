@@ -244,6 +244,10 @@ func (p *SourceCodeProcessor) SetStep(step string) {
 	p.step = step
 }
 
+func (p *SourceCodeProcessor) Transition(effect SourceCodeEffect) error {
+	return nil
+}
+
 func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
 	fileContents := make(map[string]model.OpenFile)

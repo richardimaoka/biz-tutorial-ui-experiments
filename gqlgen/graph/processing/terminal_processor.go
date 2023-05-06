@@ -42,6 +42,10 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
 }
 
+func (t *TerminalProcessor) Apply(effect TerminalEffect) error {
+	return nil
+}
+
 func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {

@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type ProcessorTransition struct {
+type ProcessorEffect struct {
 	Step             string            `json:"step"`
 	SeqNo            int               `json:"seqNo"`
 	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
@@ -34,7 +34,7 @@ type FileEffect struct {
 	Content       string `json:"content"`
 }
 
-type SourceCodeOpenFileEffect struct {
+type OpenFileEffect struct {
 	SeqNo               int    `json:"seqNo"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 }
@@ -44,7 +44,7 @@ type SourceCodeOpenFileEffect struct {
 // 	commitHash string
 // }
 
-func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]ProcessorTransition, error) {
+func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]ProcessorEffect, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0
 	for _, t := range terminalEffects {
@@ -58,8 +58,8 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 		}
 	}
 
-	// 2. construct ProcessorTransition for each seqNo
-	var transitions []ProcessorTransition
+	// 2. construct ProcessorEffect for each seqNo
+	var transitions []ProcessorEffect
 	for seqNo := 0; seqNo < maxSeqNo; seqNo++ {
 		tEff, err := terminalEffectBySeqNo(seqNo, terminalEffects)
 		if err != nil {
@@ -71,7 +71,7 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 			return nil, fmt.Errorf("MergeEffects failed: %v", err)
 		}
 
-		p := ProcessorTransition{SeqNo: seqNo, TerminalEffect: tEff, SourceCodeEffect: sEff}
+		p := ProcessorEffect{SeqNo: seqNo, TerminalEffect: tEff, SourceCodeEffect: sEff}
 		transitions = append(transitions, p)
 	}
 
