@@ -8,6 +8,7 @@ import (
 
 type ProcessorTransition struct {
 	Step             string            `json:"step"`
+	SeqNo            int               `json:"seqNo"`
 	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
 	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
 }
@@ -42,6 +43,32 @@ type SourceCodeOpenFileEffect struct {
 // type SourceCodeGitEffect struct {
 // 	commitHash string
 // }
+
+func MergeEffects(
+	terminalEffects []TerminalEffect,
+	sourceCodeUnitEffects []SourceCodeUnitEffect,
+) ([]ProcessorTransition, error) {
+	// 1. calculate the max seqNo
+	maxSeqNo := 0
+	for _, t := range terminalEffects {
+		if t.SeqNo > maxSeqNo {
+			maxSeqNo = t.SeqNo
+		}
+	}
+	for _, t := range sourceCodeUnitEffects {
+		if t.SeqNo > maxSeqNo {
+			maxSeqNo = t.SeqNo
+		}
+	}
+
+	var transitions []ProcessorTransition
+	for i := 0; i < maxSeqNo; i++ {
+		p := ProcessorTransition{SeqNo: i}
+		transitions = append(transitions, p)
+	}
+
+	return transitions, nil
+}
 
 func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	var effects []TerminalEffect
