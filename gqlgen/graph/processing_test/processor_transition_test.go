@@ -1,13 +1,17 @@
 package processing_test
 
 import (
+	"flag"
 	"testing"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
 var terminalEffectsFile = "testdata/terminal_effects.json"
 var sourceCodeUnitEffectsFile = "testdata/source_code_unit_effects.json"
+
+var update = flag.Bool("update", false, "update golden files")
 
 func Test_ReadTerminaEffects(t *testing.T) {
 	_, err := processing.ReadTerminalEffects(terminalEffectsFile)
@@ -36,6 +40,10 @@ func Test_MergeEffects(t *testing.T) {
 		if transitions[i].SeqNo != i {
 			t.Errorf("expected seqNo=%d, but got seqNo=%d", i, transitions[i].SeqNo)
 		}
+	}
+
+	if *update {
+		internal.WriteGoldenFile(t, "testdata/transition_effects.json", transitions)
 	}
 }
 

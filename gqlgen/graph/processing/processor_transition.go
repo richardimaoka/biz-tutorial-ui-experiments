@@ -28,10 +28,10 @@ type SourceCodeEffect struct {
 }
 
 type FileEffect struct {
-	SeqNo         int     `json:"seqNo"`
-	OperationType string  `json:"operationType"`
-	FilePath      *string `json:"filePath"`
-	Content       *string `json:"content"`
+	SeqNo         int    `json:"seqNo"`
+	OperationType string `json:"operationType"`
+	FilePath      string `json:"filePath"`
+	Content       string `json:"content"`
 }
 
 type SourceCodeOpenFileEffect struct {
@@ -44,10 +44,7 @@ type SourceCodeOpenFileEffect struct {
 // 	commitHash string
 // }
 
-func MergeEffects(
-	terminalEffects []TerminalEffect,
-	sourceCodeUnitEffects []FileEffect,
-) ([]ProcessorTransition, error) {
+func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]ProcessorTransition, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0
 	for _, t := range terminalEffects {
@@ -55,29 +52,96 @@ func MergeEffects(
 			maxSeqNo = t.SeqNo
 		}
 	}
-	for _, t := range sourceCodeUnitEffects {
+	for _, t := range fileEffects {
 		if t.SeqNo > maxSeqNo {
 			maxSeqNo = t.SeqNo
 		}
 	}
 
+	// 2. construct ProcessorTransition for each seqNo
 	var transitions []ProcessorTransition
-	for i := 0; i < maxSeqNo; i++ {
-		p := ProcessorTransition{SeqNo: i}
+	for seqNo := 0; seqNo < maxSeqNo; seqNo++ {
+		tEff, err := terminalEffectBySeqNo(seqNo, terminalEffects)
+		if err != nil {
+			return nil, fmt.Errorf("MergeEffects failed: %v", err)
+		}
+
+		sEff, err := calculateSourceCodeEffect(seqNo, fileEffects)
+		if err != nil {
+			return nil, fmt.Errorf("MergeEffects failed: %v", err)
+		}
+
+		p := ProcessorTransition{SeqNo: seqNo, TerminalEffect: tEff, SourceCodeEffect: sEff}
 		transitions = append(transitions, p)
 	}
 
 	return transitions, nil
 }
 
-func findEffectsBySeqNo(seqNo int, sourceCodeUnitEffects []FileEffect) []FileEffect {
-	var effects []FileEffect
-	for _, e := range sourceCodeUnitEffects {
+func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
+	effectsBySeqNo := fileEffectsBySeqNo(seqNo, effects)
+
+	if len(effectsBySeqNo) == 0 {
+		return nil, nil
+	}
+
+	effect := SourceCodeEffect{SeqNo: seqNo}
+	for _, e := range effectsBySeqNo {
+		op, err := e.ToOperation()
+		if err != nil {
+			return nil, fmt.Errorf("failed to calculate source code effect: %v", err)
+		}
+
+		effect.Diff.Append(op)
+	}
+
+	return &effect, nil
+}
+
+func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
+	var effectsBySeqNo []FileEffect
+	for _, e := range effects {
 		if e.SeqNo == seqNo {
-			effects = append(effects, e)
+			effectsBySeqNo = append(effectsBySeqNo, e)
 		}
 	}
-	return effects
+	return effectsBySeqNo
+}
+
+func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect, error) {
+	var effectsBySeqNo []TerminalEffect
+	for _, e := range effects {
+		if e.SeqNo == seqNo {
+			effectsBySeqNo = append(effectsBySeqNo, e)
+		}
+	}
+
+	if len(effectsBySeqNo) > 1 {
+		return nil, fmt.Errorf("multiple (%d of) TerminalEffect with the same seqNo = %d found", len(effectsBySeqNo), seqNo)
+	}
+
+	if len(effectsBySeqNo) == 1 { // must be len(effectsBySeqNo) == 1
+		return &effectsBySeqNo[0], nil
+	} else { // must be len(effectsBySeqNo) == 0
+		return nil, nil
+	}
+}
+
+func (f FileEffect) ToOperation() (FileSystemOperation, error) {
+	switch f.OperationType {
+	case "FileAdd":
+		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
+	case "FileUpdate":
+		return FileUpdate{FilePath: f.FilePath, Content: f.Content}, nil
+	case "FileDelete":
+		return FileDelete{FilePath: f.FilePath}, nil
+	case "DirectoryAdd":
+		return DirectoryAdd{FilePath: f.FilePath}, nil
+	case "DirectoryDelete":
+		return DirectoryDelete{FilePath: f.FilePath}, nil
+	default:
+		return nil, fmt.Errorf("FileEffect.ToOperation() found invalid OperationType = %s", f.OperationType)
+	}
 }
 
 func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
