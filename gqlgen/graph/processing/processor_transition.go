@@ -27,7 +27,7 @@ type SourceCodeEffect struct {
 	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 }
 
-type SourceCodeUnitEffect struct {
+type FileEffect struct {
 	SeqNo         int     `json:"seqNo"`
 	OperationType string  `json:"operationType"`
 	FilePath      *string `json:"filePath"`
@@ -46,7 +46,7 @@ type SourceCodeOpenFileEffect struct {
 
 func MergeEffects(
 	terminalEffects []TerminalEffect,
-	sourceCodeUnitEffects []SourceCodeUnitEffect,
+	sourceCodeUnitEffects []FileEffect,
 ) ([]ProcessorTransition, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0
@@ -70,6 +70,16 @@ func MergeEffects(
 	return transitions, nil
 }
 
+func findEffectsBySeqNo(seqNo int, sourceCodeUnitEffects []FileEffect) []FileEffect {
+	var effects []FileEffect
+	for _, e := range sourceCodeUnitEffects {
+		if e.SeqNo == seqNo {
+			effects = append(effects, e)
+		}
+	}
+	return effects
+}
+
 func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	var effects []TerminalEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
@@ -77,8 +87,8 @@ func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	return effects, err
 }
 
-func ReadSourceCodeUnitEffect(filePath string) ([]SourceCodeUnitEffect, error) {
-	var effects []SourceCodeUnitEffect
+func ReadSourceCodeUnitEffect(filePath string) ([]FileEffect, error) {
+	var effects []FileEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadSourceCodeUnitEffect", filePath, unmarshaller)
 	return effects, err
