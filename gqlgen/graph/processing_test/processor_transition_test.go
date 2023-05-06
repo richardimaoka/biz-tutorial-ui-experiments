@@ -7,7 +7,7 @@ import (
 )
 
 func Test_ReadTerminaEffects(t *testing.T) {
-	_, err := processing.ReadTerminalEffects("testdata/test.json")
+	_, err := processing.ReadTerminalEffects("testdata/terminal_effects.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,6 +20,13 @@ func Test_ReadTerminaEffects(t *testing.T) {
 	// combine source code effects and terminal effects
 	// write them as gold files
 	// then compare them
+}
+
+func Test_ReadSourceCodeUnitEffects(t *testing.T) {
+	_, err := processing.ReadSourceCodeUnitEffect("testdata/source_code_unit_effects.json")
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 //from git, do the same

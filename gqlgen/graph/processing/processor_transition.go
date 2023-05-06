@@ -49,11 +49,26 @@ func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 		return nil, fmt.Errorf("ReadTerminalEffects failed to read file: %w", err)
 	}
 
-	var terminalEffects []TerminalEffect
-	err = json.Unmarshal(jsonBytes, &terminalEffects)
+	var effects []TerminalEffect
+	err = json.Unmarshal(jsonBytes, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadTerminalEffects failed to unmarshal: %w", err)
 	}
 
-	return terminalEffects, nil
+	return effects, nil
+}
+
+func ReadSourceCodeUnitEffect(filePath string) ([]SourceCodeUnitEffect, error) {
+	jsonBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("ReadSourceCodeUnitEffect failed to read file: %w", err)
+	}
+
+	var effects []SourceCodeUnitEffect
+	err = json.Unmarshal(jsonBytes, &effects)
+	if err != nil {
+		return nil, fmt.Errorf("ReadSourceCodeUnitEffect failed to unmarshal: %w", err)
+	}
+
+	return effects, nil
 }
