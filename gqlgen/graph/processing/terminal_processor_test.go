@@ -7,22 +7,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-// TODO: rewrite tests with table driven tests
-// TODO: private-ise the methods exept Transition
-// TODO: move the test to processing_test
-//
-// type TerminalEffect struct {
-// 	SeqNo            int     `json:"seqNo"`
-// 	TerminalName     string  `json:"terminalName"`
-// 	Command          string  `json:"command"`
-// 	Output           *string `json:"output"`           //if zero value, no output after execution
-// 	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
-// }
-// var cases := []TerminalEffect{
-// 	{ SeqNo: 0, TerminalName: "default", Command: "echo abc", Output: nil, CurrentDirectory: nil },
-// }
-
-// test case for TerminalProcessor's WriteCommand method
 func TestTerminal(t *testing.T) {
 	terminal := NewTerminalProcessor("default")
 	result := terminal.ToGraphQLTerminal()

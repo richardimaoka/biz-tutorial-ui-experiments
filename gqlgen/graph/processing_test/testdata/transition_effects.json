@@ -1,0 +1,939 @@
+[
+  {
+    "step": "",
+    "seqNo": 0,
+    "sourceCodeEffect": {
+      "seqNo": 0,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": [
+          {
+            "filePath": "protoc-go-experiments",
+            "operationType": "DirectoryAdd"
+          }
+        ],
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 1,
+    "sourceCodeEffect": null,
+    "terminalEffect": {
+      "seqNo": 1,
+      "terminalName": "default",
+      "command": "mkdir protoc-go-experiments",
+      "output": null,
+      "currentDirectory": null
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 2,
+    "sourceCodeEffect": {
+      "seqNo": 2,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": [
+          {
+            "filePath": "protoc-go-experiments/helloworld",
+            "operationType": "DirectoryAdd"
+          }
+        ],
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": {
+      "seqNo": 2,
+      "terminalName": "default",
+      "command": "cd protoc-go-experiments",
+      "output": null,
+      "currentDirectory": "protoc-go-experiments"
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 3,
+    "sourceCodeEffect": null,
+    "terminalEffect": {
+      "seqNo": 3,
+      "terminalName": "default",
+      "command": "mkdir helloworld",
+      "output": null,
+      "currentDirectory": null
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 4,
+    "sourceCodeEffect": {
+      "seqNo": 4,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "syntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": {
+      "seqNo": 4,
+      "terminalName": "default",
+      "command": "cd helloworld # protoc-go-experiments/helloworld",
+      "output": null,
+      "currentDirectory": "protoc-go-experiments/helloworld"
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 5,
+    "sourceCodeEffect": null,
+    "terminalEffect": {
+      "seqNo": 5,
+      "terminalName": "default",
+      "command": "# protoc-go-experiments/helloworld/helloworld.proto\ncat \u003c\u003c EOF \u003e helloworld.proto\nsyntax = \"proto3\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}\nEOF",
+      "output": null,
+      "currentDirectory": null
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 6,
+    "sourceCodeEffect": null,
+    "terminalEffect": {
+      "seqNo": 6,
+      "terminalName": "default",
+      "command": "# protoc-go-experiments/helloworld ディレクトリ内で以下を実行\nprotoc helloworld.proto # 引数で`.proto`ファイル名のみ指定",
+      "output": "Missing output directives.",
+      "currentDirectory": null
+    }
+  },
+  {
+    "step": "",
+    "seqNo": 7,
+    "sourceCodeEffect": {
+      "seqNo": 7,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 8,
+    "sourceCodeEffect": {
+      "seqNo": 8,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/github.com/__github_username/protoc-go-experiments/helloworld/helloworld.pb.go",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 9,
+    "sourceCodeEffect": {
+      "seqNo": 9,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/github.com",
+            "operationType": "DirectoryDelete"
+          }
+        ]
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 10,
+    "sourceCodeEffect": {
+      "seqNo": 10,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 11,
+    "sourceCodeEffect": {
+      "seqNo": 11,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 12,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 13,
+    "sourceCodeEffect": {
+      "seqNo": 13,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/outdir",
+            "operationType": "DirectoryAdd"
+          }
+        ],
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 14,
+    "sourceCodeEffect": {
+      "seqNo": 14,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/outdir/helloworld.pb.go",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 15,
+    "sourceCodeEffect": {
+      "seqNo": 15,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/outdir",
+            "operationType": "DirectoryDelete"
+          }
+        ]
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 16,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 17,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 18,
+    "sourceCodeEffect": {
+      "seqNo": 18,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb.go",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 19,
+    "sourceCodeEffect": {
+      "seqNo": 19,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb.go",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 20,
+    "sourceCodeEffect": {
+      "seqNo": 20,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld\";\n\nmessage Greeting { string greet_message = 1; }",
+            "filePath": "protoc-go-experiments/helloworld/greeting.proto",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 21,
+    "sourceCodeEffect": {
+      "seqNo": 21,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 22,
+    "sourceCodeEffect": {
+      "seqNo": 22,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 23,
+    "sourceCodeEffect": {
+      "seqNo": 23,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 24,
+    "sourceCodeEffect": {
+      "seqNo": 24,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/richardimaoka/protoc-go-experiments/helloworld/subdir\";\n\n// The greeting service definition.\nservice SubGreeter {\n  // Sends a greeting\n  rpc SayHello(SubHelloRequest) returns (SubHelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage SubHelloRequest { string name = 1; }\n\n// The response message containing the greetings\nmessage SubHelloReply { string message = 1; }",
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.proto",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 25,
+    "sourceCodeEffect": {
+      "seqNo": 25,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 26,
+    "sourceCodeEffect": {
+      "seqNo": 26,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 27,
+    "sourceCodeEffect": {
+      "seqNo": 27,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 28,
+    "sourceCodeEffect": {
+      "seqNo": 28,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 29,
+    "sourceCodeEffect": {
+      "seqNo": 29,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 30,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 31,
+    "sourceCodeEffect": {
+      "seqNo": 31,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 32,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 33,
+    "sourceCodeEffect": {
+      "seqNo": 33,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"helloworld/greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 34,
+    "sourceCodeEffect": {
+      "seqNo": 34,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 35,
+    "sourceCodeEffect": {
+      "seqNo": 35,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 36,
+    "sourceCodeEffect": {
+      "seqNo": 36,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 37,
+    "sourceCodeEffect": {
+      "seqNo": 37,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 38,
+    "sourceCodeEffect": {
+      "seqNo": 38,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 39,
+    "sourceCodeEffect": {
+      "seqNo": 39,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/greeting.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/subdir/subhello.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 40,
+    "sourceCodeEffect": {
+      "seqNo": 40,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/greeting.pb",
+            "operationType": "FileDelete"
+          },
+          {
+            "filePath": "protoc-go-experiments/helloworld.pb",
+            "operationType": "FileDelete"
+          },
+          {
+            "filePath": "protoc-go-experiments/subdir/subhello.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 41,
+    "sourceCodeEffect": {
+      "seqNo": 41,
+      "diff": {
+        "filesAdded": [
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          },
+          {
+            "content": "***",
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "isFullContent": true,
+            "operationType": "FileAdd"
+          }
+        ],
+        "filesUpdated": null,
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 42,
+    "sourceCodeEffect": {
+      "seqNo": 42,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": null,
+        "filesDeleted": [
+          {
+            "filePath": "protoc-go-experiments/helloworld/greeting.pb",
+            "operationType": "FileDelete"
+          },
+          {
+            "filePath": "protoc-go-experiments/helloworld/helloworld.pb",
+            "operationType": "FileDelete"
+          },
+          {
+            "filePath": "protoc-go-experiments/helloworld/subdir/subhello.pb",
+            "operationType": "FileDelete"
+          }
+        ],
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 43,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 44,
+    "sourceCodeEffect": null,
+    "terminalEffect": null
+  },
+  {
+    "step": "",
+    "seqNo": 45,
+    "sourceCodeEffect": {
+      "seqNo": 45,
+      "diff": {
+        "filesAdded": null,
+        "filesUpdated": [
+          {
+            "content": "syntax = \"proto3\";\n\noption go_package = \"github.com/__github_username /protoc-go-experiments/helloworld\";\n\nimport \"helloworld/greeting.proto\";\n\n// The greeting service definition.\nservice Greeter {\n  // Sends a greeting\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\n// The request message containing the user's name.\nmessage HelloRequest {\n  string name = 1;\n}\n\n// The response message containing the greetings\nmessage HelloReply {\n  string message = 1;\n  Greeting greet = 2;\n}",
+            "filePath": "protoc-go-experiments/helloworld/helloworld.proto",
+            "operationType": "FileUpdate"
+          }
+        ],
+        "filesDeleted": null,
+        "directoriesAdded": null,
+        "directoriesDeleted": null
+      },
+      "defaultOpenFilePath": null
+    },
+    "terminalEffect": null
+  }
+]

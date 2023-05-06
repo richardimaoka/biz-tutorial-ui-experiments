@@ -244,7 +244,7 @@ func (p *SourceCodeProcessor) SetStep(step string) {
 	p.step = step
 }
 
-func (p *SourceCodeProcessor) Transition(effect SourceCodeEffect) error {
+func (p *SourceCodeProcessor) Transition(effect SourceCodeEffect, nextStep string) error {
 	return nil
 }
 
