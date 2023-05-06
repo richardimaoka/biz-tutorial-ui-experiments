@@ -17,8 +17,8 @@ type SourceCodeEffect struct {
 // 	commitHash string
 // }
 
-type Action2 struct {
-	Step             string
+type ProcessTransition struct {
+	NextStep         string
 	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
 	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
 }
