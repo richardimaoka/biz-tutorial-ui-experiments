@@ -70,10 +70,8 @@ func Test_TerminalEffect(t *testing.T) {
 
 func TestTerminal_Mutation1(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
-	terminal.WriteCommand("echo abc")
-	terminal.WriteOutput("abc")
-	terminal.WriteCommand("cd hello/world/thunder")
-	terminal.ChangeCurrentDirectory("hello/world/thunder")
+	terminal.Transition(processing.TerminalEffect{Command: "echo abc", Output: internal.Address("abc")}, "001")
+	terminal.Transition(processing.TerminalEffect{Command: "cd hello/world/thunder", CurrentDirectory: internal.Address("hello/world/thunder")}, "002")
 
 	// once materialized GraphQL model...
 	materialized := terminal.ToGraphQLTerminal()
