@@ -1,13 +1,13 @@
 {
   "step": null,
   "name": "default",
-  "currentDirectory": null,
+  "currentDirectory": "hello",
   "nodes": [
     {
       "content": {
         "contentType": "TerminalCommand",
         "beforeExecution": false,
-        "command": "mkdir abc"
+        "command": "cd hello"
       }
     }
   ]
