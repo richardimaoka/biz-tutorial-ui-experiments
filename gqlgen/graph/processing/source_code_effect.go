@@ -1,6 +1,9 @@
 package processing
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type SourceCodeEffect struct {
 	SeqNo               int     `json:"seqNo"`
@@ -24,6 +27,13 @@ type OpenFileEffect struct {
 // type SourceCodeGitEffect struct {
 // 	commitHash string
 // }
+
+func ReadFileEffects(filePath string) ([]FileEffect, error) {
+	var effects []FileEffect
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
+	err := jsonRead("ReadFileEffects", filePath, unmarshaller)
+	return effects, err
+}
 
 func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
 	effectsBySeqNo := fileEffectsBySeqNo(seqNo, effects)
