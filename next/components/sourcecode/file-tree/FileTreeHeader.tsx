@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import Image from "next/image";
 
 interface FileTreeHeaderProps {
   isFolded: boolean;
@@ -30,7 +31,7 @@ export const FileTreeHeader = ({
         `}
         onClick={onButtonClick}
       >
-        <img
+        <Image
           width={buttonSize}
           height={buttonSize}
           css={css`
@@ -43,6 +44,7 @@ export const FileTreeHeader = ({
               ? "/images/ide-sidebar-expand.svg"
               : "/images/ide-sidebar-shrink.svg"
           }
+          alt={isFolded ? "file tree expand icon" : "file tree shrink icon"}
         />
       </button>
     </div>
