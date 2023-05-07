@@ -36,18 +36,18 @@ func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
 	expectedBytes, err := os.ReadFile(expectedJsonFile)
 	if err != nil {
-		t.Errorf("failed to read %s", expectedJsonFile)
+		t.Errorf("%s failed to read", expectedJsonFile)
 		return
 	}
 
 	resultBytes, err := json.Marshal(result)
 	if err != nil {
-		t.Errorf("failed to marshal result")
+		t.Errorf("%s failed to get marshaled result to compare against", expectedJsonFile)
 		return
 	}
 
 	if err := compareJsonBytes(expectedBytes, resultBytes); err != nil {
-		t.Fatalf("failed to compare after marshal where expected file = %s, %s", expectedJsonFile, err)
+		t.Fatalf("%s failed to match with result, %s", expectedJsonFile, err)
 	}
 }
 

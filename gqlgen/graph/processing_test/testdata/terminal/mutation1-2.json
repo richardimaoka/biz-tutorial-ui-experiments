@@ -1,0 +1,40 @@
+{
+  "step": null,
+  "name": "default",
+  "currentDirectory": "mutated/current/dir",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "echo abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "cd hello/world/thunder"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "mutation extra command"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "mutation extra output"
+      }
+    }
+  ]
+}

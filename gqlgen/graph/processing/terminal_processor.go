@@ -44,7 +44,7 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
 }
 
-func (t *TerminalProcessor) Transition(effect TerminalEffect, nextStep string) error {
+func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) error {
 	t.WriteCommand(effect.Command)
 	if effect.Output != nil {
 		t.WriteOutput(*effect.Output)
