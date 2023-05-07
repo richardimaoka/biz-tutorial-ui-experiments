@@ -32,7 +32,7 @@ func Test_Terminal(t *testing.T) {
 	}
 
 	testCases := []TestCase{
-		{"testdata/terminal/terminal1-1.json", processing.TerminalEffect{SeqNo: 0, TerminalName: "default", Command: "mkdir abc", Output: nil, CurrentDirectory: internal.Address("abc")}},
+		{"testdata/terminal/terminal1-1.json", processing.TerminalEffect{SeqNo: 0, TerminalName: "default", Command: "mkdir abc", Output: nil, CurrentDirectory: nil}},
 		// {"testdata/terminal/terminal1-2.json", processing.TerminalEffect{SeqNo: 1, TerminalName: "default", Command: "mkdir abc", Output: nil, CurrentDirectory: internal.Address("def")}},
 		// {"testdata/terminal/terminal1-3.json", processing.TerminalEffect{SeqNo: 2, TerminalName: "default", Command: "echo abc", Output: internal.Address("abc"), CurrentDirectory: nil}},
 		// {"testdata/terminal/terminal1-4.json", processing.TerminalEffect{SeqNo: 3, TerminalName: "default", Command: "mkdir def", Output: nil, CurrentDirectory: nil}},

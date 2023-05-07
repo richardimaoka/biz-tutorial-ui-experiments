@@ -45,6 +45,13 @@ func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
 }
 
 func (t *TerminalProcessor) Transition(effect TerminalEffect, nextStep string) error {
+	t.WriteCommand(effect.Command)
+	if effect.Output != nil {
+		t.WriteOutput(*effect.Output)
+	}
+	if effect.CurrentDirectory != nil {
+		t.ChangeCurrentDirectory(*effect.CurrentDirectory)
+	}
 	return nil
 }
 
