@@ -1,7 +1,7 @@
 {
   "step": null,
-  "currentDirectory": "hello/world/thunder",
   "name": "default",
+  "currentDirectory": "hello/world/thunder",
   "nodes": [
     {
       "content": {

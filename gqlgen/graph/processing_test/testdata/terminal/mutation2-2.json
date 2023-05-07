@@ -1,19 +1,19 @@
 {
   "step": null,
-  "currentDirectory": "hello/world/thunder",
   "name": "default",
+  "currentDirectory": "hello/world/thunder",
   "nodes": [
     {
       "content": {
         "contentType": "TerminalCommand",
         "beforeExecution": false,
-        "command": "echo abc"
+        "command": "mutation extra command"
       }
     },
     {
       "content": {
         "contentType": "TerminalOutput",
-        "output": "abc"
+        "output": "mutation extra output"
       }
     },
     {

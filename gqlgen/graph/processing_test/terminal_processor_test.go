@@ -104,6 +104,9 @@ func TestTerminal_Mutation2(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	materialized := terminal.ToGraphQLTerminal()
+	if *update { // if `-update` flag is passed from command line, update the golden file
+		internal.WriteGoldenFile(t, "testdata/terminal/mutation2-1.json", materialized)
+	}
 	internal.CompareAfterMarshal(t, "testdata/terminal/mutation2-1.json", materialized)
 
 	// ...mutation to materialized GraphQL model...
