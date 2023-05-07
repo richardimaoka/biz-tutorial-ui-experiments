@@ -1,7 +1,6 @@
 package gitmodel_test
 
 import (
-	"flag"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -10,8 +9,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/gitmodel"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
-
-var update = flag.Bool("update", false, "update golden files")
 
 func TestSourceCodeFromGit(t *testing.T) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
