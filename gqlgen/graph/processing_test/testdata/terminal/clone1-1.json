@@ -1,13 +1,19 @@
 {
   "step": null,
-  "currentDirectory": null,
   "name": "default",
+  "currentDirectory": null,
   "nodes": [
     {
       "content": {
         "contentType": "TerminalCommand",
         "beforeExecution": false,
-        "command": "mkdir abc"
+        "command": "echo abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "abc"
       }
     }
   ]

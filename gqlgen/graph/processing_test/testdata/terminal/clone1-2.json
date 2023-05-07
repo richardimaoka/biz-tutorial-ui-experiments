@@ -1,0 +1,40 @@
+{
+  "step": null,
+  "name": "default",
+  "currentDirectory": "hello/world/thunder",
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "echo abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "abc"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "echo def"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "def"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "cd hello/world/thunder"
+      }
+    }
+  ]
+}
