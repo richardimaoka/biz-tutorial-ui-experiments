@@ -5,6 +5,7 @@ import (
 )
 
 type TerminalProcessor struct {
+	step             string
 	terminalName     string
 	currentDirectory string
 	elements         []terminalElementProcessor
@@ -12,6 +13,7 @@ type TerminalProcessor struct {
 
 func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	return &TerminalProcessor{
+		step:             "",
 		terminalName:     terminalName,
 		currentDirectory: "",
 		elements:         []terminalElementProcessor{},

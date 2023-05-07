@@ -25,6 +25,7 @@
   },
   "terminals": [
     {
+      "step": null,
       "name": "default",
       "currentDirectory": "protoc-go-experiments",
       "nodes": [

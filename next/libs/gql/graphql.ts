@@ -100,6 +100,7 @@ export type Terminal = {
   currentDirectory?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   nodes?: Maybe<Array<Maybe<TerminalNode>>>;
+  step?: Maybe<Scalars["String"]>;
 };
 
 export type TerminalCommand = {

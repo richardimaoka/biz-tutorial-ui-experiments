@@ -102,6 +102,7 @@ type ComplexityRoot struct {
 		CurrentDirectory func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Nodes            func(childComplexity int) int
+		Step             func(childComplexity int) int
 	}
 
 	TerminalCommand struct {
@@ -365,6 +366,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Terminal.Nodes(childComplexity), true
+
+	case "Terminal.step":
+		if e.complexity.Terminal.Step == nil {
+			break
+		}
+
+		return e.complexity.Terminal.Step(childComplexity), true
 
 	case "TerminalCommand.beforeExecution":
 		if e.complexity.TerminalCommand.BeforeExecution == nil {
@@ -1441,6 +1449,8 @@ func (ec *executionContext) fieldContext_PageState_terminals(ctx context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "step":
+				return ec.fieldContext_Terminal_step(ctx, field)
 			case "name":
 				return ec.fieldContext_Terminal_name(ctx, field)
 			case "currentDirectory":
@@ -1904,6 +1914,47 @@ func (ec *executionContext) fieldContext_SourceCode_defaultOpenFile(ctx context.
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Terminal_step(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_step(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Step, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Terminal_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Terminal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4511,6 +4562,10 @@ func (ec *executionContext) _Terminal(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Terminal")
+		case "step":
+
+			out.Values[i] = ec._Terminal_step(ctx, field, obj)
+
 		case "name":
 
 			out.Values[i] = ec._Terminal_name(ctx, field, obj)

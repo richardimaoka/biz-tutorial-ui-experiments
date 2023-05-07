@@ -64,6 +64,7 @@ type PageState struct {
 }
 
 type Terminal struct {
+	Step             *string         `json:"step"`
 	Name             *string         `json:"name"`
 	CurrentDirectory *string         `json:"currentDirectory"`
 	Nodes            []*TerminalNode `json:"nodes"`
