@@ -51,7 +51,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 			err := applyOperation(t, sourceCode, c.Operation)
 			checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
-			internal.CompareWitGoldenFile(t, *update, c.ExpectedFile, sourceCode.ToGraphQLModel())
+			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
 		}
 	}
 
@@ -332,7 +332,7 @@ func TestSourceCode_Mutation(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
-	internal.CompareWitGoldenFile(t, *update, "testdata/source_code/mutation1-1.json", materialized)
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-1.json", materialized)
 
 	// ...mutation to source code...
 	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
@@ -340,7 +340,7 @@ func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode.DeleteFile(processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on re-materialized GraphQL model
-	internal.CompareWitGoldenFile(t, *update, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
 
 	// ...but should have no effect on materialized GraphQL model
 	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)

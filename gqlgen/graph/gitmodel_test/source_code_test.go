@@ -41,7 +41,7 @@ func TestSourceCodeFromGit(t *testing.T) {
 				t.Fatalf("error creating source code: %v", err)
 			}
 
-			if *update {
+			if *updateFlag {
 				internal.WriteGoldenFile(t, c.ExpectationFile, sc.ToGraphQLSourceCode())
 			}
 

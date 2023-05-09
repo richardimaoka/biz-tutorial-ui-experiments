@@ -39,7 +39,7 @@ func Test_MergeEffects(t *testing.T) {
 		}
 	}
 
-	if *update {
+	if *updateFlag {
 		internal.WriteGoldenFile(t, "testdata/transition_effects.json", transitions)
 	}
 }
