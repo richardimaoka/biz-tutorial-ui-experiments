@@ -48,7 +48,7 @@ func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	}
 }
 
-func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) error {
+func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) {
 	t.writeCommand(effect.Command)
 	if effect.Output != nil {
 		t.writeOutput(*effect.Output)
@@ -56,7 +56,6 @@ func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) e
 	if effect.CurrentDirectory != nil {
 		t.changeCurrentDirectory(*effect.CurrentDirectory)
 	}
-	return nil
 }
 
 func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
