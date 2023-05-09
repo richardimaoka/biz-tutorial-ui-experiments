@@ -22,18 +22,17 @@ tmux split-window -v -t "$SESSION"
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
 tmux send-keys -t "$SESSION:0.4" '(cd next && npm run compile)' C-m
 
-# TODO: enable watch mode for next lint
-# tmux split-window -v -t "$SESSION" 
-# tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-# tmux send-keys -t "$SESSION:0.5" '(cd next && npm run lint)' C-m
+tmux split-window -v -t "$SESSION" 
+tmux select-layout even-vertical   # to avoid 'no space for new pane' 
+tmux send-keys -t "$SESSION:0.5" '(cd next && npm run lint-watch)' C-m
 
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && gow -e=go,json,gql -c -v test ./graph/...)' C-m
+tmux send-keys -t "$SESSION:0.6" '(cd gqlgen && gow -e=go,json,gql -c -v test ./graph/...)' C-m
 
 # open editors
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.6" '(cd gqlgen && code .) && (cd next && code .)' C-m
+tmux send-keys -t "$SESSION:0.7" '(cd gqlgen && code .) && (cd next && code .)' C-m
 
 tmux attach -t "$SESSION"

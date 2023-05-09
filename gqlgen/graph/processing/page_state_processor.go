@@ -44,14 +44,7 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 		if !ok {
 			return fmt.Errorf("%s, terminal [%s] does not exist", errorPreceding, action.TerminalName)
 		}
-		terminal.WriteCommand(action.Command)
-		if action.Output != nil {
-			terminal.WriteOutput(*action.Output)
-		}
-		if action.CurrentDirectory != nil {
-			terminal.ChangeCurrentDirectory(*action.CurrentDirectory)
-		}
-		p.terminalMap[action.TerminalName] = terminal
+		terminal.Transition(p.step.nextStep, TerminalEffect{Command: action.Command, Output: action.Output, CurrentDirectory: action.CurrentDirectory})
 
 		return nil
 
