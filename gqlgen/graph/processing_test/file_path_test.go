@@ -1,6 +1,10 @@
-package processing
+package processing_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+)
 
 func comparisonLetter(less bool) string {
 	if less {
@@ -52,7 +56,7 @@ func TestFilePathLessFile(t *testing.T) {
 	}
 
 	for _, e := range entries {
-		if LessFilePath(e.path1, e.path2) != e.less {
+		if processing.LessFilePath(e.path1, e.path2) != e.less {
 			t.Errorf(
 				"%s %s %s is expected, but they did not make it",
 				e.path1,
