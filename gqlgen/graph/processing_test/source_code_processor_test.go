@@ -44,7 +44,6 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		}
 	}
 
-	// accept testEntries, and run tests on them
 	runTestCases := func(t *testing.T, testCases []TestCase) {
 		sourceCode := processing.NewSourceCodeProcessor()
 		for i, c := range testCases {
@@ -247,82 +246,56 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	})
 }
 
-// func TestSourceCode_Diff(t *testing.T) {
-// 	type Operation struct {
-// 		diff          Diff
-// 		expectSuccess bool
-// 	}
+func TestSourceCode_Diff(t *testing.T) {
+	checkResult := func(t *testing.T, index int, diff processing.Diff, expectSuccess bool, err error) {
+		resultSuccess := err == nil
+		if resultSuccess != expectSuccess { //if result is not expected
+			if expectSuccess {
+				t.Fatalf("diff[%d] = %+v success is expected, but result is failure\nerror: %s\n", index, diff, err)
+			} else {
+				t.Fatalf("diff[%d] = %+v failure is expected, but result is success\n", index, diff)
+			}
+		}
+	}
 
-// 	type Entry struct {
-// 		name       string
-// 		operations []Operation
-// 		resultFile string
-// 	}
+	type TestCase struct {
+		ExpectSuccess bool
+		ExpectedFile  string
+		Diff          processing.Diff
+	}
 
-// 	applyOperations := func(processor *SourceCodeProcessor, operations []Operation) error {
-// 		for opNum, op := range operations {
-// 			opError := processor.ApplyDiff(op.diff)
+	runTestCases := func(t *testing.T, testCases []TestCase) {
+		sourceCode := processing.NewSourceCodeProcessor()
+		for i, c := range testCases {
+			err := sourceCode.ApplyDiff(c.Diff)
+			checkResult(t, i, c.Diff, c.ExpectSuccess, err)
+			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
+		}
+	}
 
-// 			opSuccess := opError == nil
-// 			if opSuccess != op.expectSuccess { //if result is not expected
-// 				if op.expectSuccess {
-// 					return fmt.Errorf(
-// 						"operations[%d] success is expected, but result is failure\nerror:     %s\noperation: %+v\n",
-// 						opNum,
-// 						opError.Error(),
-// 						op)
-// 				} else {
-// 					return fmt.Errorf(
-// 						"operations[%d] failure is expected, but result is success\noperation: %+v\n",
-// 						opNum,
-// 						op)
-// 				}
-// 			}
-// 		}
+	t.Run("add_file_single", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/diff-file1.json", processing.Diff{FilesAdded: []processing.FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
+		})
+	})
 
-// 		return nil
-// 	}
+	t.Run("empty_diff", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/new-source-code.json", processing.Diff{}},
+		})
+	})
 
-// 	// accept testEntries, and run tests on them
-// 	runEntries := func(t *testing.T, testEntries []Entry) {
-// 		for _, e := range testEntries {
-// 			t.Run(e.name, func(t *testing.T) {
-// 				sourceCode := NewSourceCodeProcessor()
-// 				if err := applyOperations(sourceCode, e.operations); err != nil {
-// 					t.Errorf(err.Error()) // fail but continue running, as two ops can fail in sequence
-// 					return
-// 				}
-
-// 				internal.CompareAfterMarshal(t, e.resultFile, sourceCode.ToGraphQLModel())
-// 			})
-// 		}
-// 	}
-
-// 	t.Run("diff", func(t *testing.T) {
-// 		runEntries(t, []Entry{
-// 			{name: "add_file_single",
-// 				operations: []Operation{
-// 					{true, diff: Diff{FilesAdded: []FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
-// 				}, resultFile: "testdata/source_code/diff-file1.json",
-// 			},
-
-// 			{name: "empty",
-// 				operations: []Operation{
-// 					{true, diff: Diff{}},
-// 				}, resultFile: "testdata/source_code/new-source-code.json",
-// 			},
-
-// 			{name: "error_dupe",
-// 				operations: []Operation{
-// 					{false, diff: Diff{FilesAdded: []FileAdd{
-// 						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-// 						{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-// 					}}},
-// 				}, resultFile: "testdata/source_code/new-source-code.json",
-// 			},
-// 		})
-// 	})
-// }
+	t.Run("error_diff_dupe", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{false, "testdata/source_code/new-source-code.json", processing.Diff{
+				FilesAdded: []processing.FileAdd{
+					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+				},
+			}},
+		})
+	})
+}
 
 func TestSourceCode_Mutation(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
