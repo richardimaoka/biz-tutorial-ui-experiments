@@ -61,3 +61,10 @@ func WriteGoldenFile(t *testing.T, filePath string, v any) {
 		t.Fatalf("error writing golden file %s: %v", filePath, err)
 	}
 }
+
+func CompareWitGoldenFile(t *testing.T, updateGoldenFile bool, goldenFileName string, result interface{}) {
+	if updateGoldenFile {
+		WriteGoldenFile(t, goldenFileName, result)
+	}
+	CompareAfterMarshal(t, goldenFileName, result)
+}
