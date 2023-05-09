@@ -264,40 +264,38 @@ func TestSourceCode_Diff(t *testing.T) {
 		Diff          processing.Diff
 	}
 
-	runTestCases := func(t *testing.T, testCases []TestCase) {
-		sourceCode := processing.NewSourceCodeProcessor()
-		for i, c := range testCases {
-			err := sourceCode.ApplyDiff(c.Diff)
-			checkResult(t, i, c.Diff, c.ExpectSuccess, err)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
-		}
+	runTestCases := func(t *testing.T, name string, testCases []TestCase) {
+		t.Run(name, func(t *testing.T) {
+			sourceCode := processing.NewSourceCodeProcessor()
+			for i, c := range testCases {
+				err := sourceCode.ApplyDiff(c.Diff)
+				checkResult(t, i, c.Diff, c.ExpectSuccess, err)
+				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
+			}
+		})
 	}
 
-	t.Run("add_file_single", func(t *testing.T) {
-		runTestCases(t, []TestCase{
-			{true, "testdata/source_code/diff-file1.json", processing.Diff{FilesAdded: []processing.FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
-		})
+	runTestCases(t, "add_file_single", []TestCase{
+		{true, "testdata/source_code/diff-file1.json", processing.Diff{FilesAdded: []processing.FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
 	})
 
-	t.Run("empty_diff", func(t *testing.T) {
-		runTestCases(t, []TestCase{
-			{true, "testdata/source_code/new-source-code.json", processing.Diff{}},
-		})
+	runTestCases(t, "empty_diff", []TestCase{
+		{true, "testdata/source_code/new-source-code.json", processing.Diff{}},
 	})
 
-	t.Run("error_diff_dupe", func(t *testing.T) {
-		runTestCases(t, []TestCase{
-			{false, "testdata/source_code/new-source-code.json", processing.Diff{
-				FilesAdded: []processing.FileAdd{
-					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-					{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-				},
-			}},
-		})
+	runTestCases(t, "error_diff_dupe", []TestCase{
+		{false, "testdata/source_code/new-source-code.json", processing.Diff{
+			FilesAdded: []processing.FileAdd{
+				{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+				{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
+			},
+		}},
 	})
 }
 
-func TestSourceCode_Mutation(t *testing.T) {
+// Test mutation after sourceCode.ToGraphQLModel()
+// Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the sourceCode should have no effect on the GraphQL model
+func TestSourceCode_Mutation1(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
 	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
 	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
@@ -319,27 +317,49 @@ func TestSourceCode_Mutation(t *testing.T) {
 	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)
 }
 
-// func TestSourceCode_Clone(t *testing.T) {
-// 	sourceCode := NewSourceCodeProcessor()
-// 	sourceCode.AddFile(FileAdd{FilePath: "hello/world/japan.txt"})
-// 	sourceCode.AddFile(FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-// 	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+// Test mutation after sourceCode.ToGraphQLModel()
+// Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the GraphQL model should have no effect on the sourceCode
+func TestSourceCode_Mutation2(t *testing.T) {
+	sourceCode := processing.NewSourceCodeProcessor()
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
-// 	// once cloned ...
-// 	sourceCodeCloned := sourceCode.Clone()
-// 	internal.CompareAfterMarshal(t, "testdata/source_code/cloned.json", sourceCodeCloned.ToGraphQLModel())
+	// once GraphQL model is materialized...
+	materialized := sourceCode.ToGraphQLModel()
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-1.json", materialized)
 
-// 	// ... mutation after cloning should have no effect
-// 	sourceCode.step = "mutated step"
-// 	sourceCode.defaultOpenFilePath = "mutated/file/path"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).filePath = "mutated/path/to/file"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).isUpdated = true
-// 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
-// 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
+	// ...mutation to materialized GraphQL model...
+	ptr1 := materialized.FileTree[0].Name
+	*ptr1 = "mutation extra name"
+	ptr2 := materialized.FileTree[0].FilePath
+	*ptr2 = "mutation/extra/path"
 
-// 	// cloned source code is not affected
-// 	internal.CompareAfterMarshal(t,
-// 		"testdata/source_code/cloned.json",
-// 		sourceCodeCloned.ToGraphQLModel()) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
-// }
+	// ...should of course have effect on materialized GraphQL model
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-2.json", materialized)
+
+	// ...but should have no effect on source code
+	internal.CompareAfterMarshal(t, "testdata/source_code/mutation2-1.json", sourceCode.ToGraphQLModel())
+}
+
+func TestSourceCode_Clone(t *testing.T) {
+	sourceCode := processing.NewSourceCodeProcessor()
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+
+	// once cloned ...
+	sourceCodeCloned := sourceCode.Clone()
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
+
+	// ... mutation to source code
+	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	sourceCode.DeleteFile(processing.FileDelete{FilePath: "hello/world/japan.txt"})
+
+	// ...should of course have effect on terminal itself
+	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-2.json", sourceCode.ToGraphQLModel())
+
+	// ...but should have no effect on sourceCode
+	internal.CompareAfterMarshal(t, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
+}
