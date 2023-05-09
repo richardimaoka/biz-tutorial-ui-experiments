@@ -11,16 +11,7 @@ type TerminalProcessor struct {
 	elements         []terminalElementProcessor
 }
 
-func NewTerminalProcessor(terminalName string) *TerminalProcessor {
-	return &TerminalProcessor{
-		step:             "",
-		terminalName:     terminalName,
-		currentDirectory: "",
-		elements:         []terminalElementProcessor{},
-	}
-}
-
-func (t *TerminalProcessor) WriteCommand(command string) {
+func (t *TerminalProcessor) writeCommand(command string) {
 	defaultPromptExpression := ""
 	defaultPromptSymbol := '$'
 	t.WriteCommandWithPrompt(defaultPromptExpression, defaultPromptSymbol, command)
@@ -34,23 +25,36 @@ func (t *TerminalProcessor) WriteCommandWithPrompt(promptExpression string, prom
 	})
 }
 
-func (t *TerminalProcessor) WriteOutput(output string) {
+func (t *TerminalProcessor) writeOutput(output string) {
 	t.elements = append(t.elements, &terminalOutputProcessor{
 		output: output,
 	})
 }
 
-func (t *TerminalProcessor) ChangeCurrentDirectory(dir string) {
+func (t *TerminalProcessor) changeCurrentDirectory(dir string) {
 	t.currentDirectory = dir
 }
 
+//--------------------------------------------------------------------------------------------
+// public methods below
+//--------------------------------------------------------------------------------------------
+
+func NewTerminalProcessor(terminalName string) *TerminalProcessor {
+	return &TerminalProcessor{
+		step:             "",
+		terminalName:     terminalName,
+		currentDirectory: "",
+		elements:         []terminalElementProcessor{},
+	}
+}
+
 func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) error {
-	t.WriteCommand(effect.Command)
+	t.writeCommand(effect.Command)
 	if effect.Output != nil {
-		t.WriteOutput(*effect.Output)
+		t.writeOutput(*effect.Output)
 	}
 	if effect.CurrentDirectory != nil {
-		t.ChangeCurrentDirectory(*effect.CurrentDirectory)
+		t.changeCurrentDirectory(*effect.CurrentDirectory)
 	}
 	return nil
 }
