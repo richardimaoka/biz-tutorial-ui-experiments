@@ -3,12 +3,20 @@ package processing
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/go-git/go-git/v5/plumbing"
 )
 
 type SourceCodeEffect struct {
 	SeqNo               int     `json:"seqNo"`
 	Diff                Diff    `json:"diff"`
 	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
+}
+
+type SourceCodeGitEffect struct {
+	SeqNo               int           `json:"seqNo"`
+	CommitHash          plumbing.Hash `json:"commitHash"`
+	DefaultOpenFilePath *string       `json:"defaultOpenFilePath"`
 }
 
 type FileEffect struct {
