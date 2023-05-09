@@ -66,9 +66,8 @@ func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
 }
 
 func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
-	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutation
-	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutation
+	filePath := n.filePath   // copy to avoid mutation effect afterwards
+	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeFile
 	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
@@ -83,9 +82,8 @@ func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
 }
 
 func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
-	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath   //copy to avoid effect from fileProcessNode's mutation
-	isUpdated := n.isUpdated //copy to avoid effect from fileProcessNode's mutation
+	filePath := n.filePath   // copy to avoid mutation effect afterwards
+	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeDirectory
 	split := strings.Split(filePath, "/")
 	offset := len(split) - 1
@@ -99,20 +97,20 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 	}
 }
 
+// TODO: can this be deleted?? check and delete if possible
 func (n *fileProcessorNode) Clone() fileTreeNode {
-	copied := *n // copy to avoid effect from fileProcessNode's mutation
+	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
 
 func (n *directoryProcessorNode) Clone() fileTreeNode {
-	copied := *n // copy to avoid effect from fileProcessNode's mutation
+	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
 
 func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
-	//TODO: test if model.FileNode is not affected by fileTreeNode mutation after model.FileNode is instantiated	return nil
-	filePath := n.filePath //copy to avoid effect from fileProcessNode's mutation
-	content := n.content   //copy to avoid effect from fileProcessNode's mutation
+	filePath := n.filePath // copy to avoid mutation effect afterwards
+	content := n.content   // copy to avoid mutation effect afterwards
 	isFullContent := true
 	split := strings.Split(filePath, "/")
 

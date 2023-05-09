@@ -62,17 +62,17 @@ func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) e
 func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 	var currentDirectory *string
 	if t.currentDirectory != "" {
-		copied := t.currentDirectory // copy to avoid receiver's mutation effect afterwards
+		copied := t.currentDirectory // copy to avoid mutation effect afterwards
 		currentDirectory = &copied
 	}
 
 	var terminalName *string
 	if t.terminalName != "" {
-		copied := t.terminalName // copy to avoid receiver's mutation effect afterwards
+		copied := t.terminalName // copy to avoid mutation effect afterwards
 		terminalName = &copied
 	}
 
-	// clone to avoid receiver's mutation effect afterwards
+	// clone to avoid mutation effect afterwards
 	var nodes []*model.TerminalNode
 	for _, e := range t.elements {
 		nodes = append(nodes, &model.TerminalNode{
@@ -88,15 +88,15 @@ func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 }
 
 func (t *TerminalProcessor) Clone() *TerminalProcessor {
-	// clone to avoid receiver's mutation effect afterwards
+	// clone to avoid mutation effect afterwards
 	clonedElements := make([]terminalElementProcessor, 0)
 	for _, e := range t.elements {
 		clonedElements = append(clonedElements, e) //element is effectively immutable, so fine to use elsewhere
 	}
 
 	return &TerminalProcessor{
-		terminalName:     t.terminalName,     // copy to avoid receiver's mutation effect afterwards
-		currentDirectory: t.currentDirectory, // copy to avoid receiver's mutation effect afterwards
+		terminalName:     t.terminalName,
+		currentDirectory: t.currentDirectory,
 		elements:         clonedElements,
 	}
 }
