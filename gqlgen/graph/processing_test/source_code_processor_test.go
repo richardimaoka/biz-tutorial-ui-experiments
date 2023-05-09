@@ -329,30 +329,33 @@ func Test_SourceCodeProcessor(t *testing.T) {
 // 	})
 // }
 
-// func TestSourceCode_Mutation(t *testing.T) {
-// 	sourceCode := NewSourceCodeProcessor()
-// 	sourceCode.AddFile(FileAdd{FilePath: "hello/world/japan.txt"})
-// 	sourceCode.AddFile(FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-// 	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+func TestSourceCode_Mutation(t *testing.T) {
+	sourceCode := processing.NewSourceCodeProcessor()
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
-// 	// once materialized GraphQL model...
-// 	materialized := sourceCode.ToGraphQLModel()
-// 	internal.CompareAfterMarshal(t, "testdata/source_code/materialized.json", materialized)
+	// once GraphQL model is materialized...
+	materialized := sourceCode.ToGraphQLModel()
+	if *update { // if `-update` flag is passed from command line, update the golden file
+		internal.WriteGoldenFile(t, "testdata/source_code/mutation1-1.json", materialized)
+	}
+	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)
 
-// 	// ...mutation afterwards should have no effect
-// 	sourceCode.step = "mutated step"
-// 	sourceCode.defaultOpenFilePath = "mutated/file/path"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).content = "mutated content"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).filePath = "mutated/path/to/file"
-// 	sourceCode.fileMap["hello/world/japan.txt"].(*fileProcessorNode).isUpdated = true
-// 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).filePath = "mutated/path/to/dir"
-// 	sourceCode.fileMap["goodmorning/hello/world"].(*directoryProcessorNode).isUpdated = false
+	// ...mutation to source code...
+	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	sourceCode.DeleteFile(processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
-// 	// materialized GraphQL model should not be affected
-// 	internal.CompareAfterMarshal(t,
-// 		"testdata/source_code/materialized.json",
-// 		materialized) // by changing this to sourceCode.ToGraphQLModel(), you can confirm mutation actually updated sourceCode
-// }
+	// ...should of course have effect on re-materialized GraphQL model
+	if *update { // if `-update` flag is passed from command line, update the golden file
+		internal.WriteGoldenFile(t, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
+	}
+	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
+
+	// ...but should have no effect on materialized GraphQL model
+	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)
+}
 
 // func TestSourceCode_Clone(t *testing.T) {
 // 	sourceCode := NewSourceCodeProcessor()
