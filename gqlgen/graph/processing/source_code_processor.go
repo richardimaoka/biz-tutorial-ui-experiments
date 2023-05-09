@@ -14,14 +14,7 @@ type SourceCodeProcessor struct {
 	fileMap             map[string]fileTreeNode
 }
 
-func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
-	// 1. check if filePath is non-existent
-	exactMatchNode, exists := p.fileMap[filePath]
-	if exists {
-		return fmt.Errorf("path = %s already exists as a %s", exactMatchNode, exactMatchNode.NodeType())
-	}
-
-	// 2. check if no intermediate parent is a file node
+func (p *SourceCodeProcessor) confirmNoParentIsFile(filePath string) error {
 	split := strings.Split(filePath, "/")
 	parentPath := []string{}
 	for i := 0; i < len(split)-1; /*up to direct parent of filePath*/ i++ {
@@ -30,6 +23,21 @@ func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
 		if exists && parentNode.NodeType() == fileType {
 			return fmt.Errorf("parent path = %s already exists as a file", parentPath)
 		}
+	}
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
+	// 1. check if filePath is non-existent
+	exactMatchNode, exists := p.fileMap[filePath]
+	if exists {
+		return fmt.Errorf("path = %s already exists as a %s", exactMatchNode, exactMatchNode.NodeType())
+	}
+
+	// 2. check if no intermediate parent is a file node
+	if err := p.confirmNoParentIsFile(filePath); err != nil {
+		return err
 	}
 
 	return nil
@@ -213,6 +221,18 @@ func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
 
 	p.setAllIsUpdateFalse()
 	p.deleteFileMutation(op)
+	return nil
+}
+
+func (p *SourceCodeProcessor) UpsertFile(op FileUpsert) error {
+	fileAddOp := FileAdd{FilePath: op.FilePath, Content: op.Content, IsFullContent: op.IsFullContent}
+	if errAdd := p.AddFile(fileAddOp); errAdd != nil {
+		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
+		if errUpd := p.UpdateFile(fileUpdateOp); errUpd != nil {
+			return fmt.Errorf("cannot upsert file %s, %s, %s", op.FilePath, errAdd, errUpd)
+		}
+	}
+
 	return nil
 }
 

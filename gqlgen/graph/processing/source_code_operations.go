@@ -32,6 +32,12 @@ type FileDelete struct {
 	FilePath string `json:"filePath"`
 }
 
+type FileUpsert struct {
+	FilePath      string `json:"filePath"`
+	Content       string `json:"content"`
+	IsFullContent bool   `json:"isFullContent"`
+}
+
 func (o DirectoryAdd) IsFileSystemOperation()    {}
 func (o DirectoryDelete) IsFileSystemOperation() {}
 func (o FileAdd) IsFileSystemOperation()         {}
