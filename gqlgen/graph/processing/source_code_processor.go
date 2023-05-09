@@ -265,10 +265,10 @@ func (p *SourceCodeProcessor) SetStep(step string) {
 }
 
 func (p *SourceCodeProcessor) Transition(nextStep string, effect SourceCodeEffect) error {
-	p.step = nextStep
 	if err := p.ApplyDiff(effect.Diff); err != nil {
 		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
 	}
+	p.step = nextStep
 	return nil
 }
 
