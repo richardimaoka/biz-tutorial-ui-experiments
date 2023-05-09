@@ -7,7 +7,7 @@
       "name": "hello",
       "filePath": "hello",
       "offset": 0,
-      "isUpdated": false
+      "isUpdated": true
     },
     {
       "nodeType": "DIRECTORY",

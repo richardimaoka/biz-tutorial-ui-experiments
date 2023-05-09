@@ -1,0 +1,37 @@
+{
+  "step": "",
+  "defaultOpenFile": null,
+  "fileTree": [
+    {
+      "nodeType": "DIRECTORY",
+      "name": "hello",
+      "filePath": "hello",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "world",
+      "filePath": "hello/world",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "america.txt",
+      "filePath": "hello/world/america.txt",
+      "offset": 2,
+      "isUpdated": false
+    }
+  ],
+  "fileContents": {
+    "hello/world/america.txt": {
+      "filePath": "hello/world/america.txt",
+      "fileName": "america.txt",
+      "content": "",
+      "isFullContent": true,
+      "language": null,
+      "highlight": null
+    }
+  }
+}

@@ -4,9 +4,16 @@
   "fileTree": [
     {
       "nodeType": "DIRECTORY",
-      "name": "aloha",
-      "filePath": "aloha",
+      "name": "goodmorning",
+      "filePath": "goodmorning",
       "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "hello",
+      "filePath": "goodmorning/hello",
+      "offset": 1,
       "isUpdated": true
     },
     {
@@ -21,6 +28,13 @@
       "name": "world",
       "filePath": "hello/world",
       "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "japan",
+      "filePath": "hello/world/japan",
+      "offset": 2,
       "isUpdated": false
     }
   ],

@@ -10,8 +10,8 @@
       "request": "launch",
       "mode": "test",
       "trace": "verbose",
-      "program": "${workspaceFolder}/graph/gitmodel_test",
-      "args": ["-test.run", "TestStepFromGit"]
+      "program": "${workspaceFolder}/graph/processing_test",
+      "args": ["-test.run", "Test_SourceCodeProcessor/error_add_dir_duplicate1"]
     },
     {
       "name": "Launch file",

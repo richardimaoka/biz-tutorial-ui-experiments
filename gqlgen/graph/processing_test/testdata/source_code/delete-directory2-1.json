@@ -7,13 +7,6 @@
       "name": "hello",
       "filePath": "hello",
       "offset": 0,
-      "isUpdated": false
-    },
-    {
-      "nodeType": "DIRECTORY",
-      "name": "world",
-      "filePath": "hello/world",
-      "offset": 1,
       "isUpdated": true
     }
   ],

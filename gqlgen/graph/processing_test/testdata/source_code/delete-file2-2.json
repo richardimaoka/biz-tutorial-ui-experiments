@@ -14,7 +14,7 @@
       "name": "world",
       "filePath": "hello/world",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
     }
   ],
   "fileContents": {}

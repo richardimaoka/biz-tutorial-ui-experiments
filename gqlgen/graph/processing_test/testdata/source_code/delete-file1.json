@@ -1,0 +1,23 @@
+{
+  "step": "",
+  "defaultOpenFile": null,
+  "fileTree": [
+    {
+      "nodeType": "FILE",
+      "name": "hello.txt",
+      "filePath": "hello.txt",
+      "offset": 0,
+      "isUpdated": true
+    }
+  ],
+  "fileContents": {
+    "hello.txt": {
+      "filePath": "hello.txt",
+      "fileName": "hello.txt",
+      "content": "",
+      "isFullContent": true,
+      "language": null,
+      "highlight": null
+    }
+  }
+}

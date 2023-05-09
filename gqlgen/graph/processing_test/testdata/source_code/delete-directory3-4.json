@@ -4,6 +4,13 @@
   "fileTree": [
     {
       "nodeType": "DIRECTORY",
+      "name": "goodmorning",
+      "filePath": "goodmorning",
+      "offset": 0,
+      "isUpdated": true
+    },
+    {
+      "nodeType": "DIRECTORY",
       "name": "hello",
       "filePath": "hello",
       "offset": 0,
@@ -14,7 +21,14 @@
       "name": "world",
       "filePath": "hello/world",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "japan",
+      "filePath": "hello/world/japan",
+      "offset": 2,
+      "isUpdated": false
     }
   ],
   "fileContents": {}

@@ -37,17 +37,17 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		resultSuccess := err == nil
 		if resultSuccess != expectSuccess { //if result is not expected
 			if expectSuccess {
-				t.Fatalf("operation[%d] success is expected, but result is failure\noperation: %+v\nerror: %s\n", index, op, err)
+				t.Fatalf("operation[%d] = %+v success is expected, but result is failure\nerror: %s\n", index, op, err)
 			} else {
-				t.Fatalf("operation[%d] failure is expected, but result is success\noperation: %+v\n", index, op)
+				t.Fatalf("operation[%d] = %+v failure is expected, but result is success\n", index, op)
 			}
 		}
 	}
 
 	// accept testEntries, and run tests on them
-	runEntries := func(t *testing.T, testCases []TestCase) {
+	runTestCases := func(t *testing.T, testCases []TestCase) {
+		sourceCode := processing.NewSourceCodeProcessor()
 		for i, c := range testCases {
-			sourceCode := processing.NewSourceCodeProcessor()
 			err := applyOperation(t, sourceCode, c.Operation)
 			checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
@@ -60,190 +60,196 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		}
 	}
 
-	t.Run("add_directory", func(t *testing.T) {
-		runEntries(t, []TestCase{
+	t.Run("add_directory1", func(t *testing.T) {
+		runTestCases(t, []TestCase{
 			{true, "testdata/source_code/add-directory1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
 		})
 	})
 
 	t.Run("add_dir_nested", func(t *testing.T) {
-		runEntries(t, []TestCase{
+		runTestCases(t, []TestCase{
 			{true, "testdata/source_code/add-dir-nested1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
 			{true, "testdata/source_code/add-dir-nested1-2.json", processing.DirectoryAdd{FilePath: "hello/world"}},
 		})
 	})
 
 	t.Run("add_dir_nested2", func(t *testing.T) {
-		runEntries(t, []TestCase{
+		runTestCases(t, []TestCase{
 			{true, "testdata/source_code/add-directory3.json", processing.DirectoryAdd{FilePath: "hello/world"}},
 		})
 	})
 
 	t.Run("add_dir_multiple", func(t *testing.T) {
-		runEntries(t, []TestCase{
+		runTestCases(t, []TestCase{
 			{true, "testdata/source_code/add_dir_multiple1-1.json", processing.DirectoryAdd{FilePath: "hello/world"}},
 			{true, "testdata/source_code/add_dir_multiple1-2.json", processing.DirectoryAdd{FilePath: "aloha"}},
 		})
 	})
 
-	// 			{name: "add_dir_multiple",
-	// 				operations: []Operation{
-	// 					{true, processing.DirectoryAdd{FilePath: "hello/world"}},
-	// 					{true, processing.DirectoryAdd{FilePath: "aloha"}},
-	// 				}, resultFile: "testdata/source_code/add-directory4.json"},
+	t.Run("add_dir_multiple", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-directory4-1.json", processing.DirectoryAdd{FilePath: "hello/world"}},
+			{true, "testdata/source_code/add-directory4-2.json", processing.DirectoryAdd{FilePath: "aloha"}},
+		})
+	})
 
-	// 			{name: "error_add_dir_empty",
-	// 				operations: []Operation{
-	// 					{false, processing.DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
-	// 				}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+	t.Run("", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{false, "testdata/source_code/new-source-code.json", processing.DirectoryAdd{FilePath: ""}}, // "" is a wrong file path
 
-	// 			{name: "error_add_dir_duplicate1",
-	// 				operations: []Operation{
-	// 					{true, processing.DirectoryAdd{FilePath: "hello"}},
-	// 					{false, processing.DirectoryAdd{FilePath: "hello"}},
-	// 				}, resultFile: "testdata/source_code/add-directory1.json"},
+		})
+	})
 
-	// 			{name: "add_dir_nested2",
-	// 				operations: []Operation{
-	// 					{true, processing.DirectoryAdd{FilePath: "hello/world"}},
-	// 				}, resultFile: "testdata/source_code/add-directory3.json"},
-	// 		})
-	// })
+	t.Run("error_add_dir_duplicate1", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-directory1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+			{false, "testdata/source_code/add-directory1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+		})
+	})
 
-	// t.Run("add_file", func(t *testing.T) {
-	// 	runEntries(t, []Entry{
-	// 		{name: "add_file_single",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
-	// 			}, resultFile: "testdata/source_code/add-file1.json"},
+	t.Run("add_dir_nested2", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-directory3.json", processing.DirectoryAdd{FilePath: "hello/world"}},
+		})
+	})
 
-	// 		{name: "add_file_nested",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
-	// 			}, resultFile: "testdata/source_code/add-file2.json"},
+	t.Run("add_file_single", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file1.json", processing.FileAdd{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}},
+		})
+	})
 
-	// 		{name: "add_file_nested2",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 			}, resultFile: "testdata/source_code/add-file3.json"},
+	t.Run("add_file_nested1", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file2.json", processing.FileAdd{FilePath: "hello/world/new.txt", Content: "hello new world", IsFullContent: true}},
+		})
+	})
 
-	// 		{name: "add_file_next_to",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 				{true, FileAdd{FilePath: "hello/world/america.txt"}},
-	// 			}, resultFile: "testdata/source_code/add-file4.json"},
+	t.Run("add_file_nested2", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file3.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+		})
+	})
 
-	// 		{name: "error_add_file_duplicate1",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
-	// 				{false, FileAdd{FilePath: "hello.txt"}},
-	// 			}, resultFile: "testdata/source_code/add-file1.json"},
+	t.Run("add_file_next_to", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file4-1.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+			{true, "testdata/source_code/add-file4-2.json", processing.FileAdd{FilePath: "hello/world/america.txt"}},
+		})
+	})
 
-	// 		{name: "error_add_file_duplicate2",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world.txt"}},
-	// 				{false, FileAdd{FilePath: "hello/world.txt"}},
-	// 				{false, FileAdd{FilePath: "hello"}},
-	// 			}, resultFile: "testdata/source_code/add-file5.json"},
-	// 	})
-	// })
+	t.Run("error_add_file_duplicate1", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file1.json", processing.FileAdd{FilePath: "hello.txt", Content: "hello new world"}},
+			{false, "testdata/source_code/add-file1.json", processing.FileAdd{FilePath: "hello.txt"}},
+		})
+	})
 
-	// t.Run("delete_directory", func(t *testing.T) {
-	// 	runEntries(t, []Entry{
-	// 		{name: "delete_dir_single",
-	// 			operations: []Operation{
-	// 				{true, processing.DirectoryAdd{FilePath: "hello"}},
-	// 				{true, DirectoryDelete{FilePath: "hello"}},
-	// 			}, resultFile: "testdata/source_code/new-source-code.json"}, // json should be same as initial state
+	t.Run("error_add_file_duplicate2", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/add-file5-1.json", processing.FileAdd{FilePath: "hello/world.txt"}},
+			{false, "testdata/source_code/add-file5-1.json", processing.FileAdd{FilePath: "hello/world.txt"}},
+			{false, "testdata/source_code/add-file5-1.json", processing.FileAdd{FilePath: "hello"}},
+		})
+	})
 
-	// 		{name: "delete_dir_nested_leaf",
-	// 			operations: []Operation{
-	// 				{true, processing.DirectoryAdd{FilePath: "hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "hello/world"}},
-	// 				{true, DirectoryDelete{FilePath: "hello/world"}},
-	// 			}, resultFile: "testdata/source_code/delete-directory1.json"},
+	t.Run("delete_dir_single", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+			{true, "testdata/source_code/new-source-code.json", processing.DirectoryDelete{FilePath: "hello"}},
+		})
+	})
 
-	// 		{name: "delete_dir_nested_middle",
-	// 			operations: []Operation{
-	// 				{true, processing.DirectoryAdd{FilePath: "hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "hello/world"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "hello/world/japan"}},
-	// 				// below "goodmorning.*" dirs are not affected
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-	// 				{true, DirectoryDelete{FilePath: "hello/world"}},
-	// 			}, resultFile: "testdata/source_code/delete-directory2.json"},
+	t.Run("delete_dir_nested_leaf", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory1-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+			{true, "testdata/source_code/delete-directory1-2.json", processing.DirectoryAdd{FilePath: "hello/world"}},
+			{true, "testdata/source_code/delete-directory1-3.json", processing.DirectoryDelete{FilePath: "hello/world"}},
+		})
+	})
 
-	// 		{name: "delete_dir_nested_parent",
-	// 			operations: []Operation{
-	// 				{true, processing.DirectoryAdd{FilePath: "hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "hello/world"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "hello/world/japan"}},
-	// 				// below "goodmorning.*" dirs are note affected
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-	// 				{true, DirectoryDelete{FilePath: "hello"}},
-	// 			}, resultFile: "testdata/source_code/delete-directory3.json"},
+	t.Run("delete_dir_nested_middle", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory2-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+			{true, "testdata/source_code/delete-directory2-2.json", processing.DirectoryAdd{FilePath: "hello/world"}},
+			{true, "testdata/source_code/delete-directory2-3.json", processing.DirectoryAdd{FilePath: "hello/world/japan"}},
+			// below "goodmorning.*" dirs are not affected
+			{true, "testdata/source_code/delete-directory2-4.json", processing.DirectoryAdd{FilePath: "goodmorning"}},
+			{true, "testdata/source_code/delete-directory2-5.json", processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
+			{true, "testdata/source_code/delete-directory2-6.json", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+			{true, "testdata/source_code/delete-directory2-7.json", processing.DirectoryDelete{FilePath: "hello/world"}},
+		})
+	})
 
-	// 		{name: "error_delete_dir_non_existent",
-	// 			operations: []Operation{
-	// 				// below "goodmorning.*" dirs are note affected
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-	// 				{false, DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
-	// 				{false, DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
-	// 			}, resultFile: "testdata/source_code/delete-directory4.json"},
+	t.Run("delete_dir_nested_parent", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory3-1.json", processing.DirectoryAdd{FilePath: "hello"}},
+			{true, "testdata/source_code/delete-directory3-2.json", processing.DirectoryAdd{FilePath: "hello/world"}},
+			{true, "testdata/source_code/delete-directory3-3.json", processing.DirectoryAdd{FilePath: "hello/world/japan"}},
+			// below "goodmorning.*" dirs are note affected
+			{true, "testdata/source_code/delete-directory3-4.json", processing.DirectoryAdd{FilePath: "goodmorning"}},
+			{true, "testdata/source_code/delete-directory3-5.json", processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
+			{true, "testdata/source_code/delete-directory3-6.json", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+			{true, "testdata/source_code/delete-directory3-7.json", processing.DirectoryDelete{FilePath: "hello"}},
+		})
+	})
 
-	// 		{name: "error_delete_dir_twice",
-	// 			operations: []Operation{
-	// 				// below "goodmorning.*" dirs are note affected
-	// 				{true, processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
-	// 				{true, DirectoryDelete{FilePath: "goodmorning/hello/world"}},
-	// 				{false, DirectoryDelete{FilePath: "goodmorning/hello/world"}},
-	// 			}, resultFile: "testdata/source_code/delete-directory5.json"},
-	// 	})
-	// })
+	t.Run("error_delete_dir_non_existent", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory4-1.json", processing.DirectoryAdd{FilePath: "goodmorning"}},
+			{true, "testdata/source_code/delete-directory4-2.json", processing.DirectoryAdd{FilePath: "goodmorning/hello"}},
+			{true, "testdata/source_code/delete-directory4-3.json", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+			{false, "testdata/source_code/delete-directory4-3.json", processing.DirectoryDelete{FilePath: "goodmorning/hello/universe"}},
+			{false, "testdata/source_code/delete-directory4-3.json", processing.DirectoryDelete{FilePath: "goodmorning/vonjour/world"}},
+		})
+	})
 
-	// t.Run("delete_file", func(t *testing.T) {
-	// 	runEntries(t, []Entry{
-	// 		{name: "delete_file_single",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello.txt"}},
-	// 				{true, FileDelete{FilePath: "hello.txt"}},
-	// 			}, resultFile: "testdata/source_code/new-source-code.json"},
+	t.Run("error_delete_dir_twice", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-directory5-1.json", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"}},
+			{true, "testdata/source_code/delete-directory5-2.json", processing.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+			{false, "testdata/source_code/delete-directory5-2.json", processing.DirectoryDelete{FilePath: "goodmorning/hello/world"}},
+		})
+	})
 
-	// 		{name: "delete_file_nested",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 				{true, FileDelete{FilePath: "hello/world/japan.txt"}},
-	// 			}, resultFile: "testdata/source_code/delete-file1.json"},
+	t.Run("delete_file_single", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-file1.json", processing.FileAdd{FilePath: "hello.txt"}},
+			{true, "testdata/source_code/new-source-code.json", processing.FileDelete{FilePath: "hello.txt"}},
+		})
+	})
 
-	// 		{name: "delete_file_next_to",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 				{true, FileAdd{FilePath: "hello/world/america.txt"}},
-	// 				{true, FileDelete{FilePath: "hello/world/japan.txt"}},
-	// 			}, resultFile: "testdata/source_code/delete-file2.json"},
+	t.Run("delete_file_nested", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-file2-1.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+			{true, "testdata/source_code/delete-file2-2.json", processing.FileDelete{FilePath: "hello/world/japan.txt"}},
+		})
+	})
 
-	// 		{name: "error_delete_file_non_existent",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 				{true, FileAdd{FilePath: "hello/world/america.txt"}},
-	// 				{false, FileDelete{FilePath: "hello/world/france.txt"}},
-	// 			}, resultFile: "testdata/source_code/delete-file3.json"},
+	t.Run("delete_file_next_to", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-file3-1.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+			{true, "testdata/source_code/delete-file3-2.json", processing.FileAdd{FilePath: "hello/world/america.txt"}},
+			{true, "testdata/source_code/delete-file3-3.json", processing.FileDelete{FilePath: "hello/world/japan.txt"}},
+		})
+	})
 
-	// 		{name: "error_delete_file_twice",
-	// 			operations: []Operation{
-	// 				{true, FileAdd{FilePath: "hello/world/japan.txt"}},
-	// 				{true, FileAdd{FilePath: "hello/world/america.txt"}},
-	// 				{true, FileDelete{FilePath: "hello/world/japan.txt"}},
-	// 				{false, FileDelete{FilePath: "hello/world/japan.txt"}},
-	// 			}, resultFile: "testdata/source_code/delete-file2.json"},
-	// 	})
-	// })
+	t.Run("error_delete_file_non_existent", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-file4-1.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+			{true, "testdata/source_code/delete-file4-2.json", processing.FileAdd{FilePath: "hello/world/america.txt"}},
+			{false, "testdata/source_code/delete-file4-3.json", processing.FileDelete{FilePath: "hello/world/france.txt"}},
+		})
+	})
+
+	t.Run("error_delete_file_twice", func(t *testing.T) {
+		runTestCases(t, []TestCase{
+			{true, "testdata/source_code/delete-file5-1.json", processing.FileAdd{FilePath: "hello/world/japan.txt"}},
+			{true, "testdata/source_code/delete-file5-2.json", processing.FileAdd{FilePath: "hello/world/america.txt"}},
+			{true, "testdata/source_code/delete-file5-3.json", processing.FileDelete{FilePath: "hello/world/japan.txt"}},
+			{false, "testdata/source_code/delete-file5-3.json", processing.FileDelete{FilePath: "hello/world/japan.txt"}},
+		})
+	})
 }
 
 // func TestSourceCode_Diff(t *testing.T) {
