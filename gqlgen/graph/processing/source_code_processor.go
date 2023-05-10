@@ -2,6 +2,7 @@ package processing
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
 
@@ -144,16 +145,19 @@ func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
 func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 	// does the order of operations have any implication??
 	for _, op := range diff.DirectoriesDeleted {
+		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 		if err := p.DeleteDirectory(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.DirectoriesAdded {
+		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 		if err := p.AddDirectory(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.FilesDeleted {
+		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 		if err := p.DeleteFile(op); err != nil {
 			return err
 		}
@@ -163,11 +167,14 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 		// 	return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 		// }
 		// p.addFileMutation(op)
+
+		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 		if err := p.AddFile(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.FilesUpdated {
+		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 		if err := p.UpdateFile(op); err != nil {
 			return err
 		}
@@ -254,11 +261,50 @@ func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
+	//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
 	if err := cloned.applyDiifMutation(diff); err != nil {
 		return fmt.Errorf("cannot apply diff, %s", err)
 	}
 
 	p.step = cloned.step
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
+	//p.step = nextStep
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) ApplyOps( /*nextStep string,*/ operations []FileSystemOperation) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+
+	for _, op := range operations {
+		var err error
+		switch v := op.(type) {
+		case DirectoryAdd:
+			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
+			err = cloned.AddDirectory(v)
+		case DirectoryDelete:
+			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
+			err = cloned.DeleteDirectory(v)
+		case FileAdd:
+			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
+			err = cloned.AddFile(v)
+		case FileUpdate:
+			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
+			err = cloned.UpdateFile(v)
+		case FileDelete:
+			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
+			err = cloned.DeleteFile(v)
+		default:
+			err = fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
+		}
+
+		if err != nil {
+			return fmt.Errorf("ApplyOps failed, %s", err)
+		}
+	}
+
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath
 	p.fileMap = cloned.fileMap
 	//p.step = nextStep
