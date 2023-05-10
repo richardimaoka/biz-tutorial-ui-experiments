@@ -146,19 +146,19 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 	// does the order of operations have any implication??
 	for _, op := range diff.DirectoriesDeleted {
 		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-		if err := p.DeleteDirectory(op); err != nil {
+		if err := p.deleteDirectory(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.DirectoriesAdded {
 		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-		if err := p.AddDirectory(op); err != nil {
+		if err := p.addDirectory(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.FilesDeleted {
 		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-		if err := p.DeleteFile(op); err != nil {
+		if err := p.deleteFile(op); err != nil {
 			return err
 		}
 	}
@@ -169,13 +169,13 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 		// p.addFileMutation(op)
 
 		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-		if err := p.AddFile(op); err != nil {
+		if err := p.addFile(op); err != nil {
 			return err
 		}
 	}
 	for _, op := range diff.FilesUpdated {
 		//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-		if err := p.UpdateFile(op); err != nil {
+		if err := p.updateFile(op); err != nil {
 			return err
 		}
 	}
@@ -195,7 +195,7 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 	}
 }
 
-func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
+func (p *SourceCodeProcessor) addDirectory(op DirectoryAdd) error {
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
 	}
@@ -205,7 +205,7 @@ func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) AddFile( /*nextStep string,*/ op FileAdd) error {
+func (p *SourceCodeProcessor) addFile( /*nextStep string,*/ op FileAdd) error {
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 	}
@@ -216,7 +216,7 @@ func (p *SourceCodeProcessor) AddFile( /*nextStep string,*/ op FileAdd) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) UpdateFile(op FileUpdate) error {
+func (p *SourceCodeProcessor) updateFile(op FileUpdate) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
@@ -226,7 +226,7 @@ func (p *SourceCodeProcessor) UpdateFile(op FileUpdate) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
+func (p *SourceCodeProcessor) deleteFile(op FileDelete) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
@@ -238,9 +238,9 @@ func (p *SourceCodeProcessor) DeleteFile(op FileDelete) error {
 
 func (p *SourceCodeProcessor) UpsertFile(op FileUpsert) error {
 	fileAddOp := FileAdd{FilePath: op.FilePath, Content: op.Content, IsFullContent: op.IsFullContent}
-	if errAdd := p.AddFile(fileAddOp); errAdd != nil {
+	if errAdd := p.addFile(fileAddOp); errAdd != nil {
 		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
-		if errUpd := p.UpdateFile(fileUpdateOp); errUpd != nil {
+		if errUpd := p.updateFile(fileUpdateOp); errUpd != nil {
 			return fmt.Errorf("cannot upsert file %s, %s, %s", op.FilePath, errAdd, errUpd)
 		}
 	}
@@ -248,7 +248,7 @@ func (p *SourceCodeProcessor) UpsertFile(op FileUpsert) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
+func (p *SourceCodeProcessor) deleteDirectory(op DirectoryDelete) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
@@ -283,19 +283,19 @@ func (p *SourceCodeProcessor) ApplyOps( /*nextStep string,*/ operations []FileSy
 		switch v := op.(type) {
 		case DirectoryAdd:
 			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-			err = cloned.AddDirectory(v)
+			err = cloned.addDirectory(v)
 		case DirectoryDelete:
 			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-			err = cloned.DeleteDirectory(v)
+			err = cloned.deleteDirectory(v)
 		case FileAdd:
 			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-			err = cloned.AddFile(v)
+			err = cloned.addFile(v)
 		case FileUpdate:
 			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-			err = cloned.UpdateFile(v)
+			err = cloned.updateFile(v)
 		case FileDelete:
 			//TODO: setAllIsUpdateFalse() is called inside, which shouldn't be
-			err = cloned.DeleteFile(v)
+			err = cloned.deleteFile(v)
 		default:
 			err = fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
 		}
@@ -303,6 +303,37 @@ func (p *SourceCodeProcessor) ApplyOps( /*nextStep string,*/ operations []FileSy
 		if err != nil {
 			return fmt.Errorf("ApplyOps failed, %s", err)
 		}
+	}
+
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
+	//p.step = nextStep
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) ApplyOperation( /*nextStep string,*/ operation FileSystemOperation) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+
+	var err error
+	switch v := operation.(type) {
+	case DirectoryAdd:
+		err = cloned.addDirectory(v)
+	case DirectoryDelete:
+		err = cloned.deleteDirectory(v)
+	case FileAdd:
+		err = cloned.addFile(v)
+	case FileUpdate:
+		err = cloned.updateFile(v)
+	case FileDelete:
+		err = cloned.deleteFile(v)
+	default:
+		err = fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
+	}
+
+	if err != nil {
+		return fmt.Errorf("ApplyOperation failed, %s", err)
 	}
 
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath

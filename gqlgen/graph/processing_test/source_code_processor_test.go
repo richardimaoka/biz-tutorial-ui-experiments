@@ -1,7 +1,6 @@
 package processing_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
@@ -13,24 +12,6 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		ExpectSuccess bool
 		ExpectedFile  string
 		Operation     processing.FileSystemOperation
-	}
-
-	applyOperation := func(t *testing.T, processor *processing.SourceCodeProcessor, op processing.FileSystemOperation) error {
-		switch v := op.(type) {
-		case processing.DirectoryAdd:
-			return processor.AddDirectory(v)
-		case processing.DirectoryDelete:
-			return processor.DeleteDirectory(v)
-		case processing.FileAdd:
-			return processor.AddFile(v)
-		case processing.FileUpdate:
-			return processor.UpdateFile(v)
-		case processing.FileDelete:
-			return processor.DeleteFile(v)
-		default:
-			t.Fatalf("operation faild:\nwrong operation type = %v", reflect.TypeOf(v))
-			return nil
-		}
 	}
 
 	checkResult := func(t *testing.T, index int, op processing.FileSystemOperation, expectSuccess bool, err error) {
@@ -48,7 +29,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			sourceCode := processing.NewSourceCodeProcessor()
 			for i, c := range testCases {
-				err := applyOperation(t, sourceCode, c.Operation)
+				err := sourceCode.ApplyOperation(c.Operation)
 				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
 				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
@@ -249,18 +230,18 @@ func TestSourceCode_Diff(t *testing.T) {
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the sourceCode should have no effect on the GraphQL model
 func TestSourceCode_Mutation1(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.ApplyOperation(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-1.json", materialized)
 
 	// ...mutation to source code...
-	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
-	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
-	sourceCode.DeleteFile(processing.FileDelete{FilePath: "hello/world/japan.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	sourceCode.ApplyOperation(processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on re-materialized GraphQL model
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
@@ -273,9 +254,9 @@ func TestSourceCode_Mutation1(t *testing.T) {
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the GraphQL model should have no effect on the sourceCode
 func TestSourceCode_Mutation2(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.ApplyOperation(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
@@ -296,18 +277,18 @@ func TestSourceCode_Mutation2(t *testing.T) {
 
 func TestSourceCode_Clone(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	sourceCode.AddFile(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	sourceCode.AddDirectory(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	sourceCode.ApplyOperation(processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
 
 	// ... mutation to source code
-	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
-	sourceCode.AddFile(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
-	sourceCode.DeleteFile(processing.FileDelete{FilePath: "hello/world/japan.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	sourceCode.ApplyOperation(processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	sourceCode.ApplyOperation(processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on terminal itself
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-2.json", sourceCode.ToGraphQLModel())
