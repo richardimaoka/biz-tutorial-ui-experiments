@@ -159,6 +159,10 @@ func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 		}
 	}
 	for _, op := range diff.FilesAdded {
+		// if err := p.canAdd(op.FilePath); err != nil {
+		// 	return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
+		// }
+		// p.addFileMutation(op)
 		if err := p.AddFile(op); err != nil {
 			return err
 		}
@@ -194,13 +198,14 @@ func (p *SourceCodeProcessor) AddDirectory(op DirectoryAdd) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) AddFile(op FileAdd) error {
+func (p *SourceCodeProcessor) AddFile( /*nextStep string,*/ op FileAdd) error {
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
 	}
 
 	p.setAllIsUpdateFalse()
 	p.addFileMutation(op)
+	//p.step = nextStep
 	return nil
 }
 
@@ -246,7 +251,7 @@ func (p *SourceCodeProcessor) DeleteDirectory(op DirectoryDelete) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
+func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 	if err := cloned.applyDiifMutation(diff); err != nil {
@@ -256,6 +261,7 @@ func (p *SourceCodeProcessor) ApplyDiff(diff Diff) error {
 	p.step = cloned.step
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath
 	p.fileMap = cloned.fileMap
+	//p.step = nextStep
 
 	return nil
 }
