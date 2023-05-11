@@ -25,7 +25,7 @@ func readJsonArray(filename string) ([]JsonObj, error) {
 	return unmarshalled, nil
 }
 
-func readActionFromFiles(actionDir, actionPrefix string) ([]Action, error) {
+func ReadActionFromFiles(actionDir, actionPrefix string) ([]Action, error) {
 	var actions []Action
 
 	actionFiles, err := FilesInDir(actionDir, actionPrefix)
@@ -120,7 +120,7 @@ func EnrichActionFiles(opsListFile, actionDir, targetDir, actionPrefix string) e
 	errorPreceding := "Error in EnrichActionFiles"
 
 	// 1. load actions into memory
-	actions, err := readActionFromFiles(actionDir, actionPrefix)
+	actions, err := ReadActionFromFiles(actionDir, actionPrefix)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
@@ -176,7 +176,7 @@ func ApplyActions(actionDir, actionPrefix, targetDir, targetPrefix string) error
 	errorPreceding := "Error in ApplyActions"
 
 	// 1. load actions into memory
-	actions, err := readActionFromFiles(actionDir, actionPrefix)
+	actions, err := ReadActionFromFiles(actionDir, actionPrefix)
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}

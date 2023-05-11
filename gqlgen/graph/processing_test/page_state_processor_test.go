@@ -5,15 +5,16 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
 func Test_PageState(t *testing.T) {
-	actions, err := readActionFromFiles("testdata/page_state/enriched", "action")
+	actions, err := processing.ReadActionFromFiles("testdata/page_state/enriched", "action")
 	if err != nil {
 		t.Fatalf("reading actions failed, %s", err)
 	}
 
-	pageState, err := InitPageStateProcessor(actions[0])
+	pageState, err := processing.InitPageStateProcessor(actions[0])
 	if err != nil {
 		t.Fatalf("init page state failed, %s", err)
 	}
