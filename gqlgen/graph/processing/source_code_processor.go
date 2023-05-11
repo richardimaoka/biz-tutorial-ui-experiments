@@ -2,11 +2,13 @@ package processing
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 	"sort"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -349,10 +351,44 @@ func (p *SourceCodeProcessor) Transition(nextStep string, effect SourceCodeEffec
 }
 
 func (p *SourceCodeProcessor) TransitionGit(nextStep string, effect SourceCodeGitEffect) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+
 	// repo := nil // git repo is needed at initialization
-	// commit := nil //from commit hash
-	// filesInCommit :=
-	// operations :=
+	commit, err := p.repo.CommitObject(plumbing.NewHash(effect.CommitHash))
+	if err != nil {
+		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+	}
+
+	fileIter, err := commit.Files()
+	for {
+		file, err := fileIter.Next()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+		}
+
+		//TODO: check the size and use "***" as file.Contents() can panic if reading buffer grows too large
+		contents, err := file.Contents()
+		if err != nil {
+			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+		}
+
+		operation := FileUpsert{
+			FilePath:      file.Name,
+			Content:       contents,
+			IsFullContent: true,
+		}
+
+		if err := cloned.upsertFile(operation); err != nil {
+			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+		}
+	}
+
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
+	p.step = nextStep
 
 	return nil
 }
