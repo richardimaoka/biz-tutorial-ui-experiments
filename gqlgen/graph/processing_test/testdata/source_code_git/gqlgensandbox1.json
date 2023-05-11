@@ -1,0 +1,23 @@
+{
+  "step": "000",
+  "defaultOpenFile": null,
+  "fileTree": [
+    {
+      "nodeType": "FILE",
+      "name": "go.mod",
+      "filePath": "go.mod",
+      "offset": 0,
+      "isUpdated": true
+    }
+  ],
+  "fileContents": {
+    "go.mod": {
+      "filePath": "go.mod",
+      "fileName": "go.mod",
+      "content": "module github.com/richardimaoka/gqlgensandbox\n\ngo 1.18\n",
+      "isFullContent": true,
+      "language": null,
+      "highlight": null
+    }
+  }
+}
