@@ -13,11 +13,17 @@ type TerminalEffect struct {
 	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 }
 
+type TerminalEffects []TerminalEffect
+
 func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	var effects []TerminalEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadTerminalEffects", filePath, unmarshaller)
 	return effects, err
+}
+
+func (t TerminalEffects) findBySeqNo(seqNo int) (*TerminalEffect, error) {
+	return terminalEffectBySeqNo(seqNo, t)
 }
 
 func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect, error) {

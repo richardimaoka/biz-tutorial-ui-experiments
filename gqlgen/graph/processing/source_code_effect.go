@@ -61,6 +61,12 @@ func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffe
 	return &effect, nil
 }
 
+type FileEffects []FileEffect
+
+func (f FileEffects) filterBySeqNo(seqNo int) FileEffects {
+	return fileEffectsBySeqNo(seqNo, f)
+}
+
 func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
 	var effectsBySeqNo []FileEffect
 	for _, e := range effects {
