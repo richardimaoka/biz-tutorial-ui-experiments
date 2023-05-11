@@ -28,19 +28,19 @@ func Test_MergeEffects(t *testing.T) {
 	terminalEffects, _ := processing.ReadTerminalEffects(terminalEffectsFile)
 	sourceCodeUnitEffects, _ := processing.ReadFileEffects(fileEffectsFile)
 
-	transitions, err := processing.MergeEffects(terminalEffects, sourceCodeUnitEffects)
+	effects, err := processing.MergeEffects(terminalEffects, sourceCodeUnitEffects)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	for i := 0; i < len(transitions); i++ {
-		if transitions[i].SeqNo != i {
-			t.Errorf("expected seqNo=%d, but got seqNo=%d", i, transitions[i].SeqNo)
+	for i := 0; i < len(effects); i++ {
+		if effects[i].SeqNo != i {
+			t.Errorf("expected seqNo=%d, but got seqNo=%d", i, effects[i].SeqNo)
 		}
 	}
 
 	if *updateFlag {
-		internal.WriteGoldenFile(t, "testdata/transition_effects.json", transitions)
+		internal.WriteGoldenFile(t, "testdata/transition_effects.json", effects)
 	}
 }
 

@@ -4,14 +4,14 @@ import (
 	"fmt"
 )
 
-type ProcessorEffect struct {
+type PageStateEffect struct {
 	Step             string            `json:"step"`
 	SeqNo            int               `json:"seqNo"`
 	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
 	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
 }
 
-func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]ProcessorEffect, error) {
+func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]PageStateEffect, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0
 	for _, t := range terminalEffects {
@@ -26,7 +26,7 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 	}
 
 	// 2. construct ProcessorEffect for each seqNo
-	var transitions []ProcessorEffect
+	var effects []PageStateEffect
 	for seqNo := 0; seqNo < maxSeqNo; seqNo++ {
 		tEff, err := terminalEffectBySeqNo(seqNo, terminalEffects)
 		if err != nil {
@@ -38,9 +38,9 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 			return nil, fmt.Errorf("MergeEffects failed: %v", err)
 		}
 
-		p := ProcessorEffect{SeqNo: seqNo, TerminalEffect: tEff, SourceCodeEffect: sEff}
-		transitions = append(transitions, p)
+		p := PageStateEffect{SeqNo: seqNo, TerminalEffect: tEff, SourceCodeEffect: sEff}
+		effects = append(effects, p)
 	}
 
-	return transitions, nil
+	return effects, nil
 }
