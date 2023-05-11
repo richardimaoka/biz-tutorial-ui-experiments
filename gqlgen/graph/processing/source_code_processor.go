@@ -6,10 +6,13 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type SourceCodeProcessor struct {
+	repo                *git.Repository
 	step                string
 	defaultOpenFilePath string
 	fileMap             map[string]fileTreeNode
@@ -224,6 +227,7 @@ func (p *SourceCodeProcessor) applyOperation(operation FileSystemOperation) erro
 	}
 }
 
+// TODO: remove this method with ApplyDiff
 func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
 	// does the order of operations have any implication??
 	for _, op := range diff.DirectoriesDeleted {
@@ -267,7 +271,21 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 	}
 }
 
-//TODO: unnecessary as with regard to ApplyOps?
+func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize source code, cannot clone repo %s, %s", repoUrl, err)
+	}
+
+	return &SourceCodeProcessor{
+		repo:                repo,
+		step:                "",
+		defaultOpenFilePath: "",
+		fileMap:             make(map[string]fileTreeNode),
+	}, nil
+}
+
+//TODO: can be replaced by ApplyOps?
 func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
@@ -321,11 +339,21 @@ func (p *SourceCodeProcessor) SetStep(step string) {
 	p.step = step
 }
 
+//TODO: 2nd arg can be diff or ops? then it can be merged with ApplyDiff/ApplyOps?
 func (p *SourceCodeProcessor) Transition(nextStep string, effect SourceCodeEffect) error {
 	if err := p.ApplyDiff(effect.Diff); err != nil {
 		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
 	}
 	p.step = nextStep
+	return nil
+}
+
+func (p *SourceCodeProcessor) TransitionGit(nextStep string, effect SourceCodeGitEffect) error {
+	// repo := nil // git repo is needed at initialization
+	// commit := nil //from commit hash
+	// filesInCommit :=
+	// operations :=
+
 	return nil
 }
 
