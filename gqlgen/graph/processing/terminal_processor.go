@@ -14,10 +14,10 @@ type TerminalProcessor struct {
 func (t *TerminalProcessor) writeCommand(command string) {
 	defaultPromptExpression := ""
 	defaultPromptSymbol := '$'
-	t.WriteCommandWithPrompt(defaultPromptExpression, defaultPromptSymbol, command)
+	t.writeCommandWithPrompt(defaultPromptExpression, defaultPromptSymbol, command)
 }
 
-func (t *TerminalProcessor) WriteCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
+func (t *TerminalProcessor) writeCommandWithPrompt(promptExpression string, promptSymbol rune, command string) {
 	t.elements = append(t.elements, &terminalCommandProcessor{
 		promptExpression: promptExpression,
 		promptSymbol:     promptSymbol,
@@ -56,6 +56,27 @@ func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) {
 	if effect.CurrentDirectory != nil {
 		t.changeCurrentDirectory(*effect.CurrentDirectory)
 	}
+
+	t.step = nextStep
+}
+
+func (t *TerminalProcessor) TransitionWithOperation(nextStep string, op TerminalOperation) {
+	switch v := op.(type) {
+	case TerminalCommand:
+		t.writeCommand(v.Command)
+	case TerminalCommandWithOutput:
+		t.writeCommand(v.Command)
+		t.writeOutput(v.Output)
+	case TerminalCommandWithCd:
+		t.writeCommand(v.Command)
+		t.changeCurrentDirectory(v.CurrentDirectory)
+	case TerminalCommandWithOutputCd:
+		t.writeCommand(v.Command)
+		t.writeOutput(v.Output)
+		t.changeCurrentDirectory(v.CurrentDirectory)
+	}
+
+	t.step = nextStep
 }
 
 func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
