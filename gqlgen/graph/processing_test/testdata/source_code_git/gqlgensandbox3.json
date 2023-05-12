@@ -7,14 +7,14 @@
       "name": "go.mod",
       "filePath": "go.mod",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "go.sum",
       "filePath": "go.sum",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
@@ -28,7 +28,7 @@
       "name": "tools.go",
       "filePath": "tools.go",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     }
   ],
   "fileContents": {

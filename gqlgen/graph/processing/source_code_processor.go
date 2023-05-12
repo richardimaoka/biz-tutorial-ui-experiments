@@ -200,16 +200,24 @@ func (p *SourceCodeProcessor) deleteFile(op FileDelete) error {
 }
 
 func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
-	fileAddOp := FileAdd{FilePath: op.FilePath, Content: op.Content, IsFullContent: op.IsFullContent}
-	fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
+	canAddError := p.canAdd(op.FilePath)
+	canUpdateError := p.canDeleteOrUpdate(op.FilePath, fileType)
 
-	if errAdd := p.addFile(fileAddOp); errAdd != nil {
-		if errUpd := p.updateFile(fileUpdateOp); errUpd != nil {
-			return fmt.Errorf("cannot upsert file %s, %s, %s", op.FilePath, errAdd, errUpd)
+	switch {
+	case canAddError == nil:
+		fileAddOp := FileAdd{FilePath: op.FilePath, Content: op.Content, IsFullContent: op.IsFullContent}
+		p.addFileMutation(fileAddOp)
+		return nil
+	case canUpdateError == nil:
+		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
+		file, found := p.fileMap[fileUpdateOp.FilePath]
+		if found && !file.Matched(&fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}) {
+			p.updateFileMutation(fileUpdateOp)
 		}
+		return nil
+	default:
+		return fmt.Errorf("cannot upsert file %s, %s", op.FilePath, canAddError)
 	}
-
-	return nil
 }
 
 func (p *SourceCodeProcessor) applyOperation(operation FileSystemOperation) error {
@@ -351,14 +359,18 @@ func (p *SourceCodeProcessor) Transition(nextStep string, effect SourceCodeEffec
 }
 
 func (p *SourceCodeProcessor) TransitionGit(nextStep string, effect SourceCodeGitEffect) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
+	if p.repo == nil {
+		return fmt.Errorf("cannot transition to step %s, git repo is not initialized", nextStep)
+	}
 
 	// repo := nil // git repo is needed at initialization
 	commit, err := p.repo.CommitObject(plumbing.NewHash(effect.CommitHash))
 	if err != nil {
-		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+		return fmt.Errorf("cannot transition to step %s, error in git commit, %s", nextStep, err)
 	}
+
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
 
 	fileIter, err := commit.Files()
 	for {
@@ -366,13 +378,13 @@ func (p *SourceCodeProcessor) TransitionGit(nextStep string, effect SourceCodeGi
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+			return fmt.Errorf("cannot transition to step %s, error in commit file traversal, %s", nextStep, err)
 		}
 
 		//TODO: check the size and use "***" as file.Contents() can panic if reading buffer grows too large
 		contents, err := file.Contents()
 		if err != nil {
-			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+			return fmt.Errorf("cannot transition to step %s, error in reading file, %s", nextStep, err)
 		}
 
 		operation := FileUpsert{

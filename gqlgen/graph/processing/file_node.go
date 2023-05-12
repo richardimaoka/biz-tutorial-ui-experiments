@@ -20,6 +20,7 @@ type fileTreeNode interface {
 	SetIsUpdated(isUpdated bool)
 	ToGraphQLNode() *model.FileNode
 	Clone() fileTreeNode
+	Matched(comparedTo fileTreeNode) bool
 }
 
 type fileProcessorNode struct {
@@ -63,6 +64,24 @@ func (n *fileProcessorNode) SetIsUpdated(isUpdated bool) {
 
 func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
 	n.isUpdated = isUpdated
+}
+
+func (n *fileProcessorNode) Matched(comparedTo fileTreeNode) bool {
+	comparedFile, ok := comparedTo.(*fileProcessorNode)
+	if ok {
+		return n.filePath == comparedFile.filePath && n.content == comparedFile.content
+	}
+
+	return false
+}
+
+func (n *directoryProcessorNode) Matched(comparedTo fileTreeNode) bool {
+	comparedDir, ok := comparedTo.(*directoryProcessorNode)
+	if ok {
+		return n.filePath == comparedDir.filePath
+	}
+
+	return false
 }
 
 func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {

@@ -7,21 +7,21 @@
       "name": "go.mod",
       "filePath": "go.mod",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "go.sum",
       "filePath": "go.sum",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "gqlgen.yml",
       "filePath": "gqlgen.yml",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "DIRECTORY",
@@ -35,7 +35,7 @@
       "name": "generated.go",
       "filePath": "graph/generated.go",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "DIRECTORY",
@@ -49,28 +49,28 @@
       "name": "models_gen.go",
       "filePath": "graph/model/models_gen.go",
       "offset": 2,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "resolver.go",
       "filePath": "graph/resolver.go",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "schema.graphqls",
       "filePath": "graph/schema.graphqls",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
       "name": "schema.resolvers.go",
       "filePath": "graph/schema.resolvers.go",
       "offset": 1,
-      "isUpdated": true
+      "isUpdated": false
     },
     {
       "nodeType": "FILE",
@@ -98,7 +98,7 @@
       "name": "tools.go",
       "filePath": "tools.go",
       "offset": 0,
-      "isUpdated": true
+      "isUpdated": false
     }
   ],
   "fileContents": {
