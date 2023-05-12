@@ -18,7 +18,11 @@ type TerminalEffects []TerminalEffect
 func ReadTerminalEffects(filePath string) (TerminalEffects, error) {
 	var effects []TerminalEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := jsonRead("ReadTerminalEffects", filePath, unmarshaller)
+	err := jsonRead(filePath, unmarshaller)
+	if err != nil {
+		return nil, fmt.Errorf("ReadFileEffects failed to read file, %s", err)
+	}
+
 	return effects, err
 }
 

@@ -26,15 +26,15 @@ func extractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	return typeName, nil
 }
 
-func jsonRead(callerName, filePath string, unmarshaller func(jsonBytes []byte) error) error {
+func jsonRead(filePath string, unmarshaller func(jsonBytes []byte) error) error {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {
-		return fmt.Errorf("%s failed to read file, %s", callerName, err)
+		return fmt.Errorf("failed to read file %s, %s", filePath, err)
 	}
 
 	err = unmarshaller(jsonBytes)
 	if err != nil {
-		return fmt.Errorf("%s failed to unmarshal, %s", callerName, err)
+		return fmt.Errorf("failed to unmarshal %s, %s", filePath, err)
 	}
 
 	return nil

@@ -17,7 +17,11 @@ type FileEffects []FileEffect
 func ReadFileEffects(filePath string) (FileEffects, error) {
 	var effects []FileEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := jsonRead("ReadFileEffects", filePath, unmarshaller)
+	err := jsonRead(filePath, unmarshaller)
+	if err != nil {
+		return nil, fmt.Errorf("ReadFileEffects failed to read file, %s", err)
+	}
+
 	return effects, err
 }
 
