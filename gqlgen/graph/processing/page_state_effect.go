@@ -33,7 +33,7 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 			return nil, fmt.Errorf("MergeEffects failed: %v", err)
 		}
 
-		sEff, err := calculateSourceCodeEffect(seqNo, fileEffects)
+		sEff, err := CalculateSourceCodeEffect(seqNo, fileEffects)
 		if err != nil {
 			return nil, fmt.Errorf("MergeEffects failed: %v", err)
 		}

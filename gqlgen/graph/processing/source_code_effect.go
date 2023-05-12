@@ -22,7 +22,7 @@ type OpenFileEffect struct {
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 }
 
-func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
+func CalculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
 	effectsBySeqNo := fileEffectsBySeqNo(seqNo, effects)
 
 	if len(effectsBySeqNo) == 0 {
