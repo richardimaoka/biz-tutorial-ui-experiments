@@ -22,8 +22,14 @@ func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
 	return effects, err
 }
 
-func (t TerminalEffects) findBySeqNo(seqNo int) (*TerminalEffect, error) {
-	return terminalEffectBySeqNo(seqNo, t)
+func (t TerminalEffects) FindBySeqNo(seqNo int) *TerminalEffect {
+	for _, e := range t {
+		if e.SeqNo == seqNo {
+			return &e
+		}
+	}
+
+	return nil
 }
 
 func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect, error) {

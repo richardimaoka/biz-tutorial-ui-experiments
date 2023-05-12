@@ -1,14 +1,14 @@
 package processing
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
 type SourceCodeEffect struct {
-	SeqNo               int     `json:"seqNo"`
-	Diff                Diff    `json:"diff"`
-	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
+	SeqNo               int          `json:"seqNo"`
+	Diff                Diff         `json:"diff"` //TODO: remove this
+	FileEffects         []FileEffect `json:"fileEffects"`
+	DefaultOpenFilePath *string      `json:"defaultOpenFilePath"`
 }
 
 type SourceCodeGitEffect struct {
@@ -17,28 +17,9 @@ type SourceCodeGitEffect struct {
 	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
 }
 
-type FileEffect struct {
-	SeqNo         int    `json:"seqNo"`
-	OperationType string `json:"operationType"`
-	FilePath      string `json:"filePath"`
-	Content       string `json:"content"`
-}
-
 type OpenFileEffect struct {
 	SeqNo               int    `json:"seqNo"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
-}
-
-// TODO: later optimization
-// type SourceCodeGitEffect struct {
-// 	commitHash string
-// }
-
-func ReadFileEffects(filePath string) ([]FileEffect, error) {
-	var effects []FileEffect
-	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := jsonRead("ReadFileEffects", filePath, unmarshaller)
-	return effects, err
 }
 
 func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
@@ -59,22 +40,6 @@ func calculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffe
 	}
 
 	return &effect, nil
-}
-
-type FileEffects []FileEffect
-
-func (f FileEffects) filterBySeqNo(seqNo int) FileEffects {
-	return fileEffectsBySeqNo(seqNo, f)
-}
-
-func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
-	var effectsBySeqNo []FileEffect
-	for _, e := range effects {
-		if e.SeqNo == seqNo {
-			effectsBySeqNo = append(effectsBySeqNo, e)
-		}
-	}
-	return effectsBySeqNo
 }
 
 func (f FileEffect) ToOperation() (FileSystemOperation, error) {
