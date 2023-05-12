@@ -18,10 +18,14 @@ func EffectProcessing() error {
 		return fmt.Errorf("EffectProcessing failed: %v", err)
 	}
 
-	pageStateEffects, err := MergeEffects(terminalEffects, fileEffects)
+	for _, step := range stepEffects {
+		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
+		scEff := NewSourceCodeEffect(step.SeqNo, fEffs)
 
-	fmt.Println(stepEffects)
-	fmt.Println(pageStateEffects)
+		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
+		psEff := NewPageStateEffect(step.SeqNo, step.Step, scEff, tEff)
+		fmt.Println(psEff)
+	}
 
 	return nil
 }

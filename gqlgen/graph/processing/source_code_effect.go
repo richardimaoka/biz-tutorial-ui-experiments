@@ -5,10 +5,10 @@ import (
 )
 
 type SourceCodeEffect struct {
-	SeqNo               int          `json:"seqNo"`
-	Diff                Diff         `json:"diff"` //TODO: remove this
-	FileEffects         []FileEffect `json:"fileEffects"`
-	DefaultOpenFilePath *string      `json:"defaultOpenFilePath"`
+	SeqNo               int
+	Diff                Diff //TODO: remove this
+	FileEffects         []FileEffect
+	DefaultOpenFilePath *string
 }
 
 type SourceCodeGitEffect struct {
@@ -20,6 +20,10 @@ type SourceCodeGitEffect struct {
 type OpenFileEffect struct {
 	SeqNo               int    `json:"seqNo"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
+}
+
+func NewSourceCodeEffect(seqNo int, effects []FileEffect) *SourceCodeEffect {
+	return &SourceCodeEffect{SeqNo: seqNo, FileEffects: effects}
 }
 
 func CalculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {

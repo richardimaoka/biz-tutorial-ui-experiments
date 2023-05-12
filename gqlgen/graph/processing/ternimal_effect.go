@@ -15,7 +15,7 @@ type TerminalEffect struct {
 
 type TerminalEffects []TerminalEffect
 
-func ReadTerminalEffects(filePath string) ([]TerminalEffect, error) {
+func ReadTerminalEffects(filePath string) (TerminalEffects, error) {
 	var effects []TerminalEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadTerminalEffects", filePath, unmarshaller)

@@ -11,6 +11,14 @@ type PageStateEffect struct {
 	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
 }
 
+func NewPageStateEffect(
+	seqNo int,
+	step string,
+	sourceCodeEffect *SourceCodeEffect,
+	terminalEffect *TerminalEffect) *PageStateEffect {
+	return &PageStateEffect{SeqNo: seqNo, Step: step, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
+}
+
 func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]PageStateEffect, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0
@@ -28,6 +36,7 @@ func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([
 	// 2. construct ProcessorEffect for each seqNo
 	var effects []PageStateEffect
 	for seqNo := 0; seqNo < maxSeqNo; seqNo++ {
+
 		tEff, err := terminalEffectBySeqNo(seqNo, terminalEffects)
 		if err != nil {
 			return nil, fmt.Errorf("MergeEffects failed: %v", err)

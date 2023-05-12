@@ -11,7 +11,7 @@ type FileEffect struct {
 
 type FileEffects []FileEffect
 
-func ReadFileEffects(filePath string) ([]FileEffect, error) {
+func ReadFileEffects(filePath string) (FileEffects, error) {
 	var effects []FileEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := jsonRead("ReadFileEffects", filePath, unmarshaller)
