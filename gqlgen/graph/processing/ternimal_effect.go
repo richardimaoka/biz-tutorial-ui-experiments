@@ -58,13 +58,13 @@ func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect
 
 func (t TerminalEffect) ToOperation() TerminalOperation {
 	if t.Output == nil && t.CurrentDirectory == nil {
-		return TerminalCommand{Command: t.Command}
+		return TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}
 	} else if t.Output != nil && t.CurrentDirectory == nil {
-		return TerminalCommandWithOutput{Command: t.Command, Output: *t.Output}
+		return TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}
 	} else if t.Output == nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithCd{Command: t.Command, CurrentDirectory: *t.CurrentDirectory}
+		return TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}
 	} else if t.Output != nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithOutputCd{Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}
+		return TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}
 	} else {
 		// this should never happen
 		return nil

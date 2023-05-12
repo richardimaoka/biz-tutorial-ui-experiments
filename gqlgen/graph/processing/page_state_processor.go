@@ -28,6 +28,30 @@ func (p *PageStateProcessor) cloneForNextAction() *PageStateProcessor {
 	}
 }
 
+func (p *PageStateProcessor) applyOperation(nextStep string, nextOperation PageStateOperation) error {
+	errorPreceding := "failed to apply operation"
+
+	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
+	if len(nextOperation.FileOps) != 0 {
+		// 1.1. source code mutation
+		if err := p.sourceCode.ApplyOps(nextOperation.FileOps); err != nil {
+			return fmt.Errorf("%s, %s", errorPreceding, err)
+		}
+	}
+
+	terminalOp := nextOperation.TerminalOperation
+	if terminalOp != nil {
+		terminal, ok := p.terminalMap[terminalOp.GetTerminalName()]
+		if !ok {
+			return fmt.Errorf("%s, terminal [%s] does not exist", errorPreceding, terminalOp.GetTerminalName())
+		}
+		terminal.TransitionWithOperation(nextStep, terminalOp)
+	}
+
+	return nil
+}
+
+//TODO: remove this method altogether with Action
 func (p *PageStateProcessor) applyAction(nextAction Action) error {
 	errorPreceding := "failed to apply action"
 
