@@ -350,21 +350,21 @@ func (p *SourceCodeProcessor) SetStep(step string) {
 }
 
 //TODO: 2nd arg can be diff or ops? then it can be merged with ApplyDiff/ApplyOps?
-func (p *SourceCodeProcessor) Transition(nextStep string, effect SourceCodeEffect) error {
-	if err := p.ApplyDiff(effect.Diff); err != nil {
+func (p *SourceCodeProcessor) Transition(nextStep string, diff Diff) error {
+	if err := p.ApplyDiff(diff); err != nil {
 		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
 	}
 	p.step = nextStep
 	return nil
 }
 
-func (p *SourceCodeProcessor) TransitionGit(nextStep string, effect SourceCodeGitEffect) error {
+func (p *SourceCodeProcessor) TransitionGit(nextStep string, commitHash string) error {
 	if p.repo == nil {
 		return fmt.Errorf("cannot transition to step %s, git repo is not initialized", nextStep)
 	}
 
 	// repo := nil // git repo is needed at initialization
-	commit, err := p.repo.CommitObject(plumbing.NewHash(effect.CommitHash))
+	commit, err := p.repo.CommitObject(plumbing.NewHash(commitHash))
 	if err != nil {
 		return fmt.Errorf("cannot transition to step %s, error in git commit, %s", nextStep, err)
 	}

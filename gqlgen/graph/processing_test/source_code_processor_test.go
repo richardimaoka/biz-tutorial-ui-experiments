@@ -183,17 +183,17 @@ func Test_SourceCodeProcessor(t *testing.T) {
 func Test_SourceCodeGitEffect(t *testing.T) {
 	type TestCase struct {
 		ExpectSuccess bool
-		Effect        processing.SourceCodeGitEffect
+		CommitHash    string
 		GoldenFile    string
 	}
 
-	checkResult := func(t *testing.T, index int, effect processing.SourceCodeGitEffect, expectSuccess bool, err error) {
+	checkResult := func(t *testing.T, index int, commitHash string, expectSuccess bool, err error) {
 		resultSuccess := err == nil
 		if resultSuccess != expectSuccess { //if result is not expected
 			if expectSuccess {
-				t.Fatalf("effect[%d] = %+v success is expected, but result is failure\nerror: %s\n", index, effect, err)
+				t.Fatalf("commit[%d] = %s success is expected, but result is failure\nerror: %s\n", index, commitHash, err)
 			} else {
-				t.Fatalf("effect[%d] = %+v failure is expected, but result is success\n", index, effect)
+				t.Fatalf("commit[%d] = %s failure is expected, but result is success\n", index, commitHash)
 			}
 		}
 	}
@@ -206,8 +206,8 @@ func Test_SourceCodeGitEffect(t *testing.T) {
 			}
 
 			for i, c := range testCases {
-				err := sourceCode.TransitionGit(fmt.Sprintf("%03d", i), c.Effect)
-				checkResult(t, i, c.Effect, c.ExpectSuccess, err)
+				err := sourceCode.TransitionGit(fmt.Sprintf("%03d", i), c.CommitHash)
+				checkResult(t, i, c.CommitHash, c.ExpectSuccess, err)
 
 				internal.CompareWitGoldenFile(t, *updateFlag, c.GoldenFile, sourceCode.ToGraphQLModel())
 			}
@@ -215,25 +215,25 @@ func Test_SourceCodeGitEffect(t *testing.T) {
 	}
 
 	runTestCases(t, "https://github.com/richardimaoka/gqlgensandbox", []TestCase{
-		{true, processing.SourceCodeGitEffect{SeqNo: 0, CommitHash: "91a99d0c0558d2fc03c930d19afa97fc141f0c2e"}, "testdata/source_code_git/gqlgensandbox1.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 1, CommitHash: "83f8ad84dea56e8e5549832fb98eb8b5b9db4912"}, "testdata/source_code_git/gqlgensandbox2.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 2, CommitHash: "86a03f4f18b081b07e058f0e9f96503772a50cf0"}, "testdata/source_code_git/gqlgensandbox3.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 3, CommitHash: "490808086bded6b27f3651b095aefb7bb6708da2"}, "testdata/source_code_git/gqlgensandbox4.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 4, CommitHash: "9f835b8aaafdfc55933f52aae5a7c6e9864432aa"}, "testdata/source_code_git/gqlgensandbox5.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 5, CommitHash: "99a2c7f129cbebab3b17034fa93ad579d0fe29f6"}, "testdata/source_code_git/gqlgensandbox6.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 6, CommitHash: "20c5ef14fc6a0deae8a528beee3ed0f984da9ae1"}, "testdata/source_code_git/gqlgensandbox7.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 7, CommitHash: "4bc48072066d6e9fe339fae1341c196d4be03286"}, "testdata/source_code_git/gqlgensandbox8.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 8, CommitHash: "8d08178cb98df959288f2c4f8d0aff1bb20d6fc9"}, "testdata/source_code_git/gqlgensandbox9.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 9, CommitHash: "813c7822a3232c43edd9cc02286f063851ff2b54"}, "testdata/source_code_git/gqlgensandbox10.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 10, CommitHash: "a234864d58a12d50458ee563ba59c628c6861286"}, "testdata/source_code_git/gqlgensandbox11.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 11, CommitHash: "18c23ac5d49428845afe91f2d189968265afc19f"}, "testdata/source_code_git/gqlgensandbox12.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 12, CommitHash: "e02dc3bbdf21a533f1812507134cf1484a971f5b"}, "testdata/source_code_git/gqlgensandbox13.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 13, CommitHash: "929e04606a6eb7619f0e0949c2bdc2a1688a2d25"}, "testdata/source_code_git/gqlgensandbox14.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 14, CommitHash: "b08a390257a68951b2cf05a463655c852de7a4de"}, "testdata/source_code_git/gqlgensandbox15.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 15, CommitHash: "f745b8e233b2adfd11a63e7855f18a1986c7c084"}, "testdata/source_code_git/gqlgensandbox16.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 16, CommitHash: "700a1d749f1d3e86330ebe163d64a9fe58e25fd2"}, "testdata/source_code_git/gqlgensandbox17.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 17, CommitHash: "8c62836cfbbf9a9d0ce957d0edc4084e4bc88e60"}, "testdata/source_code_git/gqlgensandbox18.json"},
-		{true, processing.SourceCodeGitEffect{SeqNo: 18, CommitHash: "4dd8f51d6acbee9d61b24dc26715ecc48a5d2456"}, "testdata/source_code_git/gqlgensandbox19.json"},
+		{true, "91a99d0c0558d2fc03c930d19afa97fc141f0c2e", "testdata/source_code_git/gqlgensandbox1.json"},
+		{true, "83f8ad84dea56e8e5549832fb98eb8b5b9db4912", "testdata/source_code_git/gqlgensandbox2.json"},
+		{true, "86a03f4f18b081b07e058f0e9f96503772a50cf0", "testdata/source_code_git/gqlgensandbox3.json"},
+		{true, "490808086bded6b27f3651b095aefb7bb6708da2", "testdata/source_code_git/gqlgensandbox4.json"},
+		{true, "9f835b8aaafdfc55933f52aae5a7c6e9864432aa", "testdata/source_code_git/gqlgensandbox5.json"},
+		{true, "99a2c7f129cbebab3b17034fa93ad579d0fe29f6", "testdata/source_code_git/gqlgensandbox6.json"},
+		{true, "20c5ef14fc6a0deae8a528beee3ed0f984da9ae1", "testdata/source_code_git/gqlgensandbox7.json"},
+		{true, "4bc48072066d6e9fe339fae1341c196d4be03286", "testdata/source_code_git/gqlgensandbox8.json"},
+		{true, "8d08178cb98df959288f2c4f8d0aff1bb20d6fc9", "testdata/source_code_git/gqlgensandbox9.json"},
+		{true, "813c7822a3232c43edd9cc02286f063851ff2b54", "testdata/source_code_git/gqlgensandbox10.json"},
+		{true, "a234864d58a12d50458ee563ba59c628c6861286", "testdata/source_code_git/gqlgensandbox11.json"},
+		{true, "18c23ac5d49428845afe91f2d189968265afc19f", "testdata/source_code_git/gqlgensandbox12.json"},
+		{true, "e02dc3bbdf21a533f1812507134cf1484a971f5b", "testdata/source_code_git/gqlgensandbox13.json"},
+		{true, "929e04606a6eb7619f0e0949c2bdc2a1688a2d25", "testdata/source_code_git/gqlgensandbox14.json"},
+		{true, "b08a390257a68951b2cf05a463655c852de7a4de", "testdata/source_code_git/gqlgensandbox15.json"},
+		{true, "f745b8e233b2adfd11a63e7855f18a1986c7c084", "testdata/source_code_git/gqlgensandbox16.json"},
+		{true, "700a1d749f1d3e86330ebe163d64a9fe58e25fd2", "testdata/source_code_git/gqlgensandbox17.json"},
+		{true, "8c62836cfbbf9a9d0ce957d0edc4084e4bc88e60", "testdata/source_code_git/gqlgensandbox18.json"},
+		{true, "4dd8f51d6acbee9d61b24dc26715ecc48a5d2456", "testdata/source_code_git/gqlgensandbox19.json"},
 	})
 }
 
