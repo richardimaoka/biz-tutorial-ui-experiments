@@ -19,6 +19,7 @@ func NewPageStateEffect(
 	return &PageStateEffect{SeqNo: seqNo, Step: step, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
 }
 
+// TODO: remove this function
 func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]PageStateEffect, error) {
 	// 1. calculate the max seqNo
 	maxSeqNo := 0

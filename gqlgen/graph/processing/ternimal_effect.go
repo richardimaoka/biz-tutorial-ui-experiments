@@ -32,6 +32,7 @@ func (t TerminalEffects) FindBySeqNo(seqNo int) *TerminalEffect {
 	return nil
 }
 
+// TODO: remove this function
 func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect, error) {
 	var effectsBySeqNo []TerminalEffect
 	for _, e := range effects {
@@ -48,5 +49,20 @@ func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect
 		return &effectsBySeqNo[0], nil
 	} else { // must be len(effectsBySeqNo) == 0
 		return nil, nil
+	}
+}
+
+func (t TerminalEffect) ToOperation() TerminalOperation {
+	if t.Output == nil && t.CurrentDirectory == nil {
+		return TerminalCommand{Command: t.Command}
+	} else if t.Output != nil && t.CurrentDirectory == nil {
+		return TerminalCommandWithOutput{Command: t.Command, Output: *t.Output}
+	} else if t.Output == nil && t.CurrentDirectory != nil {
+		return TerminalCommandWithCd{Command: t.Command, CurrentDirectory: *t.CurrentDirectory}
+	} else if t.Output != nil && t.CurrentDirectory != nil {
+		return TerminalCommandWithOutputCd{Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}
+	} else {
+		// this should never happen
+		return nil
 	}
 }

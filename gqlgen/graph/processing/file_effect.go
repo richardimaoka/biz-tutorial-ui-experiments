@@ -1,6 +1,9 @@
 package processing
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type FileEffect struct {
 	SeqNo         int    `json:"seqNo"`
@@ -28,6 +31,7 @@ func (f FileEffects) FilterBySeqNo(seqNo int) FileEffects {
 	return effectsBySeqNo
 }
 
+//TODO: remove this function
 func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
 	var effectsBySeqNo []FileEffect
 	for _, e := range effects {
@@ -36,4 +40,40 @@ func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
 		}
 	}
 	return effectsBySeqNo
+}
+
+func (f FileEffect) ToOperation() FileSystemOperation {
+	switch f.OperationType {
+	case "FileAdd":
+		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}
+	case "FileUpdate":
+		return FileUpdate{FilePath: f.FilePath, Content: f.Content}
+	case "FileDelete":
+		return FileDelete{FilePath: f.FilePath}
+	case "DirectoryAdd":
+		return DirectoryAdd{FilePath: f.FilePath}
+	case "DirectoryDelete":
+		return DirectoryDelete{FilePath: f.FilePath}
+	default:
+		// this hsould never happen
+		return nil
+	}
+}
+
+//TODO: remove this function
+func (f FileEffect) ToOperation2() (FileSystemOperation, error) {
+	switch f.OperationType {
+	case "FileAdd":
+		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
+	case "FileUpdate":
+		return FileUpdate{FilePath: f.FilePath, Content: f.Content}, nil
+	case "FileDelete":
+		return FileDelete{FilePath: f.FilePath}, nil
+	case "DirectoryAdd":
+		return DirectoryAdd{FilePath: f.FilePath}, nil
+	case "DirectoryDelete":
+		return DirectoryDelete{FilePath: f.FilePath}, nil
+	default:
+		return nil, fmt.Errorf("FileEffect.ToOperation() found invalid OperationType = %s", f.OperationType)
+	}
 }

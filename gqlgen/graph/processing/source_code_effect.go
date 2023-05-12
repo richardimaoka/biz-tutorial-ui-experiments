@@ -26,6 +26,7 @@ func NewSourceCodeEffect(seqNo int, effects []FileEffect) *SourceCodeEffect {
 	return &SourceCodeEffect{SeqNo: seqNo, FileEffects: effects}
 }
 
+// TODO: remove this function
 func CalculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffect, error) {
 	effectsBySeqNo := fileEffectsBySeqNo(seqNo, effects)
 
@@ -35,7 +36,7 @@ func CalculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffe
 
 	effect := SourceCodeEffect{SeqNo: seqNo}
 	for _, e := range effectsBySeqNo {
-		op, err := e.ToOperation()
+		op, err := e.ToOperation2()
 		if err != nil {
 			return nil, fmt.Errorf("failed to calculate source code effect: %v", err)
 		}
@@ -44,21 +45,4 @@ func CalculateSourceCodeEffect(seqNo int, effects []FileEffect) (*SourceCodeEffe
 	}
 
 	return &effect, nil
-}
-
-func (f FileEffect) ToOperation() (FileSystemOperation, error) {
-	switch f.OperationType {
-	case "FileAdd":
-		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
-	case "FileUpdate":
-		return FileUpdate{FilePath: f.FilePath, Content: f.Content}, nil
-	case "FileDelete":
-		return FileDelete{FilePath: f.FilePath}, nil
-	case "DirectoryAdd":
-		return DirectoryAdd{FilePath: f.FilePath}, nil
-	case "DirectoryDelete":
-		return DirectoryDelete{FilePath: f.FilePath}, nil
-	default:
-		return nil, fmt.Errorf("FileEffect.ToOperation() found invalid OperationType = %s", f.OperationType)
-	}
 }
