@@ -124,12 +124,14 @@ func (p *PageStateProcessor) TransitionToNext() error {
 	p.sourceCode = p.nextState.sourceCode
 	p.sourceCode.SetStep(p.step.nextStep)
 	p.terminalMap = p.nextState.terminalMap
-	p.step.AutoIncrementStep()
 
 	// 3. update step, nextAction & nextState
 	p.nextAction = nil
 	p.nextOperation = nil
 	p.nextState = nil
+	p.step.prevStep = p.step.currentStep
+	p.step.currentStep = p.step.nextStep
+	p.step.nextStep = ""
 
 	return nil
 }

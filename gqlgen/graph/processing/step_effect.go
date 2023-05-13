@@ -6,8 +6,9 @@ import (
 )
 
 type StepEffect struct {
-	SeqNo int    `json:"seqNo"`
-	Step  string `json:"step"`
+	SeqNo       int    `json:"seqNo"`
+	CurrentStep string `json:"currentStep"`
+	NextStep    string `json:"nextStep"`
 }
 
 func ReadStepEffects(filePath string) ([]StepEffect, error) {

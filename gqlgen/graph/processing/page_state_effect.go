@@ -5,18 +5,16 @@ import (
 )
 
 type PageStateEffect struct {
-	Step             string            `json:"step"`
-	SeqNo            int               `json:"seqNo"`
-	SourceCodeEffect *SourceCodeEffect `json:"sourceCodeEffect"`
-	TerminalEffect   *TerminalEffect   `json:"terminalEffect"`
+	SeqNo            int
+	SourceCodeEffect *SourceCodeEffect
+	TerminalEffect   *TerminalEffect
 }
 
 func NewPageStateEffect(
 	seqNo int,
-	step string,
 	sourceCodeEffect *SourceCodeEffect,
 	terminalEffect *TerminalEffect) *PageStateEffect {
-	return &PageStateEffect{SeqNo: seqNo, Step: step, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
+	return &PageStateEffect{SeqNo: seqNo, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
 }
 
 func (p *PageStateEffect) ToOperation() (PageStateOperation, error) {
