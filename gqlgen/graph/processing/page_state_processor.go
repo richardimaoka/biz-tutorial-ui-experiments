@@ -10,7 +10,6 @@ type PageStateProcessor struct {
 	step          *stepProcessor
 	terminalMap   map[string]*TerminalProcessor
 	sourceCode    *SourceCodeProcessor
-	nextAction    Action
 	nextOperation *PageStateOperation
 	nextState     *PageStateProcessor
 }
@@ -89,7 +88,6 @@ func (p *PageStateProcessor) TransitionToNext() error {
 	p.terminalMap = p.nextState.terminalMap
 
 	// 3. update step, nextAction & nextState
-	p.nextAction = nil
 	p.nextOperation = nil
 	p.nextState = nil
 	p.step.prevStep = p.step.currentStep
@@ -105,14 +103,14 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		terminals = append(terminals, t.ToGraphQLTerminal())
 	}
 
-	var nextAction model.NextAction
-	if p.nextAction != nil {
-		nextAction = p.nextAction.ToGraphQLNextAction()
-	} else {
-		nextAction = model.NextAction{
-			Content: nil,
-		}
-	}
+	// var nextAction model.NextAction
+	// if p.nextAction != nil {
+	// 	nextAction = p.nextAction.ToGraphQLNextAction()
+	// } else {
+	// 	nextAction = model.NextAction{
+	// 		Content: nil,
+	// 	}
+	// }
 
 	return &model.PageState{
 		Step:       &p.step.currentStep,
@@ -120,6 +118,5 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		PrevStep:   &p.step.prevStep,
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
-		NextAction: &nextAction,
 	}
 }
