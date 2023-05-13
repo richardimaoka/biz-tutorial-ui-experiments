@@ -79,9 +79,6 @@ func main() {
 			log.Fatal(err)
 		}
 	} else {
-		if err := processing.EffectProcessing(); err != nil {
-			log.Fatal(err)
-		}
-		// server()
+		server()
 	}
 }
