@@ -6,6 +6,7 @@ import (
 )
 
 func EffectProcessing() error {
+	// 1. read effects from files
 	log.Printf("EffectProcessing started")
 
 	stepEffects, err := ReadStepEffects("data/step-effects.json")
@@ -26,6 +27,7 @@ func EffectProcessing() error {
 	}
 	log.Printf("%d terminal effects read ", len(terminalEffects))
 
+	// 2. construct page-sate level operations
 	var ops []PageStateOperation
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
@@ -46,6 +48,7 @@ func EffectProcessing() error {
 	}
 	log.Printf("%d page state operations calculated", len(ops))
 
+	// 3. apply page-state operation and write states to files
 	state := NewPageStateProcessor()
 	for i := 0; i < len(ops); i++ {
 		// after registering the next op, write to the file
