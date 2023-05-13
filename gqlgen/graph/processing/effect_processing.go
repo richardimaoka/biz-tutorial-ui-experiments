@@ -40,10 +40,12 @@ func EffectProcessing() error {
 	state := NewPageStateProcessor()
 
 	for i := 0; i < len(ops); i++ {
+		// after registering the next op, write to the file
 		state.RegisterNext(stepEffects[i].Step, &ops[i])
 		WriteJsonToFile(state, "data/page-state.json")
+
+		// iterate over to the next state
 		state.TransitionToNext()
-		// state.applyOperation(ops[i])
 	}
 	// last state
 	WriteJsonToFile(state, "data/page-state.json")
