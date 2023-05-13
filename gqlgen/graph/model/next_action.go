@@ -3,6 +3,8 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 func (t *NextAction) UnmarshalJSON(b []byte) error {
@@ -28,7 +30,7 @@ func (t *NextAction) UnmarshalJSON(b []byte) error {
 
 func nextActionContentFromBytes(bytes []byte) (NextActionContent, error) {
 	fromField := "contentType"
-	typename, err := extractTypeName(bytes, fromField)
+	typename, err := internal.ExtractTypeName(bytes, fromField)
 	if err != nil {
 		return nil, err
 	}
