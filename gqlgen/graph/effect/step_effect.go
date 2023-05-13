@@ -1,10 +1,8 @@
-package processing
+package effect
 
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 type StepEffect struct {
@@ -16,7 +14,7 @@ type StepEffect struct {
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	var effects []StepEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := internal.JsonRead(filePath, unmarshaller)
+	err := jsonRead(filePath, unmarshaller)
 	if err != nil {
 		return nil, fmt.Errorf("ReadStepEffects failed to read file, %s", err)
 	}

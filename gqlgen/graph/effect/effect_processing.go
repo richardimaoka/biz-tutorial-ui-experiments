@@ -1,8 +1,10 @@
-package processing
+package effect
 
 import (
 	"fmt"
 	"log"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
 func EffectProcessing() error {
@@ -28,7 +30,7 @@ func EffectProcessing() error {
 	log.Printf("%d terminal effects read ", len(terminalEffects))
 
 	// 2. construct page-sate level operations
-	var ops []PageStateOperation
+	var ops []processing.PageStateOperation
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
@@ -49,7 +51,7 @@ func EffectProcessing() error {
 	log.Printf("%d page state operations calculated", len(ops))
 
 	// 3. apply page-state operation and write states to files
-	state := NewPageStateProcessor()
+	state := processing.NewPageStateProcessor()
 	for i := 0; i < len(ops); i++ {
 		// after registering the next op, write to the file
 		nextStep := stepEffects[i].NextStep

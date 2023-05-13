@@ -1,8 +1,10 @@
-package processing
+package effect
 
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
 type FileEffect struct {
@@ -35,19 +37,8 @@ func (f FileEffects) FilterBySeqNo(seqNo int) FileEffects {
 	return effectsBySeqNo
 }
 
-//TODO: remove this function
-func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
-	var effectsBySeqNo []FileEffect
-	for _, e := range effects {
-		if e.SeqNo == seqNo {
-			effectsBySeqNo = append(effectsBySeqNo, e)
-		}
-	}
-	return effectsBySeqNo
-}
-
-func (f FileEffects) ToOperation() ([]FileSystemOperation, error) {
-	ops := []FileSystemOperation{}
+func (f FileEffects) ToOperation() ([]processing.FileSystemOperation, error) {
+	ops := []processing.FileSystemOperation{}
 	for i, e := range f {
 		op, err := e.ToOperation()
 		if err != nil {
@@ -61,18 +52,18 @@ func (f FileEffects) ToOperation() ([]FileSystemOperation, error) {
 	return ops, nil
 }
 
-func (f FileEffect) ToOperation() (FileSystemOperation, error) {
+func (f FileEffect) ToOperation() (processing.FileSystemOperation, error) {
 	switch f.OperationType {
 	case "FileAdd":
-		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
+		return processing.FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
 	case "FileUpdate":
-		return FileUpdate{FilePath: f.FilePath, Content: f.Content}, nil
+		return processing.FileUpdate{FilePath: f.FilePath, Content: f.Content}, nil
 	case "FileDelete":
-		return FileDelete{FilePath: f.FilePath}, nil
+		return processing.FileDelete{FilePath: f.FilePath}, nil
 	case "DirectoryAdd":
-		return DirectoryAdd{FilePath: f.FilePath}, nil
+		return processing.DirectoryAdd{FilePath: f.FilePath}, nil
 	case "DirectoryDelete":
-		return DirectoryDelete{FilePath: f.FilePath}, nil
+		return processing.DirectoryDelete{FilePath: f.FilePath}, nil
 	default:
 		// this should never happen
 		return nil, fmt.Errorf("FileEffect.ToOperation failed, wrong operation type = %s", f.OperationType)

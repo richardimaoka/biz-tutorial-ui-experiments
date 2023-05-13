@@ -3,6 +3,8 @@ package processing
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 type SourceCodeOperation struct {
@@ -102,7 +104,7 @@ func (o FileDelete) MarshalJSON() ([]byte, error) {
 }
 
 func unmarshalFileSystemOperation(bytes []byte) (FileSystemOperation, error) {
-	typeName, err := extractTypeName(bytes, "operationType")
+	typeName, err := internal.ExtractTypeName(bytes, "operationType")
 	if err != nil {
 		return nil, fmt.Errorf("unmarshalAction() failed to extract operationType %s", err)
 	}

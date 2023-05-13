@@ -1,8 +1,10 @@
-package processing
+package effect
 
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
 type TerminalEffect struct {
@@ -29,42 +31,22 @@ func ReadTerminalEffects(filePath string) (TerminalEffects, error) {
 func (t TerminalEffects) FindBySeqNo(seqNo int) *TerminalEffect {
 	for _, e := range t {
 		if e.SeqNo == seqNo {
-			return &e
+			return &e // found!
 		}
 	}
 
 	return nil
 }
 
-// TODO: remove this function
-func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect, error) {
-	var effectsBySeqNo []TerminalEffect
-	for _, e := range effects {
-		if e.SeqNo == seqNo {
-			effectsBySeqNo = append(effectsBySeqNo, e)
-		}
-	}
-
-	if len(effectsBySeqNo) > 1 {
-		return nil, fmt.Errorf("multiple (%d of) TerminalEffect with the same seqNo = %d found", len(effectsBySeqNo), seqNo)
-	}
-
-	if len(effectsBySeqNo) == 1 { // must be len(effectsBySeqNo) == 1
-		return &effectsBySeqNo[0], nil
-	} else { // must be len(effectsBySeqNo) == 0
-		return nil, nil
-	}
-}
-
-func (t TerminalEffect) ToOperation() (TerminalOperation, error) {
+func (t TerminalEffect) ToOperation() (processing.TerminalOperation, error) {
 	if t.Output == nil && t.CurrentDirectory == nil {
-		return TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}, nil
+		return processing.TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}, nil
 	} else if t.Output != nil && t.CurrentDirectory == nil {
-		return TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}, nil
+		return processing.TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}, nil
 	} else if t.Output == nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}, nil
+		return processing.TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}, nil
 	} else if t.Output != nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}, nil
+		return processing.TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}, nil
 	} else {
 		// this should never happen
 		return nil, fmt.Errorf("ToOperation() in TerminalEffect failed: terminal effect = %+v", t)
