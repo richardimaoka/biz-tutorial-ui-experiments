@@ -72,17 +72,6 @@ func stateFileName(targetDir, targetPrefix, step string) string {
 	return fmt.Sprintf("%s/%s-%s.json", targetDir, targetPrefix, step)
 }
 
-func WriteJsonToFile(v any, filePath string) error {
-	bytes, err := json.MarshalIndent(v, "", "  ")
-	if err != nil {
-		return err
-	}
-	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
-		return err
-	}
-	return nil
-}
-
 func SplitActionList(actionListFile, targetDir, targetPrefix string) error {
 	errorPreceding := "Error in SplitInputListFile for filename = " + actionListFile
 
