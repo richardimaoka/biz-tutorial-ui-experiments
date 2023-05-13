@@ -237,38 +237,6 @@ func (p *SourceCodeProcessor) applyOperation(operation FileSystemOperation) erro
 	}
 }
 
-// TODO: remove this method with ApplyDiff
-func (p *SourceCodeProcessor) applyDiifMutation(diff Diff) error {
-	// does the order of operations have any implication??
-	for _, op := range diff.DirectoriesDeleted {
-		if err := p.deleteDirectory(op); err != nil {
-			return err
-		}
-	}
-	for _, op := range diff.DirectoriesAdded {
-		if err := p.addDirectory(op); err != nil {
-			return err
-		}
-	}
-	for _, op := range diff.FilesDeleted {
-		if err := p.deleteFile(op); err != nil {
-			return err
-		}
-	}
-	for _, op := range diff.FilesAdded {
-		if err := p.addFile(op); err != nil {
-			return err
-		}
-	}
-	for _, op := range diff.FilesUpdated {
-		if err := p.updateFile(op); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 //-----------------------------------------------------//
 // public methods below
 //-----------------------------------------------------//
@@ -293,23 +261,6 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 		defaultOpenFilePath: "",
 		fileMap:             make(map[string]fileTreeNode),
 	}, nil
-}
-
-//TODO: can be replaced by ApplyOps?
-func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
-
-	if err := cloned.applyDiifMutation(diff); err != nil {
-		return fmt.Errorf("cannot apply diff, %s", err)
-	}
-
-	p.step = cloned.step
-	p.defaultOpenFilePath = cloned.defaultOpenFilePath
-	p.fileMap = cloned.fileMap
-	//p.step = nextStep
-
-	return nil
 }
 
 func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeOperation) error {
