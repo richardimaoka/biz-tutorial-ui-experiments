@@ -20,14 +20,26 @@ func NewPageStateEffect(
 }
 
 func (p *PageStateEffect) ToOperation() (PageStateOperation, error) {
-	sourceCodeOp, err := p.SourceCodeEffect.ToOperation()
-	if err != nil {
-		return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+	var sourceCodeOp *SourceCodeOperation
+	if p.SourceCodeEffect == nil {
+		sourceCodeOp = nil
+	} else {
+		var err error
+		sourceCodeOp, err = p.SourceCodeEffect.ToOperation()
+		if err != nil {
+			return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+		}
 	}
 
-	terminalOp, err := p.TerminalEffect.ToOperation()
-	if err != nil {
-		return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+	var terminalOp TerminalOperation
+	if p.TerminalEffect == nil {
+		terminalOp = nil
+	} else {
+		var err error
+		terminalOp, err = p.TerminalEffect.ToOperation()
+		if err != nil {
+			return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+		}
 	}
 
 	return PageStateOperation{

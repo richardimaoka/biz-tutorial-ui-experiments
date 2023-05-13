@@ -1,6 +1,6 @@
 package processing
 
 type PageStateOperation struct {
-	SourceCodeOperation SourceCodeOperation
+	SourceCodeOperation *SourceCodeOperation
 	TerminalOperation   TerminalOperation
 }

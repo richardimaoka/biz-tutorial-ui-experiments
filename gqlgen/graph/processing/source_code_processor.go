@@ -312,7 +312,7 @@ func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) ApplyOperation2( /*nextStep string,*/ op SourceCodeOperation) error {
+func (p *SourceCodeProcessor) ApplyOperation2( /*nextStep string,*/ op *SourceCodeOperation) error {
 
 	return nil
 }
