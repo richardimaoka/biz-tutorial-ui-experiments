@@ -28,11 +28,11 @@ func (p *PageStateProcessor) cloneCurrentState() *PageStateProcessor {
 	}
 }
 
-func (p *PageStateProcessor) applyOp(nextStep string, nextOperation *PageStateOperation) error {
+func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStateOperation) error {
 	errorPreceding := "failed to apply operation"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
-	if err := p.sourceCode.ApplyOperation2(nextStep, nextOperation.SourceCodeFileOperation); err != nil {
+	if err := p.sourceCode.Transition(nextStep, nextOperation.SourceCodeFileOperation); err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
@@ -67,7 +67,7 @@ func NewPageStateProcessor() *PageStateProcessor {
 
 func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
 	cloned := p.cloneCurrentState()
-	if err := cloned.applyOp(nextStep, op); err != nil {
+	if err := cloned.transition(nextStep, op); err != nil {
 		return fmt.Errorf("init page state failed, %s", err)
 	}
 	p.nextOperation = op

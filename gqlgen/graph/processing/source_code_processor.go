@@ -220,7 +220,7 @@ func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	}
 }
 
-func (p *SourceCodeProcessor) applyOperation(operation FileSystemOperation) error {
+func (p *SourceCodeProcessor) applyFileOperation(operation FileSystemOperation) error {
 	switch v := operation.(type) {
 	case DirectoryAdd:
 		return p.addDirectory(v)
@@ -232,6 +232,17 @@ func (p *SourceCodeProcessor) applyOperation(operation FileSystemOperation) erro
 		return p.updateFile(v)
 	case FileDelete:
 		return p.deleteFile(v)
+	default:
+		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
+	}
+}
+
+func (p *SourceCodeProcessor) applyOperation(operation SourceCodeOperation) error {
+	switch v := operation.(type) {
+	case SourceCodeFileOperation:
+		return nil
+	case SourceCodeGitOperation:
+		return nil
 	default:
 		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
 	}
@@ -263,11 +274,26 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 	}, nil
 }
 
-func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeFileOperation) error {
+func (p *SourceCodeProcessor) ApplyOperation( /*nextStep string,*/ operation FileSystemOperation) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+
+	if err := cloned.applyFileOperation(operation); err != nil {
+		return fmt.Errorf("ApplyOperation failed, %s", err)
+	}
+
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
+	//p.step = nextStep
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) Transition(nextStep string, op *SourceCodeFileOperation) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 	for _, operation := range op.FileOps {
-		if err := cloned.applyOperation(operation); err != nil {
+		if err := cloned.applyFileOperation(operation); err != nil {
 			return fmt.Errorf("ApplyOperation failed, %s", err)
 		}
 	}
@@ -275,21 +301,6 @@ func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeFil
 	p.step = cloned.step
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath
 	p.fileMap = cloned.fileMap
-
-	return nil
-}
-
-func (p *SourceCodeProcessor) ApplyOperation( /*nextStep string,*/ operation FileSystemOperation) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
-
-	if err := cloned.applyOperation(operation); err != nil {
-		return fmt.Errorf("ApplyOperation failed, %s", err)
-	}
-
-	p.defaultOpenFilePath = cloned.defaultOpenFilePath
-	p.fileMap = cloned.fileMap
-	//p.step = nextStep
 
 	return nil
 }
