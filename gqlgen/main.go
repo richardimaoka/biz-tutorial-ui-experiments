@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -54,23 +53,6 @@ func server() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func process() {
-	fmt.Println("running processing")
-	err := processing.Processing()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// actionListParse()
-
-	// err := model.SplitActionListFile("data2")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	return
 }
 
 func main() {
