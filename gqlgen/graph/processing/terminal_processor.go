@@ -48,18 +48,6 @@ func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	}
 }
 
-func (t *TerminalProcessor) Transition(nextStep string, effect TerminalEffect) {
-	t.writeCommand(effect.Command)
-	if effect.Output != nil {
-		t.writeOutput(*effect.Output)
-	}
-	if effect.CurrentDirectory != nil {
-		t.changeCurrentDirectory(*effect.CurrentDirectory)
-	}
-
-	t.step = nextStep
-}
-
 func (t *TerminalProcessor) TransitionWithOperation(nextStep string, op TerminalOperation) {
 	switch v := op.(type) {
 	case TerminalCommand:
