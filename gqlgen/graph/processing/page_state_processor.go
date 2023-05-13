@@ -42,7 +42,7 @@ func (p *PageStateProcessor) applyOp(nextStep string, nextOperation *PageStateOp
 		if !ok {
 			return fmt.Errorf("%s, terminal [%s] does not exist", errorPreceding, terminalOp.GetTerminalName())
 		}
-		terminal.TransitionWithOperation(nextStep, terminalOp)
+		terminal.Transition(nextStep, terminalOp)
 	}
 
 	return nil

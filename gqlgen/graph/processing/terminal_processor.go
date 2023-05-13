@@ -48,7 +48,7 @@ func NewTerminalProcessor(terminalName string) *TerminalProcessor {
 	}
 }
 
-func (t *TerminalProcessor) TransitionWithOperation(nextStep string, op TerminalOperation) {
+func (t *TerminalProcessor) Transition(nextStep string, op TerminalOperation) {
 	switch v := op.(type) {
 	case TerminalCommand:
 		t.writeCommand(v.Command)

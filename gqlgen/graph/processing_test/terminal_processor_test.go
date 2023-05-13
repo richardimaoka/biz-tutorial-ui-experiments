@@ -25,7 +25,7 @@ func Test_TerminalTransition(t *testing.T) {
 		terminal := processing.NewTerminalProcessor("default")
 		for i, c := range testCases {
 			step := fmt.Sprintf("%03d", i)
-			terminal.TransitionWithOperation(step, c.Operation)
+			terminal.Transition(step, c.Operation)
 
 			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, terminal.ToGraphQLTerminal())
 		}
@@ -67,15 +67,15 @@ func Test_TerminalTransition(t *testing.T) {
 // Once a GraphQL model is materialized with terminal.ToGraphQLModel(), mutation to the terminal should have no effect on the GraphQL model
 func Test_TerminalMutation1(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
-	terminal.TransitionWithOperation("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
-	terminal.TransitionWithOperation("002", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
+	terminal.Transition("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
+	terminal.Transition("002", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
 
 	// once GraphQL model is materialized...
 	materialized := terminal.ToGraphQLTerminal()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-1.json", materialized)
 
 	// ...mutation to Terminal...
-	terminal.TransitionWithOperation("003", processing.TerminalCommandWithOutputCd{Command: "mutation extra command", Output: "mutation extra output", CurrentDirectory: "mutated/current/dir"})
+	terminal.Transition("003", processing.TerminalCommandWithOutputCd{Command: "mutation extra command", Output: "mutation extra output", CurrentDirectory: "mutated/current/dir"})
 
 	// ...should of course have effect on re-materialized GraphQL model
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-2.json", terminal.ToGraphQLTerminal())
@@ -88,8 +88,8 @@ func Test_TerminalMutation1(t *testing.T) {
 // Once a GraphQL model is materialized with terminal.ToGraphQLModel(), mutation to the GraphQL model should have no effect on the terminal
 func TestTerminal_Mutation2(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
-	terminal.TransitionWithOperation("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
-	terminal.TransitionWithOperation("002", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
+	terminal.Transition("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
+	terminal.Transition("002", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
 
 	// once GraphQL model is materialized...
 	materialized := terminal.ToGraphQLTerminal()
@@ -112,15 +112,15 @@ func TestTerminal_Mutation2(t *testing.T) {
 // test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter
 func TestTerminal_Clone(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
-	terminal.TransitionWithOperation("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
+	terminal.Transition("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})
 
 	// once cloned...
 	terminalCloned := terminal.Clone()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/clone1-1.json", terminalCloned.ToGraphQLTerminal())
 
 	// ...mutation to terminal...
-	terminal.TransitionWithOperation("002", processing.TerminalCommandWithOutput{Command: "echo def", Output: "def"})
-	terminal.TransitionWithOperation("003", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
+	terminal.Transition("002", processing.TerminalCommandWithOutput{Command: "echo def", Output: "def"})
+	terminal.Transition("003", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
 
 	// ...should of course have effect on terminal itself
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/clone1-2.json", terminal.ToGraphQLTerminal())
