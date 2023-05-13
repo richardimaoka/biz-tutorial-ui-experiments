@@ -343,20 +343,6 @@ func (p *SourceCodeProcessor) ApplyOperation( /*nextStep string,*/ operation Fil
 	return nil
 }
 
-//TODO: remove this
-func (p *SourceCodeProcessor) SetStep(step string) {
-	p.step = step
-}
-
-//TODO: 2nd arg can be diff or ops? then it can be merged with ApplyDiff/ApplyOps?
-func (p *SourceCodeProcessor) Transition(nextStep string, diff Diff) error {
-	if err := p.ApplyDiff(diff); err != nil {
-		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
-	}
-	p.step = nextStep
-	return nil
-}
-
 func (p *SourceCodeProcessor) TransitionGit(nextStep string, commitHash string) error {
 	if p.repo == nil {
 		return fmt.Errorf("cannot transition to step %s, git repo is not initialized", nextStep)

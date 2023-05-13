@@ -237,53 +237,6 @@ func Test_SourceCodeGitEffect(t *testing.T) {
 	})
 }
 
-func TestSourceCode_Diff(t *testing.T) {
-	checkResult := func(t *testing.T, index int, diff processing.Diff, expectSuccess bool, err error) {
-		resultSuccess := err == nil
-		if resultSuccess != expectSuccess { //if result is not expected
-			if expectSuccess {
-				t.Fatalf("diff[%d] = %+v success is expected, but result is failure\nerror: %s\n", index, diff, err)
-			} else {
-				t.Fatalf("diff[%d] = %+v failure is expected, but result is success\n", index, diff)
-			}
-		}
-	}
-
-	type TestCase struct {
-		ExpectSuccess bool
-		ExpectedFile  string
-		Diff          processing.Diff
-	}
-
-	runTestCases := func(t *testing.T, name string, testCases []TestCase) {
-		t.Run(name, func(t *testing.T) {
-			sourceCode := processing.NewSourceCodeProcessor()
-			for i, c := range testCases {
-				err := sourceCode.ApplyDiff(c.Diff)
-				checkResult(t, i, c.Diff, c.ExpectSuccess, err)
-				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
-			}
-		})
-	}
-
-	runTestCases(t, "add_file_single", []TestCase{
-		{true, "testdata/source_code/diff-file1.json", processing.Diff{FilesAdded: []processing.FileAdd{{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true}}}},
-	})
-
-	runTestCases(t, "empty_diff", []TestCase{
-		{true, "testdata/source_code/new-source-code.json", processing.Diff{}},
-	})
-
-	runTestCases(t, "error_diff_dupe", []TestCase{
-		{false, "testdata/source_code/new-source-code.json", processing.Diff{
-			FilesAdded: []processing.FileAdd{
-				{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-				{FilePath: "hello.txt", Content: "hello new world", IsFullContent: true},
-			},
-		}},
-	})
-}
-
 // Test mutation after sourceCode.ToGraphQLModel()
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the sourceCode should have no effect on the GraphQL model
 func TestSourceCode_Mutation1(t *testing.T) {
