@@ -18,6 +18,7 @@ func EffectProcessing() error {
 		return fmt.Errorf("EffectProcessing failed: %v", err)
 	}
 
+	var ops []PageStateOperation
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
@@ -29,8 +30,23 @@ func EffectProcessing() error {
 		// PageStateEffect for seqNo
 		psEff := NewPageStateEffect(step.SeqNo, step.Step, scEff, tEff)
 
-		psEff.ToOperation()
+		op, err := psEff.ToOperation()
+		if err != nil {
+			return fmt.Errorf("EffectProcessing failed: %v", err)
+		}
+		ops = append(ops, op)
 	}
+
+	state := NewPageStateProcessor()
+
+	for i := 0; i < len(ops); i++ {
+		state.RegisterNext(stepEffects[i].Step, &ops[i])
+		WriteJsonToFile(state, "data/page-state.json")
+		state.TransitionToNext()
+		// state.applyOperation(ops[i])
+	}
+	// last state
+	WriteJsonToFile(state, "data/page-state.json")
 
 	return nil
 }

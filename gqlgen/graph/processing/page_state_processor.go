@@ -11,7 +11,7 @@ type PageStateProcessor struct {
 	terminalMap   map[string]*TerminalProcessor
 	sourceCode    *SourceCodeProcessor
 	nextAction    Action
-	nextOperation PageStateOperation
+	nextOperation *PageStateOperation
 	nextState     *PageStateProcessor
 }
 
@@ -30,7 +30,7 @@ func (p *PageStateProcessor) cloneForNextAction() *PageStateProcessor {
 	}
 }
 
-func (p *PageStateProcessor) applyOperation(nextStep string, nextOperation PageStateOperation) error {
+func (p *PageStateProcessor) applyOperation(nextStep string, nextOperation *PageStateOperation) error {
 	errorPreceding := "failed to apply operation"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
@@ -89,7 +89,7 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 // public methods
 //------------------------------------------------------------
 
-func NewPageStateProcessor(firstOperation PageStateOperation) (*PageStateProcessor, error) {
+func NewPageStateProcessor() *PageStateProcessor {
 	terminalMap := make(map[string]*TerminalProcessor)
 	terminalMap["default"] = NewTerminalProcessor("default")
 
@@ -99,16 +99,39 @@ func NewPageStateProcessor(firstOperation PageStateOperation) (*PageStateProcess
 		sourceCode:  NewSourceCodeProcessor(),
 	}
 
-	cloned := init.cloneForNextAction()
-	if err := cloned.applyOperation(init.step.nextStep, firstOperation); err != nil {
-		return nil, fmt.Errorf("init page state failed, %s", err)
+	return &init
+}
+
+func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
+	cloned := p.cloneForNextAction()
+	if err := cloned.applyOperation(nextStep, op); err != nil {
+		return fmt.Errorf("init page state failed, %s", err)
+	}
+	p.nextOperation = op
+	p.nextState = cloned
+	p.step.nextStep = nextStep
+
+	return nil
+}
+
+func (p *PageStateProcessor) TransitionToNext() error {
+	// 1. verify nextNextAction
+	if p.nextState == nil {
+		return fmt.Errorf("TransitionToNext() in PageStateProcessor failed at step = %s, next state is nil", p.step.currentStep)
 	}
 
-	init.nextOperation = firstOperation
-	init.nextState = cloned
-	init.sourceCode.SetStep(init.step.currentStep)
+	// 2. transition to nextState
+	p.sourceCode = p.nextState.sourceCode
+	p.sourceCode.SetStep(p.step.nextStep)
+	p.terminalMap = p.nextState.terminalMap
+	p.step.AutoIncrementStep()
 
-	return &init, nil
+	// 3. update step, nextAction & nextState
+	p.nextAction = nil
+	p.nextOperation = nil
+	p.nextState = nil
+
+	return nil
 }
 
 func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
