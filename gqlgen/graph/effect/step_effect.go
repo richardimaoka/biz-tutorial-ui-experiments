@@ -3,12 +3,20 @@ package effect
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/go-git/go-git/v5"
 )
 
 type StepEffect struct {
 	SeqNo       int    `json:"seqNo"`
 	CurrentStep string `json:"currentStep"`
 	NextStep    string `json:"nextStep"`
+}
+
+type GiStepEffect struct {
+	CurrentStep string
+	NextStep    string
+	CommitHash  string
 }
 
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
@@ -26,4 +34,10 @@ func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	}
 
 	return effects, err
+}
+
+func GitStepEffects(repo *git.Repository) ([]GiStepEffect, error) {
+	var effects []GiStepEffect
+
+	return effects, nil
 }
