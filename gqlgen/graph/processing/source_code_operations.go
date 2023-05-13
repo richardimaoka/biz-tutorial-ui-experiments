@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+type SourceCodeOperation struct {
+	FileOps []FileSystemOperation
+}
+
 type FileSystemOperation interface {
 	IsFileSystemOperation()
 }

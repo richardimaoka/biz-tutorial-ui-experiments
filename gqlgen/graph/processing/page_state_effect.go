@@ -19,6 +19,23 @@ func NewPageStateEffect(
 	return &PageStateEffect{SeqNo: seqNo, Step: step, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
 }
 
+func (p *PageStateEffect) ToOperation() (PageStateOperation, error) {
+	sourceCodeOp, err := p.SourceCodeEffect.ToOperation()
+	if err != nil {
+		return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+	}
+
+	terminalOp, err := p.TerminalEffect.ToOperation()
+	if err != nil {
+		return PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+	}
+
+	return PageStateOperation{
+		SourceCodeOperation: sourceCodeOp,
+		TerminalOperation:   terminalOp,
+	}, nil
+}
+
 // TODO: remove this function
 func MergeEffects(terminalEffects []TerminalEffect, fileEffects []FileEffect) ([]PageStateEffect, error) {
 	// 1. calculate the max seqNo

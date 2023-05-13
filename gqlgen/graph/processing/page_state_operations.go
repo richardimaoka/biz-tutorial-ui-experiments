@@ -1,6 +1,6 @@
 package processing
 
 type PageStateOperation struct {
-	FileOps           []FileSystemOperation
-	TerminalOperation TerminalOperation
+	SourceCodeOperation SourceCodeOperation
+	TerminalOperation   TerminalOperation
 }

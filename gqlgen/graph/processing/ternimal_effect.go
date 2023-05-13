@@ -56,17 +56,17 @@ func terminalEffectBySeqNo(seqNo int, effects []TerminalEffect) (*TerminalEffect
 	}
 }
 
-func (t TerminalEffect) ToOperation() TerminalOperation {
+func (t TerminalEffect) ToOperation() (TerminalOperation, error) {
 	if t.Output == nil && t.CurrentDirectory == nil {
-		return TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}
+		return TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}, nil
 	} else if t.Output != nil && t.CurrentDirectory == nil {
-		return TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}
+		return TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}, nil
 	} else if t.Output == nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}
+		return TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}, nil
 	} else if t.Output != nil && t.CurrentDirectory != nil {
-		return TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}
+		return TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}, nil
 	} else {
 		// this should never happen
-		return nil
+		return nil, fmt.Errorf("ToOperation() in TerminalEffect failed: terminal effect = %+v", t)
 	}
 }

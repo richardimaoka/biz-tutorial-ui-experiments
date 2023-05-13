@@ -7,13 +7,15 @@ import (
 )
 
 type PageStateProcessor struct {
-	step        *stepProcessor
-	terminalMap map[string]*TerminalProcessor
-	sourceCode  *SourceCodeProcessor
-	nextAction  Action
-	nextState   *PageStateProcessor
+	step          *stepProcessor
+	terminalMap   map[string]*TerminalProcessor
+	sourceCode    *SourceCodeProcessor
+	nextAction    Action
+	nextOperation PageStateOperation
+	nextState     *PageStateProcessor
 }
 
+//TODO: rename to cloneForNextOperation
 func (p *PageStateProcessor) cloneForNextAction() *PageStateProcessor {
 	clonedTerminalMap := make(map[string]*TerminalProcessor)
 	for k, t := range p.terminalMap {
@@ -32,11 +34,8 @@ func (p *PageStateProcessor) applyOperation(nextStep string, nextOperation PageS
 	errorPreceding := "failed to apply operation"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
-	if len(nextOperation.FileOps) != 0 {
-		// 1.1. source code mutation
-		if err := p.sourceCode.ApplyOps(nextOperation.FileOps); err != nil {
-			return fmt.Errorf("%s, %s", errorPreceding, err)
-		}
+	if err := p.sourceCode.ApplyOperation2(nextOperation.SourceCodeOperation); err != nil {
+		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
 	terminalOp := nextOperation.TerminalOperation
@@ -89,6 +88,28 @@ func (p *PageStateProcessor) applyAction(nextAction Action) error {
 //------------------------------------------------------------
 // public methods
 //------------------------------------------------------------
+
+func NewPageStateProcessor(firstOperation PageStateOperation) (*PageStateProcessor, error) {
+	terminalMap := make(map[string]*TerminalProcessor)
+	terminalMap["default"] = NewTerminalProcessor("default")
+
+	init := PageStateProcessor{
+		step:        NewStepProcessor(),
+		terminalMap: terminalMap,
+		sourceCode:  NewSourceCodeProcessor(),
+	}
+
+	cloned := init.cloneForNextAction()
+	if err := cloned.applyOperation(init.step.nextStep, firstOperation); err != nil {
+		return nil, fmt.Errorf("init page state failed, %s", err)
+	}
+
+	init.nextOperation = firstOperation
+	init.nextState = cloned
+	init.sourceCode.SetStep(init.step.currentStep)
+
+	return &init, nil
+}
 
 func InitPageStateProcessor(firstAction Action) (*PageStateProcessor, error) {
 	terminalMap := make(map[string]*TerminalProcessor)

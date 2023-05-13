@@ -46,26 +46,22 @@ func fileEffectsBySeqNo(seqNo int, effects []FileEffect) []FileEffect {
 	return effectsBySeqNo
 }
 
-func (f FileEffect) ToOperation() FileSystemOperation {
-	switch f.OperationType {
-	case "FileAdd":
-		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}
-	case "FileUpdate":
-		return FileUpdate{FilePath: f.FilePath, Content: f.Content}
-	case "FileDelete":
-		return FileDelete{FilePath: f.FilePath}
-	case "DirectoryAdd":
-		return DirectoryAdd{FilePath: f.FilePath}
-	case "DirectoryDelete":
-		return DirectoryDelete{FilePath: f.FilePath}
-	default:
-		// this hsould never happen
-		return nil
+func (f FileEffects) ToOperation() ([]FileSystemOperation, error) {
+	ops := []FileSystemOperation{}
+	for i, e := range f {
+		op, err := e.ToOperation()
+		if err != nil {
+			// this should never happen
+			return nil, fmt.Errorf("Failed in ToOperation() in FileEffects[%d]: %v", i, err)
+		}
+
+		ops = append(ops, op)
 	}
+
+	return ops, nil
 }
 
-//TODO: remove this function
-func (f FileEffect) ToOperation2() (FileSystemOperation, error) {
+func (f FileEffect) ToOperation() (FileSystemOperation, error) {
 	switch f.OperationType {
 	case "FileAdd":
 		return FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
@@ -78,6 +74,7 @@ func (f FileEffect) ToOperation2() (FileSystemOperation, error) {
 	case "DirectoryDelete":
 		return DirectoryDelete{FilePath: f.FilePath}, nil
 	default:
-		return nil, fmt.Errorf("FileEffect.ToOperation() found invalid OperationType = %s", f.OperationType)
+		// this should never happen
+		return nil, fmt.Errorf("FileEffect.ToOperation failed, wrong operation type = %s", f.OperationType)
 	}
 }
