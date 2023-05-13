@@ -20,7 +20,7 @@ func NewPageStateEffect(
 }
 
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
-	var sourceCodeOp *processing.SourceCodeOperation
+	var sourceCodeOp *processing.SourceCodeFileOperation
 	if p.SourceCodeEffect == nil {
 		sourceCodeOp = nil
 	} else {
@@ -43,7 +43,7 @@ func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 	}
 
 	return processing.PageStateOperation{
-		SourceCodeOperation: sourceCodeOp,
-		TerminalOperation:   terminalOp,
+		SourceCodeFileOperation: sourceCodeOp,
+		TerminalOperation:       terminalOp,
 	}, nil
 }

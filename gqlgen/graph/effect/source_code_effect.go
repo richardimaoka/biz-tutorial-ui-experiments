@@ -27,11 +27,11 @@ func NewSourceCodeEffect(seqNo int, effects []FileEffect) *SourceCodeEffect {
 	return &SourceCodeEffect{SeqNo: seqNo, FileEffects: effects}
 }
 
-func (s *SourceCodeEffect) ToOperation() (*processing.SourceCodeOperation, error) {
+func (s *SourceCodeEffect) ToOperation() (*processing.SourceCodeFileOperation, error) {
 	fileOps, err := s.FileEffects.ToOperation()
 	if err != nil {
-		return &processing.SourceCodeOperation{}, fmt.Errorf("ToOperation() in SourceCodeEffect failed: %v", err)
+		return &processing.SourceCodeFileOperation{}, fmt.Errorf("ToOperation() in SourceCodeEffect failed: %v", err)
 	}
 
-	return &processing.SourceCodeOperation{FileOps: fileOps}, nil
+	return &processing.SourceCodeFileOperation{FileOps: fileOps}, nil
 }

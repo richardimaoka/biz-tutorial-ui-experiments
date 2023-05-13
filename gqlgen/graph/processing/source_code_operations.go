@@ -1,6 +1,6 @@
 package processing
 
-type SourceCodeOperation struct {
+type SourceCodeFileOperation struct {
 	FileOps []FileSystemOperation
 }
 

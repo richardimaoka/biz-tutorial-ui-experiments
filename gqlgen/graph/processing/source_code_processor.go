@@ -263,7 +263,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 	}, nil
 }
 
-func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeOperation) error {
+func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeFileOperation) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 	for _, operation := range op.FileOps {
