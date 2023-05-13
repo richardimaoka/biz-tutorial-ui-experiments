@@ -11,6 +11,10 @@ type SourceCodeOperation struct {
 	FileOps []FileSystemOperation
 }
 
+type SourceCodeGitOperation struct {
+	CommitHash string
+}
+
 type FileSystemOperation interface {
 	IsFileSystemOperation()
 }
