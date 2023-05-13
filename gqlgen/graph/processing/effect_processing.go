@@ -44,6 +44,7 @@ func EffectProcessing() error {
 		}
 		ops = append(ops, op)
 	}
+	log.Printf("%d page state operations calculated", len(ops))
 
 	state := NewPageStateProcessor()
 	for i := 0; i < len(ops); i++ {
@@ -58,6 +59,8 @@ func EffectProcessing() error {
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
 	WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
+
+	log.Printf("finished writing state into files")
 
 	return nil
 }

@@ -34,7 +34,7 @@ func (p *PageStateProcessor) applyOperation(nextStep string, nextOperation *Page
 	errorPreceding := "failed to apply operation"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
-	if err := p.sourceCode.ApplyOperation2(nextOperation.SourceCodeOperation); err != nil {
+	if err := p.sourceCode.ApplyOperation2(nextStep, nextOperation.SourceCodeOperation); err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 
@@ -122,7 +122,6 @@ func (p *PageStateProcessor) TransitionToNext() error {
 
 	// 2. transition to nextState
 	p.sourceCode = p.nextState.sourceCode
-	p.sourceCode.SetStep(p.step.nextStep)
 	p.terminalMap = p.nextState.terminalMap
 
 	// 3. update step, nextAction & nextState

@@ -312,7 +312,18 @@ func (p *SourceCodeProcessor) ApplyDiff( /*nextStep string,*/ diff Diff) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) ApplyOperation2( /*nextStep string,*/ op *SourceCodeOperation) error {
+func (p *SourceCodeProcessor) ApplyOperation2(nextStep string, op *SourceCodeOperation) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+	for _, operation := range op.FileOps {
+		if err := cloned.applyOperation(operation); err != nil {
+			return fmt.Errorf("ApplyOperation failed, %s", err)
+		}
+	}
+
+	p.step = cloned.step
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
 
 	return nil
 }
