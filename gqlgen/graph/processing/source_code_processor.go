@@ -303,7 +303,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 	}, nil
 }
 
-func (p *SourceCodeProcessor) Transition(nextStep string, op *SourceCodeFileOperation) error {
+func (p *SourceCodeProcessor) TransitionOldStyle(nextStep string, op *SourceCodeFileOperation) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 	for _, operation := range op.FileOps {

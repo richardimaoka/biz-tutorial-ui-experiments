@@ -10,7 +10,7 @@ import (
 
 func applySingleFileOp(sc *processing.SourceCodeProcessor, nextStep string, op processing.FileSystemOperation) error {
 	scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{op}}
-	return sc.Transition(nextStep, &scOp)
+	return sc.TransitionOldStyle(nextStep, &scOp)
 }
 
 func Test_SourceCodeProcessor(t *testing.T) {
