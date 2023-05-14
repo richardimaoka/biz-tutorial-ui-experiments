@@ -35,3 +35,7 @@ func (s *SourceCodeEffect) ToOperation() (*processing.SourceCodeFileOperation, e
 
 	return &processing.SourceCodeFileOperation{FileOps: fileOps}, nil
 }
+
+func (s *SourceCodeGitEffect) ToOperation() (*processing.SourceCodeGitOperation, error) {
+	return nil, nil
+}
