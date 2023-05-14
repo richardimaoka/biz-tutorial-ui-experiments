@@ -8,9 +8,11 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
-func applySingleFileOp(sc *processing.SourceCodeProcessor, nextStep string, op processing.FileSystemOperation) error {
+func applySingleFileOp(t *testing.T, sc *processing.SourceCodeProcessor, nextStep string, op processing.FileSystemOperation) {
 	scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{op}}
-	return sc.Transition(nextStep, scOp)
+	if err := sc.Transition(nextStep, scOp); err != nil {
+		t.Fatalf("failed to apply operation %+v: %s", op, err)
+	}
 }
 
 func Test_SourceCodeProcessor(t *testing.T) {
@@ -35,7 +37,8 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			sourceCode := processing.NewSourceCodeProcessor()
 			for i, c := range testCases {
-				err := applySingleFileOp(sourceCode, "", c.Operation)
+				scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{c.Operation}}
+				err := sourceCode.Transition("", scOp)
 				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
 				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
@@ -246,18 +249,18 @@ func Test_SourceCodeGitEffect(t *testing.T) {
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the sourceCode should have no effect on the GraphQL model
 func TestSourceCode_Mutation1(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	applySingleFileOp(sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	applySingleFileOp(t, sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-1.json", materialized)
 
 	// ...mutation to source code...
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
-	applySingleFileOp(sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	applySingleFileOp(t, sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on re-materialized GraphQL model
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
@@ -270,9 +273,9 @@ func TestSourceCode_Mutation1(t *testing.T) {
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the GraphQL model should have no effect on the sourceCode
 func TestSourceCode_Mutation2(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	applySingleFileOp(sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	applySingleFileOp(t, sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
@@ -293,18 +296,18 @@ func TestSourceCode_Mutation2(t *testing.T) {
 
 func TestSourceCode_Clone(t *testing.T) {
 	sourceCode := processing.NewSourceCodeProcessor()
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
-	applySingleFileOp(sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/japan.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "hello/world/america.txt", Content: "hello usa", IsFullContent: true})
+	applySingleFileOp(t, sourceCode, "", processing.DirectoryAdd{FilePath: "goodmorning/hello/world"})
 
 	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
 
 	// ... mutation to source code
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
-	applySingleFileOp(sourceCode, "", processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
-	applySingleFileOp(sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
+	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/uk.txt", Content: "hello britain", IsFullContent: true})
+	applySingleFileOp(t, sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on terminal itself
 	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-2.json", sourceCode.ToGraphQLModel())
