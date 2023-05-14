@@ -38,3 +38,4 @@ func (o DirectoryDelete) IsFileSystemOperation() {}
 func (o FileAdd) IsFileSystemOperation()         {}
 func (o FileUpdate) IsFileSystemOperation()      {}
 func (o FileDelete) IsFileSystemOperation()      {}
+func (o FileUpsert) IsFileSystemOperation()      {}

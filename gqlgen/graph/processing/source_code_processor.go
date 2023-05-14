@@ -232,20 +232,49 @@ func (p *SourceCodeProcessor) applyFileOperation(operation FileSystemOperation) 
 		return p.updateFile(v)
 	case FileDelete:
 		return p.deleteFile(v)
+	case FileUpsert:
+		return p.upsertFile(v)
 	default:
 		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
 	}
 }
 
-func (p *SourceCodeProcessor) applyOperation(operation SourceCodeOperation) error {
-	switch v := operation.(type) {
-	case SourceCodeFileOperation:
-		return nil
-	case SourceCodeGitOperation:
-		return nil
-	default:
-		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
+func (p *SourceCodeProcessor) fileUpertOpsFromGit(commitHash string) ([]FileUpsert, error) {
+	if p.repo == nil {
+		return nil, fmt.Errorf("git repo is not initialized")
 	}
+
+	// repo := nil // git repo is needed at initialization
+	commit, err := p.repo.CommitObject(plumbing.NewHash(commitHash))
+	if err != nil {
+		return nil, fmt.Errorf("error in git commit %s", commitHash)
+	}
+
+	var ops []FileUpsert
+	fileIter, err := commit.Files()
+	for {
+		file, err := fileIter.Next()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return nil, fmt.Errorf("error in commit file traversal in commit %s", commitHash)
+		}
+
+		//TODO: check the size and use "***" as file.Contents() can panic if reading buffer grows too large
+		contents, err := file.Contents()
+		if err != nil {
+			return nil, fmt.Errorf("error in reading file from commit %s", commitHash)
+		}
+
+		operation := FileUpsert{
+			FilePath:      file.Name,
+			Content:       contents,
+			IsFullContent: true,
+		}
+		ops = append(ops, operation)
+	}
+
+	return ops, nil
 }
 
 //-----------------------------------------------------//
@@ -274,21 +303,6 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 	}, nil
 }
 
-func (p *SourceCodeProcessor) ApplyOperation( /*nextStep string,*/ operation FileSystemOperation) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
-
-	if err := cloned.applyFileOperation(operation); err != nil {
-		return fmt.Errorf("ApplyOperation failed, %s", err)
-	}
-
-	p.defaultOpenFilePath = cloned.defaultOpenFilePath
-	p.fileMap = cloned.fileMap
-	//p.step = nextStep
-
-	return nil
-}
-
 func (p *SourceCodeProcessor) Transition(nextStep string, op *SourceCodeFileOperation) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
@@ -306,43 +320,51 @@ func (p *SourceCodeProcessor) Transition(nextStep string, op *SourceCodeFileOper
 }
 
 func (p *SourceCodeProcessor) TransitionGit(nextStep string, commitHash string) error {
-	if p.repo == nil {
-		return fmt.Errorf("cannot transition to step %s, git repo is not initialized", nextStep)
-	}
-
-	// repo := nil // git repo is needed at initialization
-	commit, err := p.repo.CommitObject(plumbing.NewHash(commitHash))
-	if err != nil {
-		return fmt.Errorf("cannot transition to step %s, error in git commit, %s", nextStep, err)
-	}
-
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 
-	fileIter, err := commit.Files()
-	for {
-		file, err := fileIter.Next()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return fmt.Errorf("cannot transition to step %s, error in commit file traversal, %s", nextStep, err)
-		}
+	ops, err := p.fileUpertOpsFromGit(commitHash)
+	if err != nil {
+		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+	}
 
-		//TODO: check the size and use "***" as file.Contents() can panic if reading buffer grows too large
-		contents, err := file.Contents()
-		if err != nil {
-			return fmt.Errorf("cannot transition to step %s, error in reading file, %s", nextStep, err)
-		}
-
-		operation := FileUpsert{
-			FilePath:      file.Name,
-			Content:       contents,
-			IsFullContent: true,
-		}
-
-		if err := cloned.upsertFile(operation); err != nil {
+	for _, operation := range ops {
+		if err := cloned.applyFileOperation(operation); err != nil {
 			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
 		}
+	}
+
+	p.defaultOpenFilePath = cloned.defaultOpenFilePath
+	p.fileMap = cloned.fileMap
+	p.step = nextStep
+
+	return nil
+}
+
+func (p *SourceCodeProcessor) TransitionNewStype(nextStep string, operation SourceCodeOperation) error {
+	cloned := p.Clone()
+	cloned.setAllIsUpdateFalse()
+
+	switch v := operation.(type) {
+	case SourceCodeFileOperation:
+		for _, operation := range v.FileOps {
+			if err := cloned.applyFileOperation(operation); err != nil {
+				return fmt.Errorf("ApplyOperation failed, %s", err)
+			}
+		}
+	case SourceCodeGitOperation:
+		ops, err := p.fileUpertOpsFromGit(v.CommitHash)
+		if err != nil {
+			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+		}
+
+		for _, operation := range ops {
+			if err := cloned.applyFileOperation(operation); err != nil {
+				return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
+			}
+		}
+	default:
+		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
 	}
 
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath

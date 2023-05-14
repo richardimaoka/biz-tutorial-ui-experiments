@@ -64,6 +64,8 @@ func (f FileEffect) ToOperation() (processing.FileSystemOperation, error) {
 		return processing.DirectoryAdd{FilePath: f.FilePath}, nil
 	case "DirectoryDelete":
 		return processing.DirectoryDelete{FilePath: f.FilePath}, nil
+	case "FileUpsert":
+		return processing.FileUpsert{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
 	default:
 		// this should never happen
 		return nil, fmt.Errorf("FileEffect.ToOperation failed, wrong operation type = %s", f.OperationType)
