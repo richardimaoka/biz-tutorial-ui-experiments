@@ -1,6 +1,6 @@
 package processing
 
-type FileSystemOperation interface {
+type FileOperation interface {
 	IsFileSystemOperation()
 }
 

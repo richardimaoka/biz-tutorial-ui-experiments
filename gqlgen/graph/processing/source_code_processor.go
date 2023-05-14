@@ -214,7 +214,7 @@ func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	}
 }
 
-func (p *SourceCodeProcessor) applyFileOperation(operation FileSystemOperation) error {
+func (p *SourceCodeProcessor) applyFileOperation(operation FileOperation) error {
 	switch v := operation.(type) {
 	case DirectoryAdd:
 		return p.addDirectory(v)

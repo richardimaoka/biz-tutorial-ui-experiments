@@ -8,8 +8,8 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
-func applySingleFileOp(t *testing.T, sc *processing.SourceCodeProcessor, nextStep string, op processing.FileSystemOperation) {
-	scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{op}}
+func applySingleFileOp(t *testing.T, sc *processing.SourceCodeProcessor, nextStep string, op processing.FileOperation) {
+	scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileOperation{op}}
 	if err := sc.Transition(nextStep, scOp); err != nil {
 		t.Fatalf("failed to apply operation %+v: %s", op, err)
 	}
@@ -19,10 +19,10 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	type TestCase struct {
 		ExpectSuccess bool
 		ExpectedFile  string
-		Operation     processing.FileSystemOperation
+		Operation     processing.FileOperation
 	}
 
-	checkResult := func(t *testing.T, index int, op processing.FileSystemOperation, expectSuccess bool, err error) {
+	checkResult := func(t *testing.T, index int, op processing.FileOperation, expectSuccess bool, err error) {
 		resultSuccess := err == nil
 		if resultSuccess != expectSuccess { //if result is not expected
 			if expectSuccess {
@@ -37,7 +37,7 @@ func Test_SourceCodeProcessor(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			sourceCode := processing.NewSourceCodeProcessor()
 			for i, c := range testCases {
-				scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{c.Operation}}
+				scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileOperation{c.Operation}}
 				err := sourceCode.Transition("", scOp)
 				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 

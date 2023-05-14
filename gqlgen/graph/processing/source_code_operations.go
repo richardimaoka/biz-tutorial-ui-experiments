@@ -5,7 +5,7 @@ type SourceCodeOperation interface {
 }
 
 type SourceCodeFileOperation struct {
-	FileOps []FileSystemOperation
+	FileOps []FileOperation
 }
 
 type SourceCodeGitOperation struct {

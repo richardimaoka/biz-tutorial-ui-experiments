@@ -37,8 +37,8 @@ func (f FileEffects) FilterBySeqNo(seqNo int) FileEffects {
 	return effectsBySeqNo
 }
 
-func (f FileEffects) ToOperation() ([]processing.FileSystemOperation, error) {
-	ops := []processing.FileSystemOperation{}
+func (f FileEffects) ToOperation() ([]processing.FileOperation, error) {
+	ops := []processing.FileOperation{}
 	for i, e := range f {
 		op, err := e.ToOperation()
 		if err != nil {
@@ -52,7 +52,7 @@ func (f FileEffects) ToOperation() ([]processing.FileSystemOperation, error) {
 	return ops, nil
 }
 
-func (f FileEffect) ToOperation() (processing.FileSystemOperation, error) {
+func (f FileEffect) ToOperation() (processing.FileOperation, error) {
 	switch f.OperationType {
 	case "FileAdd":
 		return processing.FileAdd{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
