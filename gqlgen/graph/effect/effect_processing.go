@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
@@ -89,14 +90,14 @@ func EffectProcessing() error {
 		// after registering the next op, write to the file
 		nextStep := step.NextStep
 		state.RegisterNext(nextStep, &op)
-		WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep))
+		internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep))
 
 		// iterate over to the next state
 		state.TransitionToNext()
 	}
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
+	internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
 
 	log.Printf("finished writing state into files")
 

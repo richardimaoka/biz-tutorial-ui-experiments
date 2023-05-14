@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 )
 
 type StepEffect struct {
@@ -22,7 +23,7 @@ type GiStepEffect struct {
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	var effects []StepEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := jsonRead(filePath, unmarshaller)
+	err := internal.JsonRead(filePath, unmarshaller)
 	if err != nil {
 		return nil, fmt.Errorf("ReadStepEffects failed to read file, %s", err)
 	}
