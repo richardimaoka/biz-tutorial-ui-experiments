@@ -10,7 +10,7 @@ import (
 
 func applySingleFileOp(sc *processing.SourceCodeProcessor, nextStep string, op processing.FileSystemOperation) error {
 	scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileSystemOperation{op}}
-	return sc.TransitionOldStyle(nextStep, &scOp)
+	return sc.Transition(nextStep, scOp)
 }
 
 func Test_SourceCodeProcessor(t *testing.T) {
@@ -211,7 +211,7 @@ func Test_SourceCodeGitEffect(t *testing.T) {
 			}
 
 			for i, c := range testCases {
-				err := sourceCode.TransitionGit(fmt.Sprintf("%03d", i), c.CommitHash)
+				err := sourceCode.Transition(fmt.Sprintf("%03d", i), processing.SourceCodeGitOperation{CommitHash: c.CommitHash})
 				checkResult(t, i, c.CommitHash, c.ExpectSuccess, err)
 
 				internal.CompareWitGoldenFile(t, *updateFlag, c.GoldenFile, sourceCode.ToGraphQLModel())

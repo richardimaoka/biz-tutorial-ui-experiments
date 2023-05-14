@@ -32,7 +32,7 @@ func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStat
 	errorPreceding := "failed to apply operation"
 
 	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
-	if err := p.sourceCode.TransitionOldStyle(nextStep, nextOperation.SourceCodeFileOperation); err != nil {
+	if err := p.sourceCode.Transition(nextStep, nextOperation.SourceCodeFileOperation); err != nil {
 		return fmt.Errorf("%s, %s", errorPreceding, err)
 	}
 

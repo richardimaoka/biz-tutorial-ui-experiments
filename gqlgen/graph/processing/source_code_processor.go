@@ -137,7 +137,6 @@ func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {
 	delete(p.fileMap, op.FilePath)
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
 	delete(p.fileMap, op.FilePath)
 
@@ -149,7 +148,6 @@ func (p *SourceCodeProcessor) deleteDirectoryMutation(op DirectoryDelete) {
 	}
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) addDirectory(op DirectoryAdd) error {
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add directory %s, %s", op.FilePath, err)
@@ -159,7 +157,6 @@ func (p *SourceCodeProcessor) addDirectory(op DirectoryAdd) error {
 	return nil
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) addFile(op FileAdd) error {
 	if err := p.canAdd(op.FilePath); err != nil {
 		return fmt.Errorf("cannot add file %s, %s", op.FilePath, err)
@@ -169,7 +166,6 @@ func (p *SourceCodeProcessor) addFile(op FileAdd) error {
 	return nil
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) deleteDirectory(op DirectoryDelete) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
@@ -179,7 +175,6 @@ func (p *SourceCodeProcessor) deleteDirectory(op DirectoryDelete) error {
 	return nil
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) updateFile(op FileUpdate) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
@@ -189,7 +184,6 @@ func (p *SourceCodeProcessor) updateFile(op FileUpdate) error {
 	return nil
 }
 
-//TODO: remove this method and call the implementation directly, once ApplyDiff is removed
 func (p *SourceCodeProcessor) deleteFile(op FileDelete) error {
 	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
@@ -303,45 +297,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 	}, nil
 }
 
-func (p *SourceCodeProcessor) TransitionOldStyle(nextStep string, op *SourceCodeFileOperation) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
-	for _, operation := range op.FileOps {
-		if err := cloned.applyFileOperation(operation); err != nil {
-			return fmt.Errorf("ApplyOperation failed, %s", err)
-		}
-	}
-
-	p.step = cloned.step
-	p.defaultOpenFilePath = cloned.defaultOpenFilePath
-	p.fileMap = cloned.fileMap
-
-	return nil
-}
-
-func (p *SourceCodeProcessor) TransitionGit(nextStep string, commitHash string) error {
-	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
-
-	ops, err := p.fileUpertOpsFromGit(commitHash)
-	if err != nil {
-		return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
-	}
-
-	for _, operation := range ops {
-		if err := cloned.applyFileOperation(operation); err != nil {
-			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
-		}
-	}
-
-	p.defaultOpenFilePath = cloned.defaultOpenFilePath
-	p.fileMap = cloned.fileMap
-	p.step = nextStep
-
-	return nil
-}
-
-func (p *SourceCodeProcessor) TransitionNewStype(nextStep string, operation SourceCodeOperation) error {
+func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOperation) error {
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 
