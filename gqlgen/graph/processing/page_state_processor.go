@@ -65,6 +65,24 @@ func NewPageStateProcessor() *PageStateProcessor {
 	return &init
 }
 
+func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error) {
+	sourceCode, err := SourceCodeProcessorFromGit(repoUrl)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create PageStateGitProcessorFromGit, %s", err)
+	}
+
+	terminalMap := make(map[string]*TerminalProcessor)
+	terminalMap["default"] = NewTerminalProcessor("default")
+
+	init := PageStateProcessor{
+		step:        NewStepProcessor(),
+		terminalMap: terminalMap,
+		sourceCode:  sourceCode,
+	}
+
+	return &init, nil
+}
+
 func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
 	cloned := p.cloneCurrentState()
 	if err := cloned.transition(nextStep, op); err != nil {

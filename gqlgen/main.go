@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "processing" {
-		if err := effect.EffectProcessing(); err != nil {
+		if err := effect.GitEffectProcessing(); err != nil {
 			log.Fatal(err)
 		}
 	} else {

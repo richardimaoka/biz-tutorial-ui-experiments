@@ -301,6 +301,7 @@ func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOp
 	cloned := p.Clone()
 	cloned.setAllIsUpdateFalse()
 
+	//TODO: if FileOps() method is implemented, switch case can be removed
 	switch v := operation.(type) {
 	case SourceCodeFileOperation:
 		for _, operation := range v.FileOps {
@@ -360,6 +361,7 @@ func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
 
 	return &SourceCodeProcessor{
 		step:                p.step,
+		repo:                p.repo,
 		defaultOpenFilePath: p.defaultOpenFilePath,
 		fileMap:             fileMap,
 	}

@@ -10,11 +10,12 @@ import (
 
 func GitEffectProcessing() error {
 	log.Printf("GitEffectProcessing started")
+	repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
 
 	//------------------------------------
 	// 1. read effects from git repository
 	//------------------------------------
-	stepEffects, err := GitStepEffects("https://github.com/richardimaoka/gqlgensandbox")
+	stepEffects, err := GitStepEffects(repoUrl)
 	if err != nil {
 		return fmt.Errorf("GitStepEffects failed: %v", err)
 	}
@@ -37,25 +38,39 @@ func GitEffectProcessing() error {
 	//--------------------------------------------------------
 	// 2. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	state := processing.NewPageStateProcessor()
+	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
+	if err != nil {
+		return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
+	}
+
 	for i, step := range stepEffects {
 		state.TransitionToNext()
 		op, err := pageStateEffects[i].ToOperation()
 		if err != nil {
-			return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+			return fmt.Errorf("ToOperation() failed at %s: %v", step.CurrentStep, err)
 		}
 
-		// after registering the next op, write to the file
 		nextStep := step.NextStep
-		state.RegisterNext(nextStep, &op)
-		internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep))
+		if err := state.RegisterNext(nextStep, &op); err != nil {
+			return fmt.Errorf("RegisterNext() failed at step %s: %v", step.CurrentStep, err)
+		}
+
+		fileName := fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep)
+		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+			return fmt.Errorf("WriteJsonToFile() failed at step %s: %v", step.CurrentStep, err)
+		}
 
 		// iterate over to the next state
-		state.TransitionToNext()
+		if err := state.TransitionToNext(); err != nil {
+			return fmt.Errorf("TransitionToNext() failed at step %s: %v", step.CurrentStep, err)
+		}
 	}
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
+	fileName := fmt.Sprintf("data/state/page-state%s.json", lastStep)
+	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
+	}
 
 	log.Printf("finished writing state into files")
 	return nil
@@ -113,17 +128,28 @@ func EffectProcessing() error {
 			return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
 		}
 
-		// after registering the next op, write to the file
 		nextStep := step.NextStep
-		state.RegisterNext(nextStep, &op)
-		internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep))
+		if err := state.RegisterNext(nextStep, &op); err != nil {
+			return fmt.Errorf("RegisterNext() in PageStateProcessor failed: %v", err)
+		}
+
+		fileName := fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep)
+		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+			return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
+		}
 
 		// iterate over to the next state
-		state.TransitionToNext()
+		if err := state.TransitionToNext(); err != nil {
+			return fmt.Errorf("TransitionToNext() in PageStateProcessor failed: %v", err)
+		}
 	}
+
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
+	fileName := fmt.Sprintf("data/state/page-state%s.json", lastStep)
+	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
+	}
 
 	log.Printf("finished writing state into files")
 	return nil
