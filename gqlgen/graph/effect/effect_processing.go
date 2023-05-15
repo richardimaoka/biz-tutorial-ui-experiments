@@ -9,15 +9,30 @@ import (
 )
 
 func GitEffectProcessing() error {
-	//----------------------------------
+	log.Printf("GitEffectProcessing started")
+
+	//------------------------------------
 	// 1. read effects from git repository
 	//------------------------------------
-	log.Printf("EffectProcessing started")
-
-	stepEffects, err := GitStepEffects(nil)
+	stepEffects, err := GitStepEffects("https://github.com/richardimaoka/gqlgensandbox")
 	if err != nil {
 		return fmt.Errorf("GitStepEffects failed: %v", err)
 	}
+	log.Printf("%d step effects read ", len(stepEffects))
+
+	//------------------------------
+	// 2. construct page-sate effect
+	//------------------------------
+	var pageStateEffects []PageStateEffect
+	for _, step := range stepEffects {
+		// SourceCodeEffect for seqNo
+		scEff := NewSourceCodeGitEffect(step.SeqNo, step.CommitHash)
+
+		// PageStateEffect for seqNo
+		psEff := NewPageStateGitEffect(step.SeqNo, scEff, nil)
+		pageStateEffects = append(pageStateEffects, *psEff)
+	}
+	log.Printf("%d page state effects calculated", len(pageStateEffects))
 
 	//--------------------------------------------------------
 	// 2. apply page-state operation and write states to files
@@ -25,13 +40,12 @@ func GitEffectProcessing() error {
 	state := processing.NewPageStateProcessor()
 	for i, step := range stepEffects {
 		state.TransitionToNext()
-		var op processing.PageStateOperation
-		// op, err := stepEffects[i].ToOperation()
-		// if err != nil {
-		// 	return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
-		// }
+		op, err := pageStateEffects[i].ToOperation()
+		if err != nil {
+			return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+		}
 
-		// // after registering the next op, write to the file
+		// after registering the next op, write to the file
 		nextStep := step.NextStep
 		state.RegisterNext(nextStep, &op)
 		internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep))
@@ -43,6 +57,7 @@ func GitEffectProcessing() error {
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
 	internal.WriteJsonToFile(state.ToGraphQLPageState(), fmt.Sprintf("data/state/page-state%s.json", lastStep))
 
+	log.Printf("finished writing state into files")
 	return nil
 }
 
