@@ -13,22 +13,6 @@ type PageStateEffect struct {
 	TerminalEffect      *TerminalEffect
 }
 
-func NewPageStateEffect(
-	seqNo int,
-	sourceCodeEffect *SourceCodeEffect,
-	terminalEffect *TerminalEffect,
-) *PageStateEffect {
-	return &PageStateEffect{SeqNo: seqNo, SourceCodeEffect: sourceCodeEffect, TerminalEffect: terminalEffect}
-}
-
-func NewPageStateGitEffect(
-	seqNo int,
-	sourceCodeGitEffect *SourceCodeGitEffect,
-	terminalEffect *TerminalEffect,
-) *PageStateEffect {
-	return &PageStateEffect{SeqNo: seqNo, SourceCodeGitEffect: sourceCodeGitEffect, TerminalEffect: terminalEffect}
-}
-
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 	var sourceCodeOp processing.SourceCodeOperation
 	var err error

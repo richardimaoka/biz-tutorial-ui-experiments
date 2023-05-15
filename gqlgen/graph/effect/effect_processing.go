@@ -27,11 +27,11 @@ func GitEffectProcessing() error {
 	var pageStateEffects []PageStateEffect
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
-		scEff := NewSourceCodeGitEffect(step.SeqNo, step.CommitHash)
+		scEff := SourceCodeGitEffect{step.SeqNo, step.CommitHash, nil}
 
 		// PageStateEffect for seqNo
-		psEff := NewPageStateGitEffect(step.SeqNo, scEff, nil)
-		pageStateEffects = append(pageStateEffects, *psEff)
+		psEff := PageStateEffect{step.SeqNo, nil, &scEff, nil}
+		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))
 
@@ -107,14 +107,14 @@ func EffectProcessing() error {
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-		scEff := NewSourceCodeEffect(step.SeqNo, fEffs)
+		scEff := SourceCodeEffect{step.SeqNo, fEffs, nil}
 
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
 		// PageStateEffect for seqNo
-		psEff := NewPageStateEffect(step.SeqNo, scEff, tEff)
-		pageStateEffects = append(pageStateEffects, *psEff)
+		psEff := PageStateEffect{step.SeqNo, &scEff, nil, tEff}
+		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))
 

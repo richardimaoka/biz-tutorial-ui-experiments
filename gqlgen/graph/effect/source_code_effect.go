@@ -23,14 +23,6 @@ type OpenFileEffect struct {
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 }
 
-func NewSourceCodeGitEffect(seqNo int, commitHash string) *SourceCodeGitEffect {
-	return &SourceCodeGitEffect{SeqNo: seqNo, CommitHash: commitHash}
-}
-
-func NewSourceCodeEffect(seqNo int, effects []FileEffect) *SourceCodeEffect {
-	return &SourceCodeEffect{SeqNo: seqNo, FileEffects: effects}
-}
-
 func (s *SourceCodeGitEffect) ToOperation() (processing.SourceCodeGitOperation, error) {
 	return processing.SourceCodeGitOperation{CommitHash: s.CommitHash}, nil
 }
