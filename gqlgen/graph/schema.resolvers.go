@@ -41,7 +41,12 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
-	filename := fmt.Sprintf("data/state/state-%s.json", obj.Step)
+	var filename string
+	if obj.Step == "" {
+		filename = "data/state/state-000.json"
+	} else {
+		filename = fmt.Sprintf("data/state/state-%s.json", obj.Step)
+	}
 	log.Printf("OpenFile() reading data from %s", filename)
 
 	data, err := os.ReadFile(filename)

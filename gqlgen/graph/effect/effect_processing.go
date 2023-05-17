@@ -55,7 +55,7 @@ func GitEffectProcessing() error {
 			return fmt.Errorf("RegisterNext() failed at step %s: %v", step.CurrentStep, err)
 		}
 
-		fileName := fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep)
+		fileName := fmt.Sprintf("data/state/state-%s.json", stepEffects[i].CurrentStep)
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("WriteJsonToFile() failed at step %s: %v", step.CurrentStep, err)
 		}
@@ -67,7 +67,7 @@ func GitEffectProcessing() error {
 	}
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	fileName := fmt.Sprintf("data/state/page-state%s.json", lastStep)
+	fileName := fmt.Sprintf("data/state/state-%s.json", lastStep)
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 	}
@@ -133,7 +133,7 @@ func EffectProcessing() error {
 			return fmt.Errorf("RegisterNext() in PageStateProcessor failed: %v", err)
 		}
 
-		fileName := fmt.Sprintf("data/state/page-state%s.json", stepEffects[i].CurrentStep)
+		fileName := fmt.Sprintf("data/state/state-%s.json", stepEffects[i].CurrentStep)
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 		}
@@ -146,7 +146,7 @@ func EffectProcessing() error {
 
 	// last state writes to the file
 	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	fileName := fmt.Sprintf("data/state/page-state%s.json", lastStep)
+	fileName := fmt.Sprintf("data/state/state-%s.json", lastStep)
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 	}
