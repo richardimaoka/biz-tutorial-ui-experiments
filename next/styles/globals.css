@@ -2,4 +2,10 @@ body {
   margin: 0px;
   background-color: #333333;
   min-height: 100vh;
+  color: white;
+}
+
+a {
+  color: #389bf2;
+  text-decoration: none;
 }
