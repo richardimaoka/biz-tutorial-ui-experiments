@@ -49,8 +49,13 @@ export default function Page() {
             margin: 16px 0px;
           }
 
-          li {
+          ul {
+            margin: 16px 0px;
+          }
+
+          ul > li {
             font-size: 14px;
+            margin: 4px 0px;
           }
 
           code {
@@ -63,6 +68,7 @@ export default function Page() {
           }
 
           pre {
+            margin: 16px 0px;
             padding: 8px;
             background-color: #3c3c3c;
           }
@@ -70,6 +76,27 @@ export default function Page() {
           pre > code {
             font-size: 14px;
             line-height: 20px;
+          }
+
+          blockquote {
+            margin: 16px 0px;
+            margin: 0px;
+            padding-left: 18px;
+            border-left: 2px solid #007acc;
+            color: #858585;
+          }
+
+          img {
+            margin: 16px 0px;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+          }
+
+          iframe {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
           }
         `}
       >
@@ -121,7 +148,7 @@ export default function Page() {
         <pre>
           <code>{sourceCode}</code>
         </pre>
-        <img src="https://camo.qiitausercontent.com/c6718430970d7f1756e60ef460da266a5476599a/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e616d617a6f6e6177732e636f6d2f302f34353631372f30313562643035382d376561302d653661352d623963622d3336613466623338653539632e706e67" />
+        <img src="https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg" />
       </div>
     </div>
   );
