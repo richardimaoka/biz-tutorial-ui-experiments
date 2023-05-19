@@ -2,7 +2,12 @@ import { css } from "@emotion/react";
 
 export default function Page() {
   return (
-    <div>
+    <div
+      css={css`
+        width: 680px;
+        /* margin: 0 auto; */
+      `}
+    >
       <h1>Get started with Apollo Client</h1>
       <p>
         Hello! 👋 This short tutorial gets you up and running with Apollo
@@ -46,6 +51,7 @@ export default function Page() {
         </li>
       </ul>
       <p>Run the following command to install both of these packages:</p>
+      <h3>npm</h3>
     </div>
   );
 }
