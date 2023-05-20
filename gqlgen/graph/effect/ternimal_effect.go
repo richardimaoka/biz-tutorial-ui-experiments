@@ -9,11 +9,11 @@ import (
 )
 
 type TerminalEffect struct {
-	SeqNo            int     `json:"seqNo"`
-	TerminalName     string  `json:"terminalName"`
-	Command          string  `json:"command"`
-	Output           *string `json:"output"`           //if zero value, no output after execution
-	CurrentDirectory *string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
+	SeqNo            int    `json:"seqNo"`
+	TerminalName     string `json:"terminalName"`
+	Command          string `json:"command"`
+	Output           string `json:"output"`           //if zero value, no output after execution
+	CurrentDirectory string `json:"currentDirectory"` //if zero value, current directory is not changed after execution
 }
 
 type TerminalEffects []TerminalEffect
@@ -40,16 +40,15 @@ func (t TerminalEffects) FindBySeqNo(seqNo int) *TerminalEffect {
 }
 
 func (t TerminalEffect) ToOperation() (processing.TerminalOperation, error) {
-	if t.Output == nil && t.CurrentDirectory == nil {
+	if t.Output == "" && t.CurrentDirectory == "" {
 		return processing.TerminalCommand{TerminalName: t.TerminalName, Command: t.Command}, nil
-	} else if t.Output != nil && t.CurrentDirectory == nil {
-		return processing.TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output}, nil
-	} else if t.Output == nil && t.CurrentDirectory != nil {
-		return processing.TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: *t.CurrentDirectory}, nil
-	} else if t.Output != nil && t.CurrentDirectory != nil {
-		return processing.TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: *t.Output, CurrentDirectory: *t.CurrentDirectory}, nil
+	} else if t.Output != "" && t.CurrentDirectory == "" {
+		return processing.TerminalCommandWithOutput{TerminalName: t.TerminalName, Command: t.Command, Output: t.Output}, nil
+	} else if t.Output == "" && t.CurrentDirectory != "" {
+		return processing.TerminalCommandWithCd{TerminalName: t.TerminalName, Command: t.Command, CurrentDirectory: t.CurrentDirectory}, nil
+	} else if t.Output != "" && t.CurrentDirectory != "" {
+		return processing.TerminalCommandWithOutputCd{TerminalName: t.TerminalName, Command: t.Command, Output: t.Output, CurrentDirectory: t.CurrentDirectory}, nil
 	} else {
-		// this should never happen
-		return nil, fmt.Errorf("ToOperation() in TerminalEffect failed: terminal effect = %+v", t)
+		return nil, fmt.Errorf("ToOperation() failed - this should never happen!! likely a source code bug, where if/else is non-exhausitive, in TerminalEffect's ToOperation(): terminal effect = %+v", t)
 	}
 }

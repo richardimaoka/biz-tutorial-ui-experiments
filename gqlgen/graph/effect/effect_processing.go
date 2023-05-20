@@ -9,25 +9,25 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	log.Printf("processing started")
+	log.Printf("processingCoreLogic started")
 	//------------------------------------
 	// 1. read effects for git repository
 	//------------------------------------
 	stepEffects, err := ReadStepEffects(dirName + "/step-effects.json")
 	if err != nil {
-		return fmt.Errorf("processing failed: %v", err)
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d step effects read ", len(stepEffects))
 
 	fileEffects, err := ReadFileEffects(dirName + "/file-effects.json")
 	if err != nil {
-		return fmt.Errorf("processing failed: %v", err)
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d file effects read ", len(fileEffects))
 
 	terminalEffects, err := ReadTerminalEffects(dirName + "/terminal-effects.json")
 	if err != nil {
-		return fmt.Errorf("processing failed: %v", err)
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d terminal effects read ", len(terminalEffects))
 
@@ -65,7 +65,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		state.TransitionToNext()
 		op, err := pageStateEffects[i].ToOperation()
 		if err != nil {
-			return fmt.Errorf("ToOperation() failed at %s: %v", step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step %s: %v", step.Step, err)
 		}
 
 		var nextStep string
@@ -76,7 +76,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		}
 
 		if err := state.RegisterNext(nextStep, &op); err != nil {
-			return fmt.Errorf("RegisterNext() failed at step %s: %v", step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step %s: %v", step.Step, err)
 		}
 
 		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", step.Step)

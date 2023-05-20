@@ -9,11 +9,11 @@ import (
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "processing" {
-		dirName := "data/gqlgensandbox"
-		repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
+		// dirName := "data/gqlgensandbox"
+		// repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
 
-		// dirName := "data/protoc-go-experiments"
-		// repoUrl := ""
+		dirName := "data/protoc-go-experiments"
+		repoUrl := ""
 
 		if repoUrl == "" {
 			if err := effect.EffectProcessing(dirName); err != nil {

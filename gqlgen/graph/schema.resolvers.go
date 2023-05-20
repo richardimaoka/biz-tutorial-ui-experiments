@@ -14,13 +14,16 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
+var dirName = "data/gqlgensandbox/state"
+var firstStep = "aedf3711-8f47-4c9b-af54-12eb7c0d2d87"
+
 // PageState is the resolver for the pageState field.
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
 	if step == nil {
-		filename = "data/state/state-000.json"
+		filename = fmt.Sprintf(dirName+"/state-%s.json", firstStep)
 	} else {
-		filename = fmt.Sprintf("data/state/state-%s.json", *step)
+		filename = fmt.Sprintf(dirName+"/state-%s.json", *step)
 	}
 
 	log.Printf("reading data from %s", filename)
@@ -43,10 +46,11 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	var filename string
 	if obj.Step == "" {
-		filename = "data/state/state-000.json"
+		filename = fmt.Sprintf(dirName+"/state-%s.json", firstStep)
 	} else {
-		filename = fmt.Sprintf("data/state/state-%s.json", obj.Step)
+		filename = fmt.Sprintf(dirName+"/state-%s.json", obj.Step)
 	}
+
 	log.Printf("OpenFile() reading data from %s", filename)
 
 	data, err := os.ReadFile(filename)
