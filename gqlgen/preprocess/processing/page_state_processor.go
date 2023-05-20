@@ -10,6 +10,7 @@ type PageStateProcessor struct {
 	step          *stepProcessor
 	terminalMap   map[string]*TerminalProcessor
 	sourceCode    *SourceCodeProcessor
+	markdown      *MarkdownProcessor
 	nextOperation *PageStateOperation
 	nextState     *PageStateProcessor
 }
@@ -24,6 +25,7 @@ func (p *PageStateProcessor) cloneCurrentState() *PageStateProcessor {
 		step:        p.step.Clone(),
 		terminalMap: clonedTerminalMap,
 		sourceCode:  p.sourceCode.Clone(),
+		markdown:    p.markdown.Clone(),
 		// not cloning nextXxx as they are updated in actual next step
 	}
 }
@@ -47,6 +49,13 @@ func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStat
 		terminal.Transition(nextStep, terminalOp)
 	}
 
+	markdownOp := nextOperation.MarkdownOperation
+	if markdownOp != nil {
+		if err := p.markdown.Transition(nextStep, *markdownOp); err != nil {
+			return fmt.Errorf("%s, markdown transition failed, %s", errorPreceding, err)
+		}
+	}
+
 	return nil
 }
 
@@ -62,6 +71,7 @@ func NewPageStateProcessor() *PageStateProcessor {
 		step:        NewStepProcessor(),
 		terminalMap: terminalMap,
 		sourceCode:  NewSourceCodeProcessor(),
+		markdown:    NewMarkdownProcessor(),
 	}
 
 	return &init
@@ -80,6 +90,7 @@ func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error
 		step:        NewStepProcessor(),
 		terminalMap: terminalMap,
 		sourceCode:  sourceCode,
+		markdown:    NewMarkdownProcessor(),
 	}
 
 	return &init, nil
@@ -106,6 +117,7 @@ func (p *PageStateProcessor) TransitionToNext() error {
 	// 2. transition to nextState
 	p.sourceCode = p.nextState.sourceCode
 	p.terminalMap = p.nextState.terminalMap
+	p.markdown = p.nextState.markdown
 
 	// 3. update step, nextAction & nextState
 	p.nextOperation = nil

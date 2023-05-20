@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 type MarkdownEffect struct {
@@ -33,4 +34,9 @@ func ReadMarkdownEffects(filePath string) (MarkdownEffects, error) {
 	}
 
 	return effects, err
+}
+
+// currently MarkdownOperation is a concrete struct, so using pointer to allow nil (i.e.) no op.
+func (e *MarkdownEffect) ToOperation() (*processing.MarkdownOperation, error) {
+	return &processing.MarkdownOperation{Contents: e.Markdown}, nil
 }

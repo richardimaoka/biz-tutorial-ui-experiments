@@ -8,7 +8,7 @@ import (
 
 type PageStateEffect struct {
 	SeqNo            int
-	SourceCodeEffect *SourceCodeEffect // only either SourceCodeEffect or SourceCodeGitEffect is held
+	SourceCodeEffect *SourceCodeEffect
 	TerminalEffect   *TerminalEffect
 	MarkdownEffect   *MarkdownEffect
 }
@@ -36,8 +36,20 @@ func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 		}
 	}
 
+	var markdownOp *processing.MarkdownOperation
+	if p.MarkdownEffect == nil {
+		markdownOp = nil
+	} else {
+		var err error
+		markdownOp, err = p.MarkdownEffect.ToOperation()
+		if err != nil {
+			return processing.PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+		}
+	}
+
 	return processing.PageStateOperation{
 		SourceCodeOperation: sourceCodeOp,
 		TerminalOperation:   terminalOp,
+		MarkdownOperation:   markdownOp,
 	}, nil
 }
