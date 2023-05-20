@@ -23,6 +23,13 @@ type GiStepEffect struct {
 	CommitHash  string `json:"commitHash"`
 }
 
+type GeneralStepEffect struct {
+	SeqNo       int    `json:"seqNo"`
+	CurrentStep string `json:"currentStep"`
+	NextStep    string `json:"nextStep"`
+	CommitHash  string `json:"commitHash"`
+}
+
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	var effects []StepEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
@@ -40,6 +47,11 @@ func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	return effects, err
 }
 
+func ReadGeneralStepEffects(repoUrl string) ([]GeneralStepEffect, error) {
+	return nil, nil
+}
+
+// TODO: retain this as an alternative function returns []GeneralStepEffect
 func GitStepEffects(repoUrl string) ([]GiStepEffect, error) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
