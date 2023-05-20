@@ -37,6 +37,12 @@ export type FileNode = {
 
 export type FileNodeType = "DIRECTORY" | "FILE";
 
+export type Markdown = {
+  __typename: "Markdown";
+  contents?: Maybe<Scalars["String"]>;
+  step?: Maybe<Scalars["String"]>;
+};
+
 export type NextAction = {
   __typename: "NextAction";
   content?: Maybe<NextActionContent>;
@@ -66,6 +72,7 @@ export type OpenFile = {
 
 export type PageState = {
   __typename: "PageState";
+  markdown?: Maybe<Markdown>;
   nextAction?: Maybe<NextAction>;
   nextStep?: Maybe<Scalars["String"]>;
   prevStep?: Maybe<Scalars["String"]>;

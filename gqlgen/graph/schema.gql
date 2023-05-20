@@ -35,6 +35,7 @@ type PageState {
   prevStep: String
   sourceCode: SourceCode
   terminals: [Terminal]
+  markdown: Markdown
   nextAction: NextAction
 }
 
@@ -102,4 +103,13 @@ type SourceCode {
   fileTree: [FileNode]
   openFile(filePath: String): OpenFile
   defaultOpenFile: OpenFile
+}
+
+###################################################
+# Markdown related object types
+###################################################
+
+type Markdown {
+  step: String
+  contents: String
 }

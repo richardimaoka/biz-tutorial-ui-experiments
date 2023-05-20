@@ -57,6 +57,11 @@ type ComplexityRoot struct {
 		Offset    func(childComplexity int) int
 	}
 
+	Markdown struct {
+		Contents func(childComplexity int) int
+		Step     func(childComplexity int) int
+	}
+
 	NextAction struct {
 		Content func(childComplexity int) int
 	}
@@ -79,6 +84,7 @@ type ComplexityRoot struct {
 	}
 
 	PageState struct {
+		Markdown   func(childComplexity int) int
 		NextAction func(childComplexity int) int
 		NextStep   func(childComplexity int) int
 		PrevStep   func(childComplexity int) int
@@ -190,6 +196,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.FileNode.Offset(childComplexity), true
 
+	case "Markdown.contents":
+		if e.complexity.Markdown.Contents == nil {
+			break
+		}
+
+		return e.complexity.Markdown.Contents(childComplexity), true
+
+	case "Markdown.step":
+		if e.complexity.Markdown.Step == nil {
+			break
+		}
+
+		return e.complexity.Markdown.Step(childComplexity), true
+
 	case "NextAction.content":
 		if e.complexity.NextAction.Content == nil {
 			break
@@ -252,6 +272,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Language(childComplexity), true
+
+	case "PageState.markdown":
+		if e.complexity.PageState.Markdown == nil {
+			break
+		}
+
+		return e.complexity.PageState.Markdown(childComplexity), true
 
 	case "PageState.nextAction":
 		if e.complexity.PageState.NextAction == nil {
@@ -832,6 +859,88 @@ func (ec *executionContext) fieldContext_FileNode_isUpdated(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Markdown_step(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Markdown_step(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Step, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Markdown_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Markdown",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Markdown_contents(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Markdown_contents(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Contents, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Markdown_contents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Markdown",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1437,6 +1546,53 @@ func (ec *executionContext) fieldContext_PageState_terminals(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _PageState_markdown(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageState_markdown(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Markdown, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Markdown)
+	fc.Result = res
+	return ec.marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdown(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageState_markdown(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageState",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "step":
+				return ec.fieldContext_Markdown_step(ctx, field)
+			case "contents":
+				return ec.fieldContext_Markdown_contents(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Markdown", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageState_nextAction(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageState_nextAction(ctx, field)
 	if err != nil {
@@ -1528,6 +1684,8 @@ func (ec *executionContext) fieldContext_Query_pageState(ctx context.Context, fi
 				return ec.fieldContext_PageState_sourceCode(ctx, field)
 			case "terminals":
 				return ec.fieldContext_PageState_terminals(ctx, field)
+			case "markdown":
+				return ec.fieldContext_PageState_markdown(ctx, field)
 			case "nextAction":
 				return ec.fieldContext_PageState_nextAction(ctx, field)
 			}
@@ -4121,6 +4279,35 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
+var markdownImplementors = []string{"Markdown"}
+
+func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet, obj *model.Markdown) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, markdownImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Markdown")
+		case "step":
+
+			out.Values[i] = ec._Markdown_step(ctx, field, obj)
+
+		case "contents":
+
+			out.Values[i] = ec._Markdown_contents(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var nextActionImplementors = []string{"NextAction"}
 
 func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSet, obj *model.NextAction) graphql.Marshaler {
@@ -4270,6 +4457,10 @@ func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet
 		case "terminals":
 
 			out.Values[i] = ec._PageState_terminals(ctx, field, obj)
+
+		case "markdown":
+
+			out.Values[i] = ec._PageState_markdown(ctx, field, obj)
 
 		case "nextAction":
 
@@ -5267,6 +5458,13 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdown(ctx context.Context, sel ast.SelectionSet, v *model.Markdown) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Markdown(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v *model.NextAction) graphql.Marshaler {

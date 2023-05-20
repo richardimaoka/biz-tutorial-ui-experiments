@@ -29,6 +29,11 @@ type FileNode struct {
 	IsUpdated *bool         `json:"isUpdated"`
 }
 
+type Markdown struct {
+	Step     *string `json:"step"`
+	Contents *string `json:"contents"`
+}
+
 type NextAction struct {
 	Content NextActionContent `json:"content"`
 }
@@ -60,6 +65,7 @@ type PageState struct {
 	PrevStep   *string     `json:"prevStep"`
 	SourceCode *SourceCode `json:"sourceCode"`
 	Terminals  []*Terminal `json:"terminals"`
+	Markdown   *Markdown   `json:"markdown"`
 	NextAction *NextAction `json:"nextAction"`
 }
 
