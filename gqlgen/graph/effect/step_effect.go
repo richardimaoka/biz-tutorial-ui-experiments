@@ -51,8 +51,21 @@ func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	return effects, err
 }
 
-func ReadGeneralStepEffects(repoUrl string) ([]GeneralStepEffect, error) {
-	return nil, nil
+func ReadGeneralStepEffects(filePath string) ([]GeneralStepEffect, error) {
+	var effects []GeneralStepEffect
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
+	err := internal.JsonRead(filePath, unmarshaller)
+	if err != nil {
+		return nil, fmt.Errorf("ReadGeneralStepEffects failed to read file, %s", err)
+	}
+
+	for i, effect := range effects {
+		if effect.SeqNo != i {
+			return nil, fmt.Errorf("ReadGeneralStepEffects failed to validate, effects[%d].SeqNo must be = %d, but %d", i, i, effect.SeqNo)
+		}
+	}
+
+	return effects, err
 }
 
 // TODO: retain this as an alternative function returns []GeneralStepEffect

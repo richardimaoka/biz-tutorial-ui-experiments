@@ -13,9 +13,10 @@ type SourceCodeEffect struct {
 }
 
 type SourceCodeGitEffect struct {
-	SeqNo               int     `json:"seqNo"`
-	CommitHash          string  `json:"commitHash"`
-	DefaultOpenFilePath *string `json:"defaultOpenFilePath"`
+	SeqNo               int
+	CommitHash          string
+	DefaultOpenFilePath *string
+	IgnoredFileEffects  FileEffects
 }
 
 type OpenFileEffect struct {

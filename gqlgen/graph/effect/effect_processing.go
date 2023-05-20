@@ -8,18 +8,29 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
-func GitEffectProcessing() error {
+func GitEffectProcessing(dirName, repoUrl string) error {
 	log.Printf("GitEffectProcessing started")
-	repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
 
 	//------------------------------------
-	// 1. read effects from git repository
+	// 1. read effects for git repository
 	//------------------------------------
-	stepEffects, err := GitStepEffects(repoUrl)
+	stepEffects, err := ReadGeneralStepEffects(dirName + "/step-effects.json")
 	if err != nil {
-		return fmt.Errorf("GitStepEffects failed: %v", err)
+		return fmt.Errorf("processing failed: %v", err)
 	}
 	log.Printf("%d step effects read ", len(stepEffects))
+
+	fileEffects, err := ReadFileEffects(dirName + "/file-effects.json")
+	if err != nil {
+		return fmt.Errorf("processing failed: %v", err)
+	}
+	log.Printf("%d file effects read ", len(fileEffects))
+
+	terminalEffects, err := ReadTerminalEffects(dirName + "/terminal-effects.json")
+	if err != nil {
+		return fmt.Errorf("processing failed: %v", err)
+	}
+	log.Printf("%d terminal effects read ", len(terminalEffects))
 
 	//------------------------------
 	// 2. construct page-sate effect
@@ -27,16 +38,20 @@ func GitEffectProcessing() error {
 	var pageStateEffects []PageStateEffect
 	for _, step := range stepEffects {
 		// SourceCodeEffect for seqNo
-		scEff := SourceCodeGitEffect{step.SeqNo, step.CommitHash, nil}
+		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
+		scEff := SourceCodeGitEffect{step.SeqNo, step.CommitHash, nil, fEffs}
+
+		// TerminalEffect for seqNo
+		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
 		// PageStateEffect for seqNo
-		psEff := PageStateEffect{step.SeqNo, nil, &scEff, nil}
+		psEff := PageStateEffect{step.SeqNo, nil, &scEff, tEff}
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))
 
 	//--------------------------------------------------------
-	// 2. apply page-state operation and write states to files
+	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
 	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
 	if err != nil {
@@ -108,91 +123,6 @@ func EffectProcessing() error {
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
 		scEff := SourceCodeEffect{step.SeqNo, fEffs, nil}
-
-		// TerminalEffect for seqNo
-		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
-
-		// PageStateEffect for seqNo
-		psEff := PageStateEffect{step.SeqNo, &scEff, nil, tEff}
-		pageStateEffects = append(pageStateEffects, psEff)
-	}
-	log.Printf("%d page state effects calculated", len(pageStateEffects))
-
-	//--------------------------------------------------------
-	// 3. apply page-state operation and write states to files
-	//--------------------------------------------------------
-	state := processing.NewPageStateProcessor()
-	for i, step := range stepEffects {
-		op, err := pageStateEffects[i].ToOperation()
-		if err != nil {
-			return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
-		}
-
-		nextStep := step.NextStep
-		if err := state.RegisterNext(nextStep, &op); err != nil {
-			return fmt.Errorf("RegisterNext() in PageStateProcessor failed: %v", err)
-		}
-
-		fileName := fmt.Sprintf("data/state/state-%s.json", stepEffects[i].CurrentStep)
-		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-			return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
-		}
-
-		// iterate over to the next state
-		if err := state.TransitionToNext(); err != nil {
-			return fmt.Errorf("TransitionToNext() in PageStateProcessor failed: %v", err)
-		}
-	}
-
-	// last state writes to the file
-	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	fileName := fmt.Sprintf("data/state/state-%s.json", lastStep)
-	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
-	}
-
-	log.Printf("finished writing state into files")
-	return nil
-}
-
-// TODO: in progress
-func GeneralEffectProcessing() error {
-	log.Printf("processing started")
-
-	//---------------------------
-	// 1. read effects from files
-	//---------------------------
-	stepEffects, err := ReadGeneralStepEffects("data/step-effects.json")
-	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
-	}
-
-	fileEffects, err := ReadFileEffects("data/file-effects.json")
-	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
-	}
-
-	terminalEffects, err := ReadTerminalEffects("data/terminal-effects.json")
-	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
-	}
-
-	log.Printf("%d terminal effects, %d file effects, and %d terminal effects read ", len(stepEffects), len(fileEffects), len(terminalEffects))
-
-	//------------------------------
-	// 2. construct page-sate effect
-	//------------------------------
-	var pageStateEffects []PageStateEffect
-	for _, step := range stepEffects {
-
-		// SourceCodeEffect for seqNo
-		var scEff SourceCodeEffect
-		if step.IsGitCommitStep() {
-			// scEff = nil
-		} else {
-			fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-			scEff = SourceCodeEffect{step.SeqNo, fEffs, nil}
-		}
 
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
