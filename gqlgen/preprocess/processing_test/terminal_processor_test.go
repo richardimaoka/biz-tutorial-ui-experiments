@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 func Test_NewTerminalProcessor(t *testing.T) {

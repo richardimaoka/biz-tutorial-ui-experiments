@@ -3,7 +3,7 @@ package effect
 import (
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 type SourceCodeEffect struct {

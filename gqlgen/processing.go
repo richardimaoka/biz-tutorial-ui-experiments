@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/effect"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/effect"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {

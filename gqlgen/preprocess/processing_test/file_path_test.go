@@ -3,7 +3,7 @@ package processing_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 func comparisonLetter(less bool) string {
