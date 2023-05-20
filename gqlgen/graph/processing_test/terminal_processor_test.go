@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func Test_NewTerminalProcessor(t *testing.T) {

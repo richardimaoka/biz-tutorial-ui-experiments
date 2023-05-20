@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/effect"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {

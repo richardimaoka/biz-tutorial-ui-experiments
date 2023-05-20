@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func applySingleFileOp(t *testing.T, sc *processing.SourceCodeProcessor, nextStep string, op processing.FileOperation) {

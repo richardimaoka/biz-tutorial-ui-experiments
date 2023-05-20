@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type MarkdownEffect struct {
