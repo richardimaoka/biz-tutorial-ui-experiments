@@ -150,5 +150,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		PrevStep:   &p.step.prevStep,
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
+		Markdown:   p.markdown.ToGraphQLMarkdown(),
 	}
 }
