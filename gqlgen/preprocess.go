@@ -63,9 +63,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-
 	for i, step := range stepEffects {
-		state.TransitionToNext()
 		op, err := pageStateEffects[i].ToOperation()
 		if err != nil {
 			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, step.Step, err)

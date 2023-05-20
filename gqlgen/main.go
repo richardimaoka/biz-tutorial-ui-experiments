@@ -27,11 +27,11 @@ func main() {
 		for _, input := range cases {
 			if input.repoUrl == "" {
 				if err := EffectProcessing(input.dirName); err != nil {
-					log.Fatal(err)
+					log.Print(err)
 				}
 			} else {
 				if err := GitEffectProcessing(input.dirName, input.repoUrl); err != nil {
-					log.Fatal(err)
+					log.Print(err)
 				}
 			}
 		}
