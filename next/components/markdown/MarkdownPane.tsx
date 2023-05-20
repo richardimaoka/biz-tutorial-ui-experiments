@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export default function Page() {
+export const MarkdownPane = () => {
   const sourceCode = `interface RefetchQueriesOptions<
   TCache extends ApolloCache<any>,
   TResult = Promise<ApolloQueryResult<any>>,
@@ -154,4 +154,4 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};
