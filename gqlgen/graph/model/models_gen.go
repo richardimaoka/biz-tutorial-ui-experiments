@@ -87,12 +87,6 @@ type TerminalOutput struct {
 
 func (TerminalOutput) IsTerminalElement() {}
 
-type TerminalSimple struct {
-	Name             *string           `json:"name"`
-	CurrentDirectory *string           `json:"currentDirectory"`
-	Elements         []*TerminalOutput `json:"elements"`
-}
-
 type FileNodeType string
 
 const (

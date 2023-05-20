@@ -2,16 +2,18 @@
 #
 # https://gqlgen.com/getting-started/
 
-type TerminalCommand {
-  beforeExecution: Boolean
-  command: String
+###################################################
+# Top level types
+###################################################
+
+type Query {
+  # without passing step argument, you get the first step state
+  pageState(step: String): PageState
 }
 
-type TerminalOutput {
-  output: String
-}
-
-union TerminalElement = TerminalCommand | TerminalOutput
+###################################################
+# Page state related object types
+###################################################
 
 type NextActionTerminal {
   command: String
@@ -27,6 +29,32 @@ type NextAction {
   content: NextActionContent
 }
 
+type PageState {
+  step: String
+  nextStep: String
+  prevStep: String
+  sourceCode: SourceCode
+  terminals: [Terminal]
+  nextAction: NextAction
+}
+
+###################################################
+# Terminal related object types
+###################################################
+
+# TerminalElement
+union TerminalElement = TerminalCommand | TerminalOutput
+
+type TerminalCommand {
+  beforeExecution: Boolean
+  command: String
+}
+
+type TerminalOutput {
+  output: String
+}
+
+# TerminalNode wraps around TerminalElement, which is friendly for frontend pattern-matching
 type TerminalNode {
   content: TerminalElement
 }
@@ -38,11 +66,21 @@ type Terminal {
   nodes: [TerminalNode] # To make frontend pattern-matching easier, we return a list of concrete object types, instead of list of unions
 }
 
-# experimental
-type TerminalSimple {
+###################################################
+# Source code related object types
+###################################################
+
+enum FileNodeType {
+  FILE
+  DIRECTORY
+}
+
+type FileNode {
+  nodeType: FileNodeType
   name: String
-  currentDirectory: String
-  elements: [TerminalOutput]
+  filePath: String
+  offset: Int
+  isUpdated: Boolean
 }
 
 type FileHighlight {
@@ -59,36 +97,9 @@ type OpenFile {
   highlight: [FileHighlight]
 }
 
-enum FileNodeType {
-  FILE
-  DIRECTORY
-}
-
-type FileNode {
-  nodeType: FileNodeType
-  name: String
-  filePath: String
-  offset: Int
-  isUpdated: Boolean
-}
-
 type SourceCode {
   step: String
   fileTree: [FileNode]
   openFile(filePath: String): OpenFile
   defaultOpenFile: OpenFile
-}
-
-type PageState {
-  step: String
-  nextStep: String
-  prevStep: String
-  sourceCode: SourceCode
-  terminals: [Terminal]
-  nextAction: NextAction
-}
-
-type Query {
-  # without passing step argument, you get the first step state
-  pageState(step: String): PageState
 }

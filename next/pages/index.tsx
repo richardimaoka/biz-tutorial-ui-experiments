@@ -126,6 +126,7 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
               <MarkdownPane />
             </div>
           </div>
+
           <div>
             {prevStep && (
               <PrevStepButton prevStep={prevStep} openFilePath={openFilePath} />

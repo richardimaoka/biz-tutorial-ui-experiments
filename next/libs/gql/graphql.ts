@@ -121,13 +121,6 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]>;
 };
 
-export type TerminalSimple = {
-  __typename: "TerminalSimple";
-  currentDirectory?: Maybe<Scalars["String"]>;
-  elements?: Maybe<Array<Maybe<TerminalOutput>>>;
-  name?: Maybe<Scalars["String"]>;
-};
-
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
   openFile?:
