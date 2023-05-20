@@ -1,9 +1,10 @@
-package effect
+package graph
 
 import (
 	"fmt"
 	"log"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/effect"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
@@ -13,25 +14,25 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//------------------------------------
 	// 1. read effects for git repository
 	//------------------------------------
-	stepEffects, err := ReadStepEffects(dirName + "/step-effects.json")
+	stepEffects, err := effect.ReadStepEffects(dirName + "/step-effects.json")
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d step effects read ", len(stepEffects))
 
-	fileEffects, err := ReadFileEffects(dirName + "/file-effects.json")
+	fileEffects, err := effect.ReadFileEffects(dirName + "/file-effects.json")
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d file effects read ", len(fileEffects))
 
-	terminalEffects, err := ReadTerminalEffects(dirName + "/terminal-effects.json")
+	terminalEffects, err := effect.ReadTerminalEffects(dirName + "/terminal-effects.json")
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("%d terminal effects read ", len(terminalEffects))
 
-	markdownEffects, err := ReadMarkdownEffects(dirName + "/markdown-effects.json")
+	markdownEffects, err := effect.ReadMarkdownEffects(dirName + "/markdown-effects.json")
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
@@ -40,17 +41,17 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//------------------------------
 	// 2. construct page-sate effect
 	//------------------------------
-	var pageStateEffects []PageStateEffect
+	var pageStateEffects []effect.PageStateEffect
 	for _, step := range stepEffects {
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-		scEff := SourceCodeEffect{step.SeqNo, step.CommitHash, fEffs, nil}
+		scEff := effect.SourceCodeEffect{SeqNo: step.SeqNo, CommitHash: step.CommitHash, FileEffects: fEffs, DefaultOpenFilePath: nil}
 
 		// PageStateEffect for seqNo
-		psEff := PageStateEffect{step.SeqNo, &scEff, tEff}
+		psEff := effect.PageStateEffect{SeqNo: step.SeqNo, SourceCodeEffect: &scEff, TerminalEffect: tEff}
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))
