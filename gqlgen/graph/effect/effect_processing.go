@@ -13,7 +13,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//------------------------------------
 	// 1. read effects for git repository
 	//------------------------------------
-	stepEffects, err := ReadGeneralStepEffects(dirName + "/step-effects.json")
+	stepEffects, err := ReadStepEffects(dirName + "/step-effects.json")
 	if err != nil {
 		return fmt.Errorf("processing failed: %v", err)
 	}
