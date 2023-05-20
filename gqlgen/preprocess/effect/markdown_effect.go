@@ -15,16 +15,6 @@ type MarkdownEffect struct {
 
 type MarkdownEffects []MarkdownEffect
 
-func (t MarkdownEffects) FindBySeqNo(seqNo int) *MarkdownEffect {
-	for _, e := range t {
-		if e.SeqNo == seqNo {
-			return &e // found!
-		}
-	}
-
-	return nil
-}
-
 func ReadMarkdownEffects(filePath string) (MarkdownEffects, error) {
 	var effects MarkdownEffects
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
@@ -36,7 +26,16 @@ func ReadMarkdownEffects(filePath string) (MarkdownEffects, error) {
 	return effects, err
 }
 
-// currently MarkdownOperation is a concrete struct, so using pointer to allow nil (i.e.) no op.
-func (e *MarkdownEffect) ToOperation() (*processing.MarkdownOperation, error) {
+func (t MarkdownEffects) FindBySeqNo(seqNo int) *MarkdownEffect {
+	for _, e := range t {
+		if e.SeqNo == seqNo {
+			return &e // found!
+		}
+	}
+
+	return nil
+}
+
+func (e *MarkdownEffect) ToOperation() (*processing.MarkdownOperation /*currently MarkdownOperation is a concrete struct, so using pointer to allow nil (i.e.) no op.*/, error) {
 	return &processing.MarkdownOperation{Contents: e.Markdown}, nil
 }

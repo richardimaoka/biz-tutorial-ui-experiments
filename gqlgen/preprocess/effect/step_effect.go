@@ -18,16 +18,17 @@ func (s StepEffect) IsGitCommitStep() bool {
 }
 
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
+	funcName := "ReadStepEffects"
 	var effects []StepEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
 	err := internal.JsonRead(filePath, unmarshaller)
 	if err != nil {
-		return nil, fmt.Errorf("ReadStepEffects failed to read file, %s", err)
+		return nil, fmt.Errorf("%s failed to read file, %s", funcName, err)
 	}
 
 	for i, effect := range effects {
 		if effect.SeqNo != i {
-			return nil, fmt.Errorf("ReadStepEffects failed to validate, effects[%d].SeqNo must be = %d, but %d", i, i, effect.SeqNo)
+			return nil, fmt.Errorf("%s failed to validate, effects[%d].SeqNo must be = %d, but %d", funcName, i, i, effect.SeqNo)
 		}
 	}
 
