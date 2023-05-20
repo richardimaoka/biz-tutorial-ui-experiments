@@ -241,7 +241,7 @@ func (p *SourceCodeProcessor) fileUpertOpsFromGit(commitHash string) ([]FileUpse
 	// repo := nil // git repo is needed at initialization
 	commit, err := p.repo.CommitObject(plumbing.NewHash(commitHash))
 	if err != nil {
-		return nil, fmt.Errorf("error in git commit %s", commitHash)
+		return nil, fmt.Errorf("error in git commit %s, %v", commitHash, err)
 	}
 
 	var ops []FileUpsert
@@ -251,13 +251,13 @@ func (p *SourceCodeProcessor) fileUpertOpsFromGit(commitHash string) ([]FileUpse
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return nil, fmt.Errorf("error in commit file traversal in commit %s", commitHash)
+			return nil, fmt.Errorf("error in commit file traversal in commit %s, %v", commitHash, err)
 		}
 
 		//TODO: check the size and use "***" as file.Contents() can panic if reading buffer grows too large
 		contents, err := file.Contents()
 		if err != nil {
-			return nil, fmt.Errorf("error in reading file from commit %s", commitHash)
+			return nil, fmt.Errorf("error in reading file from commit %s, %v", commitHash, err)
 		}
 
 		operation := FileUpsert{

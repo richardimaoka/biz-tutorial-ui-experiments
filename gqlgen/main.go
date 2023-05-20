@@ -11,10 +11,10 @@ func main() {
 			dirName string
 			repoUrl string
 		}{
-			// {
-			// 	dirName: "data/apollo-client-getting-started",
-			// 	repoUrl: "https://github.com/richardimaoka/apollo-client-getting-started",
-			// },
+			{
+				dirName: "data/apollo-client-getting-started",
+				repoUrl: "https://github.com/richardimaoka/apollo-client-getting-started",
+			},
 			{
 				dirName: "data/gqlgensandbox",
 				repoUrl: "https://github.com/richardimaoka/gqlgensandbox",
