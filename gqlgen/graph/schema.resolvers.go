@@ -41,7 +41,27 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 
 // Page is the resolver for the page field.
 func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.PageState, error) {
-	panic(fmt.Errorf("not implemented: Page - page"))
+	var filename string
+	if step == nil {
+		filename = fmt.Sprintf("%s/state-%s.json", tutorial, firstStep)
+	} else {
+		filename = fmt.Sprintf("%s/state-%s.json", tutorial, *step)
+	}
+
+	log.Printf("reading data from %s", filename)
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var pageState model.PageState
+	err = json.Unmarshal(data, &pageState)
+	if err != nil {
+		log.Printf("failed to read data from %s, %s", filename, err)
+		return nil, fmt.Errorf("internal server error %s", *step)
+	}
+
+	return &pageState, nil
 }
 
 // OpenFile is the resolver for the openFile field.
