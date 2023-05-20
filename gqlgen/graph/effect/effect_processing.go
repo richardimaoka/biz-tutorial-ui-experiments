@@ -37,7 +37,6 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 	//------------------------------
 	var pageStateEffects []PageStateEffect
 	for _, step := range stepEffects {
-		log.Printf("%+v", step)
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
@@ -62,9 +61,14 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
-	if err != nil {
-		return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
+	var state *processing.PageStateProcessor
+	if repoUrl == "" {
+		state = processing.NewPageStateProcessor()
+	} else {
+		state, err = processing.NewPageStateGitProcessorFromGit(repoUrl)
+		if err != nil {
+			return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
+		}
 	}
 
 	for i, step := range stepEffects {
