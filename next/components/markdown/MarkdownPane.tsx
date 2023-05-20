@@ -19,9 +19,8 @@ export const MarkdownPane = () => {
   return (
     <div
       css={css`
-        width: 680px;
         background-color: ${dark1MainBg};
-        padding: 0px 10px;
+        padding: 2px 10px;
       `}
     >
       <div

@@ -116,21 +116,23 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
               {currentTerminal && (
                 <TerminalComponent fragment={currentTerminal} />
               )}
-              {prevStep && (
-                <PrevStepButton
-                  prevStep={prevStep}
-                  openFilePath={openFilePath}
-                />
-              )}
-              {nextStep && (
-                <NextStepButton
-                  nextStep={nextStep}
-                  openFilePath={openFilePath}
-                />
-              )}
             </div>
 
-            <MarkdownPane />
+            <div
+              css={css`
+                width: 680px;
+              `}
+            >
+              <MarkdownPane />
+            </div>
+          </div>
+          <div>
+            {prevStep && (
+              <PrevStepButton prevStep={prevStep} openFilePath={openFilePath} />
+            )}
+            {nextStep && (
+              <NextStepButton nextStep={nextStep} openFilePath={openFilePath} />
+            )}
           </div>
         </main>
       </>
