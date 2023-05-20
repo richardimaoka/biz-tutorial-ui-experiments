@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/effect"
@@ -93,6 +95,18 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 	}
+
+	//--------------------------------------------------------
+	// 4. write first step to file
+	//--------------------------------------------------------
+	firstStepJsonValue, err := json.Marshal(stepEffects[0].Step)
+	if err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+	if err := os.WriteFile(dirName+"/first-step.json", firstStepJsonValue, 0644); err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+	log.Printf("wrote first step to file")
 
 	log.Printf("finished writing state into files")
 	return nil
