@@ -42,7 +42,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//------------------------------
 	// 2. construct page-sate effect
 	//------------------------------
-	var pageStateEffects []effect.PageStateEffect
+	var pageStateEffects []*effect.PageStateEffect
 	for _, step := range stepEffects {
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
@@ -55,7 +55,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
 
 		// PageStateEffect for seqNo
-		psEff := effect.PageStateEffect{SeqNo: step.SeqNo, SourceCodeEffect: scEff, TerminalEffect: tEff, MarkdownEffect: mEff}
+		psEff := effect.NewPageStateEffect(step.SeqNo, scEff, tEff, mEff)
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))

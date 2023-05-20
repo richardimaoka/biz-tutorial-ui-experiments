@@ -6,6 +6,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
+// combined effect, so no json meta tag, and can only be constructed from a *New* function
 type SourceCodeEffect struct {
 	seqNo               int
 	commitHash          string
