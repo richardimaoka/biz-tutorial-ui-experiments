@@ -1,0 +1,44 @@
+[
+  {
+    "seqNo": 0,
+    "terminalName": "default",
+    "command": "mkdir gqlgen-todos",
+    "output": "",
+    "currentDirectory": ""
+  },
+  {
+    "seqNo": 1,
+    "terminalName": "default",
+    "command": "cd gqlgen-todos",
+    "output": "",
+    "currentDirectory": "gqlgen-todos"
+  },
+  {
+    "seqNo": 5,
+    "terminalName": "default",
+    "command": "go get -d github.com/99designs/gqlgen@latest",
+    "output": "",
+    "currentDirectory": ""
+  },
+  {
+    "seqNo": 7,
+    "terminalName": "default",
+    "command": "go run server.go",
+    "output": "",
+    "currentDirectory": ""
+  },
+  {
+    "seqNo": 8,
+    "terminalName": "default",
+    "command": "Ctrl+c",
+    "output": "",
+    "currentDirectory": ""
+  },
+  {
+    "seqNo": 10,
+    "terminalName": "default",
+    "command": "go run server.go",
+    "output": "",
+    "currentDirectory": ""
+  }
+]
