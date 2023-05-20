@@ -10,7 +10,6 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	log.Printf("processingCoreLogic started")
 	//------------------------------------
 	// 1. read effects for git repository
 	//------------------------------------
@@ -64,7 +63,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		state.TransitionToNext()
 		op, err := pageStateEffects[i].ToOperation()
 		if err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step %s: %v", step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, step.Step, err)
 		}
 
 		var nextStep string
@@ -75,17 +74,17 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		}
 
 		if err := state.RegisterNext(nextStep, &op); err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step %s: %v", step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, step.Step, err)
 		}
 
 		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", step.Step)
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-			return fmt.Errorf("WriteJsonToFile() failed at step %s: %v", step.Step, err)
+			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, step.Step, err)
 		}
 
 		// iterate over to the next state
 		if err := state.TransitionToNext(); err != nil {
-			return fmt.Errorf("TransitionToNext() failed at step %s: %v", step.Step, err)
+			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, step.Step, err)
 		}
 	}
 	// last state writes to the file
@@ -100,6 +99,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 }
 
 func GitEffectProcessing(dirName, repoUrl string) error {
+	log.Printf("GitEffectProcessing started for dirName = %s, repoUrl = %s", dirName, repoUrl)
 	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
 	if err != nil {
 		return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
@@ -108,6 +108,7 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 }
 
 func EffectProcessing(dirName string) error {
+	log.Printf("EffectProcessing started for dirName = %s", dirName)
 	state := processing.NewPageStateProcessor()
 	return processingCoreLogic(dirName, state)
 }

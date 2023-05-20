@@ -7,19 +7,32 @@ import (
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "processing" {
-		dirName := "data/gqlgensandbox"
-		repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
+		cases := []struct {
+			dirName string
+			repoUrl string
+		}{
+			// {
+			// 	dirName: "data/apollo-client-getting-started",
+			// 	repoUrl: "https://github.com/richardimaoka/apollo-client-getting-started",
+			// },
+			{
+				dirName: "data/gqlgensandbox",
+				repoUrl: "https://github.com/richardimaoka/gqlgensandbox",
+			},
+			{
+				dirName: "data/protoc-go-experiments",
+			},
+		}
 
-		// dirName := "data/protoc-go-experiments"
-		// repoUrl := ""
-
-		if repoUrl == "" {
-			if err := EffectProcessing(dirName); err != nil {
-				log.Fatal(err)
-			}
-		} else {
-			if err := GitEffectProcessing(dirName, repoUrl); err != nil {
-				log.Fatal(err)
+		for _, input := range cases {
+			if input.repoUrl == "" {
+				if err := EffectProcessing(input.dirName); err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				if err := GitEffectProcessing(input.dirName, input.repoUrl); err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	} else {
