@@ -30,6 +30,10 @@ type GeneralStepEffect struct {
 	CommitHash  string `json:"commitHash"`
 }
 
+func (s GeneralStepEffect) IsGitCommitStep() bool {
+	return s.CommitHash != ""
+}
+
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	var effects []StepEffect
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
