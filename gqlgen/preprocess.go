@@ -49,13 +49,13 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-		scEff := effect.SourceCodeEffect{SeqNo: step.SeqNo, CommitHash: step.CommitHash, FileEffects: fEffs, DefaultOpenFilePath: nil}
+		scEff := effect.NewSourceCodeEffect(step.SeqNo, step.CommitHash, fEffs)
 
 		// MarkdownEffect for seqNo
 		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
 
 		// PageStateEffect for seqNo
-		psEff := effect.PageStateEffect{SeqNo: step.SeqNo, SourceCodeEffect: &scEff, TerminalEffect: tEff, MarkdownEffect: mEff}
+		psEff := effect.PageStateEffect{SeqNo: step.SeqNo, SourceCodeEffect: scEff, TerminalEffect: tEff, MarkdownEffect: mEff}
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))

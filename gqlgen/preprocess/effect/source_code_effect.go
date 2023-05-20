@@ -7,10 +7,14 @@ import (
 )
 
 type SourceCodeEffect struct {
-	SeqNo               int
-	CommitHash          string
-	FileEffects         FileEffects
-	DefaultOpenFilePath *string
+	seqNo               int
+	commitHash          string
+	fileEffects         FileEffects
+	defaultOpenFilePath *string
+}
+
+func NewSourceCodeEffect(seqNo int, commitHash string, fileEffects FileEffects) *SourceCodeEffect {
+	return &SourceCodeEffect{seqNo, commitHash, fileEffects, nil}
 }
 
 type OpenFileEffect struct {
@@ -19,13 +23,13 @@ type OpenFileEffect struct {
 }
 
 func (s *SourceCodeEffect) ToOperation() (processing.SourceCodeOperation, error) {
-	if s.CommitHash == "" {
-		fileOps, err := s.FileEffects.ToOperation()
+	if s.commitHash == "" {
+		fileOps, err := s.fileEffects.ToOperation()
 		if err != nil {
 			return processing.SourceCodeFileOperation{}, fmt.Errorf("ToOperation() in SourceCodeEffect failed: %v", err)
 		}
 		return processing.SourceCodeFileOperation{FileOps: fileOps}, nil
 	} else {
-		return processing.SourceCodeGitOperation{CommitHash: s.CommitHash}, nil
+		return processing.SourceCodeGitOperation{CommitHash: s.commitHash}, nil
 	}
 }
