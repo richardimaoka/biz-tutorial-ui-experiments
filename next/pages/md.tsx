@@ -23,6 +23,9 @@ export default function Page() {
       `}
     >
       <div
+        // options.components (https://github.com/rehypejs/rehype-react#optionscomponents) to avoid the following Next Lint error:
+        // > Using `<img>` could result in slower LCP and higher bandwidth. Use `<Image />` from `next/image` instead to utilize Image Optimization.
+        // > See: https://nextjs.org/docs/messages/no-img-elementeslint@next/next/no-img-element
         css={css`
           background-color: #252526;
 
@@ -148,7 +151,6 @@ export default function Page() {
         <pre>
           <code>{sourceCode}</code>
         </pre>
-        <img src="https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg" />
       </div>
     </div>
   );
