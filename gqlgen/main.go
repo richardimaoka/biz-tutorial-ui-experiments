@@ -12,8 +12,7 @@ func main() {
 		// dirName := "data/gqlgensandbox"
 		// repoUrl := "https://github.com/richardimaoka/gqlgensandbox"
 		dirName := "data/protoc-go-experiments"
-		repoUrl := ""
-		if err := effect.GitEffectProcessing(dirName, repoUrl); err != nil {
+		if err := effect.EffectProcessing(dirName); err != nil {
 			log.Fatal(err)
 		}
 	} else {

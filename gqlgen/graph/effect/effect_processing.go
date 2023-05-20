@@ -8,9 +8,8 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/processing"
 )
 
-func GitEffectProcessing(dirName, repoUrl string) error {
-	log.Printf("GitEffectProcessing started")
-
+func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
+	log.Printf("processing started")
 	//------------------------------------
 	// 1. read effects for git repository
 	//------------------------------------
@@ -42,7 +41,7 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 
 		var psEff PageStateEffect
 		if step.IsGitCommitStep() {
-			// SourceCodeEffect for seqNo
+			// SourceCode**Git**Effect for seqNo
 			fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
 			scEff := SourceCodeGitEffect{step.SeqNo, step.CommitHash, nil, fEffs}
 			psEff = PageStateEffect{step.SeqNo, nil, &scEff, tEff}
@@ -61,15 +60,6 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	var state *processing.PageStateProcessor
-	if repoUrl == "" {
-		state = processing.NewPageStateProcessor()
-	} else {
-		state, err = processing.NewPageStateGitProcessorFromGit(repoUrl)
-		if err != nil {
-			return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
-		}
-	}
 
 	for i, step := range stepEffects {
 		state.TransitionToNext()
@@ -110,81 +100,15 @@ func GitEffectProcessing(dirName, repoUrl string) error {
 	return nil
 }
 
-func EffectProcessing() error {
-	log.Printf("EffectProcessing started")
-
-	//---------------------------
-	// 1. read effects from files
-	//---------------------------
-	stepEffects, err := ReadStepEffects("data/step-effects.json")
+func GitEffectProcessing(dirName, repoUrl string) error {
+	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
 	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
+		return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
 	}
-	log.Printf("%d step effects read ", len(stepEffects))
+	return processingCoreLogic(dirName, state)
+}
 
-	fileEffects, err := ReadFileEffects("data/file-effects.json")
-	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
-	}
-	log.Printf("%d file effects read ", len(fileEffects))
-
-	terminalEffects, err := ReadTerminalEffects("data/terminal-effects.json")
-	if err != nil {
-		return fmt.Errorf("EffectProcessing failed: %v", err)
-	}
-	log.Printf("%d terminal effects read ", len(terminalEffects))
-
-	//------------------------------
-	// 2. construct page-sate effect
-	//------------------------------
-	var pageStateEffects []PageStateEffect
-	for _, step := range stepEffects {
-		// SourceCodeEffect for seqNo
-		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-		scEff := SourceCodeEffect{step.SeqNo, fEffs, nil}
-
-		// TerminalEffect for seqNo
-		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
-
-		// PageStateEffect for seqNo
-		psEff := PageStateEffect{step.SeqNo, &scEff, nil, tEff}
-		pageStateEffects = append(pageStateEffects, psEff)
-	}
-	log.Printf("%d page state effects calculated", len(pageStateEffects))
-
-	//--------------------------------------------------------
-	// 3. apply page-state operation and write states to files
-	//--------------------------------------------------------
+func EffectProcessing(dirName string) error {
 	state := processing.NewPageStateProcessor()
-	for i, step := range stepEffects {
-		op, err := pageStateEffects[i].ToOperation()
-		if err != nil {
-			return fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
-		}
-
-		nextStep := step.NextStep
-		if err := state.RegisterNext(nextStep, &op); err != nil {
-			return fmt.Errorf("RegisterNext() in PageStateProcessor failed: %v", err)
-		}
-
-		fileName := fmt.Sprintf("data/state/state-%s.json", stepEffects[i].CurrentStep)
-		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-			return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
-		}
-
-		// iterate over to the next state
-		if err := state.TransitionToNext(); err != nil {
-			return fmt.Errorf("TransitionToNext() in PageStateProcessor failed: %v", err)
-		}
-	}
-
-	// last state writes to the file
-	lastStep := stepEffects[len(stepEffects)-1].CurrentStep
-	fileName := fmt.Sprintf("data/state/state-%s.json", lastStep)
-	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
-	}
-
-	log.Printf("finished writing state into files")
-	return nil
+	return processingCoreLogic(dirName, state)
 }
