@@ -321,7 +321,7 @@ func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOp
 			}
 		}
 	default:
-		return fmt.Errorf("wrong operation type = %v", reflect.TypeOf(v))
+		return fmt.Errorf("wrong source code operation type = %v", reflect.TypeOf(v))
 	}
 
 	p.defaultOpenFilePath = cloned.defaultOpenFilePath

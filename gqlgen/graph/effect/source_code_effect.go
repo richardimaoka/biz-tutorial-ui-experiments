@@ -8,15 +8,9 @@ import (
 
 type SourceCodeEffect struct {
 	SeqNo               int
+	CommitHash          string
 	FileEffects         FileEffects
 	DefaultOpenFilePath *string
-}
-
-type SourceCodeGitEffect struct {
-	SeqNo               int
-	CommitHash          string
-	DefaultOpenFilePath *string
-	IgnoredFileEffects  FileEffects
 }
 
 type OpenFileEffect struct {
@@ -24,14 +18,14 @@ type OpenFileEffect struct {
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 }
 
-func (s *SourceCodeGitEffect) ToOperation() (processing.SourceCodeGitOperation, error) {
-	return processing.SourceCodeGitOperation{CommitHash: s.CommitHash}, nil
-}
-
-func (s *SourceCodeEffect) ToOperation() (processing.SourceCodeFileOperation, error) {
-	fileOps, err := s.FileEffects.ToOperation()
-	if err != nil {
-		return processing.SourceCodeFileOperation{}, fmt.Errorf("ToOperation() in SourceCodeEffect failed: %v", err)
+func (s *SourceCodeEffect) ToOperation() (processing.SourceCodeOperation, error) {
+	if s.CommitHash == "" {
+		fileOps, err := s.FileEffects.ToOperation()
+		if err != nil {
+			return processing.SourceCodeFileOperation{}, fmt.Errorf("ToOperation() in SourceCodeEffect failed: %v", err)
+		}
+		return processing.SourceCodeFileOperation{FileOps: fileOps}, nil
+	} else {
+		return processing.SourceCodeGitOperation{CommitHash: s.CommitHash}, nil
 	}
-	return processing.SourceCodeFileOperation{FileOps: fileOps}, nil
 }

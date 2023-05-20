@@ -31,9 +31,11 @@ func (p *PageStateProcessor) cloneCurrentState() *PageStateProcessor {
 func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStateOperation) error {
 	errorPreceding := "failed to apply operation"
 
-	// not p.nextAction but passed-in nextAction, so that this method can also verify nextNextAction
-	if err := p.sourceCode.Transition(nextStep, nextOperation.SourceCodeOperation); err != nil {
-		return fmt.Errorf("%s, %s", errorPreceding, err)
+	sourceCodeOp := nextOperation.SourceCodeOperation
+	if sourceCodeOp != nil {
+		if err := p.sourceCode.Transition(nextStep, nextOperation.SourceCodeOperation); err != nil {
+			return fmt.Errorf("%s, %s", errorPreceding, err)
+		}
 	}
 
 	terminalOp := nextOperation.TerminalOperation

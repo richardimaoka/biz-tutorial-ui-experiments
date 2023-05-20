@@ -7,28 +7,21 @@ import (
 )
 
 type PageStateEffect struct {
-	SeqNo               int
-	SourceCodeEffect    *SourceCodeEffect    // only either SourceCodeEffect or SourceCodeGitEffect is held
-	SourceCodeGitEffect *SourceCodeGitEffect // only either SourceCodeEffect or SourceCodeGitEffect is held
-	TerminalEffect      *TerminalEffect
+	SeqNo            int
+	SourceCodeEffect *SourceCodeEffect // only either SourceCodeEffect or SourceCodeGitEffect is held
+	TerminalEffect   *TerminalEffect
 }
 
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 	var sourceCodeOp processing.SourceCodeOperation
-	var err error
-
-	if p.SourceCodeEffect != nil && p.SourceCodeGitEffect != nil {
-		return processing.PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: only either of SourceCodeEffect or SourceCodeGitEffect can be set")
-	} else if p.SourceCodeEffect != nil {
-		if sourceCodeOp, err = p.SourceCodeEffect.ToOperation(); err != nil {
-			return processing.PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
-		}
-	} else if p.SourceCodeGitEffect != nil {
-		if sourceCodeOp, err = p.SourceCodeGitEffect.ToOperation(); err != nil {
-			return processing.PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
-		}
-	} else {
+	if p.TerminalEffect == nil {
 		sourceCodeOp = nil
+	} else {
+		var err error
+		sourceCodeOp, err = p.SourceCodeEffect.ToOperation()
+		if err != nil {
+			return processing.PageStateOperation{}, fmt.Errorf("ToOperation() in PageStateEffect failed: %v", err)
+		}
 	}
 
 	var terminalOp processing.TerminalOperation

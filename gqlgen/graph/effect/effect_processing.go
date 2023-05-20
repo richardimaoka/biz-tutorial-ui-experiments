@@ -39,20 +39,12 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
-		var psEff PageStateEffect
-		if step.IsGitCommitStep() {
-			// SourceCode**Git**Effect for seqNo
-			fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-			scEff := SourceCodeGitEffect{step.SeqNo, step.CommitHash, nil, fEffs}
-			psEff = PageStateEffect{step.SeqNo, nil, &scEff, tEff}
-		} else {
-			// SourceCodeEffect for seqNo
-			fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-			scEff := SourceCodeEffect{step.SeqNo, fEffs, nil}
-			psEff = PageStateEffect{step.SeqNo, &scEff, nil, tEff}
-		}
+		// SourceCodeEffect for seqNo
+		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
+		scEff := SourceCodeEffect{step.SeqNo, step.CommitHash, fEffs, nil}
 
 		// PageStateEffect for seqNo
+		psEff := PageStateEffect{step.SeqNo, &scEff, tEff}
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 	log.Printf("%d page state effects calculated", len(pageStateEffects))

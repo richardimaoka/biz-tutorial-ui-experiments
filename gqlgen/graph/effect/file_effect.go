@@ -68,7 +68,6 @@ func (f FileEffect) ToOperation() (processing.FileOperation, error) {
 	case "FileUpsert":
 		return processing.FileUpsert{FilePath: f.FilePath, Content: f.Content, IsFullContent: true}, nil
 	default:
-		// this should never happen
-		return nil, fmt.Errorf("FileEffect.ToOperation failed, wrong operation type = %s", f.OperationType)
+		return nil, fmt.Errorf("FileEffect.ToOperation failed, this should never happen!! wrong operation type = %s", f.OperationType)
 	}
 }
