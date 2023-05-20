@@ -10,6 +10,7 @@ type PageStateEffect struct {
 	SeqNo            int
 	SourceCodeEffect *SourceCodeEffect // only either SourceCodeEffect or SourceCodeGitEffect is held
 	TerminalEffect   *TerminalEffect
+	MarkdownEffect   *MarkdownEffect
 }
 
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
