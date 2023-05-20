@@ -83,7 +83,13 @@ export type PageState = {
 
 export type Query = {
   __typename: "Query";
+  page?: Maybe<PageState>;
   pageState?: Maybe<PageState>;
+};
+
+export type QueryPageArgs = {
+  step?: InputMaybe<Scalars["String"]>;
+  tutorial: Scalars["String"];
 };
 
 export type QueryPageStateArgs = {

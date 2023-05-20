@@ -39,6 +39,11 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 	return &pageState, nil
 }
 
+// Page is the resolver for the page field.
+func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.PageState, error) {
+	panic(fmt.Errorf("not implemented: Page - page"))
+}
+
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	var filename string
