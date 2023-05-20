@@ -24,10 +24,9 @@ type GiStepEffect struct {
 }
 
 type GeneralStepEffect struct {
-	SeqNo       int    `json:"seqNo"`
-	CurrentStep string `json:"currentStep"`
-	NextStep    string `json:"nextStep"`
-	CommitHash  string `json:"commitHash"`
+	SeqNo      int    `json:"seqNo"`
+	Step       string `json:"step"`
+	CommitHash string `json:"commitHash"`
 }
 
 func (s GeneralStepEffect) IsGitCommitStep() bool {
