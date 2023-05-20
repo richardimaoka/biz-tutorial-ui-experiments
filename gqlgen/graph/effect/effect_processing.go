@@ -31,6 +31,12 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	}
 	log.Printf("%d terminal effects read ", len(terminalEffects))
 
+	markdownEffects, err := ReadMarkdownEffects(dirName + "/markdown-effects.json")
+	if err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+	log.Printf("%d markdown effects read ", len(markdownEffects))
+
 	//------------------------------
 	// 2. construct page-sate effect
 	//------------------------------

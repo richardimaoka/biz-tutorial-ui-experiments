@@ -14,7 +14,7 @@ type PageStateEffect struct {
 
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 	var sourceCodeOp processing.SourceCodeOperation
-	if p.TerminalEffect == nil {
+	if p.SourceCodeEffect == nil {
 		sourceCodeOp = nil
 	} else {
 		var err error
