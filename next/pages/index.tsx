@@ -11,6 +11,7 @@ import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
+import { MarkdownPane } from "../components/markdown/MarkdownPane";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -96,27 +97,40 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
         >
           <div
             css={css`
-              width: 680px;
-              /* margin: 0 auto; */
-              background-color: white;
+              display: flex;
+              gap: 40px;
             `}
           >
-            {currentPage?.sourceCode && currentStep && (
-              <SourceCodeViewer
-                fragment={currentPage.sourceCode}
-                step={currentStep}
-                currentDirectory={currentDirectory}
-              />
-            )}
-            {currentTerminal && (
-              <TerminalComponent fragment={currentTerminal} />
-            )}
-            {prevStep && (
-              <PrevStepButton prevStep={prevStep} openFilePath={openFilePath} />
-            )}
-            {nextStep && (
-              <NextStepButton nextStep={nextStep} openFilePath={openFilePath} />
-            )}
+            <div
+              css={css`
+                width: 680px;
+              `}
+            >
+              {currentPage?.sourceCode && currentStep && (
+                <SourceCodeViewer
+                  fragment={currentPage.sourceCode}
+                  step={currentStep}
+                  currentDirectory={currentDirectory}
+                />
+              )}
+              {currentTerminal && (
+                <TerminalComponent fragment={currentTerminal} />
+              )}
+              {prevStep && (
+                <PrevStepButton
+                  prevStep={prevStep}
+                  openFilePath={openFilePath}
+                />
+              )}
+              {nextStep && (
+                <NextStepButton
+                  nextStep={nextStep}
+                  openFilePath={openFilePath}
+                />
+              )}
+            </div>
+
+            <MarkdownPane />
           </div>
         </main>
       </>
