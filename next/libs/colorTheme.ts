@@ -1,0 +1,11 @@
+export const themeBlue = "#007ACC";
+export const dark1MainBg = "#252526";
+export const dark2 = "#282828";
+export const dark3SubBg = "#2D2D2D";
+export const dark4 = "#333333";
+export const dark5 = "#3C3C3C";
+export const gray = "#858585";
+export const lightGray = "#CCCCCC";
+export const white = "#FFFFFF";
+export const blaci = "#000000";
+export const hyperlink = "#389BF2";

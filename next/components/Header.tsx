@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
+import { themeBlue } from "../libs/colorTheme";
 
 export const Header = () => {
   return (
     <header
       css={css`
-        background-color: #007acc;
+        background-color: ${themeBlue};
       `}
     >
       <div

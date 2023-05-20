@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { dark1MainBg, dark5, gray, themeBlue } from "../../libs/colorTheme";
 
 export const MarkdownPane = () => {
   const sourceCode = `interface RefetchQueriesOptions<
@@ -19,9 +20,8 @@ export const MarkdownPane = () => {
     <div
       css={css`
         width: 680px;
-        background-color: #252526;
+        background-color: ${dark1MainBg};
         padding: 0px 10px;
-        /* margin: 0 auto; */
       `}
     >
       <div
@@ -29,7 +29,7 @@ export const MarkdownPane = () => {
         // > Using `<img>` could result in slower LCP and higher bandwidth. Use `<Image />` from `next/image` instead to utilize Image Optimization.
         // > See: https://nextjs.org/docs/messages/no-img-elementeslint@next/next/no-img-element
         css={css`
-          background-color: #252526;
+          background-color: ${dark1MainBg};
 
           h1 {
             font-size: 32px;
@@ -69,13 +69,13 @@ export const MarkdownPane = () => {
             font-size: 14px;
             line-height: 18px;
             padding: 1px 4px;
-            background-color: #3c3c3c;
+            background-color: ${dark5};
           }
 
           pre {
             margin: 16px 0px;
             padding: 8px;
-            background-color: #3c3c3c;
+            background-color: ${dark5};
           }
 
           pre > code {
@@ -87,8 +87,8 @@ export const MarkdownPane = () => {
             margin: 16px 0px;
             margin: 0px;
             padding-left: 18px;
-            border-left: 2px solid #007acc;
-            color: #858585;
+            border-left: 2px solid ${themeBlue};
+            color: ${gray};
           }
 
           img {
