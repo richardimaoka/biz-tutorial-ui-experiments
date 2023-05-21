@@ -50,3 +50,14 @@ func WriteJsonToFile(v any, filePath string) error {
 	}
 	return nil
 }
+
+func WriteJsonValueToFile(v any, filePath string) error {
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filePath, bytes, 0644); err != nil {
+		return err
+	}
+	return nil
+}
