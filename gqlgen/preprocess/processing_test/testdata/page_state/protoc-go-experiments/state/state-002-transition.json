@@ -1,0 +1,61 @@
+{
+  "step": "case[2]",
+  "nextStep": "",
+  "prevStep": "case[1]",
+  "sourceCode": {
+    "step": "case[2]",
+    "defaultOpenFile": null,
+    "fileTree": [
+      {
+        "nodeType": "DIRECTORY",
+        "name": "protoc-go-experiments",
+        "filePath": "protoc-go-experiments",
+        "offset": 0,
+        "isUpdated": false
+      },
+      {
+        "nodeType": "DIRECTORY",
+        "name": "helloworld",
+        "filePath": "protoc-go-experiments/helloworld",
+        "offset": 1,
+        "isUpdated": true
+      }
+    ],
+    "fileContents": {}
+  },
+  "terminals": [
+    {
+      "step": null,
+      "name": "default",
+      "currentDirectory": "protoc-go-experiments",
+      "nodes": [
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir protoc-go-experiments"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "cd protoc-go-experiments"
+          }
+        },
+        {
+          "content": {
+            "contentType": "TerminalCommand",
+            "beforeExecution": false,
+            "command": "mkdir helloworld"
+          }
+        }
+      ]
+    }
+  ],
+  "markdown": {
+    "step": "",
+    "contents": ""
+  },
+  "nextAction": null
+}

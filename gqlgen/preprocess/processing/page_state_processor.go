@@ -96,6 +96,7 @@ func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error
 	return &init, nil
 }
 
+// TODO: op can be non-pointer
 func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
 	cloned := p.cloneCurrentState()
 	if err := cloned.transition(nextStep, op); err != nil {

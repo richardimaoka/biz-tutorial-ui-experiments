@@ -51,7 +51,7 @@ func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 	}
 }
 
-func WriteGoldenFile(t *testing.T, filePath string, v any) {
+func writeGoldenFile(t *testing.T, filePath string, v any) {
 	jsonBytes, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		t.Fatalf("error writing golden file %s: %v", filePath, err)
@@ -64,7 +64,7 @@ func WriteGoldenFile(t *testing.T, filePath string, v any) {
 
 func CompareWitGoldenFile(t *testing.T, updateGoldenFile bool, goldenFileName string, result interface{}) {
 	if updateGoldenFile {
-		WriteGoldenFile(t, goldenFileName, result)
+		writeGoldenFile(t, goldenFileName, result)
 	}
 	CompareAfterMarshal(t, goldenFileName, result)
 }

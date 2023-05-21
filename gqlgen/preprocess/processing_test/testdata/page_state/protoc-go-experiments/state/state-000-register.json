@@ -1,0 +1,24 @@
+{
+  "step": "000",
+  "nextStep": "case[0]",
+  "prevStep": "",
+  "sourceCode": {
+    "step": "",
+    "defaultOpenFile": null,
+    "fileTree": null,
+    "fileContents": {}
+  },
+  "terminals": [
+    {
+      "step": null,
+      "name": "default",
+      "currentDirectory": null,
+      "nodes": null
+    }
+  ],
+  "markdown": {
+    "step": "",
+    "contents": ""
+  },
+  "nextAction": null
+}
