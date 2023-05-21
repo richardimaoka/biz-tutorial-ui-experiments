@@ -8,10 +8,6 @@ import (
 	"strconv"
 )
 
-type NextActionContent interface {
-	IsNextActionContent()
-}
-
 type TerminalElement interface {
 	IsTerminalElement()
 }
@@ -35,20 +31,9 @@ type Markdown struct {
 }
 
 type NextAction struct {
-	Content NextActionContent `json:"content"`
+	Terminal *TerminalNode `json:"terminal"`
+	Markdown *Markdown     `json:"markdown"`
 }
-
-type NextActionManual struct {
-	Comment *string `json:"comment"`
-}
-
-func (NextActionManual) IsNextActionContent() {}
-
-type NextActionTerminal struct {
-	Command *string `json:"command"`
-}
-
-func (NextActionTerminal) IsNextActionContent() {}
 
 type OpenFile struct {
 	FilePath      *string          `json:"filePath"`

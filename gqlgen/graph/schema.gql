@@ -18,18 +18,9 @@ type Query {
 # Page state related object types
 ###################################################
 
-type NextActionTerminal {
-  command: String
-}
-
-type NextActionManual {
-  comment: String
-}
-
-union NextActionContent = NextActionTerminal | NextActionManual
-
 type NextAction {
-  content: NextActionContent
+  terminal: TerminalNode
+  markdown: Markdown
 }
 
 type PageState {

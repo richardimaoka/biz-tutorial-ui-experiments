@@ -45,19 +45,8 @@ export type Markdown = {
 
 export type NextAction = {
   __typename: "NextAction";
-  content?: Maybe<NextActionContent>;
-};
-
-export type NextActionContent = NextActionManual | NextActionTerminal;
-
-export type NextActionManual = {
-  __typename: "NextActionManual";
-  comment?: Maybe<Scalars["String"]>;
-};
-
-export type NextActionTerminal = {
-  __typename: "NextActionTerminal";
-  command?: Maybe<Scalars["String"]>;
+  markdown?: Maybe<Markdown>;
+  terminal?: Maybe<TerminalNode>;
 };
 
 export type OpenFile = {
