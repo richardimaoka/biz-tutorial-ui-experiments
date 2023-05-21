@@ -46,7 +46,8 @@ export type Markdown = {
 export type NextAction = {
   __typename: "NextAction";
   markdown?: Maybe<Markdown>;
-  terminal?: Maybe<TerminalNode>;
+  terminalCommand?: Maybe<TerminalCommand>;
+  terminalName?: Maybe<Scalars["String"]>;
 };
 
 export type OpenFile = {

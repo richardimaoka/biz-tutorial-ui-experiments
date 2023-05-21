@@ -19,7 +19,8 @@ type Query {
 ###################################################
 
 type NextAction {
-  terminal: TerminalNode
+  terminalName: String
+  terminalCommand: TerminalCommand
   markdown: Markdown
 }
 

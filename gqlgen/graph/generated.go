@@ -63,8 +63,9 @@ type ComplexityRoot struct {
 	}
 
 	NextAction struct {
-		Markdown func(childComplexity int) int
-		Terminal func(childComplexity int) int
+		Markdown        func(childComplexity int) int
+		TerminalCommand func(childComplexity int) int
+		TerminalName    func(childComplexity int) int
 	}
 
 	OpenFile struct {
@@ -212,12 +213,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NextAction.Markdown(childComplexity), true
 
-	case "NextAction.terminal":
-		if e.complexity.NextAction.Terminal == nil {
+	case "NextAction.terminalCommand":
+		if e.complexity.NextAction.TerminalCommand == nil {
 			break
 		}
 
-		return e.complexity.NextAction.Terminal(childComplexity), true
+		return e.complexity.NextAction.TerminalCommand(childComplexity), true
+
+	case "NextAction.terminalName":
+		if e.complexity.NextAction.TerminalName == nil {
+			break
+		}
+
+		return e.complexity.NextAction.TerminalName(childComplexity), true
 
 	case "OpenFile.content":
 		if e.complexity.OpenFile.Content == nil {
@@ -970,8 +978,8 @@ func (ec *executionContext) fieldContext_Markdown_contents(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _NextAction_terminal(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NextAction_terminal(ctx, field)
+func (ec *executionContext) _NextAction_terminalName(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NextAction_terminalName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -984,7 +992,7 @@ func (ec *executionContext) _NextAction_terminal(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Terminal, nil
+		return obj.TerminalName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -993,12 +1001,53 @@ func (ec *executionContext) _NextAction_terminal(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.TerminalNode)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOTerminalNode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalNode(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NextAction_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NextAction_terminalName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NextAction",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NextAction_terminalCommand(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NextAction_terminalCommand(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TerminalCommand, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TerminalCommand)
+	fc.Result = res
+	return ec.marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NextAction_terminalCommand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NextAction",
 		Field:      field,
@@ -1006,10 +1055,12 @@ func (ec *executionContext) fieldContext_NextAction_terminal(ctx context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "content":
-				return ec.fieldContext_TerminalNode_content(ctx, field)
+			case "beforeExecution":
+				return ec.fieldContext_TerminalCommand_beforeExecution(ctx, field)
+			case "command":
+				return ec.fieldContext_TerminalCommand_command(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TerminalNode", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TerminalCommand", field.Name)
 		},
 	}
 	return fc, nil
@@ -1622,8 +1673,10 @@ func (ec *executionContext) fieldContext_PageState_nextAction(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "terminal":
-				return ec.fieldContext_NextAction_terminal(ctx, field)
+			case "terminalName":
+				return ec.fieldContext_NextAction_terminalName(ctx, field)
+			case "terminalCommand":
+				return ec.fieldContext_NextAction_terminalCommand(ctx, field)
 			case "markdown":
 				return ec.fieldContext_NextAction_markdown(ctx, field)
 			}
@@ -4358,9 +4411,13 @@ func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSe
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("NextAction")
-		case "terminal":
+		case "terminalName":
 
-			out.Values[i] = ec._NextAction_terminal(ctx, field, obj)
+			out.Values[i] = ec._NextAction_terminalName(ctx, field, obj)
+
+		case "terminalCommand":
+
+			out.Values[i] = ec._NextAction_terminalCommand(ctx, field, obj)
 
 		case "markdown":
 
@@ -5581,6 +5638,13 @@ func (ec *executionContext) marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._Terminal(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx context.Context, sel ast.SelectionSet, v *model.TerminalCommand) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TerminalCommand(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTerminalElement2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx context.Context, sel ast.SelectionSet, v model.TerminalElement) graphql.Marshaler {

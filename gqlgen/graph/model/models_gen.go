@@ -31,8 +31,9 @@ type Markdown struct {
 }
 
 type NextAction struct {
-	Terminal *TerminalNode `json:"terminal"`
-	Markdown *Markdown     `json:"markdown"`
+	TerminalName    *string          `json:"terminalName"`
+	TerminalCommand *TerminalCommand `json:"terminalCommand"`
+	Markdown        *Markdown        `json:"markdown"`
 }
 
 type OpenFile struct {
