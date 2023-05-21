@@ -12,53 +12,20 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	//------------------------------------
-	// 1. read effects for git repository
-	//------------------------------------
 	stepEffects, err := effect.ReadStepEffects(dirName + "/step-effects.json")
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
-	log.Printf("%d step effects read ", len(stepEffects))
 
-	fileEffects, err := effect.ReadFileEffects(dirName + "/file-effects.json")
+	pageStateEffects, err := effect.ConstructPageStateEffects(
+		dirName+"/step-effects.json",
+		dirName+"/file-effects.json",
+		dirName+"/terminal-effects.json",
+		dirName+"/markdown-effects.json",
+	)
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
-	log.Printf("%d file effects read ", len(fileEffects))
-
-	terminalEffects, err := effect.ReadTerminalEffects(dirName + "/terminal-effects.json")
-	if err != nil {
-		return fmt.Errorf("processingCoreLogic failed: %v", err)
-	}
-	log.Printf("%d terminal effects read ", len(terminalEffects))
-
-	markdownEffects, err := effect.ReadMarkdownEffects(dirName + "/markdown-effects.json")
-	if err != nil {
-		return fmt.Errorf("processingCoreLogic failed: %v", err)
-	}
-	log.Printf("%d markdown effects read ", len(markdownEffects))
-
-	//------------------------------
-	// 2. construct page-sate effect
-	//------------------------------
-	var pageStateEffects []*effect.PageStateEffect
-	for _, step := range stepEffects {
-		// TerminalEffect for seqNo
-		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
-
-		// SourceCodeEffect for seqNo
-		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
-		scEff := effect.NewSourceCodeEffect(step.SeqNo, step.CommitHash, fEffs)
-
-		// MarkdownEffect for seqNo
-		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
-
-		// PageStateEffect for seqNo
-		psEff := effect.NewPageStateEffect(step.SeqNo, scEff, tEff, mEff)
-		pageStateEffects = append(pageStateEffects, psEff)
-	}
-	log.Printf("%d page state effects calculated", len(pageStateEffects))
 
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files

@@ -19,6 +19,53 @@ func NewPageStateEffect(seqNo int, sourceCodeEffect *SourceCodeEffect, terminalE
 	return &PageStateEffect{seqNo, sourceCodeEffect, terminalEffect, markdownEffect}
 }
 
+func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffectsFile, markdownEffectsFile string) ([]*PageStateEffect, error) {
+	//------------------------------------
+	// 1. read effects from files
+	//------------------------------------
+	stepEffects, err := ReadStepEffects(stepEffectsFile)
+	if err != nil {
+		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
+	}
+
+	fileEffects, err := ReadFileEffects(fileEffectsFile)
+	if err != nil {
+		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
+	}
+
+	terminalEffects, err := ReadTerminalEffects(terminalEffectsFile)
+	if err != nil {
+		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
+	}
+
+	markdownEffects, err := ReadMarkdownEffects(markdownEffectsFile)
+	if err != nil {
+		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
+	}
+
+	//------------------------------
+	// 2. construct page-sate effect
+	//------------------------------
+	var pageStateEffects []*PageStateEffect
+	for _, step := range stepEffects {
+		// TerminalEffect for seqNo
+		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
+
+		// SourceCodeEffect for seqNo
+		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
+		scEff := NewSourceCodeEffect(step.SeqNo, step.CommitHash, fEffs)
+
+		// MarkdownEffect for seqNo
+		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
+
+		// PageStateEffect for seqNo
+		psEff := NewPageStateEffect(step.SeqNo, scEff, tEff, mEff)
+		pageStateEffects = append(pageStateEffects, psEff)
+	}
+
+	return pageStateEffects, nil
+}
+
 func (p *PageStateEffect) ToOperation() (processing.PageStateOperation, error) {
 	var sourceCodeOp processing.SourceCodeOperation
 	if p.sourceCodeEffect == nil {
