@@ -15,7 +15,7 @@ func applySingleFileOp(t *testing.T, sc *processing.SourceCodeProcessor, nextSte
 	}
 }
 
-func Test_SourceCodeProcessor(t *testing.T) {
+func Test_SingleFileOp(t *testing.T) {
 	type TestCase struct {
 		ExpectSuccess bool
 		ExpectedFile  string
@@ -188,7 +188,10 @@ func Test_SourceCodeProcessor(t *testing.T) {
 	})
 }
 
-func Test_SourceCodeGitEffect(t *testing.T) {
+// TODO: test multiple file ops in a single step
+// func Test_FileOps(t *testing.T) {
+
+func Test_GitOp(t *testing.T) {
 	type TestCase struct {
 		ExpectSuccess bool
 		CommitHash    string
