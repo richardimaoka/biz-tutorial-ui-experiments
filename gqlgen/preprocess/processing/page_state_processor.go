@@ -35,7 +35,7 @@ func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStat
 
 	sourceCodeOp := nextOperation.SourceCodeOperation
 	if sourceCodeOp != nil {
-		if err := p.sourceCode.Transition(nextStep, nextOperation.SourceCodeOperation); err != nil {
+		if err := p.sourceCode.Transition(nextStep, sourceCodeOp); err != nil {
 			return fmt.Errorf("%s, %s", errorPreceding, err)
 		}
 	}
