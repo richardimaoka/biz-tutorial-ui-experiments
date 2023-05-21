@@ -64,9 +64,11 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
 	for i, step := range stepEffects {
+		currentStep := step.Step
+
 		op, err := pageStateEffects[i].ToOperation()
 		if err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
 		var nextStep string
@@ -77,17 +79,17 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		}
 
 		if err := state.RegisterNext(nextStep, &op); err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, step.Step, err)
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
-		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", step.Step)
+		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", currentStep)
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, step.Step, err)
+			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
 		// iterate over to the next state
 		if err := state.TransitionToNext(); err != nil {
-			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, step.Step, err)
+			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, currentStep, err)
 		}
 	}
 	// last state writes to the file
