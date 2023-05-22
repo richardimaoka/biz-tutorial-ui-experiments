@@ -26,7 +26,7 @@ func (p *PageStateProcessor) cloneCurrentState() *PageStateProcessor {
 		terminalMap: clonedTerminalMap,
 		sourceCode:  p.sourceCode.Clone(),
 		markdown:    p.markdown.Clone(),
-		// not cloning nextXxx as they are updated in actual next step
+		// not cloning nextXxx as they are updated in actual transition to next step
 	}
 }
 
@@ -136,15 +136,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		terminals = append(terminals, t.ToGraphQLTerminal())
 	}
 
-	// var nextAction model.NextAction
-	// if p.nextAction != nil {
-	// 	nextAction = p.nextAction.ToGraphQLNextAction()
-	// } else {
-	// 	nextAction = model.NextAction{
-	// 		Content: nil,
-	// 	}
-	// }
-
 	return &model.PageState{
 		Step:       &p.step.currentStep,
 		NextStep:   &p.step.nextStep,
@@ -152,5 +143,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
 		Markdown:   p.markdown.ToGraphQLMarkdown(),
+		NextAction: p.nextOperation.ToGraphQLNextAction(),
 	}
 }
