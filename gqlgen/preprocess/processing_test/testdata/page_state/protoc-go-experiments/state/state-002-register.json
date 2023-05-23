@@ -43,5 +43,13 @@
     "step": "",
     "contents": ""
   },
-  "nextAction": null
+  "nextAction": {
+    "terminalName": "default",
+    "terminalCommand": {
+      "contentType": "TerminalCommand",
+      "beforeExecution": true,
+      "command": "mkdir helloworld"
+    },
+    "markdown": null
+  }
 }

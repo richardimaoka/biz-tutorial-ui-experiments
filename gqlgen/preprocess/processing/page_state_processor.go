@@ -136,6 +136,11 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		terminals = append(terminals, t.ToGraphQLTerminal())
 	}
 
+	var nextAction *model.NextAction
+	if p.nextOperation != nil {
+		nextAction = p.nextOperation.ToGraphQLNextAction()
+	}
+
 	return &model.PageState{
 		Step:       &p.step.currentStep,
 		NextStep:   &p.step.nextStep,
@@ -143,6 +148,6 @@ func (p *PageStateProcessor) ToGraphQLPageState() *model.PageState {
 		SourceCode: p.sourceCode.ToGraphQLModel(),
 		Terminals:  terminals,
 		Markdown:   p.markdown.ToGraphQLMarkdown(),
-		NextAction: p.nextOperation.ToGraphQLNextAction(),
+		NextAction: nextAction,
 	}
 }

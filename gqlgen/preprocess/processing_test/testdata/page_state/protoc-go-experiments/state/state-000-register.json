@@ -20,5 +20,13 @@
     "step": "",
     "contents": ""
   },
-  "nextAction": null
+  "nextAction": {
+    "terminalName": "default",
+    "terminalCommand": {
+      "contentType": "TerminalCommand",
+      "beforeExecution": true,
+      "command": "mkdir protoc-go-experiments"
+    },
+    "markdown": null
+  }
 }

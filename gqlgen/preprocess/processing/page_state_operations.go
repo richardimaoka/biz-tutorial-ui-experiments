@@ -10,5 +10,31 @@ type PageStateOperation struct {
 
 // TODO: implement this
 func (p *PageStateOperation) ToGraphQLNextAction() *model.NextAction {
-	return nil
+	var terminalName *string
+	var terminalCommand *model.TerminalCommand
+	if p.TerminalOperation != nil {
+		t := p.TerminalOperation.GetTerminalName()
+		terminalName = &t
+
+		cmd := p.TerminalOperation.GetCommand()
+		trueValue := true
+		terminalCommand = &model.TerminalCommand{
+			BeforeExecution: &trueValue,
+			Command:         &cmd,
+		}
+	}
+
+	var markdown *model.Markdown
+	if p.MarkdownOperation != nil {
+		contents := p.MarkdownOperation.Contents // copy to avoid
+		markdown = &model.Markdown{
+			Contents: &contents,
+		}
+	}
+
+	return &model.NextAction{
+		TerminalName:    terminalName,
+		TerminalCommand: terminalCommand,
+		Markdown:        markdown,
+	}
 }
