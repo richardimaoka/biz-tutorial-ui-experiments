@@ -12,11 +12,6 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	stepEffects, err := effect.ReadStepEffects(dirName + "/step-effects.json")
-	if err != nil {
-		return fmt.Errorf("processingCoreLogic failed: %v", err)
-	}
-
 	pageStateEffects, err := effect.ConstructPageStateEffects(
 		dirName+"/step-effects.json",
 		dirName+"/file-effects.json",
@@ -30,19 +25,19 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	for i, step := range stepEffects {
-		currentStep := step.Step
-
-		op, err := pageStateEffects[i].ToOperation()
-		if err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
-		}
+	for i, psEff := range pageStateEffects {
+		currentStep := psEff.Step
 
 		var nextStep string
-		if i == len(stepEffects)-1 {
+		if i == len(pageStateEffects)-1 {
 			nextStep = ""
 		} else {
-			nextStep = stepEffects[i+1].Step
+			nextStep = pageStateEffects[i+1].Step
+		}
+
+		op, err := psEff.ToOperation()
+		if err != nil {
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
 		if err := state.RegisterNext(nextStep, &op); err != nil {
@@ -60,7 +55,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		}
 	}
 	// last state writes to the file
-	lastStep := stepEffects[len(stepEffects)-1].Step
+	lastStep := pageStateEffects[len(pageStateEffects)-1].Step
 	fileName := fmt.Sprintf(dirName+"/state/state-%s.json", lastStep)
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
@@ -69,7 +64,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 4. write first step to file
 	//--------------------------------------------------------
-	firstStepJsonValue, err := json.Marshal(stepEffects[0].Step)
+	firstStepJsonValue, err := json.Marshal(pageStateEffects[0].Step)
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}

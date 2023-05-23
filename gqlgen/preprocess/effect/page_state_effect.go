@@ -10,13 +10,14 @@ import (
 
 type PageStateEffect struct {
 	seqNo            int
+	Step             string //TODO: move this out to an outer struct?
 	sourceCodeEffect *SourceCodeEffect
 	terminalEffect   *TerminalEffect
 	markdownEffect   *MarkdownEffect
 }
 
-func NewPageStateEffect(seqNo int, sourceCodeEffect *SourceCodeEffect, terminalEffect *TerminalEffect, markdownEffect *MarkdownEffect) *PageStateEffect {
-	return &PageStateEffect{seqNo, sourceCodeEffect, terminalEffect, markdownEffect}
+func NewPageStateEffect(seqNo int, step string, sourceCodeEffect *SourceCodeEffect, terminalEffect *TerminalEffect, markdownEffect *MarkdownEffect) *PageStateEffect {
+	return &PageStateEffect{seqNo, step, sourceCodeEffect, terminalEffect, markdownEffect}
 }
 
 func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffectsFile, markdownEffectsFile string) ([]*PageStateEffect, error) {
@@ -59,7 +60,7 @@ func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffects
 		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
 
 		// PageStateEffect for seqNo
-		psEff := NewPageStateEffect(step.SeqNo, scEff, tEff, mEff)
+		psEff := NewPageStateEffect(step.SeqNo, step.Step, scEff, tEff, mEff)
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 
