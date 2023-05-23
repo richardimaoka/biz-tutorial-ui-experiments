@@ -11,13 +11,14 @@ import (
 type PageStateEffect struct {
 	seqNo            int
 	Step             string //TODO: move this out to an outer struct?
+	NextStep         string //TODO: move this out to an outer struct?
 	sourceCodeEffect *SourceCodeEffect
 	terminalEffect   *TerminalEffect
 	markdownEffect   *MarkdownEffect
 }
 
-func NewPageStateEffect(seqNo int, step string, sourceCodeEffect *SourceCodeEffect, terminalEffect *TerminalEffect, markdownEffect *MarkdownEffect) *PageStateEffect {
-	return &PageStateEffect{seqNo, step, sourceCodeEffect, terminalEffect, markdownEffect}
+func NewPageStateEffect(seqNo int, step, nextStep string, sourceCodeEffect *SourceCodeEffect, terminalEffect *TerminalEffect, markdownEffect *MarkdownEffect) *PageStateEffect {
+	return &PageStateEffect{seqNo, step, nextStep, sourceCodeEffect, terminalEffect, markdownEffect}
 }
 
 func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffectsFile, markdownEffectsFile string) ([]*PageStateEffect, error) {
@@ -48,7 +49,7 @@ func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffects
 	// 2. construct page-sate effect
 	//------------------------------
 	var pageStateEffects []*PageStateEffect
-	for _, step := range stepEffects {
+	for i, step := range stepEffects {
 		// TerminalEffect for seqNo
 		tEff := terminalEffects.FindBySeqNo(step.SeqNo)
 
@@ -59,8 +60,15 @@ func ConstructPageStateEffects(stepEffectsFile, fileEffectsFile, terminalEffects
 		// MarkdownEffect for seqNo
 		mEff := markdownEffects.FindBySeqNo(step.SeqNo)
 
+		var nextStep string
+		if i == len(stepEffects)-1 {
+			nextStep = ""
+		} else {
+			nextStep = stepEffects[i+1].Step
+		}
+
 		// PageStateEffect for seqNo
-		psEff := NewPageStateEffect(step.SeqNo, step.Step, scEff, tEff, mEff)
+		psEff := NewPageStateEffect(step.SeqNo, step.Step, nextStep, scEff, tEff, mEff)
 		pageStateEffects = append(pageStateEffects, psEff)
 	}
 

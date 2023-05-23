@@ -28,19 +28,12 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	for i, psEff := range pageStateEffects {
 		currentStep := psEff.Step
 
-		var nextStep string
-		if i == len(pageStateEffects)-1 {
-			nextStep = ""
-		} else {
-			nextStep = pageStateEffects[i+1].Step
-		}
-
 		op, err := psEff.ToOperation()
 		if err != nil {
 			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
-		if err := state.RegisterNext(nextStep, &op); err != nil {
+		if err := state.RegisterNext(psEff.NextStep, &op); err != nil {
 			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
 		}
 
