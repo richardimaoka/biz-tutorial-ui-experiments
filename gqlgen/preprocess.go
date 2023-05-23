@@ -25,7 +25,8 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	for i, psEff := range pageStateEffects {
+	for i := 0; i < len(pageStateEffects)-1; i++ {
+		psEff := pageStateEffects[i]
 		currentStep := psEff.Step
 
 		op, err := psEff.ToOperation()
