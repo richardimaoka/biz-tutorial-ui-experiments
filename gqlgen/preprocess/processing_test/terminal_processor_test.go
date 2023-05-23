@@ -109,7 +109,7 @@ func TestTerminal_Mutation2(t *testing.T) {
 	internal.CompareAfterMarshal(t, "testdata/terminal/mutation2-1.json", terminal.ToGraphQLTerminal())
 }
 
-// test terminalProcessor.Clone() and terminalElementProcessor.Clone() as the former calls latter
+// Clone() method testing is needed as TerminalProcessor is a state**ful** structure
 func TestTerminal_Clone(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
 	terminal.Transition("001", processing.TerminalCommandWithOutput{Command: "echo abc", Output: "abc"})

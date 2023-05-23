@@ -95,6 +95,11 @@ func (t *TerminalProcessor) ToGraphQLTerminal() *model.Terminal {
 	}
 }
 
+// Clone() method is needed as TerminalProcessor is a state**ful** structure
+// so that it is mutated during the processing.
+//
+// From a PageState structure, which holds and encloses TerminalProcessor,
+// we need to clone TerminalProcessor to avoid mutation effect afterwards.
 func (t *TerminalProcessor) Clone() *TerminalProcessor {
 	// clone to avoid mutation effect afterwards
 	clonedElements := make([]terminalElementProcessor, 0)
