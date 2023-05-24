@@ -123,6 +123,11 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]>;
 };
 
+export type MarkdownPane_FragmentFragment = {
+  __typename: "Markdown";
+  contents?: string | null;
+} & { " $fragmentName"?: "MarkdownPane_FragmentFragment" };
+
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
   openFile?:
@@ -269,9 +274,35 @@ export type IndexSsrPageQuery = {
         })
       | null
     > | null;
+    markdown?:
+      | ({ __typename: "Markdown" } & {
+          " $fragmentRefs"?: {
+            MarkdownPane_FragmentFragment: MarkdownPane_FragmentFragment;
+          };
+        })
+      | null;
   } | null;
 };
 
+export const MarkdownPane_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "MarkdownPane_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Markdown" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "contents" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MarkdownPane_FragmentFragment, unknown>;
 export const FileNodeIcon_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -736,6 +767,19 @@ export const IndexSsrPageDocument = {
                     ],
                   },
                 },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdown" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "MarkdownPane_Fragment" },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -744,5 +788,6 @@ export const IndexSsrPageDocument = {
     },
     ...SourceCodeViewer_FragmentFragmentDoc.definitions,
     ...TerminalComponent_FragmentFragmentDoc.definitions,
+    ...MarkdownPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;

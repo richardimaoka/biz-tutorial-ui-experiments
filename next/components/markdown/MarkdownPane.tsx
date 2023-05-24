@@ -6,32 +6,34 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { Fragment, createElement, useEffect, useState } from "react";
+import { FragmentType, graphql, useFragment } from "../../libs/gql";
 
-export const MarkdownPane = () => {
+const MarkdownPane_Fragment = graphql(`
+  fragment MarkdownPane_Fragment on Markdown {
+    contents
+  }
+`);
+
+export interface MarkdownPaneProps {
+  fragment: FragmentType<typeof MarkdownPane_Fragment>;
+}
+
+export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
+  const fragment = useFragment(MarkdownPane_Fragment, props.fragment);
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
-  const text = `# Get started with Apollo Client
-
-Hello! 👋 This short tutorial gets you up and running with Apollo Client.
-
-> For an introduction to the entire Apollo platform, [check out Odyssey, Apollo's interactive learning platform](https://www.apollographql.com/tutorials/?utm_source=apollo_docs&utm_medium=referral).
-
-## Step 1: Setup
-
-To start this tutorial, do one of the following:
-
-- Create a new React project locally with [Create React App](https://create-react-app.dev/), or
-- Create a new React sandbox on [CodeSandbox](https://codesandbox.io/)."`;
 
   useEffect(() => {
-    unified()
-      .use(remarkParse)
-      .use(remarkRehype)
-      .use(rehypeReact, { createElement, Fragment })
-      .process(text)
-      .then((file) => {
-        setMdElem(file.result as JSX.Element);
-      });
-  }, [text]);
+    if (fragment.contents) {
+      unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeReact, { createElement, Fragment })
+        .process(fragment.contents)
+        .then((file) => {
+          setMdElem(file.result as JSX.Element);
+        });
+    }
+  }, [fragment.contents]);
 
   const sourceCode = `interface RefetchQueriesOptions<
   TCache extends ApolloCache<any>,

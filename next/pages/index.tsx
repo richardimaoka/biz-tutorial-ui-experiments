@@ -44,6 +44,9 @@ const queryDefinition = graphql(/* GraphQL */ `
         currentDirectory
         ...TerminalComponent_Fragment
       }
+      markdown {
+        ...MarkdownPane_Fragment
+      }
     }
   }
 `);
@@ -118,13 +121,15 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
               )}
             </div>
 
-            <div
-              css={css`
-                width: 680px;
-              `}
-            >
-              <MarkdownPane />
-            </div>
+            {currentPage?.markdown && (
+              <div
+                css={css`
+                  width: 680px;
+                `}
+              >
+                <MarkdownPane fragment={currentPage.markdown} />
+              </div>
+            )}
           </div>
 
           <div>
