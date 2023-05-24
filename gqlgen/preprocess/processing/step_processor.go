@@ -26,7 +26,7 @@ func (p *stepProcessor) PrevStep() string {
 func NewStepProcessor() *stepProcessor {
 	return &stepProcessor{
 		currentStep: "000",
-		nextStep:    "001",
+		nextStep:    "",
 		prevStep:    "",
 	}
 }

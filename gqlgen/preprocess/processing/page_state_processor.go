@@ -98,6 +98,16 @@ func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error
 
 // TODO: op can be non-pointer
 func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
+	if p.step.nextStep != "" {
+		return fmt.Errorf("RegisterNext() in PageStateProcessor failed, before registering nextStep = %s, nextStep = %s is already registered", nextStep, p.step.nextStep)
+	}
+	if nextStep == p.step.currentStep {
+		return fmt.Errorf("RegisterNext() in PageStateProcessor failed, nextStep = %s is the same as currentStep", nextStep)
+	}
+	if nextStep == p.step.prevStep {
+		return fmt.Errorf("RegisterNext() in PageStateProcessor failed, nextStep = %s is the same as prevStep", nextStep)
+	}
+
 	cloned := p.cloneCurrentState()
 	if err := cloned.transition(nextStep, op); err != nil {
 		return fmt.Errorf("init page state failed, %s", err)
