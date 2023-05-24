@@ -18,9 +18,9 @@ import (
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
 	if step == nil {
-		filename = fmt.Sprintf(dirName+"/state-%s.json", initialStep)
+		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
 	} else {
-		filename = fmt.Sprintf(dirName+"/state-%s.json", *step)
+		filename = fmt.Sprintf(dirName+"/%s.json", *step)
 	}
 
 	log.Printf("reading data from %s", filename)
