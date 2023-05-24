@@ -26,13 +26,6 @@ func NewStepProcessor() *stepProcessor {
 	}
 }
 
-// increment step to next
-func (p *stepProcessor) IncrementStep(nextNextStep string) {
-	p.prevStep = p.currentStep
-	p.currentStep = p.nextStep
-	p.nextStep = nextNextStep
-}
-
 func (p *stepProcessor) Clone() *stepProcessor {
 	return &stepProcessor{
 		currentStep: p.currentStep, // copy to avoid receiver's mutation effect afterwards
