@@ -96,6 +96,10 @@ func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error
 	return &init, nil
 }
 
+func (p *PageStateProcessor) CurrentStep() string {
+	return p.step.currentStep
+}
+
 // TODO: op can be non-pointer
 func (p *PageStateProcessor) RegisterNext(nextStep string, op *PageStateOperation) error {
 	if p.step.nextStep != "" {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -30,10 +29,17 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	}
 
 	//--------------------------------------------------------
-	// 3. apply page-state operation and write states to files
+	// 3. write initial step to file
 	//--------------------------------------------------------
-	initialStep := "initial"
-	currentStep := initialStep //current step starts **BEFORE** seqNo = 0
+	initialStep := state.CurrentStep()
+	if err := internal.WriteJsonValueToFile(initialStep, dirName+"/initial-step.json"); err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+	log.Printf("wrote initial step to file")
+
+	//--------------------------------------------------------
+	// 4. apply page-state operation and write states to files
+	//--------------------------------------------------------
 	for i := 0; i < len(effects)-1; i++ {
 		eff := effects[i]
 		nextStep := eff.Step
@@ -48,35 +54,22 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		}
 
 		// after registering NEXT step, write the CURRENT state to file
-		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", currentStep)
+		fileName := fmt.Sprintf(dirName+"/state/%s.json", state.CurrentStep())
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, nextStep, err)
 		}
 
 		// iterate over to the next state
-		currentStep = nextStep
 		if err := state.TransitionToNext(); err != nil {
 			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, nextStep, err)
 		}
 	}
 	// last state writes to the file
 	lastStep := effects[len(effects)-1].Step
-	fileName := fmt.Sprintf(dirName+"/state/state-%s.json", lastStep)
+	fileName := fmt.Sprintf(dirName+"/state/%s.json", lastStep)
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 	}
-
-	//--------------------------------------------------------
-	// 4. write first step to file
-	//--------------------------------------------------------
-	firstStepJsonValue, err := json.Marshal(initialStep)
-	if err != nil {
-		return fmt.Errorf("processingCoreLogic failed: %v", err)
-	}
-	if err := os.WriteFile(dirName+"/first-step.json", firstStepJsonValue, 0644); err != nil {
-		return fmt.Errorf("processingCoreLogic failed: %v", err)
-	}
-	log.Printf("wrote first step to file")
 
 	log.Printf("finished writing state into files")
 	return nil
