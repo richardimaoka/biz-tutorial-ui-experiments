@@ -1,7 +1,38 @@
 import { css } from "@emotion/react";
 import { dark1MainBg, dark5, gray, themeBlue } from "../../libs/colorTheme";
 
+import rehypeReact from "rehype-react";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { unified } from "unified";
+import { Fragment, createElement, useEffect, useState } from "react";
+
 export const MarkdownPane = () => {
+  const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
+  const text = `# Get started with Apollo Client
+
+Hello! 👋 This short tutorial gets you up and running with Apollo Client.
+
+> For an introduction to the entire Apollo platform, [check out Odyssey, Apollo's interactive learning platform](https://www.apollographql.com/tutorials/?utm_source=apollo_docs&utm_medium=referral).
+
+## Step 1: Setup
+
+To start this tutorial, do one of the following:
+
+- Create a new React project locally with [Create React App](https://create-react-app.dev/), or
+- Create a new React sandbox on [CodeSandbox](https://codesandbox.io/)."`;
+
+  useEffect(() => {
+    unified()
+      .use(remarkParse)
+      .use(remarkRehype)
+      .use(rehypeReact, { createElement, Fragment })
+      .process(text)
+      .then((file) => {
+        setMdElem(file.result as JSX.Element);
+      });
+  }, [text]);
+
   const sourceCode = `interface RefetchQueriesOptions<
   TCache extends ApolloCache<any>,
   TResult = Promise<ApolloQueryResult<any>>,
@@ -106,54 +137,7 @@ export const MarkdownPane = () => {
         // > See: https://nextjs.org/docs/messages/no-img-elementeslint@next/next/no-img-element
         css={markdownCss}
       >
-        <h1>Get started with Apollo Client</h1>
-        <p>
-          Hello! 👋 This short tutorial gets you up and running with Apollo
-          Client.
-        </p>
-        <blockquote>
-          <p>
-            For an introduction to the entire Apollo platform,{" "}
-            <a href="https://www.apollographql.com/tutorials/?utm_source=apollo_docs&amp;utm_medium=referral">
-              check out Odyssey, Apollo’s interactive learning platform
-            </a>
-            .
-          </p>
-        </blockquote>
-        <h2>Step 1: Setup</h2>
-        <p>To start this tutorial, do one of the following:</p>
-        <ul>
-          <li>
-            Create a new React project locally with{" "}
-            <a href="https://create-react-app.dev/">Create React App</a>, or
-          </li>
-          <li>
-            Create a new React sandbox on{" "}
-            <a href="https://codesandbox.io/">CodeSandbox</a>.
-          </li>
-        </ul>
-        <h2>Step 2: Install dependencies</h2>
-        <p>
-          Applications that use Apollo Client require two top-level
-          dependencies:
-        </p>
-        <ul>
-          <li>
-            <code>@apollo/client</code>: This single package contains virtually
-            everything you need to set up Apollo Client. It includes the
-            in-memory cache, local state management, error handling, and a
-            React-based view layer.
-          </li>
-          <li>
-            <code>graphql</code>: This package provides logic for parsing
-            GraphQL queries.
-          </li>
-        </ul>
-        <p>Run the following command to install both of these packages:</p>
-        <h3>npm</h3>
-        <pre>
-          <code>{sourceCode}</code>
-        </pre>
+        {mdElem}
       </div>
     </div>
   );
