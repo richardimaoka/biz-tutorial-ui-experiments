@@ -7,7 +7,6 @@ import (
 )
 
 // combined effect, so no json meta tag, and can only be constructed from a *New* function
-
 type PageStateEffect struct {
 	seqNo            int
 	Step             string //TODO: move this out to an outer struct?

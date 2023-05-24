@@ -12,44 +12,55 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	pageStateEffects, err := effect.ConstructPageStateEffects(
-		dirName+"/step-effects.json",
-		dirName+"/file-effects.json",
-		dirName+"/terminal-effects.json",
-		dirName+"/markdown-effects.json",
-	)
+	effects, err := effect.ConstructTransitionEffects(dirName)
 	if err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+
+	//--------------------------------------------------------
+	// 2. prepare state dir
+	//--------------------------------------------------------
+
+	if err := os.RemoveAll(dirName + "/state"); err != nil {
+		return fmt.Errorf("processingCoreLogic failed: %v", err)
+	}
+
+	if err := os.MkdirAll(dirName+"/state", 0744); err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 
 	//--------------------------------------------------------
 	// 3. apply page-state operation and write states to files
 	//--------------------------------------------------------
-	for i := 0; i < len(pageStateEffects)-1; i++ {
-		psEff := pageStateEffects[i]
-		currentStep := psEff.Step
+	initialStep := "initial"
+	currentStep := initialStep //current step starts **BEFORE** seqNo = 0
+	for i := 0; i < len(effects)-1; i++ {
+		eff := effects[i]
+		nextStep := eff.Step
 
-		op, err := psEff.ToOperation()
+		nextOperation, err := eff.Effect.ToOperation()
 		if err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, nextStep, err)
 		}
 
-		if err := state.RegisterNext(psEff.NextStep, &op); err != nil {
-			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, currentStep, err)
+		if err := state.RegisterNext(nextStep, &nextOperation); err != nil {
+			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, nextStep, err)
 		}
 
+		// after registering NEXT step, write the CURRENT state to file
 		fileName := fmt.Sprintf(dirName+"/state/state-%s.json", currentStep)
 		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
-			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, currentStep, err)
+			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, nextStep, err)
 		}
 
 		// iterate over to the next state
+		currentStep = nextStep
 		if err := state.TransitionToNext(); err != nil {
-			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, currentStep, err)
+			return fmt.Errorf("TransitionToNext() failed at step[%d] %s: %v", i, nextStep, err)
 		}
 	}
 	// last state writes to the file
-	lastStep := pageStateEffects[len(pageStateEffects)-1].Step
+	lastStep := effects[len(effects)-1].Step
 	fileName := fmt.Sprintf(dirName+"/state/state-%s.json", lastStep)
 	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
@@ -58,7 +69,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 4. write first step to file
 	//--------------------------------------------------------
-	firstStepJsonValue, err := json.Marshal(pageStateEffects[0].Step)
+	firstStepJsonValue, err := json.Marshal(initialStep)
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
