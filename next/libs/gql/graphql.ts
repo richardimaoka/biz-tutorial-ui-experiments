@@ -88,7 +88,6 @@ export type QueryPageStateArgs = {
 
 export type SourceCode = {
   __typename: "SourceCode";
-  defaultOpenFile?: Maybe<OpenFile>;
   fileTree?: Maybe<Array<Maybe<FileNode>>>;
   openFile?: Maybe<OpenFile>;
   step?: Maybe<Scalars["String"]>;

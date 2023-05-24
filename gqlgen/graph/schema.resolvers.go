@@ -14,9 +14,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-var dirName = "data/gqlgensandbox/state"
-var initialStep = "_initial"
-
 // PageState is the resolver for the pageState field.
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
@@ -141,5 +138,7 @@ type sourceCodeResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+var dirName = "data/gqlgensandbox/state"
+var initialStep = "_initial"
 
 type mutationResolver struct{ *Resolver }

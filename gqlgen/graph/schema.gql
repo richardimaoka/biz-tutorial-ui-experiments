@@ -97,7 +97,6 @@ type SourceCode {
   step: String
   fileTree: [FileNode]
   openFile(filePath: String): OpenFile
-  defaultOpenFile: OpenFile
 }
 
 ###################################################
