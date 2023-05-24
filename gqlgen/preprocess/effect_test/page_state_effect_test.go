@@ -66,7 +66,7 @@ func Test_PageStateEffectToOperation(t *testing.T) {
 			mEff := markdownEffects.FindBySeqNo(step.SeqNo)
 
 			// PageStateEffect for seqNo
-			psEff := effect.NewPageStateEffect(step.SeqNo, "", "", scEff, tEff, mEff)
+			psEff := effect.NewPageStateEffect(step.SeqNo, "", scEff, tEff, mEff)
 			op, err := psEff.ToOperation()
 			if err != nil {
 				t.Fatalf("ToOperation failed: %v", err)

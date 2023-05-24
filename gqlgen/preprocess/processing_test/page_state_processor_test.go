@@ -12,12 +12,7 @@ import (
 func Test_PageStateProcessor(t *testing.T) {
 	dirName := "testdata/page_state/protoc-go-experiments"
 
-	effects, err := effect.ConstructPageStateEffects(
-		dirName+"/step-effects.json",
-		dirName+"/file-effects.json",
-		dirName+"/terminal-effects.json",
-		dirName+"/markdown-effects.json",
-	)
+	effects, err := effect.ConstructPageStateEffects(dirName)
 	if err != nil {
 		t.Fatalf("ConstructPageStateEffects failed: %v", err)
 	}
@@ -26,7 +21,7 @@ func Test_PageStateProcessor(t *testing.T) {
 	cases := []struct {
 		ExpectedRegisteredFile   string
 		ExpectedTransitionedFile string
-		PageStateEffect          *effect.PageStateEffect
+		PageStateEffect          effect.PageStateEffect
 	}{
 		{stateDir + "/state-000-register.json", stateDir + "/state-000-transition.json", effects[0]},
 		{stateDir + "/state-001-register.json", stateDir + "/state-001-transition.json", effects[1]},

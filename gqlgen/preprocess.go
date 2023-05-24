@@ -11,7 +11,10 @@ import (
 )
 
 func processingCoreLogic(dirName string, state *processing.PageStateProcessor) error {
-	effects, err := effect.ConstructTransitionEffects(dirName)
+	//--------------------------------------------------------
+	// 1. construct page state effects
+	//--------------------------------------------------------
+	effects, err := effect.ConstructPageStateEffects(dirName)
 	if err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
@@ -19,7 +22,6 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	//--------------------------------------------------------
 	// 2. prepare state dir
 	//--------------------------------------------------------
-
 	if err := os.RemoveAll(dirName + "/state"); err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
@@ -44,7 +46,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		eff := effects[i]
 		nextStep := eff.Step
 
-		nextOperation, err := eff.Effect.ToOperation()
+		nextOperation, err := eff.ToOperation()
 		if err != nil {
 			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, nextStep, err)
 		}

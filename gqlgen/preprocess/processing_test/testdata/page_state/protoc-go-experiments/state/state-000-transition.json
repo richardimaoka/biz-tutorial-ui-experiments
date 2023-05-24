@@ -1,7 +1,7 @@
 {
   "step": "case[0]",
   "nextStep": "",
-  "prevStep": "000",
+  "prevStep": "_initial",
   "sourceCode": {
     "step": "case[0]",
     "defaultOpenFile": null,

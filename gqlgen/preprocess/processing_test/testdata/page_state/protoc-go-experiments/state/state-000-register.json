@@ -1,5 +1,5 @@
 {
-  "step": "000",
+  "step": "_initial",
   "nextStep": "case[0]",
   "prevStep": "",
   "sourceCode": {
