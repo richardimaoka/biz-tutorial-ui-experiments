@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import { SourceCodeViewer } from "../components/sourcecode/SourceCodeViewer";
 import { NextStepButton } from "../components/steps/NextStepButton";
@@ -88,6 +88,24 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
   const currentDirectory = currentTerminal?.currentDirectory
     ? currentTerminal.currentDirectory
     : undefined;
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        if (event.shiftKey) {
+          prevStep && router.push(`./?step=${prevStep}`);
+        } else {
+          nextStep && router.push(`./?step=${nextStep}`);
+        }
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [router, nextStep, prevStep]);
 
   return (
     currentPage && (
