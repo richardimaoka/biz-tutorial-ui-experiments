@@ -126,7 +126,7 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
     return function cleanup() {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [router, nextStep, prevStep]);
+  }, [router, nextStep, prevStep, openFilePath]);
 
   return (
     currentPage && (
