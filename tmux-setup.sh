@@ -28,7 +28,7 @@ tmux send-keys -t "$SESSION:0.5" '(cd next && npm run lint-watch)' C-m
 
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.6" '(cd gqlgen && gow -e=go,json,gql -c -v test ./graph/...)' C-m
+tmux send-keys -t "$SESSION:0.6" '(cd gqlgen && gow -e=go,json,gql -c -v test ./...)' C-m
 
 # open editors
 tmux split-window -v -t "$SESSION" 
