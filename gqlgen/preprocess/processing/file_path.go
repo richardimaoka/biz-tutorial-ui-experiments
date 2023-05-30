@@ -38,8 +38,11 @@ func lessFilePathInner(a, b []string) bool {
 	// now len(a) != 0 AND len(b) != 0
 
 	if a[0] == b[0] {
+		// e.g. a = "aaa/a.txt", b = "aaa/b.txt"
 		return lessFilePathInner(a[1:], b[1:])
 	} else {
+		// e.g. a = "aaa/a.txt", b = "bbb/b.txt"
+		// e.g. a = "a.txt",     b = "b.txt"
 		return a[0] < b[0]
 	}
 }
