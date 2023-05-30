@@ -54,6 +54,11 @@ func (p *PageStateProcessor) transition(nextStep string, nextOperation *PageStat
 		if err := p.markdown.Transition(nextStep, *markdownOp); err != nil {
 			return fmt.Errorf("%s, markdown transition failed, %s", errorPreceding, err)
 		}
+	} else {
+		clearMarkdownOp := MarkdownOperation{Contents: ""}
+		if err := p.markdown.Transition(nextStep, clearMarkdownOp); err != nil {
+			return fmt.Errorf("%s, markdown transition failed to clear contents, %s", errorPreceding, err)
+		}
 	}
 
 	return nil

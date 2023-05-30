@@ -23,7 +23,7 @@ export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
 
   useEffect(() => {
-    if (fragment.contents) {
+    if (fragment.contents || fragment.contents == "") {
       unified()
         .use(remarkParse)
         .use(remarkRehype)
