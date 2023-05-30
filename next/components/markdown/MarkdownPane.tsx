@@ -35,20 +35,6 @@ export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
     }
   }, [fragment.contents]);
 
-  const sourceCode = `interface RefetchQueriesOptions<
-  TCache extends ApolloCache<any>,
-  TResult = Promise<ApolloQueryResult<any>>,
-> {
-  updateCache?: (cache: TCache) => void;
-  include?: Array<string | DocumentNode> | "all" | "active";
-  onQueryUpdated?: (
-    observableQuery: ObservableQuery<any>,
-    diff: Cache.DiffResult<any>,
-    lastDiff: Cache.DiffResult<any> | undefined,
-  ) => boolean | TResult;
-  optimistic?: boolean;
-}`;
-
   const markdownCss = css`
     background-color: ${dark1MainBg};
 
@@ -135,8 +121,8 @@ export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
     >
       <div
         // options.components (https://github.com/rehypejs/rehype-react#optionscomponents) to avoid the following Next Lint error:
-        // > Using `<img>` could result in slower LCP and higher bandwidth. Use `<Image />` from `next/image` instead to utilize Image Optimization.
-        // > See: https://nextjs.org/docs/messages/no-img-elementeslint@next/next/no-img-element
+        //   > Using `<img>` could result in slower LCP and higher bandwidth. Use `<Image />` from `next/image` instead to utilize Image Optimization.
+        //   > See: https://nextjs.org/docs/messages/no-img-elementeslint@next/next/no-img-element
         css={markdownCss}
       >
         {mdElem}
