@@ -30,6 +30,25 @@ const extractString = (
   }
 };
 
+const constructQueryString = (
+  step: string | undefined,
+  openFilePath: string | undefined
+): string => {
+  if (step) {
+    if (openFilePath) {
+      return `?step=${step}&openFilePath=${encodeURIComponent(openFilePath)}`;
+    } else {
+      return `?step=${step}`;
+    }
+  } else {
+    if (openFilePath) {
+      return `?openFilePath=${encodeURIComponent(openFilePath)}`;
+    } else {
+      return "";
+    }
+  }
+};
+
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($step: String, $openFilePath: String) {
     pageState(step: $step) {
@@ -93,9 +112,11 @@ export default function Home({ pageState }: IndexSsrPageQuery) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         if (event.shiftKey) {
-          prevStep && router.push(`./?step=${prevStep}`);
+          prevStep &&
+            router.push(`/${constructQueryString(prevStep, openFilePath)}`);
         } else {
-          nextStep && router.push(`./?step=${nextStep}`);
+          nextStep &&
+            router.push(`/${constructQueryString(nextStep, openFilePath)}`);
         }
       }
     };
