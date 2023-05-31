@@ -190,6 +190,11 @@ export type FileContentViewer_FragmentFragment = {
   __typename: "OpenFile";
   content?: string | null;
   language?: string | null;
+  highlight?: Array<{
+    __typename: "FileHighlight";
+    fromLine?: number | null;
+    toLine?: number | null;
+  } | null> | null;
 } & { " $fragmentName"?: "FileContentViewer_FragmentFragment" };
 
 export type FileNameTab_FragmentFragment = {
@@ -463,6 +468,17 @@ export const FileContentViewer_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "highlight" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "fromLine" } },
+                { kind: "Field", name: { kind: "Name", value: "toLine" } },
+              ],
+            },
+          },
         ],
       },
     },

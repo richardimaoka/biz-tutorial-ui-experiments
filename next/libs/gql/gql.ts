@@ -27,7 +27,7 @@ const documents = {
     types.FileTreePane_FragmentFragmentDoc,
   "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n":
     types.FileContentPane_FragmentFragmentDoc,
-  "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n  }\n":
+  "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n":
     types.FileContentViewer_FragmentFragmentDoc,
   "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n":
     types.FileNameTab_FragmentFragmentDoc,
@@ -105,8 +105,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n  }\n"
-): (typeof documents)["\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n  }\n"];
+  source: "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n"
+): (typeof documents)["\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

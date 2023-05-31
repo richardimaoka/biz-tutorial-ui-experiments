@@ -12,6 +12,10 @@ const FileContentViewer_Fragment = graphql(`
   fragment FileContentViewer_Fragment on OpenFile {
     content
     language
+    highlight {
+      fromLine
+      toLine
+    }
   }
 `);
 
