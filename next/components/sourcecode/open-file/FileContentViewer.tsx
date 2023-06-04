@@ -2,7 +2,10 @@ import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
 import Prism from "prismjs";
-import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts
+
+// Side-effect only import - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#import_a_module_for_its_side_effects_only
+import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
+
 // prism stylesheet /styles/prism-xxx.css is imported from /pages/_app.tsx, as global stylesheet import is only allowed there.
 // https://nextjs.org/docs/messages/css-global
 
