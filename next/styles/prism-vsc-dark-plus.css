@@ -272,7 +272,7 @@ pre[class*="language-"] > code[class*="language-"] {
 }
 
 .line-highlight.line-highlight {
-  background: #f7ebc6;
-  box-shadow: inset 5px 0 0 #f7d87c;
+  background: #4d5e1f;
+  box-shadow: inset 5px 0 0 #748d2e;
   z-index: 0;
 }

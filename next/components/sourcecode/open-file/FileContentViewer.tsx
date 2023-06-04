@@ -77,7 +77,7 @@ export const FileContentViewer = (
     >
       <pre
         className="line-numbers"
-        data-line={"5-10"}
+        // data-line={"5-10"}
         css={css`
           width: auto; //if content width < parent width, then expand up to parent width
           min-width: fit-content; //if content width > parent width, expand up to the content width
