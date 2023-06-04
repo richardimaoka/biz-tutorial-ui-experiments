@@ -3,6 +3,12 @@ import { useEffect, useRef } from "react";
 
 import Prism from "prismjs";
 
+// Prism.js plugins
+// Side-effect only import - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#import_a_module_for_its_side_effects_only
+import "prismjs/plugins/line-numbers/prism-line-numbers"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
+import "prismjs/plugins/line-highlight/prism-line-highlight"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
+
+// Prism.js language supports.
 // Side-effect only import - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#import_a_module_for_its_side_effects_only
 import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
 
