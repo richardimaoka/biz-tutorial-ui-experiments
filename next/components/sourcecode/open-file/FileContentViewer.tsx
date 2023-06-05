@@ -11,6 +11,7 @@ import "prismjs/plugins/line-highlight/prism-line-highlight"; //ts 7016 error su
 // Prism.js language supports.
 // Side-effect only import - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#import_a_module_for_its_side_effects_only
 import "prismjs/components/prism-protobuf"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
+import "prismjs/components/prism-json"; //ts 7016 error suppressed by prism-fix.d.ts in /libs folder
 
 // prism stylesheet /styles/prism-xxx.css is imported from /pages/_app.tsx, as global stylesheet import is only allowed there.
 // https://nextjs.org/docs/messages/css-global
@@ -40,10 +41,12 @@ export const FileContentViewer = (
 
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
+    console.log("FileContentViewer useEffect");
     if (ref.current) {
+      console.log("Prism.highlightElement");
       Prism.highlightElement(ref.current);
     }
-  }, []);
+  }, [fragment]);
 
   // See https://prismjs.com/#basic-usage for className="language-xxxx"
   const prismLanguage = fragment.language
@@ -87,7 +90,7 @@ export const FileContentViewer = (
       >
         {/* See https://prismjs.com/#basic-usage for className="language-xxxx". 
             Also className={undefined} removes className attribute in React. */}
-        <code className={prismLanguage} ref={ref}>
+        <code className={"language-json"} ref={ref}>
           {fragment.content}
         </code>
       </pre>

@@ -4,3 +4,4 @@
 declare module "prismjs/plugins/line-highlight/prism-line-highlight";
 declare module "prismjs/plugins/line-numbers/prism-line-numbers";
 declare module "prismjs/components/prism-protobuf";
+declare module "prismjs/components/prism-json";
