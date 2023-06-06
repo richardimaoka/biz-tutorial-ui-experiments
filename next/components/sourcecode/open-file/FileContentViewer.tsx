@@ -38,20 +38,25 @@ export const FileContentViewer = (
   props: FileContentViewerProps
 ): JSX.Element => {
   const fragment = useFragment(FileContentViewer_Fragment, props.fragment);
-
   const ref = useRef<HTMLElement>(null);
-  useEffect(() => {
-    console.log("FileContentViewer useEffect");
-    if (ref.current) {
-      console.log("Prism.highlightElement");
-      Prism.highlightElement(ref.current);
-    }
-  }, [fragment]);
 
   // See https://prismjs.com/#basic-usage for className="language-xxxx"
   const prismLanguage = fragment.language
     ? `language-${fragment.language}`
     : undefined;
+
+  useEffect(() => {
+    console.log("FileContentViewer useEffect, ref = ", ref);
+    if (ref.current) {
+      // Need to set className here, not in JSX, otherwise, a warning like below will be generated:
+      //   Warning: Prop `className` did not match. Server: "line-numbers css-1rw6e6m-FileContentViewer language-json" Client: "line-numbers css-1rw6e6m-FileContentViewer"
+      //   at pre
+      //   See more info here: https://nextjs.org/docs/messages/react-hydration-error
+      ref.current.className = prismLanguage ? prismLanguage : "";
+
+      Prism.highlightElement(ref.current);
+    }
+  }, [fragment, prismLanguage]);
 
   const scrollBarWidth = 8; //px
 
@@ -90,7 +95,7 @@ export const FileContentViewer = (
       >
         {/* See https://prismjs.com/#basic-usage for className="language-xxxx". 
             Also className={undefined} removes className attribute in React. */}
-        <code className={"language-json"} ref={ref}>
+        <code className={prismLanguage} ref={ref}>
           {fragment.content}
         </code>
       </pre>
