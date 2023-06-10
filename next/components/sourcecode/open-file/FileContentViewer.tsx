@@ -17,6 +17,7 @@ import "prismjs/components/prism-json"; //ts 7016 error suppressed by prism-fix.
 // https://nextjs.org/docs/messages/css-global
 
 import { FragmentType, graphql, useFragment } from "../../../libs/gql";
+import { nonNullArray } from "../../../libs/nonNullArray";
 
 const FileContentViewer_Fragment = graphql(`
   fragment FileContentViewer_Fragment on OpenFile {
@@ -45,8 +46,22 @@ export const FileContentViewer = (
     ? `language-${fragment.language}`
     : undefined;
 
+  const dataLine = fragment.highlight
+    ? nonNullArray(fragment.highlight) // remove nulls to simplify type handling in filter() and map()
+        .filter((h) => h.fromLine && h.toLine) // if both is null, don't highlight it
+        .map(
+          // two possible styles of data-line attribute: `5` (single-line) and `1-2` (multi-line)
+          (h) =>
+            h.fromLine === h.toLine
+              ? `${h.fromLine}` //(e.g.) 5
+              : `${h.fromLine}-${h.toLine}` //(e.g.) 1-2
+        )
+        .join(", ") //1-2, 5, 9-20
+    : "";
+  console.log("fragment", fragment);
+  console.log("dataLine=", dataLine);
+
   useEffect(() => {
-    console.log("FileContentViewer useEffect, ref = ", ref);
     if (ref.current) {
       // 1. Walkaround - need to set className here, not in JSX.
       //    Otherwise, a warning like below will be generated:
@@ -54,7 +69,7 @@ export const FileContentViewer = (
       //        at pre
       //        See more info here: https://nextjs.org/docs/messages/react-hydration-error
       //
-      // 2. Why set className="language-xxxx" to <code> (ref points to <code>), not <pre>? See https://prismjs.com/#basic-usage
+      // 2. Why set className="language-xxxx" to <code> (`ref` points to <code>), not <pre>? See https://prismjs.com/#basic-usage
       ref.current.className = prismLanguage ? prismLanguage : "";
 
       Prism.highlightElement(ref.current);
@@ -88,7 +103,7 @@ export const FileContentViewer = (
     >
       <pre
         className="line-numbers"
-        // data-line={"5-10"}
+        data-line={dataLine}
         css={css`
           width: auto; //if content width < parent width, then expand up to parent width
           min-width: fit-content; //if content width > parent width, expand up to the content width
