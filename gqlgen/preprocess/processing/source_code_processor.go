@@ -11,6 +11,8 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 type SourceCodeProcessor struct {
@@ -130,6 +132,14 @@ func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
 }
 
 func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
+	dmp := diffmatchpatch.New()
+	//TODO: make it more robust with error check, most likely outside of this function because this mutation function is never supposed to fail
+	oldFile := p.fileMap[op.FilePath].(*fileProcessorNode)
+	//TODO: oldFile.content shouldn't be accessed!!
+	diffs := dmp.DiffMain(oldFile.content, op.Content, true)
+
+	fmt.Printf("DiffPrettyText file = %s:\n%s\n", oldFile.FilePath(), dmp.DiffPrettyText(diffs))
+
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 }
 

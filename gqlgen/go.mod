@@ -9,6 +9,7 @@ require (
 	github.com/google/go-cmp v0.5.9
 	github.com/gorilla/websocket v1.5.0
 	github.com/rs/cors v1.8.3
+	github.com/sergi/go-diff v1.1.0
 	github.com/vektah/gqlparser/v2 v2.5.1
 )
 
@@ -29,7 +30,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pjbgf/sha1cd v0.3.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/urfave/cli/v2 v2.8.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
