@@ -137,8 +137,8 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	oldFile := p.fileMap[op.FilePath].(*fileProcessorNode)
 	//TODO: oldFile.content shouldn't be accessed!!
 	diffs := dmp.DiffMain(oldFile.content, op.Content, true)
-
-	fmt.Printf("DiffPrettyText file = %s:\n%s\n", oldFile.FilePath(), dmp.DiffPrettyText(diffs))
+	diffPretty := dmp.DiffPrettyText(diffs)
+	fmt.Printf("DiffPrettyText file = %s:\n%s\n", oldFile.FilePath(), diffPretty)
 
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 }
