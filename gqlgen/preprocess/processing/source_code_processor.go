@@ -135,14 +135,27 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	dmp := diffmatchpatch.New()
 	//TODO: make it more robust with error check, most likely outside of this function because this mutation function is never supposed to fail
 	oldFile := p.fileMap[op.FilePath].(*fileProcessorNode)
-	//TODO: oldFile.content shouldn't be accessed!!
+	//TODO: oldFile.content shouldn't be accessed outside file_node.go!!
 	diffs := dmp.DiffMain(oldFile.content, op.Content, true)
-	diffPretty := dmp.DiffPrettyText(diffs)
-	diffPrettyHtml := dmp.DiffPrettyHtml(diffs)
-	fmt.Printf("DiffPrettyText file = %s:\n%s\n", oldFile.FilePath(), diffPretty)
-	fmt.Printf("DiffPrettyHtml file = %s:\n%s\n", oldFile.FilePath(), diffPrettyHtml)
 
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+	var highlights []fileHighlight
+	var h *fileHighlight = nil
+	for n, diff := range diffs {
+		if diff.Type == diffmatchpatch.DiffInsert {
+			if h != nil {
+				h.toLine = n
+			} else {
+				h = &fileHighlight{fromLine: n, toLine: n}
+			}
+		} else {
+			if h != nil {
+				highlights = append(highlights, *h)
+				h = nil
+			}
+		}
+	}
+
+	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
 }
 
 func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {

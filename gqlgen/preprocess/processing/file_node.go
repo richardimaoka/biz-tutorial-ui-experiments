@@ -13,6 +13,11 @@ const (
 	directoryType nodeType = "DIRECTORY"
 )
 
+type fileHighlight struct {
+	fromLine int
+	toLine   int
+}
+
 type fileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
@@ -24,9 +29,10 @@ type fileTreeNode interface {
 }
 
 type fileProcessorNode struct {
-	filePath  string
-	content   string
-	isUpdated bool
+	filePath   string
+	content    string
+	isUpdated  bool
+	highlights []fileHighlight
 }
 
 type directoryProcessorNode struct {
