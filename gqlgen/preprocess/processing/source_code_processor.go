@@ -148,11 +148,16 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 				h = &fileHighlight{fromLine: n, toLine: n}
 			}
 		} else {
+			// at the end of highlight
 			if h != nil {
 				highlights = append(highlights, *h)
 				h = nil
 			}
 		}
+	}
+	// if highlight continues to the last line
+	if h != nil {
+		highlights = append(highlights, *h)
 	}
 
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}

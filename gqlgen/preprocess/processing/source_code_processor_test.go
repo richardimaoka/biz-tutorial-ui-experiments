@@ -248,6 +248,44 @@ func Test_GitOp(t *testing.T) {
 	})
 }
 
+func Test_FileHighlight(t *testing.T) {
+	type TestCase struct {
+		ExpectSuccess bool
+		ExpectedFile  string
+		Operation     processing.FileOperation
+	}
+
+	checkResult := func(t *testing.T, index int, op processing.FileOperation, expectSuccess bool, err error) {
+		resultSuccess := err == nil
+		if resultSuccess != expectSuccess { //if result is not expected
+			if expectSuccess {
+				t.Fatalf("operation[%d] = %+v success is expected, but result is failure\nerror: %s\n", index, op, err)
+			} else {
+				t.Fatalf("operation[%d] = %+v failure is expected, but result is success\n", index, op)
+			}
+		}
+	}
+
+	runTestCases := func(t *testing.T, name string, testCases []TestCase) {
+		t.Run(name, func(t *testing.T) {
+			sourceCode := processing.NewSourceCodeProcessor()
+			for i, c := range testCases {
+				scOp := processing.SourceCodeFileOperation{FileOps: []processing.FileOperation{c.Operation}}
+				err := sourceCode.Transition("", scOp)
+				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
+
+				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
+			}
+		})
+	}
+
+	runTestCases(t, "file_highlight1", []TestCase{
+		{true, "testdata/source_code/file-highlight1-1.json", processing.FileAdd{FilePath: "hello.txt", Content: "hello world", IsFullContent: true}},
+		{true, "testdata/source_code/file-highlight1-2.json", processing.FileUpdate{FilePath: "hello.txt", Content: "hello world\nhello Japan"}},
+	})
+
+}
+
 // Test mutation after sourceCode.ToGraphQLModel()
 // Once a GraphQL model is materialized with sourceCode.ToGraphQLModel(), mutation to the sourceCode should have no effect on the GraphQL model
 func TestSourceCode_Mutation1(t *testing.T) {

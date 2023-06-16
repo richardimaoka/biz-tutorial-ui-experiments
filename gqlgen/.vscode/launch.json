@@ -10,8 +10,8 @@
       "request": "launch",
       "mode": "test",
       "trace": "verbose",
-      "program": "${workspaceFolder}/graph/processing_test",
-      "args": ["-test.run", "Test_SourceCodeProcessor/error_add_dir_duplicate1"]
+      "program": "${workspaceFolder}/preprocess/processing",
+      "args": ["-test.run", "Test_FileHighlight"]
     },
     {
       "name": "Launch file",
