@@ -53,7 +53,7 @@
       "fileName": "schema.graphql",
       "content": "schema {\n  query: MyQuery\n  mutation: MyMutation\n}\n\ntype MyQuery {\n  todo(id: ID!): Todo\n  lastTodo: Todo\n  todos: [Todo!]!\n}\n\ntype MyMutation {\n  createTodo(todo: TodoInput!): Todo!\n  updateTodo(id: ID!, changes: Map!): Todo\n}\n\ntype Todo {\n  id: ID!\n  text: String!\n  done: Boolean! @hasRole(role: OWNER) # only the owner can see if a todo is done\n}\n\n\"Passed to createTodo to create a new todo\"\ninput TodoInput {\n  \"The body text\"\n  text: String!\n  \"Is it done already?\"\n  done: Boolean\n}\n\nscalar Map\n\n\"Prevents access to a field if the user doesnt have the matching role\"\ndirective @hasRole(role: Role!) on FIELD_DEFINITION\ndirective @user(id: ID!) on MUTATION | QUERY | FIELD\n\nenum Role {\n  ADMIN\n  OWNER\n}\n",
       "isFullContent": true,
-      "language": null,
+      "language": "graphql",
       "highlight": null
     },
     "tools.go": {
@@ -61,7 +61,7 @@
       "fileName": "tools.go",
       "content": "//go:build tools\n// +build tools\n\npackage tools\n\nimport (\n\t_ \"github.com/99designs/gqlgen\"\n\t_ \"github.com/99designs/gqlgen/graphql/introspection\"\n)\n",
       "isFullContent": true,
-      "language": null,
+      "language": "go",
       "highlight": null
     }
   }

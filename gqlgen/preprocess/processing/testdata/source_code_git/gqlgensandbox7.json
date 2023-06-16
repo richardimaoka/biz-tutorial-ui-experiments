@@ -46,14 +46,847 @@
       "content": "github.com/99designs/gqlgen v0.17.30 h1:aRCHdy0mWZ41gdlHctJmR05bi3on3Alj4YNRMBZG5UA=\ngithub.com/99designs/gqlgen v0.17.30/go.mod h1:i4rEatMrzzu6RXaHydq1nmEPZkb3bKQsnxNRHS4DQB4=\ngithub.com/agnivade/levenshtein v1.0.1/go.mod h1:CURSv5d9Uaml+FovSIICkLbAUZ9S4RqaHDIsdSBg7lM=\ngithub.com/agnivade/levenshtein v1.1.1 h1:QY8M92nrzkmr798gCo3kmMyqXFzdQVpxLlGPRBij0P8=\ngithub.com/agnivade/levenshtein v1.1.1/go.mod h1:veldBMzWxcCG2ZvUTKD2kJNRdCk5hVbJomOvKkmgYbo=\ngithub.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 h1:bvNMNQO63//z+xNgfBlViaCIJKLlCJ6/fmUseuG0wVQ=\ngithub.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883/go.mod h1:rCTlJbsFo29Kk6CurOXKm700vrz8f0KW0JNfpkRJY/8=\ngithub.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0 h1:jfIu9sQUG6Ig+0+Ap1h4unLjW6YQJpKZVmUzxsD4E/Q=\ngithub.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0/go.mod h1:t2tdKJDJF9BV14lnkjHmOQgcvEKgtqs5a1N3LNdJhGE=\ngithub.com/cpuguy83/go-md2man/v2 v2.0.2 h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=\ngithub.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=\ngithub.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=\ngithub.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=\ngithub.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=\ngithub.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48 h1:fRzb/w+pyskVMQ+UbP35JkH8yB7MYb4q/qhBarqZE6g=\ngithub.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48/go.mod h1:if7Fbed8SFyPtHLHbg49SI7NAdJiC5WIA09pe59rfAA=\ngithub.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=\ngithub.com/hashicorp/golang-lru/v2 v2.0.1 h1:5pv5N1lT1fjLg2VQ5KWc7kmucp2x/kvFOnxuVTqZ6x4=\ngithub.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=\ngithub.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=\ngithub.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=\ngithub.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=\ngithub.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=\ngithub.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=\ngithub.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=\ngithub.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=\ngithub.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=\ngithub.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=\ngithub.com/sergi/go-diff v1.1.0 h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=\ngithub.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=\ngithub.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=\ngithub.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=\ngithub.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=\ngithub.com/urfave/cli/v2 v2.24.4 h1:0gyJJEBYtCV87zI/x2nZCPyDxD51K6xM8SkwjHFCNEU=\ngithub.com/urfave/cli/v2 v2.24.4/go.mod h1:GHupkWPMM0M/sj1a2b4wUrWBPzazNrIjouW6fmdJLxc=\ngithub.com/vektah/gqlparser/v2 v2.5.1 h1:ZGu+bquAY23jsxDRcYpWjttRZrUz07LbiY77gUOHcr4=\ngithub.com/vektah/gqlparser/v2 v2.5.1/go.mod h1:mPgqFBu/woKTVYWyNk8cO3kh4S/f4aRFZrvOnp3hmCs=\ngithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 h1:bAn7/zixMGCfxrRTfdpNzjtPYqr8smhKouy9mxVdGPU=\ngithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673/go.mod h1:N3UwUGtsrSj3ccvlPHLoLsHnpR27oXr4ZE984MbSER8=\ngolang.org/x/mod v0.8.0 h1:LUYupSeNrTNCGzR/hVBk2NHZO4hXcVaW1k4Qx7rjPx8=\ngolang.org/x/mod v0.8.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=\ngolang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=\ngolang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=\ngolang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=\ngolang.org/x/text v0.7.0 h1:4BRB4x83lYWy72KwLD/qYDuTu7q9PjSagHvijDw7cLo=\ngolang.org/x/text v0.7.0/go.mod h1:mrYo+phRRbMaCq/xk9113O4dZlRixOauAjOtrjsXDZ8=\ngolang.org/x/tools v0.6.0 h1:BOw41kyTf3PuCW1pVQf8+Cyg8pMlkYB1oo9iJ6D/lKM=\ngolang.org/x/tools v0.6.0/go.mod h1:Xwgl3UAJ/d3gWutnCtw505GrjyAbvKui8lOU390QaIU=\ngopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=\ngopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 h1:YR8cESwS4TdDjEe65xsg0ogRM/Nc3DYOhEAlW+xobZo=\ngopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=\ngopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v2 v2.2.4/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v2 v2.2.8 h1:obN1ZagJSUGI0Ek/LBmuj4SNLPfIny3KsKFopxRdj10=\ngopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=\ngopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=\n",
       "isFullContent": true,
       "language": null,
-      "highlight": null
+      "highlight": [
+        {
+          "fromLine": 2,
+          "toLine": 2
+        },
+        {
+          "fromLine": 5,
+          "toLine": 5
+        },
+        {
+          "fromLine": 7,
+          "toLine": 7
+        },
+        {
+          "fromLine": 10,
+          "toLine": 10
+        },
+        {
+          "fromLine": 15,
+          "toLine": 15
+        },
+        {
+          "fromLine": 20,
+          "toLine": 20
+        },
+        {
+          "fromLine": 23,
+          "toLine": 23
+        },
+        {
+          "fromLine": 26,
+          "toLine": 26
+        },
+        {
+          "fromLine": 29,
+          "toLine": 29
+        },
+        {
+          "fromLine": 32,
+          "toLine": 32
+        },
+        {
+          "fromLine": 35,
+          "toLine": 35
+        },
+        {
+          "fromLine": 38,
+          "toLine": 38
+        },
+        {
+          "fromLine": 41,
+          "toLine": 41
+        },
+        {
+          "fromLine": 44,
+          "toLine": 44
+        },
+        {
+          "fromLine": 47,
+          "toLine": 47
+        },
+        {
+          "fromLine": 50,
+          "toLine": 50
+        },
+        {
+          "fromLine": 57,
+          "toLine": 57
+        },
+        {
+          "fromLine": 60,
+          "toLine": 60
+        },
+        {
+          "fromLine": 63,
+          "toLine": 63
+        },
+        {
+          "fromLine": 65,
+          "toLine": 65
+        },
+        {
+          "fromLine": 67,
+          "toLine": 67
+        },
+        {
+          "fromLine": 69,
+          "toLine": 69
+        },
+        {
+          "fromLine": 72,
+          "toLine": 72
+        },
+        {
+          "fromLine": 75,
+          "toLine": 75
+        },
+        {
+          "fromLine": 77,
+          "toLine": 77
+        },
+        {
+          "fromLine": 82,
+          "toLine": 82
+        },
+        {
+          "fromLine": 85,
+          "toLine": 85
+        },
+        {
+          "fromLine": 88,
+          "toLine": 88
+        },
+        {
+          "fromLine": 92,
+          "toLine": 92
+        },
+        {
+          "fromLine": 95,
+          "toLine": 95
+        },
+        {
+          "fromLine": 98,
+          "toLine": 98
+        },
+        {
+          "fromLine": 104,
+          "toLine": 104
+        },
+        {
+          "fromLine": 106,
+          "toLine": 106
+        },
+        {
+          "fromLine": 109,
+          "toLine": 109
+        },
+        {
+          "fromLine": 112,
+          "toLine": 112
+        },
+        {
+          "fromLine": 119,
+          "toLine": 119
+        },
+        {
+          "fromLine": 122,
+          "toLine": 122
+        },
+        {
+          "fromLine": 125,
+          "toLine": 125
+        },
+        {
+          "fromLine": 128,
+          "toLine": 128
+        },
+        {
+          "fromLine": 130,
+          "toLine": 130
+        },
+        {
+          "fromLine": 134,
+          "toLine": 134
+        },
+        {
+          "fromLine": 137,
+          "toLine": 137
+        },
+        {
+          "fromLine": 144,
+          "toLine": 144
+        },
+        {
+          "fromLine": 147,
+          "toLine": 147
+        },
+        {
+          "fromLine": 150,
+          "toLine": 150
+        },
+        {
+          "fromLine": 153,
+          "toLine": 153
+        },
+        {
+          "fromLine": 156,
+          "toLine": 156
+        },
+        {
+          "fromLine": 163,
+          "toLine": 163
+        },
+        {
+          "fromLine": 166,
+          "toLine": 166
+        },
+        {
+          "fromLine": 169,
+          "toLine": 169
+        },
+        {
+          "fromLine": 172,
+          "toLine": 172
+        },
+        {
+          "fromLine": 175,
+          "toLine": 175
+        },
+        {
+          "fromLine": 177,
+          "toLine": 177
+        },
+        {
+          "fromLine": 180,
+          "toLine": 180
+        },
+        {
+          "fromLine": 183,
+          "toLine": 183
+        },
+        {
+          "fromLine": 186,
+          "toLine": 186
+        },
+        {
+          "fromLine": 189,
+          "toLine": 189
+        },
+        {
+          "fromLine": 194,
+          "toLine": 194
+        },
+        {
+          "fromLine": 197,
+          "toLine": 197
+        },
+        {
+          "fromLine": 202,
+          "toLine": 202
+        },
+        {
+          "fromLine": 205,
+          "toLine": 205
+        },
+        {
+          "fromLine": 208,
+          "toLine": 208
+        },
+        {
+          "fromLine": 211,
+          "toLine": 211
+        },
+        {
+          "fromLine": 214,
+          "toLine": 214
+        },
+        {
+          "fromLine": 216,
+          "toLine": 216
+        },
+        {
+          "fromLine": 219,
+          "toLine": 219
+        },
+        {
+          "fromLine": 222,
+          "toLine": 222
+        },
+        {
+          "fromLine": 227,
+          "toLine": 227
+        },
+        {
+          "fromLine": 232,
+          "toLine": 232
+        },
+        {
+          "fromLine": 243,
+          "toLine": 243
+        },
+        {
+          "fromLine": 246,
+          "toLine": 246
+        },
+        {
+          "fromLine": 249,
+          "toLine": 249
+        },
+        {
+          "fromLine": 251,
+          "toLine": 251
+        },
+        {
+          "fromLine": 254,
+          "toLine": 254
+        },
+        {
+          "fromLine": 257,
+          "toLine": 257
+        },
+        {
+          "fromLine": 260,
+          "toLine": 260
+        },
+        {
+          "fromLine": 263,
+          "toLine": 263
+        },
+        {
+          "fromLine": 266,
+          "toLine": 266
+        },
+        {
+          "fromLine": 269,
+          "toLine": 269
+        },
+        {
+          "fromLine": 272,
+          "toLine": 272
+        },
+        {
+          "fromLine": 275,
+          "toLine": 275
+        },
+        {
+          "fromLine": 278,
+          "toLine": 278
+        },
+        {
+          "fromLine": 280,
+          "toLine": 280
+        },
+        {
+          "fromLine": 283,
+          "toLine": 283
+        },
+        {
+          "fromLine": 291,
+          "toLine": 291
+        },
+        {
+          "fromLine": 294,
+          "toLine": 294
+        },
+        {
+          "fromLine": 299,
+          "toLine": 299
+        },
+        {
+          "fromLine": 301,
+          "toLine": 301
+        },
+        {
+          "fromLine": 308,
+          "toLine": 308
+        },
+        {
+          "fromLine": 311,
+          "toLine": 311
+        },
+        {
+          "fromLine": 316,
+          "toLine": 316
+        },
+        {
+          "fromLine": 321,
+          "toLine": 321
+        },
+        {
+          "fromLine": 326,
+          "toLine": 326
+        },
+        {
+          "fromLine": 329,
+          "toLine": 329
+        },
+        {
+          "fromLine": 332,
+          "toLine": 332
+        },
+        {
+          "fromLine": 339,
+          "toLine": 339
+        },
+        {
+          "fromLine": 343,
+          "toLine": 343
+        },
+        {
+          "fromLine": 346,
+          "toLine": 346
+        },
+        {
+          "fromLine": 351,
+          "toLine": 351
+        },
+        {
+          "fromLine": 356,
+          "toLine": 356
+        },
+        {
+          "fromLine": 359,
+          "toLine": 359
+        },
+        {
+          "fromLine": 366,
+          "toLine": 366
+        },
+        {
+          "fromLine": 369,
+          "toLine": 369
+        },
+        {
+          "fromLine": 376,
+          "toLine": 376
+        },
+        {
+          "fromLine": 385,
+          "toLine": 385
+        },
+        {
+          "fromLine": 390,
+          "toLine": 390
+        },
+        {
+          "fromLine": 397,
+          "toLine": 397
+        },
+        {
+          "fromLine": 408,
+          "toLine": 408
+        },
+        {
+          "fromLine": 415,
+          "toLine": 415
+        },
+        {
+          "fromLine": 422,
+          "toLine": 422
+        },
+        {
+          "fromLine": 427,
+          "toLine": 427
+        },
+        {
+          "fromLine": 430,
+          "toLine": 430
+        },
+        {
+          "fromLine": 433,
+          "toLine": 433
+        },
+        {
+          "fromLine": 436,
+          "toLine": 436
+        },
+        {
+          "fromLine": 439,
+          "toLine": 439
+        },
+        {
+          "fromLine": 444,
+          "toLine": 444
+        },
+        {
+          "fromLine": 447,
+          "toLine": 447
+        },
+        {
+          "fromLine": 452,
+          "toLine": 452
+        },
+        {
+          "fromLine": 459,
+          "toLine": 459
+        },
+        {
+          "fromLine": 462,
+          "toLine": 462
+        },
+        {
+          "fromLine": 473,
+          "toLine": 473
+        },
+        {
+          "fromLine": 486,
+          "toLine": 486
+        },
+        {
+          "fromLine": 493,
+          "toLine": 493
+        },
+        {
+          "fromLine": 496,
+          "toLine": 496
+        },
+        {
+          "fromLine": 500,
+          "toLine": 500
+        },
+        {
+          "fromLine": 503,
+          "toLine": 503
+        },
+        {
+          "fromLine": 508,
+          "toLine": 508
+        },
+        {
+          "fromLine": 511,
+          "toLine": 511
+        },
+        {
+          "fromLine": 516,
+          "toLine": 516
+        },
+        {
+          "fromLine": 519,
+          "toLine": 519
+        },
+        {
+          "fromLine": 524,
+          "toLine": 524
+        },
+        {
+          "fromLine": 529,
+          "toLine": 529
+        },
+        {
+          "fromLine": 534,
+          "toLine": 534
+        },
+        {
+          "fromLine": 537,
+          "toLine": 537
+        },
+        {
+          "fromLine": 542,
+          "toLine": 542
+        },
+        {
+          "fromLine": 545,
+          "toLine": 545
+        },
+        {
+          "fromLine": 550,
+          "toLine": 550
+        },
+        {
+          "fromLine": 555,
+          "toLine": 555
+        },
+        {
+          "fromLine": 560,
+          "toLine": 560
+        },
+        {
+          "fromLine": 565,
+          "toLine": 565
+        },
+        {
+          "fromLine": 568,
+          "toLine": 568
+        },
+        {
+          "fromLine": 571,
+          "toLine": 571
+        },
+        {
+          "fromLine": 574,
+          "toLine": 574
+        },
+        {
+          "fromLine": 579,
+          "toLine": 579
+        },
+        {
+          "fromLine": 582,
+          "toLine": 582
+        },
+        {
+          "fromLine": 585,
+          "toLine": 585
+        },
+        {
+          "fromLine": 588,
+          "toLine": 588
+        },
+        {
+          "fromLine": 591,
+          "toLine": 591
+        },
+        {
+          "fromLine": 596,
+          "toLine": 596
+        },
+        {
+          "fromLine": 603,
+          "toLine": 603
+        },
+        {
+          "fromLine": 610,
+          "toLine": 610
+        },
+        {
+          "fromLine": 615,
+          "toLine": 615
+        },
+        {
+          "fromLine": 618,
+          "toLine": 618
+        },
+        {
+          "fromLine": 621,
+          "toLine": 621
+        },
+        {
+          "fromLine": 624,
+          "toLine": 624
+        },
+        {
+          "fromLine": 627,
+          "toLine": 627
+        },
+        {
+          "fromLine": 634,
+          "toLine": 634
+        },
+        {
+          "fromLine": 639,
+          "toLine": 639
+        },
+        {
+          "fromLine": 642,
+          "toLine": 642
+        },
+        {
+          "fromLine": 645,
+          "toLine": 645
+        },
+        {
+          "fromLine": 648,
+          "toLine": 648
+        },
+        {
+          "fromLine": 655,
+          "toLine": 655
+        },
+        {
+          "fromLine": 660,
+          "toLine": 660
+        },
+        {
+          "fromLine": 663,
+          "toLine": 663
+        },
+        {
+          "fromLine": 666,
+          "toLine": 666
+        },
+        {
+          "fromLine": 671,
+          "toLine": 671
+        },
+        {
+          "fromLine": 678,
+          "toLine": 678
+        },
+        {
+          "fromLine": 687,
+          "toLine": 687
+        },
+        {
+          "fromLine": 692,
+          "toLine": 692
+        },
+        {
+          "fromLine": 695,
+          "toLine": 695
+        },
+        {
+          "fromLine": 697,
+          "toLine": 697
+        },
+        {
+          "fromLine": 700,
+          "toLine": 700
+        },
+        {
+          "fromLine": 703,
+          "toLine": 703
+        },
+        {
+          "fromLine": 706,
+          "toLine": 706
+        },
+        {
+          "fromLine": 713,
+          "toLine": 713
+        },
+        {
+          "fromLine": 730,
+          "toLine": 730
+        },
+        {
+          "fromLine": 733,
+          "toLine": 733
+        },
+        {
+          "fromLine": 736,
+          "toLine": 736
+        },
+        {
+          "fromLine": 741,
+          "toLine": 741
+        },
+        {
+          "fromLine": 750,
+          "toLine": 750
+        },
+        {
+          "fromLine": 755,
+          "toLine": 755
+        },
+        {
+          "fromLine": 762,
+          "toLine": 762
+        },
+        {
+          "fromLine": 765,
+          "toLine": 765
+        },
+        {
+          "fromLine": 768,
+          "toLine": 768
+        },
+        {
+          "fromLine": 771,
+          "toLine": 771
+        },
+        {
+          "fromLine": 775,
+          "toLine": 775
+        },
+        {
+          "fromLine": 782,
+          "toLine": 782
+        },
+        {
+          "fromLine": 797,
+          "toLine": 797
+        },
+        {
+          "fromLine": 804,
+          "toLine": 804
+        },
+        {
+          "fromLine": 809,
+          "toLine": 809
+        },
+        {
+          "fromLine": 814,
+          "toLine": 814
+        },
+        {
+          "fromLine": 817,
+          "toLine": 817
+        },
+        {
+          "fromLine": 820,
+          "toLine": 820
+        },
+        {
+          "fromLine": 823,
+          "toLine": 823
+        },
+        {
+          "fromLine": 826,
+          "toLine": 826
+        },
+        {
+          "fromLine": 831,
+          "toLine": 831
+        },
+        {
+          "fromLine": 834,
+          "toLine": 834
+        },
+        {
+          "fromLine": 837,
+          "toLine": 837
+        },
+        {
+          "fromLine": 842,
+          "toLine": 842
+        },
+        {
+          "fromLine": 845,
+          "toLine": 845
+        },
+        {
+          "fromLine": 848,
+          "toLine": 848
+        },
+        {
+          "fromLine": 851,
+          "toLine": 851
+        },
+        {
+          "fromLine": 856,
+          "toLine": 856
+        },
+        {
+          "fromLine": 859,
+          "toLine": 859
+        },
+        {
+          "fromLine": 864,
+          "toLine": 864
+        },
+        {
+          "fromLine": 867,
+          "toLine": 867
+        },
+        {
+          "fromLine": 870,
+          "toLine": 870
+        },
+        {
+          "fromLine": 873,
+          "toLine": 873
+        }
+      ]
     },
     "schema.graphql": {
       "filePath": "schema.graphql",
       "fileName": "schema.graphql",
       "content": "schema {\n  query: MyQuery\n  mutation: MyMutation\n}\n\ntype MyQuery {\n  todo(id: ID!): Todo\n  lastTodo: Todo\n  todos: [Todo!]!\n}\n\ntype MyMutation {\n  createTodo(todo: TodoInput!): Todo!\n  updateTodo(id: ID!, changes: Map!): Todo\n}\n\ntype Todo {\n  id: ID!\n  text: String!\n  done: Boolean! @hasRole(role: OWNER) # only the owner can see if a todo is done\n}\n\n\"Passed to createTodo to create a new todo\"\ninput TodoInput {\n  \"The body text\"\n  text: String!\n  \"Is it done already?\"\n  done: Boolean\n}\n\nscalar Map\n\n\"Prevents access to a field if the user doesnt have the matching role\"\ndirective @hasRole(role: Role!) on FIELD_DEFINITION\ndirective @user(id: ID!) on MUTATION | QUERY | FIELD\n\nenum Role {\n  ADMIN\n  OWNER\n}\n",
       "isFullContent": true,
-      "language": null,
+      "language": "graphql",
       "highlight": null
     },
     "tools.go": {
@@ -61,7 +894,7 @@
       "fileName": "tools.go",
       "content": "//go:build tools\n// +build tools\n\npackage tools\n\nimport (\n\t_ \"github.com/99designs/gqlgen\"\n)\n",
       "isFullContent": true,
-      "language": null,
+      "language": "go",
       "highlight": null
     }
   }

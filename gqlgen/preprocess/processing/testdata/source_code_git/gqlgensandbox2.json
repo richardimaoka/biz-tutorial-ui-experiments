@@ -46,7 +46,7 @@
       "fileName": "tools.go",
       "content": "//go:build tools\n// +build tools\n\npackage tools\n\nimport (\n\t_ \"github.com/99designs/gqlgen\"\n\t_ \"github.com/99designs/gqlgen/graphql/introspection\"\n)\n",
       "isFullContent": true,
-      "language": null,
+      "language": "go",
       "highlight": null
     }
   }
