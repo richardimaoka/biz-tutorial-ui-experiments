@@ -75,9 +75,9 @@ func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 	}
 }
 
-func (p *SourceCodeProcessor) setAllIsUpdateFalse() {
+func (p *SourceCodeProcessor) clearAllIsUpdated() {
 	for _, v := range p.fileMap {
-		v.SetIsUpdated(false)
+		v.ClearIsUpdated()
 	}
 }
 
@@ -329,7 +329,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 
 func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOperation) error {
 	cloned := p.Clone()
-	cloned.setAllIsUpdateFalse()
+	cloned.clearAllIsUpdated()
 
 	//TODO: if FileOps() method is implemented, switch case can be removed
 	switch v := operation.(type) {

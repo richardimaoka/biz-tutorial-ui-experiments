@@ -22,7 +22,7 @@ type fileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
 	IsUpdated() bool
-	SetIsUpdated(isUpdated bool)
+	ClearIsUpdated()
 	ToGraphQLNode() *model.FileNode
 	Clone() fileTreeNode
 	Matched(comparedTo fileTreeNode) bool
@@ -64,12 +64,12 @@ func (n *directoryProcessorNode) IsUpdated() bool {
 	return n.isUpdated
 }
 
-func (n *fileProcessorNode) SetIsUpdated(isUpdated bool) {
-	n.isUpdated = isUpdated
+func (n *fileProcessorNode) ClearIsUpdated() {
+	n.isUpdated = false
 }
 
-func (n *directoryProcessorNode) SetIsUpdated(isUpdated bool) {
-	n.isUpdated = isUpdated
+func (n *directoryProcessorNode) ClearIsUpdated() {
+	n.isUpdated = false
 }
 
 func (n *fileProcessorNode) Matched(comparedTo fileTreeNode) bool {
