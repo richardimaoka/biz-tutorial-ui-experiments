@@ -18,6 +18,24 @@ func TestFileHighlight(t *testing.T) {
 			{FromLine: 2, ToLine: 3},
 			{FromLine: 5, ToLine: 5},
 		},
+	}, {
+		before: "testdata/file_highlight/1-2.txt", after: "testdata/file_highlight/1-3.txt", expected: []processing.FileHighlight{
+			{FromLine: 3, ToLine: 3},
+			{FromLine: 5, ToLine: 7},
+		},
+	}, {
+		before: "testdata/file_highlight/1-3.txt", after: "testdata/file_highlight/1-4.txt", expected: []processing.FileHighlight{
+			{FromLine: 1, ToLine: 1},
+			{FromLine: 2, ToLine: 2},
+			{FromLine: 3, ToLine: 3},
+		},
+	}, {
+		before: "testdata/file_highlight/2-1.txt", after: "testdata/file_highlight/2-2.txt", expected: []processing.FileHighlight{
+			{FromLine: 1, ToLine: 1},
+			{FromLine: 2, ToLine: 2},
+			{FromLine: 3, ToLine: 4},
+			{FromLine: 6, ToLine: 7},
+		},
 	}}
 
 	for _, c := range cases {

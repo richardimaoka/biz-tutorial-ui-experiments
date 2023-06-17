@@ -11,7 +11,7 @@
       "mode": "test",
       "trace": "verbose",
       "program": "${workspaceFolder}/preprocess/processing",
-      "args": ["-test.run", "Test_GitOp"]
+      "args": ["-test.run", "TestFile"]
     },
     {
       "name": "Launch file",
