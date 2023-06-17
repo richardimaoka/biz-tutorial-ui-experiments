@@ -18,6 +18,11 @@ func calcHighlight(oldText, newText string) []fileHighlight {
 
 		switch diff.Type {
 		case diffmatchpatch.DiffInsert:
+			if strings.HasPrefix(diff.Text, "\n") {
+				currentLine++
+				numLines--
+			}
+
 			highlights = append(highlights,
 				fileHighlight{FromLine: currentLine, ToLine: currentLine + numLines},
 			)
@@ -27,9 +32,15 @@ func calcHighlight(oldText, newText string) []fileHighlight {
 			nextLine := currentLine + numLines
 			currentLine = nextLine
 		case diffmatchpatch.DiffDelete:
-			//do nothing, currentLine stays the same
+			if numLines == 0 {
+				// diff in the middle of a remaining line
+				highlights = append(highlights,
+					fileHighlight{FromLine: currentLine, ToLine: currentLine + numLines},
+				)
+				nextLine := currentLine + numLines
+				currentLine = nextLine
+			}
 		}
-
 	}
 
 	return fuseHighlights(highlights)
