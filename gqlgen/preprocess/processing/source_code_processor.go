@@ -247,7 +247,7 @@ func (p *SourceCodeProcessor) applyFileOperation(operation FileOperation) error 
 	}
 }
 
-func (p *SourceCodeProcessor) fileUpertOpsFromGit(commitHash string) ([]FileUpsert, error) {
+func (p *SourceCodeProcessor) fileUpsertOpsFromGit(commitHash string) ([]FileUpsert, error) {
 	if p.repo == nil {
 		return nil, fmt.Errorf("git repo is not initialized")
 	}
@@ -325,7 +325,7 @@ func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOp
 			}
 		}
 	case SourceCodeGitOperation:
-		ops, err := p.fileUpertOpsFromGit(v.CommitHash)
+		ops, err := p.fileUpsertOpsFromGit(v.CommitHash)
 		if err != nil {
 			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)
 		}
