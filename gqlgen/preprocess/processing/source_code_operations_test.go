@@ -25,7 +25,16 @@ func TestGetFileDiffsFromGitCommit(t *testing.T) {
 		t.Fatalf("failed to get file ops, %s", err)
 	}
 
-	for _, op := range ops {
-		t.Errorf("%+v", op)
+	expectedOps := []processing.FileOperation{
+		processing.FileDelete{"go.mod"},
+		processing.FileDelete{"go.sum"},
+		processing.FileDelete{"schema.graphql"},
+		processing.FileDelete{"tools.go"},
+	}
+
+	for i, op := range ops {
+		if op != expectedOps[i] {
+			t.Errorf("expected = %+v, but got %+v", expectedOps[i], op)
+		}
 	}
 }
