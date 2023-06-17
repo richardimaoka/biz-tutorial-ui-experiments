@@ -119,22 +119,6 @@
         },
         {
           "fromLine": 35,
-          "toLine": 36
-        },
-        {
-          "fromLine": 37,
-          "toLine": 40
-        },
-        {
-          "fromLine": 40,
-          "toLine": 40
-        },
-        {
-          "fromLine": 41,
-          "toLine": 42
-        },
-        {
-          "fromLine": 43,
           "toLine": 50
         }
       ]
@@ -148,10 +132,6 @@
       "highlight": [
         {
           "fromLine": 1,
-          "toLine": 18
-        },
-        {
-          "fromLine": 19,
           "toLine": 22
         },
         {
@@ -168,10 +148,6 @@
         },
         {
           "fromLine": 100,
-          "toLine": 102
-        },
-        {
-          "fromLine": 102,
           "toLine": 105
         },
         {
@@ -180,10 +156,6 @@
         },
         {
           "fromLine": 123,
-          "toLine": 139
-        },
-        {
-          "fromLine": 140,
           "toLine": 147
         },
         {
@@ -192,10 +164,6 @@
         },
         {
           "fromLine": 158,
-          "toLine": 167
-        },
-        {
-          "fromLine": 168,
           "toLine": 204
         },
         {

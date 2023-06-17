@@ -104,10 +104,6 @@
       "highlight": [
         {
           "fromLine": 5,
-          "toLine": 6
-        },
-        {
-          "fromLine": 6,
           "toLine": 8
         }
       ]

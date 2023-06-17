@@ -178,28 +178,12 @@
           "toLine": 4
         },
         {
-          "fromLine": 9,
+          "fromLine": 8,
           "toLine": 9
         },
         {
-          "fromLine": 19,
-          "toLine": 19
-        },
-        {
-          "fromLine": 24,
-          "toLine": 25
-        },
-        {
-          "fromLine": 25,
-          "toLine": 25
-        },
-        {
-          "fromLine": 25,
-          "toLine": 25
-        },
-        {
-          "fromLine": 25,
-          "toLine": 27
+          "fromLine": 11,
+          "toLine": 16
         }
       ]
     },

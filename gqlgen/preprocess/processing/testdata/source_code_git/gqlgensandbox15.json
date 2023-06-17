@@ -191,15 +191,11 @@
       "highlight": [
         {
           "fromLine": 4,
-          "toLine": 5
+          "toLine": 6
         },
         {
           "fromLine": 16,
           "toLine": 27
-        },
-        {
-          "fromLine": 35,
-          "toLine": 35
         },
         {
           "fromLine": 35,

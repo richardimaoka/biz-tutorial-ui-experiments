@@ -174,27 +174,7 @@
       "language": "go",
       "highlight": [
         {
-          "fromLine": 20,
-          "toLine": 21
-        },
-        {
           "fromLine": 21,
-          "toLine": 21
-        },
-        {
-          "fromLine": 21,
-          "toLine": 21
-        },
-        {
-          "fromLine": 21,
-          "toLine": 22
-        },
-        {
-          "fromLine": 22,
-          "toLine": 22
-        },
-        {
-          "fromLine": 22,
           "toLine": 25
         }
       ]

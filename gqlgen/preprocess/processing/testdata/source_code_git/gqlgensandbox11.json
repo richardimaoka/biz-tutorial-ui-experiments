@@ -175,22 +175,10 @@
       "highlight": [
         {
           "fromLine": 11,
-          "toLine": 11
-        },
-        {
-          "fromLine": 11,
-          "toLine": 12
-        },
-        {
-          "fromLine": 12,
           "toLine": 13
         },
         {
           "fromLine": 15,
-          "toLine": 16
-        },
-        {
-          "fromLine": 16,
           "toLine": 17
         }
       ]
