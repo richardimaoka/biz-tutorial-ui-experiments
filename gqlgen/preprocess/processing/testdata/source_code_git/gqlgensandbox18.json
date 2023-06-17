@@ -201,6 +201,10 @@
         {
           "fromLine": 26,
           "toLine": 26
+        },
+        {
+          "fromLine": 28,
+          "toLine": 28
         }
       ]
     },
@@ -258,36 +262,7 @@
       "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n)\n\n// definition of a function in Func type\nfunc Middleware(h http.Handler) http.Handler {\n\t// using http.HandlerFunc, you can create http.Handler from a function\n\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\tauthorization := r.Header.Get(\"Authorization\")\n\t\tfmt.Println(\"Authorization: \", authorization)\n\n\t\th.ServeHTTP(w, r)\n\t})\n}\n",
       "isFullContent": true,
       "language": "go",
-      "highlight": [
-        {
-          "fromLine": 2,
-          "toLine": 2
-        },
-        {
-          "fromLine": 23,
-          "toLine": 23
-        },
-        {
-          "fromLine": 42,
-          "toLine": 42
-        },
-        {
-          "fromLine": 48,
-          "toLine": 48
-        },
-        {
-          "fromLine": 50,
-          "toLine": 50
-        },
-        {
-          "fromLine": 53,
-          "toLine": 53
-        },
-        {
-          "fromLine": 55,
-          "toLine": 55
-        }
-      ]
+      "highlight": null
     },
     "schema.graphql": {
       "filePath": "schema.graphql",
@@ -303,24 +278,7 @@
       "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"log\"\n\t\"net/http\"\n\t\"os\"\n\n\t\"github.com/99designs/gqlgen/graphql/handler\"\n\t\"github.com/99designs/gqlgen/graphql/playground\"\n\t\"github.com/richardimaoka/gqlgensandbox/graph\"\n)\n\nconst defaultPort = \"8080\"\n\n// receive http.Handler and return http.Handler\nfunc Middleware(graphQLHandler http.Handler) http.Handler {\n\t// using http.HandlerFunc, you can create http.Handler from a function\n\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\tauthorization := r.Header.Get(\"Authorization\")\n\t\tfmt.Printf(\"Authorization: `%s`\\n\", authorization)\n\n\t\tif authorization != \"correct token\" {\n\t\t\thttp.Error(w, \"unauthorized\", http.StatusUnauthorized)\n\t\t} else {\n\t\t\tgraphQLHandler.ServeHTTP(w, r)\n\t\t}\n\t})\n}\n\nfunc main() {\n\tport := os.Getenv(\"PORT\")\n\tif port == \"\" {\n\t\tport = defaultPort\n\t}\n\n\tsrv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: \u0026graph.Resolver{}}))\n\n\thttp.Handle(\"/\", Middleware(playground.Handler(\"GraphQL playground\", \"/query\")))\n\thttp.Handle(\"/query\", Middleware(srv))\n\n\tlog.Printf(\"connect to http://localhost:%s/ for GraphQL playground\", port)\n\tlog.Fatal(http.ListenAndServe(\":\"+port, nil))\n}\n",
       "isFullContent": true,
       "language": "go",
-      "highlight": [
-        {
-          "fromLine": 2,
-          "toLine": 2
-        },
-        {
-          "fromLine": 4,
-          "toLine": 4
-        },
-        {
-          "fromLine": 7,
-          "toLine": 7
-        },
-        {
-          "fromLine": 9,
-          "toLine": 9
-        }
-      ]
+      "highlight": null
     },
     "tools.go": {
       "filePath": "tools.go",

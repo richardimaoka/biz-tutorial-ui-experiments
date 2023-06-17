@@ -11,32 +11,31 @@ func calcHighlight(oldText, newText string) []fileHighlight {
 	diffs := dmp.DiffMain(oldText, newText, true)
 
 	var highlights []fileHighlight
-	var h *fileHighlight
 	currentLine := 1
 	for _, diff := range diffs {
 		// possibly numLines = 0, if diffs are interleaving within the same line
 		numLines := strings.Count(diff.Text, "\n")
-		nextLine := currentLine + numLines
 
-		if diff.Type == diffmatchpatch.DiffInsert {
-			if h != nil {
-				h.ToLine = currentLine
-			} else {
-				h = &fileHighlight{FromLine: currentLine, ToLine: currentLine + numLines}
-			}
-		} else if h != nil {
-			if diff.Text != "\n" && nextLine > h.ToLine {
-				highlights = append(highlights, *h)
-				h = nil
-			}
+		switch diff.Type {
+		case diffmatchpatch.DiffInsert:
+			h := fileHighlight{FromLine: currentLine, ToLine: currentLine + numLines}
+			highlights = append(highlights, h)
+		default:
+			//do nothing
 		}
 
+		nextLine := currentLine + numLines
 		currentLine = nextLine
 	}
 
-	if h != nil {
-		highlights = append(highlights, *h)
-	}
+	fused := fuseHighliths(highlights)
+	return fused
+}
 
+func fuseHighliths(highlights []fileHighlight) []fileHighlight {
 	return highlights
+	// var fused []fileHighlight
+	// var lastHighlight *fileHighlight
+	// for _, h := range highlights {
+	// }
 }

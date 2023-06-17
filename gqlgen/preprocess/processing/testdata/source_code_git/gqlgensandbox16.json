@@ -108,12 +108,7 @@
       "content": "module github.com/richardimaoka/gqlgensandbox\n\ngo 1.18\n\nrequire (\n\tgithub.com/99designs/gqlgen v0.17.30\n\tgithub.com/vektah/gqlparser/v2 v2.5.1\n)\n\nrequire (\n\tgithub.com/agnivade/levenshtein v1.1.1 // indirect\n\tgithub.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect\n\tgithub.com/gorilla/websocket v1.5.0 // indirect\n\tgithub.com/hashicorp/golang-lru/v2 v2.0.1 // indirect\n\tgithub.com/mitchellh/mapstructure v1.5.0 // indirect\n\tgithub.com/russross/blackfriday/v2 v2.1.0 // indirect\n\tgithub.com/urfave/cli/v2 v2.24.4 // indirect\n\tgithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect\n\tgolang.org/x/mod v0.8.0 // indirect\n\tgolang.org/x/sys v0.5.0 // indirect\n\tgolang.org/x/text v0.7.0 // indirect\n\tgolang.org/x/tools v0.6.0 // indirect\n\tgopkg.in/yaml.v3 v3.0.1 // indirect\n)\n",
       "isFullContent": true,
       "language": null,
-      "highlight": [
-        {
-          "fromLine": 1,
-          "toLine": 1
-        }
-      ]
+      "highlight": null
     },
     "go.sum": {
       "filePath": "go.sum",
@@ -121,20 +116,7 @@
       "content": "github.com/99designs/gqlgen v0.17.30 h1:aRCHdy0mWZ41gdlHctJmR05bi3on3Alj4YNRMBZG5UA=\ngithub.com/99designs/gqlgen v0.17.30/go.mod h1:i4rEatMrzzu6RXaHydq1nmEPZkb3bKQsnxNRHS4DQB4=\ngithub.com/agnivade/levenshtein v1.0.1/go.mod h1:CURSv5d9Uaml+FovSIICkLbAUZ9S4RqaHDIsdSBg7lM=\ngithub.com/agnivade/levenshtein v1.1.1 h1:QY8M92nrzkmr798gCo3kmMyqXFzdQVpxLlGPRBij0P8=\ngithub.com/agnivade/levenshtein v1.1.1/go.mod h1:veldBMzWxcCG2ZvUTKD2kJNRdCk5hVbJomOvKkmgYbo=\ngithub.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 h1:bvNMNQO63//z+xNgfBlViaCIJKLlCJ6/fmUseuG0wVQ=\ngithub.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883/go.mod h1:rCTlJbsFo29Kk6CurOXKm700vrz8f0KW0JNfpkRJY/8=\ngithub.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0 h1:jfIu9sQUG6Ig+0+Ap1h4unLjW6YQJpKZVmUzxsD4E/Q=\ngithub.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0/go.mod h1:t2tdKJDJF9BV14lnkjHmOQgcvEKgtqs5a1N3LNdJhGE=\ngithub.com/cpuguy83/go-md2man/v2 v2.0.2 h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=\ngithub.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=\ngithub.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=\ngithub.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=\ngithub.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=\ngithub.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48 h1:fRzb/w+pyskVMQ+UbP35JkH8yB7MYb4q/qhBarqZE6g=\ngithub.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48/go.mod h1:if7Fbed8SFyPtHLHbg49SI7NAdJiC5WIA09pe59rfAA=\ngithub.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=\ngithub.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=\ngithub.com/hashicorp/golang-lru/v2 v2.0.1 h1:5pv5N1lT1fjLg2VQ5KWc7kmucp2x/kvFOnxuVTqZ6x4=\ngithub.com/hashicorp/golang-lru/v2 v2.0.1/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=\ngithub.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=\ngithub.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=\ngithub.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=\ngithub.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=\ngithub.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=\ngithub.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=\ngithub.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=\ngithub.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=\ngithub.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=\ngithub.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=\ngithub.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=\ngithub.com/sergi/go-diff v1.1.0 h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=\ngithub.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=\ngithub.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=\ngithub.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=\ngithub.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=\ngithub.com/urfave/cli/v2 v2.24.4 h1:0gyJJEBYtCV87zI/x2nZCPyDxD51K6xM8SkwjHFCNEU=\ngithub.com/urfave/cli/v2 v2.24.4/go.mod h1:GHupkWPMM0M/sj1a2b4wUrWBPzazNrIjouW6fmdJLxc=\ngithub.com/vektah/gqlparser/v2 v2.5.1 h1:ZGu+bquAY23jsxDRcYpWjttRZrUz07LbiY77gUOHcr4=\ngithub.com/vektah/gqlparser/v2 v2.5.1/go.mod h1:mPgqFBu/woKTVYWyNk8cO3kh4S/f4aRFZrvOnp3hmCs=\ngithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 h1:bAn7/zixMGCfxrRTfdpNzjtPYqr8smhKouy9mxVdGPU=\ngithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673/go.mod h1:N3UwUGtsrSj3ccvlPHLoLsHnpR27oXr4ZE984MbSER8=\ngolang.org/x/mod v0.8.0 h1:LUYupSeNrTNCGzR/hVBk2NHZO4hXcVaW1k4Qx7rjPx8=\ngolang.org/x/mod v0.8.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=\ngolang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=\ngolang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=\ngolang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=\ngolang.org/x/text v0.7.0 h1:4BRB4x83lYWy72KwLD/qYDuTu7q9PjSagHvijDw7cLo=\ngolang.org/x/text v0.7.0/go.mod h1:mrYo+phRRbMaCq/xk9113O4dZlRixOauAjOtrjsXDZ8=\ngolang.org/x/tools v0.6.0 h1:BOw41kyTf3PuCW1pVQf8+Cyg8pMlkYB1oo9iJ6D/lKM=\ngolang.org/x/tools v0.6.0/go.mod h1:Xwgl3UAJ/d3gWutnCtw505GrjyAbvKui8lOU390QaIU=\ngopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=\ngopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 h1:YR8cESwS4TdDjEe65xsg0ogRM/Nc3DYOhEAlW+xobZo=\ngopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=\ngopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v2 v2.2.4/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v2 v2.2.8 h1:obN1ZagJSUGI0Ek/LBmuj4SNLPfIny3KsKFopxRdj10=\ngopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=\ngopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=\ngopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=\n",
       "isFullContent": true,
       "language": null,
-      "highlight": [
-        {
-          "fromLine": 1,
-          "toLine": 1
-        },
-        {
-          "fromLine": 3,
-          "toLine": 3
-        },
-        {
-          "fromLine": 5,
-          "toLine": 5
-        }
-      ]
+      "highlight": null
     },
     "gqlgen.yml": {
       "filePath": "gqlgen.yml",
@@ -190,36 +172,7 @@
       "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n)\n\n// definition of a function in Func type\nfunc Middleware(h http.Handler) http.Handler {\n\t// using http.HandlerFunc, you can create http.Handler from a function\n\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\tauthorization := r.Header.Get(\"Authorization\")\n\t\tfmt.Println(\"Authorization: \", authorization)\n\n\t\th.ServeHTTP(w, r)\n\t})\n}\n",
       "isFullContent": true,
       "language": "go",
-      "highlight": [
-        {
-          "fromLine": 2,
-          "toLine": 2
-        },
-        {
-          "fromLine": 23,
-          "toLine": 23
-        },
-        {
-          "fromLine": 42,
-          "toLine": 42
-        },
-        {
-          "fromLine": 48,
-          "toLine": 48
-        },
-        {
-          "fromLine": 50,
-          "toLine": 50
-        },
-        {
-          "fromLine": 53,
-          "toLine": 53
-        },
-        {
-          "fromLine": 55,
-          "toLine": 55
-        }
-      ]
+      "highlight": null
     },
     "schema.graphql": {
       "filePath": "schema.graphql",

@@ -38,7 +38,12 @@
       "content": "module github.com/richardimaoka/gqlgensandbox\n\ngo 1.18\n\nrequire github.com/99designs/gqlgen v0.17.30\n\nrequire (\n\tgithub.com/agnivade/levenshtein v1.1.1 // indirect\n\tgithub.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect\n\tgithub.com/russross/blackfriday/v2 v2.1.0 // indirect\n\tgithub.com/urfave/cli/v2 v2.24.4 // indirect\n\tgithub.com/vektah/gqlparser/v2 v2.5.1 // indirect\n\tgithub.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect\n\tgolang.org/x/mod v0.8.0 // indirect\n\tgolang.org/x/sys v0.5.0 // indirect\n\tgolang.org/x/text v0.7.0 // indirect\n\tgolang.org/x/tools v0.6.0 // indirect\n\tgopkg.in/yaml.v3 v3.0.1 // indirect\n)\n",
       "isFullContent": true,
       "language": null,
-      "highlight": null
+      "highlight": [
+        {
+          "fromLine": 1,
+          "toLine": 1
+        }
+      ]
     },
     "go.sum": {
       "filePath": "go.sum",
