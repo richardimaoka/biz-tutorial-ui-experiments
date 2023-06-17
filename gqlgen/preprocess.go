@@ -46,8 +46,6 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 		eff := effects[i]
 		nextStep := eff.Step
 
-		fmt.Printf("processing next step = %s\n", nextStep)
-
 		nextOperation, err := eff.ToOperation()
 		if err != nil {
 			return fmt.Errorf("processingCoreLogic failed at step[%d] %s: %v", i, nextStep, err)

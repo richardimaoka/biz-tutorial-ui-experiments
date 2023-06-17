@@ -47,6 +47,10 @@ func calcHighlight(oldText, newText string) []fileHighlight {
 }
 
 func fuseHighlights(highlights []fileHighlight) []fileHighlight {
+	if len(highlights) == 0 {
+		return highlights
+	}
+
 	var updated []fileHighlight
 	var last *fileHighlight
 	for i := 1; i < len(highlights); i++ {
