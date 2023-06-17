@@ -48,6 +48,12 @@ func ConstructPageStateEffects(dirName string) ([]PageStateEffect, error) {
 		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
 	}
 
+	gitEffectsFile := dirName + "/git-effects.json"
+	gitEffects, err := ReadGitEffects(gitEffectsFile)
+	if err != nil {
+		return nil, fmt.Errorf("pageStateEffects failed: %v", err)
+	}
+
 	terminalEffectsFile := dirName + "/terminal-effects.json"
 	terminalEffects, err := ReadTerminalEffects(terminalEffectsFile)
 	if err != nil {
@@ -70,6 +76,10 @@ func ConstructPageStateEffects(dirName string) ([]PageStateEffect, error) {
 
 		// SourceCodeEffect for seqNo
 		fEffs := fileEffects.FilterBySeqNo(step.SeqNo)
+		gEffs := gitEffects.FilterBySeqNo(step.SeqNo)
+		if gEffs != nil {
+			fEffs = append(gEffs.FileEffects(), fEffs...)
+		}
 		scEff := NewSourceCodeEffect(step.SeqNo, step.CommitHash, fEffs)
 
 		// MarkdownEffect for seqNo
