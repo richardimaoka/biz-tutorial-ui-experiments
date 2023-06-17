@@ -17,8 +17,7 @@ func TestFileHighlight(t *testing.T) {
 		expected []processing.FileHighlight
 	}{{
 		before: "testdata/file_highlight/1-1.txt", after: "testdata/file_highlight/1-2.txt", expected: []processing.FileHighlight{
-			{FromLine: 2, ToLine: 2},
-			{FromLine: 3, ToLine: 3},
+			{FromLine: 2, ToLine: 3},
 			{FromLine: 5, ToLine: 5},
 		},
 	}, {
@@ -28,36 +27,21 @@ func TestFileHighlight(t *testing.T) {
 		},
 	}, {
 		before: "testdata/file_highlight/1-3.txt", after: "testdata/file_highlight/1-4.txt", expected: []processing.FileHighlight{
-			{FromLine: 1, ToLine: 1},
-			{FromLine: 1, ToLine: 1},
-			{FromLine: 2, ToLine: 2},
-			{FromLine: 3, ToLine: 3},
+			{FromLine: 1, ToLine: 3},
 		},
 	}, {
 		before: "testdata/file_highlight/2-1.txt", after: "testdata/file_highlight/2-2.txt", expected: []processing.FileHighlight{
-			{FromLine: 1, ToLine: 1},
-			{FromLine: 2, ToLine: 2},
-			{FromLine: 3, ToLine: 3},
-			{FromLine: 4, ToLine: 4},
-			{FromLine: 4, ToLine: 4},
-			{FromLine: 4, ToLine: 4},
-			{FromLine: 6, ToLine: 6},
-			{FromLine: 7, ToLine: 7},
+			{FromLine: 1, ToLine: 4},
+			{FromLine: 6, ToLine: 7},
 		},
 	}, {
 		before: "testdata/file_highlight/3-1.txt", after: "testdata/file_highlight/3-2.txt", expected: []processing.FileHighlight{
-			{FromLine: 1, ToLine: 1},
-			{FromLine: 1, ToLine: 1},
-			{FromLine: 2, ToLine: 2},
+			{FromLine: 1, ToLine: 2},
 			{FromLine: 4, ToLine: 6},
 		},
 	}, {
 		before: "testdata/file_highlight/4-1.txt", after: "testdata/file_highlight/4-2.txt", expected: []processing.FileHighlight{
-			{FromLine: 2, ToLine: 2},
-			{FromLine: 2, ToLine: 2},
-			{FromLine: 3, ToLine: 3},
-			{FromLine: 4, ToLine: 4},
-			{FromLine: 5, ToLine: 8},
+			{FromLine: 2, ToLine: 8},
 		},
 	}}
 
