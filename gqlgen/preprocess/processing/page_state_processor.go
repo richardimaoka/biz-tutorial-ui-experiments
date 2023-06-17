@@ -82,7 +82,7 @@ func NewPageStateProcessor() *PageStateProcessor {
 	return &init
 }
 
-func NewPageStateGitProcessorFromGit(repoUrl string) (*PageStateProcessor, error) {
+func NewPageStateProcessorGit(repoUrl string) (*PageStateProcessor, error) {
 	sourceCode, err := SourceCodeProcessorFromGit(repoUrl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create PageStateGitProcessorFromGit, %s", err)

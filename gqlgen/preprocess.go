@@ -79,7 +79,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 
 func GitEffectProcessing(dirName, repoUrl string) error {
 	log.Printf("GitEffectProcessing started for dirName = %s, repoUrl = %s", dirName, repoUrl)
-	state, err := processing.NewPageStateGitProcessorFromGit(repoUrl)
+	state, err := processing.NewPageStateProcessorGit(repoUrl)
 	if err != nil {
 		return fmt.Errorf("NewPageStateGitProcessorFromGit() failed: %v", err)
 	}
