@@ -14,8 +14,9 @@ const (
 )
 
 type fileHighlight struct {
-	fromLine int
-	toLine   int
+	// Uppercase exported fields in lowercase unexported struct, as exported fields are necessary for reflection-based testing
+	FromLine int
+	ToLine   int
 }
 
 type fileTreeNode interface {
@@ -133,6 +134,10 @@ func (n *directoryProcessorNode) Clone() fileTreeNode {
 	return &copied
 }
 
+func (n *fileProcessorNode) ClearHighlights() {
+	n.highlights = nil
+}
+
 func (n *fileProcessorNode) language() string {
 	split := strings.Split(n.filePath, ".")
 
@@ -216,8 +221,8 @@ func (n *fileProcessorNode) language() string {
 }
 
 func (h *fileHighlight) ToGraphQLFileHighlight() *model.FileHighlight {
-	fromLine := h.fromLine // copy to avoid mutation effect afterwards
-	toLine := h.toLine     // copy to avoid mutation effect afterwards
+	fromLine := h.FromLine // copy to avoid mutation effect afterwards
+	toLine := h.ToLine     // copy to avoid mutation effect afterwards
 
 	return &model.FileHighlight{
 		FromLine: &fromLine,

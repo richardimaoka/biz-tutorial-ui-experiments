@@ -81,6 +81,15 @@ func (p *SourceCodeProcessor) clearAllIsUpdated() {
 	}
 }
 
+func (p *SourceCodeProcessor) clearAllHighlights() {
+	for _, v := range p.fileMap {
+		vv, ok := v.(*fileProcessorNode)
+		if ok {
+			vv.ClearHighlights()
+		}
+	}
+}
+
 func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
 	keys := make([]string, 0)
 	for k := range p.fileMap {
@@ -139,25 +148,17 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	diffs := dmp.DiffMain(oldFile.content, op.Content, true)
 
 	var highlights []fileHighlight
-	var h *fileHighlight = nil
-	for n, diff := range diffs {
-		if diff.Type == diffmatchpatch.DiffInsert {
-			if h != nil {
-				h.toLine = n
-			} else {
-				h = &fileHighlight{fromLine: n, toLine: n}
-			}
-		} else {
-			// at the end of highlight
-			if h != nil {
-				highlights = append(highlights, *h)
-				h = nil
-			}
+	currentLine := 1
+	for _, diff := range diffs {
+		switch diff.Type {
+		case diffmatchpatch.DiffInsert:
+			fromLine := currentLine
+			currentLine += strings.Count(diff.Text, "\n")
+			toLine := currentLine
+			highlights = append(highlights, fileHighlight{FromLine: fromLine, ToLine: toLine})
+		default:
+			currentLine += strings.Count(diff.Text, "\n")
 		}
-	}
-	// if highlight continues to the last line
-	if h != nil {
-		highlights = append(highlights, *h)
 	}
 
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
@@ -330,6 +331,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOperation) error {
 	cloned := p.Clone()
 	cloned.clearAllIsUpdated()
+	cloned.clearAllHighlights()
 
 	//TODO: if FileOps() method is implemented, switch case can be removed
 	switch v := operation.(type) {
