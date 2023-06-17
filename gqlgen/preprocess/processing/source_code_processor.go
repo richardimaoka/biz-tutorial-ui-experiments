@@ -325,6 +325,7 @@ func (p *SourceCodeProcessor) Transition(nextStep string, operation SourceCodeOp
 			}
 		}
 	case SourceCodeGitOperation:
+		//p.repo, v.CommitHash, v.PrevCommitHash)
 		ops, err := p.fileUpsertOpsFromGit(v.CommitHash)
 		if err != nil {
 			return fmt.Errorf("cannot transition to step %s, %s", nextStep, err)

@@ -6,6 +6,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 // test getting file diffs from git commit
@@ -19,23 +20,12 @@ func TestGetFileDiffsFromGitCommit(t *testing.T) {
 	currCommit, err := repo.CommitObject(plumbing.NewHash("490808086bded6b27f3651b095aefb7bb6708da2"))
 	prevCommit, err := repo.CommitObject(plumbing.NewHash("86a03f4f18b081b07e058f0e9f96503772a50cf0"))
 
-	patch, err := prevCommit.Patch(currCommit)
+	ops, err := processing.FileOpsFromCommit(repo, currCommit, prevCommit)
 	if err != nil {
-		t.Fatalf("failed to get patch, %s", err)
+		t.Fatalf("failed to get file ops, %s", err)
 	}
 
-	flag := false
-	if flag {
-		t.Errorf("patch message %s", patch.Message())
-		for _, v := range patch.FilePatches() {
-			from, to := v.Files()
-			if from == nil {
-				t.Errorf("%s added ", to.Path())
-			} else if to == nil {
-				t.Errorf("%s removed ", from.Path())
-			} else {
-				t.Errorf("%s updated ", to.Path())
-			}
-		}
+	for _, op := range ops {
+		t.Errorf("%+v", op)
 	}
 }
