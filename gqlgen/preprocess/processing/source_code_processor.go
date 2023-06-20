@@ -88,16 +88,16 @@ func (p *SourceCodeProcessor) clearAllHighlights() {
 	}
 }
 
-func (p *SourceCodeProcessor) sortedFileMapKeys() []string {
-	keys := make([]string, 0)
-	for k := range p.fileMap {
-		keys = append(keys, k)
+func (p *SourceCodeProcessor) sortedFileNodes() []fileTreeNode {
+	nodes := make([]fileTreeNode, 0)
+	for _, v := range p.fileMap {
+		nodes = append(nodes, v)
 	}
-	sort.Slice(keys, func(i, j int) bool {
-		return LessFilePath(keys[i], keys[j])
+	sort.Slice(nodes, func(i, j int) bool {
+		return LessFilePath(nodes[i].FilePath(), nodes[j].FilePath())
 	})
 
-	return keys
+	return nodes
 }
 
 func (p *SourceCodeProcessor) canAdd(filePath string) error {
@@ -351,9 +351,8 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	var resultNodes []*model.FileNode
 	fileContents := make(map[string]model.OpenFile)
 
-	keys := p.sortedFileMapKeys()
-	for i := 0; i < len(keys); i++ {
-		node := p.fileMap[keys[i]]
+	nodes := p.sortedFileNodes()
+	for _, node := range nodes {
 		resultNodes = append(resultNodes, node.ToGraphQLNode())
 
 		if v, ok := node.(*fileProcessorNode); ok {
