@@ -259,3 +259,24 @@ func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
 		Highlight:     highlights,
 	}
 }
+
+func LessFileNode(a, b fileTreeNode) bool {
+	switch a.NodeType() {
+	case fileType:
+		switch b.NodeType() {
+		case fileType:
+			return LessFilePath(a.FilePath(), b.FilePath())
+		case directoryType:
+			return false
+		}
+	case directoryType:
+		switch b.NodeType() {
+		case fileType:
+			return true
+		case directoryType:
+			return LessFilePath(a.FilePath(), b.FilePath())
+		}
+	}
+
+	return false // this should never happen though
+}

@@ -94,7 +94,7 @@ func (p *SourceCodeProcessor) sortedFileNodes() []fileTreeNode {
 		nodes = append(nodes, v)
 	}
 	sort.Slice(nodes, func(i, j int) bool {
-		return LessFilePath(nodes[i].FilePath(), nodes[j].FilePath())
+		return LessFileNode(nodes[i], nodes[j])
 	})
 
 	return nodes
