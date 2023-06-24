@@ -6,7 +6,7 @@ import (
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
-func calcHighlight(oldText, newText string) []FileHighlight {
+func CalcHighlight(oldText, newText string) []FileHighlight {
 	dmp := diffmatchpatch.New()
 	diffs := dmp.DiffMain(oldText, newText, true)
 

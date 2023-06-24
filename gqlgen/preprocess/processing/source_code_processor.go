@@ -142,7 +142,7 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	//TODO: make it more robust with error check, most likely outside of this function because this mutation function is never supposed to fail
 	oldFile := p.fileMap[op.FilePath].(*fileProcessorNode)
 	//TODO: oldFile.content shouldn't be accessed outside file_node.go!!
-	highlights := calcHighlight(oldFile.content, op.Content)
+	highlights := CalcHighlight(oldFile.content, op.Content)
 
 	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
 }

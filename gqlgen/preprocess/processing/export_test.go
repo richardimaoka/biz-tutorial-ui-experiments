@@ -1,7 +1,5 @@
 package processing
 
-var CalcHighlight = calcHighlight
-
 type FileProcessorNode = fileProcessorNode
 
 type DirectoryProcessorNode = directoryProcessorNode
