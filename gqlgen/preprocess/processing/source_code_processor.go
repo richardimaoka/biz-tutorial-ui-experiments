@@ -69,7 +69,7 @@ func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 		parentPath = append(parentPath, split[i])
 		_, exists := p.fileMap[strings.Join(parentPath, "/")]
 		if !exists {
-			p.fileMap[strings.Join(parentPath, "/")] = &directoryProcessorNode{filePath: strings.Join(parentPath, "/"), isUpdated: true}
+			p.fileMap[strings.Join(parentPath, "/")] = &DirectoryProcessorNode{filePath: strings.Join(parentPath, "/"), isUpdated: true}
 		}
 	}
 }
@@ -82,7 +82,7 @@ func (p *SourceCodeProcessor) clearAllIsUpdated() {
 
 func (p *SourceCodeProcessor) clearAllHighlights() {
 	for _, v := range p.fileMap {
-		vv, ok := v.(*fileProcessorNode)
+		vv, ok := v.(*FileProcessorNode)
 		if ok {
 			vv.ClearHighlights()
 		}
@@ -131,21 +131,21 @@ func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) err
 
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &directoryProcessorNode{filePath: op.FilePath, isUpdated: true}
+	p.fileMap[op.FilePath] = &DirectoryProcessorNode{filePath: op.FilePath, isUpdated: true}
 }
 
 func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+	p.fileMap[op.FilePath] = &FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
 }
 
 func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	//TODO: make it more robust with error check, most likely outside of this function because this mutation function is never supposed to fail
-	oldFile := p.fileMap[op.FilePath].(*fileProcessorNode)
+	oldFile := p.fileMap[op.FilePath].(*FileProcessorNode)
 	//TODO: oldFile.content shouldn't be accessed outside file_node.go!!
 	highlights := internal.CalcHighlight(oldFile.content, op.Content)
 
-	p.fileMap[op.FilePath] = &fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
+	p.fileMap[op.FilePath] = &FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
 }
 
 func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {
@@ -220,7 +220,7 @@ func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	case canUpdateError == nil:
 		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
 		file, found := p.fileMap[fileUpdateOp.FilePath]
-		if found && !file.Matched(&fileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}) {
+		if found && !file.Matched(&FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}) {
 			p.updateFileMutation(fileUpdateOp)
 		}
 		return nil
@@ -356,7 +356,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	for _, node := range nodes {
 		resultNodes = append(resultNodes, node.ToGraphQLNode())
 
-		if v, ok := node.(*fileProcessorNode); ok {
+		if v, ok := node.(*FileProcessorNode); ok {
 			fileContents[node.FilePath()] = *v.ToGraphQLOpenFile()
 		}
 	}

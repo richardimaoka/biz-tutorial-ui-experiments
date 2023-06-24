@@ -28,52 +28,52 @@ type FileTreeNode interface {
 	Matched(comparedTo FileTreeNode) bool
 }
 
-type fileProcessorNode struct {
+type FileProcessorNode struct {
 	filePath   string
 	content    string
 	isUpdated  bool
 	highlights []fileHighlight
 }
 
-type directoryProcessorNode struct {
+type DirectoryProcessorNode struct {
 	filePath  string
 	isUpdated bool
 }
 
-func (n *fileProcessorNode) NodeType() nodeType {
+func (n *FileProcessorNode) NodeType() nodeType {
 	return fileType
 }
 
-func (n *directoryProcessorNode) NodeType() nodeType {
+func (n *DirectoryProcessorNode) NodeType() nodeType {
 	return directoryType
 }
 
-func (n *fileProcessorNode) FilePath() string {
+func (n *FileProcessorNode) FilePath() string {
 	return n.filePath
 }
 
-func (n *directoryProcessorNode) FilePath() string {
+func (n *DirectoryProcessorNode) FilePath() string {
 	return n.filePath
 }
 
-func (n *fileProcessorNode) IsUpdated() bool {
+func (n *FileProcessorNode) IsUpdated() bool {
 	return n.isUpdated
 }
 
-func (n *directoryProcessorNode) IsUpdated() bool {
+func (n *DirectoryProcessorNode) IsUpdated() bool {
 	return n.isUpdated
 }
 
-func (n *fileProcessorNode) ClearIsUpdated() {
+func (n *FileProcessorNode) ClearIsUpdated() {
 	n.isUpdated = false
 }
 
-func (n *directoryProcessorNode) ClearIsUpdated() {
+func (n *DirectoryProcessorNode) ClearIsUpdated() {
 	n.isUpdated = false
 }
 
-func (n *fileProcessorNode) Matched(comparedTo FileTreeNode) bool {
-	comparedFile, ok := comparedTo.(*fileProcessorNode)
+func (n *FileProcessorNode) Matched(comparedTo FileTreeNode) bool {
+	comparedFile, ok := comparedTo.(*FileProcessorNode)
 	if ok {
 		return n.filePath == comparedFile.filePath && n.content == comparedFile.content
 	}
@@ -81,8 +81,8 @@ func (n *fileProcessorNode) Matched(comparedTo FileTreeNode) bool {
 	return false
 }
 
-func (n *directoryProcessorNode) Matched(comparedTo FileTreeNode) bool {
-	comparedDir, ok := comparedTo.(*directoryProcessorNode)
+func (n *DirectoryProcessorNode) Matched(comparedTo FileTreeNode) bool {
+	comparedDir, ok := comparedTo.(*DirectoryProcessorNode)
 	if ok {
 		return n.filePath == comparedDir.filePath
 	}
@@ -90,7 +90,7 @@ func (n *directoryProcessorNode) Matched(comparedTo FileTreeNode) bool {
 	return false
 }
 
-func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
+func (n *FileProcessorNode) ToGraphQLNode() *model.FileNode {
 	filePath := n.filePath   // copy to avoid mutation effect afterwards
 	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeFile
@@ -106,7 +106,7 @@ func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
 	}
 }
 
-func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
+func (n *DirectoryProcessorNode) ToGraphQLNode() *model.FileNode {
 	filePath := n.filePath   // copy to avoid mutation effect afterwards
 	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeDirectory
@@ -123,17 +123,17 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 }
 
 // TODO: can this be deleted?? check and delete if possible
-func (n *fileProcessorNode) Clone() FileTreeNode {
+func (n *FileProcessorNode) Clone() FileTreeNode {
 	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
 
-func (n *directoryProcessorNode) Clone() FileTreeNode {
+func (n *DirectoryProcessorNode) Clone() FileTreeNode {
 	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
 
-func (n *fileProcessorNode) language() string {
+func (n *FileProcessorNode) language() string {
 	split := strings.Split(n.filePath, ".")
 
 	if len(split) == 1 {
@@ -225,7 +225,7 @@ func (h *fileHighlight) ToGraphQLFileHighlight() *model.FileHighlight {
 	}
 }
 
-func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
+func (n *FileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
 	filePath := n.filePath // copy to avoid mutation effect afterwards
 	content := n.content   // copy to avoid mutation effect afterwards
 	isFullContent := true
