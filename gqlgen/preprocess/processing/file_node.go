@@ -22,6 +22,9 @@ type fileHighlight struct {
 type fileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
+	Offset() int
+	Name() string
+	ParentDirs() []string
 	IsUpdated() bool
 	ClearIsUpdated()
 	ToGraphQLNode() *model.FileNode
@@ -89,6 +92,24 @@ func (n *directoryProcessorNode) Matched(comparedTo fileTreeNode) bool {
 	}
 
 	return false
+}
+
+func (n *fileProcessorNode) ParentDirs() []string {
+	split := strings.Split(n.FilePath(), "/")
+	if len(split) == 1 {
+		return []string{}
+	} else {
+		return split[:len(split)-2]
+	}
+}
+
+func (n *directoryProcessorNode) ParentDirs() []string {
+	split := strings.Split(n.FilePath(), "/")
+	if len(split) == 1 {
+		return []string{}
+	} else {
+		return split[:len(split)-2]
+	}
 }
 
 func (n *fileProcessorNode) Offset() int {
@@ -280,23 +301,39 @@ func (n *fileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
 	}
 }
 
-func LessFileNode(a, b fileTreeNode) bool {
-	switch a.NodeType() {
-	case fileType:
-		switch b.NodeType() {
-		case fileType:
-			return LessFilePath(a.FilePath(), b.FilePath())
-		case directoryType:
+func lessFilePath2(aSplitPath, bSplitPath []string) bool {
+	a := aSplitPath[0] //supposedly len(aSplitPath) > 0
+	b := bSplitPath[0] //supposedly len(bSplitPath) > 0
+
+	if a == b {
+		if len(aSplitPath) == 1 {
+			// (e.g.)
+			//   aSplitPath = ["src", "components", "books"]
+			//   bSplitPath = ["src", "components", "books", "BookView.tsx"]
+			// no more path part to compare, then aSplitPath is "less"
+			return true
+		} else if len(bSplitPath) == 1 {
+			// (e.g.)
+			//   aSplitPath = ["src", "components", "books", "BookTab.tsx"]
+			//   bSplitPath = ["src", "components"]
 			return false
 		}
-	case directoryType:
-		switch b.NodeType() {
-		case fileType:
-			return true
-		case directoryType:
-			return LessFilePath(a.FilePath(), b.FilePath())
-		}
-	}
 
-	return false // this should never happen though
+		// more path parts to compare in both aSplitPath and bSplitPath
+		return lessFilePath2(aSplitPath[1:], bSplitPath[1:])
+	} else {
+		return a < b
+	}
+}
+
+func LessFileNode(a, b fileTreeNode) bool {
+	// (e.g.) src/components/books/BookView.tsx
+	// splitPathA := ["src", "components", "books", "BookView.tsx"]
+	aSplitPath := strings.Split(a.FilePath(), "/")
+
+	// (e.g.) src/libs/authentication.ts
+	// splitPathB := ["src", "libs", "authentication.ts"]
+	bSplitPath := strings.Split(b.FilePath(), "/")
+
+	return lessFilePath2(aSplitPath, bSplitPath)
 }
