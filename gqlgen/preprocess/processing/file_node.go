@@ -13,7 +13,7 @@ const (
 	directoryType nodeType = "DIRECTORY"
 )
 
-type fileHighlight struct {
+type FileHighlight struct {
 	// Uppercase exported fields in lowercase unexported struct, as exported fields are necessary for reflection-based testing
 	FromLine int
 	ToLine   int
@@ -36,7 +36,7 @@ type fileProcessorNode struct {
 	filePath   string
 	content    string
 	isUpdated  bool
-	highlights []fileHighlight
+	highlights []FileHighlight
 }
 
 type directoryProcessorNode struct {
@@ -261,7 +261,7 @@ func (n *fileProcessorNode) language() string {
 	}
 }
 
-func (h *fileHighlight) ToGraphQLFileHighlight() *model.FileHighlight {
+func (h *FileHighlight) ToGraphQLFileHighlight() *model.FileHighlight {
 	fromLine := h.FromLine // copy to avoid mutation effect afterwards
 	toLine := h.ToLine     // copy to avoid mutation effect afterwards
 
