@@ -14,7 +14,7 @@ const (
 	directoryType nodeType = "DIRECTORY"
 )
 
-type fileTreeNode interface {
+type FileTreeNode interface {
 	NodeType() nodeType
 	FilePath() string
 	Offset() int
@@ -23,8 +23,8 @@ type fileTreeNode interface {
 	IsUpdated() bool
 	ClearIsUpdated()
 	ToGraphQLNode() *model.FileNode
-	Clone() fileTreeNode
-	Matched(comparedTo fileTreeNode) bool
+	Clone() FileTreeNode
+	Matched(comparedTo FileTreeNode) bool
 }
 
 type fileProcessorNode struct {
@@ -71,7 +71,7 @@ func (n *directoryProcessorNode) ClearIsUpdated() {
 	n.isUpdated = false
 }
 
-func (n *fileProcessorNode) Matched(comparedTo fileTreeNode) bool {
+func (n *fileProcessorNode) Matched(comparedTo FileTreeNode) bool {
 	comparedFile, ok := comparedTo.(*fileProcessorNode)
 	if ok {
 		return n.filePath == comparedFile.filePath && n.content == comparedFile.content
@@ -80,7 +80,7 @@ func (n *fileProcessorNode) Matched(comparedTo fileTreeNode) bool {
 	return false
 }
 
-func (n *directoryProcessorNode) Matched(comparedTo fileTreeNode) bool {
+func (n *directoryProcessorNode) Matched(comparedTo FileTreeNode) bool {
 	comparedDir, ok := comparedTo.(*directoryProcessorNode)
 	if ok {
 		return n.filePath == comparedDir.filePath
@@ -160,12 +160,12 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 }
 
 // TODO: can this be deleted?? check and delete if possible
-func (n *fileProcessorNode) Clone() fileTreeNode {
+func (n *fileProcessorNode) Clone() FileTreeNode {
 	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
 
-func (n *directoryProcessorNode) Clone() fileTreeNode {
+func (n *directoryProcessorNode) Clone() FileTreeNode {
 	copied := *n // copy to avoid mutation effect afterwards
 	return &copied
 }
@@ -311,7 +311,7 @@ func lessFilePath2(aSplitPath, bSplitPath []string) bool {
 	}
 }
 
-func LessFileNode(a, b fileTreeNode) bool {
+func LessFileNode(a, b FileTreeNode) bool {
 	// (e.g.) src/components/books/BookView.tsx
 	// splitPathA := ["src", "components", "books", "BookView.tsx"]
 	aSplitPath := strings.Split(a.FilePath(), "/")

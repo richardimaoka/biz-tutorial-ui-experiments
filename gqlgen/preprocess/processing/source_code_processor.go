@@ -18,7 +18,7 @@ type SourceCodeProcessor struct {
 	repo                *git.Repository
 	step                string
 	defaultOpenFilePath string
-	fileMap             map[string]fileTreeNode
+	fileMap             map[string]FileTreeNode
 }
 
 func (p *SourceCodeProcessor) confirmNoParentIsFile(filePath string) error {
@@ -89,8 +89,8 @@ func (p *SourceCodeProcessor) clearAllHighlights() {
 	}
 }
 
-func (p *SourceCodeProcessor) sortedFileNodes() []fileTreeNode {
-	nodes := make([]fileTreeNode, 0)
+func (p *SourceCodeProcessor) sortedFileNodes() []FileTreeNode {
+	nodes := make([]FileTreeNode, 0)
 	for _, v := range p.fileMap {
 		nodes = append(nodes, v)
 	}
@@ -294,7 +294,7 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
 		step:                "",
 		defaultOpenFilePath: "",
-		fileMap:             make(map[string]fileTreeNode),
+		fileMap:             make(map[string]FileTreeNode),
 	}
 }
 
@@ -308,7 +308,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 		repo:                repo,
 		step:                "",
 		defaultOpenFilePath: "",
-		fileMap:             make(map[string]fileTreeNode),
+		fileMap:             make(map[string]FileTreeNode),
 	}, nil
 }
 
@@ -370,7 +370,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 
 func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
 	// clone to avoid receiver's mutation effect afterwards
-	fileMap := make(map[string]fileTreeNode)
+	fileMap := make(map[string]FileTreeNode)
 	for k := range p.fileMap {
 		fileMap[k] = p.fileMap[k].Clone()
 	}
