@@ -17,6 +17,20 @@
       "isUpdated": false
     },
     {
+      "nodeType": "FILE",
+      "name": "germany.txt",
+      "filePath": "aloha/world/germany.txt",
+      "offset": 2,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "uk.txt",
+      "filePath": "aloha/world/uk.txt",
+      "offset": 2,
+      "isUpdated": false
+    },
+    {
       "nodeType": "DIRECTORY",
       "name": "goodmorning",
       "filePath": "goodmorning",
@@ -49,20 +63,6 @@
       "name": "world",
       "filePath": "hello/world",
       "offset": 1,
-      "isUpdated": false
-    },
-    {
-      "nodeType": "FILE",
-      "name": "germany.txt",
-      "filePath": "aloha/world/germany.txt",
-      "offset": 2,
-      "isUpdated": false
-    },
-    {
-      "nodeType": "FILE",
-      "name": "uk.txt",
-      "filePath": "aloha/world/uk.txt",
-      "offset": 2,
       "isUpdated": false
     },
     {

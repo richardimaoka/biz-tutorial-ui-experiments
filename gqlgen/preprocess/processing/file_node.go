@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing/internal"
 )
 
 type nodeType string
@@ -12,12 +13,6 @@ const (
 	fileType      nodeType = "FILE"
 	directoryType nodeType = "DIRECTORY"
 )
-
-type FileHighlight struct {
-	// Uppercase exported fields in lowercase unexported struct, as exported fields are necessary for reflection-based testing
-	FromLine int
-	ToLine   int
-}
 
 type fileTreeNode interface {
 	NodeType() nodeType
@@ -36,7 +31,7 @@ type fileProcessorNode struct {
 	filePath   string
 	content    string
 	isUpdated  bool
-	highlights []FileHighlight
+	highlights []internal.FileHighlight
 }
 
 type directoryProcessorNode struct {
@@ -258,16 +253,6 @@ func (n *fileProcessorNode) language() string {
 		return "vue"
 	default:
 		return ""
-	}
-}
-
-func (h *FileHighlight) ToGraphQLFileHighlight() *model.FileHighlight {
-	fromLine := h.FromLine // copy to avoid mutation effect afterwards
-	toLine := h.ToLine     // copy to avoid mutation effect afterwards
-
-	return &model.FileHighlight{
-		FromLine: &fromLine,
-		ToLine:   &toLine,
 	}
 }
 

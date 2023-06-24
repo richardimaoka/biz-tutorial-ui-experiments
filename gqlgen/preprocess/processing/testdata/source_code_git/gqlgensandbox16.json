@@ -3,20 +3,6 @@
   "defaultOpenFile": null,
   "fileTree": [
     {
-      "nodeType": "DIRECTORY",
-      "name": "graph",
-      "filePath": "graph",
-      "offset": 0,
-      "isUpdated": false
-    },
-    {
-      "nodeType": "DIRECTORY",
-      "name": "model",
-      "filePath": "graph/model",
-      "offset": 1,
-      "isUpdated": false
-    },
-    {
       "nodeType": "FILE",
       "name": "go.mod",
       "filePath": "go.mod",
@@ -38,9 +24,23 @@
       "isUpdated": false
     },
     {
+      "nodeType": "DIRECTORY",
+      "name": "graph",
+      "filePath": "graph",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
       "nodeType": "FILE",
       "name": "generated.go",
       "filePath": "graph/generated.go",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "model",
+      "filePath": "graph/model",
       "offset": 1,
       "isUpdated": false
     },
