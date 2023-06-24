@@ -91,16 +91,36 @@ func (n *directoryProcessorNode) Matched(comparedTo fileTreeNode) bool {
 	return false
 }
 
+func (n *fileProcessorNode) Offset() int {
+	split := strings.Split(n.FilePath(), "/")
+	return len(split) - 1
+}
+
+func (n *directoryProcessorNode) Offset() int {
+	split := strings.Split(n.FilePath(), "/")
+	return len(split) - 1
+}
+
+func (n *fileProcessorNode) Name() string {
+	split := strings.Split(n.FilePath(), "/")
+	return split[len(split)-1]
+}
+
+func (n *directoryProcessorNode) Name() string {
+	split := strings.Split(n.FilePath(), "/")
+	return split[len(split)-1]
+}
+
 func (n *fileProcessorNode) ToGraphQLNode() *model.FileNode {
 	filePath := n.filePath   // copy to avoid mutation effect afterwards
 	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeFile
-	split := strings.Split(filePath, "/")
-	offset := len(split) - 1
+	offset := n.Offset()
+	name := n.Name()
 
 	return &model.FileNode{
 		NodeType:  &nodeType,
-		Name:      &split[len(split)-1],
+		Name:      &name,
 		FilePath:  &filePath,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
@@ -111,12 +131,12 @@ func (n *directoryProcessorNode) ToGraphQLNode() *model.FileNode {
 	filePath := n.filePath   // copy to avoid mutation effect afterwards
 	isUpdated := n.isUpdated // copy to avoid mutation effect afterwards
 	nodeType := model.FileNodeTypeDirectory
-	split := strings.Split(filePath, "/")
-	offset := len(split) - 1
+	offset := n.Offset()
+	name := n.Name()
 
 	return &model.FileNode{
 		NodeType:  &nodeType,
-		Name:      &split[len(split)-1],
+		Name:      &name,
 		FilePath:  &filePath,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,

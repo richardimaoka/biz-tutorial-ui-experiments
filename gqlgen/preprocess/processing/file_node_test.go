@@ -15,8 +15,8 @@ func TestNodeLessFile(t *testing.T) {
 
 	var entries []Entry = []Entry{
 		{
-			processing.NewFileProcessorNode("aaa"),
-			processing.NewFileProcessorNode("aaa"),
+			processing.NewFileProcessorNode("public/images/first.png"),
+			processing.NewDirectoryProcessorNode("src"),
 			true,
 		},
 	}
