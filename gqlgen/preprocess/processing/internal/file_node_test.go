@@ -22,28 +22,28 @@ func TestNodeLessFile(t *testing.T) {
 
 	var entries []Entry = []Entry{
 		// {
-		// 	processing.NewFileProcessorNode("public/images/first.png"),
-		// 	processing.NewDirectoryProcessorNode("src"),
+		// 	processing.NewFileNode("public/images/first.png"),
+		// 	processing.NewDirNode("src"),
 		// 	true,
 		// },
 		// {
-		// 	processing.NewFileProcessorNode("src/components/App.tsx"),
-		// 	processing.NewFileProcessorNode("src/components/index.tsx"),
+		// 	processing.NewFileNode("src/components/App.tsx"),
+		// 	processing.NewFileNode("src/components/index.tsx"),
 		// 	true,
 		// },
 		// {
-		// 	processing.NewDirectoryProcessorNode("src/components"),
-		// 	processing.NewFileProcessorNode("src/components/index.tsx"),
+		// 	processing.NewDirNode("src/components"),
+		// 	processing.NewFileNode("src/components/index.tsx"),
 		// 	true,
 		// },
 		// {
-		// 	processing.NewDirectoryProcessorNode("src/components"),
-		// 	processing.NewFileProcessorNode("package.json"),
+		// 	processing.NewDirNode("src/components"),
+		// 	processing.NewFileNode("package.json"),
 		// 	true,
 		// },
 		// {
-		// 	processing.NewDirectoryProcessorNode("src/components"),
-		// 	processing.NewFileProcessorNode(".gitignore"),
+		// 	processing.NewDirNode("src/components"),
+		// 	processing.NewFileNode(".gitignore"),
 		// 	true,
 		// },
 	}

@@ -69,7 +69,7 @@ func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 		parentPath = append(parentPath, split[i])
 		_, exists := p.fileMap[strings.Join(parentPath, "/")]
 		if !exists {
-			p.fileMap[strings.Join(parentPath, "/")] = internal.NewDirectoryProcessorNode(strings.Join(parentPath, "/"), true)
+			p.fileMap[strings.Join(parentPath, "/")] = internal.NewDirNode(strings.Join(parentPath, "/"), true)
 		}
 	}
 }
@@ -131,12 +131,12 @@ func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t internal.Node
 
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = internal.NewDirectoryProcessorNode(op.FilePath, true)
+	p.fileMap[op.FilePath] = internal.NewDirNode(op.FilePath, true)
 }
 
 func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = internal.NewFileProcessorNode(op.FilePath, op.Content, true)
+	p.fileMap[op.FilePath] = internal.NewFileNode(op.FilePath, op.Content, true)
 }
 
 func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
@@ -145,7 +145,7 @@ func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	//TODO: oldFile.content shouldn't be accessed outside file_node.go!!
 	highlights := internal.CalcHighlight(oldFile.Contents(), op.Content)
 
-	n := internal.NewFileProcessorNode(op.FilePath, op.Content, true)
+	n := internal.NewFileNode(op.FilePath, op.Content, true)
 	n.SetHighlights(highlights)
 
 	p.fileMap[op.FilePath] = n
@@ -223,7 +223,7 @@ func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	case canUpdateError == nil:
 		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
 		file, found := p.fileMap[fileUpdateOp.FilePath]
-		if found && !file.Matched(internal.NewFileProcessorNode(op.FilePath, op.Content, true)) {
+		if found && !file.Matched(internal.NewFileNode(op.FilePath, op.Content, true)) {
 			p.updateFileMutation(fileUpdateOp)
 		}
 		return nil

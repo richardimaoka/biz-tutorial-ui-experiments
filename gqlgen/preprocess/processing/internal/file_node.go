@@ -38,7 +38,7 @@ type DirectoryProcessorNode struct {
 	isUpdated bool
 }
 
-func NewFileProcessorNode(filePath string, content string, isUpdated bool) *FileProcessorNode {
+func NewFileNode(filePath string, content string, isUpdated bool) *FileProcessorNode {
 	return &FileProcessorNode{
 		filePath:  filePath,
 		content:   content,
@@ -46,7 +46,7 @@ func NewFileProcessorNode(filePath string, content string, isUpdated bool) *File
 	}
 }
 
-func NewDirectoryProcessorNode(filePath string, isUpdated bool) *DirectoryProcessorNode {
+func NewDirNode(filePath string, isUpdated bool) *DirectoryProcessorNode {
 	return &DirectoryProcessorNode{
 		filePath:  filePath,
 		isUpdated: isUpdated,
