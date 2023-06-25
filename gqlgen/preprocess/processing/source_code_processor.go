@@ -18,7 +18,7 @@ type SourceCodeProcessor struct {
 	repo                *git.Repository
 	step                string
 	defaultOpenFilePath string
-	fileMap             map[string]FileTreeNode
+	fileMap             map[string]internal.FileTreeNode
 }
 
 func (p *SourceCodeProcessor) confirmNoParentIsFile(filePath string) error {
@@ -27,7 +27,7 @@ func (p *SourceCodeProcessor) confirmNoParentIsFile(filePath string) error {
 	for i := 0; i < len(split)-1; /*up to direct parent of filePath*/ i++ {
 		parentPath = append(parentPath, split[i])
 		parentNode, exists := p.fileMap[strings.Join(parentPath, "/")]
-		if exists && parentNode.NodeType() == fileType {
+		if exists && parentNode.NodeType() == internal.FileType {
 			return fmt.Errorf("parent path = %s already exists as a file", strings.Join(parentPath, "/"))
 		}
 	}
@@ -50,7 +50,7 @@ func (p *SourceCodeProcessor) confirmNoFileConflict(filePath string) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) isValidNode(filePath string, t nodeType) error {
+func (p *SourceCodeProcessor) isValidNode(filePath string, t internal.NodeType) error {
 	exactMatchNode, exists := p.fileMap[filePath]
 	if !exists {
 		return fmt.Errorf("path = %s doesn't exist", filePath)
@@ -69,7 +69,7 @@ func (p *SourceCodeProcessor) addMissingParentDirs(filePath string) {
 		parentPath = append(parentPath, split[i])
 		_, exists := p.fileMap[strings.Join(parentPath, "/")]
 		if !exists {
-			p.fileMap[strings.Join(parentPath, "/")] = &DirectoryProcessorNode{filePath: strings.Join(parentPath, "/"), isUpdated: true}
+			p.fileMap[strings.Join(parentPath, "/")] = internal.NewDirectoryProcessorNode(strings.Join(parentPath, "/"), true)
 		}
 	}
 }
@@ -82,20 +82,20 @@ func (p *SourceCodeProcessor) clearAllIsUpdated() {
 
 func (p *SourceCodeProcessor) clearAllHighlights() {
 	for _, v := range p.fileMap {
-		vv, ok := v.(*FileProcessorNode)
+		vv, ok := v.(*internal.FileProcessorNode)
 		if ok {
 			vv.ClearHighlights()
 		}
 	}
 }
 
-func (p *SourceCodeProcessor) sortedFileNodes() []FileTreeNode {
-	nodes := make([]FileTreeNode, 0)
+func (p *SourceCodeProcessor) sortedFileNodes() []internal.FileTreeNode {
+	nodes := make([]internal.FileTreeNode, 0)
 	for _, v := range p.fileMap {
 		nodes = append(nodes, v)
 	}
 	sort.Slice(nodes, func(i, j int) bool {
-		return LessFileNode(nodes[i], nodes[j])
+		return internal.LessFileNode(nodes[i], nodes[j])
 	})
 
 	return nodes
@@ -115,7 +115,7 @@ func (p *SourceCodeProcessor) canAdd(filePath string) error {
 	return nil
 }
 
-func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) error {
+func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t internal.NodeType) error {
 	// 1. validate file path
 	if err := isValidFilePath(filePath); err != nil {
 		return err
@@ -131,21 +131,24 @@ func (p *SourceCodeProcessor) canDeleteOrUpdate(filePath string, t nodeType) err
 
 func (p *SourceCodeProcessor) addDirectoryMutation(op DirectoryAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &DirectoryProcessorNode{filePath: op.FilePath, isUpdated: true}
+	p.fileMap[op.FilePath] = internal.NewDirectoryProcessorNode(op.FilePath, true)
 }
 
 func (p *SourceCodeProcessor) addFileMutation(op FileAdd) {
 	p.addMissingParentDirs(op.FilePath)
-	p.fileMap[op.FilePath] = &FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}
+	p.fileMap[op.FilePath] = internal.NewFileProcessorNode(op.FilePath, op.Content, true)
 }
 
 func (p *SourceCodeProcessor) updateFileMutation(op FileUpdate) {
 	//TODO: make it more robust with error check, most likely outside of this function because this mutation function is never supposed to fail
-	oldFile := p.fileMap[op.FilePath].(*FileProcessorNode)
+	oldFile := p.fileMap[op.FilePath].(*internal.FileProcessorNode)
 	//TODO: oldFile.content shouldn't be accessed outside file_node.go!!
-	highlights := internal.CalcHighlight(oldFile.content, op.Content)
+	highlights := internal.CalcHighlight(oldFile.Contents(), op.Content)
 
-	p.fileMap[op.FilePath] = &FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content, highlights: highlights}
+	n := internal.NewFileProcessorNode(op.FilePath, op.Content, true)
+	n.SetHighlights(highlights)
+
+	p.fileMap[op.FilePath] = n
 }
 
 func (p *SourceCodeProcessor) deleteFileMutation(op FileDelete) {
@@ -182,7 +185,7 @@ func (p *SourceCodeProcessor) addFile(op FileAdd) error {
 }
 
 func (p *SourceCodeProcessor) deleteDirectory(op DirectoryDelete) error {
-	if err := p.canDeleteOrUpdate(op.FilePath, directoryType); err != nil {
+	if err := p.canDeleteOrUpdate(op.FilePath, internal.DirectoryType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
@@ -191,7 +194,7 @@ func (p *SourceCodeProcessor) deleteDirectory(op DirectoryDelete) error {
 }
 
 func (p *SourceCodeProcessor) updateFile(op FileUpdate) error {
-	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
+	if err := p.canDeleteOrUpdate(op.FilePath, internal.FileType); err != nil {
 		return fmt.Errorf("cannot update file %s, %s", op.FilePath, err)
 	}
 
@@ -200,7 +203,7 @@ func (p *SourceCodeProcessor) updateFile(op FileUpdate) error {
 }
 
 func (p *SourceCodeProcessor) deleteFile(op FileDelete) error {
-	if err := p.canDeleteOrUpdate(op.FilePath, fileType); err != nil {
+	if err := p.canDeleteOrUpdate(op.FilePath, internal.FileType); err != nil {
 		return fmt.Errorf("cannot delete file %s, %s", op.FilePath, err)
 	}
 
@@ -210,7 +213,7 @@ func (p *SourceCodeProcessor) deleteFile(op FileDelete) error {
 
 func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	canAddError := p.canAdd(op.FilePath)
-	canUpdateError := p.canDeleteOrUpdate(op.FilePath, fileType)
+	canUpdateError := p.canDeleteOrUpdate(op.FilePath, internal.FileType)
 
 	switch {
 	case canAddError == nil:
@@ -220,7 +223,7 @@ func (p *SourceCodeProcessor) upsertFile(op FileUpsert) error {
 	case canUpdateError == nil:
 		fileUpdateOp := FileUpdate{FilePath: op.FilePath, Content: op.Content}
 		file, found := p.fileMap[fileUpdateOp.FilePath]
-		if found && !file.Matched(&FileProcessorNode{filePath: op.FilePath, isUpdated: true, content: op.Content}) {
+		if found && !file.Matched(internal.NewFileProcessorNode(op.FilePath, op.Content, true)) {
 			p.updateFileMutation(fileUpdateOp)
 		}
 		return nil
@@ -294,7 +297,7 @@ func NewSourceCodeProcessor() *SourceCodeProcessor {
 	return &SourceCodeProcessor{
 		step:                "",
 		defaultOpenFilePath: "",
-		fileMap:             make(map[string]FileTreeNode),
+		fileMap:             make(map[string]internal.FileTreeNode),
 	}
 }
 
@@ -308,7 +311,7 @@ func SourceCodeProcessorFromGit(repoUrl string) (*SourceCodeProcessor, error) {
 		repo:                repo,
 		step:                "",
 		defaultOpenFilePath: "",
-		fileMap:             make(map[string]FileTreeNode),
+		fileMap:             make(map[string]internal.FileTreeNode),
 	}, nil
 }
 
@@ -356,7 +359,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 	for _, node := range nodes {
 		resultNodes = append(resultNodes, node.ToGraphQLNode())
 
-		if v, ok := node.(*FileProcessorNode); ok {
+		if v, ok := node.(*internal.FileProcessorNode); ok {
 			fileContents[node.FilePath()] = *v.ToGraphQLOpenFile()
 		}
 	}
@@ -370,7 +373,7 @@ func (p *SourceCodeProcessor) ToGraphQLModel() *model.SourceCode {
 
 func (p *SourceCodeProcessor) Clone() *SourceCodeProcessor {
 	// clone to avoid receiver's mutation effect afterwards
-	fileMap := make(map[string]FileTreeNode)
+	fileMap := make(map[string]internal.FileTreeNode)
 	for k := range p.fileMap {
 		fileMap[k] = p.fileMap[k].Clone()
 	}

@@ -1,21 +1,20 @@
-package processing
+package internal
 
 import (
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing/internal"
 )
 
-type nodeType string
+type NodeType string
 
 const (
-	fileType      nodeType = "FILE"
-	directoryType nodeType = "DIRECTORY"
+	FileType      NodeType = "FILE"
+	DirectoryType NodeType = "DIRECTORY"
 )
 
 type FileTreeNode interface {
-	NodeType() nodeType
+	NodeType() NodeType
 	FilePath() string
 	Offset() int
 	Name() string
@@ -31,7 +30,7 @@ type FileProcessorNode struct {
 	filePath   string
 	content    string
 	isUpdated  bool
-	highlights []internal.FileHighlight
+	highlights []FileHighlight
 }
 
 type DirectoryProcessorNode struct {
@@ -39,12 +38,27 @@ type DirectoryProcessorNode struct {
 	isUpdated bool
 }
 
-func (n *FileProcessorNode) NodeType() nodeType {
-	return fileType
+func NewFileProcessorNode(filePath string, content string, isUpdated bool) *FileProcessorNode {
+	return &FileProcessorNode{
+		filePath:  filePath,
+		content:   content,
+		isUpdated: isUpdated,
+	}
 }
 
-func (n *DirectoryProcessorNode) NodeType() nodeType {
-	return directoryType
+func NewDirectoryProcessorNode(filePath string, isUpdated bool) *DirectoryProcessorNode {
+	return &DirectoryProcessorNode{
+		filePath:  filePath,
+		isUpdated: isUpdated,
+	}
+}
+
+func (n *FileProcessorNode) NodeType() NodeType {
+	return FileType
+}
+
+func (n *DirectoryProcessorNode) NodeType() NodeType {
+	return DirectoryType
 }
 
 func (n *FileProcessorNode) FilePath() string {
@@ -172,6 +186,14 @@ func (n *DirectoryProcessorNode) Clone() FileTreeNode {
 
 func (n *FileProcessorNode) ClearHighlights() {
 	n.highlights = nil
+}
+
+func (n *FileProcessorNode) Contents() string {
+	return n.content
+}
+
+func (n *FileProcessorNode) SetHighlights(highlights []FileHighlight) {
+	n.highlights = highlights
 }
 
 func (n *FileProcessorNode) language() string {

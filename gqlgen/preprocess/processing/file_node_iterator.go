@@ -1,11 +1,13 @@
 package processing
 
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing/internal"
+
 type fileNodeIterator struct {
-	node          FileTreeNode
+	node          internal.FileTreeNode
 	currentOffset int
 }
 
-func newFileNodeIterator(node FileTreeNode) *fileNodeIterator {
+func newFileNodeIterator(node internal.FileTreeNode) *fileNodeIterator {
 	return &fileNodeIterator{
 		node:          node,
 		currentOffset: 0,

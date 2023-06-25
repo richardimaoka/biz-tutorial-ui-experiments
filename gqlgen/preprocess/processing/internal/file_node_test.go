@@ -1,15 +1,22 @@
-package processing_test
+package internal_test
 
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing/internal"
 )
 
+func comparisonLetter(less bool) string {
+	if less {
+		return "<"
+	} else {
+		return ">"
+	}
+}
 func TestNodeLessFile(t *testing.T) {
 	type Entry struct {
-		node1 processing.FileTreeNode
-		node2 processing.FileTreeNode
+		node1 internal.FileTreeNode
+		node2 internal.FileTreeNode
 		less  bool
 	}
 
@@ -42,7 +49,7 @@ func TestNodeLessFile(t *testing.T) {
 	}
 
 	for _, e := range entries {
-		if processing.LessFileNode(e.node1, e.node2) != e.less {
+		if internal.LessFileNode(e.node1, e.node2) != e.less {
 			t.Errorf(
 				"%+v %s %+v is expected, but they did not make it",
 				e.node1,
