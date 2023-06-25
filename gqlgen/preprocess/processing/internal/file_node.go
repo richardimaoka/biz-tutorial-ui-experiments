@@ -296,9 +296,9 @@ func lessFilePath2(aSplitPath, bSplitPath []string) bool {
 	if a == b {
 		if len(aSplitPath) == 1 {
 			// (e.g.)
-			//   aSplitPath = ["src", "components", "books"]
+			//   aSplitPath = ["src", "components", "shelf"]
 			//   bSplitPath = ["src", "components", "books", "BookView.tsx"]
-			// no more path part to compare, then aSplitPath is "less"
+			// no more path part to compare, then bSplitPath is "less"
 			return true
 		} else if len(bSplitPath) == 1 {
 			// (e.g.)
