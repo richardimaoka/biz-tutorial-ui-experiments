@@ -89,15 +89,16 @@ func lessFileNodeIter(aIter, bIter *FileNodeIterator) bool {
 		if !aNextExists {
 			// supposedly bNextExists == true
 			// so, aNode is a parent directory containing bNode
-			return false //
+			return true // a < b
 		} else if !bNextExists {
 			// supposedly aNextExists == true
 			// so, bNode is a parent directory containing aNode
-			return true
+			return false
 		}
 
 		// supposedly aNextExists == true,  and bNextExists == true
 		//           (aNextExists == false, and bNextExists == false should not happen, which means comparing identical (i.e.) duplicated files or dirs)
+		// (i.e.) aNode and bNode have more children to compare
 		return lessFileNodeIter(aNext, bNext)
 	} else {
 		// aNode.FilePath() != bNode.FilePath()
