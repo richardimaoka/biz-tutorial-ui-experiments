@@ -18,6 +18,7 @@ type FileTreeNode interface {
 	FilePath() string
 	Offset() int
 	Name() string
+	IteratorFromRoot() *FileNodeIterator
 	IsUpdated() bool
 	ClearIsUpdated()
 	ToGraphQLNode() *model.FileNode
@@ -287,41 +288,4 @@ func (n *FileProcessorNode) ToGraphQLOpenFile() *model.OpenFile {
 		Language:      language,
 		Highlight:     highlights,
 	}
-}
-
-func lessFilePath2(aSplitPath, bSplitPath []string) bool {
-	a := aSplitPath[0] //supposedly len(aSplitPath) > 0
-	b := bSplitPath[0] //supposedly len(bSplitPath) > 0
-
-	if a == b {
-		if len(aSplitPath) == 1 {
-			// (e.g.)
-			//   aSplitPath = ["src", "components", "shelf"]
-			//   bSplitPath = ["src", "components", "books", "BookView.tsx"]
-			// no more path part to compare, then bSplitPath is "less"
-			return true
-		} else if len(bSplitPath) == 1 {
-			// (e.g.)
-			//   aSplitPath = ["src", "components", "books", "BookTab.tsx"]
-			//   bSplitPath = ["src", "components"]
-			return false
-		}
-
-		// more path parts to compare in both aSplitPath and bSplitPath
-		return lessFilePath2(aSplitPath[1:], bSplitPath[1:])
-	} else {
-		return a < b
-	}
-}
-
-func LessFileNode(a, b FileTreeNode) bool {
-	// (e.g.) src/components/books/BookView.tsx
-	// splitPathA := ["src", "components", "books", "BookView.tsx"]
-	aSplitPath := strings.Split(a.FilePath(), "/")
-
-	// (e.g.) src/libs/authentication.ts
-	// splitPathB := ["src", "libs", "authentication.ts"]
-	bSplitPath := strings.Split(b.FilePath(), "/")
-
-	return lessFilePath2(aSplitPath, bSplitPath)
 }
