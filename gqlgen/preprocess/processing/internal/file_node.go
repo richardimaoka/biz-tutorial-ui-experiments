@@ -18,7 +18,6 @@ type FileTreeNode interface {
 	FilePath() string
 	Offset() int
 	Name() string
-	ParentDirs() []string
 	IsUpdated() bool
 	ClearIsUpdated()
 	ToGraphQLNode() *model.FileNode
@@ -101,24 +100,6 @@ func (n *DirectoryProcessorNode) Matched(comparedTo FileTreeNode) bool {
 	}
 
 	return false
-}
-
-func (n *FileProcessorNode) ParentDirs() []string {
-	split := strings.Split(n.FilePath(), "/")
-	if len(split) == 1 {
-		return []string{}
-	} else {
-		return split[:len(split)-2]
-	}
-}
-
-func (n *DirectoryProcessorNode) ParentDirs() []string {
-	split := strings.Split(n.FilePath(), "/")
-	if len(split) == 1 {
-		return []string{}
-	} else {
-		return split[:len(split)-2]
-	}
 }
 
 func (n *FileProcessorNode) Offset() int {
