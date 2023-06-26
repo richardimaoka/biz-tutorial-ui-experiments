@@ -30,13 +30,13 @@ func TestNodeLessFile(t *testing.T) {
 
 	var entries []Entry = []Entry{
 		{
-			NewFileNode("public/favicon.ico", "", false),
 			NewDirNode("public", false),
+			NewFileNode("public/favicon.ico", "", false),
 			true,
 		},
 		{
-			NewDirNode("public", false),
 			NewFileNode("public/favicon.ico", "", false),
+			NewDirNode("public", false),
 			false,
 		},
 		// {
