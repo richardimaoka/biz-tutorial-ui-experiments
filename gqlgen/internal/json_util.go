@@ -7,6 +7,8 @@ import (
 	"reflect"
 )
 
+type JsonObj map[string]interface{}
+
 func ExtractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	var unmarshaled map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
@@ -38,6 +40,18 @@ func JsonRead(filePath string, unmarshaller func(jsonBytes []byte) error) error 
 	}
 
 	return nil
+}
+
+func JsonReadArray(filePath string) ([]JsonObj, error) {
+	var arrayOfObj []JsonObj
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &arrayOfObj) }
+	err := JsonRead(filePath, unmarshaller)
+
+	if err != nil {
+		return nil, fmt.Errorf("JsonReadArray failed to read file, %s", err)
+	}
+
+	return arrayOfObj, nil
 }
 
 func WriteJsonToFile(v any, filePath string) error {
