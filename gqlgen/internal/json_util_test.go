@@ -1,6 +1,9 @@
 package internal_test
 
 import (
+	"encoding/json"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -20,5 +23,29 @@ func TestJsonReadArray(t *testing.T) {
 	diff := cmp.Diff(arr, expected)
 	if diff != "" {
 		t.Fatalf("mismatch (-expected +result):\n%s", diff)
+	}
+}
+
+func TestJsonReadArrayWrite(t *testing.T) {
+	arr, err := internal.JsonReadArray("testdata/array.json")
+	if err != nil {
+		t.Fatalf("JsonReadArray failed, %s", err)
+	}
+
+	result, err := json.Marshal(arr)
+	if err != nil {
+		t.Fatalf("json.Marshal failed, %s", err)
+	}
+
+	expectedBytes, err := os.ReadFile("testdata/array.json")
+	if err != nil {
+		t.Fatalf("os.ReadFile failed, %s", err)
+	}
+	expected := string(expectedBytes)
+	expected = strings.ReplaceAll(expected, "\n", "")
+	expected = strings.ReplaceAll(expected, " ", "")
+
+	if string(result) != string(expected) {
+		t.Fatalf("mismatch: expected = %s, result = %s", string(expected), string(result))
 	}
 }
