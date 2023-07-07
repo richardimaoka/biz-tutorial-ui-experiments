@@ -27,6 +27,7 @@ func TestJsonReadArray(t *testing.T) {
 }
 
 func TestJsonReadArrayWrite(t *testing.T) {
+	//non-floating point numbers are preserved as non-floating-point numbers
 	arr, err := internal.JsonReadArray("testdata/array.json")
 	if err != nil {
 		t.Fatalf("JsonReadArray failed, %s", err)
@@ -47,5 +48,23 @@ func TestJsonReadArrayWrite(t *testing.T) {
 
 	if string(result) != string(expected) {
 		t.Fatalf("mismatch: expected = %s, result = %s", string(expected), string(result))
+	}
+}
+
+func TestMarshalThenUnmarshal(t *testing.T) {
+	obj := internal.JsonObj{"a": 10, "b": 20}
+	var result struct {
+		A int `json:"a"`
+		B int `json:"b"`
+	}
+	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &result) }
+
+	err := internal.MarshalThenUnmarshal(obj, unmarshaller)
+	if err != nil {
+		t.Fatalf("MarshalThenUnmarshal failed, %s", err)
+	}
+
+	if result.A != 10 || result.B != 20 {
+		t.Fatalf("mismatch: expected = %v, result = %v", obj, result)
 	}
 }

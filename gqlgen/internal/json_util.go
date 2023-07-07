@@ -54,6 +54,20 @@ func JsonReadArray(filePath string) ([]JsonObj, error) {
 	return arrayOfObj, nil
 }
 
+func MarshalThenUnmarshal(obj JsonObj, unmarshaller func(jsonBytes []byte) error) error {
+	jsonBytes, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+
+	err = unmarshaller(jsonBytes)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func WriteJsonToFile(v any, filePath string) error {
 	bytes, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
