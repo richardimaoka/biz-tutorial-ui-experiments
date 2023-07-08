@@ -8,11 +8,13 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/json-processor/effect"
 )
 
 const dir_to_scan string = "images"
 
-func main() {
+func imageProcessing() {
 	files, _ := ioutil.ReadDir(dir_to_scan)
 	for _, imgFile := range files {
 
@@ -27,5 +29,16 @@ func main() {
 		} else {
 			fmt.Println("Impossible to open the file:", err)
 		}
+	}
+}
+
+func main() {
+	file := "data/img_columns.json"
+	objs, err := effect.ReadImageColumnEffects(file)
+	if err != nil {
+		panic(err)
+	}
+	for _, obj := range objs {
+		fmt.Println(obj)
 	}
 }
