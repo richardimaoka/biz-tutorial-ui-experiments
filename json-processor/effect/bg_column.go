@@ -8,14 +8,14 @@ import (
 )
 
 type BackgroundColumnEffect struct {
-	SeqNo               int    `json:"seqNo"`
-	Column              int    `json:"column"`
-	Width               int    `json:"width"`
-	Height              int    `json:"height"`
-	OriginalWidth       int    `json:"originalWidth"`
-	OriginalHeight      int    `json:"originalHeight"`
-	Path                string `json:"path"`
-	DescriptionContents string `json:"description.contents"`
+	SeqNo          int    `json:"seqNo"`
+	Column         int    `json:"column"`
+	Width          int    `json:"width"`
+	Height         int    `json:"height"`
+	OriginalWidth  int    `json:"originalWidth"`
+	OriginalHeight int    `json:"originalHeight"`
+	ModalText      string `json:"modal.text"`
+	ModalPosition  string `json:"modal.position"`
 }
 
 type BackgroundColumnEffects []BackgroundColumnEffect
