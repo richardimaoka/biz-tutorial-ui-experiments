@@ -14,16 +14,16 @@ func Address(s string) *string {
 }
 
 func compareJsonBytes(expectedBytes, resultBytes []byte) error {
-	var resultMap map[string]interface{}
+	var resultMap interface{}
 	err := json.Unmarshal(resultBytes, &resultMap)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal result json %s", err)
+		return fmt.Errorf("failed to unmarshal result json, %s", err)
 	}
 
-	var expectedMap map[string]interface{}
+	var expectedMap interface{}
 	err = json.Unmarshal(expectedBytes, &expectedMap)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal expected json %s", err)
+		return fmt.Errorf("failed to unmarshal expected json, %s", err)
 	}
 
 	if diff := cmp.Diff(expectedMap, resultMap); diff != "" {
