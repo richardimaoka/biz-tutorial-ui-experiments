@@ -16,6 +16,6 @@ func TestReadImgColumn(t *testing.T) {
 	}
 
 	for i, e := range entries {
-		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/img_col_entry_golden%d.json", i), e)
+		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/img_col_entry_golden%d.json", i), e)
 	}
 }

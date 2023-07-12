@@ -16,6 +16,6 @@ func TestReadMarkdownColumn(t *testing.T) {
 	}
 
 	for i, e := range elements {
-		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/md_col_entry_golden%d.json", i), e)
+		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/md_col_entry_golden%d.json", i), e)
 	}
 }

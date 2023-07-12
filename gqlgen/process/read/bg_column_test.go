@@ -17,6 +17,6 @@ func TestReadBgColumn(t *testing.T) {
 	}
 
 	for i, e := range entries {
-		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/bg_col_entry_golden%d.json", i), e)
+		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/bg_col_entry_golden%d.json", i), e)
 	}
 }
