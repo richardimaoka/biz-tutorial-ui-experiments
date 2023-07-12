@@ -35,6 +35,46 @@ type PageState {
 }
 
 ###################################################
+# Columns
+###################################################
+
+enum ImageDescriptionOrder {
+  IMAGE_THEN_DESCRIPTION
+  DESCRIPTION_THEN_IMAGE
+}
+
+interface Column {
+  _placeholder: String
+}
+
+type BackgroundImageColumn implements Column {
+  _placeholder: String
+  width: Int
+  height: Int
+  path: String
+  url: String
+  modal: Modal
+}
+
+type ImageDescriptionColumn implements Column {
+  _placeholder: String
+  description: Markdown
+  image: ImageCentered
+  order: ImageDescriptionOrder
+}
+
+type MarkdownColumn implements Column {
+  _placeholder: String
+  description: Markdown
+}
+
+# wrap around Column, which is friendly for frontend pattern-matching
+type ColumnWrapper {
+  index: Int
+  column: Column
+}
+
+###################################################
 # Terminal related object types
 ###################################################
 

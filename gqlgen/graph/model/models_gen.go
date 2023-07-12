@@ -8,8 +8,30 @@ import (
 	"strconv"
 )
 
+type Column interface {
+	IsColumn()
+	GetPlaceholder() *string
+}
+
 type TerminalElement interface {
 	IsTerminalElement()
+}
+
+type BackgroundImageColumn struct {
+	Placeholder *string `json:"_placeholder"`
+	Width       *int    `json:"width"`
+	Height      *int    `json:"height"`
+	Path        *string `json:"path"`
+	URL         *string `json:"url"`
+	Modal       *Modal  `json:"modal"`
+}
+
+func (BackgroundImageColumn) IsColumn()                    {}
+func (this BackgroundImageColumn) GetPlaceholder() *string { return this.Placeholder }
+
+type ColumnWrapper struct {
+	Index  *int   `json:"index"`
+	Column Column `json:"column"`
 }
 
 type FileHighlight struct {
@@ -32,11 +54,29 @@ type ImageCentered struct {
 	URL    *string `json:"url"`
 }
 
+type ImageDescriptionColumn struct {
+	Placeholder *string                `json:"_placeholder"`
+	Description *Markdown              `json:"description"`
+	Image       *ImageCentered         `json:"image"`
+	Order       *ImageDescriptionOrder `json:"order"`
+}
+
+func (ImageDescriptionColumn) IsColumn()                    {}
+func (this ImageDescriptionColumn) GetPlaceholder() *string { return this.Placeholder }
+
 type Markdown struct {
 	Step      *string            `json:"step"`
 	Contents  *string            `json:"contents"`
 	Alignment *MarkdownAlignment `json:"alignment"`
 }
+
+type MarkdownColumn struct {
+	Placeholder *string   `json:"_placeholder"`
+	Description *Markdown `json:"description"`
+}
+
+func (MarkdownColumn) IsColumn()                    {}
+func (this MarkdownColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type MarkdownOld struct {
 	Step     *string `json:"step"`
@@ -135,6 +175,47 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ImageDescriptionOrder string
+
+const (
+	ImageDescriptionOrderImageThenDescription ImageDescriptionOrder = "IMAGE_THEN_DESCRIPTION"
+	ImageDescriptionOrderDescriptionThenImage ImageDescriptionOrder = "DESCRIPTION_THEN_IMAGE"
+)
+
+var AllImageDescriptionOrder = []ImageDescriptionOrder{
+	ImageDescriptionOrderImageThenDescription,
+	ImageDescriptionOrderDescriptionThenImage,
+}
+
+func (e ImageDescriptionOrder) IsValid() bool {
+	switch e {
+	case ImageDescriptionOrderImageThenDescription, ImageDescriptionOrderDescriptionThenImage:
+		return true
+	}
+	return false
+}
+
+func (e ImageDescriptionOrder) String() string {
+	return string(e)
+}
+
+func (e *ImageDescriptionOrder) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ImageDescriptionOrder(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ImageDescriptionOrder", str)
+	}
+	return nil
+}
+
+func (e ImageDescriptionOrder) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
