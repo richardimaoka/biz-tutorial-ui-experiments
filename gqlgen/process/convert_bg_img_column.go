@@ -1,6 +1,7 @@
 package process
 
 import (
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/read"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -15,4 +16,8 @@ func ToStateBgImgColumn(e read.BackgroundImageColumn) *state.BackgroundImageColu
 			Position: state.ModalPosition(e.ModalPosition),
 		},
 	}
+}
+
+func ToGraphQLBgImgCol(e read.BackgroundImageColumn) *model.BackgroundImageColumn {
+	return ToStateBgImgColumn(e).ToGraphQLBgImgCol()
 }

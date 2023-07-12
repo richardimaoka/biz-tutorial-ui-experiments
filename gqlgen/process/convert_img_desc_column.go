@@ -1,6 +1,7 @@
 package process
 
 import (
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/read"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -19,4 +20,8 @@ func ToStateImgDescColumn(e read.ImageDescriptionColumn) *state.ImageDescription
 			Alignment: state.MarkdownAlignment(e.DescriptionAlignment),
 		},
 	}
+}
+
+func ToGraphQLImgDescCol(e read.ImageDescriptionColumn) *model.ImageDescriptionColumn {
+	return ToStateImgDescColumn(e).ToGraphQLImgDescCol()
 }

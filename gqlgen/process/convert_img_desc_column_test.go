@@ -21,3 +21,16 @@ func TestToStateImgDescColumn(t *testing.T) {
 		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/state_img_desc_col_golden%d.json", i), col)
 	}
 }
+
+func TestToGraphQLImgDescColumn(t *testing.T) {
+	filepath := "testdata/img_columns.json"
+	entries, err := read.ReadImageDescriptionColumns(filepath)
+	if err != nil {
+		t.Fatalf("TestToStateBgColumn failed to read file, %s", err)
+	}
+
+	for i, e := range entries {
+		col := process.ToGraphQLImgDescCol(e)
+		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/graphql_img_desc_col_golden%d.json", i), col)
+	}
+}
