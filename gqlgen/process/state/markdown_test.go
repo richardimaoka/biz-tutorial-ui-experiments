@@ -3,6 +3,7 @@ package state_test
 import (
 	"testing"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -42,8 +43,8 @@ func TestMarkdownMutation2(t *testing.T) {
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the materialized model ...
-	gqlModel.Contents = internal.StringRef("fghi")
-	gqlModel.Alignment = md.Alignment.Convert()
+	*gqlModel.Contents = "fghi"
+	*gqlModel.Alignment = model.MarkdownAlignmentCenter
 
 	// ... has NO effect on a RE-materialized GraphQL model
 	internal.CompareAfterMarshal(t, goldenFile1, md.ToGraphQLMarkdown())
