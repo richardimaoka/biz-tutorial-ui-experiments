@@ -1,6 +1,6 @@
 {
-  "seqNo": 27,
+  "seqNo": 32,
   "column": 0,
-  "type": "command",
-  "text": "cd sign-in-with-google-experiment"
+  "type": "output",
+  "text": "Wrote to /home/username/ghq/src/github.com/username/sign-in-with-google-experiment/package.json:\n\n{\n  \"name\": \"tmp\",\n  \"version\": \"1.0.0\",\n  \"description\": \"\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"echo \\\"Error: no test specified\\\" \u0026\u0026 exit 1\"\n  },\n  \"keywords\": [],\n  \"author\": \"\",\n  \"license\": \"ISC\"\n}"
 }
