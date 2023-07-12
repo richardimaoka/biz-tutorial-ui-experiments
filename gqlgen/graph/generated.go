@@ -58,8 +58,9 @@ type ComplexityRoot struct {
 	}
 
 	Markdown struct {
-		Contents func(childComplexity int) int
-		Step     func(childComplexity int) int
+		Alignment func(childComplexity int) int
+		Contents  func(childComplexity int) int
+		Step      func(childComplexity int) int
 	}
 
 	NextAction struct {
@@ -190,6 +191,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileNode.Offset(childComplexity), true
+
+	case "Markdown.alignment":
+		if e.complexity.Markdown.Alignment == nil {
+			break
+		}
+
+		return e.complexity.Markdown.Alignment(childComplexity), true
 
 	case "Markdown.contents":
 		if e.complexity.Markdown.Contents == nil {
@@ -970,6 +978,47 @@ func (ec *executionContext) fieldContext_Markdown_contents(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Markdown_alignment(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Markdown_alignment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Alignment, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.MarkdownAlignment)
+	fc.Result = res
+	return ec.marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Markdown_alignment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Markdown",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type MarkdownAlignment does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NextAction_terminalName(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_NextAction_terminalName(ctx, field)
 	if err != nil {
@@ -1098,6 +1147,8 @@ func (ec *executionContext) fieldContext_NextAction_markdown(ctx context.Context
 				return ec.fieldContext_Markdown_step(ctx, field)
 			case "contents":
 				return ec.fieldContext_Markdown_contents(ctx, field)
+			case "alignment":
+				return ec.fieldContext_Markdown_alignment(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Markdown", field.Name)
 		},
@@ -1620,6 +1671,8 @@ func (ec *executionContext) fieldContext_PageState_markdown(ctx context.Context,
 				return ec.fieldContext_Markdown_step(ctx, field)
 			case "contents":
 				return ec.fieldContext_Markdown_contents(ctx, field)
+			case "alignment":
+				return ec.fieldContext_Markdown_alignment(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Markdown", field.Name)
 		},
@@ -4325,6 +4378,10 @@ func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._Markdown_contents(ctx, field, obj)
 
+		case "alignment":
+
+			out.Values[i] = ec._Markdown_alignment(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5467,6 +5524,22 @@ func (ec *executionContext) marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._Markdown(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, v interface{}) (*model.MarkdownAlignment, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.MarkdownAlignment)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, sel ast.SelectionSet, v *model.MarkdownAlignment) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v *model.NextAction) graphql.Marshaler {

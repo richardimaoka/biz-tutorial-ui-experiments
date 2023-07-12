@@ -39,9 +39,12 @@ export type FileNodeType = "DIRECTORY" | "FILE";
 
 export type Markdown = {
   __typename: "Markdown";
+  alignment?: Maybe<MarkdownAlignment>;
   contents?: Maybe<Scalars["String"]>;
   step?: Maybe<Scalars["String"]>;
 };
+
+export type MarkdownAlignment = "CENTER" | "LEFT";
 
 export type NextAction = {
   __typename: "NextAction";

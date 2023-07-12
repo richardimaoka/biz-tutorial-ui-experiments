@@ -55,7 +55,8 @@
   ],
   "markdown": {
     "step": "case[2]",
-    "contents": ""
+    "contents": "",
+    "alignment": null
   },
   "nextAction": null
 }

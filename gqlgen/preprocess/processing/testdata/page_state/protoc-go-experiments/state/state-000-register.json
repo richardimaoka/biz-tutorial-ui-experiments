@@ -18,7 +18,8 @@
   ],
   "markdown": {
     "step": "",
-    "contents": ""
+    "contents": "",
+    "alignment": null
   },
   "nextAction": {
     "terminalName": "default",

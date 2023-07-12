@@ -103,7 +103,13 @@ type SourceCode {
 # Markdown related object types
 ###################################################
 
+enum MarkdownAlignment {
+  LEFT
+  CENTER
+}
+
 type Markdown {
   step: String
   contents: String
+  alignment: MarkdownAlignment
 }

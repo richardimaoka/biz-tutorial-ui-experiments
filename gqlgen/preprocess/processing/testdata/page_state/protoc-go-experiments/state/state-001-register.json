@@ -34,7 +34,8 @@
   ],
   "markdown": {
     "step": "case[0]",
-    "contents": ""
+    "contents": "",
+    "alignment": null
   },
   "nextAction": {
     "terminalName": "default",

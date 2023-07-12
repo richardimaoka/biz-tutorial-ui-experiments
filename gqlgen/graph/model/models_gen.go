@@ -26,8 +26,9 @@ type FileNode struct {
 }
 
 type Markdown struct {
-	Step     *string `json:"step"`
-	Contents *string `json:"contents"`
+	Step      *string            `json:"step"`
+	Contents  *string            `json:"contents"`
+	Alignment *MarkdownAlignment `json:"alignment"`
 }
 
 type NextAction struct {
@@ -117,5 +118,46 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MarkdownAlignment string
+
+const (
+	MarkdownAlignmentLeft   MarkdownAlignment = "LEFT"
+	MarkdownAlignmentCenter MarkdownAlignment = "CENTER"
+)
+
+var AllMarkdownAlignment = []MarkdownAlignment{
+	MarkdownAlignmentLeft,
+	MarkdownAlignmentCenter,
+}
+
+func (e MarkdownAlignment) IsValid() bool {
+	switch e {
+	case MarkdownAlignmentLeft, MarkdownAlignmentCenter:
+		return true
+	}
+	return false
+}
+
+func (e MarkdownAlignment) String() string {
+	return string(e)
+}
+
+func (e *MarkdownAlignment) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MarkdownAlignment(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MarkdownAlignment", str)
+	}
+	return nil
+}
+
+func (e MarkdownAlignment) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
