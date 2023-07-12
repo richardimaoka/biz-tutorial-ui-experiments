@@ -53,7 +53,7 @@ func TestImageCenteredMutation2(t *testing.T) {
 	goldenFile1 := "testdata/image_centered_golden2-1.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
-	// ... mutation to the state ...
+	// ... mutation to the materialized model ...
 	*gqlModel.Width = 1240
 	*gqlModel.Height = 1280
 	// *gqlModel.OriginalWidth = 2480

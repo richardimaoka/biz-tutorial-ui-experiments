@@ -1,0 +1,11 @@
+{
+  "_placeholder": null,
+  "width": 240,
+  "height": 280,
+  "path": "/images/img1.png",
+  "url": "https://yourdomain.com/img1.png",
+  "modal": {
+    "text": "message in a modal",
+    "position": "TOP"
+  }
+}
