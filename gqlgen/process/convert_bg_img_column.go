@@ -6,7 +6,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func ToStateBgImgColumn(e read.BackgroundImageColumn) *state.BackgroundImageColumn {
+func ToStateBgImgColumn(e *read.BackgroundImageColumn) *state.BackgroundImageColumn {
 	return &state.BackgroundImageColumn{
 		Width:  e.Width,
 		Height: e.Height,
@@ -18,6 +18,6 @@ func ToStateBgImgColumn(e read.BackgroundImageColumn) *state.BackgroundImageColu
 	}
 }
 
-func ToGraphQLBgImgCol(e read.BackgroundImageColumn) *model.BackgroundImageColumn {
+func ToGraphQLBgImgCol(e *read.BackgroundImageColumn) *model.BackgroundImageColumn {
 	return ToStateBgImgColumn(e).ToGraphQLBgImgCol()
 }

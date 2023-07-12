@@ -13,12 +13,12 @@ type StepEntries []StepEntry
 
 func (this StepEntries) ToGraphQLPages() []model.Page {
 	var pages []model.Page
-	for _, c := range this {
+	for _, e := range this {
 		// copy to avoid mutation effects afterwards
-		step := internal.StringRef(c.Step)
-		prevStep := internal.StringRef(c.PrevStep)
-		nextStep := internal.StringRef(c.NextStep)
-		columns := c.ToGraphQLColumns()
+		step := internal.StringRef(e.Step)
+		prevStep := internal.StringRef(e.PrevStep)
+		nextStep := internal.StringRef(e.NextStep)
+		columns := e.ToGraphQLColumns()
 
 		page := model.Page{
 			Step:     step,

@@ -17,7 +17,7 @@ func TestToStateMarkdownColumn(t *testing.T) {
 	}
 
 	for i, e := range elements {
-		col := process.ToStateMarkdownColumn(e)
+		col := process.ToStateMarkdownColumn(&e)
 		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/state_md_col_golden%d.json", i), col)
 	}
 }
@@ -30,7 +30,7 @@ func TestToGraphQLMarkdownColumn(t *testing.T) {
 	}
 
 	for i, e := range elements {
-		col := process.ToGraphQLMarkdownColumn(e)
+		col := process.ToGraphQLMarkdownColumn(&e)
 		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/graphql_md_col_golden%d.json", i), col)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func ToStateMarkdownColumn(e read.MarkdownColumn) *state.MarkdownColumn {
+func ToStateMarkdownColumn(e *read.MarkdownColumn) *state.MarkdownColumn {
 	return &state.MarkdownColumn{
 		Description: state.Markdown{
 			Contents:  e.DescriptionContents,
@@ -15,6 +15,6 @@ func ToStateMarkdownColumn(e read.MarkdownColumn) *state.MarkdownColumn {
 	}
 }
 
-func ToGraphQLMarkdownColumn(e read.MarkdownColumn) *model.MarkdownColumn {
+func ToGraphQLMarkdownColumn(e *read.MarkdownColumn) *model.MarkdownColumn {
 	return ToStateMarkdownColumn(e).ToGraphQLMarkdownColumn()
 }

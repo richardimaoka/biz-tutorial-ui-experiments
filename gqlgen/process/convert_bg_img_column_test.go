@@ -17,7 +17,7 @@ func TestToStateBgImgColumn(t *testing.T) {
 	}
 
 	for i, e := range entries {
-		col := process.ToStateBgImgColumn(e)
+		col := process.ToStateBgImgColumn(&e)
 		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/state_bg_img_col_golden%d.json", i), col)
 	}
 }
@@ -30,7 +30,7 @@ func TestToGraphQLBgImgColumn(t *testing.T) {
 	}
 
 	for i, e := range entries {
-		col := process.ToGraphQLBgImgCol(e)
+		col := process.ToGraphQLBgImgCol(&e)
 		internal.CompareWitGoldenFile(t, *updateFlag, fmt.Sprintf("testdata/golden/graphql_bg_img_col_golden%d.json", i), col)
 	}
 }

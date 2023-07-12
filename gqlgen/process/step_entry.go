@@ -19,25 +19,23 @@ type StepEntry struct {
 
 func (this StepEntry) ToGraphQLColumns() []*model.ColumnWrapper {
 	var colWrappers []*model.ColumnWrapper
-	// for i := 0; i < this.NColumns; i++ {
-	// 	if this.BackgroundImageColumn != nil && this.BackgroundImageColumn.Column == i {
-	// 		state := this.BackgroundImageColumn.ToStateBgImgColumn()
-	// 		column := state.ToGraphQLBgImgCol()
-	// 		colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-	// 	}
+	for i := 0; i < this.NColumns; i++ {
 
-	// 	if this.ImageDescriptionColumn != nil && this.ImageDescriptionColumn.Column == i {
-	// 		state := this.ImageDescriptionColumn.ToStateImgDescColumn()
-	// 		column := state.ToGraphQLImgDescCol()
-	// 		colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-	// 	}
+		if this.BackgroundImageColumn != nil && this.BackgroundImageColumn.Column == i {
+			column := ToGraphQLBgImgCol(this.BackgroundImageColumn)
+			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+		}
 
-	// 	if this.MarkdownColumn != nil && this.MarkdownColumn.Column == i {
-	// 		state := this.MarkdownColumn.ToStateMarkdownColumn()
-	// 		column := state.ToGraphQLMarkdownColumn()
-	// 		colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-	// 	}
-	// }
+		if this.ImageDescriptionColumn != nil && this.ImageDescriptionColumn.Column == i {
+			column := ToGraphQLImgDescCol(this.ImageDescriptionColumn)
+			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+		}
+
+		if this.MarkdownColumn != nil && this.MarkdownColumn.Column == i {
+			column := ToGraphQLMarkdownColumn(this.MarkdownColumn)
+			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+		}
+	}
 
 	return colWrappers
 }

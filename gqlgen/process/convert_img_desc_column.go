@@ -6,7 +6,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func ToStateImgDescColumn(e read.ImageDescriptionColumn) *state.ImageDescriptionColumn {
+func ToStateImgDescColumn(e *read.ImageDescriptionColumn) *state.ImageDescriptionColumn {
 	return &state.ImageDescriptionColumn{
 		Image: state.ImageCentered{
 			Width:          e.Width,
@@ -22,6 +22,6 @@ func ToStateImgDescColumn(e read.ImageDescriptionColumn) *state.ImageDescription
 	}
 }
 
-func ToGraphQLImgDescCol(e read.ImageDescriptionColumn) *model.ImageDescriptionColumn {
+func ToGraphQLImgDescCol(e *read.ImageDescriptionColumn) *model.ImageDescriptionColumn {
 	return ToStateImgDescColumn(e).ToGraphQLImgDescCol()
 }
