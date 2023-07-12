@@ -1,0 +1,15 @@
+{
+  "_placeholder": null,
+  "description": {
+    "step": null,
+    "contents": "updated contents in markdown",
+    "alignment": "CENTER"
+  },
+  "image": {
+    "width": 1240,
+    "height": 1280,
+    "path": "/images/img2.png",
+    "url": "https://yourdomain.com/img2.png"
+  },
+  "order": null
+}
