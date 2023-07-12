@@ -36,6 +36,11 @@ type MarkdownOld struct {
 	Contents *string `json:"contents"`
 }
 
+type Modal struct {
+	Text     *string        `json:"text"`
+	Position *ModalPosition `json:"position"`
+}
+
 type NextAction struct {
 	TerminalName    *string          `json:"terminalName"`
 	TerminalCommand *TerminalCommand `json:"terminalCommand"`
@@ -164,5 +169,48 @@ func (e *MarkdownAlignment) UnmarshalGQL(v interface{}) error {
 }
 
 func (e MarkdownAlignment) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ModalPosition string
+
+const (
+	ModalPositionTop    ModalPosition = "TOP"
+	ModalPositionCenter ModalPosition = "CENTER"
+	ModalPositionBottom ModalPosition = "BOTTOM"
+)
+
+var AllModalPosition = []ModalPosition{
+	ModalPositionTop,
+	ModalPositionCenter,
+	ModalPositionBottom,
+}
+
+func (e ModalPosition) IsValid() bool {
+	switch e {
+	case ModalPositionTop, ModalPositionCenter, ModalPositionBottom:
+		return true
+	}
+	return false
+}
+
+func (e ModalPosition) String() string {
+	return string(e)
+}
+
+func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ModalPosition(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ModalPosition", str)
+	}
+	return nil
+}
+
+func (e ModalPosition) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
