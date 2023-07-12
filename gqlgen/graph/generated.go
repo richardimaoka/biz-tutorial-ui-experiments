@@ -121,6 +121,13 @@ type ComplexityRoot struct {
 		Language      func(childComplexity int) int
 	}
 
+	Page struct {
+		Columns  func(childComplexity int) int
+		NextStep func(childComplexity int) int
+		PrevStep func(childComplexity int) int
+		Step     func(childComplexity int) int
+	}
+
 	PageState struct {
 		Markdown   func(childComplexity int) int
 		NextAction func(childComplexity int) int
@@ -472,6 +479,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Language(childComplexity), true
+
+	case "Page.columns":
+		if e.complexity.Page.Columns == nil {
+			break
+		}
+
+		return e.complexity.Page.Columns(childComplexity), true
+
+	case "Page.nextStep":
+		if e.complexity.Page.NextStep == nil {
+			break
+		}
+
+		return e.complexity.Page.NextStep(childComplexity), true
+
+	case "Page.prevStep":
+		if e.complexity.Page.PrevStep == nil {
+			break
+		}
+
+		return e.complexity.Page.PrevStep(childComplexity), true
+
+	case "Page.step":
+		if e.complexity.Page.Step == nil {
+			break
+		}
+
+		return e.complexity.Page.Step(childComplexity), true
 
 	case "PageState.markdown":
 		if e.complexity.PageState.Markdown == nil {
@@ -2532,6 +2567,176 @@ func (ec *executionContext) fieldContext_OpenFile_highlight(ctx context.Context,
 				return ec.fieldContext_FileHighlight_toLine(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type FileHighlight", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_step(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_step(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Step, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_nextStep(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_nextStep(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NextStep, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_nextStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_prevStep(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_prevStep(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrevStep, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_prevStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_columns(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_columns(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Columns, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ColumnWrapper)
+	fc.Result = res
+	return ec.marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_columns(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "index":
+				return ec.fieldContext_ColumnWrapper_index(ctx, field)
+			case "column":
+				return ec.fieldContext_ColumnWrapper_column(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper", field.Name)
 		},
 	}
 	return fc, nil
@@ -5863,6 +6068,43 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
+var pageImplementors = []string{"Page"}
+
+func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj *model.Page) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pageImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Page")
+		case "step":
+
+			out.Values[i] = ec._Page_step(ctx, field, obj)
+
+		case "nextStep":
+
+			out.Values[i] = ec._Page_nextStep(ctx, field, obj)
+
+		case "prevStep":
+
+			out.Values[i] = ec._Page_prevStep(ctx, field, obj)
+
+		case "columns":
+
+			out.Values[i] = ec._Page_columns(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var pageStateImplementors = []string{"PageState"}
 
 func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet, obj *model.PageState) graphql.Marshaler {
@@ -6788,6 +7030,54 @@ func (ec *executionContext) marshalOColumn2githubᚗcomᚋrichardimaokaᚋbizᚑ
 		return graphql.Null
 	}
 	return ec._Column(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOColumnWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOColumnWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v *model.ColumnWrapper) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ColumnWrapper(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx context.Context, sel ast.SelectionSet, v []*model.FileHighlight) graphql.Marshaler {

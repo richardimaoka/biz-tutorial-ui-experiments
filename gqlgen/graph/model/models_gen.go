@@ -103,6 +103,13 @@ type OpenFile struct {
 	Highlight     []*FileHighlight `json:"highlight"`
 }
 
+type Page struct {
+	Step     *string          `json:"step"`
+	NextStep *string          `json:"nextStep"`
+	PrevStep *string          `json:"prevStep"`
+	Columns  []*ColumnWrapper `json:"columns"`
+}
+
 type PageState struct {
 	Step       *string      `json:"step"`
 	NextStep   *string      `json:"nextStep"`

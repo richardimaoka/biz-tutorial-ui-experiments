@@ -34,6 +34,13 @@ type PageState {
   nextAction: NextAction
 }
 
+type Page {
+  step: String
+  nextStep: String
+  prevStep: String
+  columns: [ColumnWrapper]
+}
+
 ###################################################
 # Columns
 ###################################################
