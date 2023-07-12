@@ -1,0 +1,46 @@
+[
+  {
+    "step": "_initial",
+    "nColumns": 1,
+    "nextStep": "d0d00a27-e289-4342-bd3b-8087795b67a3",
+    "imageDescriptionColumn": {
+      "seqNo": 0,
+      "column": 0,
+      "width": 171,
+      "height": 38,
+      "originalWidth": 342,
+      "originalHeight": 76,
+      "path": "/images/000.png",
+      "description.contents": "Googleのサービスで、\n\n**「素早く」「簡単に」** 認証を導入！",
+      "description.alignment": "CENTER"
+    }
+  },
+  {
+    "step": "d0d00a27-e289-4342-bd3b-8087795b67a3",
+    "nColumns": 1,
+    "prevStep": "_initial",
+    "nextStep": "863dbf18-84b7-4723-8ef2-a7dd9f0aa28b",
+    "markdownColumn": {
+      "seqNo": 1,
+      "column": 0,
+      "description.contents": "Googleが提供するSign in with Googleを利用して素早く簡単に、そして安全にあなたのアプリケーションに認証機能を導入する方法をデモンストレーションします",
+      "description.alignment": ""
+    }
+  },
+  {
+    "step": "863dbf18-84b7-4723-8ef2-a7dd9f0aa28b",
+    "nColumns": 1,
+    "prevStep": "d0d00a27-e289-4342-bd3b-8087795b67a3",
+    "backgroundImageColumn": {
+      "seqNo": 2,
+      "column": 0,
+      "width": 640,
+      "height": 1048,
+      "originalWidth": 640,
+      "originalHeight": 1048,
+      "path": "/images/002.png",
+      "modal.text": "このようなボタンを設置して",
+      "modal.position": "top"
+    }
+  }
+]
