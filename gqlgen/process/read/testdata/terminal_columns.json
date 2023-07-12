@@ -1,0 +1,22 @@
+[
+  {
+    "seqNo": 26,
+    "type": "command",
+    "text": "mkdir sign-in-with-google-experiment"
+  },
+  {
+    "seqNo": 27,
+    "type": "command",
+    "text": "cd sign-in-with-google-experiment"
+  },
+  {
+    "seqNo": 31,
+    "type": "command",
+    "text": "npm init -y"
+  },
+  {
+    "seqNo": 32,
+    "type": "output",
+    "text": "Wrote to /home/username/ghq/src/github.com/username/sign-in-with-google-experiment/package.json:\n\n{\n  \"name\": \"tmp\",\n  \"version\": \"1.0.0\",\n  \"description\": \"\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  },\n  \"keywords\": [],\n  \"author\": \"\",\n  \"license\": \"ISC\"\n}"
+  }
+]
