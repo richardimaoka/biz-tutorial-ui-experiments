@@ -8,6 +8,18 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
+func TestModalEmpty(t *testing.T) {
+	s := state.Modal{
+		Text:     "",
+		Position: state.ModalPositionTop,
+	}
+
+	gqlModel := s.ToGraphQLModal()
+	if gqlModel != nil {
+		t.Errorf("expected nil, got %v", gqlModel)
+	}
+}
+
 func TestModalMutation1(t *testing.T) {
 	s := state.Modal{
 		Text:     "message in modal",
