@@ -24,10 +24,10 @@ func (p *PageStateOperation) ToGraphQLNextAction() *model.NextAction {
 		}
 	}
 
-	var markdown *model.Markdown
+	var markdown *model.MarkdownOld
 	if p.MarkdownOperation != nil {
 		contents := p.MarkdownOperation.Contents // copy to avoid
-		markdown = &model.Markdown{
+		markdown = &model.MarkdownOld{
 			Contents: &contents,
 		}
 	}

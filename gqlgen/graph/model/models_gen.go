@@ -31,10 +31,15 @@ type Markdown struct {
 	Alignment *MarkdownAlignment `json:"alignment"`
 }
 
+type MarkdownOld struct {
+	Step     *string `json:"step"`
+	Contents *string `json:"contents"`
+}
+
 type NextAction struct {
 	TerminalName    *string          `json:"terminalName"`
 	TerminalCommand *TerminalCommand `json:"terminalCommand"`
-	Markdown        *Markdown        `json:"markdown"`
+	Markdown        *MarkdownOld     `json:"markdown"`
 }
 
 type OpenFile struct {
@@ -47,13 +52,13 @@ type OpenFile struct {
 }
 
 type PageState struct {
-	Step       *string     `json:"step"`
-	NextStep   *string     `json:"nextStep"`
-	PrevStep   *string     `json:"prevStep"`
-	SourceCode *SourceCode `json:"sourceCode"`
-	Terminals  []*Terminal `json:"terminals"`
-	Markdown   *Markdown   `json:"markdown"`
-	NextAction *NextAction `json:"nextAction"`
+	Step       *string      `json:"step"`
+	NextStep   *string      `json:"nextStep"`
+	PrevStep   *string      `json:"prevStep"`
+	SourceCode *SourceCode  `json:"sourceCode"`
+	Terminals  []*Terminal  `json:"terminals"`
+	Markdown   *MarkdownOld `json:"markdown"`
+	NextAction *NextAction  `json:"nextAction"`
 }
 
 type Terminal struct {

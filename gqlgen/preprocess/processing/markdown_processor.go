@@ -24,11 +24,11 @@ func (p *MarkdownProcessor) Clone() *MarkdownProcessor {
 	return &MarkdownProcessor{p.step, p.contents}
 }
 
-func (p *MarkdownProcessor) ToGraphQLMarkdown() *model.Markdown {
+func (p *MarkdownProcessor) ToGraphQLMarkdown() *model.MarkdownOld {
 	step := p.step         // copy to avoid effect from returned model.Markdown's mutation
 	contents := p.contents // copy to avoid effect from returned model.Markdown's mutation
 
-	return &model.Markdown{
+	return &model.MarkdownOld{
 		Step:     &step,
 		Contents: &contents,
 	}
