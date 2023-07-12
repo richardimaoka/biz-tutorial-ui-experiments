@@ -25,6 +25,13 @@ type FileNode struct {
 	IsUpdated *bool         `json:"isUpdated"`
 }
 
+type ImageCentered struct {
+	Width  *int    `json:"width"`
+	Height *int    `json:"height"`
+	Path   *string `json:"path"`
+	URL    *string `json:"url"`
+}
+
 type Markdown struct {
 	Step      *string            `json:"step"`
 	Contents  *string            `json:"contents"`

@@ -133,3 +133,14 @@ type Modal {
   text: String
   position: ModalPosition
 }
+
+###################################################
+# Image-centered related object types
+###################################################
+
+type ImageCentered {
+  width: Int
+  height: Int
+  path: String
+  url: String
+}

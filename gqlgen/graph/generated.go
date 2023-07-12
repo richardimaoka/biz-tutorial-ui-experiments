@@ -57,6 +57,13 @@ type ComplexityRoot struct {
 		Offset    func(childComplexity int) int
 	}
 
+	ImageCentered struct {
+		Height func(childComplexity int) int
+		Path   func(childComplexity int) int
+		URL    func(childComplexity int) int
+		Width  func(childComplexity int) int
+	}
+
 	Markdown struct {
 		Alignment func(childComplexity int) int
 		Contents  func(childComplexity int) int
@@ -201,6 +208,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileNode.Offset(childComplexity), true
+
+	case "ImageCentered.height":
+		if e.complexity.ImageCentered.Height == nil {
+			break
+		}
+
+		return e.complexity.ImageCentered.Height(childComplexity), true
+
+	case "ImageCentered.path":
+		if e.complexity.ImageCentered.Path == nil {
+			break
+		}
+
+		return e.complexity.ImageCentered.Path(childComplexity), true
+
+	case "ImageCentered.url":
+		if e.complexity.ImageCentered.URL == nil {
+			break
+		}
+
+		return e.complexity.ImageCentered.URL(childComplexity), true
+
+	case "ImageCentered.width":
+		if e.complexity.ImageCentered.Width == nil {
+			break
+		}
+
+		return e.complexity.ImageCentered.Width(childComplexity), true
 
 	case "Markdown.alignment":
 		if e.complexity.Markdown.Alignment == nil {
@@ -929,6 +964,170 @@ func (ec *executionContext) fieldContext_FileNode_isUpdated(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImageCentered_width(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageCentered_width(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Width, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImageCentered_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImageCentered",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImageCentered_height(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageCentered_height(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Height, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImageCentered_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImageCentered",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImageCentered_path(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageCentered_path(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Path, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImageCentered_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImageCentered",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImageCentered_url(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageCentered_url(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.URL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImageCentered_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImageCentered",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4546,6 +4745,43 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 		case "isUpdated":
 
 			out.Values[i] = ec._FileNode_isUpdated(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var imageCenteredImplementors = []string{"ImageCentered"}
+
+func (ec *executionContext) _ImageCentered(ctx context.Context, sel ast.SelectionSet, obj *model.ImageCentered) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, imageCenteredImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ImageCentered")
+		case "width":
+
+			out.Values[i] = ec._ImageCentered_width(ctx, field, obj)
+
+		case "height":
+
+			out.Values[i] = ec._ImageCentered_height(ctx, field, obj)
+
+		case "path":
+
+			out.Values[i] = ec._ImageCentered_path(ctx, field, obj)
+
+		case "url":
+
+			out.Values[i] = ec._ImageCentered_url(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
