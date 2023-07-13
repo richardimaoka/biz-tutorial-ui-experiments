@@ -5,34 +5,35 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
-type TerminalElementType string
-
-const (
-	TerminalCommand TerminalElementType = "COMMAND"
-	TerminalOutput  TerminalElementType = "OUTPUT"
-)
-
-type TerminalElement struct {
-	Type TerminalElementType
-	Text string `json:"text"`
+type TerminalElement interface {
+	ToGraphQLTerminalElement() model.TerminalElement
 }
 
-func (p *TerminalElement) ToGraphQLTerminalElement() model.TerminalElement {
+type TerminalCommand struct {
+	Command string
+}
+
+type TerminalOutput struct {
+	Output string
+}
+
+func (p *TerminalCommand) ToGraphQLTerminalElement() model.TerminalElement {
 	// copy to avoid mutation effect afterwards
-	text := internal.StringRef(p.Text)
+	command := internal.StringRef(p.Command)
 	falseValue := false
 
-	switch p.Type {
-	case TerminalCommand:
-		return &model.TerminalCommand{
-			BeforeExecution: &falseValue,
-			Command:         text,
-		}
-	case TerminalOutput:
-		return &model.TerminalOutput{
-			Output: text,
-		}
-	default:
-		return nil
+	return &model.TerminalCommand{
+		BeforeExecution: &falseValue,
+		Command:         command,
 	}
+}
+
+func (p *TerminalOutput) ToGraphQLTerminalElement() model.TerminalElement {
+	// copy to avoid mutation effect afterwards
+	output := internal.StringRef(p.Output)
+
+	return &model.TerminalOutput{
+		Output: output,
+	}
+
 }
