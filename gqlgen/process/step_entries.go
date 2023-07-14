@@ -148,6 +148,7 @@ func (this StepEntries) ClearDirectory(dirName string) error {
 	if err := os.Mkdir(dirName+"/state", 0744); err != nil {
 		return fmt.Errorf("ClearDirectory failed, %s", err)
 	}
+
 	return nil
 }
 
@@ -174,8 +175,10 @@ func Process(dirName string) error {
 	}
 
 	pages := entries.ToGraphQLPages()
+
 	if err := entries.WriteResults(dirName, pages); err != nil {
 		return fmt.Errorf("Process failed, %s", err)
 	}
+
 	return nil
 }
