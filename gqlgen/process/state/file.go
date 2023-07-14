@@ -10,9 +10,9 @@ import (
 )
 
 type File struct {
-	Repo        *git.Repository
-	PrevFile    *object.File
-	CurrentFile *object.File
+	repo        *git.Repository
+	prevFile    *object.File
+	currentFile *object.File
 }
 
 func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.File) (*File, error) {
@@ -24,20 +24,20 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 	}
 
 	return &File{
-		Repo:        repo,
-		PrevFile:    prevFile,
-		CurrentFile: currentFile,
+		repo:        repo,
+		prevFile:    prevFile,
+		currentFile: currentFile,
 	}, nil
 }
 
 func (s *File) ToGraphQLOpenFileNode() *model.FileNode {
 	//copy to avoid mutation effects afterwards
 	fileType := model.FileNodeTypeFile
-	filePath := s.CurrentFile.Name
+	filePath := s.currentFile.Name
 	split := strings.Split(filePath, "/")
 	fileName := split[len(split)-1]
 	offset := len(split) - 1
-	isUpdated := s.PrevFile == nil || s.PrevFile.Hash != s.CurrentFile.Hash
+	isUpdated := s.prevFile == nil || s.prevFile.Hash != s.currentFile.Hash
 
 	return &model.FileNode{
 		NodeType:  &fileType,
