@@ -18,41 +18,37 @@ func (this StepEntries) ToGraphQLPages() []model.Page {
 		step := internal.StringRef(e.Step)
 		prevStep := internal.StringRef(e.PrevStep)
 		nextStep := internal.StringRef(e.NextStep)
-		columns := e.ToGraphQLColumns()
+
+		var colWrappers []*model.ColumnWrapper
+		for i := 0; i < e.NColumns; i++ {
+
+			if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
+				column := ToGraphQLBgImgCol(e.BackgroundImageColumn)
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
+
+			if e.ImageDescriptionColumn != nil && e.ImageDescriptionColumn.Column == i {
+				column := ToGraphQLImgDescCol(e.ImageDescriptionColumn)
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
+
+			if e.MarkdownColumn != nil && e.MarkdownColumn.Column == i {
+				column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
+		}
 
 		page := model.Page{
 			Step:     step,
 			PrevStep: prevStep,
 			NextStep: nextStep,
-			Columns:  columns,
+			Columns:  colWrappers,
 		}
 
 		pages = append(pages, page)
 	}
 
 	return pages
-}
-
-func (this StepEntries) ClearDirectory(dirName string) error {
-	if err := os.RemoveAll(dirName + "/state"); err != nil {
-		return fmt.Errorf("ClearDirectory failed, %s", err)
-	}
-	if err := os.Mkdir(dirName+"/state", 0744); err != nil {
-		return fmt.Errorf("ClearDirectory failed, %s", err)
-	}
-	return nil
-}
-
-func (this StepEntries) WriteResults(dirName string) error {
-	for _, p := range this.ToGraphQLPages() {
-		filename := fmt.Sprintf("%s/state/%s.json", dirName, *p.Step)
-		err := internal.WriteJsonToFile(p, filename)
-		if err != nil {
-			return fmt.Errorf("WriteResults failed, %s", err)
-		}
-	}
-
-	return nil
 }
 
 func ReadStepEntries(dirName string) (StepEntries, error) {
@@ -88,6 +84,11 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 		imgCol := imageDescriptionColumns.FindBySeqNo(step.SeqNo)
 		mdCol := markdownColumns.FindBySeqNo(step.SeqNo)
 
+		//sourceCodeRead :=
+		//sourceCodeCol :=
+
+		//terminal
+
 		var currentStep string
 		if i == 0 {
 			currentStep = "_initial"
@@ -122,6 +123,28 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 	}
 
 	return entries, nil
+}
+
+func (this StepEntries) ClearDirectory(dirName string) error {
+	if err := os.RemoveAll(dirName + "/state"); err != nil {
+		return fmt.Errorf("ClearDirectory failed, %s", err)
+	}
+	if err := os.Mkdir(dirName+"/state", 0744); err != nil {
+		return fmt.Errorf("ClearDirectory failed, %s", err)
+	}
+	return nil
+}
+
+func (this StepEntries) WriteResults(dirName string) error {
+	for _, p := range this.ToGraphQLPages() {
+		filename := fmt.Sprintf("%s/state/%s.json", dirName, *p.Step)
+		err := internal.WriteJsonToFile(p, filename)
+		if err != nil {
+			return fmt.Errorf("WriteResults failed, %s", err)
+		}
+	}
+
+	return nil
 }
 
 func Process(dirName string) error {
