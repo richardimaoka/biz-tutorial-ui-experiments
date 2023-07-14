@@ -13,6 +13,25 @@ type BackgroundImageColumn struct {
 	Modal  Modal
 }
 
+func NewBackgroundImageColumn(
+	width int,
+	height int,
+	path string,
+	modalText string,
+	modalPosition ModalPosition,
+) *BackgroundImageColumn {
+
+	return &BackgroundImageColumn{
+		Width:  width,
+		Height: height,
+		Path:   path,
+		Modal: Modal{
+			Text:     modalText,
+			Position: modalPosition,
+		},
+	}
+}
+
 func (p *BackgroundImageColumn) ToGraphQLBgImgCol() *model.BackgroundImageColumn {
 	// copy to avoid mutation effect afterwards
 	width := p.Width

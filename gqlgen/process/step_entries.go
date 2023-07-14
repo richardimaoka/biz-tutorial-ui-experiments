@@ -19,10 +19,20 @@ func (this StepEntries) ToGraphQLPages() []model.Page {
 		prevStep := internal.StringRef(e.PrevStep)
 		nextStep := internal.StringRef(e.NextStep)
 
+		// var bgColState *state.BackgroundImageColumn
+		// var imgDescColState *state.ImageDescriptionColumn
+		// var markdownColState *state.MarkdownColumn
+		// var terminalColState *state.TerminalColumn
+
 		var colWrappers []*model.ColumnWrapper
 		for i := 0; i < e.NColumns; i++ {
 
 			if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
+				// if bgColState == nil {
+				// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
+				// } else {
+				// 	bgColState = bgColState.Transition(..., ..., ..., ..., ...)
+				// }
 				column := ToGraphQLBgImgCol(e.BackgroundImageColumn)
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
@@ -36,6 +46,17 @@ func (this StepEntries) ToGraphQLPages() []model.Page {
 				column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
+
+			// if srcColState == nil {
+			// 	srcColState = NewSourceCodeColumn(..., ..., ..., ..., ...)
+			// } else {
+			// 	if e.SourceCodeColumn != nil && e.SourceCodeColumn.Column == i {
+			// 		// if srcColState == nil
+			// 		// if srcColState
+			// 		column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
+			// 		colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			// 	}
+			// }
 		}
 
 		page := model.Page{
@@ -83,11 +104,6 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 		bgCol := backgroundImageColumns.FindBySeqNo(step.SeqNo)
 		imgCol := imageDescriptionColumns.FindBySeqNo(step.SeqNo)
 		mdCol := markdownColumns.FindBySeqNo(step.SeqNo)
-
-		//sourceCodeRead :=
-		//sourceCodeCol :=
-
-		//terminal
 
 		var currentStep string
 		if i == 0 {
