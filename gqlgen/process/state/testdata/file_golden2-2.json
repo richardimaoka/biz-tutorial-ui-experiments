@@ -1,7 +1,7 @@
 {
-  "nodeType": "FILE",
+  "nodeType": "DIRECTORY",
   "name": "README.md",
   "filePath": "next/README.md",
-  "offset": 1,
-  "isUpdated": true
+  "offset": 5,
+  "isUpdated": false
 }

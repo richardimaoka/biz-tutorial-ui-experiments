@@ -1,7 +1,13 @@
 {
-  "nodeType": "FILE",
-  "name": "README.md",
   "filePath": "next/README.md",
-  "offset": 1,
-  "isUpdated": true
+  "fileName": "README.md",
+  "content": "updated contents",
+  "isFullContent": false,
+  "language": null,
+  "highlight": [
+    {
+      "fromLine": 100,
+      "toLine": 200
+    }
+  ]
 }

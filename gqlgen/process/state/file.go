@@ -19,8 +19,8 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 	if repo == nil {
 		return nil, fmt.Errorf("failed in NewFile, repo is nil")
 	}
-	if currentFile == nil {
-		return nil, fmt.Errorf("failed in NewFile, currentFile is nil")
+	if currentFile == nil && prevFile == nil {
+		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
 	}
 
 	return &File{
@@ -30,7 +30,26 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 	}, nil
 }
 
-func (s *File) ToGraphQLOpenFileNode() *model.FileNode {
+func (s *File) ToGraphQLOpenFile() (*model.OpenFile, error) {
+	//copy to avoid mutation effects afterwards
+	filePath := s.currentFile.Name
+	split := strings.Split(filePath, "/")
+	fileName := split[len(split)-1]
+	contents, err := s.currentFile.Contents()
+	if err != nil {
+		return nil, fmt.Errorf("failed in ToGraphQLFileNode for file = %s, cannot get file contents, %s", filePath, err)
+	}
+	trueValue := true
+
+	return &model.OpenFile{
+		FilePath:      &filePath,
+		FileName:      &fileName,
+		IsFullContent: &trueValue,
+		Content:       &contents,
+	}, nil
+}
+
+func (s *File) ToGraphQLFileNode() *model.FileNode {
 	//copy to avoid mutation effects afterwards
 	fileType := model.FileNodeTypeFile
 	filePath := s.currentFile.Name
