@@ -45,13 +45,26 @@ type Page {
 # Columns
 ###################################################
 
+interface Column {
+  _placeholder: String
+}
+
+# wrap around Column, which is friendly for frontend pattern-matching
+type ColumnWrapper {
+  index: Int
+  column: Column
+}
+
 enum ImageDescriptionOrder {
   IMAGE_THEN_DESCRIPTION
   DESCRIPTION_THEN_IMAGE
 }
 
-interface Column {
+type ImageDescriptionColumn implements Column {
   _placeholder: String
+  description: Markdown
+  image: ImageCentered
+  order: ImageDescriptionOrder
 }
 
 type BackgroundImageColumn implements Column {
@@ -63,22 +76,14 @@ type BackgroundImageColumn implements Column {
   modal: Modal
 }
 
-type ImageDescriptionColumn implements Column {
-  _placeholder: String
-  description: Markdown
-  image: ImageCentered
-  order: ImageDescriptionOrder
-}
-
 type MarkdownColumn implements Column {
   _placeholder: String
   description: Markdown
 }
 
-# wrap around Column, which is friendly for frontend pattern-matching
-type ColumnWrapper {
-  index: Int
-  column: Column
+type SourceCodeColumn implements Column {
+  _placeholder: String
+  sourceCode: SourceCode
 }
 
 ###################################################

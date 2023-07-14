@@ -120,6 +120,14 @@ type PageState struct {
 	NextAction *NextAction  `json:"nextAction"`
 }
 
+type SourceCodeColumn struct {
+	Placeholder *string     `json:"_placeholder"`
+	SourceCode  *SourceCode `json:"sourceCode"`
+}
+
+func (SourceCodeColumn) IsColumn()                    {}
+func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
+
 type Terminal struct {
 	Step             *string         `json:"step"`
 	Name             *string         `json:"name"`
