@@ -17,7 +17,6 @@ func gitOpenOrClone(repoUrl string) (*git.Repository, error) {
 
 	// if failed to open, then try cloning
 	if err != nil {
-		fmt.Println("cloning repo = ", repoUrl)
 		repo, err = git.Clone(storage, nil, &git.CloneOptions{URL: repoUrl})
 		if err != nil {
 			return nil, fmt.Errorf("cannot clone repo %s, %s", repoUrl, err)

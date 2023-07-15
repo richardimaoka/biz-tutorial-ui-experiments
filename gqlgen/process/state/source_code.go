@@ -2,9 +2,12 @@ package state
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/go-git/go-git/v5/storage"
 	"github.com/go-git/go-git/v5/storage/memory"
 )
 
@@ -21,22 +24,67 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 
 	commitHash := plumbing.NewHash(currentCommitHash)
 	if commitHash.String() != currentCommitHash {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitHash, commitHash.String())
+		return nil, fmt.Errorf("failed in NewSourceCode, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitHash, commitHash.String())
 	}
 
-	commit, err := repo.CommitObject(commitHash)
+	currentCommit, err := repo.CommitObject(commitHash)
 	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get commit = %s, %s", currentCommitHash, err)
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get commit = %s, %s", currentCommitHash, err)
 	}
 
-	rootTree, err := commit.Tree()
+	currentRoot, err := currentCommit.Tree()
 	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree for commit = %s, %s", currentCommitHash, err)
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitHash, err)
 	}
 
-	for _, e := range rootTree.Entries {
-		fmt.Println(e.Name)
-	}
+	recursive(repo.Storer, currentRoot, 0)
 
 	return nil, nil
+}
+
+// sort directories
+
+// sort files
+
+func recursive(s storage.Storer, tree *object.Tree, offset int) error {
+	whitespaces := strings.Repeat(" ", offset)
+
+	var directories []*object.Tree
+	var files []*object.Blob
+
+	// needs to go through tree.Entries, as tree.Files() only returns files but not directories
+	for _, e := range tree.Entries {
+		obj, err := object.GetObject(s, e.Hash)
+		if err != nil {
+			return fmt.Errorf("failed in NewSourceCode, cannot get object = %s, %s", e.Hash.String(), err)
+		}
+
+		switch obj.Type() {
+
+		case plumbing.TreeObject:
+			fmt.Printf("%sdir  = %s\n", whitespaces, e.Name)
+			tree, err := object.GetTree(s, e.Hash)
+			if err != nil {
+				return fmt.Errorf("failed in NewSourceCode, cannot get tree = %s, %s", e.Hash.String(), err)
+			}
+			directories = append(directories, tree)
+
+		case plumbing.BlobObject:
+			fmt.Printf("%sfile = %s\n", whitespaces, e.Name)
+			file, err := object.GetBlob(s, e.Hash)
+			if err != nil {
+				return fmt.Errorf("failed in NewSourceCode, cannot get blob = %s, %s", e.Hash.String(), err)
+			}
+			files = append(files, file)
+		}
+	}
+
+	//sort directories and store
+	// for _, d := range directories {
+	// 	recursive(s, d, offset+1)
+	// }
+
+	//sort files and store
+
+	return nil
 }
