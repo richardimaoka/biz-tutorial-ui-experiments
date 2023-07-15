@@ -7,16 +7,30 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func gitFileFromCommit(repoUrl, commitHashStr, filePath string) (*object.File, error) {
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+func gitOpenOrClone(repoUrl string) (*git.Repository, error) {
+	repo, err := git.Open(storage, nil)
+
+	// if failed to open, then try cloning
 	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot clone repo %s, %s", repoUrl, err)
+		fmt.Println("cloning repo = ", repoUrl)
+		repo, err = git.Clone(storage, nil, &git.CloneOptions{URL: repoUrl})
+		if err != nil {
+			return nil, fmt.Errorf("cannot clone repo %s, %s", repoUrl, err)
+		}
+	}
+
+	return repo, nil
+}
+
+func gitFileFromCommit(repoUrl, commitHashStr, filePath string) (*object.File, error) {
+	repo, err := gitOpenOrClone(repoUrl)
+	if err != nil {
+		return nil, fmt.Errorf("failed in gitFileFromCommit, %s", err)
 	}
 
 	commitHash := plumbing.NewHash(commitHashStr)
