@@ -37,4 +37,6 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 	for _, e := range rootTree.Entries {
 		fmt.Println(e.Name)
 	}
+
+	return nil, nil
 }
