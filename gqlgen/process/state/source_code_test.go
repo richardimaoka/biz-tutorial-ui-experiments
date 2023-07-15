@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/filemode"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -39,6 +40,48 @@ func gitTreeForCommit(repoUrl, commitHashStr, dirPath string) (*object.Tree, err
 	return gitTree, nil
 }
 
+func TestSortTreeEntries(t *testing.T) {
+	cases := []struct {
+		entries  []object.TreeEntry
+		expected []object.TreeEntry
+	}{
+		{
+			[]object.TreeEntry{
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "next.config.js"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".gitignore"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "README.md"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
+			},
+			[]object.TreeEntry{
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".gitignore"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "next.config.js"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package.json"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "README.md"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
+			},
+		},
+	}
+
+	for _, c := range cases {
+		if len(c.entries) != len(c.expected) {
+			t.Fatalf("len(entries) = %d mismatched with len(expected) = %d", len(c.entries), len(c.expected))
+		}
+
+		state.SortEntries(c.entries)
+
+		for i, exp := range c.expected {
+			if exp.Name != c.entries[i].Name {
+				t.Errorf("[%d] expected = %s != result = %s", i, exp.Name, c.entries[i].Name)
+			}
+		}
+	}
+}
+
 func TestTreeFilesDirs(t *testing.T) {
 	tree, err := gitTreeForCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
@@ -71,7 +114,7 @@ func TestTreeFilesDirs(t *testing.T) {
 
 	for i, f := range files {
 		if f.Name != expectedFiles[i] {
-			t.Fatalf("files[%d] = %s mismatched with expectedFiles[%d] = %s", i, f.Name, i, expectedFiles[i])
+			t.Errorf("files[%d] = %s mismatched with expectedFiles[%d] = %s", i, f.Name, i, expectedFiles[i])
 		}
 	}
 
@@ -81,7 +124,7 @@ func TestTreeFilesDirs(t *testing.T) {
 
 	for i, d := range dirs {
 		if d.Name != expectedDirs[i] {
-			t.Fatalf("dirs[%d] = %s mismatched with expectedDirs[%d] = %s", i, d.Name, i, expectedDirs[i])
+			t.Errorf("dirs[%d] = %s mismatched with expectedDirs[%d] = %s", i, d.Name, i, expectedDirs[i])
 		}
 	}
 }

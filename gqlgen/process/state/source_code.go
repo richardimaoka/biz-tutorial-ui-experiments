@@ -2,6 +2,7 @@ package state
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
@@ -42,7 +43,6 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 	return nil, nil
 }
 
-// sub directories from tree
 func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
 	var files []object.TreeEntry
 	var dirs []object.TreeEntry
@@ -57,9 +57,11 @@ func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
 	return files, dirs
 }
 
-// sort directories
-
-// sort files
+func SortEntries(entries []object.TreeEntry) {
+	sort.Slice(entries, func(i, j int) bool {
+		return strings.ToLower(entries[i].Name) < strings.ToLower(entries[j].Name)
+	})
+}
 
 func recursive(s storage.Storer, tree *object.Tree, offset int) error {
 	whitespaces := strings.Repeat(" ", offset)
