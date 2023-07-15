@@ -42,6 +42,21 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 	return nil, nil
 }
 
+// sub directories from tree
+func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
+	var files []object.TreeEntry
+	var dirs []object.TreeEntry
+
+	for _, e := range tree.Entries {
+		if e.Mode.IsFile() {
+			files = append(files, e)
+		} else {
+			dirs = append(dirs, e)
+		}
+	}
+	return files, dirs
+}
+
 // sort directories
 
 // sort files
