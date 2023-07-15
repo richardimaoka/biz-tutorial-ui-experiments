@@ -46,23 +46,38 @@ func TestSortTreeEntries(t *testing.T) {
 		expected []object.TreeEntry
 	}{
 		{
+			// files to sort
 			[]object.TreeEntry{
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "next.config.js"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".gitignore"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "README.md"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "package.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "next.config.js"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: ".gitignore"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "README.md"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
 			},
 			[]object.TreeEntry{
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: ".gitignore"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "next.config.js"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "package.json"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "README.md"},
-				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: ".eslintrc.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: ".gitignore"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "next.config.js"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "package-lock.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "package.json"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "README.md"},
+				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
+			},
+		},
+
+		{
+			// dirs to sort
+			[]object.TreeEntry{
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "styles"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "public"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "pages"},
+			},
+			[]object.TreeEntry{
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "pages"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "public"},
+				{Mode: filemode.Dir, Hash: plumbing.ZeroHash, Name: "styles"},
 			},
 		},
 	}
@@ -137,5 +152,4 @@ func TestSourceCodePatterns(t *testing.T) {
 		t.Fatalf("failed in TestSourceCodePatterns to create state.SourceCode, %s", err)
 	}
 
-	t.Fatalf("intentionally failed")
 }
