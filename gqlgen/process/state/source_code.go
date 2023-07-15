@@ -3,9 +3,9 @@ package state
 import (
 	"fmt"
 
-	"github.com/go-git/go-git/storage/memory"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/storage/memory"
 )
 
 type SourceCode struct {
@@ -21,7 +21,7 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 
 	commitHash := plumbing.NewHash(currentCommitHash)
 	if commitHash.String() != currentCommitHash {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
+		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitHash, commitHash.String())
 	}
 
 	commit, err := repo.CommitObject(commitHash)
@@ -31,7 +31,7 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 
 	rootTree, err := commit.Tree()
 	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree for commit = %s, %s", comcurrentCommitHashmitHashStr, err)
+		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree for commit = %s, %s", currentCommitHash, err)
 	}
 
 	for _, e := range rootTree.Entries {
