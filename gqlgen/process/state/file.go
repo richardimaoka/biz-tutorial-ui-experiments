@@ -23,7 +23,7 @@ type File struct {
 	isRenamed       bool
 }
 
-func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
+func NewFile(prevFile *object.File, currentFile *object.File, currentDir string) (*File, error) {
 	if currentFile == nil && prevFile == nil {
 		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
 	}
@@ -46,7 +46,11 @@ func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
 
 	var filePath string
 	if currentFile != nil {
-		filePath = currentFile.Name
+		if currentDir != "" {
+			filePath = currentDir + "/" + currentFile.Name
+		} else {
+			filePath = currentFile.Name
+		}
 	} else {
 		filePath = prevFile.Name
 	}

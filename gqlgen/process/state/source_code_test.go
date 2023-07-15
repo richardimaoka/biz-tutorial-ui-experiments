@@ -7,6 +7,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/filemode"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -66,7 +67,6 @@ func TestSortTreeEntries(t *testing.T) {
 				{Mode: filemode.Regular, Hash: plumbing.ZeroHash, Name: "tsconfig.json"},
 			},
 		},
-
 		{
 			// dirs to sort
 			[]object.TreeEntry{
@@ -146,10 +146,25 @@ func TestTreeFilesDirs(t *testing.T) {
 
 func TestSourceCodePatterns(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
-	currentCommitHash := "8adac375628219e020d4b5957ff24f45954cbd3f"
-	_, err := state.NewSourceCode(repoUrl, currentCommitHash)
+	repo, err := gitOpenOrClone(repoUrl)
 	if err != nil {
-		t.Fatalf("failed in TestSourceCodePatterns to create state.SourceCode, %s", err)
+		t.Fatal(err)
 	}
 
+	cases := []struct {
+		currentCommit string
+		goldenFile    string
+	}{{
+		"8adac375628219e020d4b5957ff24f45954cbd3f",
+		"testdata/source_code_golden.json",
+	}}
+
+	for _, c := range cases {
+		sc, err := state.NewSourceCode(repo, c.currentCommit)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
+	}
 }

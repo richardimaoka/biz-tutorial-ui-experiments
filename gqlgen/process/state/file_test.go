@@ -62,7 +62,7 @@ func stateFileFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, 
 		return nil, fmt.Errorf("failed in stateFileFromCommit, %s", err)
 	}
 
-	fileState, err := state.NewFile(nil, gitFile)
+	fileState, err := state.NewFile(nil, gitFile, "")
 	if err != nil {
 		return nil, fmt.Errorf("failed in stateFileFromCommit, cannot create file state for file = %s in commit = %s, %s", filePath, commitHashStr, err)
 	}
@@ -119,7 +119,7 @@ func TestFilePatterns(t *testing.T) {
 		prevGitFile, _ := gitFileFromCommit(repoUrl, c.prevCommit, c.prevFilePath)
 		currentGitFile, _ := gitFileFromCommit(repoUrl, c.currentCommit, c.currentFilePath)
 
-		s, err := state.NewFile(prevGitFile, currentGitFile)
+		s, err := state.NewFile(prevGitFile, currentGitFile, "")
 		if err != nil {
 			t.Fatalf("failed in TestFilePatterns to create state.File, %s", err)
 		}

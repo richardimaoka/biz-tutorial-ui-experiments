@@ -8,21 +8,16 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/storage"
-	"github.com/go-git/go-git/v5/storage/memory"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type SourceCode struct {
-	repo   *git.Repository
-	commit plumbing.Hash
+	repo      *git.Repository
+	commit    plumbing.Hash
+	fileNodes []FileNode
 }
 
-func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
-	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot clone repo %s, %s", repoUrl, err)
-	}
-
+func NewSourceCode(repo *git.Repository, currentCommitHash string) (*SourceCode, error) {
 	commitHash := plumbing.NewHash(currentCommitHash)
 	if commitHash.String() != currentCommitHash {
 		return nil, fmt.Errorf("failed in NewSourceCode, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitHash, commitHash.String())
@@ -38,9 +33,10 @@ func NewSourceCode(repoUrl, currentCommitHash string) (*SourceCode, error) {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitHash, err)
 	}
 
-	recursive(repo.Storer, currentRoot, 0)
+	sc := SourceCode{repo: repo, commit: commitHash}
+	sc.recursive("", currentRoot, 0)
 
-	return nil, nil
+	return &sc, nil
 }
 
 func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
@@ -63,45 +59,52 @@ func SortEntries(entries []object.TreeEntry) {
 	})
 }
 
-func recursive(s storage.Storer, tree *object.Tree, offset int) error {
-	whitespaces := strings.Repeat(" ", offset)
+func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int) error {
+	files, dirs := TreeFilesDirs(tree)
+	SortEntries(files)
+	SortEntries(dirs)
 
-	var directories []*object.Tree
-	var files []*object.Blob
-
-	// needs to go through tree.Entries, as tree.Files() only returns files but not directories
-	for _, e := range tree.Entries {
-		obj, err := object.GetObject(s, e.Hash)
+	for _, d := range dirs {
+		dirPath := currentDir + "/" + d.Name
+		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
 		if err != nil {
-			return fmt.Errorf("failed in NewSourceCode, cannot get object = %s, %s", e.Hash.String(), err)
+			return fmt.Errorf("failed in recursive, cannot get tree = %s, %s", d.Name, err)
 		}
 
-		switch obj.Type() {
-
-		case plumbing.TreeObject:
-			fmt.Printf("%sdir  = %s\n", whitespaces, e.Name)
-			tree, err := object.GetTree(s, e.Hash)
-			if err != nil {
-				return fmt.Errorf("failed in NewSourceCode, cannot get tree = %s, %s", e.Hash.String(), err)
-			}
-			directories = append(directories, tree)
-
-		case plumbing.BlobObject:
-			fmt.Printf("%sfile = %s\n", whitespaces, e.Name)
-			file, err := object.GetBlob(s, e.Hash)
-			if err != nil {
-				return fmt.Errorf("failed in NewSourceCode, cannot get blob = %s, %s", e.Hash.String(), err)
-			}
-			files = append(files, file)
+		dir, err := NewDirectory(dirPath, nil, subTree)
+		if err != nil {
+			return fmt.Errorf("failed in recursive, cannot create directory = %s, %s", dirPath, err)
 		}
+		s.fileNodes = append(s.fileNodes, dir)
+
+		s.recursive(dirPath, subTree, offset+1)
 	}
 
-	//sort directories and store
-	// for _, d := range directories {
-	// 	recursive(s, d, offset+1)
-	// }
+	for _, f := range files {
+		fileObj, err := tree.File(f.Name)
+		if err != nil {
+			return fmt.Errorf("failed in recursive, cannot get file = %s in dir = %s, %s", f.Name, currentDir, err)
+		}
 
-	//sort files and store
+		file, err := NewFile(nil, fileObj, currentDir)
+		if err != nil {
+			return fmt.Errorf("failed in recursive, cannot create file = %s in dir = %s, %s", f.Name, currentDir, err)
+		}
+
+		s.fileNodes = append(s.fileNodes, file)
+	}
 
 	return nil
+}
+
+func (p *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
+	var resultNodes []*model.FileNode
+
+	for _, node := range p.fileNodes {
+		resultNodes = append(resultNodes, node.ToGraphQLFileNode())
+	}
+
+	return &model.SourceCode{
+		FileTree: resultNodes,
+	}
 }
