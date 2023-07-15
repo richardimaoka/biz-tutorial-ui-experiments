@@ -24,7 +24,6 @@ func gitFileFromCommit(repoUrl, commitHashStr, filePath string) (*object.File, e
 		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
 	}
 
-	//commit 'npx create-next-app@latest' =
 	commit, err := repo.CommitObject(commitHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get commit = %s, %s", commitHashStr, err)
