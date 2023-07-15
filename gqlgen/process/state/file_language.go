@@ -9,6 +9,8 @@ func fileLanguage(extension string) string {
 		return "javascript"
 	case "ts":
 		return "typescript"
+	case "tsx":
+		return "typescript"
 	case "html":
 		return "html"
 	case "css":

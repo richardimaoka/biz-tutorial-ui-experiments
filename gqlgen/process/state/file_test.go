@@ -74,13 +74,15 @@ func TestFilePatterns(t *testing.T) {
 	cases := []struct {
 		prevCommit         string
 		currentCommit      string
-		filePath           string
+		prevFilePath       string
+		currentFilePath    string
 		goldenFileOpenFile string
 		goldenFileFileNode string
 	}{
 		{
 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/package.json",
 			"next/package.json",
 			"testdata/file_add_openfile_golden.json",
 			"testdata/file_add_filenode_golden.json",
@@ -89,6 +91,7 @@ func TestFilePatterns(t *testing.T) {
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
 			"next/package.json",
+			"next/package.json",
 			"testdata/file_update_openfile_golden.json",
 			"testdata/file_update_filenode_golden.json",
 		},
@@ -96,17 +99,25 @@ func TestFilePatterns(t *testing.T) {
 			"3b452151c8a567e2d42a133c255e85d81ea5912a",
 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			"pages/posts/[id].js",
+			"pages/posts/[id].js",
 			"testdata/file_delete_openfile_golden.json",
 			"testdata/file_delete_filenode_golden.json",
 		},
-		//file rename
+		{
+			"e4a7c6509d5ff90da22612a66128eb38d418cb3e",
+			"e5784f193c5e62a840bbfb96a2b9a5662d1361c1", //next to nextjs
+			"next/pages/index.tsx",
+			"nextjs/pages/index.tsx",
+			"testdata/file_rename_openfile_golden.json",
+			"testdata/file_rename_filenode_golden.json",
+		},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 	for _, c := range cases {
 		// gitFile = nil is ok, so ignore errors
-		prevGitFile, _ := gitFileFromCommit(repoUrl, c.prevCommit, c.filePath)
-		currentGitFile, _ := gitFileFromCommit(repoUrl, c.currentCommit, c.filePath)
+		prevGitFile, _ := gitFileFromCommit(repoUrl, c.prevCommit, c.prevFilePath)
+		currentGitFile, _ := gitFileFromCommit(repoUrl, c.currentCommit, c.currentFilePath)
 
 		s, err := state.NewFile(prevGitFile, currentGitFile)
 		if err != nil {

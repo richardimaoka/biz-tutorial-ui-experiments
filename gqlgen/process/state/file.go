@@ -20,6 +20,7 @@ type File struct {
 	isUpdated       bool
 	isAdded         bool
 	isDeleted       bool
+	isRenamed       bool
 }
 
 func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
@@ -66,6 +67,7 @@ func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
 	isAdded := currentFile != nil && prevFile == nil
 	isDeleted := currentFile == nil && prevFile != nil
 	isUpdated := currentFile != nil && prevFile != nil && prevFile.Hash != currentFile.Hash
+	isRenamed := currentFile != nil && prevFile != nil && prevFile.Name != currentFile.Name
 
 	return &File{
 		prevFile:        prevFile,
@@ -79,6 +81,7 @@ func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
 		isAdded:         isAdded,
 		isUpdated:       isUpdated,
 		isDeleted:       isDeleted,
+		isRenamed:       isRenamed,
 	}, nil
 }
 
@@ -105,7 +108,7 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 	filePath := s.filePath
 	fileName := s.fileName
 	offset := s.offset
-	isUpdated := s.isUpdated || s.isAdded
+	isUpdated := s.isUpdated || s.isAdded || s.isRenamed
 
 	return &model.FileNode{
 		NodeType:  &fileType,
