@@ -60,10 +60,7 @@ func TestFileMutation1(t *testing.T) {
 	}
 
 	// once GraphQL model is materialized...
-	gqlModel, err := s.ToGraphQLOpenFile()
-	if err != nil {
-		t.Fatalf("failed in TestFileMutation1, %s", err)
-	}
+	gqlModel := s.ToGraphQLOpenFile()
 	goldenFile1 := "testdata/file_golden1-1.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
@@ -82,11 +79,7 @@ func TestFileMutation1(t *testing.T) {
 	gqlModel.Highlight = append(gqlModel.Highlight, &highlight)
 
 	// ... has NO effect on a RE-materialized GraphQL model
-	gqlModelReMat, err := s.ToGraphQLOpenFile()
-	if err != nil {
-		t.Fatalf("failed in TestFileMutation1, %s", err)
-	}
-	internal.CompareAfterMarshal(t, goldenFile1, gqlModelReMat)
+	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLOpenFile())
 
 	// ... has effect on the materialized GraphQL model
 	goldenFile2 := "testdata/file_golden1-2.json"

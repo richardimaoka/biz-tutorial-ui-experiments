@@ -10,9 +10,11 @@ import (
 )
 
 type File struct {
-	repo        *git.Repository
-	prevFile    *object.File
-	currentFile *object.File
+	repo            *git.Repository
+	prevFile        *object.File
+	currentFile     *object.File
+	currentContents string
+	prevContents    string
 }
 
 func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.File) (*File, error) {
@@ -23,22 +25,36 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
 	}
 
+	var currentContents, prevContents string
+	var err error
+	if currentFile != nil {
+		currentContents, err = currentFile.Contents()
+		if err != nil {
+			return nil, fmt.Errorf("failed in ToGraphQLFileNode for file = %s, cannot get current file contents, %s", currentFile.Name, err)
+		}
+	}
+	if prevFile != nil {
+		prevContents, err = prevFile.Contents()
+		if err != nil {
+			return nil, fmt.Errorf("failed in ToGraphQLFileNode for file = %s, cannot get previous file contents, %s", prevFile.Name, err)
+		}
+	}
+
 	return &File{
-		repo:        repo,
-		prevFile:    prevFile,
-		currentFile: currentFile,
+		repo:            repo,
+		prevFile:        prevFile,
+		currentFile:     currentFile,
+		currentContents: currentContents,
+		prevContents:    prevContents,
 	}, nil
 }
 
-func (s *File) ToGraphQLOpenFile() (*model.OpenFile, error) {
-	//copy to avoid mutation effects afterwards
+func (s *File) ToGraphQLOpenFile() *model.OpenFile {
+	// copy to avoid mutation effects afterwards
 	filePath := s.currentFile.Name
 	split := strings.Split(filePath, "/")
 	fileName := split[len(split)-1]
-	contents, err := s.currentFile.Contents()
-	if err != nil {
-		return nil, fmt.Errorf("failed in ToGraphQLFileNode for file = %s, cannot get file contents, %s", filePath, err)
-	}
+	contents := s.currentContents // TODO: should we not copy this as contents can be huge?
 	trueValue := true
 
 	return &model.OpenFile{
@@ -46,7 +62,7 @@ func (s *File) ToGraphQLOpenFile() (*model.OpenFile, error) {
 		FileName:      &fileName,
 		IsFullContent: &trueValue,
 		Content:       &contents,
-	}, nil
+	}
 }
 
 func (s *File) ToGraphQLFileNode() *model.FileNode {
