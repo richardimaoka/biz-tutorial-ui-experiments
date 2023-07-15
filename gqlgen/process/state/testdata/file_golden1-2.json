@@ -3,7 +3,7 @@
   "fileName": "README.md",
   "content": "updated contents",
   "isFullContent": false,
-  "language": null,
+  "language": "json",
   "highlight": [
     {
       "fromLine": 100,

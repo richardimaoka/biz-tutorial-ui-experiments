@@ -15,6 +15,10 @@ type File struct {
 	currentFile     *object.File
 	currentContents string
 	prevContents    string
+	filePath        string
+	offset          int
+	fileName        string
+	language        string
 }
 
 func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.File) (*File, error) {
@@ -25,6 +29,7 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
 	}
 
+	// read contents here, to avoid error upon GraphQL materialization
 	var currentContents, prevContents string
 	var err error
 	if currentFile != nil {
@@ -40,20 +45,44 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 		}
 	}
 
+	var filePath string
+	if currentFile != nil {
+		filePath = currentFile.Name
+	} else {
+		filePath = prevFile.Name
+	}
+
+	split := strings.Split(filePath, "/")
+	fileName := split[len(split)-1]
+
+	offset := len(split) - 1
+
+	dotSplit := strings.Split(fileName, ".")
+	var suffix string
+	if len(dotSplit) > 1 {
+		//e.g. fileName = 'some.interesting.name.json', suffix = 'json'
+		suffix = dotSplit[len(dotSplit)-1]
+	}
+	language := fileLanguage(suffix)
+
 	return &File{
 		repo:            repo,
 		prevFile:        prevFile,
 		currentFile:     currentFile,
 		currentContents: currentContents,
 		prevContents:    prevContents,
+		filePath:        filePath,
+		fileName:        fileName,
+		language:        language,
+		offset:          offset,
 	}, nil
 }
 
 func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	// copy to avoid mutation effects afterwards
-	filePath := s.currentFile.Name
-	split := strings.Split(filePath, "/")
-	fileName := split[len(split)-1]
+	filePath := s.filePath
+	fileName := s.fileName
+	language := s.language
 	contents := s.currentContents // TODO: should we not copy this as contents can be huge?
 	trueValue := true
 
@@ -62,16 +91,16 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		FileName:      &fileName,
 		IsFullContent: &trueValue,
 		Content:       &contents,
+		Language:      &language,
 	}
 }
 
 func (s *File) ToGraphQLFileNode() *model.FileNode {
 	//copy to avoid mutation effects afterwards
 	fileType := model.FileNodeTypeFile
-	filePath := s.currentFile.Name
-	split := strings.Split(filePath, "/")
-	fileName := split[len(split)-1]
-	offset := len(split) - 1
+	filePath := s.filePath
+	fileName := s.fileName
+	offset := s.offset
 	isUpdated := s.prevFile == nil || s.prevFile.Hash != s.currentFile.Hash
 
 	return &model.FileNode{
