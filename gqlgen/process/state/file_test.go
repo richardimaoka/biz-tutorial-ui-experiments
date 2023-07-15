@@ -6,51 +6,109 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func fileFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, error) {
+func gitFileFromCommit(repoUrl, commitHashStr, filePath string) (*object.File, error) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCodeColumn, cannot clone repo %s, %s", repoUrl, err)
+		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot clone repo %s, %s", repoUrl, err)
 	}
 
 	commitHash := plumbing.NewHash(commitHashStr)
 	if commitHash.String() != commitHashStr {
-		return nil, fmt.Errorf("failed in FindCommitFile, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
+		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
 	}
 
 	//commit 'npx create-next-app@latest' =
 	commit, err := repo.CommitObject(commitHash)
 	if err != nil {
-		return nil, fmt.Errorf("failed in FindCommitFile, cannot get commit = %s, %s", commitHashStr, err)
+		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get commit = %s, %s", commitHashStr, err)
 	}
 
 	rootTree, err := commit.Tree()
 	if err != nil {
-		return nil, fmt.Errorf("failed in FindCommitFile, cannot get tree for commit = %s, %s", commitHashStr, err)
+		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree for commit = %s, %s", commitHashStr, err)
 
 	}
 
 	gitFile, err := rootTree.File(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("failed in FindCommitFile, cannot get file = %s in commit = %s, %s", filePath, commitHashStr, err)
+		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get file = %s in commit = %s, %s", filePath, commitHashStr, err)
 	}
 
-	fileState, err := state.NewFile(repo, nil, gitFile)
+	return gitFile, nil
+}
+
+func stateFileFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, error) {
+	gitFile, err := gitFileFromCommit(repoUrl, commitHashStr, filePath)
 	if err != nil {
-		return nil, fmt.Errorf("failed in FindCommitFile, cannot create file state for file = %s in commit = %s, %s", filePath, commitHashStr, err)
+		return nil, fmt.Errorf("failed in stateFileFromCommit, %s", err)
+	}
+
+	fileState, err := state.NewFile(nil, gitFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed in stateFileFromCommit, cannot create file state for file = %s in commit = %s, %s", filePath, commitHashStr, err)
 	}
 
 	return fileState, nil
 }
 
+func TestFilePatterns(t *testing.T) {
+	cases := []struct {
+		prevCommit         string
+		currentCommit      string
+		filePath           string
+		goldenFileOpenFile string
+		goldenFileFileNode string
+	}{
+		{
+			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/package.json",
+			"testdata/file_add_openfile_golden.json",
+			"testdata/file_add_filenode_golden.json",
+		},
+		{
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
+			"next/package.json",
+			"testdata/file_update_openfile_golden.json",
+			"testdata/file_update_filenode_golden.json",
+		},
+		{
+			"3b452151c8a567e2d42a133c255e85d81ea5912a",
+			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			"pages/posts/[id].js",
+			"testdata/file_delete_openfile_golden.json",
+			"testdata/file_delete_filenode_golden.json",
+		},
+		//file rename
+	}
+
+	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+	for _, c := range cases {
+		// gitFile = nil is ok, so ignore errors
+		prevGitFile, _ := gitFileFromCommit(repoUrl, c.prevCommit, c.filePath)
+		currentGitFile, _ := gitFileFromCommit(repoUrl, c.currentCommit, c.filePath)
+
+		s, err := state.NewFile(prevGitFile, currentGitFile)
+		if err != nil {
+			t.Fatalf("failed in TestFilePatterns to create state.File, %s", err)
+		}
+
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+	}
+}
+
 // since state.File is effectively immutable, no need to test the state mutation, but only the GraphQL model mutation
 func TestFileMutation1(t *testing.T) {
-	s, err := fileFromCommit(
+	s, err := stateFileFromCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
 		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
 		"next/package.json",
@@ -88,7 +146,7 @@ func TestFileMutation1(t *testing.T) {
 
 // since state.File is effectively immutable, no need to test the state mutation, but only the GraphQL model mutation
 func TestFileMutation2(t *testing.T) {
-	s, err := fileFromCommit(
+	s, err := stateFileFromCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
 		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
 		"next/package.json",

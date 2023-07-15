@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type File struct {
-	repo            *git.Repository
 	prevFile        *object.File
 	currentFile     *object.File
 	currentContents string
@@ -19,12 +17,10 @@ type File struct {
 	offset          int
 	fileName        string
 	language        string
+	isUpdated       bool
 }
 
-func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.File) (*File, error) {
-	if repo == nil {
-		return nil, fmt.Errorf("failed in NewFile, repo is nil")
-	}
+func NewFile(prevFile *object.File, currentFile *object.File) (*File, error) {
 	if currentFile == nil && prevFile == nil {
 		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
 	}
@@ -65,8 +61,10 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 	}
 	language := fileLanguage(suffix)
 
+	isUpdated := prevFile == nil /*supposedly currentFile != nil*/ ||
+		(currentFile != nil && prevFile != nil && prevFile.Hash != currentFile.Hash)
+
 	return &File{
-		repo:            repo,
 		prevFile:        prevFile,
 		currentFile:     currentFile,
 		currentContents: currentContents,
@@ -75,6 +73,7 @@ func NewFile(repo *git.Repository, prevFile *object.File, currentFile *object.Fi
 		fileName:        fileName,
 		language:        language,
 		offset:          offset,
+		isUpdated:       isUpdated,
 	}, nil
 }
 
@@ -101,7 +100,7 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 	filePath := s.filePath
 	fileName := s.fileName
 	offset := s.offset
-	isUpdated := s.prevFile == nil || s.prevFile.Hash != s.currentFile.Hash
+	isUpdated := s.isUpdated
 
 	return &model.FileNode{
 		NodeType:  &fileType,
