@@ -34,7 +34,7 @@ func TestRootDirectory(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		rootDir, err := state.ConstructDirectory(repo, "", currentRoot)
+		rootDir, err := state.ConstructDirectory(repo, "", currentRoot, false)
 		if err != nil {
 			t.Fatal(err)
 		}

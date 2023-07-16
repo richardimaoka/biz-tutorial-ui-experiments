@@ -59,50 +59,6 @@ func sortEntries(entries []object.TreeEntry) {
 	})
 }
 
-func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) error {
-	if tree == nil {
-		return fmt.Errorf("failed in recurse, tree is nil")
-	}
-
-	fileEntries, subDirEntries := treeFilesDirs(tree)
-	sortEntries(fileEntries)
-	sortEntries(subDirEntries)
-
-	// Construct subdirs recursively
-	for _, d := range subDirEntries {
-		subDirPath := filePathInDir(dirPath, d.Name)
-		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
-		}
-
-		// Recursive, and depth first construction
-		subDir, err := ConstructDirectory(s.repo, subDirPath, subTree)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
-		}
-		s.subDirs = append(s.subDirs, subDir)
-	}
-
-	// Construct files under dirPath
-	for _, f := range fileEntries {
-		fileObj, err := tree.File(f.Name)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot get git file = %s in dir = %s, %s", f.Name, dirPath, err)
-		}
-
-		// Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
-		file, err := FileUnChanged(fileObj, dirPath)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
-		}
-
-		s.files = append(s.files, file)
-	}
-
-	return nil
-}
-
 func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	split := strings.Split(dirPath, "/")
 	dirName := split[len(split)-1]
@@ -118,13 +74,62 @@ func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	return &dir
 }
 
-func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree) (*Directory, error) {
+func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree, filesByAdd bool) (*Directory, error) {
 	dir := EmptyDirectory(repo, dirPath)
-	if err := dir.recursivelyConstruct(dirPath, tree); err != nil {
+	if err := dir.recursivelyConstruct(dirPath, tree, filesByAdd); err != nil {
 		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
 	}
 
 	return dir, nil
+}
+
+func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, filesByAdd bool) error {
+	if tree == nil {
+		return fmt.Errorf("failed in recurse, tree is nil")
+	}
+
+	// 1. Find subdirs and files directly belonging to dirPath
+	fileEntries, subDirEntries := treeFilesDirs(tree)
+	sortEntries(fileEntries)
+	sortEntries(subDirEntries)
+
+	// 2. Construct subdirs recursively
+	for _, d := range subDirEntries {
+		subDirPath := filePathInDir(dirPath, d.Name)
+		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
+		}
+
+		// Recursive, and depth first construction
+		subDir := EmptyDirectory(s.repo, subDirPath)
+		if err := subDir.recursivelyConstruct(subDirPath, subTree, filesByAdd); err != nil {
+			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
+		}
+		s.subDirs = append(s.subDirs, subDir)
+	}
+
+	// 3. Construct files under dirPath
+	for _, f := range fileEntries {
+		fileObj, err := tree.File(f.Name)
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot get git file = %s in dir = %s, %s", f.Name, dirPath, err)
+		}
+
+		var file *File
+		if filesByAdd { // Upon construction, all files are considered added, assuming this is the first commit
+			file, err = FileAdded(fileObj, dirPath)
+		} else { //        Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
+			file, err = FileUnChanged(fileObj, dirPath)
+		}
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
+		}
+
+		s.files = append(s.files, file)
+	}
+
+	return nil
 }
 
 func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {

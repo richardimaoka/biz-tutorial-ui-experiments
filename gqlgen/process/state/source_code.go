@@ -42,7 +42,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
 	}
 
-	rootDir, err := ConstructDirectory(repo, "", currentRoot)
+	rootDir, err := ConstructDirectory(repo, "", currentRoot, false)
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
@@ -75,6 +75,28 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 			sc.rootDir.MarkFileUpdated(from.Path(), from)
 		}
 	}
+
+	return &sc, nil
+}
+
+func InitialSourceCode(repo *git.Repository, currentCommitStr string) (*SourceCode, error) {
+	// 1. Construct source code root dir as if all files are unchanged
+	currentCommit, err := getCommit(repo, currentCommitStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get current commit, %s", err)
+	}
+
+	currentRoot, err := currentCommit.Tree()
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
+	}
+
+	rootDir, err := ConstructDirectory(repo, "", currentRoot, true)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
+	}
+
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir}
 
 	return &sc, nil
 }
