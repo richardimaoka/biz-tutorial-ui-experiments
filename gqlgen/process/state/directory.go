@@ -25,11 +25,13 @@ type Directory struct {
 
 type Directories []*Directory
 
-func (this *Directory) FilePath() string {
-	return this.dirPath
+func (dirs Directories) sortSelf() {
+	sort.Slice(dirs, func(i, j int) bool {
+		return strings.ToLower(dirs[i].dirName) < strings.ToLower(dirs[j].dirName)
+	})
 }
 
-func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
+func treeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
 	var files []object.TreeEntry
 	var dirs []object.TreeEntry
 
@@ -43,34 +45,10 @@ func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
 	return files, dirs
 }
 
-func SortEntries(entries []object.TreeEntry) {
+func sortEntries(entries []object.TreeEntry) {
 	sort.Slice(entries, func(i, j int) bool {
 		return strings.ToLower(entries[i].Name) < strings.ToLower(entries[j].Name)
 	})
-}
-
-func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
-	split := strings.Split(dirPath, "/")
-	dirName := split[len(split)-1]
-	offset := len(split) - 1
-
-	dir := Directory{
-		repo:    repo,
-		dirPath: dirPath,
-		dirName: dirName,
-		offset:  offset,
-	}
-
-	return &dir
-}
-
-func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree) (*Directory, error) {
-	dir := EmptyDirectory(repo, dirPath)
-	if err := dir.recursivelyConstruct(dirPath, tree); err != nil {
-		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
-	}
-
-	return dir, nil
 }
 
 func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) error {
@@ -78,9 +56,9 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 		return fmt.Errorf("failed in recurse, tree is nil")
 	}
 
-	fileEntries, subDirEntries := TreeFilesDirs(tree)
-	SortEntries(fileEntries)
-	SortEntries(subDirEntries)
+	fileEntries, subDirEntries := treeFilesDirs(tree)
+	sortEntries(fileEntries)
+	sortEntries(subDirEntries)
 
 	for _, d := range subDirEntries {
 		subDirPath := FilePathInDir(dirPath, d.Name)
@@ -113,6 +91,34 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 	return nil
 }
 
+func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
+	split := strings.Split(dirPath, "/")
+	dirName := split[len(split)-1]
+	offset := len(split) - 1
+
+	dir := Directory{
+		repo:    repo,
+		dirPath: dirPath,
+		dirName: dirName,
+		offset:  offset,
+	}
+
+	return &dir
+}
+
+func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree) (*Directory, error) {
+	dir := EmptyDirectory(repo, dirPath)
+	if err := dir.recursivelyConstruct(dirPath, tree); err != nil {
+		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
+	}
+
+	return dir, nil
+}
+
+func (this *Directory) FilePath() string {
+	return this.dirPath
+}
+
 func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
 	split := strings.Split(relativeFilePath, "/")
 	if len(split) == 1 {
@@ -122,7 +128,7 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		}
 
 		s.files = append(s.files, file)
-		s.files.Sort()
+		s.files.sortSelf()
 		return nil
 	} else {
 		subDirName := split[0]
@@ -142,7 +148,7 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
 		}
 		s.subDirs = append(s.subDirs, subDir)
-		s.subDirs.Sort()
+		s.subDirs.sortSelf()
 		return nil
 	}
 }
@@ -237,10 +243,4 @@ func (s *Directory) ToGraphQLFileNodeSlice() []*model.FileNode {
 	}
 
 	return fileNodes
-}
-
-func (dirs Directories) Sort() {
-	sort.Slice(dirs, func(i, j int) bool {
-		return strings.ToLower(dirs[i].dirName) < strings.ToLower(dirs[j].dirName)
-	})
 }

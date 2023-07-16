@@ -24,6 +24,12 @@ type File struct {
 
 type Files []*File
 
+func (files Files) sortSelf() {
+	sort.Slice(files, func(i, j int) bool {
+		return strings.ToLower(files[i].fileName) < strings.ToLower(files[j].fileName)
+	})
+}
+
 func (f *File) FilePath() string {
 	return f.filePath
 }
@@ -211,10 +217,4 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}
-}
-
-func (files Files) Sort() {
-	sort.Slice(files, func(i, j int) bool {
-		return strings.ToLower(files[i].fileName) < strings.ToLower(files[j].fileName)
-	})
 }
