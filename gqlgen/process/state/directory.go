@@ -68,6 +68,7 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 	sortEntries(fileEntries)
 	sortEntries(subDirEntries)
 
+	// Construct subdirs recursively
 	for _, d := range subDirEntries {
 		subDirPath := filePathInDir(dirPath, d.Name)
 		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
@@ -75,6 +76,7 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
 		}
 
+		// Recursive, and depth first construction
 		subDir, err := ConstructDirectory(s.repo, subDirPath, subTree)
 		if err != nil {
 			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
@@ -82,12 +84,14 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 		s.subDirs = append(s.subDirs, subDir)
 	}
 
+	// Construct files under dirPath
 	for _, f := range fileEntries {
 		fileObj, err := tree.File(f.Name)
 		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot get file = %s in dir = %s, %s", f.Name, dirPath, err)
+			return fmt.Errorf("failed in recurse, cannot get git file = %s in dir = %s, %s", f.Name, dirPath, err)
 		}
 
+		// Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
 		file, err := FileUnChanged(fileObj, dirPath)
 		if err != nil {
 			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)

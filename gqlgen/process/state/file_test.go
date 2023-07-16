@@ -62,7 +62,7 @@ func stateFileFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, 
 		return nil, fmt.Errorf("failed in stateFileFromCommit, %s", err)
 	}
 
-	fileState, err := state.NewFile(nil, gitFile, "")
+	fileState, err := state.FileUnChanged(gitFile, "")
 	if err != nil {
 		return nil, fmt.Errorf("failed in stateFileFromCommit, cannot create file state for file = %s in commit = %s, %s", filePath, commitHashStr, err)
 	}
@@ -142,7 +142,7 @@ func TestFileMutation1(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLOpenFile()
-	goldenFile1 := "testdata/file_golden1-1.json"
+	goldenFile1 := "testdata/file_mutation_golden1-1.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
@@ -163,7 +163,7 @@ func TestFileMutation1(t *testing.T) {
 	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLOpenFile())
 
 	// ... has effect on the materialized GraphQL model
-	goldenFile2 := "testdata/file_golden1-2.json"
+	goldenFile2 := "testdata/file_mutation_golden1-2.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 }
 
@@ -180,7 +180,7 @@ func TestFileMutation2(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLFileNode()
-	goldenFile1 := "testdata/file_golden2-1.json"
+	goldenFile1 := "testdata/file_mutation_golden2-1.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
@@ -194,6 +194,6 @@ func TestFileMutation2(t *testing.T) {
 	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLFileNode())
 
 	// ... has effect on the materialized GraphQL model
-	goldenFile2 := "testdata/file_golden2-2.json"
+	goldenFile2 := "testdata/file_mutation_golden2-2.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 }
