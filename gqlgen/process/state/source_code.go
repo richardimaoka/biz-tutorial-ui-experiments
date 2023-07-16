@@ -39,7 +39,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
 	}
 
-	rootDir := NewDirectory(repo, "")
+	rootDir := EmptyDirectory(repo, "")
 	if err := rootDir.Recurse("", currentRoot); err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}

@@ -49,7 +49,7 @@ func SortEntries(entries []object.TreeEntry) {
 	})
 }
 
-func NewDirectory(repo *git.Repository, dirPath string) *Directory {
+func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	split := strings.Split(dirPath, "/")
 	dirName := split[len(split)-1]
 	offset := len(split) - 1
@@ -80,7 +80,7 @@ func (s *Directory) Recurse(dirPath string, tree *object.Tree) error {
 			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
 		}
 
-		subDir := NewDirectory(s.repo, subDirPath)
+		subDir := EmptyDirectory(s.repo, subDirPath)
 		if err := subDir.Recurse(subDirPath, subTree); err != nil {
 			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
 		}
@@ -137,7 +137,7 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		} else {
 			subDirPath = dirPath + "/" + subDirName
 		}
-		subDir := NewDirectory(s.repo, subDirPath)
+		subDir := EmptyDirectory(s.repo, subDirPath)
 		relativeFilePath := strings.Join(split[1:], "/")
 		if err := subDir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile); err != nil {
 			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
