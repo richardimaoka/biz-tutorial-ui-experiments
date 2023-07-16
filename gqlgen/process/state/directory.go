@@ -28,6 +28,26 @@ func (this *Directory) FilePath() string {
 	return this.dirPath
 }
 
+func TreeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
+	var files []object.TreeEntry
+	var dirs []object.TreeEntry
+
+	for _, e := range tree.Entries {
+		if e.Mode.IsFile() {
+			files = append(files, e)
+		} else {
+			dirs = append(dirs, e)
+		}
+	}
+	return files, dirs
+}
+
+func SortEntries(entries []object.TreeEntry) {
+	sort.Slice(entries, func(i, j int) bool {
+		return strings.ToLower(entries[i].Name) < strings.ToLower(entries[j].Name)
+	})
+}
+
 func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree, doRecurse bool) (*Directory, error) {
 	split := strings.Split(dirPath, "/")
 	dirName := split[len(split)-1]
