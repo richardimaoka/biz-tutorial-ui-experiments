@@ -31,13 +31,10 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 }
 
 func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr string) (*SourceCode, error) {
+	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get current commit, %s", err)
-	}
-	prevCommit, err := getCommit(repo, prevCommitStr)
-	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot get prev commit, %s", err)
 	}
 
 	currentRoot, err := currentCommit.Tree()
@@ -51,6 +48,12 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 	}
 
 	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir}
+
+	// 2. From git patches, mark added/deleted/updated/renamed files
+	prevCommit, err := getCommit(repo, prevCommitStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get prev commit, %s", err)
+	}
 
 	patch, err := prevCommit.Patch(currentCommit)
 	if err != nil {
