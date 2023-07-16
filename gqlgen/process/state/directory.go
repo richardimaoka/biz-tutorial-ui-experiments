@@ -2,6 +2,7 @@ package state
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
@@ -17,9 +18,11 @@ type Directory struct {
 	isUpdated bool
 	isAdded   bool
 	isDeleted bool
-	files     []*File
-	subDirs   []*Directory
+	files     Files
+	subDirs   Directories
 }
+
+type Directories []*Directory
 
 func (this *Directory) FilePath() string {
 	return this.dirPath
@@ -89,6 +92,7 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		}
 
 		s.files = append(s.files, file)
+		s.files.Sort()
 		return nil
 	} else {
 		subDirName := split[0]
@@ -121,6 +125,7 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
 		}
 		s.subDirs = append(s.subDirs, subdir)
+		s.subDirs.Sort()
 		return nil
 	}
 }
@@ -193,4 +198,10 @@ func (s *Directory) ToGraphQLFileNodeSlice() []*model.FileNode {
 	}
 
 	return fileNodes
+}
+
+func (dirs Directories) Sort() {
+	sort.Slice(dirs, func(i, j int) bool {
+		return strings.ToLower(dirs[i].dirName) < strings.ToLower(dirs[j].dirName)
+	})
 }

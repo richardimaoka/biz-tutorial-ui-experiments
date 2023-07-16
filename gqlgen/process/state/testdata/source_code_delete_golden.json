@@ -158,13 +158,6 @@
     },
     {
       "nodeType": "FILE",
-      "name": "README.md",
-      "filePath": "README.md",
-      "offset": 0,
-      "isUpdated": false
-    },
-    {
-      "nodeType": "FILE",
       "name": "package-lock.json",
       "filePath": "package-lock.json",
       "offset": 0,
@@ -174,6 +167,13 @@
       "nodeType": "FILE",
       "name": "package.json",
       "filePath": "package.json",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "README.md",
+      "filePath": "README.md",
       "offset": 0,
       "isUpdated": false
     }

@@ -2,6 +2,7 @@ package state
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/go-git/go-git/v5/plumbing/format/diff"
@@ -20,6 +21,8 @@ type File struct {
 	isDeleted bool
 	isRenamed bool
 }
+
+type Files []*File
 
 func (f *File) FilePath() string {
 	return f.filePath
@@ -198,4 +201,10 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}
+}
+
+func (files Files) Sort() {
+	sort.Slice(files, func(i, j int) bool {
+		return strings.ToLower(files[i].fileName) < strings.ToLower(files[j].fileName)
+	})
 }
