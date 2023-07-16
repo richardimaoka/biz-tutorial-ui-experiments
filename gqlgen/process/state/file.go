@@ -27,7 +27,7 @@ func (f *File) FilePath() string {
 	return f.filePath
 }
 
-func NewFileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
+func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	if currentFile == nil {
 		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
 	}

@@ -141,7 +141,7 @@ func (s *SourceCode) recursive(repo *git.Repository, currentDir string, tree *ob
 			return fmt.Errorf("failed in recursive, cannot get file = %s in dir = %s, %s", f.Name, currentDir, err)
 		}
 
-		file, err := NewFileUnChanged(fileObj, currentDir)
+		file, err := FileUnChanged(fileObj, currentDir)
 		if err != nil {
 			return fmt.Errorf("failed in recursive, cannot create file = %s in dir = %s, %s", f.Name, currentDir, err)
 		}

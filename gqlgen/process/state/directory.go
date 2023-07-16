@@ -61,7 +61,7 @@ func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree
 				return nil, fmt.Errorf("failed in NewDirectory, cannot get file = %s in dir = %s, %s", f.Name, dirPath, err)
 			}
 
-			file, err := NewFileUnChanged(fileObj, dirPath)
+			file, err := FileUnChanged(fileObj, dirPath)
 			if err != nil {
 				return nil, fmt.Errorf("failed in NewDirectory, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
 			}
