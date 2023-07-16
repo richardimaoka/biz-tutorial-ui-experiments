@@ -74,6 +74,53 @@ func NewFileUnChanged(currentFile *object.File, currentDir string) (*File, error
 	}, nil
 }
 
+func NewFileDeleted(prevFile *object.File, prevDir string) (*File, error) {
+	if prevFile == nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged, prevFile is nil")
+	}
+
+	var filePath string
+	if prevDir != "" {
+		filePath = prevDir + "/" + prevFile.Name
+	} else {
+		filePath = prevFile.Name
+	}
+
+	// read contents here, to avoid error upon GraphQL materialization
+	prevContents, err := prevFile.Contents()
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+	}
+
+	split := strings.Split(filePath, "/")
+	fileName := split[len(split)-1]
+
+	offset := len(split) - 1
+
+	dotSplit := strings.Split(fileName, ".")
+	var suffix string
+	if len(dotSplit) > 1 {
+		//e.g. fileName = 'some.interesting.name.json', suffix = 'json'
+		suffix = dotSplit[len(dotSplit)-1]
+	}
+	language := fileLanguage(suffix)
+
+	return &File{
+		prevFile:        prevFile,
+		currentFile:     nil,
+		currentContents: "",
+		prevContents:    prevContents,
+		filePath:        filePath,
+		fileName:        fileName,
+		language:        language,
+		offset:          offset,
+		isAdded:         false,
+		isUpdated:       false,
+		isDeleted:       true,
+		isRenamed:       false,
+	}, nil
+}
+
 func NewFile(prevFile *object.File, currentFile *object.File, currentDir string) (*File, error) {
 	if currentFile == nil && prevFile == nil {
 		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")

@@ -54,6 +54,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		if from == nil {
 			//added
 			filePath := to.Path()
+			//sc.addFile(filePath, to)
 			for i, node := range sc.fileNodes {
 				if node.FilePath() != filePath {
 					continue
@@ -68,8 +69,10 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 				sc.fileNodes[i] = v
 			}
 		} else if to == nil {
+			//sc.deleteFile(filePath, from)
 			// deleted
 		} else if from.Path() != to.Path() {
+			//sc.renameFile(filePath, from)
 			// renamed
 		} else {
 			// updated
