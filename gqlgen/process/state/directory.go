@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -25,10 +26,6 @@ func (this *Directory) FilePath() string {
 }
 
 func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree, doRecurse bool) (*Directory, error) {
-	if currentTree == nil {
-		return nil, fmt.Errorf("failed in NewDirectory, currentTree and is nil")
-	}
-
 	split := strings.Split(dirPath, "/")
 	dirName := split[len(split)-1]
 	offset := len(split) - 1
@@ -37,6 +34,10 @@ func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree
 	var files []*File
 
 	if doRecurse {
+		if currentTree == nil {
+			return nil, fmt.Errorf("failed in NewDirectory, currentTree is nil")
+		}
+
 		fileEntries, subDirEntries := TreeFilesDirs(currentTree)
 		SortEntries(fileEntries)
 		SortEntries(subDirEntries)
@@ -79,8 +80,49 @@ func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree
 	}, nil
 }
 
-func (s *Directory) InsertFileDeleted(filePath string, deletedFile *object.File) error {
-	return nil
+func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
+	split := strings.Split(relativeFilePath, "/")
+	if len(split) == 1 {
+		file, err := FileDeleted(deletedFile)
+		if err != nil {
+			return fmt.Errorf("failed in InsertFileDeleted, cannot delete = %s, %s", deletedFile.Path(), err)
+		}
+
+		s.files = append(s.files, file)
+		return nil
+	} else {
+		subDirName := split[0]
+		for _, subdir := range s.subDirs {
+			if subdir.dirName == subDirName {
+				var newDirPath string
+				if dirPath == "" {
+					newDirPath = subDirName
+				} else {
+					newDirPath = dirPath + "/" + subDirName
+				}
+				newFilePath := strings.Join(split[1:], "/")
+				return subdir.InsertFileDeleted(newDirPath, newFilePath, deletedFile)
+			}
+		}
+
+		// if no matching subdir found
+		var newDirPath string
+		if dirPath == "" {
+			newDirPath = subDirName
+		} else {
+			newDirPath = dirPath + "/" + subDirName
+		}
+		subdir, err := NewDirectory(nil, newDirPath, nil, false)
+		if err != nil {
+			return fmt.Errorf("failed in InsertFileDeleted, cannot create subdir = %s under = %s, %s", subDirName, dirPath, err)
+		}
+		newFilePath := strings.Join(split[1:], "/")
+		if err := subdir.InsertFileDeleted(newDirPath, newFilePath, deletedFile); err != nil {
+			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
+		}
+		s.subDirs = append(s.subDirs, subdir)
+		return nil
+	}
 }
 
 func (s *Directory) MarkFileUpdated(filePath string, previFile *object.File) error {

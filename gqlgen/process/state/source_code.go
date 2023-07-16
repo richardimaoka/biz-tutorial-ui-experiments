@@ -61,7 +61,8 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 			//added
 			sc.rootDir.MarkFileAdded(to.Path())
 		} else if to == nil {
-			//sc.deleteFile(filePath, from)
+
+			sc.rootDir.InsertFileDeleted("", from.Path(), from)
 			// deleted
 		} else if from.Path() != to.Path() {
 			//sc.renameFile(filePath, from)

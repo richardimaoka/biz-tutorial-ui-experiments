@@ -1,0 +1,182 @@
+{
+  "step": "",
+  "defaultOpenFile": null,
+  "fileTree": [
+    {
+      "nodeType": "DIRECTORY",
+      "name": "components",
+      "filePath": "components",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "layout.js",
+      "filePath": "components/layout.js",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "layout.module.css",
+      "filePath": "components/layout.module.css",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "lib",
+      "filePath": "lib",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "posts.js",
+      "filePath": "lib/posts.js",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "pages",
+      "filePath": "pages",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "posts",
+      "filePath": "pages/posts",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "[id].js",
+      "filePath": "pages/posts/[id].js",
+      "offset": 2,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "first-post.js",
+      "filePath": "pages/posts/first-post.js",
+      "offset": 2,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "_app.js",
+      "filePath": "pages/_app.js",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "index.js",
+      "filePath": "pages/index.js",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "posts",
+      "filePath": "posts",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "pre-rendering.md",
+      "filePath": "posts/pre-rendering.md",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "ssg-ssr.md",
+      "filePath": "posts/ssg-ssr.md",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "public",
+      "filePath": "public",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "images",
+      "filePath": "public/images",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "profile.jpg",
+      "filePath": "public/images/profile.jpg",
+      "offset": 2,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "favicon.ico",
+      "filePath": "public/favicon.ico",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "DIRECTORY",
+      "name": "styles",
+      "filePath": "styles",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "global.css",
+      "filePath": "styles/global.css",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "utils.module.css",
+      "filePath": "styles/utils.module.css",
+      "offset": 1,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": ".gitignore",
+      "filePath": ".gitignore",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "README.md",
+      "filePath": "README.md",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "package-lock.json",
+      "filePath": "package-lock.json",
+      "offset": 0,
+      "isUpdated": false
+    },
+    {
+      "nodeType": "FILE",
+      "name": "package.json",
+      "filePath": "package.json",
+      "offset": 0,
+      "isUpdated": false
+    }
+  ],
+  "fileContents": null
+}

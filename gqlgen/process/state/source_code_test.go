@@ -156,10 +156,15 @@ func TestSourceCodePatterns(t *testing.T) {
 		currentCommit string
 		goldenFile    string
 	}{
+		// {
+		// 	"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
+		// 	"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+		// 	"testdata/source_code_add_golden.json",
+		// },
 		{
+			"3b452151c8a567e2d42a133c255e85d81ea5912a",
 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
-			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
-			"testdata/source_code_golden.json",
+			"testdata/source_code_delete_golden.json",
 		},
 	}
 
