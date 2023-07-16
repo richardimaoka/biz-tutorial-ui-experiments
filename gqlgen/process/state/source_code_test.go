@@ -156,15 +156,23 @@ func TestSourceCodePatterns(t *testing.T) {
 		currentCommit string
 		goldenFile    string
 	}{
-		// {
-		// 	"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
-		// 	"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
-		// 	"testdata/source_code_add_golden.json",
-		// },
 		{
+			// add
+			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"testdata/source_code_add_golden.json",
+		},
+		{
+			// delete
 			"3b452151c8a567e2d42a133c255e85d81ea5912a",
 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
 			"testdata/source_code_delete_golden.json",
+		},
+		{
+			// update
+			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad",
+			"21f725d5830aa217b28162f1609bf3b9870da79e", //emotion settings in Next.js
+			"testdata/source_code_update_golden.json",
 		},
 	}
 
