@@ -34,8 +34,8 @@ func TestRootDirectory(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		rootDir := state.EmptyDirectory(repo, "")
-		if err := rootDir.Recurse("", currentRoot); err != nil {
+		rootDir, err := state.ConstructDirectory(repo, "", currentRoot)
+		if err != nil {
 			t.Fatal(err)
 		}
 

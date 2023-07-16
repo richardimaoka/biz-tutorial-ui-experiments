@@ -6,6 +6,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 type SourceCode struct {
@@ -39,8 +40,8 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
 	}
 
-	rootDir := EmptyDirectory(repo, "")
-	if err := rootDir.Recurse("", currentRoot); err != nil {
+	rootDir, err := state.ConstructDirectory(repo, "", currentRoot)
+	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 

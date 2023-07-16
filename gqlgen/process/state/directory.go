@@ -64,6 +64,15 @@ func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	return &dir
 }
 
+func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree) (*Directory, error) {
+	dir := EmptyDirectory(repo, dirPath)
+	if err := dir.Recurse(dirPath, tree); err != nil {
+		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
+	}
+
+	return dir, nil
+}
+
 func (s *Directory) Recurse(dirPath string, tree *object.Tree) error {
 	if tree == nil {
 		return fmt.Errorf("failed in recurse, tree is nil")
@@ -80,8 +89,8 @@ func (s *Directory) Recurse(dirPath string, tree *object.Tree) error {
 			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
 		}
 
-		subDir := EmptyDirectory(s.repo, subDirPath)
-		if err := subDir.Recurse(subDirPath, subTree); err != nil {
+		subDir, err := ConstructDirectory(s.repo, subDirPath, subTree)
+		if err != nil {
 			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
 		}
 		s.subDirs = append(s.subDirs, subDir)
