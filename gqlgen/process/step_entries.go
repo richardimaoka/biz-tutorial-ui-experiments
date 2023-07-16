@@ -9,20 +9,33 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/read"
 )
 
+type StepEntry struct {
+	// Uppercase fields to allow json dump for testing
+	Step                   string                       `json:"step"`
+	NColumns               int                          `json:"nColumns"`
+	PrevStep               string                       `json:"prevStep,omitempty"`
+	NextStep               string                       `json:"nextStep,omitempty"`
+	BackgroundImageColumn  *read.BackgroundImageColumn  `json:"backgroundImageColumn,omitempty"`
+	ImageDescriptionColumn *read.ImageDescriptionColumn `json:"imageDescriptionColumn,omitempty"`
+	MarkdownColumn         *read.MarkdownColumn         `json:"markdownColumn,omitempty"`
+	GitColumn              *read.GitColumn              `json:"GitColumn,omitempty"`
+}
+
 type StepEntries []StepEntry
 
-func (this StepEntries) ToGraphQLPages() []model.Page {
+func (entries StepEntries) ToGraphQLPages() []model.Page {
+	// var bgColState *state.BackgroundImageColumn
+	// var imgDescColState *state.ImageDescriptionColumn
+	// var markdownColState *state.MarkdownColumn
+	// var terminalColState *state.TerminalColumn
+	// var srcColState *state.SourceCodeColumn
+
 	var pages []model.Page
-	for _, e := range this {
+	for _, e := range entries {
 		// copy to avoid mutation effects afterwards
 		step := internal.StringRef(e.Step)
 		prevStep := internal.StringRef(e.PrevStep)
 		nextStep := internal.StringRef(e.NextStep)
-
-		// var bgColState *state.BackgroundImageColumn
-		// var imgDescColState *state.ImageDescriptionColumn
-		// var markdownColState *state.MarkdownColumn
-		// var terminalColState *state.TerminalColumn
 
 		var colWrappers []*model.ColumnWrapper
 		for i := 0; i < e.NColumns; i++ {
@@ -78,22 +91,27 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 	//------------------------------------
 	steps, err := read.ReadSteps(dirName + "/steps.json")
 	if err != nil {
-		return nil, fmt.Errorf("InitialRead failed, %s", err)
+		return nil, fmt.Errorf("ReadStepEntries failed, %s", err)
 	}
 
 	backgroundImageColumns, err := read.ReadBackgroundImageColumns(dirName + "/bg_columns.json")
 	if err != nil {
-		return nil, fmt.Errorf("InitialRead failed, %s", err)
+		return nil, fmt.Errorf("ReadStepEntries failed, %s", err)
 	}
 
 	imageDescriptionColumns, err := read.ReadImageDescriptionColumns(dirName + "/img_columns.json")
 	if err != nil {
-		return nil, fmt.Errorf("InitialRead failed, %s", err)
+		return nil, fmt.Errorf("ReadStepEntries failed, %s", err)
 	}
 
 	markdownColumns, err := read.ReadMarkdownColumns(dirName + "/md_columns.json")
 	if err != nil {
-		return nil, fmt.Errorf("InitialRead failed, %s", err)
+		return nil, fmt.Errorf("ReadStepEntries failed, %s", err)
+	}
+
+	gitColumns, err := read.ReadGitColumns(dirName + "/git_columns.json")
+	if err != nil {
+		return nil, fmt.Errorf("ReadStepEntries failed, %s", err)
 	}
 
 	//--------------------------------------------------------
@@ -104,6 +122,7 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 		bgCol := backgroundImageColumns.FindBySeqNo(step.SeqNo)
 		imgCol := imageDescriptionColumns.FindBySeqNo(step.SeqNo)
 		mdCol := markdownColumns.FindBySeqNo(step.SeqNo)
+		gitCol := gitColumns.FindBySeqNo(step.SeqNo)
 
 		var currentStep string
 		if i == 0 {
@@ -134,6 +153,7 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 			BackgroundImageColumn:  bgCol,
 			ImageDescriptionColumn: imgCol,
 			MarkdownColumn:         mdCol,
+			GitColumn:              gitCol,
 		}
 		entries = append(entries, conv)
 	}
