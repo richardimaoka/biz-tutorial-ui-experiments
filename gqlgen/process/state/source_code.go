@@ -44,23 +44,22 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
+	sc := SourceCode{repo: repo, commit: currentCommitHash, rootDir: rootDir}
+
 	patch, err := prevCommit.Patch(currentCommit)
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommitStr, currentCommitStr, err)
 	}
 
-	sc := SourceCode{repo: repo, commit: currentCommitHash, rootDir: rootDir}
-
 	for _, p := range patch.FilePatches() {
-		from, to := p.Files()
+		from, to := p.Files() // See Files() method's comment about when 'from' and 'to' become nil
 		if from == nil {
 			//added
 			sc.rootDir.MarkFileAdded(to.Path())
 		} else if to == nil {
-			sc.rootDir.InsertFileDeleted("", from.Path(), from)
 			// deleted
+			sc.rootDir.InsertFileDeleted("", from.Path(), from)
 		} else if from.Path() != to.Path() {
-			//sc.renameFile(filePath, from)
 			// renamed
 		} else {
 			// updated
