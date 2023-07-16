@@ -58,9 +58,9 @@ func intrinsicFile(contents string, filePath string) *File {
 	}
 }
 
-func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
+func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	if currentFile == nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
+		return nil, fmt.Errorf("failed in FileUnChanged, currentFile is nil")
 	}
 
 	filePath := filePathInDir(currentDir, currentFile.Name)
@@ -68,7 +68,26 @@ func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
 	// read contents here, to avoid error upon GraphQL materialization
 	currentContents, err := currentFile.Contents()
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+		return nil, fmt.Errorf("failed in FileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+	}
+
+	file := intrinsicFile(currentContents, filePath)
+	// no need to update flags, as unchanged file has all flags false
+
+	return file, nil
+}
+
+func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
+	if currentFile == nil {
+		return nil, fmt.Errorf("failed in FileAdded, currentFile is nil")
+	}
+
+	filePath := filePathInDir(currentDir, currentFile.Name)
+
+	// read contents here, to avoid error upon GraphQL materialization
+	currentContents, err := currentFile.Contents()
+	if err != nil {
+		return nil, fmt.Errorf("failed in FileAdded for file = %s, cannot get current file contents, %s", filePath, err)
 	}
 
 	file := intrinsicFile(currentContents, filePath)
@@ -78,9 +97,12 @@ func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
 	return file, nil
 }
 
-func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
+func FileUpdated(prevFile, currentFile *object.File, currentDir string) (*File, error) {
+	if prevFile == nil {
+		return nil, fmt.Errorf("failed in FileUpdated, prevFile is nil")
+	}
 	if currentFile == nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
+		return nil, fmt.Errorf("failed in FileUpdated, currentFile is nil")
 	}
 
 	filePath := filePathInDir(currentDir, currentFile.Name)
@@ -88,11 +110,12 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	// read contents here, to avoid error upon GraphQL materialization
 	currentContents, err := currentFile.Contents()
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+		return nil, fmt.Errorf("failed in FileUpdated for file = %s, cannot get current file contents, %s", filePath, err)
 	}
 
 	file := intrinsicFile(currentContents, filePath)
-	// no need to update flags, as unchanged file has all flags false
+	// update necessary flags only, as default flags are false
+	file.isUpdated = true
 
 	return file, nil
 }
