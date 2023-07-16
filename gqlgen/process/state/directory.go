@@ -66,14 +66,14 @@ func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 
 func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree) (*Directory, error) {
 	dir := EmptyDirectory(repo, dirPath)
-	if err := dir.Recurse(dirPath, tree); err != nil {
+	if err := dir.recursivelyConstruct(dirPath, tree); err != nil {
 		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
 	}
 
 	return dir, nil
 }
 
-func (s *Directory) Recurse(dirPath string, tree *object.Tree) error {
+func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) error {
 	if tree == nil {
 		return fmt.Errorf("failed in recurse, tree is nil")
 	}
