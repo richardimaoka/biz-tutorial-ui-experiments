@@ -12,6 +12,7 @@ import (
 )
 
 type Directory struct {
+	repo      *git.Repository
 	dirPath   string
 	offset    int
 	dirName   string
@@ -48,59 +49,59 @@ func SortEntries(entries []object.TreeEntry) {
 	})
 }
 
-func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree, doRecurse bool) (*Directory, error) {
+func NewDirectory(repo *git.Repository, dirPath string) *Directory {
 	split := strings.Split(dirPath, "/")
 	dirName := split[len(split)-1]
 	offset := len(split) - 1
 
-	var subDirs []*Directory
-	var files []*File
-
-	if doRecurse {
-		if currentTree == nil {
-			return nil, fmt.Errorf("failed in NewDirectory, currentTree is nil")
-		}
-
-		fileEntries, subDirEntries := TreeFilesDirs(currentTree)
-		SortEntries(fileEntries)
-		SortEntries(subDirEntries)
-
-		for _, d := range subDirEntries {
-			subDirPath := FilePathInDir(dirPath, d.Name)
-			subTree, err := object.GetTree(repo.Storer, d.Hash)
-			if err != nil {
-				return nil, fmt.Errorf("failed in NewDirectory, cannot get tree = %s, %s", subDirPath, err)
-			}
-
-			subDir, err := NewDirectory(repo, subDirPath, subTree, true)
-			if err != nil {
-				return nil, fmt.Errorf("failed in recursive, cannot create directory = %s, %s", subDirPath, err)
-			}
-			subDirs = append(subDirs, subDir)
-		}
-
-		for _, f := range fileEntries {
-			fileObj, err := currentTree.File(f.Name)
-			if err != nil {
-				return nil, fmt.Errorf("failed in NewDirectory, cannot get file = %s in dir = %s, %s", f.Name, dirPath, err)
-			}
-
-			file, err := FileUnChanged(fileObj, dirPath)
-			if err != nil {
-				return nil, fmt.Errorf("failed in NewDirectory, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
-			}
-
-			files = append(files, file)
-		}
-	}
-
-	return &Directory{
+	dir := Directory{
+		repo:    repo,
 		dirPath: dirPath,
 		dirName: dirName,
 		offset:  offset,
-		files:   files,
-		subDirs: subDirs,
-	}, nil
+	}
+
+	return &dir
+}
+
+func (s *Directory) Recurse(dirPath string, tree *object.Tree) error {
+	if tree == nil {
+		return fmt.Errorf("failed in recurse, tree is nil")
+	}
+
+	fileEntries, subDirEntries := TreeFilesDirs(tree)
+	SortEntries(fileEntries)
+	SortEntries(subDirEntries)
+
+	for _, d := range subDirEntries {
+		subDirPath := FilePathInDir(dirPath, d.Name)
+		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
+		}
+
+		subDir := NewDirectory(s.repo, subDirPath)
+		if err := subDir.Recurse(subDirPath, subTree); err != nil {
+			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
+		}
+		s.subDirs = append(s.subDirs, subDir)
+	}
+
+	for _, f := range fileEntries {
+		fileObj, err := tree.File(f.Name)
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot get file = %s in dir = %s, %s", f.Name, dirPath, err)
+		}
+
+		file, err := FileUnChanged(fileObj, dirPath)
+		if err != nil {
+			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
+		}
+
+		s.files = append(s.files, file)
+	}
+
+	return nil
 }
 
 func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
@@ -130,21 +131,18 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		}
 
 		// if no matching subdir found
-		var newDirPath string
+		var subDirPath string
 		if dirPath == "" {
-			newDirPath = subDirName
+			subDirPath = subDirName
 		} else {
-			newDirPath = dirPath + "/" + subDirName
+			subDirPath = dirPath + "/" + subDirName
 		}
-		subdir, err := NewDirectory(nil, newDirPath, nil, false)
-		if err != nil {
-			return fmt.Errorf("failed in InsertFileDeleted, cannot create subdir = %s under = %s, %s", subDirName, dirPath, err)
-		}
-		newFilePath := strings.Join(split[1:], "/")
-		if err := subdir.InsertFileDeleted(newDirPath, newFilePath, deletedFile); err != nil {
+		subDir := NewDirectory(s.repo, subDirPath)
+		relativeFilePath := strings.Join(split[1:], "/")
+		if err := subDir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile); err != nil {
 			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
 		}
-		s.subDirs = append(s.subDirs, subdir)
+		s.subDirs = append(s.subDirs, subDir)
 		s.subDirs.Sort()
 		return nil
 	}
