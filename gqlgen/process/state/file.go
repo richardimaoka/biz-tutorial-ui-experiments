@@ -74,7 +74,14 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	}, nil
 }
 
-func NewFileDeleted(prevFile *object.File, prevDir string) (*File, error) {
+func (f *File) ToFileAdded() (*File, error) {
+	file := *f
+	file.isAdded = true
+	file.isUpdated = true
+	return &file, nil
+}
+
+func FileDeleted(prevFile *object.File, prevDir string) (*File, error) {
 	if prevFile == nil {
 		return nil, fmt.Errorf("failed in NewFileUnChanged, prevFile is nil")
 	}

@@ -79,6 +79,44 @@ func NewDirectory(repo *git.Repository, dirPath string, currentTree *object.Tree
 	}, nil
 }
 
+func (s *Directory) InsertFileDeleted(filePath string, deletedFile *object.File) error {
+	return nil
+}
+
+func (s *Directory) MarkFileUpdated(filePath string, previFile *object.File) error {
+	return nil
+}
+
+func (s *Directory) MarkFileRenamed(filePath string, previFile *object.File) error {
+	return nil
+}
+
+func (s *Directory) MarkFileAdded(filePath string) error {
+	split := strings.Split(filePath, "/")
+	if len(split) == 1 {
+		for i, f := range s.files {
+			if f.fileName == filePath {
+				added, err := f.ToFileAdded()
+				if err != nil {
+					return fmt.Errorf("failed in MarkFileAdded, cannot mark file = %s as added, %s", filePath, err)
+				}
+				s.files[i] = added
+				return nil
+			}
+		}
+	} else {
+		subDirName := split[0]
+		for _, subdir := range s.subDirs {
+			if subdir.dirName == subDirName {
+				newFilePath := strings.Join(split[1:], "/")
+				return subdir.MarkFileAdded(newFilePath)
+			}
+		}
+	}
+
+	return fmt.Errorf("failed in MarkFileAdded, cannot find file = %s", filePath)
+}
+
 func (s *Directory) ToGraphQLFileNode() *model.FileNode {
 	//copy to avoid mutation effects afterwards
 	dirType := model.FileNodeTypeDirectory

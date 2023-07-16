@@ -53,27 +53,13 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 	}
 
 	sc := SourceCode{repo: repo, commit: currentCommitHash, rootDir: rootDir}
-	sc.recursive(repo, "", currentRoot, 0)
+	// sc.recursive(repo, "", currentRoot, 0)
 
 	for _, p := range patch.FilePatches() {
 		from, to := p.Files()
 		if from == nil {
 			//added
-			filePath := to.Path()
-			//sc.addFile(filePath, to)
-			for i, node := range sc.fileNodes {
-				if node.FilePath() != filePath {
-					continue
-				}
-
-				v, ok := node.(*File)
-				if !ok {
-					continue
-				}
-				v.isAdded = true
-				v.isUpdated = true
-				sc.fileNodes[i] = v
-			}
+			sc.rootDir.MarkFileAdded(to.Path())
 		} else if to == nil {
 			//sc.deleteFile(filePath, from)
 			// deleted
@@ -152,14 +138,8 @@ func (s *SourceCode) recursive(repo *git.Repository, currentDir string, tree *ob
 	return nil
 }
 
-func (p *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
-	var resultNodes []*model.FileNode
-
-	for _, node := range p.fileNodes {
-		resultNodes = append(resultNodes, node.ToGraphQLFileNode())
-	}
-
+func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
 	return &model.SourceCode{
-		FileTree: resultNodes,
+		FileTree: s.rootDir.ToGraphQLFileNodeSlice(),
 	}
 }
