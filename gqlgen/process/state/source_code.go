@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
@@ -15,23 +16,28 @@ type SourceCode struct {
 	fileNodes []FileNode
 }
 
-func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr string) (*SourceCode, error) {
-	currentCommitHash := plumbing.NewHash(currentCommitStr)
-	if currentCommitHash.String() != currentCommitStr {
-		return nil, fmt.Errorf("failed in NewSourceCode, current commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitStr, currentCommitHash.String())
-	}
-	prevCommitHash := plumbing.NewHash(prevCommitStr)
-	if prevCommitHash.String() != prevCommitStr {
-		return nil, fmt.Errorf("failed in NewSourceCode, prev commit hash = %s is invalid as its re-calculated hash is mismatched = %s", prevCommitStr, prevCommitHash.String())
+func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
+	commitHash := plumbing.NewHash(hashStr)
+	if commitHash.String() != hashStr {
+		return nil, fmt.Errorf("commit hash = %s mismatched with re-calculated hash = %s", hashStr, commitHash.String())
 	}
 
-	currentCommit, err := repo.CommitObject(currentCommitHash)
+	commit, err := repo.CommitObject(commitHash)
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot get current commit = %s, %s", currentCommitStr, err)
+		return nil, fmt.Errorf("cannot get commit = %s, %s", hashStr, err)
 	}
-	prevCommit, err := repo.CommitObject(prevCommitHash)
+
+	return commit, nil
+}
+
+func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr string) (*SourceCode, error) {
+	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot get prev commit = %s, %s", prevCommitStr, err)
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get current commit, %s", err)
+	}
+	prevCommit, err := getCommit(repo, prevCommitStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get prev commit, %s", err)
 	}
 
 	currentRoot, err := currentCommit.Tree()
@@ -44,7 +50,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: currentCommitHash, rootDir: rootDir}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir}
 
 	patch, err := prevCommit.Patch(currentCommit)
 	if err != nil {
