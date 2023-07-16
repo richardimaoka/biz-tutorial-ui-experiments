@@ -129,16 +129,16 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		for _, subdir := range s.subDirs {
 			if subdir.dirName == subDirName {
 				subDirPath := FilePathInDir(dirPath, subDirName)
-				relativeFilePath := strings.Join(split[1:], "/")
-				return subdir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile)
+				strippedFilePath := strings.Join(split[1:], "/")
+				return subdir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile)
 			}
 		}
 
 		// if no matching subdir found
 		subDirPath := FilePathInDir(dirPath, subDirName)
 		subDir := EmptyDirectory(s.repo, subDirPath)
-		relativeFilePath := strings.Join(split[1:], "/")
-		if err := subDir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile); err != nil {
+		strippedFilePath := strings.Join(split[1:], "/")
+		if err := subDir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile); err != nil {
 			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
 		}
 		s.subDirs = append(s.subDirs, subDir)
@@ -147,22 +147,14 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 	}
 }
 
-func (s *Directory) MarkFileUpdated(filePath string, previFile *object.File) error {
-	return nil
-}
-
-func (s *Directory) MarkFileRenamed(filePath string, previFile *object.File) error {
-	return nil
-}
-
-func (s *Directory) MarkFileAdded(filePath string) error {
-	split := strings.Split(filePath, "/")
+func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File) error {
+	split := strings.Split(relativeFilePath, "/")
 	if len(split) == 1 {
 		for i, f := range s.files {
-			if f.fileName == filePath {
-				added, err := f.ToFileAdded()
+			if f.fileName == relativeFilePath {
+				added, err := f.ToFileUpdated(fromFile)
 				if err != nil {
-					return fmt.Errorf("failed in MarkFileAdded, cannot mark file = %s as added, %s", filePath, err)
+					return fmt.Errorf("failed in MarkFileUpdated, cannot mark file = %s as added, %s", relativeFilePath, err)
 				}
 				s.files[i] = added
 				return nil
@@ -172,13 +164,43 @@ func (s *Directory) MarkFileAdded(filePath string) error {
 		subDirName := split[0]
 		for _, subdir := range s.subDirs {
 			if subdir.dirName == subDirName {
-				newFilePath := strings.Join(split[1:], "/")
-				return subdir.MarkFileAdded(newFilePath)
+				strippedFilePath := strings.Join(split[1:], "/")
+				return subdir.MarkFileUpdated(strippedFilePath, fromFile)
 			}
 		}
 	}
 
-	return fmt.Errorf("failed in MarkFileAdded, cannot find file = %s", filePath)
+	return fmt.Errorf("failed in MarkFileUpdated, cannot find file = %s", fromFile.Path())
+}
+
+func (s *Directory) MarkFileRenamed(filePath string, previFile *object.File) error {
+	return nil
+}
+
+func (s *Directory) MarkFileAdded(relativeFilePath string) error {
+	split := strings.Split(relativeFilePath, "/")
+	if len(split) == 1 {
+		for i, f := range s.files {
+			if f.fileName == relativeFilePath {
+				added, err := f.ToFileAdded()
+				if err != nil {
+					return fmt.Errorf("failed in MarkFileAdded, cannot mark file = %s as added, %s", relativeFilePath, err)
+				}
+				s.files[i] = added
+				return nil
+			}
+		}
+	} else {
+		subDirName := split[0]
+		for _, subdir := range s.subDirs {
+			if subdir.dirName == subDirName {
+				strippedFilePath := strings.Join(split[1:], "/")
+				return subdir.MarkFileAdded(strippedFilePath)
+			}
+		}
+	}
+
+	return fmt.Errorf("failed in MarkFileAdded, cannot find file = %s", relativeFilePath)
 }
 
 func (s *Directory) ToGraphQLFileNode() *model.FileNode {

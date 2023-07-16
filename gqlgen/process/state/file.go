@@ -72,16 +72,9 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	}, nil
 }
 
-func (f *File) ToFileAdded() (*File, error) {
-	file := *f
-	file.isAdded = true
-	file.isUpdated = true
-	return &file, nil
-}
-
 func FileDeleted(deletedFile diff.File) (*File, error) {
 	if deletedFile == nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged, prevFile is nil")
+		return nil, fmt.Errorf("failed in FileDeleted, deletedFile is nil")
 	}
 
 	var filePath = deletedFile.Path()
@@ -110,6 +103,23 @@ func FileDeleted(deletedFile diff.File) (*File, error) {
 		isDeleted: true,
 		isRenamed: false,
 	}, nil
+}
+
+func (f *File) ToFileAdded() (*File, error) {
+	file := *f
+	file.isAdded = true
+	file.isUpdated = true
+	return &file, nil
+}
+
+func (f *File) ToFileUpdated(from diff.File) (*File, error) {
+	if from == nil {
+		return nil, fmt.Errorf("failed in ToFileUpdated, 'from' File is nil")
+	}
+
+	file := *f
+	file.isUpdated = true
+	return &file, nil
 }
 
 func NewFile(prevFile *object.File, currentFile *object.File, currentDir string) (*File, error) {
