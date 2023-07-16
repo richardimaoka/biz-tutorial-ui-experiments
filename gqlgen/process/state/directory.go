@@ -115,10 +115,6 @@ func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree)
 	return dir, nil
 }
 
-func (this *Directory) FilePath() string {
-	return this.dirPath
-}
-
 func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
 	split := strings.Split(relativeFilePath, "/")
 	if len(split) == 1 {

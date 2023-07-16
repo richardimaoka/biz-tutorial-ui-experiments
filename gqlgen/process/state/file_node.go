@@ -6,7 +6,6 @@ import (
 
 type FileNode interface {
 	ToGraphQLFileNode() *model.FileNode
-	FilePath() string
 }
 
 func FilePathInDir(parentDir, name string) string {
