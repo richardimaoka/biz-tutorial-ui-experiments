@@ -14,6 +14,7 @@ import (
 type SourceCode struct {
 	repo      *git.Repository
 	commit    plumbing.Hash
+	rootDir   *Directory
 	fileNodes []FileNode
 }
 
@@ -41,13 +42,18 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
 	}
 
+	rootDir, err := NewDirectory(repo, "", currentRoot, true)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
+	}
+
 	patch, err := prevCommit.Patch(currentCommit)
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommitStr, currentCommitStr, err)
 	}
 
-	sc := SourceCode{repo: repo, commit: currentCommitHash}
-	sc.recursive("", currentRoot, 0)
+	sc := SourceCode{repo: repo, commit: currentCommitHash, rootDir: rootDir}
+	sc.recursive(repo, "", currentRoot, 0)
 
 	for _, p := range patch.FilePatches() {
 		from, to := p.Files()
@@ -102,7 +108,7 @@ func SortEntries(entries []object.TreeEntry) {
 	})
 }
 
-func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int) error {
+func (s *SourceCode) recursive(repo *git.Repository, currentDir string, tree *object.Tree, offset int) error {
 	files, dirs := TreeFilesDirs(tree)
 	SortEntries(files)
 	SortEntries(dirs)
@@ -120,13 +126,13 @@ func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int)
 			return fmt.Errorf("failed in recursive, cannot get tree = %s, %s", d.Name, err)
 		}
 
-		dir, err := NewDirectory(dirPath, subTree)
+		dir, err := NewDirectory(repo, dirPath, subTree, false)
 		if err != nil {
 			return fmt.Errorf("failed in recursive, cannot create directory = %s, %s", dirPath, err)
 		}
 		s.fileNodes = append(s.fileNodes, dir)
 
-		s.recursive(dirPath, subTree, offset+1)
+		s.recursive(repo, dirPath, subTree, offset+1)
 	}
 
 	for _, f := range files {
