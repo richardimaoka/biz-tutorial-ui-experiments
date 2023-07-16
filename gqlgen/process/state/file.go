@@ -11,11 +11,14 @@ import (
 )
 
 type File struct {
-	contents  string
-	filePath  string
-	offset    int
-	fileName  string
-	language  string
+	// intrinsic fields
+	filePath string
+	fileName string
+	offset   int
+	language string
+	contents string
+
+	// flags
 	isUpdated bool
 	isAdded   bool
 	isDeleted bool
@@ -30,24 +33,7 @@ func (files Files) sortSelf() {
 	})
 }
 
-func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
-	if currentFile == nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
-	}
-
-	var filePath string
-	if currentDir != "" {
-		filePath = currentDir + "/" + currentFile.Name
-	} else {
-		filePath = currentFile.Name
-	}
-
-	// read contents here, to avoid error upon GraphQL materialization
-	currentContents, err := currentFile.Contents()
-	if err != nil {
-		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
-	}
-
+func intrinsicFile(contents string, filePath string) *File {
 	split := strings.Split(filePath, "/")
 	fileName := split[len(split)-1]
 
@@ -62,16 +48,53 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	language := fileLanguage(suffix)
 
 	return &File{
-		contents:  currentContents,
-		filePath:  filePath,
-		fileName:  fileName,
-		language:  language,
-		offset:    offset,
-		isAdded:   false,
-		isUpdated: false,
-		isDeleted: false,
-		isRenamed: false,
-	}, nil
+		// intrinsic fields
+		filePath: filePath,
+		fileName: fileName,
+		offset:   offset,
+		language: language,
+		contents: contents,
+		// flags are all false by default = Go's zero value for bool
+	}
+}
+
+func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
+	if currentFile == nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
+	}
+
+	filePath := filePathInDir(currentDir, currentFile.Name)
+
+	// read contents here, to avoid error upon GraphQL materialization
+	currentContents, err := currentFile.Contents()
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+	}
+
+	file := intrinsicFile(currentContents, filePath)
+	// update necessary flags only, as default flags are false
+	file.isAdded = true
+
+	return file, nil
+}
+
+func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
+	if currentFile == nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged, currentFile is nil")
+	}
+
+	filePath := filePathInDir(currentDir, currentFile.Name)
+
+	// read contents here, to avoid error upon GraphQL materialization
+	currentContents, err := currentFile.Contents()
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewFileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+	}
+
+	file := intrinsicFile(currentContents, filePath)
+	// no need to update flags, as unchanged file has all flags false
+
+	return file, nil
 }
 
 func FileDeleted(deletedFile diff.File) (*File, error) {
@@ -81,34 +104,17 @@ func FileDeleted(deletedFile diff.File) (*File, error) {
 
 	var filePath = deletedFile.Path()
 
-	split := strings.Split(filePath, "/")
-	fileName := split[len(split)-1]
+	file := intrinsicFile("", filePath)
+	// update necessary flags only, as default flags are false
+	file.isDeleted = true
 
-	offset := len(split) - 1
-
-	dotSplit := strings.Split(fileName, ".")
-	var suffix string
-	if len(dotSplit) > 1 {
-		//e.g. fileName = 'some.interesting.name.json', suffix = 'json'
-		suffix = dotSplit[len(dotSplit)-1]
-	}
-	language := fileLanguage(suffix)
-
-	return &File{
-		contents:  "",
-		filePath:  filePath,
-		fileName:  fileName,
-		language:  language,
-		offset:    offset,
-		isAdded:   false,
-		isUpdated: false,
-		isDeleted: true,
-		isRenamed: false,
-	}, nil
+	return file, nil
 }
 
 func (f *File) ToFileAdded() (*File, error) {
+	// copy to avoid mutation effects afterwards
 	file := *f
+	// update necessary flags only, as default flags are false
 	file.isAdded = true
 	file.isUpdated = true
 	return &file, nil
@@ -119,7 +125,9 @@ func (f *File) ToFileUpdated(from diff.File) (*File, error) {
 		return nil, fmt.Errorf("failed in ToFileUpdated, 'from' File is nil")
 	}
 
+	// copy to avoid mutation effects afterwards
 	file := *f
+	// update necessary flags only, as default flags are false
 	file.isUpdated = true
 	return &file, nil
 }
