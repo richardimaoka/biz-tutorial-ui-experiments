@@ -7,11 +7,3 @@ import (
 type FileNode interface {
 	ToGraphQLFileNode() *model.FileNode
 }
-
-func FilePathInDir(parentDir, name string) string {
-	if parentDir != "" {
-		return parentDir + "/" + name
-	} else {
-		return name
-	}
-}

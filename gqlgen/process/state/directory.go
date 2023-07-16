@@ -31,6 +31,14 @@ func (dirs Directories) sortSelf() {
 	})
 }
 
+func filePathInDir(parentDir, name string) string {
+	if parentDir != "" {
+		return parentDir + "/" + name
+	} else {
+		return name
+	}
+}
+
 func treeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
 	var files []object.TreeEntry
 	var dirs []object.TreeEntry
@@ -61,7 +69,7 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree) erro
 	sortEntries(subDirEntries)
 
 	for _, d := range subDirEntries {
-		subDirPath := FilePathInDir(dirPath, d.Name)
+		subDirPath := filePathInDir(dirPath, d.Name)
 		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
 		if err != nil {
 			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
@@ -130,14 +138,14 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		subDirName := split[0]
 		for _, subdir := range s.subDirs {
 			if subdir.dirName == subDirName {
-				subDirPath := FilePathInDir(dirPath, subDirName)
+				subDirPath := filePathInDir(dirPath, subDirName)
 				strippedFilePath := strings.Join(split[1:], "/")
 				return subdir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile)
 			}
 		}
 
 		// if no matching subdir found
-		subDirPath := FilePathInDir(dirPath, subDirName)
+		subDirPath := filePathInDir(dirPath, subDirName)
 		subDir := EmptyDirectory(s.repo, subDirPath)
 		strippedFilePath := strings.Join(split[1:], "/")
 		if err := subDir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile); err != nil {
