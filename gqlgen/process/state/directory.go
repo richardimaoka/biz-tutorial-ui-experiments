@@ -95,3 +95,22 @@ func (s *Directory) ToGraphQLFileNode() *model.FileNode {
 		IsUpdated: &falseValue, //git doesn't track standalone dir, so changes are always in contained files
 	}
 }
+
+func (s *Directory) ToGraphQLFileNodeSlice() []*model.FileNode {
+	var fileNodes []*model.FileNode
+
+	if s.dirPath != "" {
+		fileNodes = append(fileNodes, s.ToGraphQLFileNode())
+	}
+
+	for _, subdir := range s.subDirs {
+		subFileNodes := subdir.ToGraphQLFileNodeSlice()
+		fileNodes = append(fileNodes, subFileNodes...)
+	}
+
+	for _, file := range s.files {
+		fileNodes = append(fileNodes, file.ToGraphQLFileNode())
+	}
+
+	return fileNodes
+}
