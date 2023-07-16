@@ -17,6 +17,10 @@ type Directory struct {
 	isDeleted bool
 }
 
+func (d *Directory) FilePath() string {
+	return d.dirPath
+}
+
 func NewDirectory(dirPath string, prevTree *object.Tree, currentTree *object.Tree) (*Directory, error) {
 	if currentTree == nil && prevTree == nil {
 		return nil, fmt.Errorf("failed in NewDirectory, currentTree and prevTree are both nil")

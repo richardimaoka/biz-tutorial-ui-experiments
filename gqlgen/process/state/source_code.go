@@ -17,24 +17,64 @@ type SourceCode struct {
 	fileNodes []FileNode
 }
 
-func NewSourceCode(repo *git.Repository, currentCommitHash string) (*SourceCode, error) {
-	commitHash := plumbing.NewHash(currentCommitHash)
-	if commitHash.String() != currentCommitHash {
-		return nil, fmt.Errorf("failed in NewSourceCode, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitHash, commitHash.String())
+func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr string) (*SourceCode, error) {
+	currentCommitHash := plumbing.NewHash(currentCommitStr)
+	if currentCommitHash.String() != currentCommitStr {
+		return nil, fmt.Errorf("failed in NewSourceCode, current commit hash = %s is invalid as its re-calculated hash is mismatched = %s", currentCommitStr, currentCommitHash.String())
+	}
+	prevCommitHash := plumbing.NewHash(prevCommitStr)
+	if prevCommitHash.String() != prevCommitStr {
+		return nil, fmt.Errorf("failed in NewSourceCode, prev commit hash = %s is invalid as its re-calculated hash is mismatched = %s", prevCommitStr, prevCommitHash.String())
 	}
 
-	currentCommit, err := repo.CommitObject(commitHash)
+	currentCommit, err := repo.CommitObject(currentCommitHash)
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot get commit = %s, %s", currentCommitHash, err)
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get current commit = %s, %s", currentCommitStr, err)
+	}
+	prevCommit, err := repo.CommitObject(prevCommitHash)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get prev commit = %s, %s", prevCommitStr, err)
 	}
 
 	currentRoot, err := currentCommit.Tree()
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitHash, err)
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
 	}
 
-	sc := SourceCode{repo: repo, commit: commitHash}
+	patch, err := prevCommit.Patch(currentCommit)
+	if err != nil {
+		return nil, fmt.Errorf("failed in NewSourceCode, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommitStr, currentCommitStr, err)
+	}
+
+	sc := SourceCode{repo: repo, commit: currentCommitHash}
 	sc.recursive("", currentRoot, 0)
+
+	for _, p := range patch.FilePatches() {
+		from, to := p.Files()
+		if from == nil {
+			//added
+			filePath := to.Path()
+			for i, node := range sc.fileNodes {
+				if node.FilePath() != filePath {
+					continue
+				}
+
+				v, ok := node.(*File)
+				if !ok {
+					continue
+				}
+				v.isAdded = true
+				v.isUpdated = true
+				sc.fileNodes[i] = v
+			}
+		} else if to == nil {
+			// deleted
+		} else if from.Path() != to.Path() {
+			// renamed
+		} else {
+			// updated
+		}
+	}
 
 	return &sc, nil
 }
@@ -65,7 +105,13 @@ func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int)
 	SortEntries(dirs)
 
 	for _, d := range dirs {
-		dirPath := currentDir + "/" + d.Name
+		var dirPath string
+		if currentDir == "" {
+			dirPath = d.Name
+		} else {
+			dirPath = currentDir + "/" + d.Name
+		}
+
 		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
 		if err != nil {
 			return fmt.Errorf("failed in recursive, cannot get tree = %s, %s", d.Name, err)
@@ -86,7 +132,7 @@ func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int)
 			return fmt.Errorf("failed in recursive, cannot get file = %s in dir = %s, %s", f.Name, currentDir, err)
 		}
 
-		file, err := NewFile(nil, fileObj, currentDir)
+		file, err := NewFileUnChanged(fileObj, currentDir)
 		if err != nil {
 			return fmt.Errorf("failed in recursive, cannot create file = %s in dir = %s, %s", f.Name, currentDir, err)
 		}

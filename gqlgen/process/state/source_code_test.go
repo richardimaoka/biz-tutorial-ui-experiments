@@ -152,15 +152,17 @@ func TestSourceCodePatterns(t *testing.T) {
 	}
 
 	cases := []struct {
+		prevCommit    string
 		currentCommit string
 		goldenFile    string
 	}{{
+		"55c98498a85f4503e3922586ceeb86ab5100e91f",
 		"8adac375628219e020d4b5957ff24f45954cbd3f",
 		"testdata/source_code_golden.json",
 	}}
 
 	for _, c := range cases {
-		sc, err := state.NewSourceCode(repo, c.currentCommit)
+		sc, err := state.NewSourceCode(repo, c.currentCommit, c.prevCommit)
 		if err != nil {
 			t.Fatal(err)
 		}
