@@ -15,15 +15,17 @@ type Directory struct {
 	isUpdated bool
 	isAdded   bool
 	isDeleted bool
+	files     []*File
+	dirs      []*Directory
 }
 
 func (d *Directory) FilePath() string {
 	return d.dirPath
 }
 
-func NewDirectory(dirPath string, prevTree *object.Tree, currentTree *object.Tree) (*Directory, error) {
-	if currentTree == nil && prevTree == nil {
-		return nil, fmt.Errorf("failed in NewDirectory, currentTree and prevTree are both nil")
+func NewDirectory(dirPath string, currentTree *object.Tree) (*Directory, error) {
+	if currentTree == nil {
+		return nil, fmt.Errorf("failed in NewDirectory, currentTree and is nil")
 	}
 
 	split := strings.Split(dirPath, "/")

@@ -120,7 +120,7 @@ func (s *SourceCode) recursive(currentDir string, tree *object.Tree, offset int)
 			return fmt.Errorf("failed in recursive, cannot get tree = %s, %s", d.Name, err)
 		}
 
-		dir, err := NewDirectory(dirPath, nil, subTree)
+		dir, err := NewDirectory(dirPath, subTree)
 		if err != nil {
 			return fmt.Errorf("failed in recursive, cannot create directory = %s, %s", dirPath, err)
 		}
