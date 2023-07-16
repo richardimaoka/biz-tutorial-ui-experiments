@@ -63,6 +63,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 			//sc.renameFile(filePath, from)
 			// renamed
 		} else {
+
 			// updated
 		}
 	}

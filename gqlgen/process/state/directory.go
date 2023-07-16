@@ -128,24 +128,14 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 		subDirName := split[0]
 		for _, subdir := range s.subDirs {
 			if subdir.dirName == subDirName {
-				var newDirPath string
-				if dirPath == "" {
-					newDirPath = subDirName
-				} else {
-					newDirPath = dirPath + "/" + subDirName
-				}
-				newFilePath := strings.Join(split[1:], "/")
-				return subdir.InsertFileDeleted(newDirPath, newFilePath, deletedFile)
+				subDirPath := FilePathInDir(dirPath, subDirName)
+				relativeFilePath := strings.Join(split[1:], "/")
+				return subdir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile)
 			}
 		}
 
 		// if no matching subdir found
-		var subDirPath string
-		if dirPath == "" {
-			subDirPath = subDirName
-		} else {
-			subDirPath = dirPath + "/" + subDirName
-		}
+		subDirPath := FilePathInDir(dirPath, subDirName)
 		subDir := EmptyDirectory(s.repo, subDirPath)
 		relativeFilePath := strings.Join(split[1:], "/")
 		if err := subDir.InsertFileDeleted(subDirPath, relativeFilePath, deletedFile); err != nil {
