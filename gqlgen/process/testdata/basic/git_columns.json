@@ -1,0 +1,72 @@
+[
+  {
+    "seqNo": 31,
+    "column": 0,
+    "_comment": "npm init -y",
+    "commit": "80853dd7ab95987fef9255cbfa471cc645adefa5",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 34,
+    "column": 0,
+    "_comment": "echo \"node_modules\" > .gitignore",
+    "commit": "e02fc71d2481ed3a507926a43244e56a2d7c14c2",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 37,
+    "column": 0,
+    "_comment": "npm install live-server",
+    "commit": "6c88860799e173a271dd916791f4ec38c6c20abd",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 40,
+    "column": 0,
+    "_comment": "add start in npm scripts",
+    "commit": "4a2ec0ce7ec9fd4a8bafda822ced46b995824570",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 42,
+    "column": 0,
+    "_comment": "add index.html",
+    "commit": "11a919534f7864d6bf60f6075f72b0a4a38e83c2",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 46,
+    "column": 0,
+    "_comment": "Load the client library",
+    "commit": "a01ab9d78134ebcd4e0b22d6dfd12caae40011fa",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 47,
+    "column": 0,
+    "_comment": "place JavaScript code",
+    "commit": "7ed13779c071637cb35d53cdf9c823a7e568ee65",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 48,
+    "column": 0,
+    "_comment": "replace client ID with the real one",
+    "commit": "a60b11b2d038bb47daf305ef89d2d19f1e1cbc90",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 49,
+    "column": 0,
+    "_comment": "add handler func",
+    "commit": "5d0cc4b461623706507b527366beece48fe5e68c",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  },
+  {
+    "seqNo": 50,
+    "column": 0,
+    "_comment": "sign-in button",
+    "commit": "bb2ded3cc7a5851045c2f9573df34a562f9b2997",
+    "repoUrl": "https://github.com/richardimaoka/sign-in-with-google-experiment.git"
+  }
+]

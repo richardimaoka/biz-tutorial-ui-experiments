@@ -8,20 +8,36 @@ import (
 )
 
 func TestReadStepEntries(t *testing.T) {
-	effects, err := process.ReadStepEntries("testdata/basic")
-	if err != nil {
-		t.Fatalf("ReadStepEntries failed to read file, %s", err)
+	cases := []struct {
+		dirPath string
+	}{
+		{"testdata/basic"},
 	}
 
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/golden/basic/step_entries_golden.json", effects)
+	for _, c := range cases {
+		effects, err := process.ReadStepEntries(c.dirPath)
+		if err != nil {
+			t.Fatalf("ReadStepEntries failed to read file, %s", err)
+		}
+
+		internal.CompareWitGoldenFile(t, *updateFlag, c.dirPath+"/golden/step_entries_golden.json", effects)
+	}
 }
 
 func TestToGraphQLPages(t *testing.T) {
-	effects, err := process.ReadStepEntries("testdata/basic")
-	if err != nil {
-		t.Fatalf("ReadStepEntries failed to read file, %s", err)
+	cases := []struct {
+		dirPath string
+	}{
+		{"testdata/basic"},
 	}
 
-	pages := effects.ToGraphQLPages()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/basic/golden/pages_golden.json", pages)
+	for _, c := range cases {
+		effects, err := process.ReadStepEntries(c.dirPath)
+		if err != nil {
+			t.Fatalf("ReadStepEntries failed to read file, %s", err)
+		}
+
+		pages := effects.ToGraphQLPages()
+		internal.CompareWitGoldenFile(t, *updateFlag, c.dirPath+"/golden/pages_golden.json", pages)
+	}
 }

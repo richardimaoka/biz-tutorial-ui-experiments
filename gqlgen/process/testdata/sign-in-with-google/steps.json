@@ -1,0 +1,162 @@
+[
+  {
+    "seqNo": 31,
+    "step": "99292bd2-1e73-4ae4-935e-ce48ff69a20f",
+    "comment": "npm init -y",
+    "comment2": "80853dd7ab95987fef9255cbfa471cc645adefa5",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 32,
+    "step": "edbb0979-2432-49c8-b676-43dda178f4b2",
+    "comment": "show IDE - modal: npmを初期化",
+    "comment2": "まだすっからかんだから見せなくていい？",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 33,
+    "step": "d1127445-170b-4d38-9e2f-6c0bf18ddd0c",
+    "comment": "show terminal",
+    "comment2": "auto next",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 34,
+    "step": "78468841-a936-49c1-ab92-77e9cc60d604",
+    "comment": "echo \"node_modules\" > .gitignore",
+    "comment2": "e02fc71d2481ed3a507926a43244e56a2d7c14c2",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 35,
+    "step": "9e952c0c-fe32-48ed-917b-ba835cc56e93",
+    "comment": "show IDE - modal: .gitignoreにnode_moduleを追加しました",
+    "comment2": "",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 36,
+    "step": "d41a2666-ffd4-4329-b3ad-9bce5da2fd69",
+    "comment": "show terminal",
+    "comment2": "auto next",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 37,
+    "step": "3fd8d387-2929-44f0-9bcc-f7d57d1f949e",
+    "comment": "npm install live-server",
+    "comment2": "6c88860799e173a271dd916791f4ec38c6c20abd",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 38,
+    "step": "e76e2360-0ae7-406f-9652-04d86bbacc3a",
+    "comment": "show IDE",
+    "comment2": "",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 39,
+    "step": "ce76726c-826b-4303-a70c-0165cc6be47e",
+    "comment": "show terminal",
+    "comment2": "auto next",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 40,
+    "step": "a0b3ff24-030d-4735-a5aa-e3c5c542e341",
+    "comment": "add start in npm scripts",
+    "comment2": "4a2ec0ce7ec9fd4a8bafda822ced46b995824570",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 41,
+    "step": "6d76d697-9103-400d-b765-8e8c6350722b",
+    "comment": "show IDE",
+    "comment2": "",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 42,
+    "step": "d201905f-646f-4006-bd1c-12b90f0294ce",
+    "comment": "modal: add index.html",
+    "comment2": "11a919534f7864d6bf60f6075f72b0a4a38e83c2",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 43,
+    "step": "593f316c-4024-4cfb-8277-91b580212775",
+    "comment": "show terminal",
+    "comment2": "auto next",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 44,
+    "step": "6fc864b2-cdac-4a4e-9fdf-8e23cff105bd",
+    "comment": "npm run start",
+    "comment2": "",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 45,
+    "step": "a062047f-0995-4ae0-90d5-838152e5d6f7",
+    "comment": "show browser",
+    "comment2": "",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 46,
+    "step": "08150d4e-ddad-46ca-9680-0a34b2f6c1ca",
+    "comment": "Load the client library",
+    "comment2": "a01ab9d78134ebcd4e0b22d6dfd12caae40011fa",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 47,
+    "step": "92e7ef68-9c1c-4845-ab41-1e407db7ede4",
+    "comment": "place JavaScript code",
+    "comment2": "7ed13779c071637cb35d53cdf9c823a7e568ee65",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 48,
+    "step": "283ebd52-2578-43f5-bb87-59761c39a3d4",
+    "comment": "replace client ID with the real one",
+    "comment2": "a60b11b2d038bb47daf305ef89d2d19f1e1cbc90",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 49,
+    "step": "431c1a25-30e1-4514-8efa-cdcc7dfa9f98",
+    "comment": "add handler func",
+    "comment2": "5d0cc4b461623706507b527366beece48fe5e68c",
+    "nColumns": "",
+    "3digits": ""
+  },
+  {
+    "seqNo": 50,
+    "step": "4d2e0b2c-eaf4-43c8-9b5a-661f7f4efa62",
+    "comment": "sign-in button",
+    "comment2": "bb2ded3cc7a5851045c2f9573df34a562f9b2997",
+    "nColumns": "",
+    "3digits": ""
+  }
+]
