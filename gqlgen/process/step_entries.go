@@ -55,7 +55,7 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
 
-			if e.GitColumn != nil && e.MarkdownColumn.Column == i {
+			if e.GitColumn != nil && e.GitColumn.Column == i {
 				if srcColState == nil {
 					var err error
 					srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step)

@@ -1,0 +1,48 @@
+{
+  "step": "08150d4e-ddad-46ca-9680-0a34b2f6c1ca",
+  "nextStep": "92e7ef68-9c1c-4845-ab41-1e407db7ede4",
+  "prevStep": "a062047f-0995-4ae0-90d5-838152e5d6f7",
+  "columns": [
+    {
+      "index": null,
+      "column": {
+        "_placeholder": null,
+        "sourceCode": {
+          "step": "",
+          "defaultOpenFile": null,
+          "fileTree": [
+            {
+              "nodeType": "FILE",
+              "name": ".gitignore",
+              "filePath": ".gitignore",
+              "offset": 0,
+              "isUpdated": false
+            },
+            {
+              "nodeType": "FILE",
+              "name": "index.html",
+              "filePath": "index.html",
+              "offset": 0,
+              "isUpdated": true
+            },
+            {
+              "nodeType": "FILE",
+              "name": "package-lock.json",
+              "filePath": "package-lock.json",
+              "offset": 0,
+              "isUpdated": false
+            },
+            {
+              "nodeType": "FILE",
+              "name": "package.json",
+              "filePath": "package.json",
+              "offset": 0,
+              "isUpdated": false
+            }
+          ],
+          "fileContents": null
+        }
+      }
+    }
+  ]
+}

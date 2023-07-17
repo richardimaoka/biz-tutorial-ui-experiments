@@ -1,6 +1,7 @@
 package process_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
@@ -28,7 +29,8 @@ func TestToGraphQLPages(t *testing.T) {
 	cases := []struct {
 		dirPath string
 	}{
-		{"testdata/basic"},
+		// {"testdata/basic"},
+		{"testdata/sign-in-with-google"},
 	}
 
 	for _, c := range cases {
@@ -38,6 +40,9 @@ func TestToGraphQLPages(t *testing.T) {
 		}
 
 		pages := effects.ToGraphQLPages()
-		internal.CompareWitGoldenFile(t, *updateFlag, c.dirPath+"/golden/pages_golden.json", pages)
+		for i, p := range pages {
+			goldenFile := fmt.Sprintf("%s/golden/pages_golden%03d.json", c.dirPath, i)
+			internal.CompareWitGoldenFile(t, *updateFlag, goldenFile, p)
+		}
 	}
 }
