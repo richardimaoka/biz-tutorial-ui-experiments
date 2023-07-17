@@ -7,9 +7,10 @@ import (
 )
 
 type GitColumn struct {
-	SeqNo  int    `json:"seqNo"`
-	Column int    `json:"column"`
-	Commit string `json:"commit"`
+	SeqNo   int    `json:"seqNo"`
+	Column  int    `json:"column"`
+	Commit  string `json:"commit"`
+	RepoUrl string `json:"repoUrl"`
 }
 
 type GitColumns []GitColumn

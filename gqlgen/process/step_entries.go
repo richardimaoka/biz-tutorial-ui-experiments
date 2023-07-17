@@ -7,6 +7,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/read"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 type StepEntry struct {
@@ -28,18 +29,12 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 	// var imgDescColState *state.ImageDescriptionColumn
 	// var markdownColState *state.MarkdownColumn
 	// var terminalColState *state.TerminalColumn
-	// var srcColState *state.SourceCodeColumn
+	var srcColState *state.SourceCodeColumn
 
 	var pages []model.Page
 	for _, e := range entries {
-		// copy to avoid mutation effects afterwards
-		step := internal.StringRef(e.Step)
-		prevStep := internal.StringRef(e.PrevStep)
-		nextStep := internal.StringRef(e.NextStep)
-
 		var colWrappers []*model.ColumnWrapper
 		for i := 0; i < e.NColumns; i++ {
-
 			if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 				// if bgColState == nil {
 				// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
@@ -60,17 +55,28 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
 
-			// if srcColState == nil {
-			// 	srcColState = NewSourceCodeColumn(..., ..., ..., ..., ...)
-			// } else {
-			// 	if e.SourceCodeColumn != nil && e.SourceCodeColumn.Column == i {
-			// 		// if srcColState == nil
-			// 		// if srcColState
-			// 		column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
-			// 		colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 	}
-			// }
+			if e.GitColumn != nil && e.MarkdownColumn.Column == i {
+				if srcColState == nil {
+					var err error
+					srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step)
+					if err != nil {
+						// return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
+					}
+				} else {
+					err := srcColState.Transition(e.Step, e.GitColumn.Commit)
+					if err != nil {
+						// return nil, fmt.Errorf("ToGraphQLPages failed to transition source code, %s", err)
+					}
+				}
+				column := srcColState.ToGraphQLSourceCodeColumn()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
 		}
+
+		// copy to avoid mutation effects afterwards
+		step := internal.StringRef(e.Step)
+		prevStep := internal.StringRef(e.PrevStep)
+		nextStep := internal.StringRef(e.NextStep)
 
 		page := model.Page{
 			Step:     step,
