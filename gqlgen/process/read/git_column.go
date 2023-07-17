@@ -20,6 +20,9 @@ func ReadGitColumns(filePath string) (GitColumns, error) {
 	var entries GitColumns
 
 	jsonBytes, err := os.ReadFile(filePath)
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, fmt.Errorf("%s failed to read file = %s, %v", funcName, filePath, err)
 	}
