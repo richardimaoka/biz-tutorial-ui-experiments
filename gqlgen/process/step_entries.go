@@ -68,6 +68,10 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 						// return nil, fmt.Errorf("ToGraphQLPages failed to transition source code, %s", err)
 					}
 				}
+			}
+
+			// once srcColState is initialized, git column persists
+			if srcColState != nil {
 				column := srcColState.ToGraphQLSourceCodeColumn()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}

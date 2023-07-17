@@ -2,5 +2,26 @@
   "step": "d1127445-170b-4d38-9e2f-6c0bf18ddd0c",
   "nextStep": "78468841-a936-49c1-ab92-77e9cc60d604",
   "prevStep": "edbb0979-2432-49c8-b676-43dda178f4b2",
-  "columns": null
+  "columns": [
+    {
+      "index": null,
+      "column": {
+        "_placeholder": null,
+        "sourceCode": {
+          "step": "",
+          "defaultOpenFile": null,
+          "fileTree": [
+            {
+              "nodeType": "FILE",
+              "name": "package.json",
+              "filePath": "package.json",
+              "offset": 0,
+              "isUpdated": true
+            }
+          ],
+          "fileContents": null
+        }
+      }
+    }
+  ]
 }

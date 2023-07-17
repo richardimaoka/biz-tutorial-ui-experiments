@@ -2,5 +2,40 @@
   "step": "e76e2360-0ae7-406f-9652-04d86bbacc3a",
   "nextStep": "ce76726c-826b-4303-a70c-0165cc6be47e",
   "prevStep": "3fd8d387-2929-44f0-9bcc-f7d57d1f949e",
-  "columns": null
+  "columns": [
+    {
+      "index": null,
+      "column": {
+        "_placeholder": null,
+        "sourceCode": {
+          "step": "",
+          "defaultOpenFile": null,
+          "fileTree": [
+            {
+              "nodeType": "FILE",
+              "name": ".gitignore",
+              "filePath": ".gitignore",
+              "offset": 0,
+              "isUpdated": false
+            },
+            {
+              "nodeType": "FILE",
+              "name": "package-lock.json",
+              "filePath": "package-lock.json",
+              "offset": 0,
+              "isUpdated": true
+            },
+            {
+              "nodeType": "FILE",
+              "name": "package.json",
+              "filePath": "package.json",
+              "offset": 0,
+              "isUpdated": true
+            }
+          ],
+          "fileContents": null
+        }
+      }
+    }
+  ]
 }
