@@ -17,10 +17,14 @@ const documents = {
     types.ColumnWrapperFragmentFragmentDoc,
   "\n  fragment ImageDescriptionColumnFragment on ImageDescriptionColumn {\n    description {\n      ...MarkdownFragment\n    }\n    image {\n      ...ImageCenteredFragment\n    }\n    order\n  }\n":
     types.ImageDescriptionColumnFragmentFragmentDoc,
+  "\n  fragment BackgroundImageColumnFragment on BackgroundImageColumn {\n    width\n    height\n    path\n    modal {\n      text\n      ...ModalFrameFragment\n    }\n  }\n":
+    types.BackgroundImageColumnFragmentFragmentDoc,
   "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n":
     types.ImageCenteredFragmentFragmentDoc,
   "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n":
     types.MarkdownFragmentFragmentDoc,
+  "\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n":
+    types.ModalFrameFragmentFragmentDoc,
   "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
   "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
@@ -81,6 +85,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment BackgroundImageColumnFragment on BackgroundImageColumn {\n    width\n    height\n    path\n    modal {\n      text\n      ...ModalFrameFragment\n    }\n  }\n",
+): (typeof documents)["\n  fragment BackgroundImageColumnFragment on BackgroundImageColumn {\n    width\n    height\n    path\n    modal {\n      text\n      ...ModalFrameFragment\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n",
 ): (typeof documents)["\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n"];
 /**
@@ -89,6 +99,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n",
 ): (typeof documents)["\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n",
+): (typeof documents)["\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

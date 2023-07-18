@@ -242,6 +242,20 @@ export type ImageDescriptionColumnFragmentFragment = {
     | null;
 } & { " $fragmentName"?: "ImageDescriptionColumnFragmentFragment" };
 
+export type BackgroundImageColumnFragmentFragment = {
+  __typename: "BackgroundImageColumn";
+  width?: number | null;
+  height?: number | null;
+  path?: string | null;
+  modal?:
+    | ({ __typename: "Modal"; text?: string | null } & {
+        " $fragmentRefs"?: {
+          ModalFrameFragmentFragment: ModalFrameFragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "BackgroundImageColumnFragmentFragment" };
+
 export type ImageCenteredFragmentFragment = {
   __typename: "ImageCentered";
   width?: number | null;
@@ -254,6 +268,12 @@ export type MarkdownFragmentFragment = {
   contents?: string | null;
   alignment?: MarkdownAlignment | null;
 } & { " $fragmentName"?: "MarkdownFragmentFragment" };
+
+export type ModalFrameFragmentFragment = {
+  __typename: "Modal";
+  text?: string | null;
+  position?: ModalPosition | null;
+} & { " $fragmentName"?: "ModalFrameFragmentFragment" };
 
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
@@ -537,6 +557,62 @@ export const ColumnWrapperFragmentFragmentDoc = {
     ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
+export const ModalFrameFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ModalFrameFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ModalFrameFragmentFragment, unknown>;
+export const BackgroundImageColumnFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BackgroundImageColumnFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BackgroundImageColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ModalFrameFragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...ModalFrameFragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<BackgroundImageColumnFragmentFragment, unknown>;
 export const FileNodeIcon_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
