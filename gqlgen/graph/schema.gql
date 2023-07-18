@@ -60,11 +60,18 @@ enum ImageDescriptionOrder {
   DESCRIPTION_THEN_IMAGE
 }
 
+enum ImageDescriptionColumnPosition {
+  TOP
+  CENTER
+  BOTTOM
+}
+
 type ImageDescriptionColumn implements Column {
   _placeholder: String
   description: Markdown
   image: ImageCentered
   order: ImageDescriptionOrder
+  position: ImageDescriptionColumnPosition
 }
 
 type BackgroundImageColumn implements Column {
@@ -76,9 +83,16 @@ type BackgroundImageColumn implements Column {
   modal: Modal
 }
 
+enum MarkdownColumnPosition {
+  TOP
+  CENTER
+  BOTTOM
+}
+
 type MarkdownColumn implements Column {
   _placeholder: String
   description: Markdown
+  position: MarkdownColumnPosition
 }
 
 type SourceCodeColumn implements Column {

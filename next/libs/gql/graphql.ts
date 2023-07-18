@@ -71,7 +71,10 @@ export type ImageDescriptionColumn = Column & {
   description?: Maybe<Markdown>;
   image?: Maybe<ImageCentered>;
   order?: Maybe<ImageDescriptionOrder>;
+  position?: Maybe<ImageDescriptionColumnPosition>;
 };
+
+export type ImageDescriptionColumnPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type ImageDescriptionOrder =
   | "DESCRIPTION_THEN_IMAGE"
@@ -90,7 +93,10 @@ export type MarkdownColumn = Column & {
   __typename: "MarkdownColumn";
   _placeholder?: Maybe<Scalars["String"]>;
   description?: Maybe<Markdown>;
+  position?: Maybe<MarkdownColumnPosition>;
 };
+
+export type MarkdownColumnPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type MarkdownOld = {
   __typename: "MarkdownOld";
