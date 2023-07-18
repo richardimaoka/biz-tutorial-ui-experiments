@@ -139,6 +139,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Page      func(childComplexity int, tutorial string, step *string) int
 		PageState func(childComplexity int, step *string) int
 	}
 
@@ -176,6 +177,7 @@ type ComplexityRoot struct {
 
 type QueryResolver interface {
 	PageState(ctx context.Context, step *string) (*model.PageState, error)
+	Page(ctx context.Context, tutorial string, step *string) (*model.Page, error)
 }
 type SourceCodeResolver interface {
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
@@ -560,6 +562,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PageState.Terminals(childComplexity), true
 
+	case "Query.page":
+		if e.complexity.Query.Page == nil {
+			break
+		}
+
+		args, err := ec.field_Query_page_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Page(childComplexity, args["tutorial"].(string), args["step"].(*string)), true
+
 	case "Query.pageState":
 		if e.complexity.Query.PageState == nil {
 			break
@@ -766,6 +780,30 @@ func (ec *executionContext) field_Query_pageState_args(ctx context.Context, rawA
 		}
 	}
 	args["step"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_page_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["tutorial"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tutorial"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tutorial"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["step"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("step"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["step"] = arg1
 	return args, nil
 }
 
@@ -3104,6 +3142,68 @@ func (ec *executionContext) fieldContext_Query_pageState(ctx context.Context, fi
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_pageState_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_page(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_page(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Page(rctx, fc.Args["tutorial"].(string), fc.Args["step"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Page)
+	fc.Result = res
+	return ec.marshalOPage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "step":
+				return ec.fieldContext_Page_step(ctx, field)
+			case "nextStep":
+				return ec.fieldContext_Page_nextStep(ctx, field)
+			case "prevStep":
+				return ec.fieldContext_Page_prevStep(ctx, field)
+			case "columns":
+				return ec.fieldContext_Page_columns(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Page", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_page_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -6203,6 +6303,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "page":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_page(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "__type":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -7315,6 +7435,13 @@ func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._OpenFile(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage(ctx context.Context, sel ast.SelectionSet, v *model.Page) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Page(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOPageState2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageState(ctx context.Context, sel ast.SelectionSet, v *model.PageState) graphql.Marshaler {

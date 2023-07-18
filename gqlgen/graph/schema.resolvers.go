@@ -14,11 +14,11 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-var dirName = "data/apollo-client-getting-started/state"
-var initialStep = "_initial"
-
 // PageState is the resolver for the pageState field.
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
+	var dirName = "data/apollo-client-getting-started/state"
+	var initialStep = "_initial"
+
 	var filename string
 	if step == nil {
 		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
@@ -42,8 +42,39 @@ func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.Pag
 	return &pageState, nil
 }
 
+// Page is the resolver for the page field.
+func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.Page, error) {
+	var dirName = fmt.Sprintf("data/%s/state", tutorial)
+	var initialStep = "_initial"
+
+	var filename string
+	if step == nil {
+		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
+	} else {
+		filename = fmt.Sprintf(dirName+"/%s.json", *step)
+	}
+
+	log.Printf("reading data from %s", filename)
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var page model.Page
+	err = json.Unmarshal(data, &page)
+	if err != nil {
+		log.Printf("failed to read data from %s, %s", filename, err)
+		return nil, fmt.Errorf("internal server error %s", *step)
+	}
+
+	return &page, nil
+}
+
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
+	var dirName = "data/apollo-client-getting-started/state"
+	var initialStep = "_initial"
+
 	var filename string
 	if obj.Step == "" {
 		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
