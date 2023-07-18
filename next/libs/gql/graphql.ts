@@ -200,10 +200,50 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]>;
 };
 
-export type MarkdownPane_FragmentFragment = {
+export type ColumnWrapperFragmentFragment = {
+  __typename: "ColumnWrapper";
+  column?:
+    | { __typename: "BackgroundImageColumn" }
+    | ({ __typename: "ImageDescriptionColumn" } & {
+        " $fragmentRefs"?: {
+          ImageDescriptionColumnFragmentFragment: ImageDescriptionColumnFragmentFragment;
+        };
+      })
+    | { __typename: "MarkdownColumn" }
+    | { __typename: "SourceCodeColumn" }
+    | null;
+} & { " $fragmentName"?: "ColumnWrapperFragmentFragment" };
+
+export type ImageDescriptionColumnFragmentFragment = {
+  __typename: "ImageDescriptionColumn";
+  order?: ImageDescriptionOrder | null;
+  description?:
+    | ({ __typename: "Markdown" } & {
+        " $fragmentRefs"?: {
+          MarkdownFragmentFragment: MarkdownFragmentFragment;
+        };
+      })
+    | null;
+  image?:
+    | ({ __typename: "ImageCentered" } & {
+        " $fragmentRefs"?: {
+          ImageCenteredFragmentFragment: ImageCenteredFragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "ImageDescriptionColumnFragmentFragment" };
+
+export type ImageCenteredFragmentFragment = {
+  __typename: "ImageCentered";
+  width?: number | null;
+  height?: number | null;
+  path?: string | null;
+} & { " $fragmentName"?: "ImageCenteredFragmentFragment" };
+
+export type MarkdownFragmentFragment = {
   __typename: "Markdown";
   contents?: string | null;
-} & { " $fragmentName"?: "MarkdownPane_FragmentFragment" };
+} & { " $fragmentName"?: "MarkdownFragmentFragment" };
 
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
@@ -332,15 +372,28 @@ export type IndexSsrPageQueryVariables = Exact<{
 
 export type IndexSsrPageQuery = {
   __typename: "Query";
-  page?: { __typename: "Page" } | null;
+  page?: {
+    __typename: "Page";
+    step?: string | null;
+    nextStep?: string | null;
+    prevStep?: string | null;
+    columns?: Array<
+      | ({ __typename: "ColumnWrapper" } & {
+          " $fragmentRefs"?: {
+            ColumnWrapperFragmentFragment: ColumnWrapperFragmentFragment;
+          };
+        })
+      | null
+    > | null;
+  } | null;
 };
 
-export const MarkdownPane_FragmentFragmentDoc = {
+export const MarkdownFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "MarkdownPane_Fragment" },
+      name: { kind: "Name", value: "MarkdownFragment" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Markdown" },
@@ -353,7 +406,122 @@ export const MarkdownPane_FragmentFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<MarkdownPane_FragmentFragment, unknown>;
+} as unknown as DocumentNode<MarkdownFragmentFragment, unknown>;
+export const ImageCenteredFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ImageCenteredFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ImageCentered" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ImageCenteredFragmentFragment, unknown>;
+export const ImageDescriptionColumnFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ImageDescriptionColumnFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ImageDescriptionColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "description" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "MarkdownFragment" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ImageCenteredFragment" },
+                },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "order" } },
+        ],
+      },
+    },
+    ...MarkdownFragmentFragmentDoc.definitions,
+    ...ImageCenteredFragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<ImageDescriptionColumnFragmentFragment, unknown>;
+export const ColumnWrapperFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnWrapperFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ImageDescriptionColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "ImageDescriptionColumnFragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
 export const FileNodeIcon_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -804,11 +972,28 @@ export const IndexSsrPageDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                { kind: "Field", name: { kind: "Name", value: "step" } },
+                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "columns" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "ColumnWrapperFragment" },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
         ],
       },
     },
+    ...ColumnWrapperFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;

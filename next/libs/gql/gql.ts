@@ -13,8 +13,14 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-  "\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n":
-    types.MarkdownPane_FragmentFragmentDoc,
+  "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n    }\n  }\n":
+    types.ColumnWrapperFragmentFragmentDoc,
+  "\n  fragment ImageDescriptionColumnFragment on ImageDescriptionColumn {\n    description {\n      ...MarkdownFragment\n    }\n    image {\n      ...ImageCenteredFragment\n    }\n    order\n  }\n":
+    types.ImageDescriptionColumnFragmentFragmentDoc,
+  "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n":
+    types.ImageCenteredFragmentFragmentDoc,
+  "\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n":
+    types.MarkdownFragmentFragmentDoc,
   "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
   "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
@@ -41,7 +47,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n":
+  "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      step\n      nextStep\n      prevStep\n      columns {\n        ...ColumnWrapperFragment\n      }\n    }\n  }\n":
     types.IndexSsrPageDocument,
 };
 
@@ -63,8 +69,26 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n",
-): (typeof documents)["\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n"];
+  source: "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment ImageDescriptionColumnFragment on ImageDescriptionColumn {\n    description {\n      ...MarkdownFragment\n    }\n    image {\n      ...ImageCenteredFragment\n    }\n    order\n  }\n",
+): (typeof documents)["\n  fragment ImageDescriptionColumnFragment on ImageDescriptionColumn {\n    description {\n      ...MarkdownFragment\n    }\n    image {\n      ...ImageCenteredFragment\n    }\n    order\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n",
+): (typeof documents)["\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n",
+): (typeof documents)["\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -147,8 +171,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n",
-): (typeof documents)["\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n"];
+  source: "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      step\n      nextStep\n      prevStep\n      columns {\n        ...ColumnWrapperFragment\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      step\n      nextStep\n      prevStep\n      columns {\n        ...ColumnWrapperFragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

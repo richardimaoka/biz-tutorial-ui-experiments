@@ -11,7 +11,7 @@ import { TerminalComponent } from "../components/terminal/TerminalComponent";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
-import { MarkdownPane } from "../components/markdown/MarkdownPane";
+import { ColumnWrapper } from "../components/column/ColumnWrapper";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -53,6 +53,12 @@ const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String) {
     page(tutorial: $tutorial, step: $step) {
       __typename
+      step
+      nextStep
+      prevStep
+      columns {
+        ...ColumnWrapperFragment
+      }
     }
   }
 `);
@@ -80,14 +86,14 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-export default function Home({}: IndexSsrPageQuery) {
+export default function Home({ page }: IndexSsrPageQuery) {
   const router = useRouter();
   const currentStep = extractString(router.query.step);
   const openFilePath = extractString(router.query.openFilePath);
 
-  // const currentPage = pageState;
-  // const nextStep = currentPage?.nextStep;
-  // const prevStep = currentPage?.prevStep;
+  const currentPage = page;
+  const nextStep = currentPage?.nextStep;
+  const prevStep = currentPage?.prevStep;
 
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
@@ -116,5 +122,12 @@ export default function Home({}: IndexSsrPageQuery) {
   //   };
   // }, [router, nextStep, prevStep, openFilePath]);
 
-  return <>helo</>;
+  return (
+    <>
+      {currentPage?.columns &&
+        currentPage.columns.map(
+          (col, index) => col && <ColumnWrapper key={index} fragment={col} />
+        )}
+    </>
+  );
 }

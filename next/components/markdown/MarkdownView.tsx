@@ -1,25 +1,45 @@
-import { css } from "@emotion/react";
-import { dark1MainBg, dark5, gray, themeBlue } from "../../libs/colorTheme";
-
 import rehypeReact from "rehype-react";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { Fragment, createElement, useEffect, useState } from "react";
-import { FragmentType, graphql, useFragment } from "../../libs/gql";
 
-const MarkdownPane_Fragment = graphql(`
-  fragment MarkdownPane_Fragment on Markdown {
+import { css } from "@emotion/react";
+import {
+  dark1MainBg,
+  dark5,
+  gray,
+  themeBlue,
+  white,
+} from "../../libs/colorTheme";
+import { FragmentType, graphql, useFragment } from "../../libs/gql";
+import React, { ComponentType, ReactNode, useEffect, useState } from "react";
+
+interface PProps {
+  children?: ReactNode; //children needs to be optional, otherwise, type error in rehype-react's components argument
+}
+
+const P = (props: PProps) => (
+  <p
+    css={css`
+      /* text-align: center; */
+    `}
+  >
+    {props.children}
+  </p>
+);
+
+const MarkdownFragment = graphql(`
+  fragment MarkdownFragment on Markdown {
     contents
   }
 `);
 
-export interface MarkdownPaneProps {
-  fragment: FragmentType<typeof MarkdownPane_Fragment>;
+export interface MarkdownViewProps {
+  fragment: FragmentType<typeof MarkdownFragment>;
 }
 
-export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
-  const fragment = useFragment(MarkdownPane_Fragment, props.fragment);
+export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
+  const fragment = useFragment(MarkdownFragment, props.fragment);
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
 
   useEffect(() => {
@@ -27,7 +47,13 @@ export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
       unified()
         .use(remarkParse)
         .use(remarkRehype)
-        .use(rehypeReact, { createElement, Fragment })
+        .use(rehypeReact, {
+          createElement: React.createElement,
+          Fragment: React.Fragment,
+          components: {
+            p: P,
+          },
+        })
         .process(fragment.contents)
         .then((file) => {
           setMdElem(file.result as JSX.Element);
@@ -42,32 +68,44 @@ export const MarkdownPane = (props: MarkdownPaneProps): JSX.Element => {
       font-size: 32px;
       font-weight: 700;
       margin: 21px 0px;
+      color: ${white};
     }
 
     h2 {
       font-size: 24px;
       font-weight: 700;
       margin: 19px 0px;
+      color: ${white};
     }
 
     h3 {
       font-size: 18px;
       font-weight: 700;
       margin: 18px 0px;
+      color: ${white};
     }
 
     p {
       font-size: 14px;
       margin: 16px 0px;
+      color: ${white};
     }
 
     ul {
       margin: 16px 0px;
+      color: ${white};
     }
 
-    ul > li {
+    ol,
+    ul {
+      margin: 16px 0px;
+      padding-left: 24px;
+      color: ${white};
+    }
+
+    li {
       font-size: 14px;
-      margin: 4px 0px;
+      color: ${white};
     }
 
     code {
