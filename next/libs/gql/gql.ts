@@ -19,7 +19,7 @@ const documents = {
     types.ImageDescriptionColumnFragmentFragmentDoc,
   "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n":
     types.ImageCenteredFragmentFragmentDoc,
-  "\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n":
+  "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n":
     types.MarkdownFragmentFragmentDoc,
   "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n":
     types.SourceCodeViewer_FragmentFragmentDoc,
@@ -87,8 +87,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n",
-): (typeof documents)["\n  fragment MarkdownFragment on Markdown {\n    contents\n  }\n"];
+  source: "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n",
+): (typeof documents)["\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

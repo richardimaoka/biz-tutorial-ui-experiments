@@ -243,6 +243,7 @@ export type ImageCenteredFragmentFragment = {
 export type MarkdownFragmentFragment = {
   __typename: "Markdown";
   contents?: string | null;
+  alignment?: MarkdownAlignment | null;
 } & { " $fragmentName"?: "MarkdownFragmentFragment" };
 
 export type SourceCodeViewer_FragmentFragment = ({
@@ -402,6 +403,7 @@ export const MarkdownFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "contents" } },
+          { kind: "Field", name: { kind: "Name", value: "alignment" } },
         ],
       },
     },

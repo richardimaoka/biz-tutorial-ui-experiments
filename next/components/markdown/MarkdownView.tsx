@@ -18,19 +18,10 @@ interface PProps {
   children?: ReactNode; //children needs to be optional, otherwise, type error in rehype-react's components argument
 }
 
-const P = (props: PProps) => (
-  <p
-    css={css`
-      /* text-align: center; */
-    `}
-  >
-    {props.children}
-  </p>
-);
-
 const MarkdownFragment = graphql(`
   fragment MarkdownFragment on Markdown {
     contents
+    alignment
   }
 `);
 
@@ -41,6 +32,10 @@ export interface MarkdownViewProps {
 export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
   const fragment = useFragment(MarkdownFragment, props.fragment);
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
+  console.log(fragment);
+  const textAlign = fragment.alignment
+    ? fragment.alignment.toLowerCase()
+    : "left";
 
   useEffect(() => {
     if (fragment.contents || fragment.contents == "") {
@@ -50,9 +45,6 @@ export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
         .use(rehypeReact, {
           createElement: React.createElement,
           Fragment: React.Fragment,
-          components: {
-            p: P,
-          },
         })
         .process(fragment.contents)
         .then((file) => {
@@ -89,6 +81,7 @@ export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
       font-size: 14px;
       margin: 16px 0px;
       color: ${white};
+      text-align: ${textAlign};
     }
 
     ul {
