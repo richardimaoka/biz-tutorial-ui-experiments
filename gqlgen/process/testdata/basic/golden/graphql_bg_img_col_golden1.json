@@ -1,9 +1,8 @@
 {
-  "_placeholder": null,
+  "__typename": "BackgroundImageColumn",
   "width": 640,
   "height": 1048,
   "path": "/images/003.png",
-  "url": null,
   "modal": {
     "text": "このようなボタンを設置して",
     "position": null

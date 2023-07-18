@@ -1,5 +1,5 @@
 {
-  "_placeholder": null,
+  "__typename": "ImageDescriptionColumn",
   "description": {
     "step": null,
     "contents": "markdown default contents",
@@ -10,6 +10,5 @@
     "height": 280,
     "path": "/images/img1.png",
     "url": "https://yourdomain.com/img1.png"
-  },
-  "order": null
+  }
 }

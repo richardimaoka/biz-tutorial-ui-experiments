@@ -1,5 +1,5 @@
 {
-  "_placeholder": null,
+  "__typename": "ImageDescriptionColumn",
   "description": {
     "step": null,
     "contents": "それではデモンストレーションの手順を見ていきます。\n\n1. まずはGoogle Cloud Platform上での設定が必要です。OAuth Client IDを作成しましょう。",
@@ -10,6 +10,5 @@
     "height": 452,
     "path": "/images/015.png",
     "url": null
-  },
-  "order": null
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "_placeholder": null,
+  "__typename": "ImageDescriptionColumn",
   "description": {
     "step": null,
     "contents": "Googleのサービスで、\n\n**「素早く」「簡単に」** 認証を導入！",
@@ -10,6 +10,5 @@
     "height": 38,
     "path": "/images/000.png",
     "url": null
-  },
-  "order": null
+  }
 }

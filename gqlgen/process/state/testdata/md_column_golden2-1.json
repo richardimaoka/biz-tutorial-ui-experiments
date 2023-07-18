@@ -1,5 +1,5 @@
 {
-  "_placeholder": null,
+  "__typename": "MarkdownColumn",
   "description": {
     "step": null,
     "contents": "markdown default contents",
