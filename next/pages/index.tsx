@@ -12,6 +12,8 @@ import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { ColumnWrapper } from "../components/column/ColumnWrapper";
+import { NextButton } from "../components/navigation/NextButton";
+import { PrevButton } from "../components/navigation/PrevButton";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -91,10 +93,6 @@ export default function Home({ page }: IndexSsrPageQuery) {
   const currentStep = extractString(router.query.step);
   const openFilePath = extractString(router.query.openFilePath);
 
-  const currentPage = page;
-  const nextStep = currentPage?.nextStep;
-  const prevStep = currentPage?.prevStep;
-
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
   // const currentTerminal = terminals && terminals[currentTerminalIndex];
@@ -124,10 +122,14 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      {currentPage?.columns &&
-        currentPage.columns.map(
-          (col, index) => col && <ColumnWrapper key={index} fragment={col} />
-        )}
+      <div>
+        {page?.columns &&
+          page.columns.map(
+            (col, index) => col && <ColumnWrapper key={index} fragment={col} />
+          )}
+      </div>
+      {page?.prevStep && <PrevButton href={`/?step=${page.prevStep}`} />}
+      {page?.nextStep && <NextButton href={`/?step=${page.nextStep}`} />}
     </>
   );
 }
