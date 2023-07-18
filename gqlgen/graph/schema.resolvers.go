@@ -14,6 +14,9 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
+var dirName = "data/apollo-client-getting-started/state"
+var initialStep = "_initial"
+
 // PageState is the resolver for the pageState field.
 func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
 	var filename string
@@ -94,50 +97,3 @@ type sourceCodeResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.PageState, error) {
-	if tutorial == "" {
-		return nil, fmt.Errorf("tutorial name must be specified")
-	}
-
-	var stepStr string
-	if step == nil {
-		log.Printf("step is nil, reading first step for %s", tutorial)
-		var firstStep string
-		firstStepFile := fmt.Sprintf("data/%s/first-step.json", tutorial)
-		bytes, err := os.ReadFile(firstStepFile)
-		if err != nil {
-			return nil, fmt.Errorf("tutorial = %s does not exist", tutorial)
-		}
-		if err := json.Unmarshal(bytes, &firstStep); err != nil {
-			return nil, fmt.Errorf("tutorial = %s doesn't define a valid first step", tutorial)
-		}
-		if firstStep == "" {
-			log.Printf("first step from file = %s was empty", firstStepFile)
-			return nil, fmt.Errorf("tutorial = %s doesn't define a valid first step", tutorial)
-		}
-		stepStr = firstStep
-	} else {
-		stepStr = *step
-	}
-	filename := fmt.Sprintf("data/%s/state/state-%s.json", tutorial, stepStr)
-
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		log.Printf("failed to read %s, %s", filename, err)
-		return nil, fmt.Errorf("failed to read data for tutorial = %s, step = `%s`", tutorial, stepStr)
-	}
-
-	var pageState model.PageState
-	err = json.Unmarshal(data, &pageState)
-	if err != nil {
-		log.Printf("failed to read data from %s, %s", filename, err)
-		return nil, fmt.Errorf("internal server error %s", *step)
-	}
-
-	return &pageState, nil
-}
-
-var dirName = "data/apollo-client-getting-started/state"
-var initialStep = "_initial"
-
-type mutationResolver struct{ *Resolver }
