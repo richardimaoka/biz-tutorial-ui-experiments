@@ -41,7 +41,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n      markdown {\n        ...MarkdownPane_Fragment\n      }\n    }\n  }\n":
+  "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n":
     types.IndexSsrPageDocument,
 };
 
@@ -63,92 +63,92 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n"
+  source: "\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n",
 ): (typeof documents)["\n  fragment MarkdownPane_Fragment on Markdown {\n    contents\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"
+  source: "\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n",
 ): (typeof documents)["\n  fragment SourceCodeViewer_Fragment on SourceCode {\n    ...FileTreePane_Fragment\n    openFile(filePath: $openFilePath) {\n      ...FileContentPane_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"
+  source: "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n",
 ): (typeof documents)["\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n"
+  source: "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n",
 ): (typeof documents)["\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n"
+  source: "\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n",
 ): (typeof documents)["\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeComponent_Fragment\n  }\n"
+  source: "\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeComponent_Fragment\n  }\n",
 ): (typeof documents)["\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeComponent_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n"
+  source: "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n",
 ): (typeof documents)["\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n"
+  source: "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n",
 ): (typeof documents)["\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n"
+  source: "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n",
 ): (typeof documents)["\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n"
+  source: "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n",
 ): (typeof documents)["\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n"
+  source: "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n",
 ): (typeof documents)["\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n"
+  source: "\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n",
 ): (typeof documents)["\n  fragment TerminalComponent_Fragment on Terminal {\n    currentDirectory\n    nodes {\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalNodeComponent_Fragment on TerminalNode {\n    content {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n"
+  source: "\n  fragment TerminalNodeComponent_Fragment on TerminalNode {\n    content {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  fragment TerminalNodeComponent_Fragment on TerminalNode {\n    content {\n      __typename\n      ... on TerminalCommand {\n        ...TerminalCommand_Fragment\n      }\n      ... on TerminalOutput {\n        ...TerminalOutput_Fragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n"
+  source: "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n",
 ): (typeof documents)["\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n      markdown {\n        ...MarkdownPane_Fragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query IndexSsrPage($step: String, $openFilePath: String) {\n    pageState(step: $step) {\n      nextStep\n      prevStep\n      step\n      sourceCode {\n        ...SourceCodeViewer_Fragment\n      }\n      terminals {\n        name\n        currentDirectory\n        ...TerminalComponent_Fragment\n      }\n      markdown {\n        ...MarkdownPane_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n",
+): (typeof documents)["\n  query IndexSsrPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

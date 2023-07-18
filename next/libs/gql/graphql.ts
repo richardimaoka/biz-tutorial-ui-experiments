@@ -20,6 +20,26 @@ export type Scalars = {
   Float: number;
 };
 
+export type BackgroundImageColumn = Column & {
+  __typename: "BackgroundImageColumn";
+  _placeholder?: Maybe<Scalars["String"]>;
+  height?: Maybe<Scalars["Int"]>;
+  modal?: Maybe<Modal>;
+  path?: Maybe<Scalars["String"]>;
+  url?: Maybe<Scalars["String"]>;
+  width?: Maybe<Scalars["Int"]>;
+};
+
+export type Column = {
+  _placeholder?: Maybe<Scalars["String"]>;
+};
+
+export type ColumnWrapper = {
+  __typename: "ColumnWrapper";
+  column?: Maybe<Column>;
+  index?: Maybe<Scalars["Int"]>;
+};
+
 export type FileHighlight = {
   __typename: "FileHighlight";
   fromLine?: Maybe<Scalars["Int"]>;
@@ -37,6 +57,26 @@ export type FileNode = {
 
 export type FileNodeType = "DIRECTORY" | "FILE";
 
+export type ImageCentered = {
+  __typename: "ImageCentered";
+  height?: Maybe<Scalars["Int"]>;
+  path?: Maybe<Scalars["String"]>;
+  url?: Maybe<Scalars["String"]>;
+  width?: Maybe<Scalars["Int"]>;
+};
+
+export type ImageDescriptionColumn = Column & {
+  __typename: "ImageDescriptionColumn";
+  _placeholder?: Maybe<Scalars["String"]>;
+  description?: Maybe<Markdown>;
+  image?: Maybe<ImageCentered>;
+  order?: Maybe<ImageDescriptionOrder>;
+};
+
+export type ImageDescriptionOrder =
+  | "DESCRIPTION_THEN_IMAGE"
+  | "IMAGE_THEN_DESCRIPTION";
+
 export type Markdown = {
   __typename: "Markdown";
   alignment?: Maybe<MarkdownAlignment>;
@@ -46,9 +86,29 @@ export type Markdown = {
 
 export type MarkdownAlignment = "CENTER" | "LEFT";
 
+export type MarkdownColumn = Column & {
+  __typename: "MarkdownColumn";
+  _placeholder?: Maybe<Scalars["String"]>;
+  description?: Maybe<Markdown>;
+};
+
+export type MarkdownOld = {
+  __typename: "MarkdownOld";
+  contents?: Maybe<Scalars["String"]>;
+  step?: Maybe<Scalars["String"]>;
+};
+
+export type Modal = {
+  __typename: "Modal";
+  position?: Maybe<ModalPosition>;
+  text?: Maybe<Scalars["String"]>;
+};
+
+export type ModalPosition = "BOTTOM" | "CENTER" | "TOP";
+
 export type NextAction = {
   __typename: "NextAction";
-  markdown?: Maybe<Markdown>;
+  markdown?: Maybe<MarkdownOld>;
   terminalCommand?: Maybe<TerminalCommand>;
   terminalName?: Maybe<Scalars["String"]>;
 };
@@ -63,9 +123,17 @@ export type OpenFile = {
   language?: Maybe<Scalars["String"]>;
 };
 
+export type Page = {
+  __typename: "Page";
+  columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
+  nextStep?: Maybe<Scalars["String"]>;
+  prevStep?: Maybe<Scalars["String"]>;
+  step?: Maybe<Scalars["String"]>;
+};
+
 export type PageState = {
   __typename: "PageState";
-  markdown?: Maybe<Markdown>;
+  markdown?: Maybe<MarkdownOld>;
   nextAction?: Maybe<NextAction>;
   nextStep?: Maybe<Scalars["String"]>;
   prevStep?: Maybe<Scalars["String"]>;
@@ -76,7 +144,7 @@ export type PageState = {
 
 export type Query = {
   __typename: "Query";
-  page?: Maybe<PageState>;
+  page?: Maybe<Page>;
   pageState?: Maybe<PageState>;
 };
 
@@ -98,6 +166,12 @@ export type SourceCode = {
 
 export type SourceCodeOpenFileArgs = {
   filePath?: InputMaybe<Scalars["String"]>;
+};
+
+export type SourceCodeColumn = Column & {
+  __typename: "SourceCodeColumn";
+  _placeholder?: Maybe<Scalars["String"]>;
+  sourceCode?: Maybe<SourceCode>;
 };
 
 export type Terminal = {
@@ -252,44 +326,13 @@ export type TerminalOutput_FragmentFragment = {
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
 export type IndexSsrPageQueryVariables = Exact<{
+  tutorial: Scalars["String"];
   step?: InputMaybe<Scalars["String"]>;
-  openFilePath?: InputMaybe<Scalars["String"]>;
 }>;
 
 export type IndexSsrPageQuery = {
   __typename: "Query";
-  pageState?: {
-    __typename: "PageState";
-    nextStep?: string | null;
-    prevStep?: string | null;
-    step?: string | null;
-    sourceCode?:
-      | ({ __typename: "SourceCode" } & {
-          " $fragmentRefs"?: {
-            SourceCodeViewer_FragmentFragment: SourceCodeViewer_FragmentFragment;
-          };
-        })
-      | null;
-    terminals?: Array<
-      | ({
-          __typename: "Terminal";
-          name?: string | null;
-          currentDirectory?: string | null;
-        } & {
-          " $fragmentRefs"?: {
-            TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
-          };
-        })
-      | null
-    > | null;
-    markdown?:
-      | ({ __typename: "Markdown" } & {
-          " $fragmentRefs"?: {
-            MarkdownPane_FragmentFragment: MarkdownPane_FragmentFragment;
-          };
-        })
-      | null;
-  } | null;
+  page?: { __typename: "Page" } | null;
 };
 
 export const MarkdownPane_FragmentFragmentDoc = {
@@ -715,15 +758,21 @@ export const IndexSsrPageDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
-          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tutorial" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "openFilePath" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -732,8 +781,16 @@ export const IndexSsrPageDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "pageState" },
+            name: { kind: "Name", value: "page" },
             arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "tutorial" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "tutorial" },
+                },
+              },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "step" },
@@ -746,67 +803,12 @@ export const IndexSsrPageDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
-                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
-                { kind: "Field", name: { kind: "Name", value: "step" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "sourceCode" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "SourceCodeViewer_Fragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "terminals" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "currentDirectory" },
-                      },
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "TerminalComponent_Fragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "markdown" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: { kind: "Name", value: "MarkdownPane_Fragment" },
-                      },
-                    ],
-                  },
-                },
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
               ],
             },
           },
         ],
       },
     },
-    ...SourceCodeViewer_FragmentFragmentDoc.definitions,
-    ...TerminalComponent_FragmentFragmentDoc.definitions,
-    ...MarkdownPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;

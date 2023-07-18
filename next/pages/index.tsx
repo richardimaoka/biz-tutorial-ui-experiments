@@ -50,29 +50,15 @@ const constructQueryString = (
 };
 
 const queryDefinition = graphql(/* GraphQL */ `
-  query IndexSsrPage($step: String, $openFilePath: String) {
-    pageState(step: $step) {
-      nextStep
-      prevStep
-      step
-      sourceCode {
-        ...SourceCodeViewer_Fragment
-      }
-      terminals {
-        name
-        currentDirectory
-        ...TerminalComponent_Fragment
-      }
-      markdown {
-        ...MarkdownPane_Fragment
-      }
+  query IndexSsrPage($tutorial: String!, $step: String) {
+    page(tutorial: $tutorial, step: $step) {
+      __typename
     }
   }
 `);
 
 interface PageParams extends ParsedUrlQuery {
   step: string;
-  openFilePath: string;
 }
 
 export const getServerSideProps: GetServerSideProps<
@@ -80,11 +66,13 @@ export const getServerSideProps: GetServerSideProps<
   PageParams
 > = async (context) => {
   const step = extractString(context.query.step);
-  const openFilePath = extractString(context.query.openFilePath);
 
   const { data } = await client.query({
     query: queryDefinition,
-    variables: { step, openFilePath },
+    variables: {
+      tutorial: "sign-in-with-google",
+      step: step,
+    },
   });
 
   return {
@@ -92,95 +80,41 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-export default function Home({ pageState }: IndexSsrPageQuery) {
+export default function Home({}: IndexSsrPageQuery) {
   const router = useRouter();
   const currentStep = extractString(router.query.step);
   const openFilePath = extractString(router.query.openFilePath);
 
-  const currentPage = pageState;
-  const nextStep = currentPage?.nextStep;
-  const prevStep = currentPage?.prevStep;
+  // const currentPage = pageState;
+  // const nextStep = currentPage?.nextStep;
+  // const prevStep = currentPage?.prevStep;
 
-  const terminals = currentPage?.terminals;
-  const [currentTerminalIndex] = useState(0);
-  const currentTerminal = terminals && terminals[currentTerminalIndex];
-  const currentDirectory = currentTerminal?.currentDirectory
-    ? currentTerminal.currentDirectory
-    : undefined;
+  // const terminals = currentPage?.terminals;
+  // const [currentTerminalIndex] = useState(0);
+  // const currentTerminal = terminals && terminals[currentTerminalIndex];
+  // const currentDirectory = currentTerminal?.currentDirectory
+  //   ? currentTerminal.currentDirectory
+  //   : undefined;
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
-        if (event.shiftKey) {
-          prevStep &&
-            router.push(`/${constructQueryString(prevStep, openFilePath)}`);
-        } else {
-          nextStep &&
-            router.push(`/${constructQueryString(nextStep, openFilePath)}`);
-        }
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
+  // useEffect(() => {
+  //   const handleKeyDown = (event: KeyboardEvent) => {
+  //     if (event.code === "Space") {
+  //       if (event.shiftKey) {
+  //         prevStep &&
+  //           router.push(`/${constructQueryString(prevStep, openFilePath)}`);
+  //       } else {
+  //         nextStep &&
+  //           router.push(`/${constructQueryString(nextStep, openFilePath)}`);
+  //       }
+  //     }
+  //   };
+  //   document.addEventListener("keydown", handleKeyDown);
 
-    // Don't forget to clean up
-    return function cleanup() {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [router, nextStep, prevStep, openFilePath]);
+  //   // Don't forget to clean up
+  //   return function cleanup() {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, [router, nextStep, prevStep, openFilePath]);
 
-  return (
-    currentPage && (
-      <>
-        <Header />
-        <main
-          css={css`
-            background-color: #333333;
-          `}
-        >
-          <div
-            css={css`
-              display: flex;
-              gap: 40px;
-            `}
-          >
-            <div
-              css={css`
-                width: 680px;
-              `}
-            >
-              {currentPage?.sourceCode && currentStep && (
-                <SourceCodeViewer
-                  fragment={currentPage.sourceCode}
-                  step={currentStep}
-                  currentDirectory={currentDirectory}
-                />
-              )}
-              {currentTerminal && (
-                <TerminalComponent fragment={currentTerminal} />
-              )}
-            </div>
-
-            {currentPage?.markdown && (
-              <div
-                css={css`
-                  width: 680px;
-                `}
-              >
-                <MarkdownPane fragment={currentPage.markdown} />
-              </div>
-            )}
-          </div>
-
-          <div>
-            {prevStep && (
-              <PrevStepButton prevStep={prevStep} openFilePath={openFilePath} />
-            )}
-            {nextStep && (
-              <NextStepButton nextStep={nextStep} openFilePath={openFilePath} />
-            )}
-          </div>
-        </main>
-      </>
-    )
-  );
+  return <>helo</>;
 }
