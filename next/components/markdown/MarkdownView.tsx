@@ -32,7 +32,6 @@ export interface MarkdownViewProps {
 export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
   const fragment = useFragment(MarkdownFragment, props.fragment);
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
-  console.log(fragment);
   const textAlign = fragment.alignment
     ? fragment.alignment.toLowerCase()
     : "left";

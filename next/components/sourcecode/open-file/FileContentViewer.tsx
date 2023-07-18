@@ -58,8 +58,6 @@ export const FileContentViewer = (
         )
         .join(", ") //1-2, 5, 9-20
     : "";
-  console.log("fragment", fragment);
-  console.log("dataLine=", dataLine);
 
   useEffect(() => {
     if (ref.current) {

@@ -210,7 +210,10 @@ export type ColumnWrapperFragmentFragment = {
   __typename: "ColumnWrapper";
   column?:
     | { __typename: "BackgroundImageColumn" }
-    | ({ __typename: "ImageDescriptionColumn" } & {
+    | ({
+        __typename: "ImageDescriptionColumn";
+        position?: ImageDescriptionColumnPosition | null;
+      } & {
         " $fragmentRefs"?: {
           ImageDescriptionColumnFragmentFragment: ImageDescriptionColumnFragmentFragment;
         };
@@ -517,6 +520,10 @@ export const ColumnWrapperFragmentFragmentDoc = {
                           kind: "Name",
                           value: "ImageDescriptionColumnFragment",
                         },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "position" },
                       },
                     ],
                   },

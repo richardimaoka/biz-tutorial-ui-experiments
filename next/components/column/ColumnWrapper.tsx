@@ -3,12 +3,14 @@ import { dark1MainBg } from "../../libs/colorTheme";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { ImageDescriptionColumn } from "./ImageDescriptionColumn";
 import { ReactNode } from "react";
+import { ImageDescriptionColumnPosition } from "../../libs/gql/graphql";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperFragment on ColumnWrapper {
     column {
       ... on ImageDescriptionColumn {
         ...ImageDescriptionColumnFragment
+        position
       }
     }
   }
@@ -18,7 +20,24 @@ export interface ColumnWrapperProps {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-const ColumnPositioning = ({ children }: { children: ReactNode }) => {
+const ColumnPositioning = ({
+  position,
+  children,
+}: {
+  position: ImageDescriptionColumnPosition;
+  children: ReactNode;
+}) => {
+  const justifyContent = (p: ImageDescriptionColumnPosition): string => {
+    switch (p) {
+      case "TOP":
+        return "flex-start";
+      case "CENTER":
+        return "center";
+      case "BOTTOM":
+        return "flex-end";
+    }
+  };
+
   return (
     <div
       css={css`
@@ -29,7 +48,12 @@ const ColumnPositioning = ({ children }: { children: ReactNode }) => {
         width: 768px;
         min-height: 100vh;
         overflow: auto;
+
         background-color: ${dark1MainBg};
+
+        display: flex;
+        flex-direction: column;
+        justify-content: ${justifyContent(position)};
       `}
     >
       {children}
@@ -51,8 +75,11 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
 
   switch (typename) {
     case "ImageDescriptionColumn":
+      const position = fragment.column?.position
+        ? fragment.column?.position
+        : "TOP";
       return (
-        <ColumnPositioning>
+        <ColumnPositioning position={position}>
           <ImageDescriptionColumn fragment={fragment.column} />
         </ColumnPositioning>
       );
