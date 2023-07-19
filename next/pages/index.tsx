@@ -10,6 +10,7 @@ import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { ColumnWrapper } from "../components/column/ColumnWrapper";
 import { NextButton } from "../components/navigation/NextButton";
 import { PrevButton } from "../components/navigation/PrevButton";
+import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -125,6 +126,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
           )}
       </div>
       {page?.prevStep && <PrevButton href={`/?step=${page.prevStep}`} />}
+      {page?.nextStep && <AutoPlayButton />}
       {page?.nextStep && <NextButton href={`/?step=${page.nextStep}`} />}
     </>
   );
