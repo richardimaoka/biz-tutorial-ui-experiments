@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { ColumnVerticalPosition } from "../../libs/gql/graphql";
-import { dark1MainBg } from "../../libs/colorTheme";
+import { dark1MainBg, dark3SubBg } from "../../libs/colorTheme";
 import { css } from "@emotion/react";
 
 interface ColumnContentsPositionProps {
@@ -29,12 +29,13 @@ export const ColumnContentsPosition = ({
         @media (max-width: 768px) {
           width: 100vw;
           height: 100vh;
+          background-color: ${dark1MainBg};
         }
         width: 768px;
         min-height: 100vh;
         overflow: auto;
 
-        background-color: ${dark1MainBg};
+        background-color: ${dark3SubBg};
 
         display: flex;
         flex-direction: column;

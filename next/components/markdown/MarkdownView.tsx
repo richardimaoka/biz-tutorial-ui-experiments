@@ -53,8 +53,6 @@ export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
   }, [fragment.contents]);
 
   const markdownCss = css`
-    background-color: ${dark1MainBg};
-
     h1 {
       font-size: 32px;
       font-weight: 700;
@@ -145,7 +143,6 @@ export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
   return (
     <div
       css={css`
-        background-color: ${dark1MainBg};
         padding: 2px 10px;
       `}
     >
