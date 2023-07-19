@@ -1,11 +1,19 @@
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { ImageDescriptionColumn } from "./ImageDescriptionColumn";
+import { MarkdownColumn } from "./MarkdownColumn";
+import { BackgroundImageColumn } from "./BackgroundImageColumn";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperFragment on ColumnWrapper {
     column {
       ... on ImageDescriptionColumn {
         ...ImageDescriptionColumnFragment
+      }
+      ... on BackgroundImageColumn {
+        ...BackgroundImageColumnFragment
+      }
+      ... on MarkdownColumn {
+        ...MarkdownColumnFragment
       }
     }
   }
@@ -30,6 +38,10 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
   switch (typename) {
     case "ImageDescriptionColumn":
       return <ImageDescriptionColumn fragment={fragment.column} />;
+    case "BackgroundImageColumn":
+      return <BackgroundImageColumn fragment={fragment.column} />;
+    case "MarkdownColumn":
+      return <MarkdownColumn fragment={fragment.column} />;
     default:
       return <>no matching column</>;
   }

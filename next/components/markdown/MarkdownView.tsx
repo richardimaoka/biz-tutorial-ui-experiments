@@ -18,7 +18,7 @@ interface PProps {
   children?: ReactNode; //children needs to be optional, otherwise, type error in rehype-react's components argument
 }
 
-const MarkdownFragment = graphql(`
+const fragmentDefinition = graphql(`
   fragment MarkdownFragment on Markdown {
     contents
     alignment
@@ -26,11 +26,11 @@ const MarkdownFragment = graphql(`
 `);
 
 export interface MarkdownViewProps {
-  fragment: FragmentType<typeof MarkdownFragment>;
+  fragment: FragmentType<typeof fragmentDefinition>;
 }
 
 export const MarkdownView = (props: MarkdownViewProps): JSX.Element => {
-  const fragment = useFragment(MarkdownFragment, props.fragment);
+  const fragment = useFragment(fragmentDefinition, props.fragment);
   const [mdElem, setMdElem] = useState<JSX.Element | null>(null);
   const textAlign = fragment.alignment
     ? fragment.alignment.toLowerCase()

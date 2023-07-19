@@ -32,8 +32,6 @@ export const ImageDescriptionColumn = (
     ? fragment.contentsPosition
     : "TOP";
 
-  console.log("ImageDescriptionColumn", fragment);
-
   switch (order) {
     case "DESCRIPTION_THEN_IMAGE":
       return (

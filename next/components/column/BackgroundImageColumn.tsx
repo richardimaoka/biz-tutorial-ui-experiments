@@ -1,5 +1,5 @@
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
-import { MobileScreenshot } from "./MobileScreenshot";
+import { MobileScreenshot } from "../image/MobileScreenshot";
 import { ModalFrame } from "../modal/ModalFrame";
 
 const fragmentDefinition = graphql(`
