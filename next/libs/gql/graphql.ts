@@ -71,7 +71,6 @@ export type ImageDescriptionColumn = Column & {
   description?: Maybe<Markdown>;
   image?: Maybe<ImageCentered>;
   order?: Maybe<ImageDescriptionOrder>;
-  position?: Maybe<ImageDescriptionColumnPosition>;
 };
 
 export type ImageDescriptionColumnPosition = "BOTTOM" | "CENTER" | "TOP";
@@ -210,10 +209,7 @@ export type ColumnWrapperFragmentFragment = {
   __typename: "ColumnWrapper";
   column?:
     | { __typename: "BackgroundImageColumn" }
-    | ({
-        __typename: "ImageDescriptionColumn";
-        position?: ImageDescriptionColumnPosition | null;
-      } & {
+    | ({ __typename: "ImageDescriptionColumn" } & {
         " $fragmentRefs"?: {
           ImageDescriptionColumnFragmentFragment: ImageDescriptionColumnFragmentFragment;
         };
@@ -502,8 +498,6 @@ export const ImageDescriptionColumnFragmentFragmentDoc = {
         ],
       },
     },
-    ...MarkdownFragmentFragmentDoc.definitions,
-    ...ImageCenteredFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<ImageDescriptionColumnFragmentFragment, unknown>;
 export const ColumnWrapperFragmentFragmentDoc = {
@@ -541,10 +535,6 @@ export const ColumnWrapperFragmentFragmentDoc = {
                           value: "ImageDescriptionColumnFragment",
                         },
                       },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "position" },
-                      },
                     ],
                   },
                 },
@@ -554,7 +544,6 @@ export const ColumnWrapperFragmentFragmentDoc = {
         ],
       },
     },
-    ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
 export const ModalFrameFragmentFragmentDoc = {
@@ -610,7 +599,6 @@ export const BackgroundImageColumnFragmentFragmentDoc = {
         ],
       },
     },
-    ...ModalFrameFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<BackgroundImageColumnFragmentFragment, unknown>;
 export const FileNodeIcon_FragmentFragmentDoc = {
@@ -657,7 +645,6 @@ export const FileNodeComponent_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileNodeIcon_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileNodeComponent_FragmentFragment, unknown>;
 export const FileTreeComponent_FragmentFragmentDoc = {
@@ -690,7 +677,6 @@ export const FileTreeComponent_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileNodeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileTreeComponent_FragmentFragment, unknown>;
 export const FileTreePane_FragmentFragmentDoc = {
@@ -713,7 +699,6 @@ export const FileTreePane_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileTreeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileTreePane_FragmentFragment, unknown>;
 export const FileNameTab_FragmentFragmentDoc = {
@@ -755,7 +740,6 @@ export const FileNameTabBar_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileNameTab_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileNameTabBar_FragmentFragment, unknown>;
 export const FileContentViewer_FragmentFragmentDoc = {
@@ -813,8 +797,6 @@ export const FileContentPane_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileNameTabBar_FragmentFragmentDoc.definitions,
-    ...FileContentViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<FileContentPane_FragmentFragment, unknown>;
 export const SourceCodeViewer_FragmentFragmentDoc = {
@@ -860,8 +842,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
         ],
       },
     },
-    ...FileTreePane_FragmentFragmentDoc.definitions,
-    ...FileContentPane_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
@@ -967,8 +947,6 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
         ],
       },
     },
-    ...TerminalCommand_FragmentFragmentDoc.definitions,
-    ...TerminalOutput_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalNodeComponent_FragmentFragment, unknown>;
 export const TerminalComponent_FragmentFragmentDoc = {
@@ -1004,7 +982,6 @@ export const TerminalComponent_FragmentFragmentDoc = {
         ],
       },
     },
-    ...TerminalNodeComponent_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
 export const IndexSsrPageDocument = {
@@ -1086,5 +1063,8 @@ export const IndexSsrPageDocument = {
       },
     },
     ...ColumnWrapperFragmentFragmentDoc.definitions,
+    ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
+    ...MarkdownFragmentFragmentDoc.definitions,
+    ...ImageCenteredFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;

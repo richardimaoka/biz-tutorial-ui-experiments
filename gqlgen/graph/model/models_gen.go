@@ -55,11 +55,10 @@ type ImageCentered struct {
 }
 
 type ImageDescriptionColumn struct {
-	Placeholder *string                         `json:"_placeholder"`
-	Description *Markdown                       `json:"description"`
-	Image       *ImageCentered                  `json:"image"`
-	Order       *ImageDescriptionOrder          `json:"order"`
-	Position    *ImageDescriptionColumnPosition `json:"position"`
+	Placeholder *string                `json:"_placeholder"`
+	Description *Markdown              `json:"description"`
+	Image       *ImageCentered         `json:"image"`
+	Order       *ImageDescriptionOrder `json:"order"`
 }
 
 func (ImageDescriptionColumn) IsColumn()                    {}

@@ -10,7 +10,6 @@ const fragmentDefinition = graphql(`
     column {
       ... on ImageDescriptionColumn {
         ...ImageDescriptionColumnFragment
-        position
       }
     }
   }
@@ -75,14 +74,7 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
 
   switch (typename) {
     case "ImageDescriptionColumn":
-      const position = fragment.column?.position
-        ? fragment.column?.position
-        : "TOP";
-      return (
-        <ColumnPositioning position={position}>
-          <ImageDescriptionColumn fragment={fragment.column} />
-        </ColumnPositioning>
-      );
+      return <ImageDescriptionColumn fragment={fragment.column} />;
     default:
       return <>no matching column</>;
   }

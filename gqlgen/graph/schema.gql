@@ -71,7 +71,6 @@ type ImageDescriptionColumn implements Column {
   description: Markdown
   image: ImageCentered
   order: ImageDescriptionOrder
-  position: ImageDescriptionColumnPosition
 }
 
 type BackgroundImageColumn implements Column {
