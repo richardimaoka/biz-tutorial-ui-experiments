@@ -55,11 +55,11 @@ type ImageCentered struct {
 }
 
 type ImageDescriptionColumn struct {
-	Placeholder      *string                         `json:"_placeholder"`
-	Description      *Markdown                       `json:"description"`
-	Image            *ImageCentered                  `json:"image"`
-	Order            *ImageDescriptionOrder          `json:"order"`
-	ContentsPosition *ImageDescriptionColumnPosition `json:"contentsPosition"`
+	Placeholder      *string                 `json:"_placeholder"`
+	Description      *Markdown               `json:"description"`
+	Image            *ImageCentered          `json:"image"`
+	Order            *ImageDescriptionOrder  `json:"order"`
+	ContentsPosition *ColumnVerticalPosition `json:"contentsPosition"`
 }
 
 func (ImageDescriptionColumn) IsColumn()                    {}
@@ -74,7 +74,7 @@ type Markdown struct {
 type MarkdownColumn struct {
 	Placeholder      *string                 `json:"_placeholder"`
 	Description      *Markdown               `json:"description"`
-	ContentsPosition *MarkdownColumnPosition `json:"contentsPosition"`
+	ContentsPosition *ColumnVerticalPosition `json:"contentsPosition"`
 }
 
 func (MarkdownColumn) IsColumn()                    {}
@@ -154,6 +154,49 @@ type TerminalOutput struct {
 
 func (TerminalOutput) IsTerminalElement() {}
 
+type ColumnVerticalPosition string
+
+const (
+	ColumnVerticalPositionTop    ColumnVerticalPosition = "TOP"
+	ColumnVerticalPositionCenter ColumnVerticalPosition = "CENTER"
+	ColumnVerticalPositionBottom ColumnVerticalPosition = "BOTTOM"
+)
+
+var AllColumnVerticalPosition = []ColumnVerticalPosition{
+	ColumnVerticalPositionTop,
+	ColumnVerticalPositionCenter,
+	ColumnVerticalPositionBottom,
+}
+
+func (e ColumnVerticalPosition) IsValid() bool {
+	switch e {
+	case ColumnVerticalPositionTop, ColumnVerticalPositionCenter, ColumnVerticalPositionBottom:
+		return true
+	}
+	return false
+}
+
+func (e ColumnVerticalPosition) String() string {
+	return string(e)
+}
+
+func (e *ColumnVerticalPosition) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ColumnVerticalPosition(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ColumnVerticalPosition", str)
+	}
+	return nil
+}
+
+func (e ColumnVerticalPosition) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type FileNodeType string
 
 const (
@@ -192,49 +235,6 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type ImageDescriptionColumnPosition string
-
-const (
-	ImageDescriptionColumnPositionTop    ImageDescriptionColumnPosition = "TOP"
-	ImageDescriptionColumnPositionCenter ImageDescriptionColumnPosition = "CENTER"
-	ImageDescriptionColumnPositionBottom ImageDescriptionColumnPosition = "BOTTOM"
-)
-
-var AllImageDescriptionColumnPosition = []ImageDescriptionColumnPosition{
-	ImageDescriptionColumnPositionTop,
-	ImageDescriptionColumnPositionCenter,
-	ImageDescriptionColumnPositionBottom,
-}
-
-func (e ImageDescriptionColumnPosition) IsValid() bool {
-	switch e {
-	case ImageDescriptionColumnPositionTop, ImageDescriptionColumnPositionCenter, ImageDescriptionColumnPositionBottom:
-		return true
-	}
-	return false
-}
-
-func (e ImageDescriptionColumnPosition) String() string {
-	return string(e)
-}
-
-func (e *ImageDescriptionColumnPosition) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ImageDescriptionColumnPosition(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ImageDescriptionColumnPosition", str)
-	}
-	return nil
-}
-
-func (e ImageDescriptionColumnPosition) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -317,49 +317,6 @@ func (e *MarkdownAlignment) UnmarshalGQL(v interface{}) error {
 }
 
 func (e MarkdownAlignment) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type MarkdownColumnPosition string
-
-const (
-	MarkdownColumnPositionTop    MarkdownColumnPosition = "TOP"
-	MarkdownColumnPositionCenter MarkdownColumnPosition = "CENTER"
-	MarkdownColumnPositionBottom MarkdownColumnPosition = "BOTTOM"
-)
-
-var AllMarkdownColumnPosition = []MarkdownColumnPosition{
-	MarkdownColumnPositionTop,
-	MarkdownColumnPositionCenter,
-	MarkdownColumnPositionBottom,
-}
-
-func (e MarkdownColumnPosition) IsValid() bool {
-	switch e {
-	case MarkdownColumnPositionTop, MarkdownColumnPositionCenter, MarkdownColumnPositionBottom:
-		return true
-	}
-	return false
-}
-
-func (e MarkdownColumnPosition) String() string {
-	return string(e)
-}
-
-func (e *MarkdownColumnPosition) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = MarkdownColumnPosition(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid MarkdownColumnPosition", str)
-	}
-	return nil
-}
-
-func (e MarkdownColumnPosition) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

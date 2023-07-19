@@ -34,6 +34,8 @@ export type Column = {
   _placeholder?: Maybe<Scalars["String"]>;
 };
 
+export type ColumnVerticalPosition = "BOTTOM" | "CENTER" | "TOP";
+
 export type ColumnWrapper = {
   __typename: "ColumnWrapper";
   column?: Maybe<Column>;
@@ -68,13 +70,11 @@ export type ImageCentered = {
 export type ImageDescriptionColumn = Column & {
   __typename: "ImageDescriptionColumn";
   _placeholder?: Maybe<Scalars["String"]>;
-  contentsPosition?: Maybe<ImageDescriptionColumnPosition>;
+  contentsPosition?: Maybe<ColumnVerticalPosition>;
   description?: Maybe<Markdown>;
   image?: Maybe<ImageCentered>;
   order?: Maybe<ImageDescriptionOrder>;
 };
-
-export type ImageDescriptionColumnPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type ImageDescriptionOrder =
   | "DESCRIPTION_THEN_IMAGE"
@@ -92,11 +92,9 @@ export type MarkdownAlignment = "CENTER" | "LEFT";
 export type MarkdownColumn = Column & {
   __typename: "MarkdownColumn";
   _placeholder?: Maybe<Scalars["String"]>;
-  contentsPosition?: Maybe<MarkdownColumnPosition>;
+  contentsPosition?: Maybe<ColumnVerticalPosition>;
   description?: Maybe<Markdown>;
 };
-
-export type MarkdownColumnPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type MarkdownOld = {
   __typename: "MarkdownOld";

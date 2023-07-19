@@ -1866,9 +1866,9 @@ func (ec *executionContext) _ImageDescriptionColumn_contentsPosition(ctx context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.ImageDescriptionColumnPosition)
+	res := resTmp.(*model.ColumnVerticalPosition)
 	fc.Result = res
-	return ec.marshalOImageDescriptionColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionColumnPosition(ctx, field.Selections, res)
+	return ec.marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ImageDescriptionColumn_contentsPosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1878,7 +1878,7 @@ func (ec *executionContext) fieldContext_ImageDescriptionColumn_contentsPosition
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ImageDescriptionColumnPosition does not have child fields")
+			return nil, errors.New("field of type ColumnVerticalPosition does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2120,9 +2120,9 @@ func (ec *executionContext) _MarkdownColumn_contentsPosition(ctx context.Context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.MarkdownColumnPosition)
+	res := resTmp.(*model.ColumnVerticalPosition)
 	fc.Result = res
-	return ec.marshalOMarkdownColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownColumnPosition(ctx, field.Selections, res)
+	return ec.marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MarkdownColumn_contentsPosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2132,7 +2132,7 @@ func (ec *executionContext) fieldContext_MarkdownColumn_contentsPosition(ctx con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type MarkdownColumnPosition does not have child fields")
+			return nil, errors.New("field of type ColumnVerticalPosition does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7277,6 +7277,22 @@ func (ec *executionContext) marshalOColumn2githubᚗcomᚋrichardimaokaᚋbizᚑ
 	return ec._Column(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx context.Context, v interface{}) (*model.ColumnVerticalPosition, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.ColumnVerticalPosition)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx context.Context, sel ast.SelectionSet, v *model.ColumnVerticalPosition) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7444,22 +7460,6 @@ func (ec *executionContext) marshalOImageCentered2ᚖgithubᚗcomᚋrichardimaok
 	return ec._ImageCentered(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOImageDescriptionColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionColumnPosition(ctx context.Context, v interface{}) (*model.ImageDescriptionColumnPosition, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.ImageDescriptionColumnPosition)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOImageDescriptionColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionColumnPosition(ctx context.Context, sel ast.SelectionSet, v *model.ImageDescriptionColumnPosition) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOImageDescriptionOrder2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionOrder(ctx context.Context, v interface{}) (*model.ImageDescriptionOrder, error) {
 	if v == nil {
 		return nil, nil
@@ -7509,22 +7509,6 @@ func (ec *executionContext) unmarshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichar
 }
 
 func (ec *executionContext) marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, sel ast.SelectionSet, v *model.MarkdownAlignment) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
-func (ec *executionContext) unmarshalOMarkdownColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownColumnPosition(ctx context.Context, v interface{}) (*model.MarkdownColumnPosition, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.MarkdownColumnPosition)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOMarkdownColumnPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownColumnPosition(ctx context.Context, sel ast.SelectionSet, v *model.MarkdownColumnPosition) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
