@@ -221,6 +221,7 @@ export type ColumnWrapperFragmentFragment = {
 export type ImageDescriptionColumnFragmentFragment = {
   __typename: "ImageDescriptionColumn";
   order?: ImageDescriptionOrder | null;
+  contentsPosition?: ColumnVerticalPosition | null;
   description?:
     | ({ __typename: "Markdown" } & {
         " $fragmentRefs"?: {
@@ -494,6 +495,7 @@ export const ImageDescriptionColumnFragmentFragmentDoc = {
             },
           },
           { kind: "Field", name: { kind: "Name", value: "order" } },
+          { kind: "Field", name: { kind: "Name", value: "contentsPosition" } },
         ],
       },
     },
