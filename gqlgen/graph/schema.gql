@@ -71,6 +71,7 @@ type ImageDescriptionColumn implements Column {
   description: Markdown
   image: ImageCentered
   order: ImageDescriptionOrder
+  contentsPosition: ImageDescriptionColumnPosition
 }
 
 type BackgroundImageColumn implements Column {
@@ -91,7 +92,7 @@ enum MarkdownColumnPosition {
 type MarkdownColumn implements Column {
   _placeholder: String
   description: Markdown
-  position: MarkdownColumnPosition
+  contentsPosition: MarkdownColumnPosition
 }
 
 type SourceCodeColumn implements Column {

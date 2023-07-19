@@ -55,10 +55,11 @@ type ImageCentered struct {
 }
 
 type ImageDescriptionColumn struct {
-	Placeholder *string                `json:"_placeholder"`
-	Description *Markdown              `json:"description"`
-	Image       *ImageCentered         `json:"image"`
-	Order       *ImageDescriptionOrder `json:"order"`
+	Placeholder      *string                         `json:"_placeholder"`
+	Description      *Markdown                       `json:"description"`
+	Image            *ImageCentered                  `json:"image"`
+	Order            *ImageDescriptionOrder          `json:"order"`
+	ContentsPosition *ImageDescriptionColumnPosition `json:"contentsPosition"`
 }
 
 func (ImageDescriptionColumn) IsColumn()                    {}
@@ -71,9 +72,9 @@ type Markdown struct {
 }
 
 type MarkdownColumn struct {
-	Placeholder *string                 `json:"_placeholder"`
-	Description *Markdown               `json:"description"`
-	Position    *MarkdownColumnPosition `json:"position"`
+	Placeholder      *string                 `json:"_placeholder"`
+	Description      *Markdown               `json:"description"`
+	ContentsPosition *MarkdownColumnPosition `json:"contentsPosition"`
 }
 
 func (MarkdownColumn) IsColumn()                    {}
