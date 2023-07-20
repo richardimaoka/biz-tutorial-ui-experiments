@@ -119,7 +119,13 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      <div>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+        `}
+      >
         {page?.columns &&
           page.columns.map(
             (col, index) => col && <ColumnWrapper key={index} fragment={col} />
