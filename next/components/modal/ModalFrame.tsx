@@ -56,6 +56,7 @@ export const ModalFrame = (props: ModalFrameProps): JSX.Element => {
     <div
       css={css`
         position: relative; //to contain the modal box
+        width: 100%; //somehow, without this, the background image's width is shrunk... not shure why...
       `}
     >
       <div

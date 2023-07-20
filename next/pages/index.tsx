@@ -123,7 +123,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
         css={css`
           display: flex;
           justify-content: center;
-          gap: 20px;
+          row-gap: 20px;
         `}
       >
         {page?.columns &&
