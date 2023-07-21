@@ -94,6 +94,11 @@ type SourceCodeColumn implements Column {
   sourceCode: SourceCode
 }
 
+type TerminalColumn implements Column {
+  _placeholder: String
+  terminal: Terminal
+}
+
 ###################################################
 # Terminal related object types
 ###################################################

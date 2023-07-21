@@ -163,6 +163,11 @@ type ComplexityRoot struct {
 		Step             func(childComplexity int) int
 	}
 
+	TerminalColumn struct {
+		Placeholder func(childComplexity int) int
+		Terminal    func(childComplexity int) int
+	}
+
 	TerminalCommand struct {
 		BeforeExecution func(childComplexity int) int
 		Command         func(childComplexity int) int
@@ -669,6 +674,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Terminal.Step(childComplexity), true
+
+	case "TerminalColumn._placeholder":
+		if e.complexity.TerminalColumn.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.TerminalColumn.Placeholder(childComplexity), true
+
+	case "TerminalColumn.terminal":
+		if e.complexity.TerminalColumn.Terminal == nil {
+			break
+		}
+
+		return e.complexity.TerminalColumn.Terminal(childComplexity), true
 
 	case "TerminalCommand.beforeExecution":
 		if e.complexity.TerminalCommand.BeforeExecution == nil {
@@ -3855,6 +3874,98 @@ func (ec *executionContext) fieldContext_Terminal_nodes(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _TerminalColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalColumn__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TerminalColumn_terminal(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalColumn_terminal(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Terminal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Terminal)
+	fc.Result = res
+	return ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalColumn_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "step":
+				return ec.fieldContext_Terminal_step(ctx, field)
+			case "name":
+				return ec.fieldContext_Terminal_name(ctx, field)
+			case "currentDirectory":
+				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
+			case "nodes":
+				return ec.fieldContext_Terminal_nodes(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TerminalCommand_beforeExecution(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TerminalCommand_beforeExecution(ctx, field)
 	if err != nil {
@@ -5828,6 +5939,13 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._SourceCodeColumn(ctx, sel, obj)
+	case model.TerminalColumn:
+		return ec._TerminalColumn(ctx, sel, &obj)
+	case *model.TerminalColumn:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TerminalColumn(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
@@ -6552,6 +6670,35 @@ func (ec *executionContext) _Terminal(ctx context.Context, sel ast.SelectionSet,
 		case "nodes":
 
 			out.Values[i] = ec._Terminal_nodes(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var terminalColumnImplementors = []string{"TerminalColumn", "Column"}
+
+func (ec *executionContext) _TerminalColumn(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, terminalColumnImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TerminalColumn")
+		case "_placeholder":
+
+			out.Values[i] = ec._TerminalColumn__placeholder(ctx, field, obj)
+
+		case "terminal":
+
+			out.Values[i] = ec._TerminalColumn_terminal(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

@@ -137,6 +137,14 @@ type Terminal struct {
 	Nodes            []*TerminalNode `json:"nodes"`
 }
 
+type TerminalColumn struct {
+	Placeholder *string   `json:"_placeholder"`
+	Terminal    *Terminal `json:"terminal"`
+}
+
+func (TerminalColumn) IsColumn()                    {}
+func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
+
 type TerminalCommand struct {
 	BeforeExecution *bool   `json:"beforeExecution"`
 	Command         *string `json:"command"`

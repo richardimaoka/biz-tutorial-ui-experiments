@@ -186,6 +186,12 @@ export type Terminal = {
   step?: Maybe<Scalars["String"]>;
 };
 
+export type TerminalColumn = Column & {
+  __typename: "TerminalColumn";
+  _placeholder?: Maybe<Scalars["String"]>;
+  terminal?: Maybe<Terminal>;
+};
+
 export type TerminalCommand = {
   __typename: "TerminalCommand";
   beforeExecution?: Maybe<Scalars["Boolean"]>;
@@ -237,6 +243,7 @@ export type ColumnWrapperFragmentFragment = {
         };
       })
     | { __typename: "SourceCodeColumn" }
+    | { __typename: "TerminalColumn" }
     | null;
 } & { " $fragmentName"?: "ColumnWrapperFragmentFragment" };
 
