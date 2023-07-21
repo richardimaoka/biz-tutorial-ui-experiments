@@ -19,7 +19,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["processing"]
+      "args": ["process2"]
     }
   ]
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 type StepEntry2 struct {
@@ -95,7 +96,7 @@ func (e StepEntry2) columns(seqNo int) []string {
 
 func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 	// var srcColState *state.SourceCodeColumn
-	// var terminalColumn *state.TerminalColumn
+	var terminalColumnState *state.TerminalColumn
 
 	var pages []model.Page
 	for seqNo, e := range entries {
@@ -104,7 +105,22 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
-			fmt.Println(colName)
+			if colName == "terminal" {
+				if terminalColumnState == nil {
+					terminalColumnState = state.NewTerminalColumn()
+				}
+
+				if e.TerminalText != "" {
+					terminalType, err := state.ToTerminalElementType(e.TerminalType)
+					if err != nil {
+						return nil, fmt.Errorf("ToGraphQLPages failed to convert terminal type, %s", err)
+					}
+					terminalColumnState.Transition(terminalType, e.TerminalText)
+				}
+
+				column := terminalColumnState.ToGraphQLTerminalColumn()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 			// 			// 	// if bgColState == nil {
 			// 			// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)

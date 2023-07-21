@@ -1,6 +1,9 @@
 package state
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -9,6 +12,24 @@ type Terminal struct {
 	terminalName     string
 	currentDirectory string
 	elements         []TerminalElement
+}
+
+type TerminalElementType string
+
+const (
+	TerminalTypeCommand TerminalElementType = "COMMAND"
+	TerminalTypeOutput  TerminalElementType = "OUTPUT"
+)
+
+func ToTerminalElementType(t string) (TerminalElementType, error) {
+	switch strings.ToUpper(t) {
+	case "COMMAND":
+		return TerminalTypeCommand, nil
+	case "OUTPUT":
+		return TerminalTypeOutput, nil
+	default:
+		return "", fmt.Errorf("'%s' is unknown TerminalElementType", t)
+	}
 }
 
 func NewTerminal() *Terminal {
