@@ -171,7 +171,7 @@ func ReadStepEntries(dirName string) (StepEntries, error) {
 	return entries, nil
 }
 
-func (this StepEntries) ClearDirectory(dirName string) error {
+func ClearDirectory(dirName string) error {
 	if err := os.RemoveAll(dirName + "/state"); err != nil {
 		return fmt.Errorf("ClearDirectory failed, %s", err)
 	}
@@ -182,7 +182,7 @@ func (this StepEntries) ClearDirectory(dirName string) error {
 	return nil
 }
 
-func (this StepEntries) WriteResults(dirName string, pages []model.Page) error {
+func WriteResults(dirName string, pages []model.Page) error {
 	for _, p := range pages {
 		filename := fmt.Sprintf("%s/state/%s.json", dirName, *p.Step)
 		err := internal.WriteJsonToFile(p, filename)
@@ -200,13 +200,13 @@ func Process(dirName string) error {
 		return fmt.Errorf("Process failed, %s", err)
 	}
 
-	if err := entries.ClearDirectory(dirName); err != nil {
+	if err := ClearDirectory(dirName); err != nil {
 		return fmt.Errorf("Process failed, %s", err)
 	}
 
 	pages := entries.ToGraphQLPages()
 
-	if err := entries.WriteResults(dirName, pages); err != nil {
+	if err := WriteResults(dirName, pages); err != nil {
 		return fmt.Errorf("Process failed, %s", err)
 	}
 
