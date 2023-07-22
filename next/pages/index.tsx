@@ -11,6 +11,7 @@ import { ColumnWrapper } from "../components/column/ColumnWrapper";
 import { NextButton } from "../components/navigation/NextButton";
 import { PrevButton } from "../components/navigation/PrevButton";
 import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
+import { print } from "graphql";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -89,6 +90,8 @@ export default function Home({ page }: IndexSsrPageQuery) {
   const router = useRouter();
   const currentStep = extractString(router.query.step);
   const openFilePath = extractString(router.query.openFilePath);
+
+  //console.log(print(queryDefinition));
 
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
