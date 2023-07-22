@@ -39,7 +39,7 @@ const TypeInCodeComponent = ({
     }
     scrollIntoView();
   });
-  return <code>{command?.substring(0, writtenLength)}</code>;
+  return <code>&gt; {command?.substring(0, writtenLength)}</code>;
 };
 
 export const TerminalCommandComponent = (
@@ -59,7 +59,6 @@ export const TerminalCommandComponent = (
         padding: 4px;
         background-color: #1e1e1e;
         color: #f1f1f1;
-        border-bottom: 1px solid #333333;
       `}
     >
       {fragment.beforeExecution && animate ? (
@@ -68,7 +67,7 @@ export const TerminalCommandComponent = (
           scrollIntoView={scrollIntoView}
         />
       ) : (
-        <code>{fragment.command}</code>
+        <code>&gt; {fragment.command}</code>
       )}
     </pre>
   );

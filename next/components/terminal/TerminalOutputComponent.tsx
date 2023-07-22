@@ -22,8 +22,7 @@ export const TerminalOutputComponent = (
         margin: 1px 0px;
         padding: 4px;
         background-color: #1e1e1e;
-        color: #f1f1f1;
-        border-bottom: 1px solid #333333;
+        color: #979797;
       `}
     >
       <code>{fragment.output}</code>
