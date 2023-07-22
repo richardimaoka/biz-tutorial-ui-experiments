@@ -135,6 +135,9 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
 					}
 				}
+
+				column := srcColmnState.ToGraphQLSourceCodeColumn()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
 
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
