@@ -6,7 +6,7 @@
     {
       "index": null,
       "column": {
-        "_placeholder": null,
+        "__typename": "SourceCodeColumn",
         "sourceCode": {
           "step": "",
           "defaultOpenFile": null,

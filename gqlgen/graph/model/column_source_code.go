@@ -4,11 +4,13 @@ import "encoding/json"
 
 func (this SourceCodeColumn) MarshalJSON() ([]byte, error) {
 	extendedOutput := struct {
-		TypeName   string      `json:"__typename"`
-		SourceCode *SourceCode `json:"sourceCode,omitempty"`
+		TypeName    string      `json:"__typename"`
+		Placeholder *string     `json:"_placeholder,omitempty"`
+		SourceCode  *SourceCode `json:"sourceCode,omitempty"`
 	}{
-		TypeName:   "SourceCodeColumn",
-		SourceCode: this.SourceCode,
+		TypeName:    "SourceCodeColumn",
+		Placeholder: this.Placeholder,
+		SourceCode:  this.SourceCode,
 	}
 
 	return json.Marshal(extendedOutput)
