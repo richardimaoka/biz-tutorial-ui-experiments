@@ -12,6 +12,7 @@ import { NextButton } from "../components/navigation/NextButton";
 import { PrevButton } from "../components/navigation/PrevButton";
 import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
 import { print } from "graphql";
+import { StepDisplay } from "../components/steps/StepDisplay";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -122,20 +123,59 @@ export default function Home({ page }: IndexSsrPageQuery) {
   //   };
   // }, [router, nextStep, prevStep, openFilePath]);
 
+  const list = [1, 2, 3, 4, 5, 6, 7, 8];
+
   return (
     <>
+      {currentStep && <StepDisplay step={currentStep} />}
       <div
         css={css`
           display: flex;
-          justify-content: center;
-          row-gap: 20px;
+          gap: 20px;
+          height: 100vh;
+          @media (max-width: 768px) {
+            width: 100vw;
+            height: 100vh;
+          }
+          width: ${768 * 2}px;
+          height: 100vh;
+
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          overflow-x: auto;
         `}
       >
-        {page?.columns &&
+        {list.map((item, index) => (
+          <div
+            key={index}
+            css={css`
+              background-color: white;
+              color: black;
+              @media (max-width: 768px) {
+                width: 100vw;
+                height: 100vh;
+              }
+              width: 768px;
+              height: 100vh;
+              scroll-snap-align: start;
+              flex-shrink: 0;
+              padding-top: 100px;
+              padding-left: 100px;
+            `}
+          >
+            {item}
+          </div>
+        ))}
+        {/* {page?.columns &&
           page.columns.map(
             (col, index) => col && <ColumnWrapper key={index} fragment={col} />
           )}
+        {page?.columns &&
+          page.columns.map(
+            (col, index) => col && <ColumnWrapper key={index} fragment={col} />
+          )} */}
       </div>
+
       {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
       {page?.nextStep && <AutoPlayButton />}
       {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
