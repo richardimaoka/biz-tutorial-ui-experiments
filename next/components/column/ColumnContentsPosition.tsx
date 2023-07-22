@@ -29,13 +29,12 @@ export const ColumnContentsPosition = ({
         @media (max-width: 768px) {
           width: 100vw;
           height: 100vh;
-          background-color: ${dark1MainBg};
         }
         width: 768px;
         min-height: 100vh;
         overflow: auto;
 
-        background-color: ${dark3SubBg};
+        background-color: ${dark1MainBg};
 
         display: flex;
         flex-direction: column;

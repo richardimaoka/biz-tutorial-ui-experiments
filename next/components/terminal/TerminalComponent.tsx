@@ -33,7 +33,7 @@ export const TerminalComponent = (
     <div
       css={css`
         background-color: #1e1e1e;
-        height: 400px;
+        height: 100vh;
         overflow: scroll;
         ::-webkit-scrollbar {
           width: 8px;

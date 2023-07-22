@@ -1,6 +1,10 @@
 body {
   margin: 0px;
-  background-color: #252526;
+
+  @media (max-width: 768px) {
+    background-color: #252526;
+  }
+  background-color: #2d2d2d;
   min-height: 100vh;
   color: white;
 }
