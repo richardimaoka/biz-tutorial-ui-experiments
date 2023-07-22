@@ -242,7 +242,11 @@ export type ColumnWrapperFragmentFragment = {
           MarkdownColumnFragmentFragment: MarkdownColumnFragmentFragment;
         };
       })
-    | { __typename: "SourceCodeColumn" }
+    | ({ __typename: "SourceCodeColumn" } & {
+        " $fragmentRefs"?: {
+          SourceCodeColumnFragmentFragment: SourceCodeColumnFragmentFragment;
+        };
+      })
     | ({ __typename: "TerminalColumn" } & {
         " $fragmentRefs"?: {
           TerminalColumnFragmentFragment: TerminalColumnFragmentFragment;
@@ -282,6 +286,17 @@ export type MarkdownColumnFragmentFragment = {
       })
     | null;
 } & { " $fragmentName"?: "MarkdownColumnFragmentFragment" };
+
+export type SourceCodeColumnFragmentFragment = {
+  __typename: "SourceCodeColumn";
+  sourceCode?:
+    | ({ __typename: "SourceCode" } & {
+        " $fragmentRefs"?: {
+          SourceCodeViewer_FragmentFragment: SourceCodeViewer_FragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "SourceCodeColumnFragmentFragment" };
 
 export type TerminalColumnFragmentFragment = {
   __typename: "TerminalColumn";
@@ -436,6 +451,7 @@ export type TerminalOutput_FragmentFragment = {
 export type IndexSsrPageQueryVariables = Exact<{
   tutorial: Scalars["String"];
   step?: InputMaybe<Scalars["String"]>;
+  openFilePath?: InputMaybe<Scalars["String"]>;
 }>;
 
 export type IndexSsrPageQuery = {
@@ -801,103 +817,6 @@ export const TerminalColumnFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<TerminalColumnFragmentFragment, unknown>;
-export const ColumnWrapperFragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnWrapperFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "column" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "ImageDescriptionColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "ImageDescriptionColumnFragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "BackgroundImageColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "BackgroundImageColumnFragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "MarkdownColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: { kind: "Name", value: "MarkdownColumnFragment" },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: { kind: "Name", value: "TerminalColumnFragment" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
 export const FileNodeIcon_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1141,6 +1060,153 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
+export const SourceCodeColumnFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SourceCodeColumnFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SourceCodeViewer_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SourceCodeColumnFragmentFragment, unknown>;
+export const ColumnWrapperFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnWrapperFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ImageDescriptionColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "ImageDescriptionColumnFragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BackgroundImageColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "BackgroundImageColumnFragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "MarkdownColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "MarkdownColumnFragment" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "TerminalColumnFragment" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "SourceCodeColumnFragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
 export const IndexSsrPageDocument = {
   kind: "Document",
   definitions: [
@@ -1166,6 +1232,14 @@ export const IndexSsrPageDocument = {
         {
           kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "openFilePath" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -1231,5 +1305,15 @@ export const IndexSsrPageDocument = {
     ...TerminalNodeComponent_FragmentFragmentDoc.definitions,
     ...TerminalCommand_FragmentFragmentDoc.definitions,
     ...TerminalOutput_FragmentFragmentDoc.definitions,
+    ...SourceCodeColumnFragmentFragmentDoc.definitions,
+    ...SourceCodeViewer_FragmentFragmentDoc.definitions,
+    ...FileTreePane_FragmentFragmentDoc.definitions,
+    ...FileTreeComponent_FragmentFragmentDoc.definitions,
+    ...FileNodeComponent_FragmentFragmentDoc.definitions,
+    ...FileNodeIcon_FragmentFragmentDoc.definitions,
+    ...FileContentPane_FragmentFragmentDoc.definitions,
+    ...FileNameTabBar_FragmentFragmentDoc.definitions,
+    ...FileNameTab_FragmentFragmentDoc.definitions,
+    ...FileContentViewer_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;

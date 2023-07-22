@@ -50,7 +50,7 @@ const constructQueryString = (
 };
 
 const queryDefinition = graphql(/* GraphQL */ `
-  query IndexSsrPage($tutorial: String!, $step: String) {
+  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       __typename
       step
@@ -72,12 +72,14 @@ export const getServerSideProps: GetServerSideProps<
   PageParams
 > = async (context) => {
   const step = extractString(context.query.step);
+  const openFilePath = extractString(context.query.openFilePath);
 
   const { data } = await client.query({
     query: queryDefinition,
     variables: {
       tutorial: "sign-in-with-google",
       step: step,
+      openFilePath: openFilePath,
     },
   });
 
@@ -134,9 +136,9 @@ export default function Home({ page }: IndexSsrPageQuery) {
             (col, index) => col && <ColumnWrapper key={index} fragment={col} />
           )}
       </div>
-      {page?.prevStep && <PrevButton href={`/?step=${page.prevStep}`} />}
+      {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
       {page?.nextStep && <AutoPlayButton />}
-      {page?.nextStep && <NextButton href={`/?step=${page.nextStep}`} />}
+      {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
     </>
   );
 }

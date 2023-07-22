@@ -3,6 +3,7 @@ import { ImageDescriptionColumn } from "./ImageDescriptionColumn";
 import { MarkdownColumn } from "./MarkdownColumn";
 import { BackgroundImageColumn } from "./BackgroundImageColumn";
 import { TerminalColumn } from "./TerminalColumn";
+import { SourceCodeColumn } from "./SourceCodelColumn";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperFragment on ColumnWrapper {
@@ -18,6 +19,9 @@ const fragmentDefinition = graphql(`
       }
       ... on TerminalColumn {
         ...TerminalColumnFragment
+      }
+      ... on SourceCodeColumn {
+        ...SourceCodeColumnFragment
       }
     }
   }
@@ -48,6 +52,8 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
       return <MarkdownColumn fragment={fragment.column} />;
     case "TerminalColumn":
       return <TerminalColumn fragment={fragment.column} />;
+    case "SourceCodeColumn":
+      return <SourceCodeColumn fragment={fragment.column} />;
     default:
       return <>no matching column</>;
   }
