@@ -17,17 +17,9 @@ export interface TerminalColumnProps {
 export const TerminalColumn = (props: TerminalColumnProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  console.log("TerminalColumn", fragment);
-
   if (!fragment.terminal) {
     return <></>;
   }
 
-  console.log("TerminalColumn non-null", fragment);
-
-  return (
-    <ColumnContentsPosition position="TOP">
-      <TerminalComponent fragment={fragment.terminal} />
-    </ColumnContentsPosition>
-  );
+  return <TerminalComponent fragment={fragment.terminal} />;
 };

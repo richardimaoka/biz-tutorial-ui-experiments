@@ -35,12 +35,12 @@ export const ImageDescriptionColumn = (
   switch (order) {
     case "DESCRIPTION_THEN_IMAGE":
       return (
-        <ColumnContentsPosition position={position}>
+        <>
           {fragment.description && (
             <MarkdownView fragment={fragment.description} />
           )}
           {fragment.image && <ImageCentered fragment={fragment.image} />}
-        </ColumnContentsPosition>
+        </>
       );
     case "IMAGE_THEN_DESCRIPTION":
       return (

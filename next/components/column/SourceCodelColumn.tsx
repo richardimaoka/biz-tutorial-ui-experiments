@@ -17,17 +17,9 @@ export interface SourceCodeColumnProps {
 export const SourceCodeColumn = (props: SourceCodeColumnProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  console.log("SourceCodeColumn", fragment);
-
   if (!fragment.sourceCode) {
     return <></>;
   }
 
-  console.log("SourceCodeColumn non-null", fragment);
-
-  return (
-    <ColumnContentsPosition position="TOP">
-      <SourceCodeViewer fragment={fragment.sourceCode} step="" />
-    </ColumnContentsPosition>
-  );
+  return <SourceCodeViewer fragment={fragment.sourceCode} step="" />;
 };

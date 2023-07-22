@@ -4,12 +4,14 @@ import { MarkdownColumn } from "./MarkdownColumn";
 import { BackgroundImageColumn } from "./BackgroundImageColumn";
 import { TerminalColumn } from "./TerminalColumn";
 import { SourceCodeColumn } from "./SourceCodelColumn";
+import { ColumnContentsPosition } from "./ColumnContentsPosition";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperFragment on ColumnWrapper {
     column {
       ... on ImageDescriptionColumn {
         ...ImageDescriptionColumnFragment
+        contentsPosition
       }
       ... on BackgroundImageColumn {
         ...BackgroundImageColumnFragment
@@ -45,15 +47,30 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
 
   switch (typename) {
     case "ImageDescriptionColumn":
-      return <ImageDescriptionColumn fragment={fragment.column} />;
+      const position = fragment.column.contentsPosition
+        ? fragment.column.contentsPosition
+        : "TOP";
+      return (
+        <ColumnContentsPosition position={position}>
+          <ImageDescriptionColumn fragment={fragment.column} />
+        </ColumnContentsPosition>
+      );
     case "BackgroundImageColumn":
       return <BackgroundImageColumn fragment={fragment.column} />;
     case "MarkdownColumn":
       return <MarkdownColumn fragment={fragment.column} />;
     case "TerminalColumn":
-      return <TerminalColumn fragment={fragment.column} />;
+      return (
+        <ColumnContentsPosition position="TOP">
+          <TerminalColumn fragment={fragment.column} />
+        </ColumnContentsPosition>
+      );
     case "SourceCodeColumn":
-      return <SourceCodeColumn fragment={fragment.column} />;
+      return (
+        <ColumnContentsPosition position="TOP">
+          <SourceCodeColumn fragment={fragment.column} />
+        </ColumnContentsPosition>
+      );
     default:
       return <>no matching column</>;
   }
