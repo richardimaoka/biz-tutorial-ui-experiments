@@ -15,12 +15,14 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
 const documents = {
   "\n  fragment BackgroundImageColumnFragment on BackgroundImageColumn {\n    width\n    height\n    path\n    modal {\n      text\n      ...ModalFrameFragment\n    }\n  }\n":
     types.BackgroundImageColumnFragmentFragmentDoc,
-  "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n    }\n  }\n":
+  "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n      ... on TerminalColumn {\n        ...TerminalColumnFragment\n      }\n    }\n  }\n":
     types.ColumnWrapperFragmentFragmentDoc,
   "\n  fragment ImageDescriptionColumnFragment on ImageDescriptionColumn {\n    description {\n      ...MarkdownFragment\n    }\n    image {\n      ...ImageCenteredFragment\n    }\n    order\n    contentsPosition\n  }\n":
     types.ImageDescriptionColumnFragmentFragmentDoc,
   "\n  fragment MarkdownColumnFragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n":
     types.MarkdownColumnFragmentFragmentDoc,
+  "\n  fragment TerminalColumnFragment on TerminalColumn {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
+    types.TerminalColumnFragmentFragmentDoc,
   "\n  fragment ImageCenteredFragment on ImageCentered {\n    width\n    height\n    path\n  }\n":
     types.ImageCenteredFragmentFragmentDoc,
   "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n":
@@ -81,8 +83,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n    }\n  }\n",
-): (typeof documents)["\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n    }\n  }\n"];
+  source: "\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n      ... on TerminalColumn {\n        ...TerminalColumnFragment\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment ColumnWrapperFragment on ColumnWrapper {\n    column {\n      ... on ImageDescriptionColumn {\n        ...ImageDescriptionColumnFragment\n      }\n      ... on BackgroundImageColumn {\n        ...BackgroundImageColumnFragment\n      }\n      ... on MarkdownColumn {\n        ...MarkdownColumnFragment\n      }\n      ... on TerminalColumn {\n        ...TerminalColumnFragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -95,6 +97,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment MarkdownColumnFragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n",
 ): (typeof documents)["\n  fragment MarkdownColumnFragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment TerminalColumnFragment on TerminalColumn {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n",
+): (typeof documents)["\n  fragment TerminalColumnFragment on TerminalColumn {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

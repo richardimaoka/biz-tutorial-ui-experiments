@@ -243,7 +243,11 @@ export type ColumnWrapperFragmentFragment = {
         };
       })
     | { __typename: "SourceCodeColumn" }
-    | { __typename: "TerminalColumn" }
+    | ({ __typename: "TerminalColumn" } & {
+        " $fragmentRefs"?: {
+          TerminalColumnFragmentFragment: TerminalColumnFragmentFragment;
+        };
+      })
     | null;
 } & { " $fragmentName"?: "ColumnWrapperFragmentFragment" };
 
@@ -278,6 +282,17 @@ export type MarkdownColumnFragmentFragment = {
       })
     | null;
 } & { " $fragmentName"?: "MarkdownColumnFragmentFragment" };
+
+export type TerminalColumnFragmentFragment = {
+  __typename: "TerminalColumn";
+  terminal?:
+    | ({ __typename: "Terminal" } & {
+        " $fragmentRefs"?: {
+          TerminalComponent_FragmentFragment: TerminalComponent_FragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "TerminalColumnFragmentFragment" };
 
 export type ImageCenteredFragmentFragment = {
   __typename: "ImageCentered";
@@ -615,6 +630,177 @@ export const MarkdownColumnFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<MarkdownColumnFragmentFragment, unknown>;
+export const TerminalCommand_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommand_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "command" } },
+          { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalCommand_FragmentFragment, unknown>;
+export const TerminalOutput_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalOutput_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalOutput" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "output" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalOutput_FragmentFragment, unknown>;
+export const TerminalNodeComponent_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalNodeComponent_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "content" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalCommand" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalCommand_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalOutput" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "TerminalOutput_Fragment",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalNodeComponent_FragmentFragment, unknown>;
+export const TerminalComponent_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalComponent_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "nodes" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: {
+                    kind: "Name",
+                    value: "TerminalNodeComponent_Fragment",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
+export const TerminalColumnFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalColumnFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "TerminalComponent_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalColumnFragmentFragment, unknown>;
 export const ColumnWrapperFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -684,6 +870,22 @@ export const ColumnWrapperFragmentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "MarkdownColumnFragment" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "TerminalColumnFragment" },
                       },
                     ],
                   },
@@ -939,146 +1141,6 @@ export const SourceCodeViewer_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SourceCodeViewer_FragmentFragment, unknown>;
-export const TerminalCommand_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalCommand_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "TerminalCommand" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "command" } },
-          { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalCommand_FragmentFragment, unknown>;
-export const TerminalOutput_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalOutput_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "TerminalOutput" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "output" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalOutput_FragmentFragment, unknown>;
-export const TerminalNodeComponent_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalNodeComponent_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "TerminalNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "content" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "__typename" } },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalCommand" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "TerminalCommand_Fragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalOutput" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "TerminalOutput_Fragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalNodeComponent_FragmentFragment, unknown>;
-export const TerminalComponent_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalComponent_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Terminal" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "nodes" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: {
-                    kind: "Name",
-                    value: "TerminalNodeComponent_Fragment",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<TerminalComponent_FragmentFragment, unknown>;
 export const IndexSsrPageDocument = {
   kind: "Document",
   definitions: [
@@ -1164,5 +1226,10 @@ export const IndexSsrPageDocument = {
     ...BackgroundImageColumnFragmentFragmentDoc.definitions,
     ...ModalFrameFragmentFragmentDoc.definitions,
     ...MarkdownColumnFragmentFragmentDoc.definitions,
+    ...TerminalColumnFragmentFragmentDoc.definitions,
+    ...TerminalComponent_FragmentFragmentDoc.definitions,
+    ...TerminalNodeComponent_FragmentFragmentDoc.definitions,
+    ...TerminalCommand_FragmentFragmentDoc.definitions,
+    ...TerminalOutput_FragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<IndexSsrPageQuery, IndexSsrPageQueryVariables>;
