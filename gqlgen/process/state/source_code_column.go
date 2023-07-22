@@ -16,7 +16,7 @@ type SourceCodeColumn struct {
 func NewSourceCodeColumn(repoUrl, commitStr, initialStep string) (*SourceCodeColumn, error) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
-		return nil, fmt.Errorf("failed in NewSourceCodeColumn, %s", err)
+		return nil, fmt.Errorf("failed in NewSourceCodeColumn, could not clone git repo, %s", err)
 	}
 
 	sc, err := InitialSourceCode(repo, commitStr)

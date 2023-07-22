@@ -36,7 +36,7 @@ type StepEntry2 struct {
 	// git
 	Commit        string `json:"commit,omitempty"`
 	CommitMessage string `json:"commitMessage,omitempty"`
-	Repo          string `json:"repo,omitempty"`
+	RepoUrl       string `json:"repoUrl,omitempty"`
 
 	// browser
 	BrowserType        string `json:"browserType,omitempty"`
@@ -95,7 +95,7 @@ func (e StepEntry2) columns(seqNo int) []string {
 }
 
 func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
-	// var srcColState *state.SourceCodeColumn
+	var srcColmnState *state.SourceCodeColumn
 	var terminalColumnState *state.TerminalColumn
 
 	var pages []model.Page
@@ -113,7 +113,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 				if e.TerminalText != "" {
 					terminalType, err := state.ToTerminalElementType(e.TerminalType)
 					if err != nil {
-						return nil, fmt.Errorf("ToGraphQLPages failed to convert terminal type, %s", err)
+						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert terminal type, %s", e.Step, err)
 					}
 					terminalColumnState.Transition(terminalType, e.TerminalText)
 				}
@@ -121,6 +121,22 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 				column := terminalColumnState.ToGraphQLTerminalColumn()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
+
+			if colName == "src" {
+				if srcColmnState == nil {
+					var err error
+					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step)
+					if err != nil {
+						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
+					}
+				} else if e.Commit != "" {
+					err := srcColmnState.Transition(e.Step, e.Commit)
+					if err != nil {
+						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
+					}
+				}
+			}
+
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 			// 			// 	// if bgColState == nil {
 			// 			// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
@@ -139,21 +155,6 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 			// 			// if e.MarkdownColumn != nil && e.MarkdownColumn.Column == i {
 			// 			// 	column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
 			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 			// }
-
-			// 			// if e.GitColumn != nil && e.GitColumn.Column == i {
-			// 			// 	if srcColState == nil {
-			// 			// 		var err error
-			// 			// 		srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step)
-			// 			// 		if err != nil {
-			// 			// 			// return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
-			// 			// 		}
-			// 			// 	} else {
-			// 			// 		err := srcColState.Transition(e.Step, e.GitColumn.Commit)
-			// 			// 		if err != nil {
-			// 			// 			// return nil, fmt.Errorf("ToGraphQLPages failed to transition source code, %s", err)
-			// 			// 		}
-			// 			// 	}
 			// 			// }
 
 			// 			// // once srcColState is initialized, git column persists
