@@ -52,6 +52,10 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   return (
     <div
       css={css`
+        // flex to allow multiple columns
+        display: flex;
+        gap: 20px;
+
         // on mobile, show one column only
         @media (max-width: 768px) {
           width: 100vw;
@@ -67,10 +71,6 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
         overflow-x: auto;
         overflow-y: hidden; // let inner column handle y-axis scroll
         ${scrollBarStyle}
-
-        // flex to allow multiple columns
-        display: flex;
-        gap: 20px;
       `}
     >
       {columns.map((col, index) => (
