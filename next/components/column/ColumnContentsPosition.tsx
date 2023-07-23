@@ -26,9 +26,8 @@ export const ColumnContentsPosition = ({
   return (
     <div
       css={css`
-        min-height: 100vh;
+        /* min-height: 100vh; */
         background-color: ${dark1MainBg};
-
         display: flex;
         flex-direction: column;
         justify-content: ${justifyContent(position)};

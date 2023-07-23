@@ -11,6 +11,7 @@ import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { useEffect } from "react";
 import { queryParamToString } from "../libs/queryString";
+import { Header } from "../components/Header";
 
 const constructQueryString = (
   step: string | undefined,
