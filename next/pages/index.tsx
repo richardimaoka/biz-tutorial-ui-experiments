@@ -5,7 +5,7 @@ import { PageColumns } from "../components/column/PageColumns";
 import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
 import { NextButton } from "../components/navigation/NextButton";
 import { PrevButton } from "../components/navigation/PrevButton";
-import { StepDisplay } from "../components/steps/StepDisplay";
+import { StepDisplay } from "../components/navigation/StepDisplay";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
