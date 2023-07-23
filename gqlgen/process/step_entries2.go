@@ -102,6 +102,9 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 	for seqNo, e := range entries {
 		currentStep, prevStep, nextStep := entries.calcSteps(seqNo)
 		columns := e.columns(seqNo)
+		if len(columns) == 0 {
+			return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, no columns are specified", e.Step)
+		}
 
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
