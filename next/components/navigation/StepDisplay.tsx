@@ -14,6 +14,6 @@ export const StepDisplay = ({ step }: { step: string }) => (
       z-index: 100;
     `}
   >
-    {step}
+    step = {step}
   </div>
 );

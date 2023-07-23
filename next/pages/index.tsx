@@ -12,6 +12,7 @@ import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { useEffect } from "react";
 import { queryParamToString } from "../libs/queryString";
 import { Header } from "../components/Header";
+import { BackToStart } from "../components/navigation/BackToStart";
 
 const constructQueryString = (
   step: string | undefined,
@@ -104,6 +105,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
+      <BackToStart />
       {page?.step && <StepDisplay step={page.step} />}
       {page && <PageColumns fragment={page} />}
       {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
