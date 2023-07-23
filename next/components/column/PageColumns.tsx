@@ -30,6 +30,22 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
       ? /* show up to two columns */ desktopColumnWidth * 2 + desktopColumnGap
       : desktopColumnWidth;
 
+  const scrollBarStyle = css`
+    // scroll bar style
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background-color: #252526; /* or add it to the track */
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #37373d;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-corner {
+      background-color: #252526;
+    }
+  `;
+
   return (
     <div
       css={css`
@@ -51,20 +67,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
         scroll-behavior: smooth;
         overflow-x: auto;
         overflow-y: hidden; // let inner column handle y-axis scroll
-
-        // scroll bar style
-        ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-          background-color: #252526; /* or add it to the track */
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #37373d;
-          border-radius: 8px;
-        }
-        ::-webkit-scrollbar-corner {
-          background-color: #252526;
-        }
+        ${scrollBarStyle}
       `}
     >
       {list.map((item, index) => (
@@ -87,14 +90,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
             // in-column scroll for y-axis
             overflow-y: auto;
             overflow-x: hidden; // not to conflict with outer carousel scroll
-
-            ::-webkit-scrollbar-thumb {
-              background: #37373d;
-              border-radius: 8px;
-            }
-            ::-webkit-scrollbar-corner {
-              background-color: #252526;
-            }
+            ${scrollBarStyle}
           `}
         >
           <div
