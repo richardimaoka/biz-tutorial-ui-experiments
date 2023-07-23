@@ -1,11 +1,49 @@
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
+import { queryParamToString } from "../../libs/queryString";
 
 export const AutoPlayButton = () => {
   const router = useRouter();
-  const onClick = () => {
+  const autoPlay = queryParamToString(router.query.autoPlay) === "true";
+
+  const startAutoPlay = () => {
     router.replace({ query: { ...router.query, autoPlay: true } });
   };
+  const stopAutoPlay = () => {
+    router.replace({ query: { ...router.query, autoPlay: undefined } });
+  };
+
+  const AutoPlayText = () => (
+    <>
+      <div
+        css={css`
+          font-size: 16px;
+          height: 18px;
+        `}
+      >
+        AutoPlay
+      </div>
+      <div
+        css={css`
+          font-size: 8px;
+          line-height: 8px;
+        `}
+      >
+        to next milestone
+      </div>
+    </>
+  );
+
+  const AutoPlayStopText = () => (
+    <div
+      css={css`
+        font-size: 16px;
+        height: 18px;
+      `}
+    >
+      Stop AutoPlay
+    </div>
+  );
 
   return (
     <button
@@ -25,24 +63,9 @@ export const AutoPlayButton = () => {
         color: black;
         border-style: none;
       `}
-      onClick={onClick}
+      onClick={autoPlay ? stopAutoPlay : startAutoPlay}
     >
-      <div
-        css={css`
-          font-size: 16px;
-          height: 18px;
-        `}
-      >
-        Auto Play
-      </div>
-      <div
-        css={css`
-          font-size: 8px;
-          line-height: 8px;
-        `}
-      >
-        to next milestone
-      </div>
+      {autoPlay ? <AutoPlayStopText /> : <AutoPlayText />}
     </button>
   );
 };
