@@ -23,7 +23,7 @@ export const TerminalComponent = (
   const ref = useRef<HTMLDivElement>(null);
   const scrollIntoView = () => {
     if (ref) {
-      ref.current?.scrollIntoView({ behavior: "smooth" });
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   };
 
