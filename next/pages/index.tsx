@@ -9,23 +9,8 @@ import { StepDisplay } from "../components/steps/StepDisplay";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
-
-const extractString = (
-  queryString: string | string[] | undefined
-): string | undefined => {
-  // if object, it must be string[]
-  if (typeof queryString == "object") {
-    if (queryString.length > 0) {
-      return queryString[0];
-    } else {
-      return undefined;
-    }
-  } else if (typeof queryString == "string") {
-    return queryString;
-  } else {
-    return undefined;
-  }
-};
+import { useEffect } from "react";
+import { queryParamToString } from "../libs/queryString";
 
 const constructQueryString = (
   step: string | undefined,
@@ -66,8 +51,8 @@ export const getServerSideProps: GetServerSideProps<
   IndexSsrPageQuery,
   PageParams
 > = async (context) => {
-  const step = extractString(context.query.step);
-  const openFilePath = extractString(context.query.openFilePath);
+  const step = queryParamToString(context.query.step);
+  const openFilePath = queryParamToString(context.query.openFilePath);
 
   const { data } = await client.query({
     query: queryDefinition,
@@ -85,8 +70,14 @@ export const getServerSideProps: GetServerSideProps<
 
 export default function Home({ page }: IndexSsrPageQuery) {
   const router = useRouter();
-  const currentStep = extractString(router.query.step);
-  const openFilePath = extractString(router.query.openFilePath);
+
+  useEffect(() => {
+    if (router.query.autoPlay && page?.nextStep) {
+      setTimeout(() => {
+        router.replace({ query: { ...router.query, step: page?.nextStep } });
+      }, 1000);
+    }
+  });
 
   //console.log(print(queryDefinition));
 
@@ -119,7 +110,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      {currentStep && <StepDisplay step={currentStep} />}
+      {page?.step && <StepDisplay step={page.step} />}
       {page && <PageColumns fragment={page} />}
       {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
       {page?.nextStep && <AutoPlayButton />}
