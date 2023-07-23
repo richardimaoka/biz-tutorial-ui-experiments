@@ -290,6 +290,18 @@ export type MarkdownColumnFragmentFragment = {
     | null;
 } & { " $fragmentName"?: "MarkdownColumnFragmentFragment" };
 
+export type PageColumnsFragmentFragment = {
+  __typename: "Page";
+  columns?: Array<
+    | ({ __typename: "ColumnWrapper" } & {
+        " $fragmentRefs"?: {
+          ColumnWrapperFragmentFragment: ColumnWrapperFragmentFragment;
+        };
+      })
+    | null
+  > | null;
+} & { " $fragmentName"?: "PageColumnsFragmentFragment" };
+
 export type SourceCodeColumnFragmentFragment = {
   __typename: "SourceCodeColumn";
   sourceCode?:
@@ -459,20 +471,18 @@ export type IndexSsrPageQueryVariables = Exact<{
 
 export type IndexSsrPageQuery = {
   __typename: "Query";
-  page?: {
-    __typename: "Page";
-    step?: string | null;
-    nextStep?: string | null;
-    prevStep?: string | null;
-    columns?: Array<
-      | ({ __typename: "ColumnWrapper" } & {
-          " $fragmentRefs"?: {
-            ColumnWrapperFragmentFragment: ColumnWrapperFragmentFragment;
-          };
-        })
-      | null
-    > | null;
-  } | null;
+  page?:
+    | ({
+        __typename: "Page";
+        step?: string | null;
+        nextStep?: string | null;
+        prevStep?: string | null;
+      } & {
+        " $fragmentRefs"?: {
+          PageColumnsFragmentFragment: PageColumnsFragmentFragment;
+        };
+      })
+    | null;
 };
 
 export const MarkdownFragmentFragmentDoc = {
@@ -1214,6 +1224,37 @@ export const ColumnWrapperFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<ColumnWrapperFragmentFragment, unknown>;
+export const PageColumnsFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageColumnsFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "columns" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ColumnWrapperFragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PageColumnsFragmentFragment, unknown>;
 export const IndexSsrPageDocument = {
   kind: "Document",
   definitions: [
@@ -1282,17 +1323,8 @@ export const IndexSsrPageDocument = {
                 { kind: "Field", name: { kind: "Name", value: "nextStep" } },
                 { kind: "Field", name: { kind: "Name", value: "prevStep" } },
                 {
-                  kind: "Field",
-                  name: { kind: "Name", value: "columns" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: { kind: "Name", value: "ColumnWrapperFragment" },
-                      },
-                    ],
-                  },
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "PageColumnsFragment" },
                 },
               ],
             },
@@ -1300,6 +1332,7 @@ export const IndexSsrPageDocument = {
         ],
       },
     },
+    ...PageColumnsFragmentFragmentDoc.definitions,
     ...ColumnWrapperFragmentFragmentDoc.definitions,
     ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
     ...MarkdownFragmentFragmentDoc.definitions,

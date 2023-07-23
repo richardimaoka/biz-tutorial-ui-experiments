@@ -1,18 +1,14 @@
-import { css } from "@emotion/react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { useEffect, useState } from "react";
-import { Header } from "../components/Header";
+import { PageColumns } from "../components/column/PageColumns";
+import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
+import { NextButton } from "../components/navigation/NextButton";
+import { PrevButton } from "../components/navigation/PrevButton";
+import { StepDisplay } from "../components/steps/StepDisplay";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
-import { ColumnWrapper } from "../components/column/ColumnWrapper";
-import { NextButton } from "../components/navigation/NextButton";
-import { PrevButton } from "../components/navigation/PrevButton";
-import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
-import { print } from "graphql";
-import { StepDisplay } from "../components/steps/StepDisplay";
 
 const extractString = (
   queryString: string | string[] | undefined
@@ -57,9 +53,7 @@ const queryDefinition = graphql(/* GraphQL */ `
       step
       nextStep
       prevStep
-      columns {
-        ...ColumnWrapperFragment
-      }
+      ...PageColumnsFragment
     }
   }
 `);
@@ -123,59 +117,10 @@ export default function Home({ page }: IndexSsrPageQuery) {
   //   };
   // }, [router, nextStep, prevStep, openFilePath]);
 
-  const list = [1, 2, 3, 4, 5, 6, 7, 8];
-
   return (
     <>
       {currentStep && <StepDisplay step={currentStep} />}
-      <div
-        css={css`
-          display: flex;
-          gap: 20px;
-          height: 100vh;
-          @media (max-width: 768px) {
-            width: 100vw;
-            height: 100vh;
-          }
-          width: ${768 * 2}px;
-          height: 100vh;
-
-          scroll-snap-type: x mandatory;
-          scroll-behavior: smooth;
-          overflow-x: auto;
-        `}
-      >
-        {list.map((item, index) => (
-          <div
-            key={index}
-            css={css`
-              background-color: white;
-              color: black;
-              @media (max-width: 768px) {
-                width: 100vw;
-                height: 100vh;
-              }
-              width: 768px;
-              height: 100vh;
-              scroll-snap-align: start;
-              flex-shrink: 0;
-              padding-top: 100px;
-              padding-left: 100px;
-            `}
-          >
-            {item}
-          </div>
-        ))}
-        {/* {page?.columns &&
-          page.columns.map(
-            (col, index) => col && <ColumnWrapper key={index} fragment={col} />
-          )}
-        {page?.columns &&
-          page.columns.map(
-            (col, index) => col && <ColumnWrapper key={index} fragment={col} />
-          )} */}
-      </div>
-
+      {page && <PageColumns fragment={page} />}
       {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
       {page?.nextStep && <AutoPlayButton />}
       {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
