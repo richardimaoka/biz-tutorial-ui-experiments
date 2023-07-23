@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { ColumnWrapper } from "./ColumnWrapper";
 import { dark1MainBg } from "../../libs/colorTheme";
+import { nonNullArray } from "../../libs/nonNullArray";
 
 const fragmentDefinition = graphql(`
   fragment PageColumnsFragment on Page {
@@ -21,6 +22,8 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   if (!fragment.columns) {
     return <></>;
   }
+
+  const columns = nonNullArray(fragment.columns);
 
   const list = [1, 2, 3, 4, 5, 6, 7, 8];
   const desktopColumnWidth = 768;
@@ -49,10 +52,6 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   return (
     <div
       css={css`
-        // flex to allow multiple columns
-        display: flex;
-        gap: 20px;
-
         // on mobile, show one column only
         @media (max-width: 768px) {
           width: 100vw;
@@ -68,14 +67,21 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
         overflow-x: auto;
         overflow-y: hidden; // let inner column handle y-axis scroll
         ${scrollBarStyle}
+
+        // flex to allow multiple columns
+        display: flex;
+        gap: 20px;
       `}
     >
-      {list.map((item, index) => (
+      {columns.map((col, index) => (
         <div
           key={index}
           css={css`
             // important to avoid column-width shrink
             flex-shrink: 0;
+
+            // carousel scrol to stop
+            scroll-snap-align: start;
 
             // on mobile, use full screen
             @media (max-width: 768px) {
@@ -93,25 +99,21 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
             ${scrollBarStyle}
           `}
         >
-          <div
-            css={css`
-              background-color: ${dark1MainBg};
-              color: white;
+          <ColumnWrapper key={index} fragment={col} />
+          {/* <div
+                css={css`
+                  background-color: ${dark1MainBg};
+                  color: white;
 
-              width: 100%;
-              height: 150%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            `}
-          >
-            {item}
-          </div>
+                  width: 100%;
+                  height: 150%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                `}
+              /> */}
         </div>
       ))}
-      {/* {fragment.columns.map(
-        (col, index) => col && <ColumnWrapper key={index} fragment={col} />
-      )} */}
     </div>
   );
 };
