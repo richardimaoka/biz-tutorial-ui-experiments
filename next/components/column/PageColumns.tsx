@@ -33,8 +33,9 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
           width: 100vw;
           height: 100vh;
         }
-        width: ${768 * 2}px;
+        width: ${768 * 2 + 20}px;
         height: 100vh;
+        margin: 0 auto;
 
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
@@ -55,11 +56,19 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
             height: 100vh;
             scroll-snap-align: start;
             flex-shrink: 0;
-            padding-top: 100px;
-            padding-left: 100px;
           `}
         >
-          {item}
+          <div
+            css={css`
+              width: 100%;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            `}
+          >
+            {item}
+          </div>
         </div>
       ))}
       {/* {fragment.columns.map(
