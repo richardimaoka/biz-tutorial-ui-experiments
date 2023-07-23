@@ -69,17 +69,10 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 export default function Home({ page }: IndexSsrPageQuery) {
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    if (router.query.autoPlay && page?.nextStep) {
-      setTimeout(() => {
-        router.replace({ query: { ...router.query, step: page?.nextStep } });
-      }, 1000);
-    }
-  });
-
-  //console.log(print(queryDefinition));
+  // to debug query
+  // console.log(print(queryDefinition));
 
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
@@ -113,7 +106,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
       {page?.step && <StepDisplay step={page.step} />}
       {page && <PageColumns fragment={page} />}
       {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
-      {page?.nextStep && <AutoPlayButton />}
+      {page?.nextStep && <AutoPlayButton nextStep={page.nextStep} />}
       {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
     </>
   );

@@ -1,49 +1,85 @@
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
-import { queryParamToString } from "../../libs/queryString";
+import { useEffect, useState } from "react";
 
-export const AutoPlayButton = () => {
+interface AutoPlayActive {
+  typename: "AutoPlayActive";
+  timeoutId: number;
+}
+
+interface AutoPlayStopped {
+  typename: "AutoPlayStopped";
+}
+
+type AutoPlayState = AutoPlayActive | AutoPlayStopped;
+
+const stopped: AutoPlayStopped = { typename: "AutoPlayStopped" };
+
+interface AutoPlayButtonProps {
+  nextStep: string;
+}
+
+export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
+  const [state, setState] = useState<AutoPlayState>(stopped);
   const router = useRouter();
-  const autoPlay = queryParamToString(router.query.autoPlay) === "true";
 
-  const startAutoPlay = () => {
-    router.replace({ query: { ...router.query, autoPlay: true } });
+  const onClick = () => {
+    switch (state.typename) {
+      case "AutoPlayStopped":
+        // schedule autoPlay to next step
+        const timeoutId = window.setTimeout(() => {
+          router.replace({ query: { ...router.query, step: nextStep } });
+        }, 1000);
+
+        setState({ typename: "AutoPlayActive", timeoutId: timeoutId });
+        break;
+      case "AutoPlayActive":
+        // remove schedule autoPlay to next step
+        window.clearTimeout(state.timeoutId);
+        setState(stopped);
+        break;
+      default:
+        const _exhaustiveCheck: never = state;
+        return _exhaustiveCheck;
+    }
   };
-  const stopAutoPlay = () => {
-    router.replace({ query: { ...router.query, autoPlay: undefined } });
+
+  const AutoPlayText = (): JSX.Element => {
+    switch (state.typename) {
+      case "AutoPlayStopped":
+        return (
+          <>
+            <div
+              css={css`
+                font-size: 16px;
+                height: 18px;
+              `}
+            >
+              AutoPlay
+            </div>
+            <div
+              css={css`
+                font-size: 8px;
+                line-height: 8px;
+              `}
+            >
+              to next milestone
+            </div>
+          </>
+        );
+      case "AutoPlayActive":
+        return (
+          <div
+            css={css`
+              font-size: 16px;
+              height: 18px;
+            `}
+          >
+            Stop AutoPlay
+          </div>
+        );
+    }
   };
-
-  const AutoPlayText = () => (
-    <>
-      <div
-        css={css`
-          font-size: 16px;
-          height: 18px;
-        `}
-      >
-        AutoPlay
-      </div>
-      <div
-        css={css`
-          font-size: 8px;
-          line-height: 8px;
-        `}
-      >
-        to next milestone
-      </div>
-    </>
-  );
-
-  const AutoPlayStopText = () => (
-    <div
-      css={css`
-        font-size: 16px;
-        height: 18px;
-      `}
-    >
-      Stop AutoPlay
-    </div>
-  );
 
   return (
     <button
@@ -63,9 +99,9 @@ export const AutoPlayButton = () => {
         color: black;
         border-style: none;
       `}
-      onClick={autoPlay ? stopAutoPlay : startAutoPlay}
+      onClick={onClick}
     >
-      {autoPlay ? <AutoPlayStopText /> : <AutoPlayText />}
+      <AutoPlayText />
     </button>
   );
 };
