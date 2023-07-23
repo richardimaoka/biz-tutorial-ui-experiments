@@ -2,41 +2,69 @@ import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-interface AutoPlayActive {
-  typename: "AutoPlayActive";
+interface Scheduling {
+  kind: "Scheduling";
+}
+
+interface Scheduled {
+  kind: "Scheduled";
   timeoutId: number;
 }
 
-interface AutoPlayStopped {
-  typename: "AutoPlayStopped";
+interface Stopping {
+  kind: "Stopping";
+  timeoutId: number;
 }
 
-type AutoPlayState = AutoPlayActive | AutoPlayStopped;
+interface Stopped {
+  kind: "Stopped";
+}
 
-const stopped: AutoPlayStopped = { typename: "AutoPlayStopped" };
+type AutoPlayState = Scheduling | Scheduled | Stopping | Stopped;
 
 interface AutoPlayButtonProps {
   nextStep: string;
 }
 
 export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
-  const [state, setState] = useState<AutoPlayState>(stopped);
+  const [state, setState] = useState<AutoPlayState>({ kind: "Stopped" });
   const router = useRouter();
 
-  const onClick = () => {
-    switch (state.typename) {
-      case "AutoPlayStopped":
-        // schedule autoPlay to next step
-        const timeoutId = window.setTimeout(() => {
+  // effectful code
+  useEffect(() => {
+    switch (state.kind) {
+      case "Scheduling":
+        const tid = window.setTimeout(() => {
           router.replace({ query: { ...router.query, step: nextStep } });
+          setState({ kind: "Scheduling" }); // after transitioned to next step, schedule again transition to next next step
         }, 1000);
-
-        setState({ typename: "AutoPlayActive", timeoutId: timeoutId });
+        setState({ kind: "Scheduled", timeoutId: tid });
         break;
-      case "AutoPlayActive":
-        // remove schedule autoPlay to next step
+      case "Scheduled":
+        break; // do nothing
+      case "Stopping":
         window.clearTimeout(state.timeoutId);
-        setState(stopped);
+        setState({ kind: "Stopped" });
+        break;
+      case "Stopped":
+        break; // do nothing
+      default:
+        const _exhaustiveCheck: never = state;
+        return _exhaustiveCheck;
+    }
+  }, [state, nextStep, router]);
+
+  const onClick = () => {
+    switch (state.kind) {
+      case "Scheduling":
+        break; // do nothing
+      case "Scheduled":
+        setState({ kind: "Stopping", timeoutId: state.timeoutId });
+        break;
+      case "Stopping":
+        break; // do nothing
+      case "Stopped":
+        setState({ kind: "Scheduling" });
         break;
       default:
         const _exhaustiveCheck: never = state;
@@ -45,8 +73,23 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
   };
 
   const AutoPlayText = (): JSX.Element => {
-    switch (state.typename) {
-      case "AutoPlayStopped":
+    switch (state.kind) {
+      case "Scheduling":
+        return <></>;
+      case "Scheduled":
+        return (
+          <div
+            css={css`
+              font-size: 16px;
+              height: 18px;
+            `}
+          >
+            Stop AutoPlay
+          </div>
+        );
+      case "Stopping":
+        return <></>;
+      case "Stopped":
         return (
           <>
             <div
@@ -66,17 +109,6 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
               to next milestone
             </div>
           </>
-        );
-      case "AutoPlayActive":
-        return (
-          <div
-            css={css`
-              font-size: 16px;
-              height: 18px;
-            `}
-          >
-            Stop AutoPlay
-          </div>
         );
     }
   };
