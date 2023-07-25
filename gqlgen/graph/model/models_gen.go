@@ -110,6 +110,7 @@ type Page struct {
 	NextStep *string          `json:"nextStep"`
 	PrevStep *string          `json:"prevStep"`
 	Columns  []*ColumnWrapper `json:"columns"`
+	Modal    *Modal           `json:"modal"`
 }
 
 type PageState struct {

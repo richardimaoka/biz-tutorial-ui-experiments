@@ -125,6 +125,7 @@ type ComplexityRoot struct {
 
 	Page struct {
 		Columns  func(childComplexity int) int
+		Modal    func(childComplexity int) int
 		NextStep func(childComplexity int) int
 		PrevStep func(childComplexity int) int
 		Step     func(childComplexity int) int
@@ -512,6 +513,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Page.Columns(childComplexity), true
+
+	case "Page.modal":
+		if e.complexity.Page.Modal == nil {
+			break
+		}
+
+		return e.complexity.Page.Modal(childComplexity), true
 
 	case "Page.nextStep":
 		if e.complexity.Page.NextStep == nil {
@@ -2878,6 +2886,53 @@ func (ec *executionContext) fieldContext_Page_columns(ctx context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _Page_modal(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_modal(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Modal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Modal)
+	fc.Result = res
+	return ec.marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "text":
+				return ec.fieldContext_Modal_text(ctx, field)
+			case "position":
+				return ec.fieldContext_Modal_position(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageState_step(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageState_step(ctx, field)
 	if err != nil {
@@ -3309,6 +3364,8 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_prevStep(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
+			case "modal":
+				return ec.fieldContext_Page_modal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Page", field.Name)
 		},
@@ -6427,6 +6484,10 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 		case "columns":
 
 			out.Values[i] = ec._Page_columns(ctx, field, obj)
+
+		case "modal":
+
+			out.Values[i] = ec._Page_modal(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
