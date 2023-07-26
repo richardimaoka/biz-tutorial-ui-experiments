@@ -181,11 +181,12 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 		modalState := state.Modal{Text: modalText, Position: modalPosition}
 
 		page := model.Page{
-			Step:     internal.StringRef(currentStep),
-			PrevStep: internal.StringRef(prevStep),
-			NextStep: internal.StringRef(nextStep),
-			Columns:  colWrappers,
-			Modal:    modalState.ToGraphQLModal(),
+			Step:        internal.StringRef(currentStep),
+			PrevStep:    internal.StringRef(prevStep),
+			NextStep:    internal.StringRef(nextStep),
+			Columns:     colWrappers,
+			Modal:       modalState.ToGraphQLModal(),
+			FocusColumn: internal.StringRef(e.FocusColumn),
 		}
 
 		pages = append(pages, page)
