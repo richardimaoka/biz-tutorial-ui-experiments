@@ -15,25 +15,6 @@ import { Header } from "../components/Header";
 import { BackToStart } from "../components/navigation/BackToStart";
 import { Navigation } from "../components/navigation/Navigation";
 
-const constructQueryString = (
-  step: string | undefined,
-  openFilePath: string | undefined
-): string => {
-  if (step) {
-    if (openFilePath) {
-      return `?step=${step}&openFilePath=${encodeURIComponent(openFilePath)}`;
-    } else {
-      return `?step=${step}`;
-    }
-  } else {
-    if (openFilePath) {
-      return `?openFilePath=${encodeURIComponent(openFilePath)}`;
-    } else {
-      return "";
-    }
-  }
-};
-
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
