@@ -105,12 +105,14 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      <BackToStart />
-      {page?.step && <StepDisplay step={page.step} />}
       {page && <PageColumns fragment={page} />}
-      {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
-      {page?.nextStep && <AutoPlayButton nextStep={page.nextStep} />}
-      {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
+      <nav>
+        <BackToStart />
+        {page?.step && <StepDisplay step={page.step} />}
+        {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
+        {page?.nextStep && <AutoPlayButton nextStep={page.nextStep} />}
+        {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
+      </nav>
     </>
   );
 }
