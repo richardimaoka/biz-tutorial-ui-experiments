@@ -28,10 +28,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   const list = [1, 2, 3, 4, 5, 6, 7, 8];
   const desktopColumnWidth = 768;
   const desktopColumnGap = 20;
-  const desktopWidth =
-    fragment.columns.length > 1
-      ? /* show up to two columns */ desktopColumnWidth * 2 + desktopColumnGap
-      : desktopColumnWidth;
+  const desktopWidth = desktopColumnWidth;
 
   const scrollBarStyle = css`
     // scroll bar style
