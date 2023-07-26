@@ -177,10 +177,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 		}
 
 		modalText := e.ModalText
-		modalPosition, err := state.ToModalPosition(e.ModalPosition)
-		if err != nil {
-			return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert modal position, %s", e.Step, err)
-		}
+		modalPosition, _ := state.ToModalPosition(e.ModalPosition) // err is ignored, and modal position will be null
 		modalState := state.Modal{Text: modalText, Position: modalPosition}
 
 		page := model.Page{
