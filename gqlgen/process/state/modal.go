@@ -1,6 +1,9 @@
 package state
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -16,6 +19,19 @@ const (
 type Modal struct {
 	Text     string
 	Position ModalPosition
+}
+
+func ToModalPosition(p string) (ModalPosition, error) {
+	switch strings.ToUpper(p) {
+	case "TOP":
+		return ModalPositionTop, nil
+	case "CENTER":
+		return ModalPositionCenter, nil
+	case "BOTTOM":
+		return ModalPositionBottom, nil
+	default:
+		return "", fmt.Errorf("'%s' is unknown ModalPosition", p)
+	}
 }
 
 func convertModalPosition(pos ModalPosition) *model.ModalPosition {

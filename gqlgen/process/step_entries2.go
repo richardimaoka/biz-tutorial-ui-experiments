@@ -101,11 +101,11 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 	var pages []model.Page
 	for seqNo, e := range entries {
 		currentStep, prevStep, nextStep := entries.calcSteps(seqNo)
+
 		columns := e.columns(seqNo)
 		if len(columns) == 0 {
 			return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, no columns are specified", e.Step)
 		}
-
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
 			if colName == "terminal" {
@@ -176,11 +176,19 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 			// 		nextStep := internal.StringRef(e.NextStep)
 		}
 
+		modalText := e.ModalText
+		modalPosition, err := state.ToModalPosition(e.ModalPosition)
+		if err != nil {
+			return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert modal position, %s", e.Step, err)
+		}
+		modalState := state.Modal{Text: modalText, Position: modalPosition}
+
 		page := model.Page{
 			Step:     internal.StringRef(currentStep),
 			PrevStep: internal.StringRef(prevStep),
 			NextStep: internal.StringRef(nextStep),
 			Columns:  colWrappers,
+			Modal:    modalState.ToGraphQLModal(),
 		}
 
 		pages = append(pages, page)
