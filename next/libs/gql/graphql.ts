@@ -345,6 +345,13 @@ export type ModalFrameFragmentFragment = {
   position?: ModalPosition | null;
 } & { " $fragmentName"?: "ModalFrameFragmentFragment" };
 
+export type NavigationFragmentFragment = {
+  __typename: "Page";
+  step?: string | null;
+  nextStep?: string | null;
+  prevStep?: string | null;
+} & { " $fragmentName"?: "NavigationFragmentFragment" };
+
 export type SourceCodeViewer_FragmentFragment = ({
   __typename: "SourceCode";
   openFile?:
@@ -474,13 +481,9 @@ export type IndexSsrPageQueryVariables = Exact<{
 export type IndexSsrPageQuery = {
   __typename: "Query";
   page?:
-    | ({
-        __typename: "Page";
-        step?: string | null;
-        nextStep?: string | null;
-        prevStep?: string | null;
-      } & {
+    | ({ __typename: "Page" } & {
         " $fragmentRefs"?: {
+          NavigationFragmentFragment: NavigationFragmentFragment;
           PageColumnsFragmentFragment: PageColumnsFragmentFragment;
         };
       })
@@ -1257,6 +1260,27 @@ export const PageColumnsFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<PageColumnsFragmentFragment, unknown>;
+export const NavigationFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "NavigationFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "step" } },
+          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<NavigationFragmentFragment, unknown>;
 export const IndexSsrPageDocument = {
   kind: "Document",
   definitions: [
@@ -1321,9 +1345,10 @@ export const IndexSsrPageDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "__typename" } },
-                { kind: "Field", name: { kind: "Name", value: "step" } },
-                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
-                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "NavigationFragment" },
+                },
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "PageColumnsFragment" },
@@ -1334,6 +1359,7 @@ export const IndexSsrPageDocument = {
         ],
       },
     },
+    ...NavigationFragmentFragmentDoc.definitions,
     ...PageColumnsFragmentFragmentDoc.definitions,
     ...ColumnWrapperFragmentFragmentDoc.definitions,
     ...ImageDescriptionColumnFragmentFragmentDoc.definitions,

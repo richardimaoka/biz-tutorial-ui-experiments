@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { queryParamToString } from "../libs/queryString";
 import { Header } from "../components/Header";
 import { BackToStart } from "../components/navigation/BackToStart";
+import { Navigation } from "../components/navigation/Navigation";
 
 const constructQueryString = (
   step: string | undefined,
@@ -37,9 +38,7 @@ const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       __typename
-      step
-      nextStep
-      prevStep
+      ...NavigationFragment
       ...PageColumnsFragment
     }
   }
@@ -106,13 +105,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
   return (
     <>
       {page && <PageColumns fragment={page} />}
-      <nav>
-        <BackToStart />
-        {page?.step && <StepDisplay step={page.step} />}
-        {page?.prevStep && <PrevButton href={`?step=${page.prevStep}`} />}
-        {page?.nextStep && <AutoPlayButton nextStep={page.nextStep} />}
-        {page?.nextStep && <NextButton href={`?step=${page.nextStep}`} />}
-      </nav>
+      {page && <Navigation fragment={page} />}
     </>
   );
 }
