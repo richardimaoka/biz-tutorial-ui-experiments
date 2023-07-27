@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
@@ -9,6 +9,29 @@ const TerminalCommand_Fragment = graphql(`
     beforeExecution
   }
 `);
+
+const FlickeringTrail = () => {
+  const flickering = keyframes`
+          0% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+  `;
+  return (
+    <span
+      css={css`
+        animation: ${flickering} 2s infinite;
+      `}
+    >
+      |
+    </span>
+  );
+};
 
 export interface TerminalCommandComponentProps {
   fragment: FragmentType<typeof TerminalCommand_Fragment>;
@@ -39,7 +62,12 @@ const TypeInCodeComponent = ({
     }
     scrollIntoView();
   });
-  return <code>&gt; {command?.substring(0, writtenLength)}</code>;
+  return (
+    <code>
+      &gt; {command?.substring(0, writtenLength)}
+      <FlickeringTrail />
+    </code>
+  );
 };
 
 export const TerminalCommandComponent = (
