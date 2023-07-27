@@ -10,6 +10,10 @@ func NewTerminalColumn() *TerminalColumn {
 	return &TerminalColumn{}
 }
 
+func (t *TerminalColumn) MarkAllExecuted() {
+	t.terminal.MarkAllExecuted()
+}
+
 func (t *TerminalColumn) Transition(elemType TerminalElementType, text string) {
 	switch elemType {
 	case TerminalTypeCommand:

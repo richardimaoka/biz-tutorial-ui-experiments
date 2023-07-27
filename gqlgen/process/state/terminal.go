@@ -36,23 +36,21 @@ func NewTerminal() *Terminal {
 	return &Terminal{}
 }
 
-func (t *Terminal) WriteCommand(command string) {
+func (t *Terminal) MarkAllExecuted() {
 	for _, e := range t.elements {
 		if c, ok := e.(*TerminalCommand); ok {
 			c.BeforeExecution = false
 		}
 	}
+}
 
+func (t *Terminal) WriteCommand(command string) {
+	t.MarkAllExecuted()
 	t.elements = append(t.elements, &TerminalCommand{Command: command, BeforeExecution: true})
 }
 
 func (t *Terminal) WriteOutput(output string) {
-	for _, e := range t.elements {
-		if c, ok := e.(*TerminalCommand); ok {
-			c.BeforeExecution = false
-		}
-	}
-
+	t.MarkAllExecuted()
 	t.elements = append(t.elements, &TerminalOutput{Output: output})
 }
 
