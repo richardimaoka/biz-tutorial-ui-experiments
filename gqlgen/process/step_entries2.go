@@ -58,6 +58,8 @@ func (entries StepEntries2) calcSteps(seqNo int) (string, string, string) {
 	var prevStep string
 	if seqNo == 0 {
 		prevStep = ""
+	} else if seqNo == 1 {
+		prevStep = "_initial"
 	} else {
 		prevStep = entries[seqNo-1].Step
 	}
@@ -113,7 +115,9 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 					terminalColumnState = state.NewTerminalColumn()
 				}
 
-				if e.TerminalText != "" {
+				if e.TerminalText == "" {
+					terminalColumnState.MarkAllExecuted()
+				} else {
 					terminalType, err := state.ToTerminalElementType(e.TerminalType)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert terminal type, %s", e.Step, err)
