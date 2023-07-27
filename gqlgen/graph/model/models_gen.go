@@ -30,8 +30,9 @@ func (BackgroundImageColumn) IsColumn()                    {}
 func (this BackgroundImageColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type ColumnWrapper struct {
-	Index  *int   `json:"index"`
-	Column Column `json:"column"`
+	Index  *int    `json:"index"`
+	Column Column  `json:"column"`
+	Name   *string `json:"name"`
 }
 
 type FileHighlight struct {

@@ -40,6 +40,7 @@ export type ColumnWrapper = {
   __typename: "ColumnWrapper";
   column?: Maybe<Column>;
   index?: Maybe<Scalars["Int"]>;
+  name?: Maybe<Scalars["String"]>;
 };
 
 export type FileHighlight = {
