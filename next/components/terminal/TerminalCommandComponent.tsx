@@ -39,7 +39,7 @@ export interface TerminalCommandComponentProps {
 }
 
 interface CodeComponentProps {
-  command: string | null | undefined;
+  command: string;
   scrollIntoView: () => void;
 }
 
@@ -62,10 +62,11 @@ const TypeInCodeComponent = ({
     }
     scrollIntoView();
   });
+
   return (
     <code>
       &gt; {command?.substring(0, writtenLength)}
-      <FlickeringTrail />
+      {writtenLength >= command?.length && <FlickeringTrail />}
     </code>
   );
 };
@@ -79,6 +80,10 @@ export const TerminalCommandComponent = (
   const router = useRouter();
   const { skipAnimation } = router.query;
   const animate = skipAnimation !== "true";
+
+  if (!fragment.command) {
+    return <></>;
+  }
 
   return (
     <pre
