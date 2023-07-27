@@ -3,11 +3,15 @@ import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { ColumnWrapper } from "./ColumnWrapper";
 import { dark1MainBg } from "../../libs/colorTheme";
 import { nonNullArray } from "../../libs/nonNullArray";
+import { ModalFrame } from "../modal/ModalFrame";
 
 const fragmentDefinition = graphql(`
   fragment PageColumnsFragment on Page {
     columns {
       ...ColumnWrapperFragment
+    }
+    modal {
+      ...ModalFrameFragment
     }
   }
 `);
@@ -46,7 +50,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
     }
   `;
 
-  return (
+  const Inner = () => (
     <div
       css={css`
         // flex to allow multiple columns
@@ -112,5 +116,13 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
         </div>
       ))}
     </div>
+  );
+
+  return fragment.modal ? (
+    <ModalFrame fragment={fragment.modal}>
+      <Inner />
+    </ModalFrame>
+  ) : (
+    <Inner />
   );
 };

@@ -46,7 +46,7 @@ export const ModalFrame = (props: ModalFrameProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const topBottomPosition = fragment.position
     ? positionCss(fragment.position)
-    : positionCss("TOP"); //default position = TOP
+    : positionCss("CENTER"); //default position = CENTER
 
   if (!fragment.text) {
     return <></>;

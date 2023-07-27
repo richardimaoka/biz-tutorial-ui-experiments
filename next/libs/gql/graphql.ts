@@ -303,6 +303,13 @@ export type PageColumnsFragmentFragment = {
       })
     | null
   > | null;
+  modal?:
+    | ({ __typename: "Modal" } & {
+        " $fragmentRefs"?: {
+          ModalFrameFragmentFragment: ModalFrameFragmentFragment;
+        };
+      })
+    | null;
 } & { " $fragmentName"?: "PageColumnsFragmentFragment" };
 
 export type SourceCodeColumnFragmentFragment = {
@@ -1252,6 +1259,19 @@ export const PageColumnsFragmentFragmentDoc = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "ColumnWrapperFragment" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ModalFrameFragment" },
                 },
               ],
             },
