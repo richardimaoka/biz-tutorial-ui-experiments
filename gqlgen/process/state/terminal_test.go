@@ -8,6 +8,32 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
+func TestTerminalActions(t *testing.T) {
+	cases := []struct {
+		goldenFile  string
+		elementType state.TerminalElementType
+		text        string
+	}{
+		{"testdata/terminal_action_golden1.json", state.TerminalTypeCommand, "ls"},
+		{"testdata/terminal_action_golden2.json", state.TerminalTypeOutput, "aa.txt bb.txt cc.txt"},
+		{"testdata/terminal_action_golden3.json", state.TerminalTypeCommand, "cat aa.txt"},
+		{"testdata/terminal_action_golden4.json", state.TerminalTypeOutput, "aaaaaaaaaaa"},
+	}
+
+	terminal := state.NewTerminal()
+	for _, c := range cases {
+		switch c.elementType {
+		case state.TerminalTypeCommand:
+			terminal.WriteCommand(c.text)
+		case state.TerminalTypeOutput:
+			terminal.WriteOutput(c.text)
+		}
+
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, terminal.ToGraphQLTerminal())
+	}
+
+}
+
 func TestTerminalMutation1(t *testing.T) {
 	s := state.NewTerminal()
 	s.WriteCommand("ls")
