@@ -1,0 +1,33 @@
+{
+  "step": null,
+  "name": null,
+  "currentDirectory": null,
+  "nodes": [
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "ls"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "aa.txt bb.txt"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalCommand",
+        "beforeExecution": false,
+        "command": "cat aa.txt"
+      }
+    },
+    {
+      "content": {
+        "contentType": "TerminalOutput",
+        "output": "aaaaaaaaaa"
+      }
+    }
+  ]
+}

@@ -10,7 +10,8 @@ type TerminalElement interface {
 }
 
 type TerminalCommand struct {
-	Command string
+	Command         string
+	BeforeExecution bool
 }
 
 type TerminalOutput struct {
@@ -20,10 +21,10 @@ type TerminalOutput struct {
 func (p *TerminalCommand) ToGraphQLTerminalElement() model.TerminalElement {
 	// copy to avoid mutation effect afterwards
 	command := internal.StringRef(p.Command)
-	falseValue := false
+	beforeExecution := p.BeforeExecution
 
 	return &model.TerminalCommand{
-		BeforeExecution: &falseValue,
+		BeforeExecution: &beforeExecution,
 		Command:         command,
 	}
 }

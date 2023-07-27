@@ -31,5 +31,6 @@
       }
     }
   ],
-  "modal": null
+  "modal": null,
+  "focusColumn": null
 }
