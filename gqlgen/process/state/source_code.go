@@ -103,6 +103,7 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr string) (*SourceCo
 
 func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
 	return &model.SourceCode{
-		FileTree: s.rootDir.ToGraphQLFileNodeSlice(),
+		FileTree:     s.rootDir.ToGraphQLFileNodeSlice(),
+		FileContents: s.rootDir.ToGraphQLOpenFileMap(),
 	}
 }

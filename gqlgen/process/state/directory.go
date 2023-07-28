@@ -257,3 +257,20 @@ func (s *Directory) ToGraphQLFileNodeSlice() []*model.FileNode {
 
 	return fileNodes
 }
+
+func (s *Directory) ToGraphQLOpenFileMap() map[string]model.OpenFile {
+	openFileMap := make(map[string]model.OpenFile)
+
+	for _, subdir := range s.subDirs {
+		subMap := subdir.ToGraphQLOpenFileMap()
+		for k, v := range subMap {
+			openFileMap[k] = v
+		}
+	}
+
+	for _, file := range s.files {
+		openFileMap[file.filePath] = *file.ToGraphQLOpenFile()
+	}
+
+	return openFileMap
+}
