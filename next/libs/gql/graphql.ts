@@ -130,6 +130,7 @@ export type OpenFile = {
 
 export type Page = {
   __typename: "Page";
+  allSteps?: Maybe<Array<Maybe<Scalars["String"]>>>;
   columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
   focusColumn?: Maybe<Scalars["String"]>;
   modal?: Maybe<Modal>;

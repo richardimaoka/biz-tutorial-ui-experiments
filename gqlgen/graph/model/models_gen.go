@@ -110,6 +110,7 @@ type Page struct {
 	Step        *string          `json:"step"`
 	NextStep    *string          `json:"nextStep"`
 	PrevStep    *string          `json:"prevStep"`
+	AllSteps    []*string        `json:"allSteps"`
 	Columns     []*ColumnWrapper `json:"columns"`
 	Modal       *Modal           `json:"modal"`
 	FocusColumn *string          `json:"focusColumn"`

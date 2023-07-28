@@ -125,6 +125,7 @@ type ComplexityRoot struct {
 	}
 
 	Page struct {
+		AllSteps    func(childComplexity int) int
 		Columns     func(childComplexity int) int
 		FocusColumn func(childComplexity int) int
 		Modal       func(childComplexity int) int
@@ -515,6 +516,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Language(childComplexity), true
+
+	case "Page.allSteps":
+		if e.complexity.Page.AllSteps == nil {
+			break
+		}
+
+		return e.complexity.Page.AllSteps(childComplexity), true
 
 	case "Page.columns":
 		if e.complexity.Page.Columns == nil {
@@ -2896,6 +2904,47 @@ func (ec *executionContext) fieldContext_Page_prevStep(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Page_allSteps(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_allSteps(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AllSteps, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_allSteps(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Page_columns(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Page_columns(ctx, field)
 	if err != nil {
@@ -3462,6 +3511,8 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_nextStep(ctx, field)
 			case "prevStep":
 				return ec.fieldContext_Page_prevStep(ctx, field)
+			case "allSteps":
+				return ec.fieldContext_Page_allSteps(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			case "modal":
@@ -6587,6 +6638,10 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Page_prevStep(ctx, field, obj)
 
+		case "allSteps":
+
+			out.Values[i] = ec._Page_allSteps(ctx, field, obj)
+
 		case "columns":
 
 			out.Values[i] = ec._Page_columns(ctx, field, obj)
@@ -7906,6 +7961,38 @@ func (ec *executionContext) unmarshalOString2string(ctx context.Context, v inter
 func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalString(v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOString2ᚖstring(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕᚖstring(ctx context.Context, sel ast.SelectionSet, v []*string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOString2ᚖstring(ctx, sel, v[i])
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

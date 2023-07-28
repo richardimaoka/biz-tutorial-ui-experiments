@@ -74,6 +74,19 @@ func (entries StepEntries2) calcSteps(seqNo int) (string, string, string) {
 	return currentStep, prevStep, nextStep
 }
 
+func (entries StepEntries2) allSteps() []*string {
+	var steps []*string
+	for seqNo, e := range entries {
+		if seqNo == 0 {
+			steps = append(steps, internal.StringRef("_initial"))
+		} else {
+			steps = append(steps, internal.StringRef(e.Step))
+		}
+	}
+
+	return steps
+}
+
 func (e StepEntry2) columns(seqNo int) []string {
 	var columns []string
 
@@ -102,6 +115,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 
 	var pages []model.Page
 	for seqNo, e := range entries {
+		allSteps := entries.allSteps()
 		currentStep, prevStep, nextStep := entries.calcSteps(seqNo)
 
 		columns := e.columns(seqNo)
@@ -188,6 +202,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 			Step:        internal.StringRef(currentStep),
 			PrevStep:    internal.StringRef(prevStep),
 			NextStep:    internal.StringRef(nextStep),
+			AllSteps:    allSteps,
 			Columns:     colWrappers,
 			Modal:       modalState.ToGraphQLModal(),
 			FocusColumn: internal.StringRef(e.FocusColumn),
