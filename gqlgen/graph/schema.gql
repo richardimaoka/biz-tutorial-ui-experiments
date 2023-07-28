@@ -38,7 +38,6 @@ type Page {
   step: String
   nextStep: String
   prevStep: String
-  allSteps: [String]
   columns: [ColumnWrapper]
   modal: Modal
   focusColumn: String
