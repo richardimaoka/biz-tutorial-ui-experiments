@@ -4,6 +4,8 @@ import { ColumnWrapper } from "./ColumnWrapper";
 import { dark1MainBg } from "../../libs/colorTheme";
 import { nonNullArray } from "../../libs/nonNullArray";
 import { ModalFrame } from "../modal/ModalFrame";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const fragmentDefinition = graphql(`
   fragment PageColumnsFragment on Page {
@@ -14,6 +16,7 @@ const fragmentDefinition = graphql(`
     modal {
       ...ModalFrameFragment
     }
+    focusColumn
   }
 `);
 
@@ -23,6 +26,21 @@ export interface ColumnWrapperProps {
 
 export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
+  const router = useRouter();
+  useEffect(() => {
+    if (!router.asPath.includes("#") && fragment.focusColumn) {
+      router.replace({ hash: fragment.focusColumn }).catch((e) => {
+        // workaround for https://github.com/vercel/next.js/issues/37362
+        if (e.cancelled) {
+          console.log(
+            "[INFO]: you can ignore this message for now, but might want to to check if https://github.com/vercel/next.js/issues/37362 is resolved at some point."
+          );
+        } else {
+          throw e;
+        }
+      });
+    }
+  }, [router, fragment.focusColumn]);
 
   if (!fragment.columns) {
     return <></>;
