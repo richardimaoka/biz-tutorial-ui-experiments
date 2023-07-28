@@ -296,7 +296,7 @@ export type MarkdownColumnFragmentFragment = {
 export type PageColumnsFragmentFragment = {
   __typename: "Page";
   columns?: Array<
-    | ({ __typename: "ColumnWrapper" } & {
+    | ({ __typename: "ColumnWrapper"; name?: string | null } & {
         " $fragmentRefs"?: {
           ColumnWrapperFragmentFragment: ColumnWrapperFragmentFragment;
         };
@@ -1260,6 +1260,7 @@ export const PageColumnsFragmentFragmentDoc = {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "ColumnWrapperFragment" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
               ],
             },
           },

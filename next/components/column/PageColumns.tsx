@@ -9,6 +9,7 @@ const fragmentDefinition = graphql(`
   fragment PageColumnsFragment on Page {
     columns {
       ...ColumnWrapperFragment
+      name
     }
     modal {
       ...ModalFrameFragment
@@ -29,9 +30,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
 
   const columns = nonNullArray(fragment.columns);
 
-  const list = [1, 2, 3, 4, 5, 6, 7, 8];
   const desktopColumnWidth = 768;
-  const desktopColumnGap = 20;
   const desktopWidth = desktopColumnWidth;
 
   const scrollBarStyle = css`
@@ -61,22 +60,23 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
         @media (max-width: 768px) {
           width: 100vw;
         }
-
-        // on desktop, show up to two columns only
+        // on desktop, show one column ony
         width: ${desktopWidth}px;
         margin: 0 auto; // centering on desktop
+        height: 80svh;
 
         // carousel container
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
-        overflow-x: auto;
+        overflow-x: auto; // buttons are the only way to scroll
         overflow-y: hidden; // let inner column handle y-axis scroll
-        ${scrollBarStyle}
+        /* ${scrollBarStyle} */
       `}
     >
       {columns.map((col, index) => (
         <div
-          key={index}
+          id={col.name ? col.name : undefined}
+          key={col.name ? col.name : index}
           css={css`
             // important to avoid column-width shrink
             flex-shrink: 0;
@@ -96,23 +96,11 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
 
             // in-column scroll for y-axis
             overflow-y: auto;
-            overflow-x: hidden; // not to conflict with outer carousel scroll
+            overflow-x: auto; // not to conflict with outer carousel scroll
             ${scrollBarStyle}
           `}
         >
           <ColumnWrapper key={index} fragment={col} />
-          {/* <div
-                css={css`
-                  background-color: ${dark1MainBg};
-                  color: white;
-
-                  width: 100%;
-                  height: 150%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                `}
-              /> */}
         </div>
       ))}
     </div>
