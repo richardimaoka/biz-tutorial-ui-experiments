@@ -126,7 +126,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 				}
 
 				column := terminalColumnState.ToGraphQLTerminalColumn()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef("terminal")})
 			}
 
 			if colName == "src" {
@@ -144,7 +144,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 				}
 
 				column := srcColmnState.ToGraphQLSourceCodeColumn()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef("src")})
 			}
 
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
