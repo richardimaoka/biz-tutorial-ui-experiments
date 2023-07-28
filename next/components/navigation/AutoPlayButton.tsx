@@ -2,25 +2,21 @@ import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-interface Scheduling {
-  kind: "Scheduling";
-}
-
 interface Scheduled {
   kind: "Scheduled";
   timeoutId: number;
 }
 
-interface Stopping {
-  kind: "Stopping";
-  timeoutId: number;
+interface Transitioned {
+  kind: "Transitioned";
+  step: string;
 }
 
 interface Stopped {
   kind: "Stopped";
 }
 
-type AutoPlayState = Scheduling | Scheduled | Stopping | Stopped;
+type AutoPlayState = Scheduled | Transitioned | Stopped;
 
 interface AutoPlayButtonProps {
   nextStep: string;
@@ -33,18 +29,20 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
   // effectful code
   useEffect(() => {
     switch (state.kind) {
-      case "Scheduling":
-        const tid = window.setTimeout(() => {
-          router.replace({ query: { ...router.query, step: nextStep } });
-          setState({ kind: "Scheduling" }); // after transitioned to next step, schedule again transition to next next step
-        }, 1000);
-        setState({ kind: "Scheduled", timeoutId: tid });
-        break;
       case "Scheduled":
         break; // do nothing
-      case "Stopping":
-        window.clearTimeout(state.timeoutId);
-        setState({ kind: "Stopped" });
+      case "Transitioned":
+        // This is an important state as React re-renders this component *BEFORE* updating the URL query string
+        // without the Transitioned state, setTimeout is called twice for the same nextStep
+        if (state.step !== nextStep) {
+          const tid = window.setTimeout(() => {
+            router.replace({
+              query: { ...router.query, step: nextStep },
+            });
+            setState({ kind: "Transitioned", step: nextStep });
+          }, 1000);
+          setState({ kind: "Scheduled", timeoutId: tid });
+        }
         break;
       case "Stopped":
         break; // do nothing
@@ -56,15 +54,21 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
 
   const onClick = () => {
     switch (state.kind) {
-      case "Scheduling":
-        break; // do nothing
       case "Scheduled":
-        setState({ kind: "Stopping", timeoutId: state.timeoutId });
+        window.clearTimeout(state.timeoutId);
+        setState({ kind: "Stopped" });
         break;
-      case "Stopping":
-        break; // do nothing
+      case "Transitioned":
+        setState({ kind: "Stopped" });
+        break;
       case "Stopped":
-        setState({ kind: "Scheduling" });
+        const tid = window.setTimeout(() => {
+          router.replace({
+            query: { ...router.query, step: nextStep },
+          });
+          setState({ kind: "Transitioned", step: nextStep });
+        }, 1000);
+        setState({ kind: "Scheduled", timeoutId: tid });
         break;
       default:
         const _exhaustiveCheck: never = state;
@@ -74,8 +78,6 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
 
   const AutoPlayText = (): JSX.Element => {
     switch (state.kind) {
-      case "Scheduling":
-        return <></>;
       case "Scheduled":
         return (
           <div
@@ -87,8 +89,17 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
             Stop AutoPlay
           </div>
         );
-      case "Stopping":
-        return <></>;
+      case "Transitioned":
+        return (
+          <div
+            css={css`
+              font-size: 16px;
+              height: 18px;
+            `}
+          >
+            Stop AutoPlay
+          </div>
+        );
       case "Stopped":
         return (
           <>
