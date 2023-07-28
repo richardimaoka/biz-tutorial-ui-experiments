@@ -62,13 +62,10 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
         setState({ kind: "Stopped" });
         break;
       case "Stopped":
-        const tid = window.setTimeout(() => {
-          router.replace({
-            query: { ...router.query, step: nextStep },
-          });
-          setState({ kind: "Transitioned", step: nextStep });
-        }, 1000);
-        setState({ kind: "Scheduled", timeoutId: tid });
+        router.replace({
+          query: { ...router.query, step: nextStep },
+        });
+        setState({ kind: "Transitioned", step: nextStep });
         break;
       default:
         const _exhaustiveCheck: never = state;
@@ -78,17 +75,7 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
 
   const AutoPlayText = (): JSX.Element => {
     switch (state.kind) {
-      case "Scheduled":
-        return (
-          <div
-            css={css`
-              font-size: 16px;
-              height: 18px;
-            `}
-          >
-            Stop AutoPlay
-          </div>
-        );
+      case "Scheduled": // fallthrough
       case "Transitioned":
         return (
           <div
