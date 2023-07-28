@@ -126,6 +126,7 @@ export type OpenFile = {
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]>;
   language?: Maybe<Scalars["String"]>;
+  size?: Maybe<Scalars["Float"]>;
 };
 
 export type Page = {

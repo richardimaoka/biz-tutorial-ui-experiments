@@ -17,6 +17,7 @@ type File struct {
 	offset   int
 	language string
 	contents string
+	size     int64
 
 	// flags
 	isUpdated bool
@@ -33,7 +34,7 @@ func (files Files) sortSelf() {
 	})
 }
 
-func intrinsicFile(contents string, filePath string) *File {
+func intrinsicFile(contents string, filePath string, size int64) *File {
 	split := strings.Split(filePath, "/")
 	fileName := split[len(split)-1]
 
@@ -54,6 +55,7 @@ func intrinsicFile(contents string, filePath string) *File {
 		offset:   offset,
 		language: language,
 		contents: contents,
+		size:     size,
 		// flags are all false by default = Go's zero value for bool
 	}
 }
@@ -71,7 +73,7 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 		return nil, fmt.Errorf("failed in FileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
 	}
 
-	file := intrinsicFile(currentContents, filePath)
+	file := intrinsicFile(currentContents, filePath, currentFile.Size)
 	// no need to update flags, as unchanged file has all flags false
 
 	return file, nil
@@ -90,7 +92,7 @@ func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
 		return nil, fmt.Errorf("failed in FileAdded for file = %s, cannot get current file contents, %s", filePath, err)
 	}
 
-	file := intrinsicFile(currentContents, filePath)
+	file := intrinsicFile(currentContents, filePath, currentFile.Size)
 	// update necessary flags only, as default flags are false
 	file.isAdded = true
 
@@ -113,7 +115,7 @@ func FileUpdated(prevFile, currentFile *object.File, currentDir string) (*File, 
 		return nil, fmt.Errorf("failed in FileUpdated for file = %s, cannot get current file contents, %s", filePath, err)
 	}
 
-	file := intrinsicFile(currentContents, filePath)
+	file := intrinsicFile(currentContents, filePath, currentFile.Size)
 	// update necessary flags only, as default flags are false
 	file.isUpdated = true
 
@@ -127,7 +129,7 @@ func FileDeleted(deletedFile diff.File) (*File, error) {
 
 	var filePath = deletedFile.Path()
 
-	file := intrinsicFile("", filePath)
+	file := intrinsicFile("", filePath, 0)
 	// update necessary flags only, as default flags are false
 	file.isDeleted = true
 
@@ -219,6 +221,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	language := s.language
 	contents := s.contents // TODO: should we not copy this as contents can be huge?
 	trueValue := true
+	size := float64(s.size)
 
 	return &model.OpenFile{
 		FilePath:      &filePath,
@@ -226,6 +229,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		IsFullContent: &trueValue,
 		Content:       &contents,
 		Language:      &language,
+		Size:          &size,
 	}
 }
 

@@ -159,6 +159,7 @@ type OpenFile {
   isFullContent: Boolean
   language: String
   highlight: [FileHighlight]
+  size: Float
 }
 
 type SourceCode {

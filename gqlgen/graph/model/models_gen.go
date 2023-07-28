@@ -104,6 +104,7 @@ type OpenFile struct {
 	IsFullContent *bool            `json:"isFullContent"`
 	Language      *string          `json:"language"`
 	Highlight     []*FileHighlight `json:"highlight"`
+	Size          *float64         `json:"size"`
 }
 
 type Page struct {

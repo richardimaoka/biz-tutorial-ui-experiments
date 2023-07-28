@@ -122,6 +122,7 @@ type ComplexityRoot struct {
 		Highlight     func(childComplexity int) int
 		IsFullContent func(childComplexity int) int
 		Language      func(childComplexity int) int
+		Size          func(childComplexity int) int
 	}
 
 	Page struct {
@@ -515,6 +516,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Language(childComplexity), true
+
+	case "OpenFile.size":
+		if e.complexity.OpenFile.Size == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.Size(childComplexity), true
 
 	case "Page.columns":
 		if e.complexity.Page.Columns == nil {
@@ -2773,6 +2781,47 @@ func (ec *executionContext) fieldContext_OpenFile_highlight(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _OpenFile_size(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_size(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Size, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_size(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Page_step(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Page_step(ctx, field)
 	if err != nil {
@@ -3757,6 +3806,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "highlight":
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
+			case "size":
+				return ec.fieldContext_OpenFile_size(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
@@ -6554,6 +6605,10 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._OpenFile_highlight(ctx, field, obj)
 
+		case "size":
+
+			out.Values[i] = ec._OpenFile_size(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7769,6 +7824,22 @@ func (ec *executionContext) marshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaoka
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) marshalOImageCentered2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageCentered(ctx context.Context, sel ast.SelectionSet, v *model.ImageCentered) graphql.Marshaler {
