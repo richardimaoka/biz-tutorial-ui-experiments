@@ -96,7 +96,7 @@ func (e StepEntry2) columns(seqNo int) []string {
 	return columns
 }
 
-func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
+func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error) {
 	var srcColmnState *state.SourceCodeColumn
 	var terminalColumnState *state.TerminalColumn
 
@@ -132,7 +132,7 @@ func (entries StepEntries2) ToGraphQLPages() ([]model.Page, error) {
 			if colName == "src" {
 				if srcColmnState == nil {
 					var err error
-					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step)
+					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, tutorial)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
 					}
@@ -219,13 +219,15 @@ func ReadStepEntries2(filePath string) (StepEntries2, error) {
 	return entries, err
 }
 
-func Process2(dirName string) error {
+func Process2(tutorial string) error {
+	dirName := "data/" + tutorial
+
 	entries, err := ReadStepEntries2(dirName + "/steps2.json")
 	if err != nil {
 		return fmt.Errorf("Process2 failed, %s", err)
 	}
 
-	pages, err := entries.ToGraphQLPages()
+	pages, err := entries.ToGraphQLPages(tutorial)
 	if err != nil {
 		return fmt.Errorf("Process2 failed, %s", err)
 	}

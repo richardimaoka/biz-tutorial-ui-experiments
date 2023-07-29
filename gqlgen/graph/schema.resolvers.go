@@ -72,7 +72,7 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
-	var dirName = "data/apollo-client-getting-started/state"
+	var dirName = fmt.Sprintf("data/%s/state", obj.Tutorial)
 	var initialStep = "_initial"
 
 	var filename string
@@ -89,10 +89,10 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, err
 	}
 
-	var pageState model.PageState
-	err = json.Unmarshal(data, &pageState)
+	var page model.Page
+	err = json.Unmarshal(data, &page)
 	if err != nil {
-		return nil, fmt.Errorf("internal server error - failed to unmarshal PageState from %s", filename)
+		return nil, fmt.Errorf("internal server error - failed to unmarshal page from %s", filename)
 	}
 
 	if filePath == nil {
@@ -102,15 +102,22 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, nil
 	}
 
-	openFile, ok := pageState.SourceCode.FileContents[*filePath]
-	if !ok {
-		log.Printf("OpenFile() file not found: %s", *filePath)
-		// return nil openFile, instead of error, so that the entire page can still render
-		return nil, nil
+	for _, col := range page.Columns {
+		if col.Name != nil && *col.Name == "src" {
+		}
 	}
 
-	log.Printf("OpenFile() returning file for: %s", *filePath)
-	return &openFile, nil
+	// openFile, ok := page.SourceCode.FileContents[*filePath]
+	// if !ok {
+	// 	log.Printf("OpenFile() file not found: %s", *filePath)
+	// 	// return nil openFile, instead of error, so that the entire page can still render
+	// 	return nil, nil
+	// }
+
+	// log.Printf("OpenFile() returning file for: %s", *filePath)
+	// return &openFile, nil
+
+	return nil, nil
 }
 
 // Query returns QueryResolver implementation.

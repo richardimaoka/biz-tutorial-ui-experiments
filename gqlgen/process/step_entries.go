@@ -58,7 +58,7 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 			if e.GitColumn != nil && e.GitColumn.Column == i {
 				if srcColState == nil {
 					var err error
-					srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step)
+					srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step, "")
 					if err != nil {
 						// return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
 					}

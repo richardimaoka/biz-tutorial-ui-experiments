@@ -14,6 +14,7 @@ type SourceCode struct {
 	commit    plumbing.Hash
 	rootDir   *Directory
 	fileNodes []FileNode
+	tutorial  string
 }
 
 func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
@@ -30,7 +31,7 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	return commit, nil
 }
 
-func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr string) (*SourceCode, error) {
+func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial string) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -47,7 +48,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial}
 
 	// 2. From git patches, mark added/deleted/updated/renamed files
 	prevCommit, err := getCommit(repo, prevCommitStr)
@@ -79,7 +80,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr string, prevCommitStr 
 	return &sc, nil
 }
 
-func InitialSourceCode(repo *git.Repository, currentCommitStr string) (*SourceCode, error) {
+func InitialSourceCode(repo *git.Repository, currentCommitStr, tutorial string) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -96,7 +97,7 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr string) (*SourceCo
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial}
 
 	return &sc, nil
 }
@@ -105,5 +106,6 @@ func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
 	return &model.SourceCode{
 		FileTree:     s.rootDir.ToGraphQLFileNodeSlice(),
 		FileContents: s.rootDir.ToGraphQLOpenFileMap(),
+		Tutorial:     s.tutorial,
 	}
 }
