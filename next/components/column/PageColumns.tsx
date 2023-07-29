@@ -17,6 +17,7 @@ const fragmentDefinition = graphql(`
       ...ModalFrameFragment
     }
     focusColumn
+    step
   }
 `);
 
@@ -45,11 +46,16 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   if (!fragment.columns) {
     return <></>;
   }
+  if (!fragment.step) {
+    return <></>;
+  }
 
   const columns = nonNullArray(fragment.columns);
 
   const desktopColumnWidth = 768;
   const desktopWidth = desktopColumnWidth;
+
+  const step = fragment.step;
 
   const scrollBarStyle = css`
     // scroll bar style
@@ -118,7 +124,7 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
             ${scrollBarStyle}
           `}
         >
-          <ColumnWrapper key={index} fragment={col} />
+          <ColumnWrapper key={index} fragment={col} step={step} />
         </div>
       ))}
     </div>

@@ -21,7 +21,7 @@ const documents = {
     types.ImageDescriptionColumnFragmentFragmentDoc,
   "\n  fragment MarkdownColumnFragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n":
     types.MarkdownColumnFragmentFragmentDoc,
-  "\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n  }\n":
+  "\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n    step\n  }\n":
     types.PageColumnsFragmentFragmentDoc,
   "\n  fragment SourceCodeColumnFragment on SourceCodeColumn {\n    sourceCode {\n      ...SourceCodeViewer_Fragment\n    }\n  }\n":
     types.SourceCodeColumnFragmentFragmentDoc,
@@ -107,8 +107,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n  }\n",
-): (typeof documents)["\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n  }\n"];
+  source: "\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n    step\n  }\n",
+): (typeof documents)["\n  fragment PageColumnsFragment on Page {\n    columns {\n      ...ColumnWrapperFragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    focusColumn\n    step\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

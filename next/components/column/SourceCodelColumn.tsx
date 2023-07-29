@@ -12,6 +12,7 @@ const fragmentDefinition = graphql(`
 
 export interface SourceCodeColumnProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  step: string;
 }
 
 export const SourceCodeColumn = (props: SourceCodeColumnProps): JSX.Element => {
@@ -21,5 +22,5 @@ export const SourceCodeColumn = (props: SourceCodeColumnProps): JSX.Element => {
     return <></>;
   }
 
-  return <SourceCodeViewer fragment={fragment.sourceCode} step="" />;
+  return <SourceCodeViewer fragment={fragment.sourceCode} step={props.step} />;
 };
