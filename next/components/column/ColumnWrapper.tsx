@@ -31,6 +31,7 @@ const fragmentDefinition = graphql(`
 
 export interface ColumnWrapperProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  step: string;
 }
 
 export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
@@ -68,7 +69,7 @@ export const ColumnWrapper = (props: ColumnWrapperProps): JSX.Element => {
     case "SourceCodeColumn":
       return (
         <ColumnContentsPosition position="TOP">
-          <SourceCodeColumn fragment={fragment.column} />
+          <SourceCodeColumn fragment={fragment.column} step={props.step} />
         </ColumnContentsPosition>
       );
     default:

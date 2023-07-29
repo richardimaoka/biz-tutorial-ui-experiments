@@ -32,7 +32,6 @@ const EmptyFileContentPane = () => (
 export const SourceCodeViewer = (props: SourceCodeViewerProps): JSX.Element => {
   const fragment = useFragment(SourceCodeViewer_Fragment, props.fragment);
   const sourceCodeHeight = 400;
-  console.log(fragment.openFile);
 
   return (
     <div

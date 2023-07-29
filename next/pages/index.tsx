@@ -1,20 +1,12 @@
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { PageColumns } from "../components/column/PageColumns";
-import { AutoPlayButton } from "../components/navigation/AutoPlayButton";
-import { NextButton } from "../components/navigation/NextButton";
-import { PrevButton } from "../components/navigation/PrevButton";
-import { StepDisplay } from "../components/navigation/StepDisplay";
+import { Navigation } from "../components/navigation/Navigation";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
-import { useEffect } from "react";
 import { queryParamToString } from "../libs/queryString";
-import { Header } from "../components/Header";
-import { BackToStart } from "../components/navigation/BackToStart";
-import { Navigation } from "../components/navigation/Navigation";
-
+import { print } from "graphql";
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
@@ -54,7 +46,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
   // const router = useRouter();
 
   // to debug query
-  // console.log(print(queryDefinition));
+  console.log(print(queryDefinition));
 
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
