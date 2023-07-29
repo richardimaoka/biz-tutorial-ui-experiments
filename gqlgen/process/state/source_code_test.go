@@ -176,8 +176,8 @@ func TestSourceCodePatterns(t *testing.T) {
 		},
 	}
 
-	for _, c := range cases {
-		sc, err := state.NewSourceCode(repo, c.currentCommit, c.prevCommit, "next-sandbox")
+	for i, c := range cases {
+		sc, err := state.NewSourceCode(repo, c.currentCommit, c.prevCommit, "next-sandbox", fmt.Sprintf("%d", i))
 		if err != nil {
 			t.Fatal(err)
 		}

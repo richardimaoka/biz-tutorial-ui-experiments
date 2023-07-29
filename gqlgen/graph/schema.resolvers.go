@@ -102,22 +102,32 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, nil
 	}
 
+	var sourceCode *model.SourceCode
 	for _, col := range page.Columns {
 		if col.Name != nil && *col.Name == "src" {
+			scCol, ok := col.Column.(*model.SourceCodeColumn)
+			if !ok {
+				log.Printf("OpenFile() failed to cast column to SourceCodeColumn")
+				return nil, fmt.Errorf("internal server error")
+			}
+			sourceCode = scCol.SourceCode
 		}
 	}
 
-	// openFile, ok := page.SourceCode.FileContents[*filePath]
-	// if !ok {
-	// 	log.Printf("OpenFile() file not found: %s", *filePath)
-	// 	// return nil openFile, instead of error, so that the entire page can still render
-	// 	return nil, nil
-	// }
+	if sourceCode == nil {
+		log.Printf("source code is nil")
+		return nil, fmt.Errorf("internal server error")
+	}
 
-	// log.Printf("OpenFile() returning file for: %s", *filePath)
-	// return &openFile, nil
+	openFile, ok := sourceCode.FileContents[*filePath]
+	if !ok {
+		log.Printf("OpenFile() file not found: %s", *filePath)
+		// return nil openFile, instead of error, so that the entire page can still render
+		return nil, nil
+	}
 
-	return nil, nil
+	log.Printf("OpenFile() returning file for: %s", *filePath)
+	return &openFile, nil
 }
 
 // Query returns QueryResolver implementation.

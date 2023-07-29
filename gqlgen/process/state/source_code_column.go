@@ -31,7 +31,7 @@ func NewSourceCodeColumn(repoUrl, commitStr, initialStep, tutorial string) (*Sou
 }
 
 func (c *SourceCodeColumn) Transition(step string, commitStr string) error {
-	sc, err := NewSourceCode(c.sc.repo, commitStr, c.sc.commit.String(), c.sc.tutorial)
+	sc, err := NewSourceCode(c.sc.repo, commitStr, c.sc.commit.String(), c.sc.tutorial, step)
 	if err != nil {
 		return fmt.Errorf("failed in Transition, %s", err)
 	}
