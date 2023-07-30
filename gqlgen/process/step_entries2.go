@@ -34,9 +34,10 @@ type StepEntry2 struct {
 	TerminalType string `json:"terminalType,omitempty"`
 
 	// git
-	Commit        string `json:"commit,omitempty"`
-	CommitMessage string `json:"commitMessage,omitempty"`
-	RepoUrl       string `json:"repoUrl,omitempty"`
+	Commit              string `json:"commit,omitempty"`
+	CommitMessage       string `json:"commitMessage,omitempty"`
+	RepoUrl             string `json:"repoUrl,omitempty"`
+	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
 
 	// browser
 	BrowserType        string `json:"browserType,omitempty"`
@@ -108,6 +109,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 		if len(columns) == 0 {
 			return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, no columns are specified", e.Step)
 		}
+
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
 			if colName == "terminal" {
@@ -132,12 +134,12 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 			if colName == "src" {
 				if srcColmnState == nil {
 					var err error
-					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, tutorial)
+					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, e.DefaultOpenFilePath, tutorial)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
 					}
 				} else if e.Commit != "" {
-					err := srcColmnState.Transition(e.Step, e.Commit)
+					err := srcColmnState.Transition(e.Step, e.Commit, e.DefaultOpenFilePath)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
 					}

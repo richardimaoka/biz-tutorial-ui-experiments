@@ -13,13 +13,13 @@ type SourceCodeColumn struct {
 	sc   *SourceCode
 }
 
-func NewSourceCodeColumn(repoUrl, commitStr, initialStep, tutorial string) (*SourceCodeColumn, error) {
+func NewSourceCodeColumn(repoUrl, commitStr, initialStep, defaultOpenFilePath, tutorial string) (*SourceCodeColumn, error) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCodeColumn, could not clone git repo, %s", err)
 	}
 
-	sc, err := InitialSourceCode(repo, commitStr, tutorial)
+	sc, err := InitialSourceCode(repo, commitStr, defaultOpenFilePath, tutorial)
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCodeColumn, %s", err)
 	}
@@ -30,8 +30,8 @@ func NewSourceCodeColumn(repoUrl, commitStr, initialStep, tutorial string) (*Sou
 	}, nil
 }
 
-func (c *SourceCodeColumn) Transition(step string, commitStr string) error {
-	sc, err := NewSourceCode(c.sc.repo, commitStr, c.sc.commit.String(), c.sc.tutorial, step)
+func (c *SourceCodeColumn) Transition(step, commitStr, defaultOpenFilePath string) error {
+	sc, err := NewSourceCode(c.sc.repo, commitStr, c.sc.commit.String(), c.sc.tutorial, step, defaultOpenFilePath)
 	if err != nil {
 		return fmt.Errorf("failed in Transition, %s", err)
 	}

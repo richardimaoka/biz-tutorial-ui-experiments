@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) > 1 && os.Args[1] == "process2" {
+	if len(os.Args) > 1 && os.Args[1] == "process" {
 		err := process.Process2("sign-in-with-google")
 		if err != nil {
 			panic(err)

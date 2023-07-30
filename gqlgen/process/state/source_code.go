@@ -10,12 +10,13 @@ import (
 )
 
 type SourceCode struct {
-	repo      *git.Repository
-	commit    plumbing.Hash
-	rootDir   *Directory
-	fileNodes []FileNode
-	tutorial  string
-	step      string
+	repo                *git.Repository
+	commit              plumbing.Hash
+	rootDir             *Directory
+	fileNodes           []FileNode
+	tutorial            string
+	step                string
+	defaultOpenFilePath string
 }
 
 func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
@@ -32,7 +33,7 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	return commit, nil
 }
 
-func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial, step string) (*SourceCode, error) {
+func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial, step, defaultOpenFilePath string) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -49,7 +50,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath}
 
 	// 2. From git patches, mark added/deleted/updated/renamed files
 	prevCommit, err := getCommit(repo, prevCommitStr)
@@ -81,7 +82,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 	return &sc, nil
 }
 
-func InitialSourceCode(repo *git.Repository, currentCommitStr, tutorial string) (*SourceCode, error) {
+func InitialSourceCode(repo *git.Repository, currentCommitStr, defaultOpenFilePath, tutorial string) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -98,16 +99,17 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr, tutorial string) 
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: "_initial"}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: "_initial", defaultOpenFilePath: defaultOpenFilePath}
 
 	return &sc, nil
 }
 
 func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
 	return &model.SourceCode{
-		FileTree:     s.rootDir.ToGraphQLFileNodeSlice(),
-		FileContents: s.rootDir.ToGraphQLOpenFileMap(),
-		Tutorial:     s.tutorial,
-		Step:         s.step,
+		FileTree:            s.rootDir.ToGraphQLFileNodeSlice(),
+		FileContents:        s.rootDir.ToGraphQLOpenFileMap(),
+		Tutorial:            s.tutorial,
+		Step:                s.step,
+		DefaultOpenFilePath: s.defaultOpenFilePath,
 	}
 }
