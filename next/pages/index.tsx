@@ -7,12 +7,13 @@ import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { queryParamToString } from "../libs/queryString";
 import { print } from "graphql";
+import { PageColumns2 } from "../components/column/PageColumns2";
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       __typename
       ...NavigationFragment
-      ...PageColumnsFragment
+      ...PageColumns2Fragment
     }
   }
 `);
@@ -77,7 +78,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      {page && <PageColumns fragment={page} />}
+      {page && <PageColumns2 fragment={page} />}
       {page && <Navigation fragment={page} />}
     </>
   );
