@@ -27,21 +27,6 @@ export interface ColumnWrapperProps {
 
 export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-  const router = useRouter();
-  useEffect(() => {
-    if (!router.asPath.includes("#") && fragment.focusColumn) {
-      router.replace({ hash: fragment.focusColumn }).catch((e) => {
-        // workaround for https://github.com/vercel/next.js/issues/37362
-        if (e.cancelled) {
-          console.log(
-            "[INFO]: you can ignore this message for now, but might want to to check if https://github.com/vercel/next.js/issues/37362 is resolved at some point."
-          );
-        } else {
-          throw e;
-        }
-      });
-    }
-  }, [router, fragment.focusColumn]);
 
   if (!fragment.columns) {
     return <></>;
@@ -94,41 +79,43 @@ export const PageColumns = (props: ColumnWrapperProps): JSX.Element => {
           // carousel container
           scroll-snap-type: x mandatory;
           scroll-behavior: smooth;
-          overflow-x: auto; // buttons are the only way to scroll
+          overflow-x: hidden; // buttons are the only way to scroll
           overflow-y: hidden; // let inner column handle y-axis scroll
           /* ${scrollBarStyle} */
         `}
       >
-        {columns.map((col, index) => (
-          <div
-            id={col.name ? col.name : undefined}
-            key={col.name ? col.name : index}
-            css={css`
-              // important to avoid column-width shrink
-              flex-shrink: 0;
+        {columns.map((col, index) => {
+          return (
+            <div
+              id={col.name ? col.name : undefined}
+              key={col.name ? col.name : index}
+              css={css`
+                // important to avoid column-width shrink
+                flex-shrink: 0;
 
-              // carousel scrol to stop
-              scroll-snap-align: start;
+                // carousel scrol to stop
+                scroll-snap-align: start;
 
-              // on mobile, use full screen
-              @media (max-width: 768px) {
-                width: 100vw;
+                // on mobile, use full screen
+                @media (max-width: 768px) {
+                  width: 100vw;
+                  height: 100vh;
+                }
+
+                // on desktop, use fixed width
+                width: ${desktopColumnWidth}px;
                 height: 100vh;
-              }
 
-              // on desktop, use fixed width
-              width: ${desktopColumnWidth}px;
-              height: 100vh;
-
-              // in-column scroll for y-axis
-              overflow-y: auto;
-              overflow-x: auto; // not to conflict with outer carousel scroll
-              ${scrollBarStyle}
-            `}
-          >
-            <ColumnWrapper key={index} fragment={col} step={step} />
-          </div>
-        ))}
+                // in-column scroll for y-axis
+                overflow-y: auto;
+                overflow-x: auto; // not to conflict with outer carousel scroll
+                ${scrollBarStyle}
+              `}
+            >
+              <ColumnWrapper key={index} fragment={col} step={step} />
+            </div>
+          );
+        })}
       </div>
     </>
   );
