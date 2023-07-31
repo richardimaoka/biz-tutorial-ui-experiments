@@ -4,7 +4,7 @@ import { ColumnWrapper } from "./ColumnWrapper";
 import { dark1MainBg } from "../../libs/colorTheme";
 import { nonNullArray } from "../../libs/nonNullArray";
 import { ModalFrame } from "../modal/ModalFrame";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const fragmentDefinition = graphql(`
@@ -43,6 +43,7 @@ export interface PageColumnsProps {
 
 export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
+  const [colIndex, setColIndex] = useState(0);
 
   if (!fragment.columns) {
     return <></>;
