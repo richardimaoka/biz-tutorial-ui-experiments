@@ -72,7 +72,12 @@ export const PageColumns2 = (props: PageColumns2Props): JSX.Element => {
           `}
         >
           {columns.map((col, index) => (
-            <div key={col.name ? col.name : index} css={css``}>
+            <div
+              key={col.name ? col.name : index}
+              css={css`
+                color: ${col.name === focusColumn ? "white" : "gray"};
+              `}
+            >
               {col.name}
             </div>
           ))}
