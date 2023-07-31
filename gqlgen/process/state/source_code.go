@@ -82,7 +82,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 	return &sc, nil
 }
 
-func InitialSourceCode(repo *git.Repository, currentCommitStr, defaultOpenFilePath, tutorial string) (*SourceCode, error) {
+func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpenFilePath, tutorial string) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -99,7 +99,7 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr, defaultOpenFilePa
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: "_initial", defaultOpenFilePath: defaultOpenFilePath}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath}
 
 	return &sc, nil
 }

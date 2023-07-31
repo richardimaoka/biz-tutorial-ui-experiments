@@ -95,8 +95,14 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, fmt.Errorf("internal server error - failed to unmarshal page from %s", filename)
 	}
 
-	if filePath == nil {
-		log.Printf("returning nil as filePath empty")
+	var openFilePath string
+	if filePath != nil {
+		openFilePath = *filePath
+	} else if obj.DefaultOpenFilePath != "" {
+		log.Printf("filePath argument is null, so using default file path %s", obj.DefaultOpenFilePath)
+		openFilePath = obj.DefaultOpenFilePath
+	} else {
+		log.Printf("returning empty openFile as filePath argument is null and defaultOpenFilePath is empty")
 		// return nil openFile, instead of error, so that the entire page can still render
 		// TODO: enable default open file returning, once SourceCode has defaultOpenFilePath set
 		return nil, nil
@@ -119,14 +125,14 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		return nil, fmt.Errorf("internal server error")
 	}
 
-	openFile, ok := sourceCode.FileContents[*filePath]
+	openFile, ok := sourceCode.FileContents[openFilePath]
 	if !ok {
-		log.Printf("OpenFile() file not found: %s", *filePath)
+		log.Printf("OpenFile() file not found: %s", openFilePath)
 		// return nil openFile, instead of error, so that the entire page can still render
 		return nil, nil
 	}
 
-	log.Printf("OpenFile() returning file for: %s", *filePath)
+	log.Printf("OpenFile() returning file for: %s", openFilePath)
 	return &openFile, nil
 }
 
