@@ -6,14 +6,14 @@ import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
 import { IndexSsrPageQuery } from "../libs/gql/graphql";
 import { queryParamToString } from "../libs/queryString";
-import { print } from "graphql";
-import { PageColumns2 } from "../components/column/PageColumns2";
+// import { print } from "graphql";
+
 const queryDefinition = graphql(/* GraphQL */ `
   query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       __typename
       ...NavigationFragment
-      ...PageColumns2Fragment
+      ...PageColumnsFragment
     }
   }
 `);
@@ -47,7 +47,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
   // const router = useRouter();
 
   // to debug query
-  console.log(print(queryDefinition));
+  //console.log(print(queryDefinition));
 
   // const terminals = currentPage?.terminals;
   // const [currentTerminalIndex] = useState(0);
@@ -78,7 +78,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      {page && <PageColumns2 fragment={page} />}
+      {page && <PageColumns fragment={page} />}
       {page && <Navigation fragment={page} />}
     </>
   );
