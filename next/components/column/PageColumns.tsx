@@ -45,6 +45,17 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const [colIndex, setColIndex] = useState(0);
 
+  useEffect(() => {
+    if (fragment.columns && fragment.focusColumn) {
+      const columns = nonNullArray(fragment.columns);
+      const focusColumn = fragment.focusColumn;
+      const targetIndex = columns.findIndex((col) => col.name === focusColumn);
+      if (targetIndex > -1 && targetIndex !== colIndex) {
+        setColIndex(targetIndex);
+      }
+    }
+  }, [fragment.columns, fragment.focusColumn, colIndex]);
+
   if (!fragment.columns) {
     return <></>;
   }
@@ -90,6 +101,7 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
           </div>
         ))}
       </div>
+      <div>{colIndex}</div>
       <div
         css={css`
           // flex to allow multiple columns
