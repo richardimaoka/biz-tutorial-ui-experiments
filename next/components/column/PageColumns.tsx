@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import { FragmentType, graphql, useFragment } from "../../libs/gql";
 import { ColumnWrapper } from "./ColumnWrapper";
 import { dark1MainBg } from "../../libs/colorTheme";
@@ -69,6 +69,14 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   const desktopColumnWidth = 768;
   const desktopWidth = desktopColumnWidth;
 
+  const slide = keyframes`
+    0% {
+      left: 0px;
+    }
+    100% {
+      left: ${-(768 + 20) * 2}px;
+  }`;
+
   const Inner = () => (
     <div
       css={css`
@@ -111,7 +119,7 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
           // carousel container
           scroll-snap-type: x mandatory;
           scroll-behavior: smooth;
-          overflow-x: auto; // buttons are the only way to scroll
+          overflow-x: hidden; // buttons are the only way to scroll
           overflow-y: hidden; // let inner column handle y-axis scroll
           /* ${scrollBarStyle} */
         `}
@@ -134,6 +142,9 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
                   height: 80vh;
                 }
 
+                position: relative;
+                animation: ${slide} 1s forwards;
+
                 // on desktop, use fixed width
                 width: ${desktopColumnWidth}px;
                 height: 80vh;
@@ -143,6 +154,9 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
                 overflow-x: auto; // not to conflict with outer carousel scroll
                 ${scrollBarStyle}
               `}
+              onAnimationEnd={() => {
+                console.log("animation finished");
+              }}
             >
               <ColumnWrapper key={index} fragment={col} step={step} />
             </div>
