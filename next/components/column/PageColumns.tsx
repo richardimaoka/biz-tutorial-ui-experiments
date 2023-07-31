@@ -41,20 +41,52 @@ export interface PageColumnsProps {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
+interface Animating {
+  kind: "animating";
+  toIndex: number;
+  fromIndex: number;
+}
+
+interface Static {
+  kind: "static";
+  index: number;
+}
+
+type AnimationState = Animating | Static;
+
 export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-  const [colIndex, setColIndex] = useState(0);
+  const [animation, setAnimation] = useState<AnimationState>({
+    kind: "static",
+    index: 0,
+  });
 
   useEffect(() => {
-    if (fragment.columns && fragment.focusColumn) {
-      const columns = nonNullArray(fragment.columns);
-      const focusColumn = fragment.focusColumn;
-      const targetIndex = columns.findIndex((col) => col.name === focusColumn);
-      if (targetIndex > -1 && targetIndex !== colIndex) {
-        setColIndex(targetIndex);
-      }
+    console.log("useEffect", animation);
+    switch (animation.kind) {
+      case "animating":
+        break; // do nothing
+      case "static":
+        if (fragment.columns && fragment.focusColumn) {
+          // find toIndex from fragment.columns
+          const columns = nonNullArray(fragment.columns);
+          const focusColumn = fragment.focusColumn;
+          const toIndex = columns.findIndex((col) => col.name === focusColumn);
+
+          if (toIndex > -1 && toIndex !== animation.index) {
+            setAnimation({
+              kind: "animating",
+              toIndex: toIndex,
+              fromIndex: animation.index,
+            });
+          }
+        }
+        break;
+      default:
+        const _exhaustiveCheck: never = animation;
+        return _exhaustiveCheck;
     }
-  }, [fragment.columns, fragment.focusColumn, colIndex]);
+  }, [fragment.columns, fragment.focusColumn, animation]);
 
   if (!fragment.columns) {
     return <></>;
@@ -66,26 +98,86 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   }
   const step = fragment.step;
 
-  const desktopColumnWidth = 768;
-  const desktopWidth = desktopColumnWidth;
+  const columnWidth = 768;
+  const columnGap = 20;
 
-  const slide = keyframes`
-    0% {
-      left: 0px;
+  const kf =
+    animation.kind === "animating"
+      ? keyframes`
+        0% {
+          left: ${-(columnWidth + columnGap) * animation.fromIndex}px;
+        }
+        100% {
+          left: ${-(columnWidth + columnGap) * animation.toIndex}px;
+        }`
+      : keyframes``;
+
+  const left =
+    animation.kind === "static"
+      ? -(columnWidth + columnGap) * animation.index
+      : 0;
+
+  const cssAnimate = css`
+    // important to avoid column-width shrink
+    flex-shrink: 0;
+
+    // carousel scrol to stop
+    scroll-snap-align: start;
+
+    // on mobile, use full screen
+    @media (max-width: 768px) {
+      width: 100vw;
+      height: 80vh;
     }
-    100% {
-      left: ${-(768 + 20) * 2}px;
-  }`;
+
+    position: relative;
+    animation: ${kf} 1s forwards;
+
+    // on desktop, use fixed width
+    width: ${columnWidth}px;
+    height: 80vh;
+
+    // in-column scroll for y-axis
+    overflow-y: auto;
+    overflow-x: auto; // not to conflict with outer carousel scroll
+    ${scrollBarStyle}
+  `;
+
+  const cssStatic = css`
+    // important to avoid column-width shrink
+    flex-shrink: 0;
+
+    // carousel scrol to stop
+    scroll-snap-align: start;
+
+    // on mobile, use full screen
+    @media (max-width: 768px) {
+      width: 100vw;
+      height: 80vh;
+    }
+
+    position: relative;
+    left: ${left}px;
+
+    // on desktop, use fixed width
+    width: ${columnWidth}px;
+    height: 80vh;
+
+    // in-column scroll for y-axis
+    overflow-y: auto;
+    overflow-x: auto; // not to conflict with outer carousel scroll
+    ${scrollBarStyle}
+  `;
 
   const Inner = () => (
     <div
       css={css`
         // on mobile, show one column only
-        @media (max-width: 768px) {
+        @media (max-width: ${columnWidth}px) {
           width: 100vw;
         }
         // on desktop, show one column ony
-        width: ${desktopWidth}px;
+        width: ${columnWidth}px;
         margin: 0 auto; // centering on desktop
         height: 100svh;
 
@@ -109,12 +201,11 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
           </div>
         ))}
       </div>
-      <div>{colIndex}</div>
       <div
         css={css`
           // flex to allow multiple columns
           display: flex;
-          gap: 20px;
+          gap: ${columnGap}px;
 
           // carousel container
           scroll-snap-type: x mandatory;
@@ -129,33 +220,11 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
             <div
               id={col.name ? col.name : undefined}
               key={col.name ? col.name : index}
-              css={css`
-                // important to avoid column-width shrink
-                flex-shrink: 0;
-
-                // carousel scrol to stop
-                scroll-snap-align: start;
-
-                // on mobile, use full screen
-                @media (max-width: 768px) {
-                  width: 100vw;
-                  height: 80vh;
-                }
-
-                position: relative;
-                animation: ${slide} 1s forwards;
-
-                // on desktop, use fixed width
-                width: ${desktopColumnWidth}px;
-                height: 80vh;
-
-                // in-column scroll for y-axis
-                overflow-y: auto;
-                overflow-x: auto; // not to conflict with outer carousel scroll
-                ${scrollBarStyle}
-              `}
+              css={animation.kind === "animating" ? cssAnimate : cssStatic}
               onAnimationEnd={() => {
-                console.log("animation finished");
+                if (animation.kind === "animating") {
+                  setAnimation({ kind: "static", index: animation.toIndex });
+                }
               }}
             >
               <ColumnWrapper key={index} fragment={col} step={step} />
