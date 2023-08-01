@@ -26,6 +26,10 @@ export const getServerSideProps: GetServerSideProps<
   IndexSsrPageQuery,
   PageParams
 > = async (context) => {
+  console.log(
+    "getServerSideProps called for index.tsx",
+    new Date().toUTCString()
+  );
   const step = queryParamToString(context.query.step);
   const openFilePath = queryParamToString(context.query.openFilePath);
 
