@@ -516,7 +516,7 @@ export type IndexSsrPageQuery = {
     | ({ __typename: "Page" } & {
         " $fragmentRefs"?: {
           NavigationFragmentFragment: NavigationFragmentFragment;
-          PageColumnsFragmentFragment: PageColumnsFragmentFragment;
+          PageColumns2FragmentFragment: PageColumns2FragmentFragment;
         };
       })
     | null;
@@ -1446,7 +1446,7 @@ export const IndexSsrPageDocument = {
                 },
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "PageColumnsFragment" },
+                  name: { kind: "Name", value: "PageColumns2Fragment" },
                 },
               ],
             },
@@ -1455,7 +1455,7 @@ export const IndexSsrPageDocument = {
       },
     },
     ...NavigationFragmentFragmentDoc.definitions,
-    ...PageColumnsFragmentFragmentDoc.definitions,
+    ...PageColumns2FragmentFragmentDoc.definitions,
     ...ColumnWrapperFragmentFragmentDoc.definitions,
     ...ImageDescriptionColumnFragmentFragmentDoc.definitions,
     ...MarkdownFragmentFragmentDoc.definitions,

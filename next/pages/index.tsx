@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { PageColumns } from "../components/column/PageColumns";
+import { PageColumns2 } from "../components/column/PageColumns2";
 import { Navigation } from "../components/navigation/Navigation";
 import { client } from "../libs/apolloClient";
 import { graphql } from "../libs/gql";
@@ -13,7 +13,7 @@ const queryDefinition = graphql(/* GraphQL */ `
     page(tutorial: $tutorial, step: $step) {
       __typename
       ...NavigationFragment
-      ...PageColumnsFragment
+      ...PageColumns2Fragment
     }
   }
 `);
@@ -82,7 +82,7 @@ export default function Home({ page }: IndexSsrPageQuery) {
 
   return (
     <>
-      {page && <PageColumns fragment={page} />}
+      {page && <PageColumns2 fragment={page} />}
       {page && <Navigation fragment={page} />}
     </>
   );

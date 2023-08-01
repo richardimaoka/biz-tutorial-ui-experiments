@@ -63,7 +63,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumnsFragment\n    }\n  }\n":
+  "\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumns2Fragment\n    }\n  }\n":
     types.IndexSsrPageDocument,
 };
 
@@ -235,8 +235,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumnsFragment\n    }\n  }\n",
-): (typeof documents)["\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumnsFragment\n    }\n  }\n"];
+  source: "\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumns2Fragment\n    }\n  }\n",
+): (typeof documents)["\n  query IndexSsrPage($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      __typename\n      ...NavigationFragment\n      ...PageColumns2Fragment\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

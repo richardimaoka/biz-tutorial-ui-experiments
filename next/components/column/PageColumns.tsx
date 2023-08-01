@@ -47,17 +47,17 @@ interface Animating {
   fromIndex: number;
 }
 
-interface Static {
-  kind: "static";
+interface Completed {
+  kind: "completed";
   index: number;
 }
 
-type AnimationState = Animating | Static;
+type AnimationState = Animating | Completed;
 
 export const PageColumns = (props: PageColumnsProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const [animation, setAnimation] = useState<AnimationState>({
-    kind: "static",
+    kind: "completed",
     index: 0,
   });
 
@@ -65,15 +65,20 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
     console.log("useEffect", animation);
     switch (animation.kind) {
       case "animating":
+        console.log("case animating");
         break; // do nothing
-      case "static":
+      case "completed":
+        console.log("case completed");
         if (fragment.columns && fragment.focusColumn) {
+          console.log("case completed inside if");
           // find toIndex from fragment.columns
           const columns = nonNullArray(fragment.columns);
           const focusColumn = fragment.focusColumn;
           const toIndex = columns.findIndex((col) => col.name === focusColumn);
 
+          // if toIndex != current visible index
           if (toIndex > -1 && toIndex !== animation.index) {
+            console.log("case completed deep inside if, set to animating");
             setAnimation({
               kind: "animating",
               toIndex: toIndex,
@@ -112,8 +117,17 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
         }`
       : keyframes``;
 
+  const kfString =
+    animation.kind === "animating"
+      ? `from ${-(columnWidth + columnGap) * animation.fromIndex}px to ${
+          -(columnWidth + columnGap) * animation.toIndex
+        }px`
+      : `no animation, completed`;
+
+  console.log("kf", kfString);
+
   const left =
-    animation.kind === "static"
+    animation.kind === "completed"
       ? -(columnWidth + columnGap) * animation.index
       : 0;
 
@@ -143,7 +157,7 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
     ${scrollBarStyle}
   `;
 
-  const cssStatic = css`
+  const cssCompleted = css`
     // important to avoid column-width shrink
     flex-shrink: 0;
 
@@ -220,10 +234,11 @@ export const PageColumns = (props: PageColumnsProps): JSX.Element => {
             <div
               id={col.name ? col.name : undefined}
               key={col.name ? col.name : index}
-              css={animation.kind === "animating" ? cssAnimate : cssStatic}
+              css={animation.kind === "completed" ? cssCompleted : cssAnimate}
               onAnimationEnd={() => {
+                console.log("onAnimationEnd", animation);
                 if (animation.kind === "animating") {
-                  setAnimation({ kind: "static", index: animation.toIndex });
+                  setAnimation({ kind: "completed", index: animation.toIndex });
                 }
               }}
             >
