@@ -24,7 +24,9 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
     <nav>
       <BackToStart />
       {fragment.step && <StepDisplay step={fragment.step} />}
-      {fragment.prevStep && <PrevButton href={`?step=${fragment.prevStep}`} />}
+      {fragment.prevStep && (
+        <PrevButton href={`?step=${fragment.prevStep}&skipAnimation=true`} />
+      )}
       {fragment.nextStep && <AutoPlayButton nextStep={fragment.nextStep} />}
       {fragment.nextStep && <NextButton href={`?step=${fragment.nextStep}`} />}
     </nav>

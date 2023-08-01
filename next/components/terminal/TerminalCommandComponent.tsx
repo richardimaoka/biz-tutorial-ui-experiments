@@ -100,7 +100,10 @@ export const TerminalCommandComponent = (
           scrollIntoView={scrollIntoView}
         />
       ) : (
-        <code>&gt; {fragment.command}</code>
+        <code>
+          &gt; {fragment.command}
+          {fragment.beforeExecution && <FlickeringTrail />}
+        </code>
       )}
     </pre>
   );
