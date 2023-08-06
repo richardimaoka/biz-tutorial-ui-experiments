@@ -1,5 +1,5 @@
 import { graphql } from "@/libs/gql";
-import { getClient } from "@/libs/gql/apolloClient";
+import { getClient } from "@/libs/apolloClient";
 import RouterMounting from "./RouterMounting";
 import { VisibleColumn } from "./components/column/VisibleColumn";
 
