@@ -1,0 +1,97 @@
+.pane {
+  height: 100svh;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-sourcecode-surface-filetree);
+
+  /* overlay */
+  position: absolute;
+  z-index: 100;
+
+  /* flex child = .header, .tree */
+}
+
+.pane.expanded {
+  width: 300px;
+  box-shadow: 4px 0px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.pane.folded {
+  width: 24px; /* (icon 16px) + 2x(padding 4px) */
+}
+
+.header {
+  /* flex parent = .pane */
+
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-menu);
+}
+
+.header.folded {
+  background-color: var(--color-sourcecode-menu-unfocused);
+  padding: 5px 4px;
+}
+
+.header.expanded {
+  background-color: var(--color-menu);
+  padding: 5px 8px;
+}
+
+.tree {
+  /* flex parent = .pane */
+  flex-grow: 1; /*grow in column direction*/
+}
+
+.filenode {
+  display: flex;
+  gap: 4px;
+  color: white;
+  padding: 3px 8px;
+}
+
+.filenode:hover {
+  background-color: #748d2e;
+}
+
+.filenode.updated {
+  background-color: #748d2e;
+}
+
+.nodename {
+  font-size: 13px;
+
+  /* ellipsis settings*/
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.currentdirectory {
+  color: #a1a1a1;
+}
+
+.projectdir {
+  color: var(--color-primary-text);
+  font-size: 12px;
+
+  /* ellipsis settings*/
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #252526; /* or add it to the track */
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: #37373d;
+  border-radius: 8px;
+}
+.scroll::-webkit-scrollbar-corner {
+  background-color: #252526;
+}

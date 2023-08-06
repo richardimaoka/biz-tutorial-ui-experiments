@@ -1,0 +1,20 @@
+.icon {
+  /* https://fontawesome.com/docs/web/style/fixed-width
+  Font Awesome icons are designed on grid and share a consistent height. 
+  But they vary in width depending on how wide or narrow each symbol is. */
+  height: 16px;
+
+  color: var(--color-primary-text);
+}
+
+.icon svg {
+  font-size: 16px;
+}
+
+.wideicon {
+  width: 16px;
+}
+
+.folder {
+  color: #fcd462;
+}

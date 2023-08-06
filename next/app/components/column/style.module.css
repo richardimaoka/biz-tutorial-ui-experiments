@@ -1,0 +1,88 @@
+@media (max-width: 768px) {
+  .visiblecolumn {
+    width: 100%;
+    height: 100svh;
+
+    /* make sure hights of flex children add up to 100svh */
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 769px) {
+  .visiblecolumn {
+    width: 768px;
+    height: 100svh;
+
+    /* make sure hights of flex children add up to 100svh */
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  padding-bottom: 0px;
+
+  border-bottom: 1px solid var(--color-primary-text);
+}
+
+.tabs {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  position: relative;
+  top: 1px;
+  width: fit-content;
+}
+
+.tab {
+  font-size: 13px;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.tab.selected {
+  background-color: var(--color-menu);
+  color: var(--color-primary-text);
+
+  padding: 4px 8px;
+  padding-bottom: 8px;
+
+  border: 1px solid var(--color-primary-text);
+  border-bottom: none;
+}
+
+.tab.unselected {
+  background-color: var(--color-surface);
+  color: var(--color-disabled-text);
+  padding: 4px 8px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+  .tab .desktop {
+    display: none;
+  }
+  .tab .smartphone {
+    display: visible;
+  }
+}
+
+@media (min-width: 769px) {
+  .tab .desktop {
+    display: visible;
+    height: 16px;
+  }
+  .tab .smartphone {
+    display: none;
+  }
+}
+
+.wrapper {
+  /* make sure hights of flex children add up to parent(.visiblecolumn) hight */
+  overflow-y: hidden;
+  flex-grow: 1;
+}

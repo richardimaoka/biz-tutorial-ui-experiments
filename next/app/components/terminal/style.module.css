@@ -1,0 +1,86 @@
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.terminal {
+  /*regardless of contents height, fill the (column height - header) space*/
+  height: 100%;
+
+  /*.contents to fill only the remaining space, and enable .contents scroll*/
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+}
+
+.contents {
+  padding: 1px 8px;
+  overflow: auto;
+  background-color: var(--color-surface);
+  flex-grow: 1;
+}
+
+.command {
+  padding: 4px;
+  background-color: var(--color-surface);
+  color: var(--color-primary-text);
+}
+
+.command code {
+  font-size: 12px;
+}
+
+.prompt {
+  display: inline-block;
+  width: 8px;
+  font-size: 12px;
+  margin-right: 2px;
+  color: var(--color-prompt);
+}
+
+.flickering {
+  animation: flicker 1s infinite;
+}
+
+.output {
+  padding: 4px;
+  background-color: var(--color-surface);
+  color: var(--color-secondary-text);
+}
+
+.output code {
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  /* https://stackoverflow.com/questions/4413015/browser-compatible-word-wrap-and-whitespace-pre */
+  .command,
+  .output {
+    white-space: pre-wrap; /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+  }
+}
+
+.currentDir {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-menu);
+  padding: 6px 0px;
+}
+
+.currentDir span {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 14px;
+  color: var(--color-primary-text);
+}
