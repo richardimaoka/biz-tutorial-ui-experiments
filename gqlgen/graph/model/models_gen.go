@@ -29,6 +29,13 @@ type BackgroundImageColumn struct {
 func (BackgroundImageColumn) IsColumn()                    {}
 func (this BackgroundImageColumn) GetPlaceholder() *string { return this.Placeholder }
 
+type BrowserColumn struct {
+	Placeholder *string `json:"_placeholder"`
+}
+
+func (BrowserColumn) IsColumn()                    {}
+func (this BrowserColumn) GetPlaceholder() *string { return this.Placeholder }
+
 type ColumnWrapper struct {
 	Index  *int    `json:"index"`
 	Column Column  `json:"column"`

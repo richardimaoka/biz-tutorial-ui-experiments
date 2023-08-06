@@ -70,6 +70,16 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 	return &page, nil
 }
 
+// SourceCode is the resolver for the sourceCode field.
+func (r *queryResolver) SourceCode(ctx context.Context) (*model.SourceCode, error) {
+	panic(fmt.Errorf("not implemented: SourceCode - sourceCode"))
+}
+
+// ProjectDir is the resolver for the projectDir field.
+func (r *sourceCodeResolver) ProjectDir(ctx context.Context, obj *model.SourceCode) (*string, error) {
+	panic(fmt.Errorf("not implemented: ProjectDir - projectDir"))
+}
+
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	var dirName = fmt.Sprintf("data/%s/state", obj.Tutorial)
