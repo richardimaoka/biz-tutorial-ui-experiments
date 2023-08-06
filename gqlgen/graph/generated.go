@@ -198,8 +198,6 @@ type QueryResolver interface {
 	SourceCode(ctx context.Context) (*model.SourceCode, error)
 }
 type SourceCodeResolver interface {
-	ProjectDir(ctx context.Context, obj *model.SourceCode) (*string, error)
-
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
 }
 
@@ -3843,7 +3841,7 @@ func (ec *executionContext) _SourceCode_projectDir(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.SourceCode().ProjectDir(rctx, obj)
+		return obj.ProjectDir, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3852,17 +3850,17 @@ func (ec *executionContext) _SourceCode_projectDir(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SourceCode_projectDir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SourceCode",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
 		},
@@ -7030,22 +7028,9 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._SourceCode_step(ctx, field, obj)
 
 		case "projectDir":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._SourceCode_projectDir(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._SourceCode_projectDir(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "fileTree":
 
 			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)

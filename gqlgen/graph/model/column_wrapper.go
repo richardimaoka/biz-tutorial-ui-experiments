@@ -21,7 +21,8 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 
 	name, ok := obj["name"]
 	if !ok {
-		return fmt.Errorf(`failed in ColumnWrapper UnmarshalJSON(), "name" field does not exist`)
+		name = ""
+		// return fmt.Errorf(`failed in ColumnWrapper UnmarshalJSON(), "name" field does not exist`)
 	}
 
 	nameStr, ok := name.(string)
@@ -83,6 +84,13 @@ func columnFromBytes(bytes []byte) (Column, error) {
 
 	case "SourceCodeColumn":
 		var col SourceCodeColumn
+		if err := json.Unmarshal(bytes, &col); err != nil {
+			return nil, err
+		}
+		return &col, nil
+
+	case "BrowserColumn":
+		var col BrowserColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}
