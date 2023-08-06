@@ -7,6 +7,7 @@ const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       ...VisibleColumn_Fragment
+      step
     }
   }
 `);
@@ -23,14 +24,13 @@ export default async function Home({ searchParams }: PageParams) {
   const openFilePath = searchParams.openFilePath
     ? searchParams.openFilePath
     : "package.json";
-  const step = "bf3aadbd-c876-4fd3-817b-3b0fc24b04f9";
 
   const { data } = await getClient().query({
     query: queryDefinition,
     variables: {
       tutorial: "sign-in-with-google",
       openFilePath: openFilePath,
-      step: step,
+      step: searchParams.step,
       column: searchParams.column,
     },
   });
@@ -43,7 +43,7 @@ export default async function Home({ searchParams }: PageParams) {
             fragment={data.page}
             selectColumn={searchParams.column}
             openFilePath={openFilePath}
-            step={step}
+            step={searchParams.step}
           />
         )}
       </main>

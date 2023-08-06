@@ -460,7 +460,7 @@ export type PageQueryQueryVariables = Exact<{
 export type PageQueryQuery = {
   __typename: "Query";
   page?:
-    | ({ __typename: "Page" } & {
+    | ({ __typename: "Page"; step?: string | null } & {
         " $fragmentRefs"?: {
           VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
         };
@@ -3024,6 +3024,7 @@ export const PageQueryDocument = {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "VisibleColumn_Fragment" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "step" } },
               ],
             },
           },
