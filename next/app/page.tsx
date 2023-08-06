@@ -41,14 +41,16 @@ export default async function Home({ searchParams }: PageParams) {
     <RouterMounting>
       <main>
         {data.page && (
-          <VisibleColumn
-            fragment={data.page}
-            selectColumn={searchParams.column}
-            openFilePath={openFilePath}
-            step={searchParams.step}
-          />
+          <>
+            <VisibleColumn
+              fragment={data.page}
+              selectColumn={searchParams.column}
+              openFilePath={openFilePath}
+              step={searchParams.step}
+            />
+            <Navigation fragment={data.page} />
+          </>
         )}
-        <Navigation fragment={data.page} />
       </main>
     </RouterMounting>
   );
