@@ -22,7 +22,7 @@ interface PageParams {
 export default async function Home({ searchParams }: PageParams) {
   const openFilePath = searchParams.openFilePath
     ? searchParams.openFilePath
-    : "public/robots.txt";
+    : "package.json";
   const step = "bf3aadbd-c876-4fd3-817b-3b0fc24b04f9";
 
   const { data } = await getClient().query({
