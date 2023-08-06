@@ -13,11 +13,11 @@
 .prev {
   position: fixed;
   bottom: 0px;
-  font-size: 20px;
-  width: 100px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
+
+  font-size: 16px;
+  padding: 8px;
+  background-color: var(--color-theme-blue);
+  color: var(--color-primary-text);
   border-style: none;
 }
 
@@ -25,11 +25,11 @@
   position: fixed;
   bottom: 0px;
   right: 0px;
-  font-size: 20px;
-  width: 100px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
+
+  font-size: 16px;
+  padding: 8px;
+  background-color: var(--color-theme-blue);
+  color: var(--color-primary-text);
   border-style: none;
 }
 
@@ -41,12 +41,12 @@
   transform: translate(-50%, 0%);
 
   /* sizing */
-  width: 120px;
-  height: 40px;
+  font-size: 16px;
+  padding: 8px;
 
   /* color and styles */
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
+  background-color: var(--color-theme-green);
+  color: var(--color-primary-text);
   border-style: none;
 }
 

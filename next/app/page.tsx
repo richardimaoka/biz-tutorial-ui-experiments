@@ -23,8 +23,6 @@ interface PageParams {
 }
 
 export default async function Home({ searchParams }: PageParams) {
-  console.log("rendering page.tsx");
-
   const openFilePath = searchParams.openFilePath
     ? searchParams.openFilePath
     : "package.json";

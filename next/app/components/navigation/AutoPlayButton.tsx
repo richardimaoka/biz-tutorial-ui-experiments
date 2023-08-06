@@ -91,12 +91,7 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
       case "Transitioned":
         return <div className={styles.text}>Stop AutoPlay</div>;
       case "Stopped":
-        return (
-          <>
-            <div className={styles.text}>AutoPlay</div>
-            <div className={styles.minitext}>to next milestone</div>
-          </>
-        );
+        return <div className={styles.text}>AutoPlay</div>;
     }
   };
 

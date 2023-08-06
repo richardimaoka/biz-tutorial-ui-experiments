@@ -7,6 +7,6 @@ interface PrevButtonProps {
 
 export const PrevButton = ({ href }: PrevButtonProps) => (
   <Link href={href}>
-    <button className={styles.prev}>prev</button>
+    <button className={styles.prev}>PREV</button>
   </Link>
 );
