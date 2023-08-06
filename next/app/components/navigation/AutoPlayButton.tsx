@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import styles from "./style.module.css";
+import { PlayIcon } from "../icons/PlayIcon";
 
 interface Scheduled {
   kind: "Scheduled";
@@ -89,9 +90,20 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
     switch (state.kind) {
       case "Scheduled": // fallthrough
       case "Transitioned":
-        return <div className={styles.text}>Stop AutoPlay</div>;
+        return (
+          <>
+            <div className={styles.text}>Stop AutoPlay</div>
+          </>
+        );
       case "Stopped":
-        return <div className={styles.text}>AutoPlay</div>;
+        return (
+          <>
+            <div className={`${styles.text} ${styles.smartphone}`}>
+              <PlayIcon />
+            </div>
+            <div className={`${styles.text} ${styles.desktop}`}>AutoPlay</div>
+          </>
+        );
     }
   };
 
