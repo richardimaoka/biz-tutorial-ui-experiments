@@ -2,11 +2,13 @@ import { graphql } from "@/libs/gql";
 import { getClient } from "@/libs/apolloClient";
 import RouterMounting from "./RouterMounting";
 import { VisibleColumn } from "./components/column/VisibleColumn";
+import { Navigation } from "./components/navigation/Navigation";
 
 const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       ...VisibleColumn_Fragment
+      ...Navigation_Fragment
       step
     }
   }
@@ -46,6 +48,7 @@ export default async function Home({ searchParams }: PageParams) {
             step={searchParams.step}
           />
         )}
+        <Navigation fragment={data.page} />
       </main>
     </RouterMounting>
   );

@@ -38,8 +38,6 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
 
   const visibleColumn = columns.find((column) => column.name === selectColumn);
 
-  console.log(props.selectColumn);
-
   return (
     <div className={styles.visiblecolumn}>
       <ColumnHeader

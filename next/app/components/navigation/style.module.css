@@ -1,0 +1,73 @@
+.back {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  font-size: 8px;
+  padding: 0px 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  border-style: none;
+  z-index: 100;
+}
+
+.prev {
+  position: fixed;
+  bottom: 0px;
+  font-size: 20px;
+  width: 100px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-style: none;
+}
+
+.next {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  font-size: 20px;
+  width: 100px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-style: none;
+}
+
+.autoplay {
+  /* positioning */
+  position: fixed;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+
+  /* sizing */
+  width: 120px;
+  height: 40px;
+
+  /* color and styles */
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-style: none;
+}
+
+.step {
+  position: fixed;
+  bottom: 40px;
+  right: 0px;
+  font-size: 8px;
+  padding: 0px 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  border-style: none;
+  z-index: 100;
+}
+
+.text {
+  font-size: 16px;
+  height: 18px;
+}
+
+.minitext {
+  font-size: 8px;
+  height: 8px;
+}

@@ -23,6 +23,8 @@ const documents = {
     types.ColumnWrapperComponent_FragmentFragmentDoc,
   "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n":
     types.VisibleColumn_FragmentFragmentDoc,
+  "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n":
+    types.Navigation_FragmentFragmentDoc,
   "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n":
     types.SourceCodeColumn_FragmentFragmentDoc,
   "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
@@ -57,7 +59,7 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n    }\n  }\n":
+  "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      ...Navigation_Fragment\n      step\n    }\n  }\n":
     types.PageQueryDocument,
 };
 
@@ -105,6 +107,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n",
+): (typeof documents)["\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -211,8 +219,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n    }\n  }\n",
-): (typeof documents)["\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n    }\n  }\n"];
+  source: "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      ...Navigation_Fragment\n      step\n    }\n  }\n",
+): (typeof documents)["\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      ...Navigation_Fragment\n      step\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

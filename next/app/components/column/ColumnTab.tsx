@@ -48,8 +48,6 @@ export const ColumnTab = (props: ColumnTabProps): JSX.Element => {
     }
   };
 
-  console.log(props);
-
   return (
     <div className={`${styles.tab} ${selectStyle}`}>
       <Link
