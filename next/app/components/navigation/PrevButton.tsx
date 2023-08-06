@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import Link from "next/link";
 import styles from "./style.module.css";
 

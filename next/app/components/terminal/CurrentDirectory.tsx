@@ -21,7 +21,7 @@ export const CurrentDirectory = (props: CurrentDirectoryProps) => {
     <div className={styles.currentDir}>
       {fragment.currentDirectory && <DirectoryIcon />}
       <span className={source_code_pro.className}>
-        {fragment.currentDirectory ? fragment.currentDirectory : "　"}
+        {fragment.currentDirectory ? fragment.currentDirectory : "Terminal"}
       </span>
     </div>
   );

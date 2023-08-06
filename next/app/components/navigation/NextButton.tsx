@@ -6,7 +6,7 @@ interface NextButtonProps {
 }
 
 export const NextButton = ({ href }: NextButtonProps) => (
-  <Link href={href} className={styles.next}>
-    <button>next</button>
+  <Link href={href}>
+    <button className={styles.next}>next</button>
   </Link>
 );
