@@ -112,7 +112,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
-			if colName == "terminal" {
+			if colName == "Terminal" {
 				if terminalColumnState == nil {
 					terminalColumnState = state.NewTerminalColumn()
 				}
@@ -131,7 +131,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef("terminal")})
 			}
 
-			if colName == "src" {
+			if colName == "Source Code" {
 				if srcColmnState == nil {
 					var err error
 					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, e.DefaultOpenFilePath, tutorial)
