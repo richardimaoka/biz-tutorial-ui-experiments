@@ -1,6 +1,5 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { AutoPlayButton } from "./AutoPlayButton";
-import { BackToStart } from "./BackToStart";
 import { NextButton } from "./NextButton";
 import { PrevButton } from "./PrevButton";
 import { StepDisplay } from "./StepDisplay";
@@ -22,7 +21,6 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
 
   return (
     <nav>
-      <BackToStart />
       {fragment.step && <StepDisplay step={fragment.step} />}
       {fragment.prevStep && (
         <PrevButton href={`?step=${fragment.prevStep}&skipAnimation=true`} />
