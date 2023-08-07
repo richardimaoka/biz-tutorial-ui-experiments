@@ -14,6 +14,7 @@ interface Scheduled {
 interface Transitioned {
   kind: "Transitioned";
   step: string;
+  autoPlay: boolean;
 }
 
 interface Stopped {
@@ -24,15 +25,20 @@ type AutoPlayState = Scheduled | Transitioned | Stopped;
 
 interface AutoPlayButtonProps {
   nextStep: string;
+  autoNextSeconds?: number | null;
 }
 
-export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
+export const AutoPlayButton = ({
+  nextStep,
+  autoNextSeconds,
+}: AutoPlayButtonProps) => {
   const [state, setState] = useState<AutoPlayState>({ kind: "Stopped" });
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // effectful code
   useEffect(() => {
+    console.log("AutoPlayButton: useEffect", state.kind);
     let newParams = new URLSearchParams();
     searchParams.forEach((value, key) => {
       newParams.set(key, value);
@@ -46,20 +52,35 @@ export const AutoPlayButton = ({ nextStep }: AutoPlayButtonProps) => {
         // This is an important state as React re-renders this component *BEFORE* updating the URL query string
         // without the Transitioned state, setTimeout is called twice for the same nextStep
         if (state.step !== nextStep) {
-          const tid = window.setTimeout(() => {
-            router.push("/?" + newParams.toString());
-            setState({ kind: "Transitioned", step: nextStep });
-          }, 1000);
-          setState({ kind: "Scheduled", timeoutId: tid });
+          if (state.autoPlay) {
+            const tid = window.setTimeout(() => {
+              router.push("/?" + newParams.toString());
+              setState({
+                kind: "Transitioned",
+                step: nextStep,
+                autoPlay: true,
+              });
+            }, 1000);
+            setState({ kind: "Scheduled", timeoutId: tid });
+          } else {
+            setState({ kind: "Stopped" });
+          }
         }
         break;
       case "Stopped":
+        if (autoNextSeconds) {
+          const tid = window.setTimeout(() => {
+            router.push("/?" + newParams.toString());
+            setState({ kind: "Transitioned", step: nextStep, autoPlay: false });
+          }, autoNextSeconds * 1000);
+          setState({ kind: "Scheduled", timeoutId: tid });
+        }
         break; // do nothing
       default:
         const _exhaustiveCheck: never = state;
         return _exhaustiveCheck;
     }
-  }, [state, nextStep, router, searchParams]);
+  }, [state, nextStep, router, searchParams, autoNextSeconds]);
 
   const onClick = () => {
     let newParams = new URLSearchParams();

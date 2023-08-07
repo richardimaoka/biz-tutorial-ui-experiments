@@ -11,6 +11,7 @@ const queryDefinition = graphql(/* GraphQL */ `
       ...Navigation_Fragment
       step
       focusColumn
+      autoNextSeconds
     }
   }
 `);
@@ -60,7 +61,10 @@ export default async function Home({ searchParams }: PageParams) {
               step={searchParams.step}
               skipAnimation={searchParams.skipAnimation}
             />
-            <Navigation fragment={data.page} />
+            <Navigation
+              fragment={data.page}
+              autoNextSeconds={data.page.autoNextSeconds}
+            />
           </>
         )}
       </main>

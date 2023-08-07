@@ -130,13 +130,13 @@ type ComplexityRoot struct {
 	}
 
 	Page struct {
-		AutoAnimateSeconds func(childComplexity int) int
-		Columns            func(childComplexity int) int
-		FocusColumn        func(childComplexity int) int
-		Modal              func(childComplexity int) int
-		NextStep           func(childComplexity int) int
-		PrevStep           func(childComplexity int) int
-		Step               func(childComplexity int) int
+		AutoNextSeconds func(childComplexity int) int
+		Columns         func(childComplexity int) int
+		FocusColumn     func(childComplexity int) int
+		Modal           func(childComplexity int) int
+		NextStep        func(childComplexity int) int
+		PrevStep        func(childComplexity int) int
+		Step            func(childComplexity int) int
 	}
 
 	PageState struct {
@@ -539,12 +539,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OpenFile.Size(childComplexity), true
 
-	case "Page.autoAnimateSeconds":
-		if e.complexity.Page.AutoAnimateSeconds == nil {
+	case "Page.autoNextSeconds":
+		if e.complexity.Page.AutoNextSeconds == nil {
 			break
 		}
 
-		return e.complexity.Page.AutoAnimateSeconds(childComplexity), true
+		return e.complexity.Page.AutoNextSeconds(childComplexity), true
 
 	case "Page.columns":
 		if e.complexity.Page.Columns == nil {
@@ -3022,8 +3022,8 @@ func (ec *executionContext) fieldContext_Page_prevStep(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Page_autoAnimateSeconds(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Page_autoAnimateSeconds(ctx, field)
+func (ec *executionContext) _Page_autoNextSeconds(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_autoNextSeconds(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3036,7 +3036,7 @@ func (ec *executionContext) _Page_autoAnimateSeconds(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.AutoAnimateSeconds, nil
+		return obj.AutoNextSeconds, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3050,7 +3050,7 @@ func (ec *executionContext) _Page_autoAnimateSeconds(ctx context.Context, field 
 	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Page_autoAnimateSeconds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Page_autoNextSeconds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Page",
 		Field:      field,
@@ -3631,8 +3631,8 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_nextStep(ctx, field)
 			case "prevStep":
 				return ec.fieldContext_Page_prevStep(ctx, field)
-			case "autoAnimateSeconds":
-				return ec.fieldContext_Page_autoAnimateSeconds(ctx, field)
+			case "autoNextSeconds":
+				return ec.fieldContext_Page_autoNextSeconds(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			case "focusColumn":
@@ -6890,9 +6890,9 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Page_prevStep(ctx, field, obj)
 
-		case "autoAnimateSeconds":
+		case "autoNextSeconds":
 
-			out.Values[i] = ec._Page_autoAnimateSeconds(ctx, field, obj)
+			out.Values[i] = ec._Page_autoNextSeconds(ctx, field, obj)
 
 		case "columns":
 

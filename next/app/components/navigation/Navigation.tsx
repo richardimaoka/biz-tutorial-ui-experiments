@@ -14,6 +14,7 @@ const fragmentDefinition = graphql(/* GraphQL */ `
 
 export interface NavigationProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  autoNextSeconds?: number | null;
 }
 
 export const Navigation = (props: NavigationProps): JSX.Element => {
@@ -25,7 +26,12 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
       {fragment.prevStep && (
         <PrevButton href={`?step=${fragment.prevStep}&skipAnimation=true`} />
       )}
-      {fragment.nextStep && <AutoPlayButton nextStep={fragment.nextStep} />}
+      {fragment.nextStep && (
+        <AutoPlayButton
+          nextStep={fragment.nextStep}
+          autoNextSeconds={props.autoNextSeconds}
+        />
+      )}
       {fragment.nextStep && <NextButton href={`?step=${fragment.nextStep}`} />}
     </nav>
   );

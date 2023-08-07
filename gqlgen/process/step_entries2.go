@@ -191,13 +191,16 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 		modalPosition, _ := state.ToModalPosition(e.ModalPosition) // err is ignored, and modal position will be null
 		modalState := state.Modal{Text: modalText, Position: modalPosition}
 
+		autoNextSeconds := e.AutoNextSeconds
+
 		page := model.Page{
-			Step:        internal.StringRef(currentStep),
-			PrevStep:    internal.StringRef(prevStep),
-			NextStep:    internal.StringRef(nextStep),
-			Columns:     colWrappers,
-			Modal:       modalState.ToGraphQLModal(),
-			FocusColumn: internal.StringRef(e.FocusColumn),
+			Step:            internal.StringRef(currentStep),
+			PrevStep:        internal.StringRef(prevStep),
+			NextStep:        internal.StringRef(nextStep),
+			AutoNextSeconds: &autoNextSeconds,
+			Columns:         colWrappers,
+			FocusColumn:     internal.StringRef(e.FocusColumn),
+			Modal:           modalState.ToGraphQLModal(),
 		}
 
 		pages = append(pages, page)

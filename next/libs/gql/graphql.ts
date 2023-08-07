@@ -145,7 +145,7 @@ export type OpenFile = {
 
 export type Page = {
   __typename: "Page";
-  autoAnimateSeconds?: Maybe<Scalars["Int"]["output"]>;
+  autoNextSeconds?: Maybe<Scalars["Int"]["output"]>;
   columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   modal?: Maybe<Modal>;
@@ -485,6 +485,7 @@ export type PageQueryQuery = {
         __typename: "Page";
         step?: string | null;
         focusColumn?: string | null;
+        autoNextSeconds?: number | null;
       } & {
         " $fragmentRefs"?: {
           VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
@@ -3125,6 +3126,10 @@ export const PageQueryDocument = {
                 },
                 { kind: "Field", name: { kind: "Name", value: "step" } },
                 { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "autoNextSeconds" },
+                },
               ],
             },
           },
