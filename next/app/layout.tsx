@@ -11,17 +11,6 @@ config.autoAddCss = false;
 
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-import { Noto_Sans_JP } from "next/font/google";
-
-const notojp = Noto_Sans_JP({
-  weight: "400",
-  preload: false,
-  display: "block",
-  adjustFontFallback: false,
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -46,7 +35,7 @@ export default function RootLayout({
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Source+Code+Pro&display=swap"
         rel="stylesheet"
       />
-      <body className={notojp.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
