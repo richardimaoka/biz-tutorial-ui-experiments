@@ -200,7 +200,6 @@ type QueryResolver interface {
 	SourceCode(ctx context.Context) (*model.SourceCode, error)
 }
 type SourceCodeResolver interface {
-	IsFoldFileTree(ctx context.Context, obj *model.SourceCode) (*bool, error)
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
 }
 
@@ -3999,7 +3998,7 @@ func (ec *executionContext) _SourceCode_isFoldFileTree(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.SourceCode().IsFoldFileTree(rctx, obj)
+		return obj.IsFoldFileTree, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4008,17 +4007,17 @@ func (ec *executionContext) _SourceCode_isFoldFileTree(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SourceCode_isFoldFileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SourceCode",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
 		},
@@ -7147,22 +7146,9 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)
 
 		case "isFoldFileTree":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._SourceCode_isFoldFileTree(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._SourceCode_isFoldFileTree(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "openFile":
 			field := field
 

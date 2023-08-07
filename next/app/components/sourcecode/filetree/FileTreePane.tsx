@@ -11,6 +11,7 @@ const fragmentDefinition = graphql(`
   fragment FileTreePane_Fragment on SourceCode {
     ...FileTreeHeader_Fragment
     ...FileTreeComponent_Fragment
+    isFoldFileTree
   }
 `);
 
@@ -25,8 +26,10 @@ export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
   const [isFolded, setIsFolded] = useState(false);
 
   useEffect(() => {
-    console.log("useeffect in FileTreePane, step = ", props.step);
-  }, [props.step]);
+    if (typeof fragment.isFoldFileTree === "boolean") {
+      setIsFolded(fragment.isFoldFileTree);
+    }
+  }, [props.step, fragment.isFoldFileTree]);
 
   return (
     <div

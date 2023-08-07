@@ -375,7 +375,10 @@ export type FileTreeHeader_FragmentFragment = {
   projectDir?: string | null;
 } & { " $fragmentName"?: "FileTreeHeader_FragmentFragment" };
 
-export type FileTreePane_FragmentFragment = ({ __typename: "SourceCode" } & {
+export type FileTreePane_FragmentFragment = ({
+  __typename: "SourceCode";
+  isFoldFileTree?: boolean | null;
+} & {
   " $fragmentRefs"?: {
     FileTreeHeader_FragmentFragment: FileTreeHeader_FragmentFragment;
     FileTreeComponent_FragmentFragment: FileTreeComponent_FragmentFragment;
@@ -822,6 +825,7 @@ export const FileTreePane_FragmentFragmentDoc = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreeComponent_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
         ],
       },
     },
@@ -1280,6 +1284,7 @@ export const SourceCodeColumn_FragmentFragmentDoc = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreeComponent_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
         ],
       },
     },
@@ -2093,6 +2098,7 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreeComponent_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
         ],
       },
     },
@@ -2624,6 +2630,7 @@ export const VisibleColumn_FragmentFragmentDoc = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreeComponent_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
         ],
       },
     },
@@ -3300,6 +3307,7 @@ export const PageQueryDocument = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "FileTreeComponent_Fragment" },
           },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
         ],
       },
     },

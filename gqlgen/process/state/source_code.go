@@ -105,11 +105,14 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpen
 }
 
 func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
+	isFoldFileTree := s.defaultOpenFilePath != ""
+
 	return &model.SourceCode{
 		FileTree:            s.rootDir.ToGraphQLFileNodeSlice(),
 		FileContents:        s.rootDir.ToGraphQLOpenFileMap(),
 		Tutorial:            s.tutorial,
 		Step:                s.step,
 		DefaultOpenFilePath: s.defaultOpenFilePath,
+		IsFoldFileTree:      isFoldFileTree,
 	}
 }
