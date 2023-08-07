@@ -99,7 +99,7 @@ export const AutoPlayButton = ({
         break;
       case "Stopped":
         router.push("/?" + newParams.toString());
-        setState({ kind: "Transitioned", step: nextStep });
+        setState({ kind: "Transitioned", step: nextStep, autoPlay: true });
         break;
       default:
         const _exhaustiveCheck: never = state;
