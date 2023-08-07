@@ -115,7 +115,7 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 
 	var sourceCode *model.SourceCode
 	for _, col := range page.Columns {
-		if col.Name != nil && *col.Name == "src" {
+		if col.Name != nil && *col.Name == "Source Code" {
 			scCol, ok := col.Column.(*model.SourceCodeColumn)
 			if !ok {
 				log.Printf("OpenFile() failed to cast column to SourceCodeColumn")
