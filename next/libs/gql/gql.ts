@@ -23,6 +23,8 @@ const documents = {
     types.ColumnWrapperComponent_FragmentFragmentDoc,
   "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n":
     types.VisibleColumn_FragmentFragmentDoc,
+  "\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n":
+    types.ModalFrameFragmentFragmentDoc,
   "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n":
     types.Navigation_FragmentFragmentDoc,
   "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n":
@@ -107,6 +109,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n",
+): (typeof documents)["\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
