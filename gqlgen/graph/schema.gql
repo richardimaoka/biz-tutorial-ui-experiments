@@ -40,9 +40,10 @@ type Page {
   step: String
   nextStep: String
   prevStep: String
+  autoAnimateSeconds: Int
   columns: [ColumnWrapper]
-  modal: Modal
   focusColumn: String
+  modal: Modal
 }
 
 ###################################################

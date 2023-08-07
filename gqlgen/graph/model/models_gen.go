@@ -115,12 +115,13 @@ type OpenFile struct {
 }
 
 type Page struct {
-	Step        *string          `json:"step"`
-	NextStep    *string          `json:"nextStep"`
-	PrevStep    *string          `json:"prevStep"`
-	Columns     []*ColumnWrapper `json:"columns"`
-	Modal       *Modal           `json:"modal"`
-	FocusColumn *string          `json:"focusColumn"`
+	Step               *string          `json:"step"`
+	NextStep           *string          `json:"nextStep"`
+	PrevStep           *string          `json:"prevStep"`
+	AutoAnimateSeconds *int             `json:"autoAnimateSeconds"`
+	Columns            []*ColumnWrapper `json:"columns"`
+	FocusColumn        *string          `json:"focusColumn"`
+	Modal              *Modal           `json:"modal"`
 }
 
 type PageState struct {

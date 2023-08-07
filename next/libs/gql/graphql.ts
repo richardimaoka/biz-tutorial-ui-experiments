@@ -145,6 +145,7 @@ export type OpenFile = {
 
 export type Page = {
   __typename: "Page";
+  autoAnimateSeconds?: Maybe<Scalars["Int"]["output"]>;
   columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   modal?: Maybe<Modal>;
