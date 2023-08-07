@@ -14,8 +14,8 @@ type StepEntry2 struct {
 	// Uppercase fields to allow json dump for testing
 
 	// steps
-	Step              string `json:"step"`
-	AutoAnimateSecond int    `json:"autoAnimateSecond,omitempty"`
+	Step            string `json:"step"`
+	AutoNextSeconds int    `json:"autoNextSeconds,omitempty"`
 
 	// columns
 	FocusColumn string `json:"focusColumn,omitempty"`
@@ -32,6 +32,7 @@ type StepEntry2 struct {
 	// terminal
 	TerminalText string `json:"terminalText,omitempty"`
 	TerminalType string `json:"terminalType,omitempty"`
+	CurrentDir   string `json:"currentDir,omitempty"`
 
 	// git
 	Commit              string `json:"commit,omitempty"`
@@ -125,6 +126,10 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert terminal type, %s", e.Step, err)
 					}
 					terminalColumnState.Transition(terminalType, e.TerminalText)
+				}
+
+				if e.CurrentDir != "" {
+					terminalColumnState.Cd(e.CurrentDir)
 				}
 
 				column := terminalColumnState.ToGraphQLTerminalColumn()

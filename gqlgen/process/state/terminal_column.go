@@ -23,6 +23,10 @@ func (t *TerminalColumn) Transition(elemType TerminalElementType, text string) {
 	}
 }
 
+func (t *TerminalColumn) Cd(dir string) {
+	t.terminal.ChangeCurrentDirectory(dir)
+}
+
 func (c *TerminalColumn) ToGraphQLTerminalColumn() *model.TerminalColumn {
 	return &model.TerminalColumn{
 		Terminal: c.terminal.ToGraphQLTerminal(),
