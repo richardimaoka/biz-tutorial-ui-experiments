@@ -14,6 +14,7 @@ const fragmentDefinition = graphql(`
 
 interface TerminalContentsComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const TerminalContentsComponent = (
@@ -29,7 +30,11 @@ export const TerminalContentsComponent = (
   return (
     <div className={styles.contents}>
       {nodes.map((node, index) => (
-        <TerminalNodeComponent key={index} fragment={node} />
+        <TerminalNodeComponent
+          key={index}
+          fragment={node}
+          skipAnimation={props.skipAnimation}
+        />
       ))}
     </div>
   );

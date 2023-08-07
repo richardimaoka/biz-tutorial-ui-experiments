@@ -13,6 +13,7 @@ const fragmentDefinition = graphql(`
 
 interface TerminalComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const TerminalComponent = (props: TerminalComponentProps) => {
@@ -21,7 +22,10 @@ export const TerminalComponent = (props: TerminalComponentProps) => {
   return (
     <div className={styles.terminal}>
       <CurrentDirectory fragment={fragment} />
-      <TerminalContentsComponent fragment={fragment} />
+      <TerminalContentsComponent
+        fragment={fragment}
+        skipAnimation={props.skipAnimation}
+      />
     </div>
   );
 };

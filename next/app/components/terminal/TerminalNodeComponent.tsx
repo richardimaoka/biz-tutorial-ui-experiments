@@ -20,6 +20,7 @@ const fragmentDefinition = graphql(`
 
 export interface TerminalNodeComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const TerminalNodeComponent = (
@@ -33,7 +34,12 @@ export const TerminalNodeComponent = (
 
   switch (fragment.content.__typename) {
     case "TerminalCommand":
-      return <TerminalCommandComponent fragment={fragment.content} />;
+      return (
+        <TerminalCommandComponent
+          fragment={fragment.content}
+          skipAnimation={props.skipAnimation}
+        />
+      );
     case "TerminalOutput":
       return <TerminalOutputComponent fragment={fragment.content} />;
   }

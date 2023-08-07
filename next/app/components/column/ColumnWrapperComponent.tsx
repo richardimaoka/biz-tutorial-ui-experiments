@@ -22,6 +22,7 @@ const fragmentDefinition = graphql(`
 
 interface ColumnWrapperComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const ColumnWrapperComponent = (props: ColumnWrapperComponentProps) => {
@@ -36,7 +37,12 @@ export const ColumnWrapperComponent = (props: ColumnWrapperComponentProps) => {
       case "SourceCodeColumn":
         return <SourceCodeColumn fragment={fragment.column} />;
       case "TerminalColumn":
-        return <TerminalColumn fragment={fragment.column} />;
+        return (
+          <TerminalColumn
+            fragment={fragment.column}
+            skipAnimation={props.skipAnimation}
+          />
+        );
       default:
         return <div>default</div>;
     }

@@ -12,6 +12,7 @@ const fragmentDefinition = graphql(`
 
 interface TerminalColumnProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const TerminalColumn = (props: TerminalColumnProps) => {
@@ -21,5 +22,10 @@ export const TerminalColumn = (props: TerminalColumnProps) => {
     return <></>;
   }
 
-  return <TerminalComponent fragment={fragment.terminal} />;
+  return (
+    <TerminalComponent
+      fragment={fragment.terminal}
+      skipAnimation={props.skipAnimation}
+    />
+  );
 };

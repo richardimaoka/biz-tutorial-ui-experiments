@@ -19,6 +19,7 @@ interface PageParams {
     column?: string;
     step?: string;
     openFilePath?: string;
+    skipAnimation?: boolean;
   };
 }
 
@@ -47,6 +48,7 @@ export default async function Home({ searchParams }: PageParams) {
               selectColumn={searchParams.column}
               openFilePath={openFilePath}
               step={searchParams.step}
+              skipAnimation={searchParams.skipAnimation}
             />
             <Navigation fragment={data.page} />
           </>

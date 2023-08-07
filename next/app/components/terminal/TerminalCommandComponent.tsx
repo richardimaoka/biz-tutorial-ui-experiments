@@ -28,6 +28,7 @@ const TerminalCommandStatic = ({ command }: TerminalCommandStaticProps) => (
 
 interface TerminalCommandComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  skipAnimation?: boolean;
 }
 
 export const TerminalCommandComponent = (
@@ -43,7 +44,7 @@ export const TerminalCommandComponent = (
     <pre className={styles.command}>
       <TerminalPrompt />
 
-      {fragment.beforeExecution ? (
+      {fragment.beforeExecution && !props.skipAnimation ? (
         <TerminalCommandTypeIn command={fragment.command} />
       ) : (
         <TerminalCommandStatic command={fragment.command} />

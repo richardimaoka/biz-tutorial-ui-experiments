@@ -20,6 +20,7 @@ interface VisibleColumnProps {
   selectColumn?: string;
   openFilePath?: string;
   step?: string;
+  skipAnimation?: boolean;
 }
 
 export const VisibleColumn = (props: VisibleColumnProps) => {
@@ -48,7 +49,12 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
       />
       <div className={styles.wrapper}>
         {/* above <div> + .wrapper style is necessary to control the height of visible column = 100svh */}
-        {visibleColumn && <ColumnWrapperComponent fragment={visibleColumn} />}
+        {visibleColumn && (
+          <ColumnWrapperComponent
+            fragment={visibleColumn}
+            skipAnimation={props.skipAnimation}
+          />
+        )}
       </div>
     </div>
   );
