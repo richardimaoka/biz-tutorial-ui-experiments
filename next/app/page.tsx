@@ -1,6 +1,5 @@
 import { graphql } from "@/libs/gql";
 import { getClient } from "@/libs/apolloClient";
-import RouterMounting from "./RouterMounting";
 import { VisibleColumn } from "./components/column/VisibleColumn";
 import { Navigation } from "./components/navigation/Navigation";
 
@@ -50,24 +49,22 @@ export default async function Home({ searchParams }: PageParams) {
   }
 
   return (
-    <RouterMounting>
-      <main>
-        {data.page && (
-          <>
-            <VisibleColumn
-              fragment={data.page}
-              selectColumn={selectColumn}
-              openFilePath={openFilePath}
-              step={searchParams.step}
-              skipAnimation={searchParams.skipAnimation}
-            />
-            <Navigation
-              fragment={data.page}
-              autoNextSeconds={data.page.autoNextSeconds}
-            />
-          </>
-        )}
-      </main>
-    </RouterMounting>
+    <main>
+      {data.page && (
+        <>
+          <VisibleColumn
+            fragment={data.page}
+            selectColumn={selectColumn}
+            openFilePath={openFilePath}
+            step={searchParams.step}
+            skipAnimation={searchParams.skipAnimation}
+          />
+          <Navigation
+            fragment={data.page}
+            autoNextSeconds={data.page.autoNextSeconds}
+          />
+        </>
+      )}
+    </main>
   );
 }
