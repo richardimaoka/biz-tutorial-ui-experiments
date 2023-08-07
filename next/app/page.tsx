@@ -4,6 +4,14 @@ import RouterMounting from "./RouterMounting";
 import { VisibleColumn } from "./components/column/VisibleColumn";
 import { Navigation } from "./components/navigation/Navigation";
 
+import { Noto_Sans_JP } from "next/font/google";
+
+const notojp = Noto_Sans_JP({
+  weight: "400",
+  preload: false,
+  display: "swap", // フォントの表示方法を指定します
+});
+
 const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
@@ -40,7 +48,7 @@ export default async function Home({ searchParams }: PageParams) {
 
   return (
     <RouterMounting>
-      <main>
+      <main className={notojp.className}>
         {data.page && (
           <>
             <VisibleColumn

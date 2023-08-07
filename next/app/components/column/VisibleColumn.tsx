@@ -4,6 +4,7 @@ import { ColumnHeader } from "./ColumnHeader";
 import styles from "./style.module.css";
 import { ColumnWrapperComponent } from "./ColumnWrapperComponent";
 import { nonNullArray } from "@/libs/nonNullArray";
+import { ModalFrame } from "../modal/ModalFrame";
 
 const fragmentDefinition = graphql(`
   fragment VisibleColumn_Fragment on Page {
@@ -11,6 +12,9 @@ const fragmentDefinition = graphql(`
     columns {
       ...ColumnWrapperComponent_Fragment
       name
+    }
+    modal {
+      ...ModalFrameFragment
     }
   }
 `);
@@ -39,7 +43,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
 
   const visibleColumn = columns.find((column) => column.name === selectColumn);
 
-  return (
+  const Inner = () => (
     <div className={styles.visiblecolumn}>
       <ColumnHeader
         fragment={fragment}
@@ -57,5 +61,15 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
         )}
       </div>
     </div>
+  );
+
+  console.log(fragment.modal);
+
+  return fragment.modal ? (
+    <ModalFrame fragment={fragment.modal}>
+      <Inner />
+    </ModalFrame>
+  ) : (
+    <Inner />
   );
 };
