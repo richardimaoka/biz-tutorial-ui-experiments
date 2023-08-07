@@ -104,6 +104,7 @@ body {
   overflow-x: hidden;
   background-color: var(--color-background);
   -webkit-text-size-adjust: 100%;
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 /* body {
