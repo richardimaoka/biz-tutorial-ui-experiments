@@ -1,5 +1,4 @@
 "use client";
-import { source_code_pro } from "../fonts/fonts";
 import { useEffect, useState } from "react";
 import { FlickeringTrail } from "./FlickeringTrail";
 
@@ -26,10 +25,7 @@ export const TerminalCommandTypeIn = ({
   });
 
   return (
-    <code
-      // needs to specify font here, as <code> has its own font
-      className={source_code_pro.className}
-    >
+    <code>
       {command?.substring(0, writtenLength)}
       {writtenLength >= command?.length && <FlickeringTrail />}
     </code>

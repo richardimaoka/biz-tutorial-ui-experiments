@@ -1,5 +1,3 @@
-import { source_code_pro } from "../fonts/fonts";
-import { FlickeringTrail } from "./FlickeringTrail";
 import { TerminalCommandTypeIn } from "./TerminalCommandTypeIn";
 import { TerminalPrompt } from "./TerminalPrompt";
 import styles from "./style.module.css";
@@ -18,12 +16,7 @@ interface TerminalCommandStaticProps {
 }
 
 const TerminalCommandStatic = ({ command }: TerminalCommandStaticProps) => (
-  <code
-    // needs to specify font here, as <code> has its own font
-    className={source_code_pro.className}
-  >
-    {command}
-  </code>
+  <code>{command}</code>
 );
 
 interface TerminalCommandComponentProps {
@@ -43,7 +36,6 @@ export const TerminalCommandComponent = (
   return (
     <pre className={styles.command}>
       <TerminalPrompt />
-
       {fragment.beforeExecution && !props.skipAnimation ? (
         <TerminalCommandTypeIn command={fragment.command} />
       ) : (
