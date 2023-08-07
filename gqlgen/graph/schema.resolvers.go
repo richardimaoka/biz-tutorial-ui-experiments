@@ -75,6 +75,11 @@ func (r *queryResolver) SourceCode(ctx context.Context) (*model.SourceCode, erro
 	panic(fmt.Errorf("not implemented: SourceCode - sourceCode"))
 }
 
+// IsFoldFileTree is the resolver for the isFoldFileTree field.
+func (r *sourceCodeResolver) IsFoldFileTree(ctx context.Context, obj *model.SourceCode) (*bool, error) {
+	panic(fmt.Errorf("not implemented: IsFoldFileTree - isFoldFileTree"))
+}
+
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	var dirName = fmt.Sprintf("data/%s/state", obj.Tutorial)

@@ -156,10 +156,11 @@ type ComplexityRoot struct {
 	}
 
 	SourceCode struct {
-		FileTree   func(childComplexity int) int
-		OpenFile   func(childComplexity int, filePath *string) int
-		ProjectDir func(childComplexity int) int
-		Step       func(childComplexity int) int
+		FileTree       func(childComplexity int) int
+		IsFoldFileTree func(childComplexity int) int
+		OpenFile       func(childComplexity int, filePath *string) int
+		ProjectDir     func(childComplexity int) int
+		Step           func(childComplexity int) int
 	}
 
 	SourceCodeColumn struct {
@@ -199,6 +200,7 @@ type QueryResolver interface {
 	SourceCode(ctx context.Context) (*model.SourceCode, error)
 }
 type SourceCodeResolver interface {
+	IsFoldFileTree(ctx context.Context, obj *model.SourceCode) (*bool, error)
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
 }
 
@@ -674,6 +676,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SourceCode.FileTree(childComplexity), true
+
+	case "SourceCode.isFoldFileTree":
+		if e.complexity.SourceCode.IsFoldFileTree == nil {
+			break
+		}
+
+		return e.complexity.SourceCode.IsFoldFileTree(childComplexity), true
 
 	case "SourceCode.openFile":
 		if e.complexity.SourceCode.OpenFile == nil {
@@ -3365,6 +3374,8 @@ func (ec *executionContext) fieldContext_PageState_sourceCode(ctx context.Contex
 				return ec.fieldContext_SourceCode_projectDir(ctx, field)
 			case "fileTree":
 				return ec.fieldContext_SourceCode_fileTree(ctx, field)
+			case "isFoldFileTree":
+				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
 			case "openFile":
 				return ec.fieldContext_SourceCode_openFile(ctx, field)
 			}
@@ -3699,6 +3710,8 @@ func (ec *executionContext) fieldContext_Query_sourceCode(ctx context.Context, f
 				return ec.fieldContext_SourceCode_projectDir(ctx, field)
 			case "fileTree":
 				return ec.fieldContext_SourceCode_fileTree(ctx, field)
+			case "isFoldFileTree":
+				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
 			case "openFile":
 				return ec.fieldContext_SourceCode_openFile(ctx, field)
 			}
@@ -3972,6 +3985,47 @@ func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _SourceCode_isFoldFileTree(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.SourceCode().IsFoldFileTree(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode_isFoldFileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SourceCode_openFile(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SourceCode_openFile(ctx, field)
 	if err != nil {
@@ -4123,6 +4177,8 @@ func (ec *executionContext) fieldContext_SourceCodeColumn_sourceCode(ctx context
 				return ec.fieldContext_SourceCode_projectDir(ctx, field)
 			case "fileTree":
 				return ec.fieldContext_SourceCode_fileTree(ctx, field)
+			case "isFoldFileTree":
+				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
 			case "openFile":
 				return ec.fieldContext_SourceCode_openFile(ctx, field)
 			}
@@ -7090,6 +7146,23 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = ec._SourceCode_fileTree(ctx, field, obj)
 
+		case "isFoldFileTree":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._SourceCode_isFoldFileTree(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "openFile":
 			field := field
 

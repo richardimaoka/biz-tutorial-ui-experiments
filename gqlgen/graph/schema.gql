@@ -173,6 +173,7 @@ type SourceCode {
   step: String
   projectDir: String
   fileTree: [FileNode]
+  isFoldFileTree: Boolean
   openFile(filePath: String): OpenFile
 }
 

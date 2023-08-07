@@ -184,6 +184,7 @@ export type QueryPageStateArgs = {
 export type SourceCode = {
   __typename: "SourceCode";
   fileTree?: Maybe<Array<Maybe<FileNode>>>;
+  isFoldFileTree?: Maybe<Scalars["Boolean"]["output"]>;
   openFile?: Maybe<OpenFile>;
   projectDir?: Maybe<Scalars["String"]["output"]>;
   step?: Maybe<Scalars["String"]["output"]>;
