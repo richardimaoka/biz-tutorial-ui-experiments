@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import styles from "./style.module.css";
 import { PlayIcon } from "../icons/PlayIcon";
+import styles from "./style.module.css";
 
 interface Scheduled {
   kind: "Scheduled";
@@ -38,7 +38,6 @@ export const AutoPlayButton = ({
 
   // effectful code
   useEffect(() => {
-    console.log("AutoPlayButton: useEffect", state.kind);
     let newParams = new URLSearchParams();
     searchParams.forEach((value, key) => {
       newParams.set(key, value);
