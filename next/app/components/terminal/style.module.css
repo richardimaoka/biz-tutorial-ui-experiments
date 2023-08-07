@@ -76,6 +76,7 @@
   justify-content: center;
   background-color: var(--color-menu);
   padding: 6px 0px;
+  font-family: Source Code Pro, monospace;
 }
 
 .currentDir span {

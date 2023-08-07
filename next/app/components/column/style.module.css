@@ -66,14 +66,10 @@
   .tab .desktop {
     display: none;
   }
-  .tab .smartphone {
-    display: visible;
-  }
 }
 
 @media (min-width: 769px) {
   .tab .desktop {
-    display: visible;
     height: 16px;
   }
   .tab .smartphone {
