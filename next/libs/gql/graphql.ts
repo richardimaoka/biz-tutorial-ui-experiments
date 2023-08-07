@@ -480,7 +480,11 @@ export type PageQueryQueryVariables = Exact<{
 export type PageQueryQuery = {
   __typename: "Query";
   page?:
-    | ({ __typename: "Page"; step?: string | null } & {
+    | ({
+        __typename: "Page";
+        step?: string | null;
+        focusColumn?: string | null;
+      } & {
         " $fragmentRefs"?: {
           VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
           Navigation_FragmentFragment: Navigation_FragmentFragment;
@@ -3119,6 +3123,7 @@ export const PageQueryDocument = {
                   name: { kind: "Name", value: "Navigation_Fragment" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "step" } },
+                { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
               ],
             },
           },

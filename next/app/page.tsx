@@ -4,20 +4,13 @@ import RouterMounting from "./RouterMounting";
 import { VisibleColumn } from "./components/column/VisibleColumn";
 import { Navigation } from "./components/navigation/Navigation";
 
-import { Noto_Sans_JP } from "next/font/google";
-
-const notojp = Noto_Sans_JP({
-  weight: "400",
-  preload: false,
-  display: "swap", // フォントの表示方法を指定します
-});
-
 const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       ...VisibleColumn_Fragment
       ...Navigation_Fragment
       step
+      focusColumn
     }
   }
 `);
@@ -46,14 +39,23 @@ export default async function Home({ searchParams }: PageParams) {
     },
   });
 
+  let selectColumn: string | undefined;
+  if (searchParams.column) {
+    selectColumn = searchParams.column;
+  } else if (data?.page?.focusColumn) {
+    selectColumn = data.page.focusColumn;
+  } else {
+    selectColumn = undefined;
+  }
+
   return (
     <RouterMounting>
-      <main className={notojp.className}>
+      <main>
         {data.page && (
           <>
             <VisibleColumn
               fragment={data.page}
-              selectColumn={searchParams.column}
+              selectColumn={selectColumn}
               openFilePath={openFilePath}
               step={searchParams.step}
               skipAnimation={searchParams.skipAnimation}
