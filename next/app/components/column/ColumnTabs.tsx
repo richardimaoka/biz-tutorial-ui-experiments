@@ -14,9 +14,9 @@ const fragmentDefinition = graphql(`
 
 export interface ColumnTabProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  step: string;
   selectColumn: string;
   openFilePath?: string;
-  step?: string;
 }
 
 export const ColumnTabs = (props: ColumnTabProps): JSX.Element => {

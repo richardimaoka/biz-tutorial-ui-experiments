@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FileTreeHeader } from "./FileTreeHeader";
 import styles from "./style.module.css";
 
@@ -23,6 +23,10 @@ export interface FileTreePaneProps {
 export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const [isFolded, setIsFolded] = useState(false);
+
+  useEffect(() => {
+    console.log("useeffect in FileTreePane, step = ", props.step);
+  }, [props.step]);
 
   return (
     <div

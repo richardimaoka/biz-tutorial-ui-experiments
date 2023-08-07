@@ -21,9 +21,9 @@ const fragmentDefinition = graphql(`
 
 interface VisibleColumnProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  step: string;
   selectColumn?: string;
   openFilePath?: string;
-  step?: string;
   skipAnimation?: boolean;
 }
 
@@ -58,12 +58,14 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
             <ModalFrame fragment={fragment.modal}>
               <ColumnWrapperComponent
                 fragment={visibleColumn}
+                step={props.step}
                 skipAnimation={props.skipAnimation}
               />
             </ModalFrame>
           ) : (
             <ColumnWrapperComponent
               fragment={visibleColumn}
+              step={props.step}
               skipAnimation={props.skipAnimation}
             />
           ))}

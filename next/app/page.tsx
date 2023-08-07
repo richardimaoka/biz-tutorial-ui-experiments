@@ -48,6 +48,8 @@ export default async function Home({ searchParams }: PageParams) {
     selectColumn = undefined;
   }
 
+  const step = searchParams.step ? searchParams.step : "_initial";
+
   return (
     <main>
       {data.page && (
@@ -56,7 +58,7 @@ export default async function Home({ searchParams }: PageParams) {
             fragment={data.page}
             selectColumn={selectColumn}
             openFilePath={openFilePath}
-            step={searchParams.step}
+            step={step}
             skipAnimation={searchParams.skipAnimation}
           />
           <Navigation

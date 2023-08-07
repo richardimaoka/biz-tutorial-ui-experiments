@@ -20,7 +20,7 @@ export interface ColumnTabProps {
   fragment: FragmentType<typeof fragmentDefinition>;
   isSelected: boolean;
   openFilePath?: string;
-  step?: string;
+  step: string;
 }
 
 export const ColumnTab = (props: ColumnTabProps): JSX.Element => {

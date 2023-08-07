@@ -17,6 +17,7 @@ const fragmentDefinition = graphql(`
 
 interface SourceCodeColumnProps {
   fragment: FragmentType<typeof fragmentDefinition>;
+  step: string;
 }
 
 export const SourceCodeColumn = (props: SourceCodeColumnProps) => {
@@ -25,7 +26,7 @@ export const SourceCodeColumn = (props: SourceCodeColumnProps) => {
   return (
     <div className={styles.sourcecode}>
       {fragment.sourceCode && (
-        <FileTreePane step="" fragment={fragment.sourceCode} />
+        <FileTreePane step={props.step} fragment={fragment.sourceCode} />
       )}
       {fragment.sourceCode?.openFile && (
         <FileContentPane fragment={fragment.sourceCode.openFile} />

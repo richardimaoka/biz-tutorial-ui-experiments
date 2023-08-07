@@ -12,8 +12,8 @@ const fragmentDefinition = graphql(`
 interface ColumnHeaderProps {
   fragment: FragmentType<typeof fragmentDefinition>;
   selectColumn: string;
+  step: string;
   openFilePath?: string;
-  step?: string;
 }
 
 export const ColumnHeader = (props: ColumnHeaderProps) => {
