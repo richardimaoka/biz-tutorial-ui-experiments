@@ -4,6 +4,7 @@
 
   /* somehow, without this, the background image's width is shrunk... not shure why...*/
   width: 100%;
+  height: 100%;
 }
 
 .boxposition {

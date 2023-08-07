@@ -43,7 +43,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
 
   const visibleColumn = columns.find((column) => column.name === selectColumn);
 
-  const Inner = () => (
+  return (
     <div className={styles.visiblecolumn}>
       <ColumnHeader
         fragment={fragment}
@@ -53,23 +53,21 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
       />
       <div className={styles.wrapper}>
         {/* above <div> + .wrapper style is necessary to control the height of visible column = 100svh */}
-        {visibleColumn && (
-          <ColumnWrapperComponent
-            fragment={visibleColumn}
-            skipAnimation={props.skipAnimation}
-          />
-        )}
+        {visibleColumn &&
+          (fragment.modal ? (
+            <ModalFrame fragment={fragment.modal}>
+              <ColumnWrapperComponent
+                fragment={visibleColumn}
+                skipAnimation={props.skipAnimation}
+              />
+            </ModalFrame>
+          ) : (
+            <ColumnWrapperComponent
+              fragment={visibleColumn}
+              skipAnimation={props.skipAnimation}
+            />
+          ))}
       </div>
     </div>
-  );
-
-  console.log(fragment.modal);
-
-  return fragment.modal ? (
-    <ModalFrame fragment={fragment.modal}>
-      <Inner />
-    </ModalFrame>
-  ) : (
-    <Inner />
   );
 };
