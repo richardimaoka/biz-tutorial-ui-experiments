@@ -1,6 +1,6 @@
 @media (max-width: 768px) {
   .visiblecolumn {
-    width: 100%;
+    width: 100svw;
     height: 100svh;
 
     /* make sure hights of flex children add up to 100svh */
@@ -8,6 +8,10 @@
     flex-direction: column;
 
     position: relative;
+  }
+
+  .carouselElement {
+    width: 100svw;
   }
 }
 
@@ -21,6 +25,10 @@
     flex-direction: column;
 
     position: relative;
+  }
+
+  .carouselElement {
+    width: 768px;
   }
 }
 
@@ -89,6 +97,13 @@
 
 .carousel {
   height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.carouselElement {
+  height: 100%;
+  flex-shrink: 0;
 }
 
 .bottom {

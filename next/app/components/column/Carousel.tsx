@@ -2,7 +2,7 @@
 
 import { nonNullArray } from "@/libs/nonNullArray";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ColumnWrapperComponent } from "./ColumnWrapperComponent";
 import styles from "./style.module.css";
 
@@ -28,6 +28,7 @@ interface Animating {
   kind: "Animating";
   fromIndex: number;
   toIndex: number;
+  columnIndex: number;
 }
 
 type State = Static | Animating;
@@ -43,12 +44,17 @@ interface CarouselProps {
 export const Carousel = (props: CarouselProps) => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const searchParams = useSearchParams();
+  const ref = useRef<HTMLDivElement>(null);
   const columnParam = searchParams.get("column");
   const [state, setState] = useState<State>({ kind: "Static", columnIndex: 0 });
 
   useEffect(() => {
     switch (state.kind) {
       case "Animating":
+        if (ref) {
+          ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+        setState({ kind: "Static", columnIndex: state.toIndex });
         break;
       case "Static":
         console.log(
@@ -92,6 +98,7 @@ export const Carousel = (props: CarouselProps) => {
               kind: "Animating",
               fromIndex: state.columnIndex,
               toIndex: index,
+              columnIndex: index,
             });
           }
         }
@@ -106,13 +113,18 @@ export const Carousel = (props: CarouselProps) => {
 
   return (
     <div className={styles.carousel}>
-      {columns.map((column) => (
-        <ColumnWrapperComponent
+      {columns.map((column, index) => (
+        <div
+          ref={index === state.columnIndex ? ref : null}
           key={column.name}
-          fragment={column}
-          step={props.step}
-          skipAnimation={props.skipAnimation}
-        />
+          className={styles.carouselElement}
+        >
+          <ColumnWrapperComponent
+            fragment={column}
+            step={props.step}
+            skipAnimation={props.skipAnimation}
+          />
+        </div>
       ))}
     </div>
   );
