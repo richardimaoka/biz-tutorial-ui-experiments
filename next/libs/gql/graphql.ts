@@ -311,7 +311,7 @@ export type VisibleColumn_FragmentFragment = ({
   modal?:
     | ({ __typename: "Modal" } & {
         " $fragmentRefs"?: {
-          ModalFrameFragmentFragment: ModalFrameFragmentFragment;
+          ModalComponentFragmentFragment: ModalComponentFragmentFragment;
         };
       })
     | null;
@@ -323,11 +323,11 @@ export type VisibleColumn_FragmentFragment = ({
   };
 }) & { " $fragmentName"?: "VisibleColumn_FragmentFragment" };
 
-export type ModalFrameFragmentFragment = {
+export type ModalComponentFragmentFragment = {
   __typename: "Modal";
   text?: string | null;
   position?: ModalPosition | null;
-} & { " $fragmentName"?: "ModalFrameFragmentFragment" };
+} & { " $fragmentName"?: "ModalComponentFragmentFragment" };
 
 export type Navigation_FragmentFragment = {
   __typename: "Page";
@@ -2937,12 +2937,12 @@ export const Carousel_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<Carousel_FragmentFragment, unknown>;
-export const ModalFrameFragmentFragmentDoc = {
+export const ModalComponentFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ModalFrameFragment" },
+      name: { kind: "Name", value: "ModalComponentFragment" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Modal" },
@@ -2956,7 +2956,7 @@ export const ModalFrameFragmentFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<ModalFrameFragmentFragment, unknown>;
+} as unknown as DocumentNode<ModalComponentFragmentFragment, unknown>;
 export const Navigation_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -3024,7 +3024,7 @@ export const VisibleColumn_FragmentFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "ModalFrameFragment" },
+                  name: { kind: "Name", value: "ModalComponentFragment" },
                 },
               ],
             },
@@ -3609,7 +3609,7 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ModalFrameFragment" },
+      name: { kind: "Name", value: "ModalComponentFragment" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Modal" },
@@ -4292,7 +4292,7 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ModalFrameFragment" },
+      name: { kind: "Name", value: "ModalComponentFragment" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Modal" },
@@ -4364,7 +4364,7 @@ export const PageQueryDocument = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "ModalFrameFragment" },
+                  name: { kind: "Name", value: "ModalComponentFragment" },
                 },
               ],
             },

@@ -1,11 +1,12 @@
-import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ColumnHeader } from "./ColumnHeader";
 
 import styles from "./style.module.css";
 import { nonNullArray } from "@/libs/nonNullArray";
-import { ModalFrame } from "../modal/ModalFrame";
+import { ModalComponent } from "../modal/ModalComponent";
 import { Navigation } from "../navigation/Navigation";
 import { Carousel } from "./Carousel";
+
+import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
   fragment VisibleColumn_Fragment on Page {
@@ -16,7 +17,7 @@ const fragmentDefinition = graphql(`
       name
     }
     modal {
-      ...ModalFrameFragment
+      ...ModalComponentFragment
     }
     ...Navigation_Fragment
   }
@@ -57,7 +58,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
       />
       <div className={styles.body}>
         {/* above <div> + .body style is necessary to control the height of visible column = 100svh */}
-        {fragment.modal && <ModalFrame fragment={fragment.modal} />}
+        {fragment.modal && <ModalComponent fragment={fragment.modal} />}
         <Carousel
           fragment={fragment}
           step={props.step}

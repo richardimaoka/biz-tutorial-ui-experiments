@@ -3,7 +3,7 @@ import { ModalPosition } from "@/libs/gql/graphql";
 import styles from "./style.module.css";
 
 const fragmentDefinition = graphql(`
-  fragment ModalFrameFragment on Modal {
+  fragment ModalComponentFragment on Modal {
     text
     position
   }
@@ -24,11 +24,11 @@ const positionStyle = (p: ModalPosition): string => {
   }
 };
 
-interface ModalFrameProps {
+interface ModalComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-export const ModalFrame = (props: ModalFrameProps): JSX.Element => {
+export const ModalComponent = (props: ModalComponentProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const stylePos = fragment.position
     ? positionStyle(fragment.position)
