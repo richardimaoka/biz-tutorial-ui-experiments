@@ -304,6 +304,7 @@ export type VisibleColumn_FragmentFragment = ({
 } & {
   " $fragmentRefs"?: {
     ColumnHeader_FragmentFragment: ColumnHeader_FragmentFragment;
+    Navigation_FragmentFragment: Navigation_FragmentFragment;
   };
 }) & { " $fragmentName"?: "VisibleColumn_FragmentFragment" };
 
@@ -493,7 +494,6 @@ export type PageQueryQuery = {
       } & {
         " $fragmentRefs"?: {
           VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
-          Navigation_FragmentFragment: Navigation_FragmentFragment;
         };
       })
     | null;
@@ -2434,6 +2434,27 @@ export const ModalFrameFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<ModalFrameFragmentFragment, unknown>;
+export const Navigation_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Navigation_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "step" } },
+          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<Navigation_FragmentFragment, unknown>;
 export const VisibleColumn_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2480,6 +2501,10 @@ export const VisibleColumn_FragmentFragmentDoc = {
                 },
               ],
             },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "Navigation_Fragment" },
           },
         ],
       },
@@ -3038,11 +3063,6 @@ export const VisibleColumn_FragmentFragmentDoc = {
         ],
       },
     },
-  ],
-} as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
-export const Navigation_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
     {
       kind: "FragmentDefinition",
       name: { kind: "Name", value: "Navigation_Fragment" },
@@ -3060,7 +3080,7 @@ export const Navigation_FragmentFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<Navigation_FragmentFragment, unknown>;
+} as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [
@@ -3127,10 +3147,6 @@ export const PageQueryDocument = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "VisibleColumn_Fragment" },
-                },
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "Navigation_Fragment" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "step" } },
                 { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
@@ -3700,6 +3716,22 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Navigation_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "step" } },
+          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "VisibleColumn_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3742,22 +3774,10 @@ export const PageQueryDocument = {
               ],
             },
           },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "Navigation_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "step" } },
-          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
-          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "Navigation_Fragment" },
+          },
         ],
       },
     },

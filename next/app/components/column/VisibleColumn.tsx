@@ -5,6 +5,7 @@ import styles from "./style.module.css";
 import { ColumnWrapperComponent } from "./ColumnWrapperComponent";
 import { nonNullArray } from "@/libs/nonNullArray";
 import { ModalFrame } from "../modal/ModalFrame";
+import { Navigation } from "../navigation/Navigation";
 
 const fragmentDefinition = graphql(`
   fragment VisibleColumn_Fragment on Page {
@@ -16,6 +17,7 @@ const fragmentDefinition = graphql(`
     modal {
       ...ModalFrameFragment
     }
+    ...Navigation_Fragment
   }
 `);
 
@@ -25,6 +27,7 @@ interface VisibleColumnProps {
   selectColumn?: string;
   openFilePath?: string;
   skipAnimation?: boolean;
+  autoNextSeconds?: number;
 }
 
 export const VisibleColumn = (props: VisibleColumnProps) => {
@@ -70,7 +73,12 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
             />
           ))}
       </div>
-      <button className={styles.button}>next</button>
+      <div className={styles.button}>
+        <Navigation
+          fragment={fragment}
+          autoNextSeconds={props.autoNextSeconds}
+        />
+      </div>
     </div>
   );
 };

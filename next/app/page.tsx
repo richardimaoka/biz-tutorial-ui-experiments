@@ -1,13 +1,11 @@
 import { graphql } from "@/libs/gql";
 import { getClient } from "@/libs/apolloClient";
 import { VisibleColumn } from "./components/column/VisibleColumn";
-import { Navigation } from "./components/navigation/Navigation";
 
 const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
     page(tutorial: $tutorial, step: $step) {
       ...VisibleColumn_Fragment
-      ...Navigation_Fragment
       step
       focusColumn
       autoNextSeconds
@@ -53,19 +51,14 @@ export default async function Home({ searchParams }: PageParams) {
   return (
     <main>
       {data.page && (
-        <>
-          <VisibleColumn
-            fragment={data.page}
-            selectColumn={selectColumn}
-            openFilePath={openFilePath}
-            step={step}
-            skipAnimation={searchParams.skipAnimation}
-          />
-          {/* <Navigation
-            fragment={data.page}
-            autoNextSeconds={data.page.autoNextSeconds}
-          /> */}
-        </>
+        <VisibleColumn
+          fragment={data.page}
+          selectColumn={selectColumn}
+          openFilePath={openFilePath}
+          step={step}
+          skipAnimation={searchParams.skipAnimation}
+          autoNextSeconds={data.page.autoNextSeconds}
+        />
       )}
     </main>
   );

@@ -87,9 +87,7 @@
   flex-grow: 1;
 }
 
-.button {
+.bottom {
   position: absolute;
   bottom: 0px;
-  left: 50%;
-  transform: translate(-50%, 0%);
 }

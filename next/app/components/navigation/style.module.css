@@ -1,18 +1,10 @@
-.back {
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  font-size: 8px;
-  padding: 0px 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: black;
-  border-style: none;
-  z-index: 100;
+.buttons {
+  position: relative;
 }
 
 .prev {
   /* positioning */
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   left: 0px;
 
@@ -27,7 +19,7 @@
 
 .next {
   /* positioning */
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   right: 0px;
 
@@ -42,7 +34,7 @@
 
 .autoplay {
   /* positioning */
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0%);
