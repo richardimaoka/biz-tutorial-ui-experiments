@@ -61,10 +61,10 @@ export default async function Home({ searchParams }: PageParams) {
             step={step}
             skipAnimation={searchParams.skipAnimation}
           />
-          <Navigation
+          {/* <Navigation
             fragment={data.page}
             autoNextSeconds={data.page.autoNextSeconds}
-          />
+          /> */}
         </>
       )}
     </main>

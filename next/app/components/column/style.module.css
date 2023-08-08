@@ -6,6 +6,8 @@
     /* make sure hights of flex children add up to 100svh */
     display: flex;
     flex-direction: column;
+
+    position: relative;
   }
 }
 
@@ -17,6 +19,8 @@
     /* make sure hights of flex children add up to 100svh */
     display: flex;
     flex-direction: column;
+
+    position: relative;
   }
 }
 
@@ -81,4 +85,11 @@
   /* make sure hights of flex children add up to parent(.visiblecolumn) hight */
   overflow-y: hidden;
   flex-grow: 1;
+}
+
+.button {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }

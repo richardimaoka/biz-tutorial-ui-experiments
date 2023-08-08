@@ -70,6 +70,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
             />
           ))}
       </div>
+      <button className={styles.button}>next</button>
     </div>
   );
 };
