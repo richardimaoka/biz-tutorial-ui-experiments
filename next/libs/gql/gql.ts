@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n":
+    types.Carousel_FragmentFragmentDoc,
   "\n  fragment ColumnHeader_Fragment on Page {\n    ...ColumnTabs_Fragment\n  }\n":
     types.ColumnHeader_FragmentFragmentDoc,
   "\n  fragment ColumnTab_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n    }\n  }\n":
@@ -79,6 +81,12 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n",
+): (typeof documents)["\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
