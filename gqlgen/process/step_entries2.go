@@ -37,6 +37,7 @@ type StepEntry2 struct {
 	// git
 	Commit              string `json:"commit,omitempty"`
 	CommitMessage       string `json:"commitMessage,omitempty"`
+	PrevCommit          string `json:"prevCommit,omitempty"`
 	RepoUrl             string `json:"repoUrl,omitempty"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
 
