@@ -109,22 +109,20 @@ export const Carousel = (props: CarouselProps) => {
   const columns = nonNullArray(fragment.columns);
 
   return (
-    <>
-      <div className={styles.carousel}>
-        {columns.map((column, index) => (
-          <div
-            ref={index === state.columnIndex ? ref : null}
-            key={column.name}
-            className={styles.carouselElement}
-          >
-            <ColumnWrapperComponent
-              fragment={column}
-              step={props.step}
-              skipAnimation={props.skipAnimation}
-            />
-          </div>
-        ))}
-      </div>
-    </>
+    <div className={styles.carousel}>
+      {columns.map((column, index) => (
+        <div
+          ref={index === state.columnIndex ? ref : null}
+          key={column.name}
+          className={styles.carouselElement}
+        >
+          <ColumnWrapperComponent
+            fragment={column}
+            step={props.step}
+            skipAnimation={props.skipAnimation}
+          />
+        </div>
+      ))}
+    </div>
   );
 };

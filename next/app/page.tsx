@@ -23,10 +23,7 @@ interface PageParams {
 }
 
 export default async function Home({ searchParams }: PageParams) {
-  const openFilePath = searchParams.openFilePath
-    ? searchParams.openFilePath
-    : "package.json";
-
+  const openFilePath = searchParams.openFilePath;
   const { data } = await getClient().query({
     query: queryDefinition,
     variables: {
