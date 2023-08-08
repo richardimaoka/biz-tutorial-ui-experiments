@@ -1,15 +1,12 @@
 "use client";
 
-import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { ColumnHeader } from "./ColumnHeader";
-
-import styles from "./style.module.css";
-import { ColumnWrapperComponent } from "./ColumnWrapperComponent";
 import { nonNullArray } from "@/libs/nonNullArray";
-import { ModalFrame } from "../modal/ModalFrame";
-import { Navigation } from "../navigation/Navigation";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ColumnWrapperComponent } from "./ColumnWrapperComponent";
+import styles from "./style.module.css";
+
+import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
   fragment Carousel_Fragment on Page {
@@ -18,6 +15,7 @@ const fragmentDefinition = graphql(`
       name
     }
     focusColumn
+    step
   }
 `);
 
@@ -42,9 +40,10 @@ interface CarouselProps {
   skipAnimation?: boolean;
 }
 
-export const VisibleColumn = (props: CarouselProps) => {
+export const Carousel = (props: CarouselProps) => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const searchParams = useSearchParams();
+  const columnParam = searchParams.get("column");
   const [state, setState] = useState<State>({ kind: "Static", columnIndex: 0 });
 
   useEffect(() => {
@@ -52,14 +51,15 @@ export const VisibleColumn = (props: CarouselProps) => {
       case "Animating":
         break;
       case "Static":
-        console.log("useEffect Static");
+        console.log(
+          `useEffect Static step = ${props.step}, focusColumn = ${fragment.focusColumn}, column param = ${columnParam}`
+        );
         if (fragment?.columns && fragment.columns.length > 0) {
           const columns = nonNullArray(fragment.columns);
 
           // function's early return makes this logic clean - this is still cleaner than that of non-funcion :(
           const findIndex = (): number => {
-            // 1st priority = 'column' query param
-            const columnParam = searchParams.get("column");
+            // 1st priority = 'column' query param;
             if (columnParam) {
               const index = columns.findIndex(
                 (col) => col.name === decodeURI(columnParam)
@@ -85,6 +85,9 @@ export const VisibleColumn = (props: CarouselProps) => {
 
           const index = findIndex();
           if (index !== state.columnIndex) {
+            console.log(
+              `Carousel animating from = ${state.columnIndex} , to = ${index}`
+            );
             setState({
               kind: "Animating",
               fromIndex: state.columnIndex,
@@ -94,7 +97,7 @@ export const VisibleColumn = (props: CarouselProps) => {
         }
         break;
     }
-  }, [fragment.columns, fragment.focusColumn, state, searchParams]);
+  }, [fragment.columns, fragment.focusColumn, state, columnParam, props.step]);
 
   if (!fragment?.columns || fragment.columns.length === 0) {
     return <div></div>;
@@ -102,7 +105,7 @@ export const VisibleColumn = (props: CarouselProps) => {
   const columns = nonNullArray(fragment.columns);
 
   return (
-    <div>
+    <div className={styles.carousel}>
       {columns.map((column) => (
         <ColumnWrapperComponent
           key={column.name}

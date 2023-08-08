@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n":
+  "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n    step\n  }\n":
     types.Carousel_FragmentFragmentDoc,
   "\n  fragment ColumnHeader_Fragment on Page {\n    ...ColumnTabs_Fragment\n  }\n":
     types.ColumnHeader_FragmentFragmentDoc,
@@ -23,7 +23,7 @@ const documents = {
     types.ColumnTabs_FragmentFragmentDoc,
   "\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n    }\n  }\n":
     types.ColumnWrapperComponent_FragmentFragmentDoc,
-  "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n":
+  "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    ...Carousel_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n":
     types.VisibleColumn_FragmentFragmentDoc,
   "\n  fragment ModalFrameFragment on Modal {\n    text\n    position\n  }\n":
     types.ModalFrameFragmentFragmentDoc,
@@ -85,8 +85,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n",
-): (typeof documents)["\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n  }\n"];
+  source: "\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n    step\n  }\n",
+): (typeof documents)["\n  fragment Carousel_Fragment on Page {\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    focusColumn\n    step\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -115,8 +115,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n",
-): (typeof documents)["\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n"];
+  source: "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    ...Carousel_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n",
+): (typeof documents)["\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    ...Carousel_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalFrameFragment\n    }\n    ...Navigation_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

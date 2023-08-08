@@ -235,6 +235,7 @@ export type TerminalOutput = {
 export type Carousel_FragmentFragment = {
   __typename: "Page";
   focusColumn?: string | null;
+  step?: string | null;
   columns?: Array<
     | ({ __typename: "ColumnWrapper"; name?: string | null } & {
         " $fragmentRefs"?: {
@@ -317,6 +318,7 @@ export type VisibleColumn_FragmentFragment = ({
 } & {
   " $fragmentRefs"?: {
     ColumnHeader_FragmentFragment: ColumnHeader_FragmentFragment;
+    Carousel_FragmentFragment: Carousel_FragmentFragment;
     Navigation_FragmentFragment: Navigation_FragmentFragment;
   };
 }) & { " $fragmentName"?: "VisibleColumn_FragmentFragment" };
@@ -512,6 +514,164 @@ export type PageQueryQuery = {
     | null;
 };
 
+export const ColumnTab_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnTab_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ColumnTab_FragmentFragment, unknown>;
+export const ColumnTabs_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnTabs_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "columns" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ColumnTab_Fragment" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnTab_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ColumnTabs_FragmentFragment, unknown>;
+export const ColumnHeader_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnHeader_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "ColumnTabs_Fragment" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnTab_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnTabs_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "columns" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ColumnTab_Fragment" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ColumnHeader_FragmentFragment, unknown>;
 export const FileTreeHeader_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2300,6 +2460,7 @@ export const Carousel_FragmentFragmentDoc = {
             },
           },
           { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
+          { kind: "Field", name: { kind: "Name", value: "step" } },
         ],
       },
     },
@@ -2776,164 +2937,6 @@ export const Carousel_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<Carousel_FragmentFragment, unknown>;
-export const ColumnTab_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnTab_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "column" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "__typename" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ColumnTab_FragmentFragment, unknown>;
-export const ColumnTabs_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnTabs_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "columns" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "ColumnTab_Fragment" },
-                },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnTab_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "column" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "__typename" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ColumnTabs_FragmentFragment, unknown>;
-export const ColumnHeader_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnHeader_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "ColumnTabs_Fragment" },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnTab_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "column" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "__typename" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnTabs_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "columns" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "ColumnTab_Fragment" },
-                },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ColumnHeader_FragmentFragment, unknown>;
 export const ModalFrameFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2991,6 +2994,10 @@ export const VisibleColumn_FragmentFragmentDoc = {
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "ColumnHeader_Fragment" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "Carousel_Fragment" },
           },
           {
             kind: "Field",
@@ -3491,23 +3498,6 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ColumnHeader_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "ColumnTabs_Fragment" },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3565,6 +3555,55 @@ export const VisibleColumn_FragmentFragmentDoc = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ColumnHeader_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "ColumnTabs_Fragment" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Carousel_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "columns" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: {
+                    kind: "Name",
+                    value: "ColumnWrapperComponent_Fragment",
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
+          { kind: "Field", name: { kind: "Name", value: "step" } },
         ],
       },
     },
@@ -4221,6 +4260,38 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Carousel_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "columns" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: {
+                    kind: "Name",
+                    value: "ColumnWrapperComponent_Fragment",
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
+          { kind: "Field", name: { kind: "Name", value: "step" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ModalFrameFragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4263,6 +4334,10 @@ export const PageQueryDocument = {
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "ColumnHeader_Fragment" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "Carousel_Fragment" },
           },
           {
             kind: "Field",
