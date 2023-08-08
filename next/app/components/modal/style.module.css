@@ -1,6 +1,6 @@
 .modal {
   /*to contain the modal box*/
-  position: relative;
+  position: absolute;
 
   /* somehow, without this, the background image's width is shrunk... not shure why...*/
   width: 100%;

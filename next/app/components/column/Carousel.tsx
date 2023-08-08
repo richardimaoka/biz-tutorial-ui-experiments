@@ -57,9 +57,6 @@ export const Carousel = (props: CarouselProps) => {
         setState({ kind: "Static", columnIndex: state.toIndex });
         break;
       case "Static":
-        console.log(
-          `useEffect Static step = ${props.step}, focusColumn = ${fragment.focusColumn}, column param = ${columnParam}`
-        );
         if (fragment?.columns && fragment.columns.length > 0) {
           const columns = nonNullArray(fragment.columns);
 
@@ -112,20 +109,22 @@ export const Carousel = (props: CarouselProps) => {
   const columns = nonNullArray(fragment.columns);
 
   return (
-    <div className={styles.carousel}>
-      {columns.map((column, index) => (
-        <div
-          ref={index === state.columnIndex ? ref : null}
-          key={column.name}
-          className={styles.carouselElement}
-        >
-          <ColumnWrapperComponent
-            fragment={column}
-            step={props.step}
-            skipAnimation={props.skipAnimation}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className={styles.carousel}>
+        {columns.map((column, index) => (
+          <div
+            ref={index === state.columnIndex ? ref : null}
+            key={column.name}
+            className={styles.carouselElement}
+          >
+            <ColumnWrapperComponent
+              fragment={column}
+              step={props.step}
+              skipAnimation={props.skipAnimation}
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };

@@ -57,21 +57,12 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
       />
       <div className={styles.body}>
         {/* above <div> + .body style is necessary to control the height of visible column = 100svh */}
-        {fragment.modal ? (
-          <ModalFrame fragment={fragment.modal}>
-            <Carousel
-              fragment={fragment}
-              step={props.step}
-              skipAnimation={props.skipAnimation}
-            />
-          </ModalFrame>
-        ) : (
-          <Carousel
-            fragment={fragment}
-            step={props.step}
-            skipAnimation={props.skipAnimation}
-          />
-        )}
+        {fragment.modal && <ModalFrame fragment={fragment.modal} />}
+        <Carousel
+          fragment={fragment}
+          step={props.step}
+          skipAnimation={props.skipAnimation}
+        />
       </div>
       <div className={styles.bottom}>
         <Navigation

@@ -1,6 +1,5 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ModalPosition } from "@/libs/gql/graphql";
-import { ReactNode } from "react";
 import styles from "./style.module.css";
 
 const fragmentDefinition = graphql(`
@@ -27,7 +26,6 @@ const positionStyle = (p: ModalPosition): string => {
 
 interface ModalFrameProps {
   fragment: FragmentType<typeof fragmentDefinition>;
-  children: ReactNode;
 }
 
 export const ModalFrame = (props: ModalFrameProps): JSX.Element => {
@@ -45,7 +43,6 @@ export const ModalFrame = (props: ModalFrameProps): JSX.Element => {
       <div className={`${stylePos} ${styles.boxposition}`}>
         <ModalBox message={fragment.text} />
       </div>
-      {props.children}
     </div>
   );
 };
