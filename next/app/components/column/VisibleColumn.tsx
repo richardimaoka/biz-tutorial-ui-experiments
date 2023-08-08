@@ -46,8 +46,6 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
     ? columns[0].name
     : "";
 
-  // const visibleColumn = columns.find((column) => column.name === selectColumn);
-
   return (
     <div className={styles.visiblecolumn}>
       <ColumnHeader
