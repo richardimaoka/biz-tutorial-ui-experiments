@@ -73,7 +73,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
           />
         )}
       </div>
-      <div className={styles.button}>
+      <div className={styles.bottom}>
         <Navigation
           fragment={fragment}
           autoNextSeconds={props.autoNextSeconds}
