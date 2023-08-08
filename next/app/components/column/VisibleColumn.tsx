@@ -2,7 +2,7 @@ import { ColumnHeader } from "./ColumnHeader";
 
 import styles from "./style.module.css";
 import { nonNullArray } from "@/libs/nonNullArray";
-import { ModalComponent } from "../modal/ModalComponent";
+import { ModalComponent } from "./modal/ModalComponent";
 import { Navigation } from "../navigation/Navigation";
 import { Carousel } from "./Carousel";
 
