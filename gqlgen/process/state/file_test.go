@@ -163,10 +163,7 @@ func TestFileAdded(t *testing.T) {
 			t.Fatalf("failed in TestFileAdded to create state.File, %s", err)
 		}
 
-		s, err := u.ToFileAdded()
-		if err != nil {
-			t.Fatalf("failed in TestFileAdded to create state.File, %s", err)
-		}
+		s := u.ToFileAdded()
 
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())

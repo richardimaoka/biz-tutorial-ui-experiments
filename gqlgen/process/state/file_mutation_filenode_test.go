@@ -7,6 +7,8 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
+// state.File is effectively immutable, so no need to test mutation to the state
+/*
 func TestFileNodeMutation1(t *testing.T) {
 	s, err := fileStateFromCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
@@ -23,7 +25,7 @@ func TestFileNodeMutation1(t *testing.T) {
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
-	s.ToFileAdded2()
+  // state.File is effectively immutable, so no need to test mutation to the state
 
 	// ... has NO effect on the materialized GraphQL model
 	internal.CompareAfterMarshal(t, goldenFile1, gqlModel)
@@ -36,6 +38,7 @@ func TestFileNodeMutation1(t *testing.T) {
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
 
 }
+*/
 
 func TestFileNodeMutation2(t *testing.T) {
 	s, err := fileStateFromCommit(

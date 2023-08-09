@@ -74,16 +74,16 @@ func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	return &dir
 }
 
-func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree, filesByAdd bool) (*Directory, error) {
+func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree, isFirstCommit bool) (*Directory, error) {
 	dir := EmptyDirectory(repo, dirPath)
-	if err := dir.recursivelyConstruct(dirPath, tree, filesByAdd); err != nil {
+	if err := dir.recursivelyConstruct(dirPath, tree, isFirstCommit); err != nil {
 		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
 	}
 
 	return dir, nil
 }
 
-func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, filesByAdd bool) error {
+func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, isFirstCommit bool) error {
 	if tree == nil {
 		return fmt.Errorf("failed in recurse, tree is nil")
 	}
@@ -103,7 +103,7 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, file
 
 		// Recursive, and depth first construction
 		subDir := EmptyDirectory(s.repo, subDirPath)
-		if err := subDir.recursivelyConstruct(subDirPath, subTree, filesByAdd); err != nil {
+		if err := subDir.recursivelyConstruct(subDirPath, subTree, isFirstCommit); err != nil {
 			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
 		}
 		s.subDirs = append(s.subDirs, subDir)
@@ -116,14 +116,14 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, file
 			return fmt.Errorf("failed in recurse, cannot get git file = %s in dir = %s, %s", f.Name, dirPath, err)
 		}
 
-		var file *File
-		if filesByAdd { // Upon construction, all files are considered added, assuming this is the first commit
-			file, err = FileAdded(fileObj, dirPath)
-		} else { //        Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
-			file, err = FileUnChanged(fileObj, dirPath)
-		}
+		// Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
+		file, err := FileUnChanged(fileObj, dirPath)
 		if err != nil {
 			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
+		}
+		if isFirstCommit {
+			// Special case where all files are considered added, assuming this is the first commit
+			file = file.ToFileAdded()
 		}
 
 		s.files = append(s.files, file)
@@ -194,10 +194,7 @@ func (s *Directory) MarkFileAdded(relativeFilePath string) error {
 	if len(split) == 1 {
 		for i, f := range s.files {
 			if f.fileName == relativeFilePath {
-				added, err := f.ToFileAdded()
-				if err != nil {
-					return fmt.Errorf("failed in MarkFileAdded, cannot mark file = %s as added, %s", relativeFilePath, err)
-				}
+				added := f.ToFileAdded()
 				s.files[i] = added
 				return nil
 			}

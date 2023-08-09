@@ -92,26 +92,6 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	return file, nil
 }
 
-func FileAdded(currentFile *object.File, currentDir string) (*File, error) {
-	if currentFile == nil {
-		return nil, fmt.Errorf("failed in FileAdded, currentFile is nil")
-	}
-
-	filePath := filePathInDir(currentDir, currentFile.Name)
-
-	// read contents here, to avoid error upon GraphQL materialization
-	currentContents, err := currentFile.Contents()
-	if err != nil {
-		return nil, fmt.Errorf("failed in FileAdded for file = %s, cannot get current file contents, %s", filePath, err)
-	}
-
-	file := intrinsicFile(currentContents, filePath, currentFile.Size)
-	// update necessary flags only, as default flags are false
-	file.isAdded = true
-
-	return file, nil
-}
-
 func FileDeleted(filePath string) *File {
 	file := intrinsicFile("", filePath, 0)
 	// update necessary flags only, as default flags are false
@@ -120,22 +100,19 @@ func FileDeleted(filePath string) *File {
 	return file
 }
 
-func (f *File) ToFileAdded2() {
-	// update necessary flags only, as default flags are false
-	f.isAdded = true
-	f.isUpdated = true
-}
-
+// TODO: calculate highlights
 // to keep File immutable, return a new File
-func (f *File) ToFileAdded() (*File, error) {
+func (f *File) ToFileAdded() *File {
 	// copy to avoid mutation effects afterwards
 	file := *f
 	// update necessary flags only, as default flags are false
 	file.isAdded = true
 	file.isUpdated = true
-	return &file, nil
+	return &file
 }
 
+// TODO: calculate highlights
+// to keep File immutable, return a new File
 func (f *File) ToFileUpdated() *File {
 	// copy to avoid mutation effects afterwards
 	file := *f
