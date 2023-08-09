@@ -146,10 +146,10 @@ func TestFileMutation1(t *testing.T) {
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
-	*gqlModel.FilePath = "next/README.md"
-	*gqlModel.FileName = "README.md"
+	*gqlModel.FilePath = "next/package-mutated.json"
+	*gqlModel.FileName = "package-mudated.json"
 	*gqlModel.IsFullContent = false
-	*gqlModel.Content = "updated contents"
+	*gqlModel.Content = "mutated contents - " + *gqlModel.Content
 	//*gqlModel.Language = "markdown"
 	line100 := 100
 	line200 := 200
