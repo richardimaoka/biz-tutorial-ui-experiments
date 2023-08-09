@@ -55,7 +55,7 @@ func gitFileFromCommit(repoUrl, commitHashStr, filePath string) (*object.File, e
 	return gitFile, nil
 }
 
-func stateFileFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, error) {
+func fileStateFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, error) {
 	gitFile, err := gitFileFromCommit(repoUrl, commitHashStr, filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed in stateFileFromCommit, %s", err)

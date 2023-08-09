@@ -8,7 +8,7 @@ import (
 )
 
 func TestOpenFileMutation1(t *testing.T) {
-	s, err := stateFileFromCommit(
+	s, err := fileStateFromCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
 		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
 		"next/package.json",
@@ -37,13 +37,13 @@ func TestOpenFileMutation1(t *testing.T) {
 }
 
 func TestOpenFileMutation2(t *testing.T) {
-	s, err := stateFileFromCommit(
+	s, err := fileStateFromCommit(
 		"https://github.com/richardimaoka/next-sandbox.git",
 		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
 		"next/package.json",
 	)
 	if err != nil {
-		t.Fatalf("failed in TestOpenFileMutation1, %s", err)
+		t.Fatalf("failed in TestOpenFileMutation2, %s", err)
 	}
 
 	// once GraphQL model is materialized...
