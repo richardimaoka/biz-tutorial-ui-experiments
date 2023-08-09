@@ -20,6 +20,33 @@ type SourceCode struct {
 	isFoldFileTree      bool
 }
 
+func New__SourceCodeFromURL(repoUrl, tutorial string) {
+}
+
+func (s *SourceCode) setInnerState(commitStr string) error {
+	return nil
+}
+
+// stateless, predictable from arguments
+func (s *SourceCode) ConstructStep(step, commitStr, prevCommitStr, defaultOpenFilePath string, isFoldFileTree bool) error {
+	return nil
+}
+
+// stateful, current state + arguments => next state
+func (s *SourceCode) ForwardCommit(nextStep, commitStr, defaultOpenFilePath string, isFoldFileTree bool) error {
+	return nil
+}
+
+// stateful, current state + arguments => next state
+func (s *SourceCode) ForwardStepOps(nextStep string, fileOps []string, defaultOpenFilePath string, isFoldFileTree bool) error {
+	return nil
+}
+
+// no state change, just cosmetic modification
+func (s *SourceCode) ModifyDisplay(nextStep string, defaultOpenFilePath string, isFoldFileTree bool) error {
+	return nil
+}
+
 func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	commitHash := plumbing.NewHash(hashStr)
 	if commitHash.String() != hashStr {
