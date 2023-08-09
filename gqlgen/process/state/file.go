@@ -136,18 +136,12 @@ func FileUpdated(prevFile, currentFile *object.File, currentDir string) (*File, 
 	return file, nil
 }
 
-func FileDeleted(deletedFile diff.File) (*File, error) {
-	if deletedFile == nil {
-		return nil, fmt.Errorf("failed in FileDeleted, deletedFile is nil")
-	}
-
-	var filePath = deletedFile.Path()
-
+func FileDeleted(filePath string) *File {
 	file := intrinsicFile("", filePath, 0)
 	// update necessary flags only, as default flags are false
 	file.isDeleted = true
 
-	return file, nil
+	return file
 }
 
 func (f *File) ToFileAdded2() {
@@ -156,6 +150,7 @@ func (f *File) ToFileAdded2() {
 	f.isUpdated = true
 }
 
+// to keep File immutable, return a new File
 func (f *File) ToFileAdded() (*File, error) {
 	// copy to avoid mutation effects afterwards
 	file := *f

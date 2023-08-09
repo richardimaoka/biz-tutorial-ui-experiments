@@ -135,11 +135,7 @@ func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, file
 func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
 	split := strings.Split(relativeFilePath, "/")
 	if len(split) == 1 {
-		file, err := FileDeleted(deletedFile)
-		if err != nil {
-			return fmt.Errorf("failed in InsertFileDeleted, cannot delete = %s, %s", deletedFile.Path(), err)
-		}
-
+		file := FileDeleted(deletedFile.Path())
 		s.files = append(s.files, file)
 		s.files.sortSelf()
 		return nil

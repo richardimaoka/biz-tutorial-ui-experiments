@@ -159,7 +159,12 @@ func TestFileAdded(t *testing.T) {
 			t.Fatalf("failed in TestFileAdded to get gitFile, %s", err)
 		}
 
-		s, err := state.FileAdded(gitFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
+		u, err := state.FileUnChanged(gitFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
+		if err != nil {
+			t.Fatalf("failed in TestFileAdded to create state.File, %s", err)
+		}
+
+		s, err := u.ToFileAdded()
 		if err != nil {
 			t.Fatalf("failed in TestFileAdded to create state.File, %s", err)
 		}
@@ -170,7 +175,7 @@ func TestFileAdded(t *testing.T) {
 }
 
 func TestFileDeleted(t *testing.T) {
-	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+	// repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
 	cases := []struct {
 		prevCommit         string
@@ -197,39 +202,9 @@ func TestFileDeleted(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		prevCommit, err := gitCommit(repoUrl, c.prevCommit)
-		if err != nil {
-			t.Fatalf("failed in TestFileDeleted to get prev commit, %s", err)
-		}
-		currentCommit, err := gitCommit(repoUrl, c.currentCommit)
-		if err != nil {
-			t.Fatalf("failed in TestFileDeleted to get current commit, %s", err)
-		}
-
-		patch, err := prevCommit.Patch(currentCommit)
-		if err != nil {
-			t.Fatalf("failed in TestFileDeleted to get patch, %s", err)
-		}
-
-		var deleted bool = false
-		for _, p := range patch.FilePatches() {
-			from, to := p.Files()
-			if from.Path() == c.filePath && to == nil {
-				s, err := state.FileDeleted(from)
-				if err != nil {
-					t.Fatalf("failed in TestFileDeleted to create state.File, %s", err)
-				}
-
-				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
-
-				deleted = true
-			}
-		}
-
-		if !deleted {
-			t.Fatalf("failed in TestFileDeleted, %s is not actually deleted between %s and %s", c.filePath, c.prevCommit, c.currentCommit)
-		}
+		s := state.FileDeleted(c.filePath)
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
 
 }
