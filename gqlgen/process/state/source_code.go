@@ -17,6 +17,7 @@ type SourceCode struct {
 	tutorial            string
 	step                string
 	defaultOpenFilePath string
+	isFoldFileTree      bool
 }
 
 func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
@@ -33,7 +34,7 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	return commit, nil
 }
 
-func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial, step, defaultOpenFilePath string) (*SourceCode, error) {
+func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial, step, defaultOpenFilePath string, isFoldFileTree bool) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -50,7 +51,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath, isFoldFileTree: isFoldFileTree}
 
 	// 2. From git patches, mark added/deleted/updated/renamed files
 	prevCommit, err := getCommit(repo, prevCommitStr)
@@ -82,7 +83,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 	return &sc, nil
 }
 
-func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpenFilePath, tutorial string) (*SourceCode, error) {
+func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpenFilePath, tutorial string, isFoldFileTree bool) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
 	if err != nil {
@@ -99,13 +100,12 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpen
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath}
+	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, defaultOpenFilePath: defaultOpenFilePath, isFoldFileTree: isFoldFileTree}
 
 	return &sc, nil
 }
 
 func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
-	isFoldFileTree := s.defaultOpenFilePath != ""
 
 	return &model.SourceCode{
 		FileTree:            s.rootDir.ToGraphQLFileNodeSlice(),
@@ -113,6 +113,6 @@ func (s *SourceCode) ToGraphQLSourceCode() *model.SourceCode {
 		Tutorial:            s.tutorial,
 		Step:                s.step,
 		DefaultOpenFilePath: s.defaultOpenFilePath,
-		IsFoldFileTree:      isFoldFileTree,
+		IsFoldFileTree:      s.isFoldFileTree,
 	}
 }

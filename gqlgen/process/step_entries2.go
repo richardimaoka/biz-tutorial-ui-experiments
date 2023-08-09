@@ -40,6 +40,7 @@ type StepEntry2 struct {
 	PrevCommit          string `json:"prevCommit,omitempty"`
 	RepoUrl             string `json:"repoUrl,omitempty"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
+	IsFoldFileTree      string `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
 
 	// browser
 	BrowserType        string `json:"browserType,omitempty"`
@@ -138,14 +139,15 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 			}
 
 			if colName == "Source Code" {
+				isFoldFileTree := e.IsFoldFileTree == "TRUE"
 				if srcColmnState == nil {
 					var err error
-					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, e.DefaultOpenFilePath, tutorial)
+					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, e.DefaultOpenFilePath, tutorial, isFoldFileTree)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
 					}
 				} else if e.Commit != "" {
-					err := srcColmnState.Transition(e.Step, e.Commit, e.DefaultOpenFilePath)
+					err := srcColmnState.Transition(e.Step, e.Commit, e.DefaultOpenFilePath, isFoldFileTree)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
 					}
