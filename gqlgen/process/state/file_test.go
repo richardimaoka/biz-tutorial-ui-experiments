@@ -125,7 +125,7 @@ func TestFileUnchanged(t *testing.T) {
 
 		s, err := state.FileUnChanged(gitFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
 		if err != nil {
-			t.Fatalf("failed in TestFilePatterns to create state.File, %s", err)
+			t.Fatalf("failed in TestFileUnchanged to create state.File, %s", err)
 		}
 
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
@@ -234,43 +234,45 @@ func TestFileDeleted(t *testing.T) {
 
 }
 
-func TestFilePatterns(t *testing.T) {
+func TestFileUpdatd(t *testing.T) {
+	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+
 	cases := []struct {
 		prevCommit         string
 		currentCommit      string
-		prevFilePath       string
-		currentFilePath    string
+		filePath           string
 		goldenFileOpenFile string
 		goldenFileFileNode string
 	}{
 		{
+			// TODO: calculate highlights
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
 			"next/package.json",
-			"next/package.json",
-			"testdata/file_update_openfile_golden.json",
-			"testdata/file_update_filenode_golden.json",
+			"testdata/file_updated_openfile_golden1.json",
+			"testdata/file_updated_filenode_golden1.json",
 		},
-
-		{
-			"e4a7c6509d5ff90da22612a66128eb38d418cb3e",
-			"e5784f193c5e62a840bbfb96a2b9a5662d1361c1", //next to nextjs
-			"next/pages/index.tsx",
-			"nextjs/pages/index.tsx",
-			"testdata/file_rename_openfile_golden.json",
-			"testdata/file_rename_filenode_golden.json",
-		},
+		// //rename
+		// "e4a7c6509d5ff90da22612a66128eb38d418cb3e",
+		// "e5784f193c5e62a840bbfb96a2b9a5662d1361c1", //next to nextjs
+		// "next/pages/index.tsx",                     //renamed to "nextjs/pages/index.tsx",
+		// "testdata/file_renamed_openfile_golden.json",
+		// "testdata/file_renamed_filenode_golden.json",
 	}
 
-	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 	for _, c := range cases {
-		// gitFile = nil is ok, so ignore errors
-		prevGitFile, _ := gitFileFromCommit(repoUrl, c.prevCommit, c.prevFilePath)
-		currentGitFile, _ := gitFileFromCommit(repoUrl, c.currentCommit, c.currentFilePath)
-
-		s, err := state.NewFile(prevGitFile, currentGitFile, "")
+		prevFile, err := gitFileFromCommit(repoUrl, c.prevCommit, c.filePath)
 		if err != nil {
-			t.Fatalf("failed in TestFilePatterns to create state.File, %s", err)
+			t.Fatalf("failed in TestFileUpdatd to get prevFile, %s", err)
+		}
+		currentFile, err := gitFileFromCommit(repoUrl, c.currentCommit, c.filePath)
+		if err != nil {
+			t.Fatalf("failed in TestFileUpdatd to get currentFile, %s", err)
+		}
+
+		s, err := state.FileUpdated(prevFile, currentFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
+		if err != nil {
+			t.Fatalf("failed in TestFileUpdatd to create state.File, %s", err)
 		}
 
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
