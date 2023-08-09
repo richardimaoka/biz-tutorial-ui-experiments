@@ -137,15 +137,14 @@ func TestFileAdded(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
 	cases := []struct {
-		prevCommit         string
+		// prevCommit         string
 		currentCommit      string
 		filePath           string
 		goldenFileOpenFile string
 		goldenFileFileNode string
 	}{
 		{
-			// text file
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			// "55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"next/package.json",
 			"testdata/file_added_openfile_golden1.json",
@@ -178,23 +177,23 @@ func TestFileDeleted(t *testing.T) {
 	// repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
 	cases := []struct {
-		prevCommit         string
-		currentCommit      string
+		// prevCommit         string
+		// currentCommit      string
 		filePath           string
 		goldenFileOpenFile string
 		goldenFileFileNode string
 	}{
 		{
 			// text file
-			"3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			// "3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
+			// "55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			".gitignore",
 			"testdata/file_deleted_openfile_golden1.json",
 			"testdata/file_deleted_filenode_golden1.json",
 		},
 		{
-			"3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			// "3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
+			// "55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			"pages/posts/[id].js",
 			"testdata/file_deleted_openfile_golden2.json",
 			"testdata/file_deleted_filenode_golden2.json",
@@ -212,7 +211,7 @@ func TestFileUpdatd(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
 	cases := []struct {
-		prevCommit         string
+		// prevCommit         string
 		currentCommit      string
 		filePath           string
 		goldenFileOpenFile string
@@ -220,7 +219,7 @@ func TestFileUpdatd(t *testing.T) {
 	}{
 		{
 			// TODO: calculate highlights
-			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			// "8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
 			"next/package.json",
 			"testdata/file_updated_openfile_golden1.json",
@@ -235,19 +234,17 @@ func TestFileUpdatd(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		prevFile, err := gitFileFromCommit(repoUrl, c.prevCommit, c.filePath)
-		if err != nil {
-			t.Fatalf("failed in TestFileUpdatd to get prevFile, %s", err)
-		}
 		currentFile, err := gitFileFromCommit(repoUrl, c.currentCommit, c.filePath)
 		if err != nil {
 			t.Fatalf("failed in TestFileUpdatd to get currentFile, %s", err)
 		}
 
-		s, err := state.FileUpdated(prevFile, currentFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
+		u, err := state.FileUnChanged(currentFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
 		if err != nil {
 			t.Fatalf("failed in TestFileUpdatd to create state.File, %s", err)
 		}
+
+		s := u.ToFileUpdated()
 
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())

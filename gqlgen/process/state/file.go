@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -160,16 +159,12 @@ func (f *File) ToFileAdded() (*File, error) {
 	return &file, nil
 }
 
-func (f *File) ToFileUpdated(from diff.File) (*File, error) {
-	if from == nil {
-		return nil, fmt.Errorf("failed in ToFileUpdated, 'from' File is nil")
-	}
-
+func (f *File) ToFileUpdated() *File {
 	// copy to avoid mutation effects afterwards
 	file := *f
 	// update necessary flags only, as default flags are false
 	file.isUpdated = true
-	return &file, nil
+	return &file
 }
 
 func (s *File) ToGraphQLOpenFile() *model.OpenFile {

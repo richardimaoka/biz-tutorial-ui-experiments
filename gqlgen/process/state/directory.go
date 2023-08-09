@@ -167,10 +167,7 @@ func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File)
 	if len(split) == 1 {
 		for i, f := range s.files {
 			if f.fileName == relativeFilePath {
-				added, err := f.ToFileUpdated(fromFile)
-				if err != nil {
-					return fmt.Errorf("failed in MarkFileUpdated, cannot mark file = %s as added, %s", relativeFilePath, err)
-				}
+				added := f.ToFileUpdated()
 				s.files[i] = added
 				return nil
 			}
