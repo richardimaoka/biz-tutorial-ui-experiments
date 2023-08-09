@@ -181,11 +181,18 @@ func TestFileDeleted(t *testing.T) {
 	}{
 		{
 			// text file
-			"3b452151c8a567e2d42a133c255e85d81ea5912a", // getStaticProps
+			"3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
 			".gitignore",
 			"testdata/file_deleted_openfile_golden1.json",
 			"testdata/file_deleted_filenode_golden1.json",
+		},
+		{
+			"3b452151c8a567e2d42a133c255e85d81ea5912a", //getStaticProps
+			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
+			"pages/posts/[id].js",
+			"testdata/file_deleted_openfile_golden2.json",
+			"testdata/file_deleted_filenode_golden2.json",
 		},
 	}
 
@@ -237,14 +244,6 @@ func TestFilePatterns(t *testing.T) {
 		goldenFileFileNode string
 	}{
 		{
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
-			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
-			"next/package.json",
-			"next/package.json",
-			"testdata/file_add_openfile_golden.json",
-			"testdata/file_add_filenode_golden.json",
-		},
-		{
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
 			"next/package.json",
@@ -252,14 +251,7 @@ func TestFilePatterns(t *testing.T) {
 			"testdata/file_update_openfile_golden.json",
 			"testdata/file_update_filenode_golden.json",
 		},
-		{
-			"3b452151c8a567e2d42a133c255e85d81ea5912a",
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup
-			"pages/posts/[id].js",
-			"pages/posts/[id].js",
-			"testdata/file_delete_openfile_golden.json",
-			"testdata/file_delete_filenode_golden.json",
-		},
+
 		{
 			"e4a7c6509d5ff90da22612a66128eb38d418cb3e",
 			"e5784f193c5e62a840bbfb96a2b9a5662d1361c1", //next to nextjs
