@@ -1,0 +1,9 @@
+{
+  "filePath": "next/package.json",
+  "fileName": "package.json",
+  "content": "{\n  \"name\": \"next\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"@types/node\": \"20.3.3\",\n    \"@types/react\": \"18.2.14\",\n    \"@types/react-dom\": \"18.2.6\",\n    \"eslint\": \"8.44.0\",\n    \"eslint-config-next\": \"13.4.7\",\n    \"next\": \"13.4.7\",\n    \"react\": \"18.2.0\",\n    \"react-dom\": \"18.2.0\",\n    \"typescript\": \"5.1.6\"\n  }\n}\n",
+  "isFullContent": true,
+  "language": "json",
+  "highlight": null,
+  "size": 460
+}
