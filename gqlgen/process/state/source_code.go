@@ -61,6 +61,7 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	return commit, nil
 }
 
+// SourceCodeFromChange(prevCommit, currentCommit)
 func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutorial, step, defaultOpenFilePath string, isFoldFileTree bool) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
@@ -110,6 +111,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 	return &sc, nil
 }
 
+// SourceCodeFromCommit(commit) // all files are FileUnchanged
 func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpenFilePath, tutorial string, isFoldFileTree bool) (*SourceCode, error) {
 	// 1. Construct source code root dir as if all files are unchanged
 	currentCommit, err := getCommit(repo, currentCommitStr)
