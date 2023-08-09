@@ -78,7 +78,7 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	// read contents here, to avoid error upon GraphQL materialization
 	var currentContents string
 	if isBinary {
-		currentContents = "this is a binary file"
+		currentContents = "Binary file not shown."
 	} else {
 		var err error
 		currentContents, err = currentFile.Contents()

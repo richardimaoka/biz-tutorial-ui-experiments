@@ -77,10 +77,32 @@ func TestFileUnchanged(t *testing.T) {
 		goldenFileFileNode string
 	}{
 		{
+			// text file
 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"next/package.json",
 			"testdata/file_unchanged_openfile_golden1.json",
 			"testdata/file_unchanged_filenode_golden1.json",
+		},
+		{
+			// another text file to see difference from case 1
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/pages/api/hello.ts",
+			"testdata/file_unchanged_openfile_golden2.json",
+			"testdata/file_unchanged_filenode_golden2.json",
+		},
+		{
+			// binary file
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/public/favicon.ico",
+			"testdata/file_unchanged_openfile_golden3.json",
+			"testdata/file_unchanged_filenode_golden3.json",
+		},
+		{
+			// svg file
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/public/next.svg",
+			"testdata/file_unchanged_openfile_golden4.json",
+			"testdata/file_unchanged_filenode_goldenr.json",
 		},
 	}
 
