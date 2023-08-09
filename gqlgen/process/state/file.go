@@ -260,6 +260,7 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 	fileName := s.fileName
 	offset := s.offset
 	isUpdated := s.isUpdated || s.isAdded || s.isRenamed
+	isDeleted := s.isDeleted
 
 	return &model.FileNode{
 		NodeType:  &fileType,
@@ -267,5 +268,6 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 		Name:      &fileName,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
+		IsDeleted: &isDeleted,
 	}
 }

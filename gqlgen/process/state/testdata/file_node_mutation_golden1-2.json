@@ -3,5 +3,6 @@
   "name": "package.json",
   "filePath": "next/package.json",
   "offset": 1,
-  "isUpdated": true
+  "isUpdated": true,
+  "isDeleted": false
 }

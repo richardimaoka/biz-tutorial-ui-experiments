@@ -3,5 +3,6 @@
   "name": "package-mudated.json",
   "filePath": "next/package-mudated.json",
   "offset": 5,
-  "isUpdated": true
+  "isUpdated": true,
+  "isDeleted": false
 }

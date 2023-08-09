@@ -3,5 +3,6 @@
   "name": "hello.ts",
   "filePath": "next/pages/api/hello.ts",
   "offset": 3,
-  "isUpdated": false
+  "isUpdated": false,
+  "isDeleted": false
 }

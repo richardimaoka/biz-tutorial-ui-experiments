@@ -3,5 +3,6 @@
   "name": "index.tsx",
   "filePath": "nextjs/pages/index.tsx",
   "offset": 2,
-  "isUpdated": true
+  "isUpdated": true,
+  "isDeleted": false
 }
