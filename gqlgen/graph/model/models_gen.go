@@ -53,6 +53,7 @@ type FileNode struct {
 	FilePath  *string       `json:"filePath"`
 	Offset    *int          `json:"offset"`
 	IsUpdated *bool         `json:"isUpdated"`
+	IsDeleted *bool         `json:"isDeleted"`
 }
 
 type ImageCentered struct {

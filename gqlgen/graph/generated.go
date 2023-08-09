@@ -70,6 +70,7 @@ type ComplexityRoot struct {
 
 	FileNode struct {
 		FilePath  func(childComplexity int) int
+		IsDeleted func(childComplexity int) int
 		IsUpdated func(childComplexity int) int
 		Name      func(childComplexity int) int
 		NodeType  func(childComplexity int) int
@@ -308,6 +309,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileNode.FilePath(childComplexity), true
+
+	case "FileNode.isDeleted":
+		if e.complexity.FileNode.IsDeleted == nil {
+			break
+		}
+
+		return e.complexity.FileNode.IsDeleted(childComplexity), true
 
 	case "FileNode.isUpdated":
 		if e.complexity.FileNode.IsUpdated == nil {
@@ -1662,6 +1670,47 @@ func (ec *executionContext) _FileNode_isUpdated(ctx context.Context, field graph
 }
 
 func (ec *executionContext) fieldContext_FileNode_isUpdated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FileNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FileNode_isDeleted(ctx context.Context, field graphql.CollectedField, obj *model.FileNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FileNode_isDeleted(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsDeleted, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FileNode_isDeleted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "FileNode",
 		Field:      field,
@@ -3977,6 +4026,8 @@ func (ec *executionContext) fieldContext_SourceCode_fileTree(ctx context.Context
 				return ec.fieldContext_FileNode_offset(ctx, field)
 			case "isUpdated":
 				return ec.fieldContext_FileNode_isUpdated(ctx, field)
+			case "isDeleted":
+				return ec.fieldContext_FileNode_isDeleted(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type FileNode", field.Name)
 		},
@@ -6627,6 +6678,10 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 		case "isUpdated":
 
 			out.Values[i] = ec._FileNode_isUpdated(ctx, field, obj)
+
+		case "isDeleted":
+
+			out.Values[i] = ec._FileNode_isDeleted(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

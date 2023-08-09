@@ -66,6 +66,7 @@ export type FileHighlight = {
 export type FileNode = {
   __typename: "FileNode";
   filePath?: Maybe<Scalars["String"]["output"]>;
+  isDeleted?: Maybe<Scalars["Boolean"]["output"]>;
   isUpdated?: Maybe<Scalars["Boolean"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
   nodeType?: Maybe<FileNodeType>;

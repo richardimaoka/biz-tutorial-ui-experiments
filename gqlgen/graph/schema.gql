@@ -152,6 +152,7 @@ type FileNode {
   filePath: String
   offset: Int
   isUpdated: Boolean
+  isDeleted: Boolean
 }
 
 type FileHighlight {
