@@ -56,7 +56,10 @@ func intrinsicFile(contents string, filePath string, size int64) *File {
 		language: language,
 		contents: contents,
 		size:     size,
+
 		// flags are all false by default = Go's zero value for bool
+		// isUpdated bool
+		// ...
 	}
 }
 
@@ -67,10 +70,21 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 
 	filePath := filePathInDir(currentDir, currentFile.Name)
 
-	// read contents here, to avoid error upon GraphQL materialization
-	currentContents, err := currentFile.Contents()
+	isBinary, err := currentFile.IsBinary()
 	if err != nil {
-		return nil, fmt.Errorf("failed in FileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+		return nil, fmt.Errorf("failed in FileUnChanged for file = %s, cannot get current file binary flag, %s", filePath, err)
+	}
+
+	// read contents here, to avoid error upon GraphQL materialization
+	var currentContents string
+	if isBinary {
+		currentContents = "this is a binary file"
+	} else {
+		var err error
+		currentContents, err = currentFile.Contents()
+		if err != nil {
+			return nil, fmt.Errorf("failed in FileUnChanged for file = %s, cannot get current file contents, %s", filePath, err)
+		}
 	}
 
 	file := intrinsicFile(currentContents, filePath, currentFile.Size)

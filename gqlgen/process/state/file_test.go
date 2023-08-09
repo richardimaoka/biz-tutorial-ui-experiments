@@ -69,6 +69,38 @@ func fileStateFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, 
 	return fileState, nil
 }
 
+func TestFileUnchanged(t *testing.T) {
+	cases := []struct {
+		commit             string
+		filePath           string
+		goldenFileOpenFile string
+		goldenFileFileNode string
+	}{
+		{
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"next/package.json",
+			"testdata/file_unchanged_openfile_golden1.json",
+			"testdata/file_unchanged_filenode_golden1.json",
+		},
+	}
+
+	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+	for _, c := range cases {
+		gitFile, err := gitFileFromCommit(repoUrl, c.commit, c.filePath)
+		if err != nil {
+			t.Fatalf("failed in TestFileUnchanged to get gitFile, %s", err)
+		}
+
+		s, err := state.FileUnChanged(gitFile, "") //curretDir = "", as gitFile is retrieved with respect to the rootDir
+		if err != nil {
+			t.Fatalf("failed in TestFilePatterns to create state.File, %s", err)
+		}
+
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+	}
+}
+
 func TestFilePatterns(t *testing.T) {
 	cases := []struct {
 		prevCommit         string
