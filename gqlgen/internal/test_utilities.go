@@ -68,3 +68,19 @@ func CompareWitGoldenFile(t *testing.T, updateGoldenFile bool, goldenFileName st
 	}
 	CompareAfterMarshal(t, goldenFileName, result)
 }
+
+func FilesMustUnmatch(t *testing.T, file1, file2 string) {
+	bytes1, err := os.ReadFile(file1)
+	if err != nil {
+		t.Fatalf("FilesMustUnmatch - failed to read %s", file1)
+	}
+
+	bytes2, err := os.ReadFile(file2)
+	if err != nil {
+		t.Fatalf("FilesMustUnmatch - failed to read %s", file2)
+	}
+
+	if string(bytes1) == string(bytes2) {
+		t.Fatalf("FilesMustUnmatch - %s and %s must unmatch but same", file1, file2)
+	}
+}

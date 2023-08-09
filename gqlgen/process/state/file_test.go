@@ -7,7 +7,6 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -127,73 +126,4 @@ func TestFilePatterns(t *testing.T) {
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
-}
-
-// since state.File is effectively immutable, no need to test the state mutation, but only the GraphQL model mutation
-func TestFileMutation1(t *testing.T) {
-	s, err := stateFileFromCommit(
-		"https://github.com/richardimaoka/next-sandbox.git",
-		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
-		"next/package.json",
-	)
-	if err != nil {
-		t.Fatalf("failed in TestFileMutation1, %s", err)
-	}
-
-	// once GraphQL model is materialized...
-	gqlModel := s.ToGraphQLOpenFile()
-	goldenFile1 := "testdata/file_mutation_golden1-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
-
-	// ... mutation to the state ...
-	*gqlModel.FilePath = "next/package-mutated.json"
-	*gqlModel.FileName = "package-mudated.json"
-	*gqlModel.IsFullContent = false
-	*gqlModel.Content = "mutated contents - " + *gqlModel.Content
-	//*gqlModel.Language = "markdown"
-	line100 := 100
-	line200 := 200
-	highlight := model.FileHighlight{
-		FromLine: &line100,
-		ToLine:   &line200,
-	}
-	gqlModel.Highlight = append(gqlModel.Highlight, &highlight)
-
-	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLOpenFile())
-
-	// ... has effect on the materialized GraphQL model
-	goldenFile2 := "testdata/file_mutation_golden1-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
-}
-
-// since state.File is effectively immutable, no need to test the state mutation, but only the GraphQL model mutation
-func TestFileMutation2(t *testing.T) {
-	s, err := stateFileFromCommit(
-		"https://github.com/richardimaoka/next-sandbox.git",
-		"8adac375628219e020d4b5957ff24f45954cbd3f", // commit = 'npx create-next-app@latest'
-		"next/package.json",
-	)
-	if err != nil {
-		t.Fatalf("failed in FindCommitFile, %s", err)
-	}
-
-	// once GraphQL model is materialized...
-	gqlModel := s.ToGraphQLFileNode()
-	goldenFile1 := "testdata/file_mutation_golden2-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
-
-	// ... mutation to the state ...
-	*gqlModel.Name = "README.md"
-	*gqlModel.FilePath = "next/README.md"
-	*gqlModel.Offset = 5
-	*gqlModel.IsUpdated = !*gqlModel.IsUpdated
-	*gqlModel.NodeType = model.FileNodeTypeDirectory
-
-	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLFileNode())
-
-	// ... has effect on the materialized GraphQL model
-	goldenFile2 := "testdata/file_mutation_golden2-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 }

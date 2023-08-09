@@ -136,6 +136,12 @@ func FileDeleted(deletedFile diff.File) (*File, error) {
 	return file, nil
 }
 
+func (f *File) ToFileAdded2() {
+	// update necessary flags only, as default flags are false
+	f.isAdded = true
+	f.isUpdated = true
+}
+
 func (f *File) ToFileAdded() (*File, error) {
 	// copy to avoid mutation effects afterwards
 	file := *f
