@@ -172,63 +172,6 @@ func (f *File) ToFileUpdated(from diff.File) (*File, error) {
 	return &file, nil
 }
 
-func NewFile(prevFile *object.File, currentFile *object.File, currentDir string) (*File, error) {
-	if currentFile == nil && prevFile == nil {
-		return nil, fmt.Errorf("failed in NewFile, currentFile and prevFile are both nil")
-	}
-
-	// read contents here, to avoid error upon GraphQL materialization
-	var currentContents string
-	var err error
-	if currentFile != nil {
-		currentContents, err = currentFile.Contents()
-		if err != nil {
-			return nil, fmt.Errorf("failed in ToGraphQLFileNode for file = %s, cannot get current file contents, %s", currentFile.Name, err)
-		}
-	}
-
-	var filePath string
-	if currentFile != nil {
-		if currentDir != "" {
-			filePath = currentDir + "/" + currentFile.Name
-		} else {
-			filePath = currentFile.Name
-		}
-	} else {
-		filePath = prevFile.Name
-	}
-
-	split := strings.Split(filePath, "/")
-	fileName := split[len(split)-1]
-
-	offset := len(split) - 1
-
-	dotSplit := strings.Split(fileName, ".")
-	var suffix string
-	if len(dotSplit) > 1 {
-		//e.g. fileName = 'some.interesting.name.json', suffix = 'json'
-		suffix = dotSplit[len(dotSplit)-1]
-	}
-	language := fileLanguage(suffix)
-
-	isAdded := currentFile != nil && prevFile == nil
-	isDeleted := currentFile == nil && prevFile != nil
-	isUpdated := currentFile != nil && prevFile != nil && prevFile.Hash != currentFile.Hash
-	isRenamed := currentFile != nil && prevFile != nil && prevFile.Name != currentFile.Name
-
-	return &File{
-		contents:  currentContents,
-		filePath:  filePath,
-		fileName:  fileName,
-		language:  language,
-		offset:    offset,
-		isAdded:   isAdded,
-		isUpdated: isUpdated,
-		isDeleted: isDeleted,
-		isRenamed: isRenamed,
-	}, nil
-}
-
 func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	// copy to avoid mutation effects afterwards
 	filePath := s.filePath

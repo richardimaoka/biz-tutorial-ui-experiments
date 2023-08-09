@@ -206,7 +206,6 @@ func TestFileDeleted(t *testing.T) {
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
-
 }
 
 func TestFileUpdatd(t *testing.T) {
