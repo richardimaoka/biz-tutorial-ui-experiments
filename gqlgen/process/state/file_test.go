@@ -4,26 +4,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
-
-func gitOpenOrClone(repoUrl string) (*git.Repository, error) {
-	repo, err := git.Open(storage, nil)
-
-	// if failed to open, then try cloning
-	if err != nil {
-		repo, err = git.Clone(storage, nil, &git.CloneOptions{URL: repoUrl})
-		if err != nil {
-			return nil, fmt.Errorf("cannot clone repo %s, %s", repoUrl, err)
-		}
-	}
-
-	return repo, nil
-}
 
 func gitCommit(repoUrl, commitHashStr string) (*object.Commit, error) {
 	repo, err := gitOpenOrClone(repoUrl)
