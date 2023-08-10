@@ -92,55 +92,24 @@ func TestFileHighlight(t *testing.T) {
 				{FromLine: 3, ToLine: 5},
 			},
 		},
-		// "4b8c45ccadad77d1d6ebdc0cbf8a417fa7e93e24",
-		// "6ed2af145624da2682e691960ff3f07bbe5dc85e",
-
-		// "6ed2af145624da2682e691960ff3f07bbe5dc85e",
-		// "b3beb34fd96adbc1bde65609ce65e3a9f69b79fc",
-
-		// "b3beb34fd96adbc1bde65609ce65e3a9f69b79fc",
-		// "e2be05446a2c01b108ece7d8ec69354bf14f5393",
-
-		// "e2be05446a2c01b108ece7d8ec69354bf14f5393",
-		// "af63b0a71cba4dd14e2b7e5c46edb42236a4d7b3",
-		// }, {
-
-		// }, {
-		// 	 []state.FileHighlight{
-		// 		{FromLine: 1, ToLine: 3},
-		// 	},
-		// }, {
-		// 	 []state.FileHighlight{
-		// 		{FromLine: 1, ToLine: 4},
-		// 		{FromLine: 6, ToLine: 7},
-		// 	},
-		// }, {
-		// 	 []state.FileHighlight{
-		// 		{FromLine: 1, ToLine: 2},
-		// 		{FromLine: 4, ToLine: 6},
-		// 	},
-		// }, {
-		// []state.FileHighlight{
-		// 		{FromLine: 2, ToLine: 8},
-		// 	},
-		// }, {
-		//  []state.FileHighlight{
-		// 		{FromLine: 7, ToLine: 10},
-		// 	},
-		// }, {
-		//  []state.FileHighlight{
-		// 		{FromLine: 3, ToLine: 5},
-		// 	},
-		// }, {
-		// 	 []state.FileHighlight{
-		// 		{FromLine: 25, ToLine: 25},
-		// 		{FromLine: 67, ToLine: 68},
-		// 		{FromLine: 71, ToLine: 72},
-		// 	},
-		// }, {
-		// []state.FileHighlight{
-		// 		{FromLine: 4, ToLine: 20},
-		// 	},
+		{
+			"6ed2af145624da2682e691960ff3f07bbe5dc85e",
+			"b3beb34fd96adbc1bde65609ce65e3a9f69b79fc",
+			"6.g0",
+			[]state.FileHighlight{
+				{FromLine: 25, ToLine: 25},
+				{FromLine: 67, ToLine: 68},
+				{FromLine: 71, ToLine: 72},
+			},
+		},
+		{
+			"e2be05446a2c01b108ece7d8ec69354bf14f5393",
+			"af63b0a71cba4dd14e2b7e5c46edb42236a4d7b3",
+			"go.mod",
+			[]state.FileHighlight{
+				{FromLine: 4, ToLine: 19},
+			},
+		},
 	}
 
 	for _, c := range cases {

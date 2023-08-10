@@ -61,11 +61,6 @@ func CalcHighlight(patch diff.FilePatch) []FileHighlight {
 			// possibly numNewLines = 0, if diffs are interleaving within the same line
 			numNewLines := strings.Count(contents, "\n")
 
-			if strings.HasPrefix(contents, "\n") && !strings.HasPrefix(contents, "\n\n") {
-				currentLine++
-				numNewLines--
-			}
-
 			if strings.HasSuffix(contents, "\n") {
 				highlights = append(highlights,
 					FileHighlight{FromLine: currentLine, ToLine: currentLine + numNewLines - 1})
@@ -73,26 +68,14 @@ func CalcHighlight(patch diff.FilePatch) []FileHighlight {
 				highlights = append(highlights,
 					FileHighlight{FromLine: currentLine, ToLine: currentLine + numNewLines})
 			}
+
 			currentLine = currentLine + numNewLines
 		case diff.Equal:
 			// possibly numNewLines = 0, if diffs are interleaving within the same line
 			numNewLines := strings.Count(contents, "\n")
-
-			if strings.HasPrefix(contents, "\n") {
-				currentLine++
-				numNewLines--
-			}
-
 			currentLine = currentLine + numNewLines
 		case diff.Delete:
-			// if numLines == 0 {
-			// 	// diff in the middle of a remaining line
-			// 	highlights = append(highlights,
-			// 		FileHighlight{FromLine: currentLine, ToLine: currentLine + numLines},
-			// 	)
-			// 	nextLine := currentLine + numLines
-			// 	currentLine = nextLine
-			// }
+			// ignore
 		}
 	}
 
