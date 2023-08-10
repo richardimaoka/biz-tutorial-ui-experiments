@@ -189,11 +189,11 @@ func TestFileDeleted(t *testing.T) {
 	}
 }
 
-func TestFileUpdatd(t *testing.T) {
+func TestFileUpdated(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
 	cases := []struct {
-		// prevCommit         string
+		prevCommit         string
 		currentCommit      string
 		filePath           string
 		goldenFileOpenFile string
@@ -201,7 +201,7 @@ func TestFileUpdatd(t *testing.T) {
 	}{
 		{
 			// TODO: calculate highlights
-			// "8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad", //npm install --save @emotion/react
 			"next/package.json",
 			"testdata/file_updated_openfile_golden1.json",
@@ -226,9 +226,35 @@ func TestFileUpdatd(t *testing.T) {
 			t.Fatalf("failed in TestFileUpdatd to create state.File, %s", err)
 		}
 
-		s := u.ToFileUpdated()
+		prevCommit, err := gitCommit(repoUrl, c.prevCommit)
+		if err != nil {
+			t.Fatalf("failed in TestFileHighlight to get prev commit, %s", err)
+		}
 
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+		currentCommit, err := gitCommit(repoUrl, c.currentCommit)
+		if err != nil {
+			t.Fatalf("failed in TestFileHighlight to get current commit, %s", err)
+		}
+
+		patch, err := prevCommit.Patch(currentCommit)
+		if err != nil {
+			t.Fatalf("failed in TestFileHighlight to get patch, %s", err)
+		}
+
+		compared := false
+		for _, p := range patch.FilePatches() {
+			from, _ := p.Files()
+			if from.Path() == c.filePath {
+				s := u.ToFileUpdated(p)
+				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+				compared = true
+			}
+		}
+
+		if !compared {
+			t.Fatalf("failed in TestFileHighlightTestFileUpdatd, no patch found for %s in prev = %s and current  = %s", c.filePath, c.prevCommit, c.currentCommit)
+		}
+
 	}
 }

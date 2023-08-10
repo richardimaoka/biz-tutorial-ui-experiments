@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -17,6 +18,8 @@ type File struct {
 	language string
 	contents string
 	size     int64
+
+	highlights []FileHighlight
 
 	// flags
 	isUpdated bool
@@ -113,11 +116,13 @@ func (f *File) ToFileAdded() *File {
 
 // TODO: calculate highlights
 // to keep File immutable, return a new File
-func (f *File) ToFileUpdated() *File {
+func (f *File) ToFileUpdated(patch diff.FilePatch) *File {
 	// copy to avoid mutation effects afterwards
 	file := *f
 	// update necessary flags only, as default flags are false
 	file.isUpdated = true
+	file.highlights = CalcHighlight(patch)
+
 	return &file
 }
 
@@ -130,6 +135,11 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	trueValue := true
 	size := float64(s.size)
 
+	var highlights []*model.FileHighlight
+	for _, h := range s.highlights {
+		highlights = append(highlights, h.ToGraphQLFileHighlight())
+	}
+
 	return &model.OpenFile{
 		FilePath:      &filePath,
 		FileName:      &fileName,
@@ -137,6 +147,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		Content:       &contents,
 		Language:      &language,
 		Size:          &size,
+		Highlight:     highlights,
 	}
 }
 

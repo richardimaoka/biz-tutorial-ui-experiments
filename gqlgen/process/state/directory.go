@@ -162,12 +162,12 @@ func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedF
 	}
 }
 
-func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File) error {
+func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File, patch diff.FilePatch) error {
 	split := strings.Split(relativeFilePath, "/")
 	if len(split) == 1 {
 		for i, f := range s.files {
 			if f.fileName == relativeFilePath {
-				added := f.ToFileUpdated()
+				added := f.ToFileUpdated(patch)
 				s.files[i] = added
 				return nil
 			}
@@ -177,7 +177,7 @@ func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File)
 		for _, subdir := range s.subDirs {
 			if subdir.dirName == subDirName {
 				strippedFilePath := strings.Join(split[1:], "/")
-				return subdir.MarkFileUpdated(strippedFilePath, fromFile)
+				return subdir.MarkFileUpdated(strippedFilePath, fromFile, patch)
 			}
 		}
 	}

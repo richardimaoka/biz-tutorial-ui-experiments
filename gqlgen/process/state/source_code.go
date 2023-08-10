@@ -104,7 +104,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 			// renamed
 		} else {
 			// updated
-			sc.rootDir.MarkFileUpdated(from.Path(), from)
+			sc.rootDir.MarkFileUpdated(from.Path(), from, p)
 		}
 	}
 
