@@ -51,7 +51,7 @@ func TestOpenFileMutation2(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLOpenFile()
-	goldenFile1 := "testdata/file_node_mutation_golden2-1.json"
+	goldenFile1 := "testdata/openfile_mutation_golden2-1.json"
 	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the materialized model ...
