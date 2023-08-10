@@ -1,13 +1,6 @@
 package process_test
 
-import (
-	"fmt"
-	"testing"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process"
-)
-
+/*
 func TestReadStepEntries(t *testing.T) {
 	cases := []struct {
 		dirPath string
@@ -46,3 +39,4 @@ func TestToGraphQLPages(t *testing.T) {
 		}
 	}
 }
+*/

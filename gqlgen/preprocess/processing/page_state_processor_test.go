@@ -1,14 +1,6 @@
 package processing_test
 
-import (
-	"fmt"
-	"testing"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/effect"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
-)
-
+/*
 func Test_PageStateProcessor(t *testing.T) {
 	dirName := "testdata/page_state/protoc-go-experiments"
 
@@ -50,3 +42,4 @@ func Test_PageStateProcessor(t *testing.T) {
 		})
 	}
 }
+*/

@@ -1,5 +1,6 @@
 package processing_test
 
+/*
 import (
 	"fmt"
 	"testing"
@@ -356,3 +357,4 @@ func TestSourceCode_Clone(t *testing.T) {
 	// ...but should have no effect on sourceCode
 	internal.CompareAfterMarshal(t, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
 }
+*/

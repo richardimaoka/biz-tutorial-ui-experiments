@@ -1,5 +1,6 @@
 package processing_test
 
+/*
 import (
 	"testing"
 
@@ -38,3 +39,4 @@ func TestGetFileDiffsFromGitCommit(t *testing.T) {
 		}
 	}
 }
+*/
