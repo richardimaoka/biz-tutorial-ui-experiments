@@ -55,20 +55,20 @@ func (entries StepEntries) ToGraphQLPages() []model.Page {
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			}
 
-			if e.GitColumn != nil && e.GitColumn.Column == i {
-				if srcColState == nil {
-					var err error
-					srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step, "", "", false)
-					if err != nil {
-						// return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
-					}
-				} else {
-					err := srcColState.Transition(e.Step, e.GitColumn.Commit, "", false)
-					if err != nil {
-						// return nil, fmt.Errorf("ToGraphQLPages failed to transition source code, %s", err)
-					}
-				}
-			}
+			// if e.GitColumn != nil && e.GitColumn.Column == i {
+			// 	if srcColState == nil {
+			// 		var err error
+			// 		srcColState, err = state.NewSourceCodeColumn(e.GitColumn.RepoUrl, e.GitColumn.Commit, e.Step, "", "", false)
+			// 		if err != nil {
+			// 			// return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
+			// 		}
+			// 	} else {
+			// 		err := srcColState.Transition(e.Step, e.GitColumn.Commit, "", false)
+			// 		if err != nil {
+			// 			// return nil, fmt.Errorf("ToGraphQLPages failed to transition source code, %s", err)
+			// 		}
+			// 	}
+			// }
 
 			// once srcColState is initialized, git column persists
 			if srcColState != nil {
