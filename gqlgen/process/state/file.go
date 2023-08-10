@@ -95,7 +95,6 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	return file, nil
 }
 
-// TODO: make tos toFileDeleted, by making source code forward transition as the only direction
 func FileDeleted(filePath string) *File {
 	file := intrinsicFile("", filePath, 0)
 	// update necessary flags only, as default flags are false
@@ -104,7 +103,6 @@ func FileDeleted(filePath string) *File {
 	return file
 }
 
-// TODO: calculate highlights
 // to keep File immutable, return a new File
 func (f *File) ToFileAdded() *File {
 	// copy to avoid mutation effects afterwards
@@ -115,7 +113,6 @@ func (f *File) ToFileAdded() *File {
 	return &file
 }
 
-// TODO: calculate highlights
 // to keep File immutable, return a new File
 func (f *File) ToFileUpdated(patch diff.FilePatch) *File {
 	// copy to avoid mutation effects afterwards

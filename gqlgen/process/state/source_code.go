@@ -65,6 +65,7 @@ func dirBetweenCommits(repo *git.Repository, prevCommit, currentCommit *object.C
 		return nil, fmt.Errorf("failed in dirFromTwoCommits, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommit.Hash, currentCommit.Hash, err)
 	}
 
+	// this calculates backword - from current to prev, but it makes the logic so much simpler than forward calculation
 	for _, p := range patch.FilePatches() {
 		from, to := p.Files() // See Files() method's comment about when 'from' and 'to' become nil
 		if from == nil {
@@ -75,6 +76,7 @@ func dirBetweenCommits(repo *git.Repository, prevCommit, currentCommit *object.C
 			rootDir.InsertFileDeleted("", from.Path(), from)
 		} else if from.Path() != to.Path() {
 			// renamed
+			return nil, fmt.Errorf("failed in dirFromTwoCommits, file rename is not impelemented yet, from = %s, to = %s", from.Path(), to.Path())
 		} else {
 			// updated
 			rootDir.MarkFileUpdated(from.Path(), from, p)
