@@ -61,7 +61,7 @@ func CalcHighlight(patch diff.FilePatch) []FileHighlight {
 			// possibly numNewLines = 0, if diffs are interleaving within the same line
 			numNewLines := strings.Count(contents, "\n")
 
-			if strings.HasPrefix(contents, "\n") {
+			if strings.HasPrefix(contents, "\n") && !strings.HasPrefix(contents, "\n\n") {
 				currentLine++
 				numNewLines--
 			}
