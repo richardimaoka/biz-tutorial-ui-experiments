@@ -247,3 +247,25 @@ func TestFileUpdatd(t *testing.T) {
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
 }
+
+func TestFileHighlight(t *testing.T) {
+	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+
+	// prevCommit, _ := gitCommit(repoUrl, "55c98498a85f4503e3922586ceeb86ab5100e91f") //cleanup
+	// currCommit, _ := gitCommit(repoUrl, "8adac375628219e020d4b5957ff24f45954cbd3f") //npx create-next-app@latest
+
+	// prevCommit, _ := gitCommit(repoUrl, "c0ed01692055e8f7f1b2925ea75efb8bcb026402") //clean up page
+	// currCommit, _ := gitCommit(repoUrl, "a4a6867fc0f2afcabfff1cba15b67b424cc2c121") //modal
+
+	prevCommit, _ := gitCommit(repoUrl, "8f0e4eaceecf3656b95bc2cebd2922be135feb42") //modal frame
+	currCommit, _ := gitCommit(repoUrl, "89e9f8fd525fce59900c57ac32735a450d0c6be8") //slide modal from top
+
+	patch, _ := prevCommit.Patch(currCommit)
+	for _, p := range patch.FilePatches() {
+		chunks := p.Chunks()
+		for _, c := range chunks {
+			fmt.Println(c.Content())
+			fmt.Println(c.Type())
+		}
+	}
+}
