@@ -9,8 +9,7 @@ import (
 )
 
 type SourceCodeColumn struct {
-	step string
-	sc   *SourceCode
+	sc *SourceCode
 }
 
 func NewSourceCodeColumn2(repoUrl, projectDir, tutorial string) (*SourceCodeColumn, error) {
@@ -21,6 +20,22 @@ func NewSourceCodeColumn2(repoUrl, projectDir, tutorial string) (*SourceCodeColu
 
 	sc := NewSourceCode2(repo, projectDir, tutorial)
 	return &SourceCodeColumn{sc: sc}, nil
+}
+
+func (c *SourceCodeColumn) UpdateDefaultOpenFilePath(defaultOpenFilePath string) {
+	c.sc.DefaultOpenFilePath = defaultOpenFilePath
+}
+
+func (c *SourceCodeColumn) UpdateIsFoldFileTree(isFoldFileTree bool) {
+	c.sc.IsFoldFileTree = isFoldFileTree
+}
+
+func (c *SourceCodeColumn) ForwardCommit(step, commit string) error {
+	err := c.sc.ForwardCommit(step, commit)
+	if err != nil {
+		return fmt.Errorf("failed in TransitionForwardCommit, %s", err)
+	}
+	return nil
 }
 
 func NewSourceCodeColumn(repoUrl, commitStr, step, defaultOpenFilePath, tutorial string, isFoldFileTree bool) (*SourceCodeColumn, error) {
@@ -35,8 +50,8 @@ func NewSourceCodeColumn(repoUrl, commitStr, step, defaultOpenFilePath, tutorial
 	}
 
 	return &SourceCodeColumn{
-		step: step,
-		sc:   sc,
+
+		sc: sc,
 	}, nil
 }
 
@@ -47,8 +62,6 @@ func (c *SourceCodeColumn) Transition(step, commitStr, defaultOpenFilePath strin
 	}
 
 	c.sc = sc
-	c.step = step
-
 	return nil
 }
 

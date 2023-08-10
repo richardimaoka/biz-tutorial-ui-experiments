@@ -139,18 +139,28 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 			}
 
 			if colName == "Source Code" {
-				isFoldFileTree := e.IsFoldFileTree == "TRUE"
 				if srcColmnState == nil {
 					var err error
-					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, e.Commit, e.Step, e.DefaultOpenFilePath, tutorial, isFoldFileTree)
+					srcColmnState, err = state.NewSourceCodeColumn2(e.RepoUrl, "myproj", tutorial)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
 					}
-				} else if e.Commit != "" {
-					err := srcColmnState.Transition(e.Step, e.Commit, e.DefaultOpenFilePath, isFoldFileTree)
+				}
+
+				if e.Commit != "" {
+					err := srcColmnState.ForwardCommit(e.Step, e.Commit)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
 					}
+				}
+
+				if e.IsFoldFileTree != "" {
+					isFoldFileTree := e.IsFoldFileTree == "TRUE"
+					srcColmnState.UpdateIsFoldFileTree(isFoldFileTree)
+				}
+
+				if e.DefaultOpenFilePath != "" {
+					srcColmnState.UpdateDefaultOpenFilePath(e.DefaultOpenFilePath)
 				}
 
 				column := srcColmnState.ToGraphQLSourceCodeColumn()
