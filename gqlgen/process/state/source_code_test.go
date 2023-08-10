@@ -147,12 +147,20 @@ func TestSourceCodePatterns(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		sc := state.NewSourceCode2(repo, "myproj", "next-sandbox")
-		err := sc.ConstructStep(fmt.Sprintf("Step%02d", i), c.prevCommit, c.currentCommit)
-		if err != nil {
-			t.Errorf("failed in ConstructStep, %s", err)
-		}
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			sc := state.NewSourceCode2(repo, "myproj", "next-sandbox")
 
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
+			// prev commit as the initial commit
+			if err := sc.ForwardCommit(fmt.Sprintf("Step%02d-a", i), c.prevCommit); err != nil {
+				t.Errorf("failed in ConstructStep for commit = %s, %s", c.prevCommit, err)
+			}
+
+			// current commit as the next commit
+			if err = sc.ForwardCommit(fmt.Sprintf("Step%02d-b", i), c.currentCommit); err != nil {
+				t.Errorf("failed in ConstructStep for commit = %s, %s", c.currentCommit, err)
+			}
+
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
+		})
 	}
 }

@@ -95,6 +95,7 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	return file, nil
 }
 
+// TODO: make tos toFileDeleted, by making source code forward transition as the only direction
 func FileDeleted(filePath string) *File {
 	file := intrinsicFile("", filePath, 0)
 	// update necessary flags only, as default flags are false

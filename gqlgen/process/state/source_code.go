@@ -10,15 +10,17 @@ import (
 )
 
 type SourceCode struct {
-	repo       *git.Repository
-	commit     plumbing.Hash
-	rootDir    *Directory
-	fileNodes  []FileNode
+	// metadata, can be set only at initialization
 	tutorial   string
 	projectDir string
+	repo       *git.Repository
+
+	// inner state updated at each step
+	commitHash string
+	rootDir    *Directory
 	step       string
 
-	// can be set from caller
+	// metadata, can be set from caller anytime
 	DefaultOpenFilePath string
 	IsFoldFileTree      bool
 }
@@ -46,33 +48,21 @@ func NewSourceCode2(repo *git.Repository, projectDir, tutorial string) *SourceCo
 	}
 }
 
-// stateless, predictable from arguments
-func (s *SourceCode) ConstructStep(step, prevCommitHash, currentCommitHash string) error {
-	// 1. Construct source code root dir as if all files are unchanged
-	currentCommit, err := getCommit(s.repo, currentCommitHash)
-	if err != nil {
-		return fmt.Errorf("failed in ConstructStep, cannot get current commit = %s, %v", currentCommitHash, err)
-	}
-
+// pure function, to make it clear it's side-effect free
+func dirBetweenCommits(repo *git.Repository, prevCommit, currentCommit *object.Commit) (*Directory, error) {
 	currentRoot, err := currentCommit.Tree()
 	if err != nil {
-		return fmt.Errorf("failed in ConstructStep, cannot get the root tree for commit = %s, %s", currentCommitHash, err)
+		return nil, fmt.Errorf("failed in dirFromTwoCommits, cannot get the root tree for commit = %s, %s", currentCommit.Hash, err)
 	}
 
-	rootDir, err := ConstructDirectory(s.repo, "", currentRoot, false)
+	rootDir, err := ConstructDirectory(repo, "", currentRoot, false) //false as FileUnchanged
 	if err != nil {
-		return fmt.Errorf("failed in ConstructStep, cannot create root directory, %s", err)
-	}
-
-	// 2. From git patches, mark added/deleted/updated/renamed files
-	prevCommit, err := getCommit(s.repo, prevCommitHash)
-	if err != nil {
-		return fmt.Errorf("failed in ConstructStep, cannot get prev commit, %s", err)
+		return nil, fmt.Errorf("failed in dirFromTwoCommits, cannot create root directory, %s", err)
 	}
 
 	patch, err := prevCommit.Patch(currentCommit)
 	if err != nil {
-		return fmt.Errorf("failed in ConstructStep, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommitHash, currentCommitHash, err)
+		return nil, fmt.Errorf("failed in dirFromTwoCommits, cannot get patch between prev commit = %s and current commit = %s, %s", prevCommit.Hash, currentCommit.Hash, err)
 	}
 
 	for _, p := range patch.FilePatches() {
@@ -91,14 +81,55 @@ func (s *SourceCode) ConstructStep(step, prevCommitHash, currentCommitHash strin
 		}
 	}
 
-	s.step = step
+	return rootDir, nil
+}
+
+// stateful, current state + arguments => next state
+func (s *SourceCode) ForwardCommit(step, currentCommitStr string) error {
+	// 1.1. check if it's the initial commit, before setting s.rootDir
+	isInitialCommit := s.rootDir == nil
+
+	// 1.2. variables used commonly in both of if/else blocks
+	currentCommit, err := getCommit(s.repo, currentCommitStr)
+	if err != nil {
+		return fmt.Errorf("failed in ForwardCommit, cannot get current commit, %s", err)
+	}
+
+	var rootDir *Directory
+	if isInitialCommit {
+		// 2.1 All files as FileAdded for the initial commit
+		currentRoot, err := currentCommit.Tree()
+		if err != nil {
+			return fmt.Errorf("failed in ForwardCommit, cannot get the root tree for commit = %s, %s", currentCommitStr, err)
+		}
+
+		rootDir, err = ConstructDirectory(s.repo, "", currentRoot, true) //true, as FileAdded
+		if err != nil {
+			return fmt.Errorf("failed in ForwardCommit, cannot create root directory, %s", err)
+		}
+	} else {
+		// 2.2 Mark files in diff from prevCommit
+		prevCommitHash := s.commitHash // s.commitHash preserves the prev commit at this point
+		prevCommit, err := getCommit(s.repo, prevCommitHash)
+		if err != nil {
+			return fmt.Errorf("failed in ForwardCommit, cannot get prev commit = %s, %s", prevCommitHash, err)
+		}
+
+		rootDir, err = dirBetweenCommits(s.repo, prevCommit, currentCommit)
+		if err != nil {
+			return fmt.Errorf("failed in ForwardCommit, cannot create root directory, %s", err)
+		}
+	}
+
 	s.rootDir = rootDir
+	s.step = step
+	s.commitHash = currentCommitStr
 
 	return nil
 }
 
-// stateful, current state + arguments => next state
-func (s *SourceCode) ForwardCommit(nextStep, commitStr string) error {
+// stateful, reset the inner state to the given commit
+func (s *SourceCode) ResetCommit(step, commitStr string) error {
 	return nil
 }
 
@@ -125,7 +156,7 @@ func NewSourceCode(repo *git.Repository, currentCommitStr, prevCommitStr, tutori
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, DefaultOpenFilePath: defaultOpenFilePath, IsFoldFileTree: isFoldFileTree}
+	sc := SourceCode{repo: repo, commitHash: currentCommitStr, rootDir: rootDir, tutorial: tutorial, step: step, DefaultOpenFilePath: defaultOpenFilePath, IsFoldFileTree: isFoldFileTree}
 
 	// 2. From git patches, mark added/deleted/updated/renamed files
 	prevCommit, err := getCommit(repo, prevCommitStr)
@@ -175,7 +206,7 @@ func InitialSourceCode(repo *git.Repository, currentCommitStr, step, defaultOpen
 		return nil, fmt.Errorf("failed in NewSourceCode, cannot create root directory, %s", err)
 	}
 
-	sc := SourceCode{repo: repo, commit: plumbing.NewHash(currentCommitStr), rootDir: rootDir, tutorial: tutorial, step: step, DefaultOpenFilePath: defaultOpenFilePath, IsFoldFileTree: isFoldFileTree}
+	sc := SourceCode{repo: repo, commitHash: currentCommitStr, rootDir: rootDir, tutorial: tutorial, step: step, DefaultOpenFilePath: defaultOpenFilePath, IsFoldFileTree: isFoldFileTree}
 
 	return &sc, nil
 }
