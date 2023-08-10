@@ -12,13 +12,13 @@ type SourceCodeColumn struct {
 	sc *SourceCode
 }
 
-func NewSourceCodeColumn2(repoUrl, projectDir, tutorial string) (*SourceCodeColumn, error) {
+func NewSourceCodeColumn(repoUrl, projectDir, tutorial string) (*SourceCodeColumn, error) {
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
 		return nil, fmt.Errorf("failed in NewSourceCodeColumn2, could not clone git repo, %s", err)
 	}
 
-	sc := NewSourceCode2(repo, projectDir, tutorial)
+	sc := NewSourceCode(repo, projectDir, tutorial)
 	return &SourceCodeColumn{sc: sc}, nil
 }
 

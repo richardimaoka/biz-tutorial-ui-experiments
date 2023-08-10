@@ -39,7 +39,7 @@ func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	return commit, nil
 }
 
-func NewSourceCode2(repo *git.Repository, projectDir, tutorial string) *SourceCode {
+func NewSourceCode(repo *git.Repository, projectDir, tutorial string) *SourceCode {
 	return &SourceCode{
 		repo:           repo,
 		projectDir:     projectDir,

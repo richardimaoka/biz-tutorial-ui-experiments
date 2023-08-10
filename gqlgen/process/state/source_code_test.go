@@ -148,7 +148,7 @@ func TestSourceCodePatterns(t *testing.T) {
 
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
-			sc := state.NewSourceCode2(repo, "myproj", "next-sandbox")
+			sc := state.NewSourceCode(repo, "myproj", "next-sandbox")
 
 			// prev commit as the initial commit
 			if err := sc.ForwardCommit(fmt.Sprintf("Step%02d-a", i), c.prevCommit); err != nil {

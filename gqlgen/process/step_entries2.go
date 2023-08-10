@@ -141,7 +141,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 			if colName == "Source Code" {
 				if srcColmnState == nil {
 					var err error
-					srcColmnState, err = state.NewSourceCodeColumn2(e.RepoUrl, "myproj", tutorial)
+					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, "myproj", tutorial)
 					if err != nil {
 						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
 					}
