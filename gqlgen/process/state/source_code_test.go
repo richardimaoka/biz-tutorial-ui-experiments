@@ -11,36 +11,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-func gitTreeForCommit(repoUrl, commitHashStr, dirPath string) (*object.Tree, error) {
-	repo, err := gitOpenOrClone(repoUrl)
-	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, %s", err)
-	}
-
-	commitHash := plumbing.NewHash(commitHashStr)
-	if commitHash.String() != commitHashStr {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
-	}
-
-	commit, err := repo.CommitObject(commitHash)
-	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get commit = %s, %s", commitHashStr, err)
-	}
-
-	rootTree, err := commit.Tree()
-	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree for commit = %s, %s", commitHashStr, err)
-
-	}
-
-	gitTree, err := rootTree.Tree(dirPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed in gitFileFromCommit, cannot get tree = %s in commit = %s, %s", dirPath, commitHashStr, err)
-	}
-
-	return gitTree, nil
-}
-
 func TestSortTreeEntries(t *testing.T) {
 	cases := []struct {
 		entries  []object.TreeEntry
