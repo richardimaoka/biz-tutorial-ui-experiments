@@ -147,9 +147,10 @@ func TestSourceCodePatterns(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		sc, err := state.NewSourceCode(repo, c.currentCommit, c.prevCommit, "next-sandbox", fmt.Sprintf("%d", i), "", false)
+		sc := state.NewSourceCode2(repo, "myproj", "next-sandbox")
+		err := sc.ConstructStep(fmt.Sprintf("Step%02d", i), c.prevCommit, c.currentCommit)
 		if err != nil {
-			t.Fatal(err)
+			t.Errorf("failed in ConstructStep, %s", err)
 		}
 
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
