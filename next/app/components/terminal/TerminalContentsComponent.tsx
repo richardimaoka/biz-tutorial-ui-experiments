@@ -40,12 +40,14 @@ export const TerminalContentsComponent = (
             />
           </div>
         ) : (
-          <TerminalScrollIntoView key={index}>
+          // <TerminalScrollIntoView key={index}>
+          <div key={index}>
             <TerminalNodeComponent
               fragment={node}
               skipAnimation={props.skipAnimation}
             />
-          </TerminalScrollIntoView>
+          </div>
+          // </TerminalScrollIntoView>
         )
       )}
     </div>
