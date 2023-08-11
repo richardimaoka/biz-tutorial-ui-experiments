@@ -2,11 +2,13 @@
 
 import { ReactNode, useEffect, useRef } from "react";
 
-interface TerminalScrollIntoProps {
+interface TerminalScrollIntoViewoProps {
   children: ReactNode;
 }
 
-export const TerminalScrollInto = ({ children }: TerminalScrollIntoProps) => {
+export const TerminalScrollIntoView = ({
+  children,
+}: TerminalScrollIntoViewoProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollIntoView = () => {
     if (ref) {

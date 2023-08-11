@@ -3,7 +3,7 @@ import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { TerminalNodeComponent } from "./TerminalNodeComponent";
-import { TerminalScrollInto } from "./TerminalScrollInto";
+import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 const fragmentDefinition = graphql(`
   fragment TerminalContentsComponent_Fragment on Terminal {
@@ -32,6 +32,7 @@ export const TerminalContentsComponent = (
     <div className={styles.contents}>
       {nodes.map((node, index) =>
         index < nodes.length - 1 ? (
+          // <div> to have the same depth as <TerminalScrollIntoView>
           <div key={index}>
             <TerminalNodeComponent
               fragment={node}
@@ -39,12 +40,12 @@ export const TerminalContentsComponent = (
             />
           </div>
         ) : (
-          <TerminalScrollInto key={index}>
+          <TerminalScrollIntoView key={index}>
             <TerminalNodeComponent
               fragment={node}
               skipAnimation={props.skipAnimation}
             />
-          </TerminalScrollInto>
+          </TerminalScrollIntoView>
         )
       )}
     </div>
