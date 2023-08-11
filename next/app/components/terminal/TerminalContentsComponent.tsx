@@ -30,26 +30,17 @@ export const TerminalContentsComponent = (
 
   return (
     <div className={styles.contents}>
-      {nodes.map((node, index) =>
-        index < nodes.length - 1 ? (
-          // <div> to have the same depth as <TerminalScrollIntoView>
-          <div key={index}>
-            <TerminalNodeComponent
-              fragment={node}
-              skipAnimation={props.skipAnimation}
-            />
-          </div>
-        ) : (
-          // <TerminalScrollIntoView key={index}>
-          <div key={index}>
-            <TerminalNodeComponent
-              fragment={node}
-              skipAnimation={props.skipAnimation}
-            />
-          </div>
-          // </TerminalScrollIntoView>
-        )
-      )}
+      {nodes.map((node, index) => (
+        <TerminalScrollIntoView
+          key={index}
+          doScroll={index === nodes.length - 1}
+        >
+          <TerminalNodeComponent
+            fragment={node}
+            skipAnimation={props.skipAnimation}
+          />
+        </TerminalScrollIntoView>
+      ))}
     </div>
   );
 };

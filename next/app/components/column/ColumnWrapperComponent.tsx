@@ -3,6 +3,7 @@ import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import styles from "./style.module.css";
 import { SourceCodeColumn } from "../sourcecode/SourceCodeColumn";
 import { TerminalColumn } from "../terminal/TerminalColumn";
+import { useState } from "react";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperComponent_Fragment on ColumnWrapper {
@@ -26,30 +27,28 @@ interface ColumnWrapperComponentProps {
   skipAnimation?: boolean;
 }
 
-export const ColumnWrapperComponent = (props: ColumnWrapperComponentProps) => {
+export const ColumnWrapperComponent = (
+  props: ColumnWrapperComponentProps
+): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  const Column = (): JSX.Element => {
-    if (!fragment?.column?.__typename) {
-      return <div></div>;
-    }
+  if (!fragment?.column?.__typename) {
+    return <div></div>;
+  }
 
-    switch (fragment.column.__typename) {
-      case "SourceCodeColumn":
-        return (
-          <SourceCodeColumn fragment={fragment.column} step={props.step} />
-        );
-      case "TerminalColumn":
-        return (
+  switch (fragment.column.__typename) {
+    case "SourceCodeColumn":
+      return <SourceCodeColumn fragment={fragment.column} step={props.step} />;
+    case "TerminalColumn":
+      return (
+        <div>
           <TerminalColumn
             fragment={fragment.column}
             skipAnimation={props.skipAnimation}
           />
-        );
-      default:
-        return <div>default</div>;
-    }
-  };
-
-  return <Column />;
+        </div>
+      );
+    default:
+      return <div>default</div>;
+  }
 };
