@@ -88,9 +88,6 @@ export const Carousel = (props: CarouselProps) => {
 
           const index = findIndex();
           if (index !== state.columnIndex) {
-            console.log(
-              `Carousel animating from = ${state.columnIndex} , to = ${index}`
-            );
             setState({
               kind: "Animating",
               fromIndex: state.columnIndex,
