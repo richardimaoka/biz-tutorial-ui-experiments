@@ -33,7 +33,8 @@ export const TerminalContentsComponent = (
       {nodes.map((node, index) => (
         <TerminalScrollIntoView
           key={index}
-          doScroll={index === nodes.length - 1}
+          // doScroll={index === nodes.length - 1}
+          doScroll={false}
         >
           <TerminalNodeComponent
             fragment={node}

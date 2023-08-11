@@ -41,12 +41,10 @@ export const ColumnWrapperComponent = (
       return <SourceCodeColumn fragment={fragment.column} step={props.step} />;
     case "TerminalColumn":
       return (
-        <div>
-          <TerminalColumn
-            fragment={fragment.column}
-            skipAnimation={props.skipAnimation}
-          />
-        </div>
+        <TerminalColumn
+          fragment={fragment.column}
+          skipAnimation={props.skipAnimation}
+        />
       );
     default:
       return <div>default</div>;
