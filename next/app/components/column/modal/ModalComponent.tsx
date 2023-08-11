@@ -39,10 +39,8 @@ export const ModalComponent = (props: ModalComponentProps): JSX.Element => {
   }
 
   return (
-    <div className={styles.modal}>
-      <div className={`${stylePos} ${styles.boxposition}`}>
-        <ModalBox message={fragment.text} />
-      </div>
+    <div className={`${stylePos} ${styles.boxposition}`}>
+      <ModalBox message={fragment.text} />
     </div>
   );
 };
