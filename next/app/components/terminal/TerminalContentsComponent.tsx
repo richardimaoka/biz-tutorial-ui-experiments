@@ -3,6 +3,7 @@ import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { TerminalNodeComponent } from "./TerminalNodeComponent";
+import { TerminalScrollInto } from "./TerminalScrollInto";
 
 const fragmentDefinition = graphql(`
   fragment TerminalContentsComponent_Fragment on Terminal {
@@ -29,13 +30,23 @@ export const TerminalContentsComponent = (
 
   return (
     <div className={styles.contents}>
-      {nodes.map((node, index) => (
-        <TerminalNodeComponent
-          key={index}
-          fragment={node}
-          skipAnimation={props.skipAnimation}
-        />
-      ))}
+      {nodes.map((node, index) =>
+        index < nodes.length - 1 ? (
+          <div key={index}>
+            <TerminalNodeComponent
+              fragment={node}
+              skipAnimation={props.skipAnimation}
+            />
+          </div>
+        ) : (
+          <TerminalScrollInto key={index}>
+            <TerminalNodeComponent
+              fragment={node}
+              skipAnimation={props.skipAnimation}
+            />
+          </TerminalScrollInto>
+        )
+      )}
     </div>
   );
 };
