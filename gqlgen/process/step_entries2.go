@@ -154,9 +154,11 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 					}
 				}
 
-				if e.IsFoldFileTree != "" {
-					isFoldFileTree := e.IsFoldFileTree == "TRUE"
-					srcColmnState.UpdateIsFoldFileTree(isFoldFileTree)
+				isFoldFileTree := e.IsFoldFileTree == "FALSE"
+				if isFoldFileTree {
+					srcColmnState.UpdateIsFoldFileTree(false)
+				} else {
+					srcColmnState.UpdateIsFoldFileTree(true)
 				}
 
 				if e.DefaultOpenFilePath != "" {

@@ -23,7 +23,10 @@ export interface FileTreePaneProps {
 
 export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-  const [isFolded, setIsFolded] = useState(false);
+
+  // CAUTION: this keeps refreshed upon parent component state change.
+  // So some workaround or redesign is needed.
+  const [isFolded, setIsFolded] = useState(true);
 
   useEffect(() => {
     if (typeof fragment.isFoldFileTree === "boolean") {
