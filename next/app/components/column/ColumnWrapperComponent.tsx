@@ -25,6 +25,7 @@ interface ColumnWrapperComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
   step: string;
   skipAnimation?: boolean;
+  isFocused: boolean;
 }
 
 export const ColumnWrapperComponent = (
@@ -44,6 +45,7 @@ export const ColumnWrapperComponent = (
         <TerminalColumn
           fragment={fragment.column}
           skipAnimation={props.skipAnimation}
+          isFocused={props.isFocused}
         />
       );
     default:

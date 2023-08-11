@@ -14,6 +14,7 @@ const fragmentDefinition = graphql(`
 interface TerminalComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
   skipAnimation?: boolean;
+  isFocused: boolean;
 }
 
 export const TerminalComponent = (props: TerminalComponentProps) => {
@@ -25,6 +26,7 @@ export const TerminalComponent = (props: TerminalComponentProps) => {
       <TerminalContentsComponent
         fragment={fragment}
         skipAnimation={props.skipAnimation}
+        isFocused={props.isFocused}
       />
     </div>
   );

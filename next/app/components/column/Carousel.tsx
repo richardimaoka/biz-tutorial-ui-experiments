@@ -117,6 +117,7 @@ export const Carousel = (props: CarouselProps) => {
             fragment={column}
             step={props.step}
             skipAnimation={props.skipAnimation}
+            isFocused={index === state.columnIndex}
           />
         </div>
       ))}

@@ -16,6 +16,7 @@ const fragmentDefinition = graphql(`
 interface TerminalContentsComponentProps {
   fragment: FragmentType<typeof fragmentDefinition>;
   skipAnimation?: boolean;
+  isFocused: boolean;
 }
 
 export const TerminalContentsComponent = (
@@ -33,8 +34,7 @@ export const TerminalContentsComponent = (
       {nodes.map((node, index) => (
         <TerminalScrollIntoView
           key={index}
-          // doScroll={index === nodes.length - 1}
-          doScroll={false}
+          doScroll={index === nodes.length - 1 && props.isFocused}
         >
           <TerminalNodeComponent
             fragment={node}
