@@ -31,6 +31,9 @@ func (this BackgroundImageColumn) GetPlaceholder() *string { return this.Placeho
 
 type BrowserColumn struct {
 	Placeholder *string `json:"_placeholder"`
+	Width       *int    `json:"width"`
+	Height      *int    `json:"height"`
+	Path        *string `json:"path"`
 }
 
 func (BrowserColumn) IsColumn()                    {}

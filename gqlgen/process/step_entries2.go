@@ -45,8 +45,8 @@ type StepEntry2 struct {
 	// browser
 	BrowserType        string `json:"browserType,omitempty"`
 	BrowserImagePath   string `json:"browserImagePath,omitempty"`
-	BrowserImageWidth  string `json:"browserImageWidth,omitempty"`
-	BrowserImageHeight string `json:"browserImageHeight,omitempty"`
+	BrowserImageWidth  int    `json:"browserImageWidth,omitempty"`
+	BrowserImageHeight int    `json:"browserImageHeight,omitempty"`
 }
 
 type StepEntries2 []StepEntry2
@@ -103,6 +103,7 @@ func (e StepEntry2) columns(seqNo int) []string {
 func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error) {
 	var srcColmnState *state.SourceCodeColumn
 	var terminalColumnState *state.TerminalColumn
+	var browserColumnState *state.BrowserColumn
 
 	var pages []model.Page
 	for seqNo, e := range entries {
@@ -169,6 +170,13 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
 
+			if colName == "Browser" {
+				// stateless, always new state
+				browserColumnState = state.NewBrowserColumn(e.BrowserImageWidth, e.BrowserImageHeight, e.BrowserImagePath)
+
+				column := browserColumnState.ToGraphQLBrowserCol()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+			}
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 			// 			// 	// if bgColState == nil {
 			// 			// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)

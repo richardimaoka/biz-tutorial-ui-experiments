@@ -42,6 +42,9 @@ export type BackgroundImageColumn = Column & {
 export type BrowserColumn = Column & {
   __typename: "BrowserColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
+  height?: Maybe<Scalars["Int"]["output"]>;
+  path?: Maybe<Scalars["String"]["output"]>;
+  width?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type Column = {

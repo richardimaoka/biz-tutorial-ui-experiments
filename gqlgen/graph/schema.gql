@@ -89,6 +89,13 @@ type BackgroundImageColumn implements Column {
   modal: Modal
 }
 
+type BrowserColumn implements Column {
+  _placeholder: String
+  width: Int
+  height: Int
+  path: String
+}
+
 type MarkdownColumn implements Column {
   _placeholder: String
   description: Markdown
@@ -103,10 +110,6 @@ type SourceCodeColumn implements Column {
 type TerminalColumn implements Column {
   _placeholder: String
   terminal: Terminal
-}
-
-type BrowserColumn implements Column {
-  _placeholder: String
 }
 
 ###################################################
