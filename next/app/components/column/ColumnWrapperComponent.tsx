@@ -1,9 +1,8 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
-import styles from "./style.module.css";
 import { SourceCodeColumn } from "../sourcecode/SourceCodeColumn";
 import { TerminalColumn } from "../terminal/TerminalColumn";
-import { useState } from "react";
+import { BrowserColumn } from "../browser/BrowserColumn";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperComponent_Fragment on ColumnWrapper {
@@ -16,6 +15,10 @@ const fragmentDefinition = graphql(`
 
       ... on TerminalColumn {
         ...TerminalColumn_Fragment
+      }
+
+      ... on BrowserColumn {
+        ...BrowserColumn_Fragment
       }
     }
   }
@@ -48,6 +51,8 @@ export const ColumnWrapperComponent = (
           isFocused={props.isFocused}
         />
       );
+    case "BrowserColumn":
+      return <BrowserColumn fragment={fragment.column} />;
     default:
       return <div>default</div>;
   }

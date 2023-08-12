@@ -175,7 +175,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 				browserColumnState = state.NewBrowserColumn(e.BrowserImageWidth, e.BrowserImageHeight, e.BrowserImagePath)
 
 				column := browserColumnState.ToGraphQLBrowserCol()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 			// 			// 	// if bgColState == nil {

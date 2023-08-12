@@ -236,6 +236,13 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type BrowserColumn_FragmentFragment = {
+  __typename: "BrowserColumn";
+  width?: number | null;
+  height?: number | null;
+  path?: string | null;
+} & { " $fragmentName"?: "BrowserColumn_FragmentFragment" };
+
 export type Carousel_FragmentFragment = {
   __typename: "Page";
   focusColumn?: string | null;
@@ -286,7 +293,11 @@ export type ColumnWrapperComponent_FragmentFragment = {
   name?: string | null;
   column?:
     | { __typename: "BackgroundImageColumn" }
-    | { __typename: "BrowserColumn" }
+    | ({ __typename: "BrowserColumn" } & {
+        " $fragmentRefs"?: {
+          BrowserColumn_FragmentFragment: BrowserColumn_FragmentFragment;
+        };
+      })
     | { __typename: "ImageDescriptionColumn" }
     | { __typename: "MarkdownColumn" }
     | ({ __typename: "SourceCodeColumn" } & {
@@ -1957,6 +1968,27 @@ export const TerminalColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<TerminalColumn_FragmentFragment, unknown>;
+export const BrowserColumn_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BrowserColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<BrowserColumn_FragmentFragment, unknown>;
 export const ColumnWrapperComponent_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2012,6 +2044,22 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "TerminalColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "BrowserColumn_Fragment" },
                       },
                     ],
                   },
@@ -2428,6 +2476,22 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BrowserColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
         ],
       },
     },
@@ -2879,6 +2943,22 @@ export const Carousel_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BrowserColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -2929,6 +3009,22 @@ export const Carousel_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "TerminalColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "BrowserColumn_Fragment" },
                       },
                     ],
                   },
@@ -3502,6 +3598,22 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BrowserColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3552,6 +3664,22 @@ export const VisibleColumn_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "TerminalColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "BrowserColumn_Fragment" },
                       },
                     ],
                   },
@@ -4202,6 +4330,22 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BrowserColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4252,6 +4396,22 @@ export const PageQueryDocument = {
                           kind: "Name",
                           value: "TerminalColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "BrowserColumn_Fragment" },
                       },
                     ],
                   },
