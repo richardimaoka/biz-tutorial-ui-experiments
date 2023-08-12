@@ -45,6 +45,16 @@ type ColumnWrapper struct {
 	Name   *string `json:"name"`
 }
 
+type DevToolsColumn struct {
+	Placeholder *string `json:"_placeholder"`
+	Width       *int    `json:"width"`
+	Height      *int    `json:"height"`
+	Path        *string `json:"path"`
+}
+
+func (DevToolsColumn) IsColumn()                    {}
+func (this DevToolsColumn) GetPlaceholder() *string { return this.Placeholder }
+
 type FileHighlight struct {
 	FromLine *int `json:"fromLine"`
 	ToLine   *int `json:"toLine"`

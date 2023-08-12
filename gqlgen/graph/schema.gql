@@ -96,6 +96,13 @@ type BrowserColumn implements Column {
   path: String
 }
 
+type DevToolsColumn implements Column {
+  _placeholder: String
+  width: Int
+  height: Int
+  path: String
+}
+
 type MarkdownColumn implements Column {
   _placeholder: String
   description: Markdown

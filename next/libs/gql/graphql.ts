@@ -60,6 +60,14 @@ export type ColumnWrapper = {
   name?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type DevToolsColumn = Column & {
+  __typename: "DevToolsColumn";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  height?: Maybe<Scalars["Int"]["output"]>;
+  path?: Maybe<Scalars["String"]["output"]>;
+  width?: Maybe<Scalars["Int"]["output"]>;
+};
+
 export type FileHighlight = {
   __typename: "FileHighlight";
   fromLine?: Maybe<Scalars["Int"]["output"]>;
@@ -269,6 +277,7 @@ export type ColumnTab_FragmentFragment = {
   column?:
     | { __typename: "BackgroundImageColumn" }
     | { __typename: "BrowserColumn" }
+    | { __typename: "DevToolsColumn" }
     | { __typename: "ImageDescriptionColumn" }
     | { __typename: "MarkdownColumn" }
     | { __typename: "SourceCodeColumn" }
@@ -298,6 +307,7 @@ export type ColumnWrapperComponent_FragmentFragment = {
           BrowserColumn_FragmentFragment: BrowserColumn_FragmentFragment;
         };
       })
+    | { __typename: "DevToolsColumn" }
     | { __typename: "ImageDescriptionColumn" }
     | { __typename: "MarkdownColumn" }
     | ({ __typename: "SourceCodeColumn" } & {

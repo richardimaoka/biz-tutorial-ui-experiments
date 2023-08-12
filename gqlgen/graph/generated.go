@@ -66,6 +66,13 @@ type ComplexityRoot struct {
 		Name   func(childComplexity int) int
 	}
 
+	DevToolsColumn struct {
+		Height      func(childComplexity int) int
+		Path        func(childComplexity int) int
+		Placeholder func(childComplexity int) int
+		Width       func(childComplexity int) int
+	}
+
 	FileHighlight struct {
 		FromLine func(childComplexity int) int
 		ToLine   func(childComplexity int) int
@@ -312,6 +319,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ColumnWrapper.Name(childComplexity), true
+
+	case "DevToolsColumn.height":
+		if e.complexity.DevToolsColumn.Height == nil {
+			break
+		}
+
+		return e.complexity.DevToolsColumn.Height(childComplexity), true
+
+	case "DevToolsColumn.path":
+		if e.complexity.DevToolsColumn.Path == nil {
+			break
+		}
+
+		return e.complexity.DevToolsColumn.Path(childComplexity), true
+
+	case "DevToolsColumn._placeholder":
+		if e.complexity.DevToolsColumn.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.DevToolsColumn.Placeholder(childComplexity), true
+
+	case "DevToolsColumn.width":
+		if e.complexity.DevToolsColumn.Width == nil {
+			break
+		}
+
+		return e.complexity.DevToolsColumn.Width(childComplexity), true
 
 	case "FileHighlight.fromLine":
 		if e.complexity.FileHighlight.FromLine == nil {
@@ -1532,6 +1567,170 @@ func (ec *executionContext) _ColumnWrapper_name(ctx context.Context, field graph
 func (ec *executionContext) fieldContext_ColumnWrapper_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ColumnWrapper",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DevToolsColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DevToolsColumn__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DevToolsColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DevToolsColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DevToolsColumn_width(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DevToolsColumn_width(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Width, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DevToolsColumn_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DevToolsColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DevToolsColumn_height(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DevToolsColumn_height(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Height, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DevToolsColumn_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DevToolsColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DevToolsColumn_path(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DevToolsColumn_path(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Path, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DevToolsColumn_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DevToolsColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -6611,6 +6810,13 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._BrowserColumn(ctx, sel, obj)
+	case model.DevToolsColumn:
+		return ec._DevToolsColumn(ctx, sel, &obj)
+	case *model.DevToolsColumn:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._DevToolsColumn(ctx, sel, obj)
 	case model.MarkdownColumn:
 		return ec._MarkdownColumn(ctx, sel, &obj)
 	case *model.MarkdownColumn:
@@ -6767,6 +6973,43 @@ func (ec *executionContext) _ColumnWrapper(ctx context.Context, sel ast.Selectio
 		case "name":
 
 			out.Values[i] = ec._ColumnWrapper_name(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var devToolsColumnImplementors = []string{"DevToolsColumn", "Column"}
+
+func (ec *executionContext) _DevToolsColumn(ctx context.Context, sel ast.SelectionSet, obj *model.DevToolsColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, devToolsColumnImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DevToolsColumn")
+		case "_placeholder":
+
+			out.Values[i] = ec._DevToolsColumn__placeholder(ctx, field, obj)
+
+		case "width":
+
+			out.Values[i] = ec._DevToolsColumn_width(ctx, field, obj)
+
+		case "height":
+
+			out.Values[i] = ec._DevToolsColumn_height(ctx, field, obj)
+
+		case "path":
+
+			out.Values[i] = ec._DevToolsColumn_path(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

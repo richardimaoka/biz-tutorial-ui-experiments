@@ -43,10 +43,14 @@ type StepEntry2 struct {
 	IsFoldFileTree      string `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
 
 	// browser
-	BrowserType        string `json:"browserType,omitempty"`
-	BrowserImagePath   string `json:"browserImagePath,omitempty"`
+	BrowserImageName   string `json:"browserImageName,omitempty"`
 	BrowserImageWidth  int    `json:"browserImageWidth,omitempty"`
 	BrowserImageHeight int    `json:"browserImageHeight,omitempty"`
+
+	// browser
+	DevToolsImageName   string `json:"devtoolsImageName,omitempty"`
+	DevToolsImageWidth  int    `json:"devtoolsImageWidth,omitempty"`
+	DevToolsImageHeight int    `json:"devtoolsImageHeight,omitempty"`
 }
 
 type StepEntries2 []StepEntry2
@@ -104,6 +108,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 	var srcColmnState *state.SourceCodeColumn
 	var terminalColumnState *state.TerminalColumn
 	var browserColumnState *state.BrowserColumn
+	var devtoolsColumnState *state.DevToolsColumn
 
 	var pages []model.Page
 	for seqNo, e := range entries {
@@ -170,13 +175,35 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
 
+			// only when e.BrowserImageName is specified, change the state
 			if colName == "Browser" {
-				// stateless, always new state
-				browserColumnState = state.NewBrowserColumn(e.BrowserImageWidth, e.BrowserImageHeight, e.BrowserImagePath)
+
+				if e.BrowserImageName != "" {
+					// *Next.js <Image> requires a leading slash in path
+					imagePath := "/images/" + tutorial + "/" + e.BrowserImageName
+
+					// stateless, always new state
+					browserColumnState = state.NewBrowserColumn(e.BrowserImageWidth, e.BrowserImageHeight, imagePath)
+				}
 
 				column := browserColumnState.ToGraphQLBrowserCol()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
+
+			// only when e.DevToolsImageName is specified, change the state
+			if colName == "Dev Tools" {
+				if e.DevToolsImageName != "" {
+					// *Next.js <Image> requires a leading slash in path
+					imagePath := "/images/" + tutorial + "/" + e.DevToolsImageName
+
+					// stateless, always new state
+					devtoolsColumnState = state.NewDevToolsColumn(e.DevToolsImageHeight, e.DevToolsImageHeight, imagePath)
+				}
+
+				column := devtoolsColumnState.ToGraphQLDevToolsCol()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
+			}
+
 			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 			// 			// 	// if bgColState == nil {
 			// 			// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
