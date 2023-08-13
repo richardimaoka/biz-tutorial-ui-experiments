@@ -125,30 +125,19 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
 			if colName == "Terminal" {
-				terminalColumnState.Process(e.Step, e.TerminalType, e.TerminalText, e.CurrentDir)
+				err := terminalColumnState.Process(e.Step, e.TerminalType, e.TerminalText, e.CurrentDir)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, %s", e.Step, err)
+				}
 				column := terminalColumnState.ToGraphQLTerminalColumn()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
 
 			if colName == "Source Code" {
-				if e.Commit != "" {
-					err := srcColmnState.ForwardCommit(e.Step, e.Commit)
-					if err != nil {
-						return nil, fmt.Errorf("ToGraphQLPages failed at step %s to transition source code, %s", e.Step, err)
-					}
+				err := srcColmnState.Process(e.Step, e.Commit, e.DefaultOpenFilePath, e.IsFoldFileTree)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, %s", e.Step, err)
 				}
-
-				isFoldFileTree := e.IsFoldFileTree == "FALSE"
-				if isFoldFileTree {
-					srcColmnState.UpdateIsFoldFileTree(false)
-				} else {
-					srcColmnState.UpdateIsFoldFileTree(true)
-				}
-
-				if e.DefaultOpenFilePath != "" {
-					srcColmnState.UpdateDefaultOpenFilePath(e.DefaultOpenFilePath)
-				}
-
 				column := srcColmnState.ToGraphQLSourceCodeColumn()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}

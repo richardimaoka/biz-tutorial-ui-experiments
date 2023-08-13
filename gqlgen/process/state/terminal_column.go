@@ -37,7 +37,7 @@ func (t *TerminalColumn) Process(step, terminalType, terminalText, currentDir st
 	} else {
 		terminalType, err := ToTerminalElementType(terminalType)
 		if err != nil {
-			return fmt.Errorf("ToGraphQLPages failed at step = %s to convert terminal type, %s", step, err)
+			return fmt.Errorf("Process() failed at step = %s to convert terminal type, %s", step, err)
 		}
 		t.Transition(terminalType, terminalText)
 	}

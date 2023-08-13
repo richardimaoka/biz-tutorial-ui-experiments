@@ -38,6 +38,28 @@ func (c *SourceCodeColumn) ForwardCommit(step, commit string) error {
 	return nil
 }
 
+func (c *SourceCodeColumn) Process(step, commit, defaultOpenFilePath, isFoldFileTree string) error {
+	if commit != "" {
+		err := c.ForwardCommit(step, commit)
+		if err != nil {
+			return fmt.Errorf("Process() failed at step %s to transition source code, %s", step, err)
+		}
+	}
+
+	updateOnlyOnFalse := isFoldFileTree == "FALSE"
+	if updateOnlyOnFalse {
+		c.UpdateIsFoldFileTree(false)
+	} else {
+		c.UpdateIsFoldFileTree(true)
+	}
+
+	if defaultOpenFilePath != "" {
+		c.UpdateDefaultOpenFilePath(defaultOpenFilePath)
+	}
+
+	return nil
+}
+
 func (c *SourceCodeColumn) ToGraphQLSourceCodeColumn() *model.SourceCodeColumn {
 	return &model.SourceCodeColumn{
 		SourceCode: c.sc.ToGraphQLSourceCode(),
