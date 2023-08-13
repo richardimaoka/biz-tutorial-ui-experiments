@@ -1,6 +1,8 @@
 package state
 
 import (
+	"fmt"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
@@ -8,12 +10,19 @@ type MarkdownColumn struct {
 	Description Markdown
 }
 
-func NewMarkdownColumn(markdownContents string, alignment MarkdownAlignment) *MarkdownColumn {
-	return &MarkdownColumn{
-		Description: Markdown{
-			Contents:  markdownContents,
-			Alignment: alignment,
-		},
+func NewMarkdownColumn() *MarkdownColumn {
+	return &MarkdownColumn{}
+}
+
+func (p *MarkdownColumn) Process(markdownContents string, alignment string) error {
+	markdownAlignment, err := ToMarkdownAlignment(alignment)
+	if err != nil {
+		return fmt.Errorf("Process() failed to convert alignment, %s", err)
+	}
+
+	p.Description = Markdown{
+		Contents:  markdownContents,
+		Alignment: markdownAlignment,
 	}
 }
 

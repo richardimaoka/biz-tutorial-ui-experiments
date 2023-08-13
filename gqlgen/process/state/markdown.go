@@ -1,6 +1,9 @@
 package state
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -11,6 +14,17 @@ const (
 	MarkdownAlignmentLeft   MarkdownAlignment = "LEFT"
 	MarkdownAlignmentCenter MarkdownAlignment = "CENTER"
 )
+
+func ToMarkdownAlignment(a string) (MarkdownAlignment, error) {
+	switch strings.ToUpper(a) {
+	case "LEFT":
+		return MarkdownAlignmentLeft, nil
+	case "CENTER":
+		return MarkdownAlignmentCenter, nil
+	default:
+		return "", fmt.Errorf("'%s' is unknown MarkdownAlignment", a)
+	}
+}
 
 func (this MarkdownAlignment) Convert() *model.MarkdownAlignment {
 	a := model.MarkdownAlignment(this)

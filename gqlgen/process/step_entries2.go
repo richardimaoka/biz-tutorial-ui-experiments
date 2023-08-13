@@ -47,10 +47,14 @@ type StepEntry2 struct {
 	BrowserImageWidth  int    `json:"browserImageWidth,omitempty"`
 	BrowserImageHeight int    `json:"browserImageHeight,omitempty"`
 
-	// browser
+	// dev tools
 	DevToolsImageName   string `json:"devtoolsImageName,omitempty"`
 	DevToolsImageWidth  int    `json:"devtoolsImageWidth,omitempty"`
 	DevToolsImageHeight int    `json:"devtoolsImageHeight,omitempty"`
+
+	// markdown
+	MarkdownContents  string `json:"markdownContents,omitempty"`
+	MarkdownAlignment string `json:"markdownAlignment,omitempty"`
 }
 
 type StepEntries2 []StepEntry2
@@ -110,6 +114,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 		return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
 	}
 	terminalColumnState := state.NewTerminalColumn()
+	markdownColumnState := state.NewMarkdownColumn()
 	var browserColumnState *state.BrowserColumn
 	var devtoolsColumnState *state.DevToolsColumn
 
@@ -186,10 +191,11 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
 			// 			// }
 
-			// 			// if e.MarkdownColumn != nil && e.MarkdownColumn.Column == i {
-			// 			// 	column := ToGraphQLMarkdownColumn(e.MarkdownColumn)
-			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 			// }
+			if colName == "Markdown" {
+				markdownColumnState.Process(e.MarkdownContents, e.MarkdownAlignment)
+				column := markdownColumnState.ToGraphQLMarkdownColumn()
+				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
+			}
 
 			// 			// // once srcColState is initialized, git column persists
 			// 			// if srcColState != nil {
