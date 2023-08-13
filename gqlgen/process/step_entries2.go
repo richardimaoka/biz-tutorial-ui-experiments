@@ -109,14 +109,14 @@ func (e StepEntry2) columns(seqNo int) []string {
 }
 
 func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Page, error) {
+	terminalColumnState := state.NewTerminalColumn()
+	markdownColumnState := state.NewMarkdownColumn()
+	devtoolsColumnState := state.NewDevToolsColumn()
+	browserColumnState := state.NewBrowserColumn()
 	srcColmnState, err := state.NewSourceCodeColumn(repoUrl, "myproj", tutorial)
 	if err != nil {
 		return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
 	}
-	terminalColumnState := state.NewTerminalColumn()
-	markdownColumnState := state.NewMarkdownColumn()
-	var browserColumnState *state.BrowserColumn
-	var devtoolsColumnState *state.DevToolsColumn
 
 	var pages []model.Page
 	for seqNo, e := range entries {
@@ -149,29 +149,20 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 
 			// only when e.BrowserImageName is specified, change the state
 			if colName == "Browser" {
-
-				if e.BrowserImageName != "" {
-					// *Next.js <Image> requires a leading slash in path
-					imagePath := "/images/" + tutorial + "/" + e.BrowserImageName
-
-					// stateless, always new state
-					browserColumnState = state.NewBrowserColumn(e.BrowserImageWidth, e.BrowserImageHeight, imagePath)
+				err := browserColumnState.Process(tutorial, e.BrowserImageName, e.BrowserImageWidth, e.BrowserImageHeight)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed to process Browser column at step = %s, %s", e.Step, err)
 				}
-
 				column := browserColumnState.ToGraphQLBrowserCol()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
 
 			// only when e.DevToolsImageName is specified, change the state
 			if colName == "Dev Tools" {
-				if e.DevToolsImageName != "" {
-					// *Next.js <Image> requires a leading slash in path
-					imagePath := "/images/" + tutorial + "/" + e.DevToolsImageName
-
-					// stateless, always new state
-					devtoolsColumnState = state.NewDevToolsColumn(e.DevToolsImageHeight, e.DevToolsImageHeight, imagePath)
+				err := devtoolsColumnState.Process(tutorial, e.DevToolsImageName, e.DevToolsImageWidth, e.DevToolsImageHeight)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed to process DevTools column at step = %s, %s", e.Step, err)
 				}
-
 				column := devtoolsColumnState.ToGraphQLDevToolsCol()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}

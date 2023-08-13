@@ -24,6 +24,8 @@ func (p *MarkdownColumn) Process(markdownContents string, alignment string) erro
 		Contents:  markdownContents,
 		Alignment: markdownAlignment,
 	}
+
+	return nil
 }
 
 func (p *MarkdownColumn) ToGraphQLMarkdownColumn() *model.MarkdownColumn {
