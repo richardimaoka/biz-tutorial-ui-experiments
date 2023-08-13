@@ -125,20 +125,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
 			if colName == "Terminal" {
-				if e.TerminalText == "" {
-					terminalColumnState.MarkAllExecuted()
-				} else {
-					terminalType, err := state.ToTerminalElementType(e.TerminalType)
-					if err != nil {
-						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to convert terminal type, %s", e.Step, err)
-					}
-					terminalColumnState.Transition(terminalType, e.TerminalText)
-				}
-
-				if e.CurrentDir != "" {
-					terminalColumnState.Cd(e.CurrentDir)
-				}
-
+				terminalColumnState.Process(e.Step, e.TerminalType, e.TerminalText, e.CurrentDir)
 				column := terminalColumnState.ToGraphQLTerminalColumn()
 				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 			}
