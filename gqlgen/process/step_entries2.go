@@ -129,76 +129,67 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
-			if colName == "Terminal" {
+			var column model.Column
+
+			switch colName {
+			case "Terminal":
 				err := terminalColumnState.Process(e.Step, e.TerminalType, e.TerminalText, e.CurrentDir)
 				if err != nil {
 					return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, %s", e.Step, err)
 				}
-				column := terminalColumnState.ToGraphQLTerminalColumn()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
-			}
+				column = terminalColumnState.ToGraphQLTerminalColumn()
 
-			if colName == "Source Code" {
+			case "Source Code":
 				err := srcColmnState.Process(e.Step, e.Commit, e.DefaultOpenFilePath, e.IsFoldFileTree)
 				if err != nil {
 					return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, %s", e.Step, err)
 				}
-				column := srcColmnState.ToGraphQLSourceCodeColumn()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
-			}
+				column = srcColmnState.ToGraphQLSourceCodeColumn()
 
-			// only when e.BrowserImageName is specified, change the state
-			if colName == "Browser" {
+			case "Browser":
 				err := browserColumnState.Process(tutorial, e.BrowserImageName, e.BrowserImageWidth, e.BrowserImageHeight)
 				if err != nil {
 					return nil, fmt.Errorf("ToGraphQLPages failed to process Browser column at step = %s, %s", e.Step, err)
 				}
-				column := browserColumnState.ToGraphQLBrowserCol()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
-			}
+				column = browserColumnState.ToGraphQLBrowserCol()
 
-			// only when e.DevToolsImageName is specified, change the state
-			if colName == "Dev Tools" {
+			case "Dev Tools":
 				err := devtoolsColumnState.Process(tutorial, e.DevToolsImageName, e.DevToolsImageWidth, e.DevToolsImageHeight)
 				if err != nil {
 					return nil, fmt.Errorf("ToGraphQLPages failed to process DevTools column at step = %s, %s", e.Step, err)
 				}
-				column := devtoolsColumnState.ToGraphQLDevToolsCol()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
-			}
+				column = devtoolsColumnState.ToGraphQLDevToolsCol()
 
-			// 			// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
-			// 			// 	// if bgColState == nil {
-			// 			// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
-			// 			// 	// } else {
-			// 			// 	// 	bgColState = bgColState.Transition(..., ..., ..., ..., ...)
-			// 			// 	// }
-			// 			// 	column := ToGraphQLBgImgCol(e.BackgroundImageColumn)
-			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 			// }
-
-			// 			// if e.ImageDescriptionColumn != nil && e.ImageDescriptionColumn.Column == i {
-			// 			// 	column := ToGraphQLImgDescCol(e.ImageDescriptionColumn)
-			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 			// }
-
-			if colName == "Markdown" {
+			case "Markdown":
 				markdownColumnState.Process(e.MarkdownContents, e.MarkdownAlignment)
-				column := markdownColumnState.ToGraphQLMarkdownColumn()
-				colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
+				column = markdownColumnState.ToGraphQLMarkdownColumn()
+
+				// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
+				// 	// if bgColState == nil {
+				// 	// 	bgColState = NewBackgroundImageColumn(..., ..., ..., ..., ...)
+				// 	// } else {
+				// 	// 	bgColState = bgColState.Transition(..., ..., ..., ..., ...)
+				// 	// }
+				// 	column := ToGraphQLBgImgCol(e.BackgroundImageColumn)
+				// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+				// }
+
+				// if e.ImageDescriptionColumn != nil && e.ImageDescriptionColumn.Column == i {
+				// 	column := ToGraphQLImgDescCol(e.ImageDescriptionColumn)
+				// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
+				// }
+
+				// 		// copy to avoid mutation effects afterwards
+				// 		step := internal.StringRef(e.Step)
+				// 		prevStep := internal.StringRef(e.PrevStep)
+				// 		nextStep := internal.StringRef(e.NextStep)
 			}
 
-			// 			// // once srcColState is initialized, git column persists
-			// 			// if srcColState != nil {
-			// 			// 	column := srcColState.ToGraphQLSourceCodeColumn()
-			// 			// 	colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column})
-			// 			// }
-			// 		}
+			if column == nil {
+				return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, column = %s is not supported", e.Step, colName)
+			}
 
-			// 		// copy to avoid mutation effects afterwards
-			// 		step := internal.StringRef(e.Step)
-			// 		prevStep := internal.StringRef(e.PrevStep)
-			// 		nextStep := internal.StringRef(e.NextStep)
+			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
 		}
 
 		modalText := e.ModalText
