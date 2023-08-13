@@ -104,9 +104,12 @@ func (e StepEntry2) columns(seqNo int) []string {
 	return columns
 }
 
-func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error) {
-	var srcColmnState *state.SourceCodeColumn
-	var terminalColumnState *state.TerminalColumn
+func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Page, error) {
+	srcColmnState, err := state.NewSourceCodeColumn(repoUrl, "myproj", tutorial)
+	if err != nil {
+		return nil, fmt.Errorf("ToGraphQLPages failed to initialize source code, %s", err)
+	}
+	terminalColumnState := state.NewTerminalColumn()
 	var browserColumnState *state.BrowserColumn
 	var devtoolsColumnState *state.DevToolsColumn
 
@@ -122,10 +125,6 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 		var colWrappers []*model.ColumnWrapper
 		for _, colName := range columns {
 			if colName == "Terminal" {
-				if terminalColumnState == nil {
-					terminalColumnState = state.NewTerminalColumn()
-				}
-
 				if e.TerminalText == "" {
 					terminalColumnState.MarkAllExecuted()
 				} else {
@@ -145,14 +144,6 @@ func (entries StepEntries2) ToGraphQLPages(tutorial string) ([]model.Page, error
 			}
 
 			if colName == "Source Code" {
-				if srcColmnState == nil {
-					var err error
-					srcColmnState, err = state.NewSourceCodeColumn(e.RepoUrl, "myproj", tutorial)
-					if err != nil {
-						return nil, fmt.Errorf("ToGraphQLPages failed at step = %s to initialize source code, %s", e.Step, err)
-					}
-				}
-
 				if e.Commit != "" {
 					err := srcColmnState.ForwardCommit(e.Step, e.Commit)
 					if err != nil {
@@ -279,7 +270,7 @@ func ReadStepEntries2(filePath string) (StepEntries2, error) {
 	return entries, err
 }
 
-func Process2(tutorial string) error {
+func Process2(tutorial, repoUrl string) error {
 	dirName := "data/" + tutorial
 
 	entries, err := ReadStepEntries2(dirName + "/steps2.json")
@@ -287,7 +278,7 @@ func Process2(tutorial string) error {
 		return fmt.Errorf("Process2 failed, %s", err)
 	}
 
-	pages, err := entries.ToGraphQLPages(tutorial)
+	pages, err := entries.ToGraphQLPages(tutorial, repoUrl)
 	if err != nil {
 		return fmt.Errorf("Process2 failed, %s", err)
 	}

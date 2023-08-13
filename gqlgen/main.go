@@ -8,7 +8,7 @@ import (
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "process" {
-		err := process.Process2("sign-in-with-google")
+		err := process.Process2("sign-in-with-google", "https://github.com/richardimaoka/sign-in-with-google-experiment.git")
 		if err != nil {
 			panic(err)
 		}
