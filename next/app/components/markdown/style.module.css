@@ -1,0 +1,100 @@
+.markdown {
+  padding: 2px 10px;
+}
+
+.markdown h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 21px 0px;
+  color: var(--color-primary-text);
+}
+
+.markdown h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 19px 0px;
+  color: var(--color-primary-text);
+}
+.markdown h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 18px 0px;
+  color: var(--color-primary-text);
+}
+
+.markdown p {
+  font-size: 14px;
+  margin: 16px 0px;
+  color: var(--color-primary-text);
+}
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.markdown ul {
+  margin: 16px 0px;
+  color: var(--color-primary-text);
+}
+
+.markdown ol {
+  margin: 16px 0px;
+  padding-left: 24px;
+  color: var(--color-primary-text);
+}
+
+.markdown ul {
+  margin: 16px 0px;
+  padding-left: 24px;
+  color: var(--color-primary-text);
+}
+
+.markdown li {
+  font-size: 14px;
+  color: var(--color-primary-text);
+}
+
+.markdown code {
+  font-family: "Roboto Mono";
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 1px 4px;
+  background-color: var(--color-background);
+}
+
+.markdown pre {
+  margin: 16px 0px;
+  padding: 8px;
+  background-color: var(--color-background);
+}
+
+.markdown pre > code {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.markdown blockquote {
+  margin: 16px 0px;
+  margin: 0px;
+  padding-left: 18px;
+  border-left: 2px solid var(--color-theme-blue);
+  color: var(--color-secondary-text);
+}
+
+.markdown img {
+  margin: 16px 0px;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.markdown iframe {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}

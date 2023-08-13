@@ -1,6 +1,7 @@
 import { graphql } from "@/libs/gql";
 import { getClient } from "@/libs/apolloClient";
 import { VisibleColumn } from "./components/column/VisibleColumn";
+import { print } from "graphql";
 
 const queryDefinition = graphql(/* GraphQL */ `
   query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {
@@ -23,6 +24,8 @@ interface PageParams {
 }
 
 export default async function Home({ searchParams }: PageParams) {
+  console.log(print(queryDefinition));
+
   const openFilePath = searchParams.openFilePath;
   const { data } = await getClient().query({
     query: queryDefinition,

@@ -4,6 +4,7 @@ import { SourceCodeColumn } from "../sourcecode/SourceCodeColumn";
 import { TerminalColumn } from "../terminal/TerminalColumn";
 import { BrowserColumn } from "../browser/BrowserColumn";
 import { DevToolsColumn } from "../devtools/DevtoolsColumn";
+import { MarkdownColumn } from "../markdown/MarkdownColumn";
 
 const fragmentDefinition = graphql(`
   fragment ColumnWrapperComponent_Fragment on ColumnWrapper {
@@ -24,6 +25,10 @@ const fragmentDefinition = graphql(`
 
       ... on DevToolsColumn {
         ...DevToolsColumn_Fragment
+      }
+
+      ... on MarkdownColumn {
+        ...MarkdownColumn_Fragment
       }
     }
   }
@@ -60,6 +65,8 @@ export const ColumnWrapperComponent = (
       return <BrowserColumn fragment={fragment.column} />;
     case "DevToolsColumn":
       return <DevToolsColumn fragment={fragment.column} />;
+    case "MarkdownColumn":
+      return <MarkdownColumn fragment={fragment.column} />;
     default:
       return <div>default</div>;
   }

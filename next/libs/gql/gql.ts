@@ -23,7 +23,7 @@ const documents = {
     types.ColumnTab_FragmentFragmentDoc,
   "\n  fragment ColumnTabs_Fragment on Page {\n    columns {\n      ...ColumnTab_Fragment\n      name\n    }\n  }\n":
     types.ColumnTabs_FragmentFragmentDoc,
-  "\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n    }\n  }\n":
+  "\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n\n      ... on MarkdownColumn {\n        ...MarkdownColumn_Fragment\n      }\n    }\n  }\n":
     types.ColumnWrapperComponent_FragmentFragmentDoc,
   "\n  fragment VisibleColumn_Fragment on Page {\n    ...ColumnHeader_Fragment\n    ...Carousel_Fragment\n    columns {\n      ...ColumnWrapperComponent_Fragment\n      name\n    }\n    modal {\n      ...ModalComponentFragment\n    }\n    ...Navigation_Fragment\n  }\n":
     types.VisibleColumn_FragmentFragmentDoc,
@@ -31,6 +31,10 @@ const documents = {
     types.ModalComponentFragmentFragmentDoc,
   "\n  fragment DevToolsColumn_Fragment on DevToolsColumn {\n    width\n    height\n    path\n  }\n":
     types.DevToolsColumn_FragmentFragmentDoc,
+  "\n  fragment MarkdownColumn_Fragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n":
+    types.MarkdownColumn_FragmentFragmentDoc,
+  "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n":
+    types.MarkdownFragmentFragmentDoc,
   "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n":
     types.Navigation_FragmentFragmentDoc,
   "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n":
@@ -119,8 +123,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n    }\n  }\n",
-): (typeof documents)["\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n    }\n  }\n"];
+  source: "\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n\n      ... on MarkdownColumn {\n        ...MarkdownColumn_Fragment\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment ColumnWrapperComponent_Fragment on ColumnWrapper {\n    name\n    column {\n      __typename\n      ... on SourceCodeColumn {\n        ...SourceCodeColumn_Fragment\n      }\n\n      ... on TerminalColumn {\n        ...TerminalColumn_Fragment\n      }\n\n      ... on BrowserColumn {\n        ...BrowserColumn_Fragment\n      }\n\n      ... on DevToolsColumn {\n        ...DevToolsColumn_Fragment\n      }\n\n      ... on MarkdownColumn {\n        ...MarkdownColumn_Fragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -139,6 +143,18 @@ export function graphql(
 export function graphql(
   source: "\n  fragment DevToolsColumn_Fragment on DevToolsColumn {\n    width\n    height\n    path\n  }\n",
 ): (typeof documents)["\n  fragment DevToolsColumn_Fragment on DevToolsColumn {\n    width\n    height\n    path\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment MarkdownColumn_Fragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n",
+): (typeof documents)["\n  fragment MarkdownColumn_Fragment on MarkdownColumn {\n    description {\n      ...MarkdownFragment\n    }\n    contentsPosition\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n",
+): (typeof documents)["\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
