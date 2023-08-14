@@ -35,7 +35,7 @@ export const MarkdownColumn = (props: MarkdownColumnProps): JSX.Element => {
   if (!fragment.description) return <></>;
 
   return (
-    <div className={positionStyle()}>
+    <div className={`${styles.column} ${positionStyle()}`}>
       <MarkdownView fragment={fragment.description} />
     </div>
   );

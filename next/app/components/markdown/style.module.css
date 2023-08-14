@@ -1,3 +1,19 @@
+.column {
+  height: 100%;
+}
+
+.verticalCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.verticalBottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
 .markdown {
   padding: 2px 10px;
 }
@@ -119,20 +135,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-.verticalCenter {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.verticalBottom {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
 }
 
 .center {
