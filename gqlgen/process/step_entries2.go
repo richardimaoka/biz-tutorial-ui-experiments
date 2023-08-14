@@ -53,8 +53,9 @@ type StepEntry2 struct {
 	DevToolsImageHeight int    `json:"devtoolsImageHeight,omitempty"`
 
 	// markdown
-	MarkdownContents  string `json:"markdownContents,omitempty"`
-	MarkdownAlignment string `json:"markdownAlignment,omitempty"`
+	MarkdownContents            string `json:"markdownContents,omitempty"`
+	MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment,omitempty"`
+	MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment,omitempty"`
 }
 
 type StepEntries2 []StepEntry2
@@ -161,7 +162,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 				column = devtoolsColumnState.ToGraphQLDevToolsCol()
 
 			case "Markdown":
-				markdownColumnState.Process(e.MarkdownContents, e.MarkdownAlignment)
+				markdownColumnState.Process(e.MarkdownContents, e.MarkdownVerticalAlignment, e.MarkdownHorizontalAlignment)
 				column = markdownColumnState.ToGraphQLMarkdownColumn()
 
 				// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
