@@ -20,8 +20,6 @@ export const MarkdownColumn = (props: MarkdownColumnProps): JSX.Element => {
     ? fragment.contentsPosition
     : "TOP";
 
-  console.log(fragment);
-
   if (!fragment.description) return <></>;
 
   return <MarkdownView fragment={fragment.description} />;

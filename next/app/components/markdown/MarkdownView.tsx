@@ -1,4 +1,5 @@
-import React, { ComponentType, ReactNode, useEffect, useState } from "react";
+"use client";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import rehypeReact from "rehype-react";
 import remarkParse from "remark-parse";
@@ -8,10 +9,6 @@ import { unified } from "unified";
 import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-
-interface PProps {
-  children?: ReactNode; //children needs to be optional, otherwise, type error in rehype-react's components argument
-}
 
 const fragmentDefinition = graphql(`
   fragment MarkdownFragment on Markdown {
@@ -37,23 +34,34 @@ export interface MarkdownViewProps {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-export const MarkdownView = async (
+export const MarkdownView = /*async*/ (
   props: MarkdownViewProps
-): Promise<JSX.Element> => {
+): JSX.Element => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  const textAlign = fragment.alignment
-    ? fragment.alignment.toLowerCase()
-    : "left";
+  const [children, setChildren] = useState<JSX.Element>(<></>);
+
+  useEffect(() => {
+    if (fragment.contents) {
+      Markdown({ input: fragment.contents }).then((result) => {
+        setChildren(result);
+      });
+    }
+  }, [fragment.contents]);
+
+  console.log(fragment);
+
+  const alignmentStyle =
+    fragment.alignment === "CENTER" ? styles.center : styles.left; //default alignment = styles.left
 
   if (!fragment.contents) {
     return <div></div>;
   }
 
   return (
-    <div className={styles.markdown}>
-      <Markdown input={fragment.contents} />
+    <div className={`${styles.markdown} ${alignmentStyle}`}>
+      {children /* <Markdown input={fragment.contents} /> */}
     </div>
   );
 };

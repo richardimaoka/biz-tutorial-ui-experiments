@@ -24,7 +24,7 @@ interface PageParams {
 }
 
 export default async function Home({ searchParams }: PageParams) {
-  console.log(print(queryDefinition));
+  // console.log(print(queryDefinition));
 
   const openFilePath = searchParams.openFilePath;
   const { data } = await getClient().query({
