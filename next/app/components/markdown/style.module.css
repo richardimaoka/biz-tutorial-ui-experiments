@@ -114,6 +114,27 @@
   max-width: 100%;
 }
 
+.verticalTop {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.verticalCenter {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.verticalBottom {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
 .center {
   text-align: center;
 }
