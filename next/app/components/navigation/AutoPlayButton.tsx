@@ -70,7 +70,7 @@ export const AutoPlayButton = ({
         break;
       case "Stopped":
         if (isTrivialStep) {
-          const duration = durationSeconds ? durationSeconds * 1000 : 3000;
+          const duration = durationSeconds ? durationSeconds * 1000 : 2000;
           const tid = window.setTimeout(() => {
             router.push("/?" + newParams.toString());
             setState({ kind: "Transitioned", step: nextStep, autoPlay: false });

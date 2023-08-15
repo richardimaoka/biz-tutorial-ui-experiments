@@ -199,13 +199,12 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 		modalPosition, _ := state.ToModalPosition(e.ModalPosition) // err is ignored, and modal position will be null
 		modalState := state.Modal{Text: modalText, Position: modalPosition}
 
-		autoNextSeconds := e.AutoNextSeconds
-
-		var durationSeconds int
+		var durationSeconds *int
 		if e.DurationSeconds == 0 { // zero value, input JSON didn't specify this
-			durationSeconds = 3
+			durationSeconds = nil
 		} else {
-			durationSeconds = e.DurationSeconds
+			temp := e.DurationSeconds
+			durationSeconds = &temp
 		}
 
 		isTrivialStep := e.IsTrivialStep
@@ -214,8 +213,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 			Step:            internal.StringRef(currentStep),
 			PrevStep:        internal.StringRef(prevStep),
 			NextStep:        internal.StringRef(nextStep),
-			AutoNextSeconds: &autoNextSeconds,
-			DurationSeconds: &durationSeconds,
+			DurationSeconds: durationSeconds,
 			IsTrivialStep:   &isTrivialStep,
 			Columns:         colWrappers,
 			FocusColumn:     internal.StringRef(e.FocusColumn),
