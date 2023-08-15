@@ -41,6 +41,8 @@ type Page {
   nextStep: String
   prevStep: String
   autoNextSeconds: Int
+  durationSeconds: Int
+  trivialStep: Boolean
   columns: [ColumnWrapper]
   focusColumn: String
   modal: Modal

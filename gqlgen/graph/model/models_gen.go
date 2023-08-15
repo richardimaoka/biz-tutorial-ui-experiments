@@ -133,6 +133,8 @@ type Page struct {
 	NextStep        *string          `json:"nextStep"`
 	PrevStep        *string          `json:"prevStep"`
 	AutoNextSeconds *int             `json:"autoNextSeconds"`
+	DurationSeconds *int             `json:"durationSeconds"`
+	TrivialStep     *bool            `json:"trivialStep"`
 	Columns         []*ColumnWrapper `json:"columns"`
 	FocusColumn     *string          `json:"focusColumn"`
 	Modal           *Modal           `json:"modal"`

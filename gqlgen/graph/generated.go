@@ -143,11 +143,13 @@ type ComplexityRoot struct {
 	Page struct {
 		AutoNextSeconds func(childComplexity int) int
 		Columns         func(childComplexity int) int
+		DurationSeconds func(childComplexity int) int
 		FocusColumn     func(childComplexity int) int
 		Modal           func(childComplexity int) int
 		NextStep        func(childComplexity int) int
 		PrevStep        func(childComplexity int) int
 		Step            func(childComplexity int) int
+		TrivialStep     func(childComplexity int) int
 	}
 
 	PageState struct {
@@ -621,6 +623,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Page.Columns(childComplexity), true
 
+	case "Page.durationSeconds":
+		if e.complexity.Page.DurationSeconds == nil {
+			break
+		}
+
+		return e.complexity.Page.DurationSeconds(childComplexity), true
+
 	case "Page.focusColumn":
 		if e.complexity.Page.FocusColumn == nil {
 			break
@@ -655,6 +664,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Page.Step(childComplexity), true
+
+	case "Page.trivialStep":
+		if e.complexity.Page.TrivialStep == nil {
+			break
+		}
+
+		return e.complexity.Page.TrivialStep(childComplexity), true
 
 	case "PageState.markdown":
 		if e.complexity.PageState.Markdown == nil {
@@ -3466,6 +3482,88 @@ func (ec *executionContext) fieldContext_Page_autoNextSeconds(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Page_durationSeconds(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_durationSeconds(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DurationSeconds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_durationSeconds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_trivialStep(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_trivialStep(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrivialStep, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_trivialStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Page_columns(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Page_columns(ctx, field)
 	if err != nil {
@@ -4038,6 +4136,10 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_prevStep(ctx, field)
 			case "autoNextSeconds":
 				return ec.fieldContext_Page_autoNextSeconds(ctx, field)
+			case "durationSeconds":
+				return ec.fieldContext_Page_durationSeconds(ctx, field)
+			case "trivialStep":
+				return ec.fieldContext_Page_trivialStep(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			case "focusColumn":
@@ -7405,6 +7507,14 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 		case "autoNextSeconds":
 
 			out.Values[i] = ec._Page_autoNextSeconds(ctx, field, obj)
+
+		case "durationSeconds":
+
+			out.Values[i] = ec._Page_durationSeconds(ctx, field, obj)
+
+		case "trivialStep":
+
+			out.Values[i] = ec._Page_trivialStep(ctx, field, obj)
 
 		case "columns":
 

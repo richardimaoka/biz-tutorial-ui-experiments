@@ -16,6 +16,8 @@ type StepEntry2 struct {
 	// steps
 	Step            string `json:"step"`
 	AutoNextSeconds int    `json:"autoNextSeconds,omitempty"`
+	DurationSeconds int    `json:"duration,omitempty"`
+	IsTrivialStep   bool   `json:"isTrivialStep,omitempty"`
 
 	// columns
 	FocusColumn string `json:"focusColumn,omitempty"`
@@ -199,11 +201,22 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 
 		autoNextSeconds := e.AutoNextSeconds
 
+		var durationSeconds int
+		if e.DurationSeconds == 0 { // zero value, input JSON didn't specify this
+			durationSeconds = 3
+		} else {
+			durationSeconds = e.DurationSeconds
+		}
+
+		isTrivialStep := e.IsTrivialStep
+
 		page := model.Page{
 			Step:            internal.StringRef(currentStep),
 			PrevStep:        internal.StringRef(prevStep),
 			NextStep:        internal.StringRef(nextStep),
 			AutoNextSeconds: &autoNextSeconds,
+			DurationSeconds: &durationSeconds,
+			TrivialStep:     &isTrivialStep,
 			Columns:         colWrappers,
 			FocusColumn:     internal.StringRef(e.FocusColumn),
 			Modal:           modalState.ToGraphQLModal(),

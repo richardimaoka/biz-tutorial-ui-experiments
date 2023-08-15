@@ -159,11 +159,13 @@ export type Page = {
   __typename: "Page";
   autoNextSeconds?: Maybe<Scalars["Int"]["output"]>;
   columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
+  durationSeconds?: Maybe<Scalars["Int"]["output"]>;
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   modal?: Maybe<Modal>;
   nextStep?: Maybe<Scalars["String"]["output"]>;
   prevStep?: Maybe<Scalars["String"]["output"]>;
   step?: Maybe<Scalars["String"]["output"]>;
+  trivialStep?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type PageState = {
