@@ -42,7 +42,7 @@ type Page {
   prevStep: String
   autoNextSeconds: Int
   durationSeconds: Int
-  trivialStep: Boolean
+  isTrivialStep: Boolean
   columns: [ColumnWrapper]
   focusColumn: String
   modal: Modal

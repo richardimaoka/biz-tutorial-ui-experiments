@@ -25,12 +25,14 @@ type AutoPlayState = Scheduled | Transitioned | Stopped;
 
 interface AutoPlayButtonProps {
   nextStep: string;
-  autoNextSeconds?: number | null;
+  durationSeconds?: number | null;
+  isTrivialStep?: boolean | null;
 }
 
 export const AutoPlayButton = ({
   nextStep,
-  autoNextSeconds,
+  durationSeconds,
+  isTrivialStep,
 }: AutoPlayButtonProps) => {
   const [state, setState] = useState<AutoPlayState>({ kind: "Stopped" });
   const router = useRouter();
@@ -67,11 +69,12 @@ export const AutoPlayButton = ({
         }
         break;
       case "Stopped":
-        if (autoNextSeconds) {
+        if (isTrivialStep) {
+          const duration = durationSeconds ? durationSeconds * 1000 : 3000;
           const tid = window.setTimeout(() => {
             router.push("/?" + newParams.toString());
             setState({ kind: "Transitioned", step: nextStep, autoPlay: false });
-          }, autoNextSeconds * 1000);
+          }, duration);
           setState({ kind: "Scheduled", timeoutId: tid });
         }
         break; // do nothing
@@ -79,7 +82,7 @@ export const AutoPlayButton = ({
         const _exhaustiveCheck: never = state;
         return _exhaustiveCheck;
     }
-  }, [state, nextStep, router, searchParams, autoNextSeconds]);
+  }, [state, nextStep, router, searchParams, durationSeconds, isTrivialStep]);
 
   const onClick = () => {
     let newParams = new URLSearchParams();

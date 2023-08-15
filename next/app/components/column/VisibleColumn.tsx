@@ -29,7 +29,6 @@ interface VisibleColumnProps {
   selectColumn?: string;
   openFilePath?: string;
   skipAnimation?: boolean;
-  autoNextSeconds?: number;
 }
 
 export const VisibleColumn = (props: VisibleColumnProps) => {
@@ -64,10 +63,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
         />
       </div>
       <div className={styles.bottom}>
-        <Navigation
-          fragment={fragment}
-          autoNextSeconds={props.autoNextSeconds}
-        />
+        <Navigation fragment={fragment} />
       </div>
     </div>
   );

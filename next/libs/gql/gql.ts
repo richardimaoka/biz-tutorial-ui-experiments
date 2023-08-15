@@ -35,7 +35,7 @@ const documents = {
     types.MarkdownColumn_FragmentFragmentDoc,
   "\n  fragment MarkdownFragment on Markdown {\n    contents\n    alignment\n  }\n":
     types.MarkdownFragmentFragmentDoc,
-  "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n":
+  "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n":
     types.Navigation_FragmentFragmentDoc,
   "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n":
     types.SourceCodeColumn_FragmentFragmentDoc,
@@ -159,8 +159,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n",
-): (typeof documents)["\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n  }\n"];
+  source: "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n",
+): (typeof documents)["\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -216,7 +216,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 			NextStep:        internal.StringRef(nextStep),
 			AutoNextSeconds: &autoNextSeconds,
 			DurationSeconds: &durationSeconds,
-			TrivialStep:     &isTrivialStep,
+			IsTrivialStep:   &isTrivialStep,
 			Columns:         colWrappers,
 			FocusColumn:     internal.StringRef(e.FocusColumn),
 			Modal:           modalState.ToGraphQLModal(),

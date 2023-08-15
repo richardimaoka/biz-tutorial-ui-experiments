@@ -161,11 +161,11 @@ export type Page = {
   columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
   durationSeconds?: Maybe<Scalars["Int"]["output"]>;
   focusColumn?: Maybe<Scalars["String"]["output"]>;
+  isTrivialStep?: Maybe<Scalars["Boolean"]["output"]>;
   modal?: Maybe<Modal>;
   nextStep?: Maybe<Scalars["String"]["output"]>;
   prevStep?: Maybe<Scalars["String"]["output"]>;
   step?: Maybe<Scalars["String"]["output"]>;
-  trivialStep?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type PageState = {
@@ -394,6 +394,8 @@ export type Navigation_FragmentFragment = {
   step?: string | null;
   nextStep?: string | null;
   prevStep?: string | null;
+  durationSeconds?: number | null;
+  isTrivialStep?: boolean | null;
 } & { " $fragmentName"?: "Navigation_FragmentFragment" };
 
 export type SourceCodeColumn_FragmentFragment = {
@@ -3398,6 +3400,8 @@ export const Navigation_FragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "step" } },
           { kind: "Field", name: { kind: "Name", value: "nextStep" } },
           { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          { kind: "Field", name: { kind: "Name", value: "durationSeconds" } },
+          { kind: "Field", name: { kind: "Name", value: "isTrivialStep" } },
         ],
       },
     },
@@ -4188,6 +4192,8 @@ export const VisibleColumn_FragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "step" } },
           { kind: "Field", name: { kind: "Name", value: "nextStep" } },
           { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          { kind: "Field", name: { kind: "Name", value: "durationSeconds" } },
+          { kind: "Field", name: { kind: "Name", value: "isTrivialStep" } },
         ],
       },
     },
@@ -4999,6 +5005,8 @@ export const PageQueryDocument = {
           { kind: "Field", name: { kind: "Name", value: "step" } },
           { kind: "Field", name: { kind: "Name", value: "nextStep" } },
           { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          { kind: "Field", name: { kind: "Name", value: "durationSeconds" } },
+          { kind: "Field", name: { kind: "Name", value: "isTrivialStep" } },
         ],
       },
     },
