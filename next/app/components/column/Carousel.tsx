@@ -52,9 +52,16 @@ export const Carousel = (props: CarouselProps) => {
     switch (state.kind) {
       case "Animating":
         if (ref) {
-          ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+          // typically on iPhone safari, if animation happens too early, scrollIntoView is cancelled and the carousel is reverted to the previous state
+          // setting settimeout delay works around it
+          // TODO: using CSS animation and make it slow could work better?
+          window.setTimeout(() => {
+            ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+            setState({ kind: "Static", columnIndex: state.toIndex });
+          }, 500);
+        } else {
+          setState({ kind: "Static", columnIndex: state.fromIndex });
         }
-        setState({ kind: "Static", columnIndex: state.toIndex });
         break;
       case "Static":
         if (fragment?.columns && fragment.columns.length > 0) {
