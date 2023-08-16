@@ -17,7 +17,6 @@ export interface MarkdownColumnProps {
 
 export const MarkdownColumn = (props: MarkdownColumnProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-  console.log(fragment);
 
   const positionStyle = () => {
     switch (fragment.contentsPosition) {

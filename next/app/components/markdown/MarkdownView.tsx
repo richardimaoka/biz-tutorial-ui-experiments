@@ -50,8 +50,6 @@ export const MarkdownView = /*async*/ (
     }
   }, [fragment.contents]);
 
-  console.log(fragment);
-
   const alignmentStyle =
     fragment.alignment === "CENTER" ? styles.center : styles.left; //default alignment = styles.left
 
