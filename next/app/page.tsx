@@ -57,9 +57,6 @@ export default async function Home({ searchParams }: PageParams) {
           openFilePath={openFilePath}
           step={step}
           skipAnimation={searchParams.skipAnimation}
-          autoNextSeconds={
-            data.page.autoNextSeconds ? data.page.autoNextSeconds : undefined
-          }
         />
       )}
     </main>
