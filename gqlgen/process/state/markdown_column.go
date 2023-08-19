@@ -49,12 +49,14 @@ func NewMarkdownColumn() *MarkdownColumn {
 func (p *MarkdownColumn) Process(markdownContents, verticalAlignment, horizontalAlignment string) error {
 	va, err := ToMarkdownVerticalAlignment(verticalAlignment)
 	if err != nil {
-		return fmt.Errorf("Process() failed to convert vertical alignment, %s", err)
+		va = "invalid alignment" // this will be nil in GraphQL
+		// return fmt.Errorf("Process() failed to convert vertical alignment, %s", err)
 	}
 
 	ha, err := ToMarkdownAlignment(horizontalAlignment)
 	if err != nil {
-		return fmt.Errorf("Process() failed to convert horizontal alignment, %s", err)
+		ha = "invalid alignment" // this will be nil in GraphQL
+		// return fmt.Errorf("Process() failed to convert horizontal alignment, %s", err)
 	}
 
 	p.Description = Markdown{

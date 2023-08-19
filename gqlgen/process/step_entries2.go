@@ -164,7 +164,10 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 				column = devtoolsColumnState.ToGraphQLDevToolsCol()
 
 			case "Markdown":
-				markdownColumnState.Process(e.MarkdownContents, e.MarkdownVerticalAlignment, e.MarkdownHorizontalAlignment)
+				err := markdownColumnState.Process(e.MarkdownContents, e.MarkdownVerticalAlignment, e.MarkdownHorizontalAlignment)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed to process Markdown column at step = %s, %s", e.Step, err)
+				}
 				column = markdownColumnState.ToGraphQLMarkdownColumn()
 
 				// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
