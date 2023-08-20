@@ -27,7 +27,7 @@ export const MarkdownColumn = (props: MarkdownColumnProps): JSX.Element => {
       case "BOTTOM":
         return styles.verticalBottom;
       default:
-        return styles.verticalCenter;
+        return styles.verticalTop;
     }
   };
 
