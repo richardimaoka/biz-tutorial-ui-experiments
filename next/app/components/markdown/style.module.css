@@ -29,27 +29,27 @@
 }
 
 .markdown h1 {
-  font-size: 32px;
+  font-size: 40px;
   margin: 21px 0px;
 }
 .markdown h2 {
-  font-size: 28px;
+  font-size: 36px;
   margin: 16px 0px;
 }
 .markdown h3 {
-  font-size: 24px;
+  font-size: 32px;
   margin: 14px 0px;
 }
 .markdown h4 {
-  font-size: 20px;
+  font-size: 28px;
   margin: 10px 0px;
 }
 .markdown h5 {
-  font-size: 16px;
+  font-size: 24px;
   margin: 8px 0px;
 }
 .markdown h6 {
-  font-size: 14px;
+  font-size: 20px;
   margin: 7px 0px;
 }
 
