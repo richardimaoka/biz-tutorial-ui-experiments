@@ -9,7 +9,7 @@ import (
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "process" {
 		// err := process.Process2("sign-in-with-google", "https://github.com/richardimaoka/sign-in-with-google-experiment.git")
-		err := process.Process2("live-server", "https://github.com/richardimaoka/sign-in-with-google-experiment.git")
+		err := process.Process2("live-server", "https://github.com/richardimaoka/tutorial-html-live-server.git")
 		if err != nil {
 			panic(err)
 		}
