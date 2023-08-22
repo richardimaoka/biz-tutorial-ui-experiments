@@ -205,6 +205,17 @@ type ComplexityRoot struct {
 	TerminalOutput struct {
 		Output func(childComplexity int) int
 	}
+
+	YouTubeColumn struct {
+		Placeholder func(childComplexity int) int
+		Youtube     func(childComplexity int) int
+	}
+
+	YouTubeEmbed struct {
+		Height  func(childComplexity int) int
+		VideoID func(childComplexity int) int
+		Width   func(childComplexity int) int
+	}
 }
 
 type QueryResolver interface {
@@ -875,6 +886,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalOutput.Output(childComplexity), true
+
+	case "YouTubeColumn._placeholder":
+		if e.complexity.YouTubeColumn.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.YouTubeColumn.Placeholder(childComplexity), true
+
+	case "YouTubeColumn.youtube":
+		if e.complexity.YouTubeColumn.Youtube == nil {
+			break
+		}
+
+		return e.complexity.YouTubeColumn.Youtube(childComplexity), true
+
+	case "YouTubeEmbed.height":
+		if e.complexity.YouTubeEmbed.Height == nil {
+			break
+		}
+
+		return e.complexity.YouTubeEmbed.Height(childComplexity), true
+
+	case "YouTubeEmbed.videoId":
+		if e.complexity.YouTubeEmbed.VideoID == nil {
+			break
+		}
+
+		return e.complexity.YouTubeEmbed.VideoID(childComplexity), true
+
+	case "YouTubeEmbed.width":
+		if e.complexity.YouTubeEmbed.Width == nil {
+			break
+		}
+
+		return e.complexity.YouTubeEmbed.Width(childComplexity), true
 
 	}
 	return 0, false
@@ -5110,6 +5156,219 @@ func (ec *executionContext) fieldContext_TerminalOutput_output(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _YouTubeColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeColumn__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_YouTubeColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "YouTubeColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _YouTubeColumn_youtube(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeColumn_youtube(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Youtube, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.YouTubeEmbed)
+	fc.Result = res
+	return ec.marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_YouTubeColumn_youtube(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "YouTubeColumn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "width":
+				return ec.fieldContext_YouTubeEmbed_width(ctx, field)
+			case "height":
+				return ec.fieldContext_YouTubeEmbed_height(ctx, field)
+			case "videoId":
+				return ec.fieldContext_YouTubeEmbed_videoId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type YouTubeEmbed", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _YouTubeEmbed_width(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeEmbed_width(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Width, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_YouTubeEmbed_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "YouTubeEmbed",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _YouTubeEmbed_height(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeEmbed_height(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Height, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_YouTubeEmbed_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "YouTubeEmbed",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _YouTubeEmbed_videoId(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeEmbed_videoId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.VideoID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_YouTubeEmbed_videoId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "YouTubeEmbed",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext___Directive_name(ctx, field)
 	if err != nil {
@@ -6940,6 +7199,13 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._TerminalColumn(ctx, sel, obj)
+	case model.YouTubeColumn:
+		return ec._YouTubeColumn(ctx, sel, &obj)
+	case *model.YouTubeColumn:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._YouTubeColumn(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
@@ -7906,6 +8172,68 @@ func (ec *executionContext) _TerminalOutput(ctx context.Context, sel ast.Selecti
 		case "output":
 
 			out.Values[i] = ec._TerminalOutput_output(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var youTubeColumnImplementors = []string{"YouTubeColumn", "Column"}
+
+func (ec *executionContext) _YouTubeColumn(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, youTubeColumnImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("YouTubeColumn")
+		case "_placeholder":
+
+			out.Values[i] = ec._YouTubeColumn__placeholder(ctx, field, obj)
+
+		case "youtube":
+
+			out.Values[i] = ec._YouTubeColumn_youtube(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var youTubeEmbedImplementors = []string{"YouTubeEmbed"}
+
+func (ec *executionContext) _YouTubeEmbed(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeEmbed) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, youTubeEmbedImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("YouTubeEmbed")
+		case "width":
+
+			out.Values[i] = ec._YouTubeEmbed_width(ctx, field, obj)
+
+		case "height":
+
+			out.Values[i] = ec._YouTubeEmbed_height(ctx, field, obj)
+
+		case "videoId":
+
+			out.Values[i] = ec._YouTubeEmbed_videoId(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -9005,6 +9333,13 @@ func (ec *executionContext) marshalOTerminalNode2ᚖgithubᚗcomᚋrichardimaoka
 		return graphql.Null
 	}
 	return ec._TerminalNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx context.Context, sel ast.SelectionSet, v *model.YouTubeEmbed) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._YouTubeEmbed(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

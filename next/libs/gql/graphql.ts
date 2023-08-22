@@ -246,6 +246,19 @@ export type TerminalOutput = {
   output?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type YouTubeColumn = Column & {
+  __typename: "YouTubeColumn";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  youtube?: Maybe<YouTubeEmbed>;
+};
+
+export type YouTubeEmbed = {
+  __typename: "YouTubeEmbed";
+  height?: Maybe<Scalars["Int"]["output"]>;
+  videoId?: Maybe<Scalars["String"]["output"]>;
+  width?: Maybe<Scalars["Int"]["output"]>;
+};
+
 export type BrowserColumn_FragmentFragment = {
   __typename: "BrowserColumn";
   width?: number | null;
@@ -284,6 +297,7 @@ export type ColumnTab_FragmentFragment = {
     | { __typename: "MarkdownColumn" }
     | { __typename: "SourceCodeColumn" }
     | { __typename: "TerminalColumn" }
+    | { __typename: "YouTubeColumn" }
     | null;
 } & { " $fragmentName"?: "ColumnTab_FragmentFragment" };
 
@@ -330,6 +344,7 @@ export type ColumnWrapperComponent_FragmentFragment = {
           TerminalColumn_FragmentFragment: TerminalColumn_FragmentFragment;
         };
       })
+    | { __typename: "YouTubeColumn" }
     | null;
 } & { " $fragmentName"?: "ColumnWrapperComponent_FragmentFragment" };
 

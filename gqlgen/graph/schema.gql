@@ -121,6 +121,11 @@ type TerminalColumn implements Column {
   terminal: Terminal
 }
 
+type YouTubeColumn implements Column {
+  _placeholder: String
+  youtube: YouTubeEmbed
+}
+
 ###################################################
 # Terminal related object types
 ###################################################
@@ -234,4 +239,14 @@ type ImageCentered {
   height: Int
   path: String
   url: String
+}
+
+###################################################
+# Video related object types
+###################################################
+
+type YouTubeEmbed {
+  width: Int
+  height: Int
+  videoId: String
 }
