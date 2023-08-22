@@ -31,6 +31,23 @@ func (c *SourceCodeColumn) UpdateIsFoldFileTree(isFoldFileTree bool) {
 }
 
 func (c *SourceCodeColumn) ForwardCommit(step, commit string) error {
+	if c.sc.commitHash == commit {
+		// Repeating the same commit means clearing diff
+
+		// Before clearing the inner state, back up these fields
+		DefaultOpenFilePath := c.sc.DefaultOpenFilePath
+		IsFoldFileTree := c.sc.IsFoldFileTree
+
+		// Clear the inner source code state, to clear highlights
+		c.sc = NewSourceCode(c.sc.repo, c.sc.projectDir, c.sc.tutorial)
+
+		// Restore backed-up fields
+		c.UpdateDefaultOpenFilePath(DefaultOpenFilePath)
+		c.UpdateIsFoldFileTree(IsFoldFileTree)
+
+		// And the following ForwardCommit will add all files as unchanged
+	}
+
 	err := c.sc.ForwardCommit(step, commit)
 	if err != nil {
 		return fmt.Errorf("failed in TransitionForwardCommit, %s", err)

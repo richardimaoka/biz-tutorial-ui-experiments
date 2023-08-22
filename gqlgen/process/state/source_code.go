@@ -130,11 +130,6 @@ func (s *SourceCode) ForwardCommit(step, currentCommitStr string) error {
 	return nil
 }
 
-// stateful, reset the inner state to the given commit
-func (s *SourceCode) ResetCommit(step, commitStr string) error {
-	return nil
-}
-
 // stateful, current state + arguments => next state
 // func (s *SourceCode) ForwardStepOps(nextStep string, fileOps []string, defaultOpenFilePath string, isFoldFileTree bool) error {
 // 	return nil
