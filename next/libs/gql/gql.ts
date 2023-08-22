@@ -73,7 +73,7 @@ const documents = {
     types.TerminalOutput_FragmentFragmentDoc,
   "\n  fragment YouTubeColumn_Fragment on YouTubeColumn {\n    youtube {\n      ...YouTube_Fragment\n    }\n  }\n":
     types.YouTubeColumn_FragmentFragmentDoc,
-  "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    videoId\n    width\n    height\n  }\n":
+  "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n":
     types.YouTube_FragmentFragmentDoc,
   "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n":
     types.PageQueryDocument,
@@ -277,8 +277,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    videoId\n    width\n    height\n  }\n",
-): (typeof documents)["\n  fragment YouTube_Fragment on YouTubeEmbed {\n    videoId\n    width\n    height\n  }\n"];
+  source: "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n",
+): (typeof documents)["\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

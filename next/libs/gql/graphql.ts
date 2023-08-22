@@ -254,8 +254,8 @@ export type YouTubeColumn = Column & {
 
 export type YouTubeEmbed = {
   __typename: "YouTubeEmbed";
+  embedUrl?: Maybe<Scalars["String"]["output"]>;
   height?: Maybe<Scalars["Int"]["output"]>;
-  videoId?: Maybe<Scalars["String"]["output"]>;
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
@@ -586,7 +586,7 @@ export type YouTubeColumn_FragmentFragment = {
 
 export type YouTube_FragmentFragment = {
   __typename: "YouTubeEmbed";
-  videoId?: string | null;
+  embedUrl?: string | null;
   width?: number | null;
   height?: number | null;
 } & { " $fragmentName"?: "YouTube_FragmentFragment" };
@@ -2174,7 +2174,7 @@ export const YouTube_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],
@@ -2221,7 +2221,7 @@ export const YouTubeColumn_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],
@@ -2720,7 +2720,7 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],
@@ -3419,7 +3419,7 @@ export const Carousel_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],
@@ -4230,7 +4230,7 @@ export const VisibleColumn_FragmentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],
@@ -5118,7 +5118,7 @@ export const PageQueryDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
           { kind: "Field", name: { kind: "Name", value: "width" } },
           { kind: "Field", name: { kind: "Name", value: "height" } },
         ],

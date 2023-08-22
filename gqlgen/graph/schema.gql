@@ -248,5 +248,5 @@ type ImageCentered {
 type YouTubeEmbed {
   width: Int
   height: Int
-  videoId: String
+  embedUrl: String
 }

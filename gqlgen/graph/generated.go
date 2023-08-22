@@ -212,9 +212,9 @@ type ComplexityRoot struct {
 	}
 
 	YouTubeEmbed struct {
-		Height  func(childComplexity int) int
-		VideoID func(childComplexity int) int
-		Width   func(childComplexity int) int
+		EmbedURL func(childComplexity int) int
+		Height   func(childComplexity int) int
+		Width    func(childComplexity int) int
 	}
 }
 
@@ -901,19 +901,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.YouTubeColumn.Youtube(childComplexity), true
 
+	case "YouTubeEmbed.embedUrl":
+		if e.complexity.YouTubeEmbed.EmbedURL == nil {
+			break
+		}
+
+		return e.complexity.YouTubeEmbed.EmbedURL(childComplexity), true
+
 	case "YouTubeEmbed.height":
 		if e.complexity.YouTubeEmbed.Height == nil {
 			break
 		}
 
 		return e.complexity.YouTubeEmbed.Height(childComplexity), true
-
-	case "YouTubeEmbed.videoId":
-		if e.complexity.YouTubeEmbed.VideoID == nil {
-			break
-		}
-
-		return e.complexity.YouTubeEmbed.VideoID(childComplexity), true
 
 	case "YouTubeEmbed.width":
 		if e.complexity.YouTubeEmbed.Width == nil {
@@ -5237,8 +5237,8 @@ func (ec *executionContext) fieldContext_YouTubeColumn_youtube(ctx context.Conte
 				return ec.fieldContext_YouTubeEmbed_width(ctx, field)
 			case "height":
 				return ec.fieldContext_YouTubeEmbed_height(ctx, field)
-			case "videoId":
-				return ec.fieldContext_YouTubeEmbed_videoId(ctx, field)
+			case "embedUrl":
+				return ec.fieldContext_YouTubeEmbed_embedUrl(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type YouTubeEmbed", field.Name)
 		},
@@ -5328,8 +5328,8 @@ func (ec *executionContext) fieldContext_YouTubeEmbed_height(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _YouTubeEmbed_videoId(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeEmbed_videoId(ctx, field)
+func (ec *executionContext) _YouTubeEmbed_embedUrl(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_YouTubeEmbed_embedUrl(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5342,7 +5342,7 @@ func (ec *executionContext) _YouTubeEmbed_videoId(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.VideoID, nil
+		return obj.EmbedURL, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5356,7 +5356,7 @@ func (ec *executionContext) _YouTubeEmbed_videoId(ctx context.Context, field gra
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_YouTubeEmbed_videoId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_YouTubeEmbed_embedUrl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "YouTubeEmbed",
 		Field:      field,
@@ -8231,9 +8231,9 @@ func (ec *executionContext) _YouTubeEmbed(ctx context.Context, sel ast.Selection
 
 			out.Values[i] = ec._YouTubeEmbed_height(ctx, field, obj)
 
-		case "videoId":
+		case "embedUrl":
 
-			out.Values[i] = ec._YouTubeEmbed_videoId(ctx, field, obj)
+			out.Values[i] = ec._YouTubeEmbed_embedUrl(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

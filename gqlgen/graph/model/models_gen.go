@@ -199,9 +199,9 @@ func (YouTubeColumn) IsColumn()                    {}
 func (this YouTubeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type YouTubeEmbed struct {
-	Width   *int    `json:"width"`
-	Height  *int    `json:"height"`
-	VideoID *string `json:"videoId"`
+	Width    *int    `json:"width"`
+	Height   *int    `json:"height"`
+	EmbedURL *string `json:"embedUrl"`
 }
 
 type ColumnVerticalPosition string
