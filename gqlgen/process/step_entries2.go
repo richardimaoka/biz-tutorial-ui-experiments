@@ -58,6 +58,11 @@ type StepEntry2 struct {
 	MarkdownContents            string `json:"markdownContents,omitempty"`
 	MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment,omitempty"`
 	MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment,omitempty"`
+
+	// youtube
+	YouTubeVideoId string `json:"youtubeVideoId,omitempty"`
+	YouTubeWidth   int    `json:"youtubeWidth,omitempty"`
+	YouTubeHeight  int    `json:"youtubeHeight,omitempty"`
 }
 
 type StepEntries2 []StepEntry2
@@ -114,6 +119,7 @@ func (e StepEntry2) columns(seqNo int) []string {
 func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Page, error) {
 	terminalColumnState := state.NewTerminalColumn()
 	markdownColumnState := state.NewMarkdownColumn()
+	youtubeColumnState := state.NewYouTubeColumn()
 	devtoolsColumnState := state.NewDevToolsColumn()
 	browserColumnState := state.NewBrowserColumn()
 	srcColmnState, err := state.NewSourceCodeColumn(repoUrl, "myproj", tutorial)
@@ -169,6 +175,13 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 					return nil, fmt.Errorf("ToGraphQLPages failed to process Markdown column at step = %s, %s", e.Step, err)
 				}
 				column = markdownColumnState.ToGraphQLMarkdownColumn()
+
+			case "YouTube":
+				err := youtubeColumnState.Process(e.YouTubeVideoId, e.YouTubeHeight, e.YouTubeWidth)
+				if err != nil {
+					return nil, fmt.Errorf("ToGraphQLPages failed to process YouTube column at step = %s, %s", e.Step, err)
+				}
+				column = youtubeColumnState.ToGraphQLYouTubeColumn()
 
 				// if e.BackgroundImageColumn != nil && e.BackgroundImageColumn.Column == i {
 				// 	// if bgColState == nil {
