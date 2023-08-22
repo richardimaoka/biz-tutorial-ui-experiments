@@ -344,7 +344,11 @@ export type ColumnWrapperComponent_FragmentFragment = {
           TerminalColumn_FragmentFragment: TerminalColumn_FragmentFragment;
         };
       })
-    | { __typename: "YouTubeColumn" }
+    | ({ __typename: "YouTubeColumn" } & {
+        " $fragmentRefs"?: {
+          YouTubeColumn_FragmentFragment: YouTubeColumn_FragmentFragment;
+        };
+      })
     | null;
 } & { " $fragmentName"?: "ColumnWrapperComponent_FragmentFragment" };
 
@@ -568,6 +572,24 @@ export type TerminalOutput_FragmentFragment = {
   __typename: "TerminalOutput";
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
+
+export type YouTubeColumn_FragmentFragment = {
+  __typename: "YouTubeColumn";
+  youtube?:
+    | ({ __typename: "YouTubeEmbed" } & {
+        " $fragmentRefs"?: {
+          YouTube_FragmentFragment: YouTube_FragmentFragment;
+        };
+      })
+    | null;
+} & { " $fragmentName"?: "YouTubeColumn_FragmentFragment" };
+
+export type YouTube_FragmentFragment = {
+  __typename: "YouTubeEmbed";
+  videoId?: string | null;
+  width?: number | null;
+  height?: number | null;
+} & { " $fragmentName"?: "YouTube_FragmentFragment" };
 
 export type PageQueryQueryVariables = Exact<{
   tutorial: Scalars["String"]["input"];
@@ -2139,6 +2161,74 @@ export const MarkdownColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<MarkdownColumn_FragmentFragment, unknown>;
+export const YouTube_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<YouTube_FragmentFragment, unknown>;
+export const YouTubeColumn_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "youtube" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "YouTube_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<YouTubeColumn_FragmentFragment, unknown>;
 export const ColumnWrapperComponent_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2248,6 +2338,22 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "MarkdownColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "YouTubeColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "YouTubeColumn_Fragment" },
                       },
                     ],
                   },
@@ -2606,6 +2712,22 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "SourceCodeColumn_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -2738,6 +2860,32 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
             },
           },
           { kind: "Field", name: { kind: "Name", value: "contentsPosition" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "youtube" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "YouTube_Fragment" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -3263,6 +3411,48 @@ export const Carousel_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "youtube" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "YouTube_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3367,6 +3557,22 @@ export const Carousel_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "MarkdownColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "YouTubeColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "YouTubeColumn_Fragment" },
                       },
                     ],
                   },
@@ -4016,6 +4222,48 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "youtube" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "YouTube_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4120,6 +4368,22 @@ export const VisibleColumn_FragmentFragmentDoc = {
                           kind: "Name",
                           value: "MarkdownColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "YouTubeColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "YouTubeColumn_Fragment" },
                       },
                     ],
                   },
@@ -4846,6 +5110,48 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTube_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeEmbed" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "videoId" } },
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "YouTubeColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "youtube" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "YouTube_Fragment" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "ColumnWrapperComponent_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4950,6 +5256,22 @@ export const PageQueryDocument = {
                           kind: "Name",
                           value: "MarkdownColumn_Fragment",
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "YouTubeColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "YouTubeColumn_Fragment" },
                       },
                     ],
                   },
