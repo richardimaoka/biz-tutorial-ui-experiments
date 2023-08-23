@@ -24,6 +24,7 @@ export const YouTubeView = (props: Props) => {
 
   return (
     <iframe
+      className={styles.youtubeEmbed}
       width={fragment.width}
       height={fragment.height}
       src={fragment.embedUrl}
