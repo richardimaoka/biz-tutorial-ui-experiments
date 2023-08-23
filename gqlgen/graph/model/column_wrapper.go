@@ -104,7 +104,7 @@ func columnFromBytes(bytes []byte) (Column, error) {
 		return &col, nil
 
 	case "YouTubeColumn":
-		var col DevToolsColumn
+		var col YouTubeColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}
