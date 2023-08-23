@@ -17,7 +17,7 @@ func (p *YouTubeEmbed) ToGraphQLYouTubeEmbed() *model.YouTubeEmbed {
 	// copy to avoid mutation effect afterwards
 	width := p.Width
 	height := p.Height
-	url := internal.StringRef(fmt.Sprintf("https://www.youtube.com/embed/%s", p.VideoId))
+	url := internal.StringRef(fmt.Sprintf("https://www.youtube.com/embed/%s?autoplay=1&mute=1", p.VideoId))
 
 	return &model.YouTubeEmbed{
 		Width:    &width,
