@@ -43,7 +43,8 @@ type Markdown struct {
 func (p *Markdown) ToGraphQLMarkdown() *model.Markdown {
 	// copy to avoid mutation effect afterwards
 	contents := internal.StringRef(p.Contents)
-	alignment := p.Alignment.Convert()
+	s := "str"
+	alignment := &s
 
 	return &model.Markdown{
 		Contents:  contents,
