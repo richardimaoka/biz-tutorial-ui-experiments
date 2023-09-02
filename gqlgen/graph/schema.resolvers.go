@@ -14,34 +14,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
-// PageState is the resolver for the pageState field.
-func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
-	var dirName = "data/apollo-client-getting-started/state"
-	var initialStep = "_initial"
-
-	var filename string
-	if step == nil {
-		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
-	} else {
-		filename = fmt.Sprintf(dirName+"/%s.json", *step)
-	}
-
-	log.Printf("reading data from %s", filename)
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	var pageState model.PageState
-	err = json.Unmarshal(data, &pageState)
-	if err != nil {
-		log.Printf("failed to read data from %s, %s", filename, err)
-		return nil, fmt.Errorf("internal server error %s", *step)
-	}
-
-	return &pageState, nil
-}
-
 // Page is the resolver for the page field.
 func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.Page, error) {
 	var dirName = fmt.Sprintf("data/%s/state", tutorial)
@@ -68,11 +40,6 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 	}
 
 	return &page, nil
-}
-
-// SourceCode is the resolver for the sourceCode field.
-func (r *queryResolver) SourceCode(ctx context.Context) (*model.SourceCode, error) {
-	panic(fmt.Errorf("not implemented: SourceCode - sourceCode"))
 }
 
 // OpenFile is the resolver for the openFile field.
@@ -149,3 +116,39 @@ func (r *Resolver) SourceCode() SourceCodeResolver { return &sourceCodeResolver{
 
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
+	var dirName = "data/apollo-client-getting-started/state"
+	var initialStep = "_initial"
+
+	var filename string
+	if step == nil {
+		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
+	} else {
+		filename = fmt.Sprintf(dirName+"/%s.json", *step)
+	}
+
+	log.Printf("reading data from %s", filename)
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var pageState model.PageState
+	err = json.Unmarshal(data, &pageState)
+	if err != nil {
+		log.Printf("failed to read data from %s, %s", filename, err)
+		return nil, fmt.Errorf("internal server error %s", *step)
+	}
+
+	return &pageState, nil
+}
+func (r *queryResolver) SourceCode(ctx context.Context) (*model.SourceCode, error) {
+	panic(fmt.Errorf("not implemented: SourceCode - sourceCode"))
+}
