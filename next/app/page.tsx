@@ -31,7 +31,8 @@ export default async function Home({ searchParams }: PageParams) {
     query: queryDefinition,
     variables: {
       // tutorial: "sign-in-with-google",
-      tutorial: "live-server",
+      // tutorial: "live-server",
+      tutorial: "gqlgen-getting-started",
       openFilePath: openFilePath,
       step: searchParams.step,
       column: searchParams.column,
