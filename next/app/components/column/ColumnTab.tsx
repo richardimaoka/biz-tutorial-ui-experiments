@@ -6,6 +6,7 @@ import { TerminalIcon } from "../icons/TerminalIcon";
 import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import { VideoIcon } from "../icons/VideoIcon";
 
 const fragmentDefinition = graphql(`
   fragment ColumnTab_Fragment on ColumnWrapper {
@@ -33,20 +34,22 @@ export const ColumnTab = (props: ColumnTabProps): JSX.Element => {
     }
 
     switch (fragment.column.__typename) {
-      case "SourceCodeColumn":
-        return <SourceCodeIcon />;
-      case "TerminalColumn":
-        return <TerminalIcon />;
       case "BackgroundImageColumn":
+        return <ChromeIcon />;
+      case "BrowserColumn":
+        return <ChromeIcon />;
+      case "DevToolsColumn":
         return <ChromeIcon />;
       case "ImageDescriptionColumn":
         return <FileLinesIcon />;
       case "MarkdownColumn":
         return <FileLinesIcon />;
-      case "BrowserColumn":
-        return <ChromeIcon />;
-      case "DevToolsColumn":
-        return <ChromeIcon />;
+      case "SourceCodeColumn":
+        return <SourceCodeIcon />;
+      case "TerminalColumn":
+        return <TerminalIcon />;
+      case "YouTubeColumn":
+        return <VideoIcon />;
     }
   };
 
