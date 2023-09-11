@@ -16,13 +16,13 @@ func Committtssss(tutorial string) error {
 
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Errorf("Committtssss failed, %s", err)
+		return fmt.Errorf("Committtssss failed, %s", err)
 	}
 
 	var commits []Commit
 	err = json.Unmarshal(bytes, &commits)
 	if err != nil {
-		fmt.Errorf("Committtssss failed, %s", err)
+		return fmt.Errorf("Committtssss failed, %s", err)
 	}
 
 	return nil
