@@ -1,5 +1,7 @@
 package rough
 
+import "github.com/google/uuid"
+
 type InnerState struct {
 	currentSeqNo int
 	currentCol   string
@@ -67,6 +69,15 @@ type DetailedStep struct {
 	YouTubeVideoId string `json:"youtubeVideoId,omitempty"`
 	YouTubeWidth   int    `json:"youtubeWidth,omitempty"`
 	YouTubeHeight  int    `json:"youtubeHeight,omitempty"`
+}
+
+func simpleCommand(command string) DetailedStep {
+	uuid := uuid.NewString()
+	return DetailedStep{
+		Step:         uuid,
+		TerminalText: command,
+		TerminalType: "command",
+	}
 }
 
 func GenDetailedSteps(filename string) []DetailedStep {
