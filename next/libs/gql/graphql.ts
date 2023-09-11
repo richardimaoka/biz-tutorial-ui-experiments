@@ -253,6 +253,28 @@ export type YouTubeEmbed = {
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
+export type PageQueryQueryVariables = Exact<{
+  tutorial: Scalars["String"]["input"];
+  step?: InputMaybe<Scalars["String"]["input"]>;
+  openFilePath?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type PageQueryQuery = {
+  __typename: "Query";
+  page?:
+    | ({
+        __typename: "Page";
+        step?: string | null;
+        focusColumn?: string | null;
+        autoNextSeconds?: number | null;
+      } & {
+        " $fragmentRefs"?: {
+          VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
+        };
+      })
+    | null;
+};
+
 export type BrowserColumn_FragmentFragment = {
   __typename: "BrowserColumn";
   width?: number | null;
@@ -584,28 +606,6 @@ export type YouTube_FragmentFragment = {
   width?: number | null;
   height?: number | null;
 } & { " $fragmentName"?: "YouTube_FragmentFragment" };
-
-export type PageQueryQueryVariables = Exact<{
-  tutorial: Scalars["String"]["input"];
-  step?: InputMaybe<Scalars["String"]["input"]>;
-  openFilePath?: InputMaybe<Scalars["String"]["input"]>;
-}>;
-
-export type PageQueryQuery = {
-  __typename: "Query";
-  page?:
-    | ({
-        __typename: "Page";
-        step?: string | null;
-        focusColumn?: string | null;
-        autoNextSeconds?: number | null;
-      } & {
-        " $fragmentRefs"?: {
-          VisibleColumn_FragmentFragment: VisibleColumn_FragmentFragment;
-        };
-      })
-    | null;
-};
 
 export const ColumnTab_FragmentFragmentDoc = {
   kind: "Document",
