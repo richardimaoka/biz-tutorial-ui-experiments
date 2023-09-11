@@ -25,5 +25,39 @@ func Committtssss(tutorial string) error {
 		return fmt.Errorf("Committtssss failed, %s", err)
 	}
 
+	for _, commit := range commits {
+		fmt.Printf("%s: %s\n", commit.Commit, commit.Message)
+	}
+
 	return nil
+}
+
+type RoughStep struct {
+	Commit      string `json:"commit"`
+	Instruction string `json:"instruction"`
+}
+
+func findMatchingRoughStep(commit *Commit, roughSteps []RoughStep) *RoughStep {
+	for _, roughStep := range roughSteps {
+		if commit.Message == roughStep.Instruction {
+			return &roughStep
+		}
+	}
+	return nil
+}
+
+func Reconcile(commits []Commit, roughSteps []RoughStep) ([]*RoughStep, error) {
+	var updatedRoughSteps []*RoughStep
+
+	for _, commit := range commits {
+		roughStep := findMatchingRoughStep(&commit, roughSteps)
+		if roughStep != nil {
+			return nil, fmt.Errorf("rough step for %v not found", commit)
+		}
+
+		roughStep.Commit = commit.Commit
+		updatedRoughSteps = append(updatedRoughSteps, roughStep)
+	}
+
+	return updatedRoughSteps, nil
 }
