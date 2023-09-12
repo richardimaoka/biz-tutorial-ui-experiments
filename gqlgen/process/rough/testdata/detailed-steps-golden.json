@@ -3,6 +3,7 @@
     "step": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
     "focusColumn": "Terminal",
     "column1": "Terminal",
-    "terminalText": "mkdir gqlgen-todos"
+    "terminalText": "mkdir gqlgen-todos",
+    "terminalType": "command"
   }
 ]

@@ -1,7 +1,5 @@
 package rough
 
-import "github.com/google/uuid"
-
 type InnerState struct {
 	currentSeqNo int
 	currentCol   string
@@ -123,8 +121,8 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 	}
 }
 
-func simpleCommand(command string, existingColumns []string) DetailedStep {
-	uuid := uuid.NewString()
+func simpleCommand(uuid, command string, existingColumns []string) DetailedStep {
+
 	step := DetailedStep{
 		Step:         uuid,
 		FocusColumn:  "Terminal",
@@ -137,8 +135,9 @@ func simpleCommand(command string, existingColumns []string) DetailedStep {
 
 func GenDetailedSteps(filename string) []DetailedStep {
 	var detailedSteps []DetailedStep
-
-	detailedSteps = append(detailedSteps, simpleCommand("mkdir gqlgen-todos", []string{}))
+	// uuid := uuid.NewString()
+	uuid := "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec"
+	detailedSteps = append(detailedSteps, simpleCommand(uuid, "mkdir gqlgen-todos", []string{}))
 
 	return detailedSteps
 }
