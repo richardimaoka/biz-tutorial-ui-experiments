@@ -71,24 +71,74 @@ type DetailedStep struct {
 	YouTubeHeight  int    `json:"youtubeHeight,omitempty"`
 }
 
-func simpleCommand(command string) DetailedStep {
+func (step *DetailedStep) setColumns(existingColumns []string, focusColumn string) {
+	var focusColumnExists bool
+
+	if len(existingColumns) > 0 {
+		step.Column1 = existingColumns[0]
+		focusColumnExists = existingColumns[0] == focusColumn
+	} else {
+		step.Column1 = focusColumn
+		return
+	}
+
+	if len(existingColumns) > 1 {
+		step.Column2 = existingColumns[1]
+		focusColumnExists = existingColumns[1] == focusColumn
+	} else {
+		if !focusColumnExists {
+			step.Column2 = focusColumn
+		}
+		return
+	}
+
+	if len(existingColumns) > 2 {
+		step.Column3 = existingColumns[2]
+		focusColumnExists = existingColumns[2] == focusColumn
+	} else {
+		if !focusColumnExists {
+			step.Column3 = focusColumn
+		}
+		return
+	}
+
+	if len(existingColumns) > 3 {
+		step.Column4 = existingColumns[3]
+		focusColumnExists = existingColumns[3] == focusColumn
+	} else {
+		if !focusColumnExists {
+			step.Column4 = focusColumn
+		}
+		return
+	}
+
+	if len(existingColumns) > 4 {
+		step.Column5 = existingColumns[4]
+		focusColumnExists = existingColumns[4] == focusColumn
+	} else {
+		if !focusColumnExists {
+			step.Column5 = focusColumn
+		}
+		return
+	}
+}
+
+func simpleCommand(command string, existingColumns []string) DetailedStep {
 	uuid := uuid.NewString()
-	return DetailedStep{
+	step := DetailedStep{
 		Step:         uuid,
+		FocusColumn:  "Terminal",
 		TerminalText: command,
 		TerminalType: "command",
 	}
+	step.setColumns(existingColumns, "Terminal")
+	return step
 }
 
 func GenDetailedSteps(filename string) []DetailedStep {
 	var detailedSteps []DetailedStep
 
-	detailedSteps = append(detailedSteps, DetailedStep{
-		FocusColumn:  "Terminal",
-		Column1:      "Terminal",
-		Step:         "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
-		TerminalText: "mkdir gqlgen-todos",
-	})
+	detailedSteps = append(detailedSteps, simpleCommand("mkdir gqlgen-todos", []string{}))
 
 	return detailedSteps
 }
