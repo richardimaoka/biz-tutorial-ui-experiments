@@ -143,6 +143,22 @@ func isCommand(instruction string) bool {
 		strings.HasPrefix(instruction, "go ")
 }
 
+func isManualCommit(instruction string) bool {
+	return instruction == "# manual commit"
+}
+
+func isAutoCommit(instruction string) bool {
+	return instruction == "# auto commit"
+}
+
+func isSourceError(instruction string) bool {
+	return instruction == "# source error"
+}
+
+func isBrowser(instruction string) bool {
+	return instruction == "# browser"
+}
+
 func (s *RoughStep) Convert(uuid string, columns []string) []DetailedStep {
 	split := strings.Split(s.Instruction, " ")
 	if len(split) == 0 {
@@ -152,6 +168,10 @@ func (s *RoughStep) Convert(uuid string, columns []string) []DetailedStep {
 	if isCommand(s.Instruction) {
 		ds := command(uuid, s.Instruction, s.Commit, columns)
 		return []DetailedStep{ds}
+	} else if isManualCommit(s.Instruction) {
+	} else if isAutoCommit(s.Instruction) {
+	} else if isSourceError(s.Instruction) {
+	} else if isBrowser(s.Instruction) {
 	}
 
 	return nil
