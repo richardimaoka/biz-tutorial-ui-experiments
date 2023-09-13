@@ -52,7 +52,10 @@ func TestRough(t *testing.T) {
 		}
 
 		// 3. convert to detailed step and verify
-		result := roughStep.Convert(stepId.String(), []string{})
+		result, err := roughStep.Convert(stepId.String(), []string{})
+		if err != nil {
+			t.Fatalf("failed to convert rough step: %v", err)
+		}
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 	}
 }
