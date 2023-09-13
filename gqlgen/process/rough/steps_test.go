@@ -1,9 +1,13 @@
 package rough_test
 
 import (
+	"bufio"
 	"encoding/json"
 	"os"
+	"strings"
 	"testing"
+
+	"github.com/google/uuid"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
@@ -17,7 +21,25 @@ func TestRough(t *testing.T) {
 		{"testdata/rough-step.json", "testdata/detailed-steps-golden.json"},
 	}
 
+	uuidFile, err := os.Open("testdata/uuids.txt")
+	if err != nil {
+		t.Fatalf("failed to open file: %v", err)
+	}
+
+	r := bufio.NewReader(uuidFile)
 	for _, c := range cases {
+		// 1. read UUID from file
+		line, err := r.ReadString('\n')
+		if err != nil {
+			t.Fatalf("failed to read uuid: %v", err)
+		}
+		line = strings.TrimSuffix(line, "\n")
+		stepId, err := uuid.Parse(line)
+		if err != nil {
+			t.Fatalf("failed to parse uuid = '%s': %v", line, err)
+		}
+
+		// 2. read rough step from file
 		bytes, err := os.ReadFile(c.roughStepFile)
 		if err != nil {
 			t.Fatalf("failed to read file: %v", err)
@@ -29,7 +51,8 @@ func TestRough(t *testing.T) {
 			t.Fatalf("failed to unmarshal json: %v", err)
 		}
 
-		result := roughStep.Convert("c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec", []string{})
+		// 3. convert to detailed step and verify
+		result := roughStep.Convert(stepId.String(), []string{})
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 	}
 }
