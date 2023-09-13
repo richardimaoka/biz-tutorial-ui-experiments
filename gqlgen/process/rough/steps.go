@@ -1,5 +1,10 @@
 package rough
 
+import (
+	"encoding/json"
+	"os"
+)
+
 type InnerState struct {
 	currentSeqNo int
 	currentCol   string
@@ -7,7 +12,7 @@ type InnerState struct {
 }
 
 type RoughStep struct {
-	Phase       string `json:"phase"`
+	// Phase       string `json:"phase"`
 	Type        string `json:"type"`
 	Instruction string `json:"instruction"`
 	Commit      string `json:"commit"`
@@ -122,7 +127,6 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 }
 
 func simpleCommand(uuid, command string, existingColumns []string) DetailedStep {
-
 	step := DetailedStep{
 		Step:         uuid,
 		FocusColumn:  "Terminal",
@@ -133,11 +137,57 @@ func simpleCommand(uuid, command string, existingColumns []string) DetailedStep 
 	return step
 }
 
+func commandWithCd(uuid, command, currentDir string, existingColumns []string) DetailedStep {
+	step := DetailedStep{
+		Step:         uuid,
+		FocusColumn:  "Terminal",
+		TerminalText: command,
+		TerminalType: "command",
+		CurrentDir:   currentDir,
+	}
+	step.setColumns(existingColumns, "Terminal")
+	return step
+}
+
+func convert(roughSteps RoughStep) []DetailedStep {
+	return nil
+}
+
 func GenDetailedSteps(filename string) []DetailedStep {
 	var detailedSteps []DetailedStep
+
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	var roughSteps []RoughStep
+	err = json.Unmarshal(bytes, &roughSteps)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, rs := range roughSteps {
+		convertedSteps := convert(rs)
+		detailedSteps = append(detailedSteps, convertedSteps...)
+	}
+
 	// uuid := uuid.NewString()
 	uuid := "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec"
 	detailedSteps = append(detailedSteps, simpleCommand(uuid, "mkdir gqlgen-todos", []string{}))
 
 	return detailedSteps
+}
+
+func (s *RoughStep) Convert(uuid string, columns []string) []DetailedStep {
+	ds := DetailedStep{
+
+		Step:         uuid,
+		FocusColumn:  "Terminal",
+		TerminalText: "mkdir gqlgen-todos",
+		TerminalType: "command",
+	}
+	ds.setColumns(columns, "Terminal")
+
+	return []DetailedStep{ds}
 }
