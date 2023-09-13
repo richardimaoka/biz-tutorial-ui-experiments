@@ -1,8 +1,7 @@
 package rough
 
 import (
-	"encoding/json"
-	"os"
+	"strings"
 )
 
 type InnerState struct {
@@ -126,68 +125,34 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 	}
 }
 
-func simpleCommand(uuid, command string, existingColumns []string) DetailedStep {
+func command(uuid, command, commit string, existingColumns []string) DetailedStep {
 	step := DetailedStep{
 		Step:         uuid,
 		FocusColumn:  "Terminal",
 		TerminalText: command,
 		TerminalType: "command",
+		Commit:       commit,
 	}
 	step.setColumns(existingColumns, "Terminal")
 	return step
 }
 
-func commandWithCd(uuid, command, currentDir string, existingColumns []string) DetailedStep {
-	step := DetailedStep{
-		Step:         uuid,
-		FocusColumn:  "Terminal",
-		TerminalText: command,
-		TerminalType: "command",
-		CurrentDir:   currentDir,
-	}
-	step.setColumns(existingColumns, "Terminal")
-	return step
-}
-
-func convert(roughSteps RoughStep) []DetailedStep {
-	return nil
-}
-
-func GenDetailedSteps(filename string) []DetailedStep {
-	var detailedSteps []DetailedStep
-
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		panic(err)
-	}
-
-	var roughSteps []RoughStep
-	err = json.Unmarshal(bytes, &roughSteps)
-	if err != nil {
-		panic(err)
-	}
-
-	for _, rs := range roughSteps {
-		convertedSteps := convert(rs)
-		detailedSteps = append(detailedSteps, convertedSteps...)
-	}
-
-	// uuid := uuid.NewString()
-	uuid := "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec"
-	detailedSteps = append(detailedSteps, simpleCommand(uuid, "mkdir gqlgen-todos", []string{}))
-
-	return detailedSteps
+func isCommand(instruction string) bool {
+	return strings.HasPrefix(instruction, "mkdir ") ||
+		strings.HasPrefix(instruction, "cd ") ||
+		strings.HasPrefix(instruction, "go ")
 }
 
 func (s *RoughStep) Convert(uuid string, columns []string) []DetailedStep {
-	ds := DetailedStep{
-
-		Step:         uuid,
-		FocusColumn:  "Terminal",
-		TerminalText: "mkdir gqlgen-todos",
-		TerminalType: "command",
+	split := strings.Split(s.Instruction, " ")
+	if len(split) == 0 {
+		return nil
 	}
-	ds.setColumns(columns, "Terminal")
 
-	return []DetailedStep{ds}
+	if isCommand(s.Instruction) {
+		ds := command(uuid, s.Instruction, s.Commit, columns)
+		return []DetailedStep{ds}
+	}
+
+	return nil
 }
