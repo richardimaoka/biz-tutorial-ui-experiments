@@ -18,7 +18,7 @@ func TestRough(t *testing.T) {
 		roughStepFile string
 		goldenFile    string
 	}{
-		{"testdata/rough-step.json", "testdata/detailed-steps-golden.json"},
+		{"testdata/rough-step1.json", "testdata/detailed-steps-golden1.json"},
 	}
 
 	uuidFile, err := os.Open("testdata/uuids.txt")
