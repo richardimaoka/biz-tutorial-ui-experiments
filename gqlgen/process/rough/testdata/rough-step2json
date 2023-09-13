@@ -1,6 +1,6 @@
 {
   "phase": "Installから動かす直前まで",
-  "instruction": "mkdir gqlgen-todos",
+  "instruction": "# browser",
   "commit": "",
   "comment": ""
 }
