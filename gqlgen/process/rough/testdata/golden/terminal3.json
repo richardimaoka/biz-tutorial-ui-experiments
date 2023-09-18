@@ -1,8 +1,51 @@
 [
   {
     "step": "",
-    "terminalText": "go run github.com/99designs/gqlgen generate",
+    "focusColumn": "Terminal",
+    "terminalText": "go run github.com/99designs/gqlgen init",
     "terminalType": "command",
-    "commit": "xxxxx"
+    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47"
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
+    "defaultOpenFilePath": "go.mod"
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.mod",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.sum",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "gqlgen.yml",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/generated.go",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/model/models_gen.go",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/resolver.go",
+    "isFoldFileTree": true
   }
 ]

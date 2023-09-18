@@ -1,11 +1,13 @@
 [
   {
     "step": "",
+    "focusColumn": "Terminal",
     "terminalText": "go run .",
     "terminalType": "command"
   },
   {
     "step": "",
+    "focusColumn": "Terminal",
     "terminalText": "2023/09/02 23:42:54 connect to http://localhost:8080/ for GraphQL playground",
     "terminalType": "output"
   }

@@ -1,6 +1,7 @@
 [
   {
     "step": "",
+    "focusColumn": "Terminal",
     "terminalText": "mkdir gqlgen-todos",
     "terminalType": "command"
   }
