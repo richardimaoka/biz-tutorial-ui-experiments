@@ -20,6 +20,7 @@ type RoughStep struct {
 	Type         string `json:"type"`
 	Instruction  string `json:"instruction"`
 	Instruction2 string `json:"instruction2"`
+	Instruction3 string `json:"instruction3"`
 	Commit       string `json:"commit"`
 	Comment      string `json:"comment"`
 }
@@ -49,6 +50,7 @@ type DetailedStep struct {
 	// terminal
 	TerminalText string `json:"terminalText,omitempty"`
 	TerminalType string `json:"terminalType,omitempty"`
+	TerminalName string `json:"terminalName,omitempty"`
 	CurrentDir   string `json:"currentDir,omitempty"`
 
 	// git

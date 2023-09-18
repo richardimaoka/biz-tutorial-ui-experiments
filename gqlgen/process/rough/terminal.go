@@ -13,15 +13,19 @@ func (s *RoughStep) TerminalConvert(state *InnerState) ([]DetailedStep, error) {
 		return nil, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
 
-	// 1. command step
+	// 1.   command step
+	// 1.1. check if it's a 'cd' command
 	var currentDir string
 	if strings.HasPrefix(s.Instruction, "cd ") {
 		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
 	}
+	// 1.2. create command step
 	cmdStep := DetailedStep{
 		TerminalText: s.Instruction,
 		TerminalType: "command",
-		CurrentDir:   currentDir,
+		CurrentDir:   currentDir,    // Go zero value is ""
+		Commit:       s.Commit,      // Go zero value is ""
+		TerminalName: s.Instruction, // Go zero value is ""
 	}
 	detailedSteps = append(detailedSteps, cmdStep)
 
