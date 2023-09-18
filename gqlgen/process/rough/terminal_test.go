@@ -15,13 +15,14 @@ func TestRoughCommands(t *testing.T) {
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
+		rough.InnerState
 	}{
-		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json"},
-		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json"},
-		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json"},
-		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json"},
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json"},
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json"},
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.InnerState{CurrentCol: "Terminal"}},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.InnerState{CurrentCol: "Terminal"}},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.InnerState{CurrentCol: "Terminal"}},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.InnerState{CurrentCol: "Terminal"}},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.InnerState{CurrentCol: "Terminal"}},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.InnerState{CurrentCol: "Source Code"}},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
@@ -31,23 +32,25 @@ func TestRoughCommands(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		// 1. read rough step from file
-		bytes, err := os.ReadFile(c.roughStepFile)
-		if err != nil {
-			t.Fatalf("failed to read file: %v", err)
-		}
+		t.Run(c.roughStepFile, func(t *testing.T) {
+			// 1. read rough step from file
+			bytes, err := os.ReadFile(c.roughStepFile)
+			if err != nil {
+				t.Fatalf("failed to read file: %v", err)
+			}
 
-		var roughStep rough.RoughStep
-		err = json.Unmarshal(bytes, &roughStep)
-		if err != nil {
-			t.Fatalf("failed to unmarshal json: %v", err)
-		}
+			var roughStep rough.RoughStep
+			err = json.Unmarshal(bytes, &roughStep)
+			if err != nil {
+				t.Fatalf("failed to unmarshal json: %v", err)
+			}
 
-		// 3. convert to detailed step and verify
-		result, err := roughStep.Conversion(&rough.InnerState{}, repo)
-		if err != nil {
-			t.Fatalf("failed to convert rough step: %v", err)
-		}
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			// 3. convert to detailed step and verify
+			result, err := roughStep.Conversion(&c.InnerState, repo)
+			if err != nil {
+				t.Fatalf("failed to convert rough step: %v", err)
+			}
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+		})
 	}
 }

@@ -1,9 +1,9 @@
 package rough
 
 type InnerState struct {
-	currentSeqNo int
-	currentCol   string
-	existingCols []string
+	CurrentSeqNo int
+	CurrentCol   string
+	ExistingCols []string
 }
 
 type RoughStep struct {

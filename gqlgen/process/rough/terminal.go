@@ -25,6 +25,7 @@ func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]Detai
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
+	// Get info from git
 	if s.Commit == "" {
 		return nil, fmt.Errorf("commit is missing for manual commit, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
@@ -37,7 +38,8 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 		return nil, fmt.Errorf("failed to get files for commit = %s, no files found", s.Commit)
 	}
 
-	if state.currentCol != "Source Code" {
+	// Insert file-tree step if current column != "Source Code"
+	if state.CurrentCol != "Source Code" {
 		fileTreeStep := DetailedStep{
 			FocusColumn:         "Source Code",
 			IsFoldFileTree:      false,
@@ -47,7 +49,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
-	// 3.2. file steps
+	// file steps
 	for i, file := range files {
 		commitStep := DetailedStep{
 			FocusColumn:         "Source Code",
@@ -67,18 +69,27 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
-	// 0. check if it's a valid terminal step
+	// check if it's a valid terminal step
 	if s.Instruction == "" && s.Instruction2 == "" {
 		return nil, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
 
-	// 1.   command step
-	// 1.1. check if it's a 'cd' command
+	// insert move-to-terminal step if current column != "Terminal"
+	if state.CurrentCol != "Terminal" {
+		fileTreeStep := DetailedStep{
+			FocusColumn: "Terminal",
+			Comment:     "(move)",
+		}
+		detailedSteps = append(detailedSteps, fileTreeStep)
+	}
+
+	// command step
+	// * check if it's a 'cd' command
 	var currentDir string
 	if strings.HasPrefix(s.Instruction, "cd ") {
 		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
 	}
-	// 1.2. create command step
+	// * create command step
 	cmdStep := DetailedStep{
 		FocusColumn:  "Terminal",
 		TerminalType: "command",
@@ -89,7 +100,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	}
 	detailedSteps = append(detailedSteps, cmdStep)
 
-	// 2. output step
+	// output step
 	if s.Instruction2 != "" {
 		outputStep := DetailedStep{
 			FocusColumn:  "Terminal",
@@ -99,9 +110,11 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
-	// 3. source code steps
+	// Udpate the state
+	state.CurrentCol = "Terminal"
+
+	// source code steps
 	if s.Commit != "" {
-		state.currentCol = "Terminal"
 		commitSteps, err := s.CommitConvert(state, repo)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
@@ -115,6 +128,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
+	// 1. source code step
 	sourceErrorStep := DetailedStep{
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
@@ -122,18 +136,24 @@ func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) 
 
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
+	// 2. udpate the state
+	state.CurrentCol = "Source Code"
+
 	return detailedSteps, nil
 }
 
 func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
+	// Browser step
 	if s.Instruction == "" {
+		// no instruction - single browser step
 		browserStep := DetailedStep{
 			FocusColumn: "Browser",
 		}
 		detailedSteps = append(detailedSteps, browserStep)
 	} else {
+		// no instruction - multiple browser steps
 		split := strings.Split(s.Instruction, ",")
 		for _, s := range split {
 			browserImageName := strings.ReplaceAll(s, " ", "")
@@ -144,6 +164,9 @@ func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]D
 			detailedSteps = append(detailedSteps, browserStep)
 		}
 	}
+
+	// 2. udpate the state
+	state.CurrentCol = "Browser"
 
 	return detailedSteps, nil
 }
