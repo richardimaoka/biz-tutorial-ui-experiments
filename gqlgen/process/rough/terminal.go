@@ -28,7 +28,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState) ([]DetailedStep, error) {
 	// 2. output step
 	if s.Instruction2 != "" {
 		outputStep := DetailedStep{
-			TerminalText: s.Instruction,
+			TerminalText: s.Instruction2,
 			TerminalType: "output",
 		}
 		detailedSteps = append(detailedSteps, outputStep)

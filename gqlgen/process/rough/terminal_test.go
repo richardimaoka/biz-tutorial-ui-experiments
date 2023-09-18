@@ -18,6 +18,8 @@ func TestRoughCommands(t *testing.T) {
 	}{
 		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json"},
 		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json"},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json"},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json"},
 	}
 
 	for _, c := range cases {
