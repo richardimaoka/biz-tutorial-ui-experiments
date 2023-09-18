@@ -16,11 +16,12 @@ type InnerState struct {
 }
 
 type RoughStep struct {
-	// Phase       string `json:"phase"`
-	// Type        string `json:"type"`
-	Instruction string `json:"instruction"`
-	Commit      string `json:"commit"`
-	Comment     string `json:"comment"`
+	Phase        string `json:"phase"`
+	Type         string `json:"type"`
+	Instruction  string `json:"instruction"`
+	Instruction2 string `json:"instruction2"`
+	Commit       string `json:"commit"`
+	Comment      string `json:"comment"`
 }
 
 type DetailedStep struct {
