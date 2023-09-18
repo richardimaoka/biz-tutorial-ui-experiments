@@ -27,6 +27,7 @@ type DetailedStep struct {
 	AutoNextSeconds int    `json:"autoNextSeconds,omitempty"`
 	DurationSeconds int    `json:"duration,omitempty"`
 	IsTrivialStep   bool   `json:"isTrivialStep,omitempty"`
+	Comment         string `json:"comment,omitempty"`
 
 	// columns
 	FocusColumn string `json:"focusColumn,omitempty"`
@@ -51,7 +52,7 @@ type DetailedStep struct {
 	PrevCommit          string `json:"prevCommit,omitempty"`
 	RepoUrl             string `json:"repoUrl,omitempty"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
-	IsFoldFileTree      string `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
+	IsFoldFileTree      bool   `json:"isFoldFileTree,omitempty"`
 
 	// browser
 	BrowserImageName   string `json:"browserImageName,omitempty"`
@@ -136,6 +137,44 @@ func command(uuid, command, commit string, existingColumns []string) DetailedSte
 	}
 	step.setColumns(existingColumns, "Terminal")
 	return step
+}
+
+func filesForCommit(commit string) []string {
+	return []string{}
+}
+
+func fileTreeStep(firstFileInCommit string) DetailedStep {
+	return DetailedStep{
+		FocusColumn:         "SourceCode",
+		Comment:             "File Tree",
+		DefaultOpenFilePath: firstFileInCommit,
+	}
+}
+
+func fileOpenStep(file string) DetailedStep {
+	return DetailedStep{
+		FocusColumn:         "SourceCode",
+		DefaultOpenFilePath: file,
+		IsFoldFileTree:      false,
+	}
+}
+
+func commitFileSteps(uuids []string, commit string, existingColumns []string, previousStep string) []DetailedStep {
+	files := filesForCommit(commit)
+
+	var steps []DetailedStep
+
+	if previousStep != "SourceCode" {
+		step := fileTreeStep(files[0])
+		steps = append(steps, step)
+	}
+
+	for _, file := range files {
+		step := fileOpenStep(file)
+		steps = append(steps, step)
+	}
+
+	return steps
 }
 
 func isCommand(instruction string) bool {

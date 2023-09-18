@@ -3,7 +3,6 @@ package rough_test
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -60,7 +59,6 @@ func TestRough(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to convert rough step: %v", err)
 		}
-		fmt.Println("updateFlag ", *updateFlag)
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 	}
 }
