@@ -3,6 +3,7 @@ package rough_test
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -14,11 +15,14 @@ import (
 )
 
 func TestRough(t *testing.T) {
+	// repoURL := "https://github.com/richardimaoka/gqlgen-getting-started.git"
+
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
 	}{
 		{"testdata/rough-step1.json", "testdata/detailed-steps-golden1.json"},
+		{"testdata/rough-step2.json", "testdata/detailed-steps-golden2.json"},
 	}
 
 	uuidFile, err := os.Open("testdata/uuids.txt")
@@ -56,6 +60,7 @@ func TestRough(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to convert rough step: %v", err)
 		}
+		fmt.Println("updateFlag ", *updateFlag)
 		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 	}
 }
