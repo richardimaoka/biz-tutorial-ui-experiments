@@ -43,12 +43,14 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	}
 
 	// 3. source code steps
-	state.currentCol = "Terminal"
-	commitSteps, err := s.CommitConvert(state, repo)
-	if err != nil {
-		return nil, fmt.Errorf("failed to convert commit steps, %s", err)
+	if s.Commit != "" {
+		state.currentCol = "Terminal"
+		commitSteps, err := s.CommitConvert(state, repo)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
+		}
+		detailedSteps = append(detailedSteps, commitSteps...)
 	}
-	detailedSteps = append(detailedSteps, commitSteps...)
 
 	return detailedSteps, nil
 }
