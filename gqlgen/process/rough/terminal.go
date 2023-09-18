@@ -23,9 +23,9 @@ func (s *RoughStep) TerminalConvert(state *InnerState) ([]DetailedStep, error) {
 	cmdStep := DetailedStep{
 		TerminalText: s.Instruction,
 		TerminalType: "command",
-		CurrentDir:   currentDir,    // Go zero value is ""
-		Commit:       s.Commit,      // Go zero value is ""
-		TerminalName: s.Instruction, // Go zero value is ""
+		CurrentDir:   currentDir,     // Go zero value is ""
+		Commit:       s.Commit,       // Go zero value is ""
+		TerminalName: s.Instruction3, // Go zero value is ""
 	}
 	detailedSteps = append(detailedSteps, cmdStep)
 

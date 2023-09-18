@@ -2,6 +2,7 @@
   {
     "step": "",
     "terminalText": "go run github.com/99designs/gqlgen generate",
-    "terminalType": "command"
+    "terminalType": "command",
+    "commit": "xxxxx"
   }
 ]
