@@ -20,6 +20,8 @@ func TestRoughCommands(t *testing.T) {
 		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json"},
 		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json"},
 		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json"},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json"},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json"},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
