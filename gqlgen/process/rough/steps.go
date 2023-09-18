@@ -159,7 +159,25 @@ func fileOpenStep(file string) DetailedStep {
 	}
 }
 
-func commitFileSteps(uuids []string, commit string, existingColumns []string, previousStep string) []DetailedStep {
+func commandCommitFileSteps(uuids []string, commit string, existingColumns []string, previousStep string) []DetailedStep {
+	files := filesForCommit(commit)
+
+	var steps []DetailedStep
+
+	if previousStep != "SourceCode" {
+		step := fileTreeStep(files[0])
+		steps = append(steps, step)
+	}
+
+	for _, file := range files {
+		step := fileOpenStep(file)
+		steps = append(steps, step)
+	}
+
+	return steps
+}
+
+func manualCommitFileSteps(uuids []string, commit string, existingColumns []string, previousStep string) []DetailedStep {
 	files := filesForCommit(commit)
 
 	var steps []DetailedStep
