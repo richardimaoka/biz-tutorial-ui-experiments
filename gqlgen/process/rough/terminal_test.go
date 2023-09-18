@@ -5,13 +5,13 @@ import (
 	"os"
 	"testing"
 
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
 func TestRoughCommands(t *testing.T) {
-	// repoURL := "https://github.com/richardimaoka/gqlgen-getting-started.git"
-
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
@@ -20,6 +20,12 @@ func TestRoughCommands(t *testing.T) {
 		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json"},
 		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json"},
 		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json"},
+	}
+
+	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
 	}
 
 	for _, c := range cases {
@@ -36,7 +42,7 @@ func TestRoughCommands(t *testing.T) {
 		}
 
 		// 3. convert to detailed step and verify
-		result, err := roughStep.TerminalConvert(&rough.InnerState{})
+		result, err := roughStep.TerminalConvert(&rough.InnerState{}, repo)
 		if err != nil {
 			t.Fatalf("failed to convert rough step: %v", err)
 		}

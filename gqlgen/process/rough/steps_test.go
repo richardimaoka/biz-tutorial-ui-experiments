@@ -14,8 +14,6 @@ import (
 )
 
 func TestRough(t *testing.T) {
-	// repoURL := "https://github.com/richardimaoka/gqlgen-getting-started.git"
-
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string

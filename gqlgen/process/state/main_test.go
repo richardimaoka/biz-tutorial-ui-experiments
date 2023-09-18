@@ -13,6 +13,20 @@ import (
 var storage *memory.Storage
 var repoCache map[string]*git.Repository
 
+func GitOpenOrClone(repoUrl string) (*git.Repository, error) {
+	if repo, ok := repoCache[repoUrl]; ok {
+		return repo, nil
+	}
+
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		return nil, fmt.Errorf("cannot clone repo %s, %s", repoUrl, err)
+	}
+
+	repoCache[repoUrl] = repo
+	return repo, nil
+}
+
 func gitOpenOrClone(repoUrl string) (*git.Repository, error) {
 	if repo, ok := repoCache[repoUrl]; ok {
 		return repo, nil

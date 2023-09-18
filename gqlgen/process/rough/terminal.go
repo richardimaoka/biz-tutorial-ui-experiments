@@ -3,9 +3,11 @@ package rough
 import (
 	"fmt"
 	"strings"
+
+	"github.com/go-git/go-git/v5"
 )
 
-func (s *RoughStep) TerminalConvert(state *InnerState) ([]DetailedStep, error) {
+func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// 0. check if it's a valid terminal step
