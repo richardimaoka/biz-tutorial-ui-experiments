@@ -1,0 +1,6 @@
+{
+  "phase": "Installから動かす直前まで",
+  "instruction": "go run github.com/99designs/gqlgen generate",
+  "commit": "xxxxx",
+  "comment": ""
+}

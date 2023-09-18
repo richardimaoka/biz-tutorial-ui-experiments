@@ -16,7 +16,8 @@ func TestRoughCommands(t *testing.T) {
 		roughStepFile string
 		goldenFile    string
 	}{
-		{"testdata/rough-step-command1.json", "testdata/detailed-step-command-golden1.json"},
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json"},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json"},
 	}
 
 	for _, c := range cases {
