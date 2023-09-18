@@ -43,38 +43,12 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	}
 
 	// 3. source code steps
-	if s.Commit != "" {
-		files, err := gitFilesForCommit(repo, s.Commit)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get files for commit = %s, %s", s.Commit, err)
-		}
-		if len(files) == 0 {
-			return nil, fmt.Errorf("failed to get files for commit = %s, no files found", s.Commit)
-		}
-
-		// 3.1. file tree step
-		sourceCodeStep := DetailedStep{
-			FocusColumn:         "Source Code",
-			IsFoldFileTree:      false,
-			DefaultOpenFilePath: files[0],
-			Commit:              s.Commit,
-		}
-		detailedSteps = append(detailedSteps, sourceCodeStep)
-
-		// 3.2. file steps
-		for i, file := range files {
-			commitStep := DetailedStep{
-				FocusColumn:         "Source Code",
-				DefaultOpenFilePath: file,
-				IsFoldFileTree:      true,
-			}
-			detailedSteps = append(detailedSteps, commitStep)
-
-			if i == 5 {
-				break
-			}
-		}
+	state.currentCol = "Terminal"
+	commitSteps, err := s.CommitConvert(state, repo)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert commit steps, %s", err)
 	}
+	detailedSteps = append(detailedSteps, commitSteps...)
 
 	return detailedSteps, nil
 }
