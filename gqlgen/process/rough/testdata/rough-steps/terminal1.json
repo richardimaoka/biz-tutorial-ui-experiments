@@ -1,5 +1,6 @@
 {
   "phase": "Installから動かす直前まで",
+  "type": "terminal",
   "instruction": "mkdir gqlgen-todos",
   "commit": "",
   "comment": ""

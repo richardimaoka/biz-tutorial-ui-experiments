@@ -39,7 +39,7 @@ func TestRoughManualCommits(t *testing.T) {
 		}
 
 		// 3. convert to detailed step and verify
-		result, err := roughStep.CommitConvert(&rough.InnerState{}, repo)
+		result, err := roughStep.Conversion(&rough.InnerState{}, repo)
 		if err != nil {
 			t.Fatalf("failed to convert rough step: %v", err)
 		}

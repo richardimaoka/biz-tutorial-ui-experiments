@@ -7,6 +7,21 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
+func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+	switch s.Type {
+	case "terminal":
+		return s.TerminalConvert(state, repo)
+	case "commit":
+		return s.CommitConvert(state, repo)
+	case "source error":
+		return s.SourceErrorConvert(state, repo)
+	case "browser":
+		return s.BrowserConvert(state, repo)
+	default:
+		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
+	}
+}
+
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 

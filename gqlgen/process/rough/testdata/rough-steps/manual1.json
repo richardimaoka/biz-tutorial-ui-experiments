@@ -1,5 +1,6 @@
 {
   "phase": "サクサク感を表現するためgowは必須",
+  "type": "commit",
   "instruction": "add createdAt to Todo",
   "commit": "c8a922d8850d7b5f738f649a8ad61947f1202edd",
   "comment": ""
