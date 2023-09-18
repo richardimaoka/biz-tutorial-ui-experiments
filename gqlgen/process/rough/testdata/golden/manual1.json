@@ -1,0 +1,44 @@
+[
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "commit": "c8a922d8850d7b5f738f649a8ad61947f1202edd",
+    "defaultOpenFilePath": "data/todo.json"
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "data/todo.json",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.mod",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.sum",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "gqlgen.yml",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/generated.go",
+    "isFoldFileTree": true
+  },
+  {
+    "step": "",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/model/models_gen.go",
+    "isFoldFileTree": true
+  }
+]
