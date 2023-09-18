@@ -6,7 +6,7 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-func (s *RoughStep) ManualCommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	if s.Commit == "" {
@@ -21,13 +21,15 @@ func (s *RoughStep) ManualCommitConvert(state *InnerState, repo *git.Repository)
 		return nil, fmt.Errorf("failed to get files for commit = %s, no files found", s.Commit)
 	}
 
-	sourceCodeStep := DetailedStep{
-		FocusColumn:         "Source Code",
-		IsFoldFileTree:      false,
-		DefaultOpenFilePath: files[0],
-		Commit:              s.Commit,
+	if state.currentCol != "Source Code" {
+		fileTreeStep := DetailedStep{
+			FocusColumn:         "Source Code",
+			IsFoldFileTree:      false,
+			DefaultOpenFilePath: files[0],
+			Commit:              s.Commit,
+		}
+		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
-	detailedSteps = append(detailedSteps, sourceCodeStep)
 
 	// 3.2. file steps
 	for i, file := range files {
