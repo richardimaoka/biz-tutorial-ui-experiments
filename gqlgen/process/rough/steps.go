@@ -171,29 +171,21 @@ func findUUID(r *RoughStep, d *DetailedStep, targetFile string) (string, error) 
 		return uuid.NewString(), nil // if not exists, then new UUID
 	}
 
-	// filter by rough step uuid
+	// read detailed steps
 	var allDetailedSteps []DetailedStep
-	err = internal.JsonRead2("rough.json", &allDetailedSteps)
+	err = internal.JsonRead2(targetFile, &allDetailedSteps)
 	if err != nil {
 		return "", fmt.Errorf("failed to read rough.json, %s", err)
 	}
 
-	var filtered []DetailedStep
-	for _, s := range allDetailedSteps {
-		// if r.Phase == r.Phase && s.Type == r.Type && s.Comment == r.Comment {
-		filtered = append(filtered, s)
-		// }
-	}
-
-	// for each detailed steps
-	for _, s := range filtered {
-		// if s.DefaultOpenFilePath == targetFile {
-		return s.Step, nil
-		// }
+	for _, ds := range allDetailedSteps {
+		if r.Step == ds.Step && r.Instruction == ds.TerminalText {
+			return ds.Step, nil
+		}
 	}
 
 	// if not found, then new UUID
-	return "", nil
+	return uuid.NewString(), nil
 }
 
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
