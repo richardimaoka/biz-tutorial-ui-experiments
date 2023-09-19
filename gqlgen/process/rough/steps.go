@@ -18,6 +18,7 @@ type InnerState struct {
 }
 
 type RoughStep struct {
+	Step         string `json:"step"`
 	Phase        string `json:"phase"`
 	Type         string `json:"type"`
 	Instruction  string `json:"instruction"`
@@ -214,6 +215,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 	// Insert file-tree step if current column != "Source Code"
 	if state.CurrentCol != "Source Code" {
 		fileTreeStep := DetailedStep{
+			ParentStep:          s.Step,
 			FocusColumn:         "Source Code",
 			IsFoldFileTree:      false,
 			DefaultOpenFilePath: files[0],
@@ -226,6 +228,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 	// file steps
 	for i, file := range files {
 		commitStep := DetailedStep{
+			ParentStep:          s.Step,
 			FocusColumn:         "Source Code",
 			DefaultOpenFilePath: file,
 			IsFoldFileTree:      true,
@@ -252,6 +255,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	// insert move-to-terminal step if current column != "Terminal"
 	if state.CurrentCol != "Terminal" {
 		fileTreeStep := DetailedStep{
+			ParentStep:  s.Step,
 			FocusColumn: "Terminal",
 			Comment:     "(move)",
 		}
@@ -266,6 +270,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	}
 	// * create command step
 	cmdStep := DetailedStep{
+		ParentStep:   s.Step,
 		FocusColumn:  "Terminal",
 		TerminalType: "command",
 		TerminalText: s.Instruction,
@@ -278,6 +283,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	// output step
 	if s.Instruction2 != "" {
 		outputStep := DetailedStep{
+			ParentStep:   s.Step,
 			FocusColumn:  "Terminal",
 			TerminalType: "output",
 			TerminalText: s.Instruction2,
@@ -305,6 +311,7 @@ func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) 
 
 	// 1. source code step
 	sourceErrorStep := DetailedStep{
+		ParentStep:          s.Step,
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
 	}
@@ -324,15 +331,17 @@ func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]D
 	if s.Instruction == "" {
 		// no instruction - single browser step
 		browserStep := DetailedStep{
+			ParentStep:  s.Step,
 			FocusColumn: "Browser",
 		}
 		detailedSteps = append(detailedSteps, browserStep)
 	} else {
 		// no instruction - multiple browser steps
 		split := strings.Split(s.Instruction, ",")
-		for _, s := range split {
-			browserImageName := strings.ReplaceAll(s, " ", "")
+		for _, each := range split {
+			browserImageName := strings.ReplaceAll(each, " ", "")
 			browserStep := DetailedStep{
+				ParentStep:       s.Step,
 				FocusColumn:      "Browser",
 				BrowserImageName: browserImageName,
 			}
