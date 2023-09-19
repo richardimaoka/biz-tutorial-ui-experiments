@@ -147,6 +147,15 @@ func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]Detai
 	}
 }
 
+func findUUID(r *RoughStep, d *DetailedStep, targetFile string) string {
+	// filter by rough step uuid
+
+	// for each detailed steps
+
+	// if not found, then new UUID
+	return ""
+}
+
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 

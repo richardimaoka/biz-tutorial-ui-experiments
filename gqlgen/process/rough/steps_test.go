@@ -1,8 +1,6 @@
 package rough_test
 
 import (
-	"encoding/json"
-	"os"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -34,13 +32,8 @@ func TestRoughCommands(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.roughStepFile, func(t *testing.T) {
 			// 1. read rough step from file
-			bytes, err := os.ReadFile(c.roughStepFile)
-			if err != nil {
-				t.Fatalf("failed to read file: %v", err)
-			}
-
 			var roughStep rough.RoughStep
-			err = json.Unmarshal(bytes, &roughStep)
+			err := internal.JsonRead2(c.roughStepFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}
