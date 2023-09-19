@@ -47,3 +47,24 @@ func TestRoughCommands(t *testing.T) {
 		})
 	}
 }
+
+func TestFindUUIDs(t *testing.T) {
+	// uuid, err := rough.FindUUID(
+	// 	"testdata/target-detailed-steps.json",
+	// 	func(ds *rough.DetailedStep) bool {
+	// 		return ds.ParentStep == s.Step &&
+	// 			ds.FocusColumn == "Terminal" &&
+	// 			ds.TerminalType == "command" &&
+	// 			ds.TerminalText == s.Instruction &&
+	// 			ds.TerminalName == s.Instruction3 &&
+	// 			ds.CurrentDir == currentDir &&
+	// 			ds.CurrentDir == s.Commit
+	// 	})
+
+	// if err != nil {
+	// 	t.Fatalf("failed to find uuid: %v", err)
+	// }
+	// if uuid != "e0b0a0a0-0000-0000-0000-000000000001" {
+	// 	t.Fatalf("unexpected uuid: %s", uuid)
+	// }
+}

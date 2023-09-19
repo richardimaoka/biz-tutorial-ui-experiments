@@ -35,5 +35,9 @@ func gitFilesForCommit(repo *git.Repository, commitHashStr string) ([]string, er
 		files = append(files, file.Name)
 	}
 
+	if len(files) == 0 {
+		return nil, fmt.Errorf("failed to get files for commit = %s, no files found", commitHashStr)
+	}
+
 	return files, nil
 }

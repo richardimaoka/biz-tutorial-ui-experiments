@@ -164,7 +164,7 @@ func fileExists(filename string) (bool, error) {
 	return false, err
 }
 
-func findUUID(r *RoughStep, d *DetailedStep, targetFile string) (string, error) {
+func FindUUID(targetFile string, isSame func(ds *DetailedStep) bool) (string, error) {
 	// check if targetFile exists
 	_, err := os.Stat(targetFile)
 	if errors.Is(err, os.ErrNotExist) {
@@ -179,13 +179,60 @@ func findUUID(r *RoughStep, d *DetailedStep, targetFile string) (string, error) 
 	}
 
 	for _, ds := range allDetailedSteps {
-		if r.Step == ds.Step && r.Instruction == ds.TerminalText {
+		if isSame(&ds) {
 			return ds.Step, nil
 		}
 	}
 
 	// if not found, then new UUID
 	return uuid.NewString(), nil
+}
+
+func fileTreeStep(s *RoughStep, file string) DetailedStep {
+	fileTreeStep := DetailedStep{
+		ParentStep:          s.Step,
+		FocusColumn:         "Source Code",
+		IsFoldFileTree:      false,
+		DefaultOpenFilePath: file,
+		Commit:              s.Commit,
+	}
+	// uuid, err := FindUUID("", func(ds *DetailedStep) bool {
+	// 	return ds.ParentStep == s.Step &&
+	// 		ds.FocusColumn == "Source Code" &&
+	// 		ds.IsFoldFileTree == false &&
+	// 		ds.DefaultOpenFilePath == file &&
+	// 		ds.Commit == s.Commit
+	// })
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
+	// }
+	// fileTreeStep.Step = uuid
+	// uuid = findUUID(s, &fileTreeStep, files[0])
+
+	return fileTreeStep
+}
+
+func openFileStep(s *RoughStep, file string) DetailedStep {
+	fileTreeStep := DetailedStep{
+		ParentStep:          s.Step,
+		FocusColumn:         "Source Code",
+		DefaultOpenFilePath: file,
+		IsFoldFileTree:      true,
+	}
+	// uuid, err := FindUUID("", func(ds *DetailedStep) bool {
+	// 	return ds.ParentStep == s.Step &&
+	// 		ds.FocusColumn == "Source Code" &&
+	// 		ds.IsFoldFileTree == false &&
+	// 		ds.DefaultOpenFilePath == file &&
+	// 		ds.Commit == s.Commit
+	// })
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
+	// }
+	// fileTreeStep.Step = uuid
+	// uuid = findUUID(s, &fileTreeStep, files[0])
+
+	return fileTreeStep
 }
 
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
@@ -196,38 +243,22 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 		return nil, fmt.Errorf("commit is missing for manual commit, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
 
+	// find files from commit
 	files, err := gitFilesForCommit(repo, s.Commit)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get files for commit = %s, %s", s.Commit, err)
 	}
-	if len(files) == 0 {
-		return nil, fmt.Errorf("failed to get files for commit = %s, no files found", s.Commit)
-	}
 
 	// Insert file-tree step if current column != "Source Code"
 	if state.CurrentCol != "Source Code" {
-		fileTreeStep := DetailedStep{
-			ParentStep:          s.Step,
-			FocusColumn:         "Source Code",
-			IsFoldFileTree:      false,
-			DefaultOpenFilePath: files[0],
-			Commit:              s.Commit,
-		}
-		// uuid = findUUID(s, &fileTreeStep, files[0])
+		fileTreeStep := fileTreeStep(s, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
 	// file steps
 	for i, file := range files {
-		commitStep := DetailedStep{
-			ParentStep:          s.Step,
-			FocusColumn:         "Source Code",
-			DefaultOpenFilePath: file,
-			IsFoldFileTree:      true,
-		}
-		// uuid = findUUID(s, &fileTreeStep, files[0])
-		detailedSteps = append(detailedSteps, commitStep)
-
+		openFileStep := openFileStep(s, file)
+		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
 		}
@@ -251,6 +282,16 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 			FocusColumn: "Terminal",
 			Comment:     "(move)",
 		}
+		// uuid, err := findUUID("", func(ds *DetailedStep) bool {
+		// 	return ds.ParentStep == s.Step &&
+		// 		ds.FocusColumn == "Terminal" &&
+		// 		ds.Comment == "(move)"
+		// })
+		// if err != nil {
+		// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
+		// }
+		// fileTreeStep.Step = uuid
+		// uuid = findUUID(s, &fileTreeStep, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
@@ -270,6 +311,20 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 		CurrentDir:   currentDir,     // Go zero value is ""
 		Commit:       s.Commit,       // Go zero value is ""
 	}
+	// uuid, err := findUUID("", func(ds *DetailedStep) bool {
+	// 	return ds.ParentStep == s.Step &&
+	// 		ds.FocusColumn == "Terminal" &&
+	// 		ds.TerminalType == "command" &&
+	// 		ds.TerminalText == s.Instruction &&
+	// 		ds.TerminalName == s.Instruction3 &&
+	// 		ds.CurrentDir == currentDir &&
+	// 		ds.CurrentDir == s.Commit
+	// })
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
+	// }
+	// fileTreeStep.Step = uuid
+	// uuid = findUUID(s, &fileTreeStep, files[0])
 	detailedSteps = append(detailedSteps, cmdStep)
 
 	// output step
