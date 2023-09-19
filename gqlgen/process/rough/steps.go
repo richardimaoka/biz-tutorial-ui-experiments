@@ -1,10 +1,14 @@
 package rough
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/google/uuid"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type InnerState struct {
@@ -27,6 +31,7 @@ type DetailedStep struct {
 	// Uppercase fields to allow json dump for testing
 
 	// steps
+	ParentStep      string `json:"parentStep,omitempty"`
 	Step            string `json:"step"`
 	AutoNextSeconds int    `json:"autoNextSeconds,omitempty"`
 	DurationSeconds int    `json:"duration,omitempty"`
@@ -147,13 +152,47 @@ func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]Detai
 	}
 }
 
-func findUUID(r *RoughStep, d *DetailedStep, targetFile string) string {
+func fileExists(filename string) (bool, error) {
+	_, err := os.Stat(filename)
+	if err == nil {
+		return true, nil
+	}
+	if errors.Is(err, os.ErrNotExist) {
+		return false, nil
+	}
+	return false, err
+}
+
+func findUUID(r *RoughStep, d *DetailedStep, targetFile string) (string, error) {
+	// check if targetFile exists
+	_, err := os.Stat(targetFile)
+	if errors.Is(err, os.ErrNotExist) {
+		return uuid.NewString(), nil // if not exists, then new UUID
+	}
+
 	// filter by rough step uuid
+	var allDetailedSteps []DetailedStep
+	err = internal.JsonRead2("rough.json", &allDetailedSteps)
+	if err != nil {
+		return "", fmt.Errorf("failed to read rough.json, %s", err)
+	}
+
+	var filtered []DetailedStep
+	for _, s := range allDetailedSteps {
+		// if r.Phase == r.Phase && s.Type == r.Type && s.Comment == r.Comment {
+		filtered = append(filtered, s)
+		// }
+	}
 
 	// for each detailed steps
+	for _, s := range filtered {
+		// if s.DefaultOpenFilePath == targetFile {
+		return s.Step, nil
+		// }
+	}
 
 	// if not found, then new UUID
-	return ""
+	return "", nil
 }
 
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
@@ -180,6 +219,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 			DefaultOpenFilePath: files[0],
 			Commit:              s.Commit,
 		}
+		// uuid = findUUID(s, &fileTreeStep, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
@@ -190,6 +230,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 			DefaultOpenFilePath: file,
 			IsFoldFileTree:      true,
 		}
+		// uuid = findUUID(s, &fileTreeStep, files[0])
 		detailedSteps = append(detailedSteps, commitStep)
 
 		if i == 5 {
