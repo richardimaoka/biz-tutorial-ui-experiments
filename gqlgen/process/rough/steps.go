@@ -248,6 +248,73 @@ func openFileStep(s *RoughStep, index int, file string) DetailedStep {
 	return fileTreeStep
 }
 
+func moveToTerminalStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
+		ParentStep:  s.Step,
+		FocusColumn: "Terminal",
+		Comment:     "(move)",
+	}
+	return step
+}
+
+func terminalOutputStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
+		ParentStep:    s.Step,
+		FromRoughStep: true,
+		SubID:         "terminalOutputStep",
+		FocusColumn:   "Terminal",
+		TerminalType:  "output",
+		TerminalText:  s.Instruction2,
+	}
+
+	return step
+}
+
+func sourceErrorStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
+		ParentStep:          s.Step,
+		FromRoughStep:       true,
+		SubID:               "sourceErrorStep",
+		FocusColumn:         "Source Code",
+		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
+	}
+
+	return step
+}
+
+func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
+	step := DetailedStep{
+		ParentStep:       s.Step,
+		FromRoughStep:    true,
+		SubID:            fmt.Sprintf("browserStep-%d", index),
+		FocusColumn:      "Browser",
+		BrowserImageName: browserImageName,
+	}
+
+	return step
+}
+func terminalCommandStep(s *RoughStep) DetailedStep {
+	// * check if it's a 'cd' command
+	var currentDir string
+	if strings.HasPrefix(s.Instruction, "cd ") {
+		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
+	}
+
+	step := DetailedStep{
+		ParentStep:    s.Step,
+		FromRoughStep: true,
+		SubID:         "terminalCommandStep",
+		FocusColumn:   "Terminal",
+		TerminalType:  "command",
+		TerminalText:  s.Instruction,
+		TerminalName:  s.Instruction3, // Go zero value is ""
+		CurrentDir:    currentDir,     // Go zero value is ""
+		Commit:        s.Commit,       // Go zero value is ""
+	}
+
+	return step
+}
+
 func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
@@ -278,50 +345,6 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 	}
 
 	return detailedSteps, nil
-}
-
-func moveToTerminalStep(s *RoughStep) DetailedStep {
-	step := DetailedStep{
-		ParentStep:  s.Step,
-		FocusColumn: "Terminal",
-		Comment:     "(move)",
-	}
-	return step
-}
-
-func terminalCommandStep(s *RoughStep) DetailedStep {
-	// * check if it's a 'cd' command
-	var currentDir string
-	if strings.HasPrefix(s.Instruction, "cd ") {
-		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
-	}
-
-	step := DetailedStep{
-		ParentStep:    s.Step,
-		FromRoughStep: true,
-		SubID:         "terminalCommandStep",
-		FocusColumn:   "Terminal",
-		TerminalType:  "command",
-		TerminalText:  s.Instruction,
-		TerminalName:  s.Instruction3, // Go zero value is ""
-		CurrentDir:    currentDir,     // Go zero value is ""
-		Commit:        s.Commit,       // Go zero value is ""
-	}
-
-	return step
-}
-
-func terminalOutputStep(s *RoughStep) DetailedStep {
-	step := DetailedStep{
-		ParentStep:    s.Step,
-		FromRoughStep: true,
-		SubID:         "terminalOutputStep",
-		FocusColumn:   "Terminal",
-		TerminalType:  "output",
-		TerminalText:  s.Instruction2,
-	}
-
-	return step
 }
 
 func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
@@ -363,18 +386,6 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	return detailedSteps, nil
 }
 
-func sourceErrorStep(s *RoughStep) DetailedStep {
-	step := DetailedStep{
-		ParentStep:          s.Step,
-		FromRoughStep:       true,
-		SubID:               "sourceErrorStep",
-		FocusColumn:         "Source Code",
-		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
-	}
-
-	return step
-}
-
 func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
@@ -386,18 +397,6 @@ func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) 
 	state.CurrentCol = "Source Code"
 
 	return detailedSteps, nil
-}
-
-func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
-	step := DetailedStep{
-		ParentStep:       s.Step,
-		FromRoughStep:    true,
-		SubID:            fmt.Sprintf("browserStep-%d", index),
-		FocusColumn:      "Browser",
-		BrowserImageName: browserImageName,
-	}
-
-	return step
 }
 
 func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
