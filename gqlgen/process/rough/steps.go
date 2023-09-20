@@ -200,6 +200,8 @@ func (i *InnerState) ExistingDetailedSteps() []DetailedStep {
 func fileTreeStep(s *RoughStep, file string) DetailedStep {
 	fileTreeStep := DetailedStep{
 		ParentStep:          s.Step,
+		FromRoughStep:       true,
+		SubID:               "fileTreeStep",
 		FocusColumn:         "Source Code",
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
@@ -224,6 +226,8 @@ func fileTreeStep(s *RoughStep, file string) DetailedStep {
 func openFileStep(s *RoughStep, index int, file string) DetailedStep {
 	fileTreeStep := DetailedStep{
 		ParentStep:          s.Step,
+		FromRoughStep:       true,
+		SubID:               fmt.Sprintf("openFileStep-%d", index),
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: file,
 		IsFoldFileTree:      true,
@@ -293,13 +297,15 @@ func terminalCommandStep(s *RoughStep) DetailedStep {
 	}
 
 	step := DetailedStep{
-		ParentStep:   s.Step,
-		FocusColumn:  "Terminal",
-		TerminalType: "command",
-		TerminalText: s.Instruction,
-		TerminalName: s.Instruction3, // Go zero value is ""
-		CurrentDir:   currentDir,     // Go zero value is ""
-		Commit:       s.Commit,       // Go zero value is ""
+		ParentStep:    s.Step,
+		FromRoughStep: true,
+		SubID:         "terminalCommandStep",
+		FocusColumn:   "Terminal",
+		TerminalType:  "command",
+		TerminalText:  s.Instruction,
+		TerminalName:  s.Instruction3, // Go zero value is ""
+		CurrentDir:    currentDir,     // Go zero value is ""
+		Commit:        s.Commit,       // Go zero value is ""
 	}
 
 	return step
@@ -307,10 +313,12 @@ func terminalCommandStep(s *RoughStep) DetailedStep {
 
 func terminalOutputStep(s *RoughStep) DetailedStep {
 	step := DetailedStep{
-		ParentStep:   s.Step,
-		FocusColumn:  "Terminal",
-		TerminalType: "output",
-		TerminalText: s.Instruction2,
+		ParentStep:    s.Step,
+		FromRoughStep: true,
+		SubID:         "terminalOutputStep",
+		FocusColumn:   "Terminal",
+		TerminalType:  "output",
+		TerminalText:  s.Instruction2,
 	}
 
 	return step
@@ -358,6 +366,8 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 func sourceErrorStep(s *RoughStep) DetailedStep {
 	step := DetailedStep{
 		ParentStep:          s.Step,
+		FromRoughStep:       true,
+		SubID:               "sourceErrorStep",
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
 	}
@@ -381,6 +391,8 @@ func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) 
 func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
 	step := DetailedStep{
 		ParentStep:       s.Step,
+		FromRoughStep:    true,
+		SubID:            fmt.Sprintf("browserStep-%d", index),
 		FocusColumn:      "Browser",
 		BrowserImageName: browserImageName,
 	}

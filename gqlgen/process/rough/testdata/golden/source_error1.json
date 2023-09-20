@@ -1,5 +1,7 @@
 [
   {
+    "fromRoughStep": true,
+    "subId": "sourceErrorStep",
     "step": "",
     "focusColumn": "Source Code"
   }

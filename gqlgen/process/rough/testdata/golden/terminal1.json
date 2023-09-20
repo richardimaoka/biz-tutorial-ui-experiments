@@ -1,5 +1,7 @@
 [
   {
+    "fromRoughStep": true,
+    "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "mkdir gqlgen-todos",

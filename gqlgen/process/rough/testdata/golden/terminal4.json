@@ -1,11 +1,15 @@
 [
   {
+    "fromRoughStep": true,
+    "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go run .",
     "terminalType": "command"
   },
   {
+    "fromRoughStep": true,
+    "subId": "terminalOutputStep",
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "2023/09/02 23:42:54 connect to http://localhost:8080/ for GraphQL playground",
