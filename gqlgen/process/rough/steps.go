@@ -142,16 +142,16 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 	}
 }
 
-func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {
 	case "terminal":
-		return s.TerminalConvert(state, repo)
+		return state.TerminalConvert(s, repo)
 	case "commit":
-		return s.CommitConvert(state, repo)
+		return state.CommitConvert(s, repo)
 	case "source error":
-		return s.SourceErrorConvert(state, repo)
+		return state.SourceErrorConvert(s, repo)
 	case "browser":
-		return s.BrowserConvert(state, repo)
+		return state.BrowserConvert(s, repo)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
 	}
@@ -304,7 +304,7 @@ func terminalCommandStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) CommitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// Get info from git
@@ -336,7 +336,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 	return detailedSteps, nil
 }
 
-func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// check if it's a valid terminal step
@@ -365,7 +365,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 
 	// source code steps
 	if s.Commit != "" {
-		commitSteps, err := s.CommitConvert(state, repo)
+		commitSteps, err := state.CommitConvert(s, repo)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
@@ -375,7 +375,7 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	return detailedSteps, nil
 }
 
-func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) SourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// source code step
@@ -388,7 +388,7 @@ func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) 
 	return detailedSteps, nil
 }
 
-func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) BrowserConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// Browser step

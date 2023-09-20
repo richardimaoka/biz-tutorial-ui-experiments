@@ -39,7 +39,7 @@ func TestRoughCommands(t *testing.T) {
 			}
 
 			// 3. convert to detailed step and verify
-			result, err := roughStep.Conversion(&c.InnerState, repo)
+			result, err := c.InnerState.Conversion(&roughStep, repo)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
