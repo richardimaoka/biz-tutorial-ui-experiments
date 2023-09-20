@@ -172,6 +172,7 @@ func FindUUID(targetFile string, isSame func(ds *DetailedStep) bool) (string, er
 	}
 
 	// read detailed steps
+	// TODO: ExistingDetailedSteps() to avoid returning error
 	var allDetailedSteps []DetailedStep
 	err = internal.JsonRead2(targetFile, &allDetailedSteps)
 	if err != nil {
@@ -186,6 +187,10 @@ func FindUUID(targetFile string, isSame func(ds *DetailedStep) bool) (string, er
 
 	// if not found, then new UUID
 	return uuid.NewString(), nil
+}
+
+func (i *InnerState) ExistingDetailedSteps() []DetailedStep {
+	return nil
 }
 
 func fileTreeStep(s *RoughStep, file string) DetailedStep {
