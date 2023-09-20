@@ -31,6 +31,10 @@ type RoughStep struct {
 type DetailedStep struct {
 	// Uppercase fields to allow json dump for testing
 
+	// internal fields
+	FromRoughStep bool   `json:"fromRoughStep,omitempty"`
+	SubID         string `json:"subId,omitempty"`
+
 	// steps
 	ParentStep      string `json:"parentStep,omitempty"`
 	Step            string `json:"step"`
@@ -217,7 +221,7 @@ func fileTreeStep(s *RoughStep, file string) DetailedStep {
 	return fileTreeStep
 }
 
-func openFileStep(s *RoughStep, file string) DetailedStep {
+func openFileStep(s *RoughStep, index int, file string) DetailedStep {
 	fileTreeStep := DetailedStep{
 		ParentStep:          s.Step,
 		FocusColumn:         "Source Code",
@@ -262,7 +266,7 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 
 	// file steps
 	for i, file := range files {
-		openFileStep := openFileStep(s, file)
+		openFileStep := openFileStep(s, i, file)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
@@ -270,6 +274,46 @@ func (s *RoughStep) CommitConvert(state *InnerState, repo *git.Repository) ([]De
 	}
 
 	return detailedSteps, nil
+}
+
+func moveToTerminalStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
+		ParentStep:  s.Step,
+		FocusColumn: "Terminal",
+		Comment:     "(move)",
+	}
+	return step
+}
+
+func terminalCommandStep(s *RoughStep) DetailedStep {
+	// * check if it's a 'cd' command
+	var currentDir string
+	if strings.HasPrefix(s.Instruction, "cd ") {
+		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
+	}
+
+	step := DetailedStep{
+		ParentStep:   s.Step,
+		FocusColumn:  "Terminal",
+		TerminalType: "command",
+		TerminalText: s.Instruction,
+		TerminalName: s.Instruction3, // Go zero value is ""
+		CurrentDir:   currentDir,     // Go zero value is ""
+		Commit:       s.Commit,       // Go zero value is ""
+	}
+
+	return step
+}
+
+func terminalOutputStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
+		ParentStep:   s.Step,
+		FocusColumn:  "Terminal",
+		TerminalType: "output",
+		TerminalText: s.Instruction2,
+	}
+
+	return step
 }
 
 func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
@@ -282,64 +326,17 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 
 	// insert move-to-terminal step if current column != "Terminal"
 	if state.CurrentCol != "Terminal" {
-		fileTreeStep := DetailedStep{
-			ParentStep:  s.Step,
-			FocusColumn: "Terminal",
-			Comment:     "(move)",
-		}
-		// uuid, err := findUUID("", func(ds *DetailedStep) bool {
-		// 	return ds.ParentStep == s.Step &&
-		// 		ds.FocusColumn == "Terminal" &&
-		// 		ds.Comment == "(move)"
-		// })
-		// if err != nil {
-		// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
-		// }
-		// fileTreeStep.Step = uuid
-		// uuid = findUUID(s, &fileTreeStep, files[0])
-		detailedSteps = append(detailedSteps, fileTreeStep)
+		moveToTerminalStep := moveToTerminalStep(s)
+		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
 
 	// command step
-	// * check if it's a 'cd' command
-	var currentDir string
-	if strings.HasPrefix(s.Instruction, "cd ") {
-		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
-	}
-	// * create command step
-	cmdStep := DetailedStep{
-		ParentStep:   s.Step,
-		FocusColumn:  "Terminal",
-		TerminalType: "command",
-		TerminalText: s.Instruction,
-		TerminalName: s.Instruction3, // Go zero value is ""
-		CurrentDir:   currentDir,     // Go zero value is ""
-		Commit:       s.Commit,       // Go zero value is ""
-	}
-	// uuid, err := findUUID("", func(ds *DetailedStep) bool {
-	// 	return ds.ParentStep == s.Step &&
-	// 		ds.FocusColumn == "Terminal" &&
-	// 		ds.TerminalType == "command" &&
-	// 		ds.TerminalText == s.Instruction &&
-	// 		ds.TerminalName == s.Instruction3 &&
-	// 		ds.CurrentDir == currentDir &&
-	// 		ds.CurrentDir == s.Commit
-	// })
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
-	// }
-	// fileTreeStep.Step = uuid
-	// uuid = findUUID(s, &fileTreeStep, files[0])
+	cmdStep := terminalCommandStep(s)
 	detailedSteps = append(detailedSteps, cmdStep)
 
 	// output step
 	if s.Instruction2 != "" {
-		outputStep := DetailedStep{
-			ParentStep:   s.Step,
-			FocusColumn:  "Terminal",
-			TerminalType: "output",
-			TerminalText: s.Instruction2,
-		}
+		outputStep := terminalOutputStep(s)
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
@@ -358,22 +355,37 @@ func (s *RoughStep) TerminalConvert(state *InnerState, repo *git.Repository) ([]
 	return detailedSteps, nil
 }
 
-func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
-	var detailedSteps []DetailedStep
-
-	// 1. source code step
-	sourceErrorStep := DetailedStep{
+func sourceErrorStep(s *RoughStep) DetailedStep {
+	step := DetailedStep{
 		ParentStep:          s.Step,
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
 	}
 
+	return step
+}
+
+func (s *RoughStep) SourceErrorConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
+	var detailedSteps []DetailedStep
+
+	// source code step
+	sourceErrorStep := sourceErrorStep(s)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
-	// 2. udpate the state
+	// udpate the state
 	state.CurrentCol = "Source Code"
 
 	return detailedSteps, nil
+}
+
+func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
+	step := DetailedStep{
+		ParentStep:       s.Step,
+		FocusColumn:      "Browser",
+		BrowserImageName: browserImageName,
+	}
+
+	return step
 }
 
 func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]DetailedStep, error) {
@@ -390,13 +402,9 @@ func (s *RoughStep) BrowserConvert(state *InnerState, repo *git.Repository) ([]D
 	} else {
 		// no instruction - multiple browser steps
 		split := strings.Split(s.Instruction, ",")
-		for _, each := range split {
+		for i, each := range split {
 			browserImageName := strings.ReplaceAll(each, " ", "")
-			browserStep := DetailedStep{
-				ParentStep:       s.Step,
-				FocusColumn:      "Browser",
-				BrowserImageName: browserImageName,
-			}
+			browserStep := browserStep(s, i, browserImageName)
 			detailedSteps = append(detailedSteps, browserStep)
 		}
 	}
