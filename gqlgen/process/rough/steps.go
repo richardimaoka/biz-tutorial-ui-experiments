@@ -1,20 +1,20 @@
 package rough
 
 import (
-	"errors"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/google/uuid"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type InnerState struct {
-	CurrentSeqNo int
-	CurrentCol   string
-	ExistingCols []string
+	CurrentSeqNo          int
+	CurrentCol            string
+	ExistingCols          []string
+	existingDetailedSteps []DetailedStep
 }
 
 type RoughStep struct {
@@ -157,44 +157,33 @@ func (s *RoughStep) Conversion(state *InnerState, repo *git.Repository) ([]Detai
 	}
 }
 
-func fileExists(filename string) (bool, error) {
-	_, err := os.Stat(filename)
-	if err == nil {
-		return true, nil
-	}
-	if errors.Is(err, os.ErrNotExist) {
-		return false, nil
-	}
-	return false, err
-}
-
-func FindUUID(targetFile string, isSame func(ds *DetailedStep) bool) (string, error) {
-	// check if targetFile exists
-	_, err := os.Stat(targetFile)
-	if errors.Is(err, os.ErrNotExist) {
-		return uuid.NewString(), nil // if not exists, then new UUID
-	}
-
-	// read detailed steps
-	// TODO: ExistingDetailedSteps() to avoid returning error
-	var allDetailedSteps []DetailedStep
-	err = internal.JsonRead2(targetFile, &allDetailedSteps)
+func readExistingDetailedSteps(targetFile string) ([]DetailedStep, error) {
+	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
-		return "", fmt.Errorf("failed to read rough.json, %s", err)
-	}
-
-	for _, ds := range allDetailedSteps {
-		if isSame(&ds) {
-			return ds.Step, nil
+		if os.IsNotExist(err) {
+			return nil, nil // if targetFile not exist, then no existing DetailedStep
+		} else {
+			return nil, fmt.Errorf("failed to read file %s, %s", targetFile, err)
 		}
 	}
 
-	// if not found, then new UUID
-	return uuid.NewString(), nil
+	var detailedSteps []DetailedStep
+	err = json.Unmarshal(jsonBytes, &detailedSteps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
+	}
+
+	return detailedSteps, nil
 }
 
-func (i *InnerState) ExistingDetailedSteps() []DetailedStep {
-	return nil
+func (i *InnerState) FindUUID(rs *RoughStep, subID string) string {
+	for _, ds := range i.existingDetailedSteps {
+		if ds.FromRoughStep && rs.Step == ds.ParentStep && subID == ds.SubID {
+			return ds.Step
+		}
+	}
+	// if not found, then new UUID
+	return uuid.NewString()
 }
 
 func fileTreeStep(s *RoughStep, file string) DetailedStep {
