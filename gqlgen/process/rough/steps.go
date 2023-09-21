@@ -7,25 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/google/uuid"
 )
-
-type InnerState struct {
-	currentColumn         string
-	existingCols          []string
-	existingDetailedSteps []DetailedStep
-}
-
-func NewInnerState(targetFile string) (*InnerState, error) {
-	existing, err := readExistingDetailedSteps(targetFile)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read existing detailed steps, %s", err)
-	}
-
-	return &InnerState{
-		existingDetailedSteps: existing,
-	}, nil
-}
 
 type RoughStep struct {
 	Step         string `json:"step"`
@@ -184,16 +166,6 @@ func readExistingDetailedSteps(targetFile string) ([]DetailedStep, error) {
 	}
 
 	return detailedSteps, nil
-}
-
-func (i *InnerState) FindUUID(rs *RoughStep, subID string) string {
-	for _, ds := range i.existingDetailedSteps {
-		if ds.FromRoughStep && rs.Step == ds.ParentStep && subID == ds.SubID {
-			return ds.Step
-		}
-	}
-	// if not found, then new UUID
-	return uuid.NewString()
 }
 
 func fileTreeStep(s *RoughStep, file string) DetailedStep {
