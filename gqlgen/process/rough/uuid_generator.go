@@ -10,6 +10,7 @@ import (
 
 type UUIDFinder struct {
 	existingSteps []DetailedStep
+	uuidGenerator func() string
 }
 
 func NewUUIDGenerator(targetFile string) (*UUIDFinder, error) {
@@ -28,7 +29,10 @@ func NewUUIDGenerator(targetFile string) (*UUIDFinder, error) {
 		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
 	}
 
-	return &UUIDFinder{existingSteps: detailedSteps}, nil
+	return &UUIDFinder{
+		existingSteps: detailedSteps,
+		uuidGenerator: generateUUID,
+	}, nil
 }
 
 func (g *UUIDFinder) FindOrGenerateUUID(rs *RoughStep, subID string) string {
@@ -39,5 +43,9 @@ func (g *UUIDFinder) FindOrGenerateUUID(rs *RoughStep, subID string) string {
 	}
 
 	// if not found, then new UUID
+	return g.uuidGenerator()
+}
+
+func generateUUID() string {
 	return uuid.NewString()
 }
