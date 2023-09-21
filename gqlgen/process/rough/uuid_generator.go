@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type UUIDGenerator interface {
+type UUIDFinder interface {
 	FindOrGenerateUUID(rs *RoughStep, subID string) string
 }
 
@@ -16,7 +16,7 @@ type UUIDGenFromTarget struct {
 	existingSteps []DetailedStep
 }
 
-func NewUUIDGenerator(targetFile string) (UUIDGenerator, error) {
+func NewUUIDGenerator(targetFile string) (UUIDFinder, error) {
 	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
 		if os.IsNotExist(err) {
