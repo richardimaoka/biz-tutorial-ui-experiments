@@ -12,7 +12,7 @@ import (
 
 type InnerState struct {
 	currentColumn         string
-	ExistingCols          []string
+	existingCols          []string
 	existingDetailedSteps []DetailedStep
 }
 
