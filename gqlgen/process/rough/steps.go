@@ -134,21 +134,6 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 	}
 }
 
-func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	switch s.Type {
-	case "terminal":
-		return state.TerminalConvert(s, repo)
-	case "commit":
-		return state.CommitConvert(s, repo)
-	case "source error":
-		return state.SourceErrorConvert(s, repo)
-	case "browser":
-		return state.BrowserConvert(s, repo)
-	default:
-		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
-	}
-}
-
 func readExistingDetailedSteps(targetFile string) ([]DetailedStep, error) {
 	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
@@ -286,7 +271,7 @@ func terminalCommandStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) CommitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func commitConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// Get info from git
@@ -318,7 +303,7 @@ func (state *InnerState) CommitConvert(s *RoughStep, repo *git.Repository) ([]De
 	return detailedSteps, nil
 }
 
-func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func terminalConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// check if it's a valid terminal step
@@ -347,7 +332,7 @@ func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]
 
 	// source code steps
 	if s.Commit != "" {
-		commitSteps, err := state.CommitConvert(s, repo)
+		commitSteps, err := commitConvert(state, s, repo)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
@@ -357,7 +342,7 @@ func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]
 	return detailedSteps, nil
 }
 
-func (state *InnerState) SourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func sourceErrorConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// source code step
@@ -370,7 +355,7 @@ func (state *InnerState) SourceErrorConvert(s *RoughStep, repo *git.Repository) 
 	return detailedSteps, nil
 }
 
-func (state *InnerState) BrowserConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func browserConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// Browser step
@@ -395,4 +380,19 @@ func (state *InnerState) BrowserConvert(s *RoughStep, repo *git.Repository) ([]D
 	state.currentColumn = "Browser"
 
 	return detailedSteps, nil
+}
+
+func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	switch s.Type {
+	case "terminal":
+		return terminalConvert(state, s, repo)
+	case "commit":
+		return commitConvert(state, s, repo)
+	case "source error":
+		return sourceErrorConvert(state, s, repo)
+	case "browser":
+		return browserConvert(state, s, repo)
+	default:
+		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
+	}
 }
