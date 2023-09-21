@@ -8,15 +8,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type UUIDFinder interface {
-	FindOrGenerateUUID(rs *RoughStep, subID string) string
-}
-
-type UUIDGenFromTarget struct {
+type UUIDFinder struct {
 	existingSteps []DetailedStep
 }
 
-func NewUUIDGenerator(targetFile string) (UUIDFinder, error) {
+func NewUUIDGenerator(targetFile string) (*UUIDFinder, error) {
 	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -32,10 +28,10 @@ func NewUUIDGenerator(targetFile string) (UUIDFinder, error) {
 		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
 	}
 
-	return &UUIDGenFromTarget{existingSteps: detailedSteps}, nil
+	return &UUIDFinder{existingSteps: detailedSteps}, nil
 }
 
-func (g *UUIDGenFromTarget) FindOrGenerateUUID(rs *RoughStep, subID string) string {
+func (g *UUIDFinder) FindOrGenerateUUID(rs *RoughStep, subID string) string {
 	for _, ds := range g.existingSteps {
 		if ds.FromRoughStep && rs.Step == ds.ParentStep && subID == ds.SubID {
 			return ds.Step
