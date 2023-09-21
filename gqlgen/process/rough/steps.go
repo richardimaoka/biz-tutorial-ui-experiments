@@ -249,6 +249,7 @@ func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep 
 
 	return step
 }
+
 func terminalCommandStep(s *RoughStep) DetailedStep {
 	// * check if it's a 'cd' command
 	var currentDir string
@@ -358,22 +359,16 @@ func sourceErrorConvert(state *InnerState, s *RoughStep, repo *git.Repository) (
 func browserConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
-	// Browser step
 	if s.Instruction == "" {
-		// no instruction - single browser step
-		browserStep := DetailedStep{
-			ParentStep:  s.Step,
-			FocusColumn: "Browser",
-		}
+		return nil, fmt.Errorf("instruction is missing for browser step, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+	}
+
+	// browser steps
+	split := strings.Split(s.Instruction, ",")
+	for i, each := range split {
+		browserImageName := strings.ReplaceAll(each, " ", "")
+		browserStep := browserStep(s, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
-	} else {
-		// no instruction - multiple browser steps
-		split := strings.Split(s.Instruction, ",")
-		for i, each := range split {
-			browserImageName := strings.ReplaceAll(each, " ", "")
-			browserStep := browserStep(s, i, browserImageName)
-			detailedSteps = append(detailedSteps, browserStep)
-		}
 	}
 
 	// 2. udpate the state
