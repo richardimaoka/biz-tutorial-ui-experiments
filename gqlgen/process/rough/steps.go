@@ -1,9 +1,7 @@
 package rough
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
@@ -132,25 +130,6 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 		}
 		return
 	}
-}
-
-func readExistingDetailedSteps(targetFile string) ([]DetailedStep, error) {
-	jsonBytes, err := os.ReadFile(targetFile)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil, nil // if targetFile not exist, then no existing DetailedStep
-		} else {
-			return nil, fmt.Errorf("failed to read file %s, %s", targetFile, err)
-		}
-	}
-
-	var detailedSteps []DetailedStep
-	err = json.Unmarshal(jsonBytes, &detailedSteps)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
-	}
-
-	return detailedSteps, nil
 }
 
 func fileTreeStep(s *RoughStep, file string) DetailedStep {
