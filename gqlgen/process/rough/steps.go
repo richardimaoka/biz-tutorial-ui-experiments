@@ -132,84 +132,87 @@ func (step *DetailedStep) setColumns(existingColumns []string, focusColumn strin
 	}
 }
 
-func fileTreeStep(s *RoughStep, file string) DetailedStep {
+func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
+	subId := "fileTreeStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	fileTreeStep := DetailedStep{
-		ParentStep:          s.Step,
-		FromRoughStep:       true,
-		SubID:               "fileTreeStep",
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:                stepId,
 		FocusColumn:         "Source Code",
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
 		Commit:              s.Commit,
 	}
-	// uuid, err := FindUUID("", func(ds *DetailedStep) bool {
-	// 	return ds.ParentStep == s.Step &&
-	// 		ds.FocusColumn == "Source Code" &&
-	// 		ds.IsFoldFileTree == false &&
-	// 		ds.DefaultOpenFilePath == file &&
-	// 		ds.Commit == s.Commit
-	// })
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
-	// }
-	// fileTreeStep.Step = uuid
-	// uuid = findUUID(s, &fileTreeStep, files[0])
 
 	return fileTreeStep
 }
 
-func openFileStep(s *RoughStep, index int, file string) DetailedStep {
+func (state *InnerState) openFileStep(s *RoughStep, index int, file string) DetailedStep {
+	subId := fmt.Sprintf("openFileStep-%d", index)
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	fileTreeStep := DetailedStep{
-		ParentStep:          s.Step,
-		FromRoughStep:       true,
-		SubID:               fmt.Sprintf("openFileStep-%d", index),
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:                stepId,
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: file,
 		IsFoldFileTree:      true,
 	}
-	// uuid, err := FindUUID("", func(ds *DetailedStep) bool {
-	// 	return ds.ParentStep == s.Step &&
-	// 		ds.FocusColumn == "Source Code" &&
-	// 		ds.IsFoldFileTree == false &&
-	// 		ds.DefaultOpenFilePath == file &&
-	// 		ds.Commit == s.Commit
-	// })
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to find UUID for file-tree step, %s", err)
-	// }
-	// fileTreeStep.Step = uuid
-	// uuid = findUUID(s, &fileTreeStep, files[0])
 
 	return fileTreeStep
 }
 
-func moveToTerminalStep(s *RoughStep) DetailedStep {
+func (state *InnerState) moveToTerminalStep(s *RoughStep) DetailedStep {
+	subId := "moveToTerminalStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
-		ParentStep:  s.Step,
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:        stepId,
 		FocusColumn: "Terminal",
 		Comment:     "(move)",
 	}
 	return step
 }
 
-func terminalOutputStep(s *RoughStep) DetailedStep {
+func (state *InnerState) terminalOutputStep(s *RoughStep) DetailedStep {
+	subId := "terminalOutputStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
-		ParentStep:    s.Step,
+		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
-		SubID:         "terminalOutputStep",
-		FocusColumn:   "Terminal",
-		TerminalType:  "output",
-		TerminalText:  s.Instruction2,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "output",
+		TerminalText: s.Instruction2,
 	}
 
 	return step
 }
 
-func sourceErrorStep(s *RoughStep) DetailedStep {
+func (state *InnerState) sourceErrorStep(s *RoughStep) DetailedStep {
+	subId := "sourceErrorStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
-		ParentStep:          s.Step,
-		FromRoughStep:       true,
-		SubID:               "sourceErrorStep",
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:                stepId,
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
 	}
@@ -217,11 +220,16 @@ func sourceErrorStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
+func (state *InnerState) browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
+	subId := fmt.Sprintf("browserStep-%d", index)
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
-		ParentStep:       s.Step,
-		FromRoughStep:    true,
-		SubID:            fmt.Sprintf("browserStep-%d", index),
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:             stepId,
 		FocusColumn:      "Browser",
 		BrowserImageName: browserImageName,
 	}
@@ -229,29 +237,35 @@ func browserStep(s *RoughStep, index int, browserImageName string) DetailedStep 
 	return step
 }
 
-func terminalCommandStep(s *RoughStep) DetailedStep {
+func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 	// * check if it's a 'cd' command
 	var currentDir string
 	if strings.HasPrefix(s.Instruction, "cd ") {
 		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
 	}
 
+	subId := "terminalCommandStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+
 	step := DetailedStep{
-		ParentStep:    s.Step,
+		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
-		SubID:         "terminalCommandStep",
-		FocusColumn:   "Terminal",
-		TerminalType:  "command",
-		TerminalText:  s.Instruction,
-		TerminalName:  s.Instruction3, // Go zero value is ""
-		CurrentDir:    currentDir,     // Go zero value is ""
-		Commit:        s.Commit,       // Go zero value is ""
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "command",
+		TerminalText: s.Instruction,
+		TerminalName: s.Instruction3, // Go zero value is ""
+		CurrentDir:   currentDir,     // Go zero value is ""
+		Commit:       s.Commit,       // Go zero value is ""
 	}
 
 	return step
 }
 
-func commitConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// Get info from git
@@ -267,13 +281,13 @@ func commitConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]Det
 
 	// Insert file-tree step if current column != "Source Code"
 	if state.currentColumn != "Source Code" {
-		fileTreeStep := fileTreeStep(s, files[0])
+		fileTreeStep := state.fileTreeStep(s, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
 	// file steps
 	for i, file := range files {
-		openFileStep := openFileStep(s, i, file)
+		openFileStep := state.openFileStep(s, i, file)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
@@ -283,7 +297,7 @@ func commitConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]Det
 	return detailedSteps, nil
 }
 
-func terminalConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// check if it's a valid terminal step
@@ -293,17 +307,17 @@ func terminalConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]D
 
 	// insert move-to-terminal step if current column != "Terminal"
 	if state.currentColumn != "Terminal" {
-		moveToTerminalStep := moveToTerminalStep(s)
+		moveToTerminalStep := state.moveToTerminalStep(s)
 		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
 
 	// command step
-	cmdStep := terminalCommandStep(s)
+	cmdStep := state.terminalCommandStep(s)
 	detailedSteps = append(detailedSteps, cmdStep)
 
 	// output step
 	if s.Instruction2 != "" {
-		outputStep := terminalOutputStep(s)
+		outputStep := state.terminalOutputStep(s)
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
@@ -312,7 +326,7 @@ func terminalConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]D
 
 	// source code steps
 	if s.Commit != "" {
-		commitSteps, err := commitConvert(state, s, repo)
+		commitSteps, err := state.commitConvert(s, repo)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
@@ -322,11 +336,11 @@ func terminalConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]D
 	return detailedSteps, nil
 }
 
-func sourceErrorConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// source code step
-	sourceErrorStep := sourceErrorStep(s)
+	sourceErrorStep := state.sourceErrorStep(s)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
 	// udpate the state
@@ -335,7 +349,7 @@ func sourceErrorConvert(state *InnerState, s *RoughStep, repo *git.Repository) (
 	return detailedSteps, nil
 }
 
-func browserConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	if s.Instruction == "" {
@@ -346,7 +360,7 @@ func browserConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]De
 	split := strings.Split(s.Instruction, ",")
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := browserStep(s, i, browserImageName)
+		browserStep := state.browserStep(s, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
@@ -359,13 +373,13 @@ func browserConvert(state *InnerState, s *RoughStep, repo *git.Repository) ([]De
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {
 	case "terminal":
-		return terminalConvert(state, s, repo)
+		return state.terminalConvert(s, repo)
 	case "commit":
-		return commitConvert(state, s, repo)
+		return state.commitConvert(s, repo)
 	case "source error":
-		return sourceErrorConvert(state, s, repo)
+		return state.sourceErrorConvert(s, repo)
 	case "browser":
-		return browserConvert(state, s, repo)
+		return state.browserConvert(s, repo)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
 	}
