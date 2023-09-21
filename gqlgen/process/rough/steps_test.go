@@ -15,12 +15,12 @@ func TestRoughCommands(t *testing.T) {
 		goldenFile    string
 		InnerState    *rough.InnerState
 	}{
-		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.InnerStateProbe("Terminal")},
-		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.InnerStateProbe("Terminal")},
-		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.InnerStateProbe("Terminal")},
-		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.InnerStateProbe("Terminal")},
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.InnerStateProbe("Terminal")},
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.InnerStateProbe("Source Code")},
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.PredictableInnerState("Terminal", "")},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.PredictableInnerState("Terminal", "")},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.PredictableInnerState("Terminal", "")},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.PredictableInnerState("Terminal", "")},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.PredictableInnerState("Terminal", "")},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.PredictableInnerState("Source Code", "")},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"

@@ -2,9 +2,15 @@ package rough
 
 import "fmt"
 
-func InnerStateProbe(currentColumn string) *InnerState {
+func PredictableInnerState(currentColumn, targetFile string) *InnerState {
+	finder, err := PredictableUUIDFinder(targetFile)
+	if err != nil {
+		panic(fmt.Errorf("failed to create UUIDFinder: %s", err))
+	}
+
 	return &InnerState{
 		currentColumn: currentColumn,
+		uuidFinder:    finder,
 	}
 }
 
