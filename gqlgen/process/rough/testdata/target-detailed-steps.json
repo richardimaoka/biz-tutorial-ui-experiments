@@ -1,14 +1,67 @@
 [
   {
-    "step": "5b7417be-830b-4ddd-9ee0-cb1c41dedf43",
+    "fromRoughStep": true,
+    "subId": "terminalCommandStep",
+    "step": "73388488-7f44-4617-9d6f-5cacad5bcaf8",
     "focusColumn": "Terminal",
-    "terminalText": "go run .",
-    "terminalType": "command"
+    "terminalText": "go run github.com/99designs/gqlgen init",
+    "terminalType": "command",
+    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47"
   },
   {
-    "step": "409344c3-57cf-4d8d-8716-f729e7c29391",
-    "focusColumn": "Terminal",
-    "terminalText": "2023/09/02 23:42:54 connect to http://localhost:8080/ for GraphQL playground",
-    "terminalType": "output"
+    "fromRoughStep": true,
+    "subId": "fileTreeStep",
+    "step": "96d5c1df-5488-4601-9ed2-5387f3e8d5f8",
+    "focusColumn": "Source Code",
+    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
+    "defaultOpenFilePath": "go.mod"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-0",
+    "step": "d748e6d7-124a-4889-92eb-6a2226272ea8",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.mod",
+    "isFoldFileTree": true
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-1",
+    "step": "292c33f3-de99-4f87-a25d-06706ef9f10c",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "go.sum",
+    "isFoldFileTree": true
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-2",
+    "step": "567aaaad-0181-4502-b112-fbf0028633dd",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "gqlgen.yml",
+    "isFoldFileTree": true
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-3",
+    "step": "4f192757-a95e-4062-9d4b-5e7d00d1dc1d",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/generated.go",
+    "isFoldFileTree": true
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-4",
+    "step": "b3ff849b-86ee-48f5-8703-6b19711490da",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/model/models_gen.go",
+    "isFoldFileTree": true
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "openFileStep-5",
+    "step": "e0d03774-d687-4d2a-aea9-ceb3b06f8592",
+    "focusColumn": "Source Code",
+    "defaultOpenFilePath": "graph/resolver.go",
+    "isFoldFileTree": true
   }
 ]
