@@ -9,7 +9,7 @@ import (
 )
 
 type UUIDFinder struct {
-	existingSteps []DetailedStep
+	targetSteps   []DetailedStep
 	uuidGenerator func() string
 }
 
@@ -20,13 +20,13 @@ func NewUUIDFinder(targetFile string) (*UUIDFinder, error) {
 	}
 
 	return &UUIDFinder{
-		existingSteps: detailedSteps,
+		targetSteps:   detailedSteps,
 		uuidGenerator: generateUUID,
 	}, nil
 }
 
 func (g *UUIDFinder) FindOrGenerateUUID(rs *RoughStep, subID string) string {
-	for _, ds := range g.existingSteps {
+	for _, ds := range g.targetSteps {
 		if ds.FromRoughStep && rs.Step == ds.ParentStep && subID == ds.SubID {
 			return ds.Step
 		}
