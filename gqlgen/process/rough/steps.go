@@ -11,10 +11,20 @@ import (
 )
 
 type InnerState struct {
-	CurrentSeqNo          int
-	CurrentCol            string
+	currentColumn         string
 	ExistingCols          []string
 	existingDetailedSteps []DetailedStep
+}
+
+func NewInnerState(targetFile string) (*InnerState, error) {
+	existing, err := readExistingDetailedSteps(targetFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read existing detailed steps, %s", err)
+	}
+
+	return &InnerState{
+		existingDetailedSteps: existing,
+	}, nil
 }
 
 type RoughStep struct {
@@ -319,7 +329,7 @@ func (state *InnerState) CommitConvert(s *RoughStep, repo *git.Repository) ([]De
 	}
 
 	// Insert file-tree step if current column != "Source Code"
-	if state.CurrentCol != "Source Code" {
+	if state.currentColumn != "Source Code" {
 		fileTreeStep := fileTreeStep(s, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
@@ -345,7 +355,7 @@ func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]
 	}
 
 	// insert move-to-terminal step if current column != "Terminal"
-	if state.CurrentCol != "Terminal" {
+	if state.currentColumn != "Terminal" {
 		moveToTerminalStep := moveToTerminalStep(s)
 		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
@@ -361,7 +371,7 @@ func (state *InnerState) TerminalConvert(s *RoughStep, repo *git.Repository) ([]
 	}
 
 	// Udpate the state
-	state.CurrentCol = "Terminal"
+	state.currentColumn = "Terminal"
 
 	// source code steps
 	if s.Commit != "" {
@@ -383,7 +393,7 @@ func (state *InnerState) SourceErrorConvert(s *RoughStep, repo *git.Repository) 
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
 	// udpate the state
-	state.CurrentCol = "Source Code"
+	state.currentColumn = "Source Code"
 
 	return detailedSteps, nil
 }
@@ -410,7 +420,7 @@ func (state *InnerState) BrowserConvert(s *RoughStep, repo *git.Repository) ([]D
 	}
 
 	// 2. udpate the state
-	state.CurrentCol = "Browser"
+	state.currentColumn = "Browser"
 
 	return detailedSteps, nil
 }
