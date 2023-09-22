@@ -1,0 +1,83 @@
+[
+  {
+    "step": "625bce57-59fe-4480-92b1-cfb208b85e4f",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "mkdir gqlgen-todos",
+    "commit": "",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "cd gqlgen-todos",
+    "commit": "",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "3d13f191-09bb-4896-9e61-50b2f425690c",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "go mod init github.com/[username]/gqlgen-todos",
+    "commit": "f71bd4db513263c346a78a347c7d91a9e8685a10",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "5a8e3fbc-7921-4b7b-86fd-c021663e1aca",
+    "phase": "Installから動かす直前まで",
+    "type": "commit",
+    "instruction": "# manual commit",
+    "commit": "09e168580be4bb3fc8479fc6e7f7560a024456ec",
+    "comment": "tools.go",
+    "instruction2": ""
+  },
+  {
+    "step": "9e4193a7-d651-475f-99ca-ecab0ab92964",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "go mod tidy",
+    "commit": "f2a4aff4a83fb1e8cddf8577ab416239de6dd3eb",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "go get -d github.com/99designs/gqlgen@latest",
+    "commit": "",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "go run github.com/99designs/gqlgen init",
+    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "cc49f5b3-40c4-4457-a754-e8b780f0fbf8",
+    "phase": "Installから動かす直前まで",
+    "type": "source error",
+    "instruction": "# source error",
+    "commit": "",
+    "comment": "",
+    "instruction2": ""
+  },
+  {
+    "step": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
+    "phase": "Installから動かす直前まで",
+    "type": "terminal",
+    "instruction": "go mod tidy",
+    "commit": "2a40664382db572026fa7e80c40dfb73c7bd15a6",
+    "comment": "",
+    "instruction2": ""
+  }
+]

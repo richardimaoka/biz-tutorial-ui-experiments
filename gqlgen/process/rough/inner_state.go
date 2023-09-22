@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type InnerState struct {
@@ -25,6 +26,25 @@ func NewInnerState(targetFile string) (*InnerState, error) {
 //////////////////////////////////////////////////////
 // RoughStep to DetailedStep conversion methods
 //////////////////////////////////////////////////////
+
+func (state *InnerState) GenerateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
+	var roughSteps []RoughStep
+	err := internal.JsonRead2(roughStepsFile, &roughSteps)
+	if err != nil {
+		return nil, fmt.Errorf("GenerateTarget error - failed to read from json: %v", err)
+	}
+
+	var detailedSteps []DetailedStep
+	for _, s := range roughSteps {
+		dSteps, err := state.Conversion(&s, repo)
+		if err != nil {
+			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
+		}
+		detailedSteps = append(detailedSteps, dSteps...)
+	}
+
+	return detailedSteps, nil
+}
 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {

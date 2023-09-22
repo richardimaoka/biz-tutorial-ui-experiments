@@ -9,7 +9,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
-func TestRoughCommands(t *testing.T) {
+func TestRoughSteps(t *testing.T) {
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
@@ -48,23 +48,29 @@ func TestRoughCommands(t *testing.T) {
 	}
 }
 
-func TestFindUUIDs(t *testing.T) {
-	// uuid, err := rough.FindUUID(
-	// 	"testdata/target-detailed-steps.json",
-	// 	func(ds *rough.DetailedStep) bool {
-	// 		return ds.ParentStep == s.Step &&
-	// 			ds.FocusColumn == "Terminal" &&
-	// 			ds.TerminalType == "command" &&
-	// 			ds.TerminalText == s.Instruction &&
-	// 			ds.TerminalName == s.Instruction3 &&
-	// 			ds.CurrentDir == currentDir &&
-	// 			ds.CurrentDir == s.Commit
-	// 	})
+func TestRoughStepSequence(t *testing.T) {
+	cases := []struct {
+		inputFile  string
+		goldenFile string
+	}{
+		{"testdata/rough-steps/rough-steps1.json", "testdata/golden/detailed-steps1.json"},
+	}
 
-	// if err != nil {
-	// 	t.Fatalf("failed to find uuid: %v", err)
-	// }
-	// if uuid != "e0b0a0a0-0000-0000-0000-000000000001" {
-	// 	t.Fatalf("unexpected uuid: %s", uuid)
-	// }
+	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
+	}
+
+	state := rough.PredictableInnerState("", "")
+
+	for _, c := range cases {
+		t.Run(c.inputFile, func(t *testing.T) {
+			result, err := state.GenerateTarget(c.inputFile, repo)
+			if err != nil {
+				t.Fatalf("failed to generate detailed steps: %v", err)
+			}
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+		})
+	}
 }
