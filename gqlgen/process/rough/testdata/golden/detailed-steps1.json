@@ -1,14 +1,6 @@
 [
   {
     "fromRoughStep": true,
-    "subId": "moveToTerminalStep",
-    "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
-    "step": "",
-    "comment": "(move)",
-    "focusColumn": "Terminal"
-  },
-  {
-    "fromRoughStep": true,
     "subId": "terminalCommandStep",
     "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
     "step": "",

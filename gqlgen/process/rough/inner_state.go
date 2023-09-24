@@ -12,6 +12,7 @@ import (
 
 type InnerState struct {
 	repo          *git.Repository
+	currentSeqNo  int
 	currentColumn string
 	existingCols  []string
 	uuidFinder    *UUIDFinder
@@ -79,6 +80,8 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 		if s.Commit != "" {
 			state.prevCommit = plumbing.NewHash(s.Commit)
 		}
+
+		state.currentSeqNo++
 	}
 
 	return detailedSteps, nil
@@ -149,7 +152,7 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 	}
 
 	// insert move-to-terminal step if current column != "Terminal"
-	if state.currentColumn != "Terminal" {
+	if state.currentColumn != "Terminal" && state.currentSeqNo != 0 {
 		moveToTerminalStep := state.moveToTerminalStep(s)
 		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
