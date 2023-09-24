@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -16,7 +15,7 @@ type InnerState struct {
 	currentColumn string
 	existingCols  [5]string //fixed size, according to DetailedStep
 	uuidFinder    *UUIDFinder
-	prevCommit    plumbing.Hash
+	prevCommit    string
 }
 
 func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
@@ -71,16 +70,17 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 
 	var detailedSteps []DetailedStep
 	for _, s := range roughSteps {
+		// step conversion
 		dSteps, err := state.Conversion(&s, state.repo)
 		if err != nil {
 			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
 		}
 		detailedSteps = append(detailedSteps, dSteps...)
 
+		// inner state update
 		if s.Commit != "" {
-			state.prevCommit = plumbing.NewHash(s.Commit)
+			state.prevCommit = s.Commit
 		}
-
 		state.currentSeqNo++
 	}
 
@@ -116,7 +116,8 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	}
 
 	// find files from commit
-	files, err := gitFilesForCommit(repo, s.Commit)
+	files, err := CommitFiles(repo, s.Commit, state.prevCommit)
+	// files, err := state.commitFiles
 	if err != nil {
 		return nil, fmt.Errorf("failed to get files for commit = %s, %s", s.Commit, err)
 	}

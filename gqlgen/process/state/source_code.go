@@ -25,6 +25,7 @@ type SourceCode struct {
 	IsFoldFileTree      bool
 }
 
+// TODO duplicated implementation to be unified
 func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 	commitHash := plumbing.NewHash(hashStr)
 	if commitHash.String() != hashStr {
