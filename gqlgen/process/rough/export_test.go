@@ -1,6 +1,10 @@
 package rough
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/go-git/go-git/v5"
+)
 
 func PredictableInnerState(currentColumn, targetFile string) *InnerState {
 	finder, err := PredictableUUIDFinder(targetFile)
@@ -24,4 +28,8 @@ func PredictableUUIDFinder(targetFile string) (*UUIDFinder, error) {
 	finder.uuidGenerator = func() string { return "" }
 
 	return finder, nil
+}
+
+func (state *InnerState) GenerateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
+	return state.generateTarget(roughStepsFile, repo)
 }

@@ -24,10 +24,10 @@ func NewInnerState(targetFile string) (*InnerState, error) {
 }
 
 //////////////////////////////////////////////////////
-// RoughStep to DetailedStep conversion methods
+// Overall conversion methods
 //////////////////////////////////////////////////////
 
-func (state *InnerState) GenerateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) generateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
 	err := internal.JsonRead2(roughStepsFile, &roughSteps)
 	if err != nil {
@@ -45,6 +45,10 @@ func (state *InnerState) GenerateTarget(roughStepsFile string, repo *git.Reposit
 
 	return detailedSteps, nil
 }
+
+//////////////////////////////////////////////////////
+// RoughStep to DetailedStep conversion methods
+//////////////////////////////////////////////////////
 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {
