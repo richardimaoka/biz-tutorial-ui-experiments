@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -14,6 +15,7 @@ type InnerState struct {
 	currentColumn string
 	existingCols  []string
 	uuidFinder    *UUIDFinder
+	prevCommit    plumbing.Hash
 }
 
 func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
