@@ -209,7 +209,7 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
 	subId := "fileTreeStep"
 	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
-	fileTreeStep := DetailedStep{
+	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
 		ParentStep:    s.Step,
@@ -219,16 +219,15 @@ func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
 		FocusColumn:         "Source Code",
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
-		Commit:              s.Commit,
 	}
 
-	return fileTreeStep
+	return step
 }
 
 func (state *InnerState) openFileStep(s *RoughStep, index int, file string) DetailedStep {
 	subId := fmt.Sprintf("openFileStep-%d", index)
 	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
-	fileTreeStep := DetailedStep{
+	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
 		ParentStep:    s.Step,
@@ -240,7 +239,7 @@ func (state *InnerState) openFileStep(s *RoughStep, index int, file string) Deta
 		IsFoldFileTree:      true,
 	}
 
-	return fileTreeStep
+	return step
 }
 
 func (state *InnerState) moveToTerminalStep(s *RoughStep) DetailedStep {
