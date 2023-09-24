@@ -125,6 +125,7 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 			break
 		}
 	}
+	state.currentColumn = "Source Code"
 
 	return detailedSteps, nil
 }
