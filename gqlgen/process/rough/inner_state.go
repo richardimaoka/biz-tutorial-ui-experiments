@@ -14,7 +14,7 @@ type InnerState struct {
 	repo          *git.Repository
 	currentSeqNo  int
 	currentColumn string
-	existingCols  []string
+	existingCols  [5]string //fixed size, according to DetailedStep
 	uuidFinder    *UUIDFinder
 	prevCommit    plumbing.Hash
 }
@@ -357,4 +357,43 @@ func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 	}
 
 	return step
+}
+
+//////////////////////////////////////////////////////
+// Other utils
+//////////////////////////////////////////////////////
+
+func (state *InnerState) isColumnExist(colName string) bool {
+	for _, col := range state.existingCols {
+		if col == colName {
+			return true
+		}
+	}
+	return false
+}
+
+func (state *InnerState) appendColumnIfNotExist(colName string) {
+	for _, col := range state.existingCols {
+		if col == colName {
+			// if already exists, do nothing
+			return
+		}
+	}
+
+	// here we didn't find the column, so append it
+	for i, col := range state.existingCols {
+		if col == "" {
+			state.existingCols[i] = colName
+			break
+		}
+	}
+}
+
+func (ds *DetailedStep) setColumns(cols [5]string) bool {
+	ds.Column1 = cols[0]
+	ds.Column2 = cols[1]
+	ds.Column3 = cols[2]
+	ds.Column4 = cols[3]
+	ds.Column5 = cols[4]
+	return false
 }
