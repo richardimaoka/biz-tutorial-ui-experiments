@@ -41,10 +41,11 @@ func TestRoughSteps(t *testing.T) {
 			}
 
 			// 3. convert to detailed step and verify
-			result, err := c.InnerState.Conversion(&roughStep, repo)
+			converted, err := c.InnerState.Conversion(&roughStep, repo)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
+			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
@@ -68,10 +69,11 @@ func TestRoughStepSequence(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			result, err := state.GenerateTarget(c.inputFile)
+			converted, err := state.GenerateTarget(c.inputFile)
 			if err != nil {
 				t.Fatalf("failed to generate detailed steps: %v", err)
 			}
+			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}

@@ -1,6 +1,7 @@
 package rough
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
@@ -37,4 +38,25 @@ func PredictableUUIDFinder(targetFile string) (*UUIDFinder, error) {
 
 func (state *InnerState) GenerateTarget(roughStepsFile string) ([]DetailedStep, error) {
 	return state.generateTarget(roughStepsFile)
+}
+
+func ToOmitEmptyStructs(dsSlice []DetailedStep) []DetailedStepTest {
+	var dstSlice []DetailedStepTest
+
+	for _, ds := range dsSlice {
+		jsonBytes, err := json.Marshal(ds)
+		if err != nil {
+			panic(err)
+		}
+
+		var dst DetailedStepTest
+		err = json.Unmarshal(jsonBytes, &dst)
+		if err != nil {
+			panic(err)
+		}
+
+		dstSlice = append(dstSlice, dst)
+	}
+
+	return dstSlice
 }
