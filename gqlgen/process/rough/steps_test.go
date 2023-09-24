@@ -10,23 +10,23 @@ import (
 )
 
 func TestRoughSteps(t *testing.T) {
+	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
+	}
+
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
 		InnerState    *rough.InnerState
 	}{
-		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.PredictableInnerState("Terminal", "")},
-		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.PredictableInnerState("Terminal", "")},
-		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.PredictableInnerState("Terminal", "")},
-		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.PredictableInnerState("Terminal", "")},
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.PredictableInnerState("Terminal", "")},
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.PredictableInnerState("Source Code", "")},
-	}
-
-	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.PredictableInnerState("Source Code", "", repo)},
 	}
 
 	for _, c := range cases {
@@ -62,11 +62,11 @@ func TestRoughStepSequence(t *testing.T) {
 		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
 	}
 
-	state := rough.PredictableInnerState("", "")
+	state := rough.PredictableInnerState("", "", repo)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			result, err := state.GenerateTarget(c.inputFile, repo)
+			result, err := state.GenerateTarget(c.inputFile)
 			if err != nil {
 				t.Fatalf("failed to generate detailed steps: %v", err)
 			}

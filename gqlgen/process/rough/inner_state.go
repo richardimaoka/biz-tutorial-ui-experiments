@@ -9,25 +9,29 @@ import (
 )
 
 type InnerState struct {
+	repo          *git.Repository
 	currentColumn string
 	existingCols  []string
 	uuidFinder    *UUIDFinder
 }
 
-func NewInnerState(targetFile string) (*InnerState, error) {
+func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
 	finder, err := NewUUIDFinder(targetFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create UUIDFinder: %s", err)
 	}
 
-	return &InnerState{uuidFinder: finder}, nil
+	return &InnerState{
+		repo:       repo,
+		uuidFinder: finder,
+	}, nil
 }
 
 //////////////////////////////////////////////////////
 // Overall conversion methods
 //////////////////////////////////////////////////////
 
-func (state *InnerState) generateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
 	err := internal.JsonRead2(roughStepsFile, &roughSteps)
 	if err != nil {
@@ -36,7 +40,7 @@ func (state *InnerState) generateTarget(roughStepsFile string, repo *git.Reposit
 
 	var detailedSteps []DetailedStep
 	for _, s := range roughSteps {
-		dSteps, err := state.Conversion(&s, repo)
+		dSteps, err := state.Conversion(&s, state.repo)
 		if err != nil {
 			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
 		}

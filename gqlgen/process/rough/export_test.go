@@ -6,16 +6,21 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-func PredictableInnerState(currentColumn, targetFile string) *InnerState {
+func PredictableInnerState(currentColumn, targetFile string, repo *git.Repository) *InnerState {
+	state, err := NewInnerState(targetFile, repo)
+	if err != nil {
+		panic(fmt.Errorf("failed to create InnerState: %s", err))
+	}
+
 	finder, err := PredictableUUIDFinder(targetFile)
 	if err != nil {
 		panic(fmt.Errorf("failed to create UUIDFinder: %s", err))
 	}
 
-	return &InnerState{
-		currentColumn: currentColumn,
-		uuidFinder:    finder,
-	}
+	state.uuidFinder = finder
+	state.currentColumn = currentColumn
+
+	return state
 }
 
 func PredictableUUIDFinder(targetFile string) (*UUIDFinder, error) {
@@ -30,6 +35,6 @@ func PredictableUUIDFinder(targetFile string) (*UUIDFinder, error) {
 	return finder, nil
 }
 
-func (state *InnerState) GenerateTarget(roughStepsFile string, repo *git.Repository) ([]DetailedStep, error) {
-	return state.generateTarget(roughStepsFile, repo)
+func (state *InnerState) GenerateTarget(roughStepsFile string) ([]DetailedStep, error) {
+	return state.generateTarget(roughStepsFile)
 }
