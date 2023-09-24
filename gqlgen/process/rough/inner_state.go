@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
@@ -30,6 +31,33 @@ func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error)
 //////////////////////////////////////////////////////
 // Overall conversion methods
 //////////////////////////////////////////////////////
+
+func Process(dir, repoUrl string) error {
+	roughFile := fmt.Sprintf("%s/rough-steps.json", dir)
+	targetFile := fmt.Sprintf("%s/detailed-steps.json", dir)
+
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	if err != nil {
+		return fmt.Errorf("cannot clone repo %s, %s", repoUrl, err)
+	}
+
+	state, err := NewInnerState(targetFile, repo)
+	if err != nil {
+		return fmt.Errorf("failed to create InnerState: %s", err)
+	}
+
+	detailedSteps, err := state.generateTarget(roughFile)
+	if err != nil {
+		return fmt.Errorf("failed to generate detailed steps, %s", err)
+	}
+
+	err = internal.WriteJsonToFile(detailedSteps, targetFile)
+	if err != nil {
+		return fmt.Errorf("failed to write detailed steps to file, %s", err)
+	}
+
+	return nil
+}
 
 func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
