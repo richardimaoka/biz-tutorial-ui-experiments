@@ -75,6 +75,10 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
 		}
 		detailedSteps = append(detailedSteps, dSteps...)
+
+		if s.Commit != "" {
+			state.prevCommit = plumbing.NewHash(s.Commit)
+		}
 	}
 
 	return detailedSteps, nil
