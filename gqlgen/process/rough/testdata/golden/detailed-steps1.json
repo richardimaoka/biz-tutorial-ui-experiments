@@ -33,8 +33,7 @@
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go mod init github.com/[username]/gqlgen-todos",
-    "terminalType": "command",
-    "commit": "f71bd4db513263c346a78a347c7d91a9e8685a10"
+    "terminalType": "command"
   },
   {
     "fromRoughStep": true,
@@ -56,19 +55,11 @@
   },
   {
     "fromRoughStep": true,
-    "subId": "fileTreeStep",
-    "parentStep": "5a8e3fbc-7921-4b7b-86fd-c021663e1aca",
-    "step": "",
-    "focusColumn": "Source Code",
-    "commit": "09e168580be4bb3fc8479fc6e7f7560a024456ec",
-    "defaultOpenFilePath": "go.mod"
-  },
-  {
-    "fromRoughStep": true,
     "subId": "openFileStep-0",
     "parentStep": "5a8e3fbc-7921-4b7b-86fd-c021663e1aca",
     "step": "",
     "focusColumn": "Source Code",
+    "commit": "09e168580be4bb3fc8479fc6e7f7560a024456ec",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -83,13 +74,20 @@
   },
   {
     "fromRoughStep": true,
+    "subId": "moveToTerminalStep",
+    "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
+    "step": "",
+    "comment": "(move)",
+    "focusColumn": "Terminal"
+  },
+  {
+    "fromRoughStep": true,
     "subId": "terminalCommandStep",
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go mod tidy",
-    "terminalType": "command",
-    "commit": "f2a4aff4a83fb1e8cddf8577ab416239de6dd3eb"
+    "terminalType": "command"
   },
   {
     "fromRoughStep": true,
@@ -129,6 +127,14 @@
   },
   {
     "fromRoughStep": true,
+    "subId": "moveToTerminalStep",
+    "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
+    "step": "",
+    "comment": "(move)",
+    "focusColumn": "Terminal"
+  },
+  {
+    "fromRoughStep": true,
     "subId": "terminalCommandStep",
     "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
     "step": "",
@@ -143,8 +149,7 @@
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go run github.com/99designs/gqlgen init",
-    "terminalType": "command",
-    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47"
+    "terminalType": "command"
   },
   {
     "fromRoughStep": true,
@@ -232,8 +237,7 @@
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go mod tidy",
-    "terminalType": "command",
-    "commit": "2a40664382db572026fa7e80c40dfb73c7bd15a6"
+    "terminalType": "command"
   },
   {
     "fromRoughStep": true,

@@ -99,6 +99,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 
 func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
+	prevColumn := state.currentColumn
 
 	// Get info from git
 	if s.Commit == "" {
@@ -112,14 +113,17 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	}
 
 	// Insert file-tree step if current column != "Source Code"
-	if state.currentColumn != "Source Code" {
+	if prevColumn != "Source Code" {
 		fileTreeStep := state.fileTreeStep(s, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
 	// file steps
 	for i, file := range files {
-		openFileStep := state.openFileStep(s, i, file)
+		// if prev step is "Source Code", then fileTreeStep is skipped, so the commit should be included in the 0-th openFileStep
+		includeCommit := prevColumn == "Source Code" && i == 0
+
+		openFileStep := state.openFileStep(s, i, file, includeCommit)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
@@ -218,6 +222,7 @@ func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
 		// other fields
 		Step:                stepId,
 		FocusColumn:         "Source Code",
+		Commit:              s.Commit,
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
 	}
@@ -225,9 +230,15 @@ func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
 	return step
 }
 
-func (state *InnerState) openFileStep(s *RoughStep, index int, file string) DetailedStep {
+func (state *InnerState) openFileStep(s *RoughStep, index int, file string, includeCommit bool) DetailedStep {
 	subId := fmt.Sprintf("openFileStep-%d", index)
 	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+
+	var commit string
+	if includeCommit {
+		commit = s.Commit
+	}
+
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -238,6 +249,7 @@ func (state *InnerState) openFileStep(s *RoughStep, index int, file string) Deta
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: file,
 		IsFoldFileTree:      true,
+		Commit:              commit,
 	}
 
 	return step
@@ -333,7 +345,6 @@ func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 		TerminalText: s.Instruction,
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
-		Commit:       s.Commit,       // Go zero value is ""
 	}
 
 	return step

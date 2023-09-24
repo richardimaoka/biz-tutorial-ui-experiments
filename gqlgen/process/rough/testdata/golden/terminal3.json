@@ -5,8 +5,7 @@
     "step": "",
     "focusColumn": "Terminal",
     "terminalText": "go run github.com/99designs/gqlgen init",
-    "terminalType": "command",
-    "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47"
+    "terminalType": "command"
   },
   {
     "fromRoughStep": true,

@@ -1,6 +1,7 @@
 package rough_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -72,5 +73,13 @@ func TestRoughStepSequence(t *testing.T) {
 			}
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
+	}
+}
+
+func TestDetailedStepStruct(t *testing.T) {
+	ds := rough.DetailedStep{}
+	fields := reflect.VisibleFields(reflect.TypeOf(ds))
+	for _, f := range fields {
+		t.Logf("%s: %v", f.Name, f.Type)
 	}
 }
