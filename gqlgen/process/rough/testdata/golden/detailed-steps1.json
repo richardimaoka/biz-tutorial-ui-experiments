@@ -5,8 +5,8 @@
     "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "mkdir gqlgen-todos",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "mkdir gqlgen-todos"
   },
   {
     "fromRoughStep": true,
@@ -14,8 +14,8 @@
     "parentStep": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "cd gqlgen-todos",
     "terminalType": "command",
+    "terminalText": "cd gqlgen-todos",
     "currentDir": "gqlgen-todos"
   },
   {
@@ -24,8 +24,8 @@
     "parentStep": "3d13f191-09bb-4896-9e61-50b2f425690c",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go mod init github.com/[username]/gqlgen-todos",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go mod init github.com/[username]/gqlgen-todos"
   },
   {
     "fromRoughStep": true,
@@ -60,8 +60,8 @@
     "subId": "moveToTerminalStep",
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
-    "comment": "(move)",
-    "focusColumn": "Terminal"
+    "focusColumn": "Terminal",
+    "comment": "(move)"
   },
   {
     "fromRoughStep": true,
@@ -69,8 +69,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go mod tidy",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go mod tidy"
   },
   {
     "fromRoughStep": true,
@@ -104,8 +104,8 @@
     "subId": "moveToTerminalStep",
     "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
     "step": "",
-    "comment": "(move)",
-    "focusColumn": "Terminal"
+    "focusColumn": "Terminal",
+    "comment": "(move)"
   },
   {
     "fromRoughStep": true,
@@ -113,8 +113,8 @@
     "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go get -d github.com/99designs/gqlgen@latest",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go get -d github.com/99designs/gqlgen@latest"
   },
   {
     "fromRoughStep": true,
@@ -122,8 +122,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go run github.com/99designs/gqlgen init",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go run github.com/99designs/gqlgen init"
   },
   {
     "fromRoughStep": true,
@@ -201,8 +201,8 @@
     "subId": "moveToTerminalStep",
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
-    "comment": "(move)",
-    "focusColumn": "Terminal"
+    "focusColumn": "Terminal",
+    "comment": "(move)"
   },
   {
     "fromRoughStep": true,
@@ -210,8 +210,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go mod tidy",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go mod tidy"
   },
   {
     "fromRoughStep": true,

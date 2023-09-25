@@ -4,8 +4,8 @@
     "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "cd gqlgen-todos",
     "terminalType": "command",
+    "terminalText": "cd gqlgen-todos",
     "currentDir": "gqlgen-todos"
   }
 ]

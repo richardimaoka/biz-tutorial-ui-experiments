@@ -4,8 +4,8 @@
     "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "go run github.com/99designs/gqlgen init",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "go run github.com/99designs/gqlgen init"
   },
   {
     "fromRoughStep": true,

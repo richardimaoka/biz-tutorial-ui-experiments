@@ -4,7 +4,7 @@
     "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
-    "terminalText": "mkdir gqlgen-todos",
-    "terminalType": "command"
+    "terminalType": "command",
+    "terminalText": "mkdir gqlgen-todos"
   }
 ]

@@ -3,17 +3,13 @@ package rough
 type DetailedStep struct {
 	// Uppercase fields to allow json dump for testing
 
-	// internal fields
+	// rough-step related
 	FromRoughStep bool   `json:"fromRoughStep"`
 	SubID         string `json:"subId"`
+	ParentStep    string `json:"parentStep"`
 
 	// steps
-	ParentStep      string `json:"parentStep"`
-	Step            string `json:"step"`
-	AutoNextSeconds int    `json:"autoNextSeconds"`
-	DurationSeconds int    `json:"duration"`
-	IsTrivialStep   bool   `json:"isTrivialStep"`
-	Comment         string `json:"comment"`
+	Step string `json:"step"`
 
 	// columns
 	FocusColumn string `json:"focusColumn"`
@@ -23,21 +19,24 @@ type DetailedStep struct {
 	Column4     string `json:"column4"`
 	Column5     string `json:"column5"`
 
+	Comment string `json:"comment"`
+
+	// animation
+	DurationSeconds int  `json:"duration"`
+	IsTrivialStep   bool `json:"isTrivialStep"`
+
 	// modal
 	ModalText     string `json:"modalText"`
 	ModalPosition string `json:"modalPosition"`
 
 	// terminal
-	TerminalText string `json:"terminalText"`
 	TerminalType string `json:"terminalType"`
-	TerminalName string `json:"terminalName"`
+	TerminalText string `json:"terminalText"`
 	CurrentDir   string `json:"currentDir"`
+	TerminalName string `json:"terminalName"`
 
 	// git
 	Commit              string `json:"commit"`
-	CommitMessage       string `json:"commitMessage"`
-	PrevCommit          string `json:"prevCommit"`
-	RepoUrl             string `json:"repoUrl"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 	IsFoldFileTree      bool   `json:"isFoldFileTree"`
 

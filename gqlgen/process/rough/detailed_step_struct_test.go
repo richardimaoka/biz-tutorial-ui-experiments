@@ -3,17 +3,13 @@ package rough
 type DetailedStepTest struct {
 	// Uppercase fields to allow json dump for testing
 
-	// internal fields
+	// rough-step related
 	FromRoughStep bool   `json:"fromRoughStep,omitempty"`
 	SubID         string `json:"subId,omitempty"`
+	ParentStep    string `json:"parentStep,omitempty"`
 
 	// steps
-	ParentStep      string `json:"parentStep,omitempty"`
-	Step            string `json:"step"`
-	AutoNextSeconds int    `json:"autoNextSeconds,omitempty"`
-	DurationSeconds int    `json:"duration,omitempty"`
-	IsTrivialStep   bool   `json:"isTrivialStep,omitempty"`
-	Comment         string `json:"comment,omitempty"`
+	Step string `json:"step"`
 
 	// columns
 	FocusColumn string `json:"focusColumn,omitempty"`
@@ -23,21 +19,24 @@ type DetailedStepTest struct {
 	Column4     string `json:"column4,omitempty"`
 	Column5     string `json:"column5,omitempty"`
 
+	Comment string `json:"comment,omitempty"`
+
+	// animation
+	DurationSeconds int  `json:"duration,omitempty"`
+	IsTrivialStep   bool `json:"isTrivialStep,omitempty"`
+
 	// modal
 	ModalText     string `json:"modalText,omitempty"`
 	ModalPosition string `json:"modalPosition,omitempty"`
 
 	// terminal
-	TerminalText string `json:"terminalText,omitempty"`
 	TerminalType string `json:"terminalType,omitempty"`
-	TerminalName string `json:"terminalName,omitempty"`
+	TerminalText string `json:"terminalText,omitempty"`
 	CurrentDir   string `json:"currentDir,omitempty"`
+	TerminalName string `json:"terminalName,omitempty"`
 
 	// git
 	Commit              string `json:"commit,omitempty"`
-	CommitMessage       string `json:"commitMessage,omitempty"`
-	PrevCommit          string `json:"prevCommit,omitempty"`
-	RepoUrl             string `json:"repoUrl,omitempty"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
 	IsFoldFileTree      bool   `json:"isFoldFileTree,omitempty"`
 
