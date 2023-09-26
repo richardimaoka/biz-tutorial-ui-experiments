@@ -1,7 +1,5 @@
 [
   {
-    "IsFoldFileTree": false,
-    "IsTrivialStep": false,
     "browserImageHeight": 0,
     "browserImageName": "",
     "browserImageWidth": 0,
@@ -19,8 +17,8 @@
     "devtoolsImageWidth": 0,
     "durationSeconds": 0,
     "focusColumn": "Terminal",
-    "isFoldFileTree": "",
-    "isTrivialStep": "",
+    "isFoldFileTree": false,
+    "isTrivialStep": false,
     "markdownContents": "",
     "markdownHorizontalAlignment": "",
     "markdownVerticalAlignment": "",

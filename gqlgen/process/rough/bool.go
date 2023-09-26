@@ -7,7 +7,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
-func ToBool(s string) bool {
+func toBool(s string) bool {
 	switch s {
 	case "TRUE":
 		return true
@@ -21,6 +21,15 @@ func ToBool(s string) bool {
 		return false
 	default:
 		return false
+	}
+}
+
+func toInt(s string) int {
+	switch s {
+	case "": //mapping string zero value = "" to bool zero value = false
+		return 0
+	default:
+		return 0
 	}
 }
 
@@ -44,7 +53,33 @@ func alterStringToBool(jsonObj internal.JsonObj, field reflect.StructField) erro
 			return fmt.Errorf("failed to convert \"%s\" in %v to bool", field.Name, jsonObj)
 		}
 
-		jsonObj[field.Name] = ToBool(s)
+		jsonObj[jsonTag] = toBool(s)
+	}
+
+	return nil
+}
+
+func alterStringToInt(jsonObj internal.JsonObj, field reflect.StructField) error {
+	// for those struct fields where type = bool, convert string to bool
+	if field.Type.String() == "int" {
+		// validate st
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == "" {
+			return fmt.Errorf("json tag not found for field %s", field.Name)
+		}
+
+		jsonValue, ok := jsonObj[jsonTag]
+		if !ok {
+			// if not existent in jsonObj then skip
+			return nil
+		}
+
+		s, ok := jsonValue.(string)
+		if !ok {
+			return fmt.Errorf("failed to convert \"%s\" in %v to int", field.Name, jsonObj)
+		}
+
+		jsonObj[jsonTag] = toInt(s)
 	}
 
 	return nil
@@ -62,6 +97,7 @@ func ConvertBoolean(inputFile, targetFile string) error {
 	for i, jsonMap := range jsonObjArray {
 		for _, field := range structFields {
 			alterStringToBool(jsonMap, field)
+			alterStringToInt(jsonMap, field)
 		}
 		jsonObjArray[i] = jsonMap
 	}
