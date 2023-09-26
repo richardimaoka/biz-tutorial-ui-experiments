@@ -120,29 +120,27 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	}
 }
 
-func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func commitConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn, prevCommit string) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
-	prevColumn := state.currentColumn
 
 	// - precondition for RoughStep
 
-	// Get info from git
+	// get info from git
 	if s.Commit == "" {
-		return nil, fmt.Errorf("commit is missing for manual commit, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+		return nil, fmt.Errorf("commit is missing for step = '%s'", s.Step)
+	}
+
+	// find files from commit
+	files, err := CommitFiles(repo, s.Commit, prevCommit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get files for commit = %s, prevCommit = %s, %s", s.Commit, prevCommit, err)
 	}
 
 	// - step creation
 
-	// find files from commit
-	files, err := CommitFiles(repo, s.Commit, state.prevCommit)
-	// files, err := state.commitFiles
-	if err != nil {
-		return nil, fmt.Errorf("failed to get files for commit = %s, %s", s.Commit, err)
-	}
-
-	// Insert file-tree step if current column != "Source Code"
+	// insert file-tree step if prev column != "Source Code"
 	if prevColumn != "Source Code" {
-		fileTreeStep := fileTreeStep(s, state.uuidFinder, files[0])
+		fileTreeStep := fileTreeStep(s, uuidFinder, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
@@ -151,11 +149,21 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 		// if prev step is "Source Code", then fileTreeStep is skipped, so the commit should be included in the 0-th openFileStep
 		includeCommit := prevColumn == "Source Code" && i == 0
 
-		openFileStep := openFileStep(s, state.uuidFinder, i, file, includeCommit)
+		openFileStep := openFileStep(s, uuidFinder, i, file, includeCommit)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
 		}
+	}
+
+	return detailedSteps, nil
+}
+
+func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	prevColumn := state.currentColumn
+	detailedSteps, err := commitConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit)
+	if err != nil {
+		return nil, err
 	}
 
 	// - udpate the state
