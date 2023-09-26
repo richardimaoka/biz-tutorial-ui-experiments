@@ -139,39 +139,48 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 }
 
 func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
+	detailedSteps, usedColumns, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
 	if err != nil {
 		return nil, err
 	}
+	if len(usedColumns) == 0 {
+		return nil, fmt.Errorf("usedColumns is empty")
+	}
 
 	// - udpate the state
-	state.currentColumn = "Source Code"
+	state.currentColumn = usedColumns[len(usedColumns)-1]
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
 
 func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
-	detailedSteps, err := browserConvertInternal(s, state.uuidFinder)
+	detailedSteps, usedColumns, err := browserConvertInternal(s, state.uuidFinder)
 	if err != nil {
 		return nil, err
 	}
+	if len(usedColumns) == 0 {
+		return nil, fmt.Errorf("usedColumns is empty")
+	}
 
 	// - udpate the state
-	state.currentColumn = "Browser"
+	state.currentColumn = usedColumns[len(usedColumns)-1]
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
 
 func (state *InnerState) markdownConvert(s *RoughStep) ([]DetailedStep, error) {
-	detailedSteps, err := markdownConvertInternal(s, state.uuidFinder)
+	detailedSteps, usedColumns, err := markdownConvertInternal(s, state.uuidFinder)
 	if err != nil {
 		return nil, err
 	}
+	if len(usedColumns) == 0 {
+		return nil, fmt.Errorf("usedColumns is empty")
+	}
 
 	// - udpate the state
-	state.currentColumn = "Markdown"
+	state.currentColumn = usedColumns[len(usedColumns)-1]
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
@@ -272,21 +281,22 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	return steps, usedColumns, nil
 }
 
-func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
+func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
 	var detailedSteps []DetailedStep
 
 	sourceErrorStep := sourceErrorStep(s, uuidFinder)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
-	return detailedSteps, nil
+	usedColumns := []string{"Source Code"}
+	return detailedSteps, usedColumns, nil
 }
 
-func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
+func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
+		return nil, nil, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
 	// browser steps
@@ -297,22 +307,24 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	return detailedSteps, nil
+	usedColumns := []string{"Browser"}
+	return detailedSteps, usedColumns, nil
 }
 
-func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
+func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+		return nil, nil, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
 	// browser steps
 	markdownStep := markdownStep(s, uuidFinder)
 	detailedSteps = append(detailedSteps, markdownStep)
 
-	return detailedSteps, nil
+	usedColumns := []string{"Markdown"}
+	return detailedSteps, usedColumns, nil
 }
 
 //////////////////////////////////////////////////////

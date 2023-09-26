@@ -89,10 +89,11 @@ func TestCommitSteps(t *testing.T) {
 
 func TestSourceErrorSteps(t *testing.T) {
 	cases := []struct {
-		inputFile  string
-		goldenFile string
+		inputFile       string
+		goldenFile      string
+		expectedColumns []string
 	}{
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json"},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", []string{"Source Code"}},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
@@ -106,24 +107,28 @@ func TestSourceErrorSteps(t *testing.T) {
 
 			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, err := rough.SourceErrorConvertInternal(&roughStep, repo, uuidFinder)
+			converted, usedColumns, err := rough.SourceErrorConvertInternal(&roughStep, repo, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
+			result := rough.ToOmitEmptyStructs(converted)
 
 			// verify results
-			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
+				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
+			}
 		})
 	}
 }
 
 func TestBrowserSteps(t *testing.T) {
 	cases := []struct {
-		inputFile  string
-		goldenFile string
+		inputFile       string
+		goldenFile      string
+		expectedColumns []string
 	}{
-		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json"},
+		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json", []string{"Browser"}},
 	}
 
 	for _, c := range cases {
@@ -134,7 +139,7 @@ func TestBrowserSteps(t *testing.T) {
 
 			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, err := rough.BrowserConvertInternal(&roughStep, uuidFinder)
+			converted, usedColumns, err := rough.BrowserConvertInternal(&roughStep, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -142,16 +147,20 @@ func TestBrowserSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
+				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
+			}
 		})
 	}
 }
 
 func TestMarkdownSteps(t *testing.T) {
 	cases := []struct {
-		inputFile  string
-		goldenFile string
+		inputFile       string
+		goldenFile      string
+		expectedColumns []string
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json"},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", []string{"Markdown"}},
 	}
 
 	for _, c := range cases {
@@ -162,7 +171,7 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder)
+			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -170,6 +179,9 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
+				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
+			}
 		})
 	}
 }
