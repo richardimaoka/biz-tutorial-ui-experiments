@@ -1,6 +1,7 @@
 package rough
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 
@@ -102,7 +103,18 @@ func ConvertBoolean(inputFile, targetFile string) error {
 		jsonObjArray[i] = jsonMap
 	}
 
-	err = internal.WriteJsonToFile(jsonObjArray, targetFile)
+	bytes, err := json.Marshal(jsonObjArray)
+	if err != nil {
+		return fmt.Errorf("failed to marshal json array, %s", err)
+	}
+
+	var dst []DetailedStep
+	err = json.Unmarshal(bytes, &dst)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal to DetailedStep, %s", err)
+	}
+
+	err = internal.WriteJsonToFile(dst, targetFile)
 
 	return nil
 }

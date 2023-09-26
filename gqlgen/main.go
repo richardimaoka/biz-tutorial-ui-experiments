@@ -22,6 +22,11 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+	} else if len(os.Args) > 1 && os.Args[1] == "csv" {
+		err := rough.ConvertBoolean("data/gqlgen-getting-started/steps2.json", "data/gqlgen-getting-started/steps3.json")
+		if err != nil {
+			panic(err)
+		}
 	} else if len(os.Args) > 1 && os.Args[1] == "processing" {
 		process.Process("data/sign-in-with-google-1st-half")
 	} else if len(os.Args) > 1 && os.Args[1] == "commits" {
