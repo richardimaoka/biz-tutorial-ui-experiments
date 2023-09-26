@@ -56,3 +56,12 @@ func TestDetailedStepReadStruct(t *testing.T) {
 		t.Fatalf("mismatch (-expected +result):\n%s", diff)
 	}
 }
+
+func TestBoolStringConversion(t *testing.T) {
+	rough.ConvertBoolean(
+		"testdata/detailed-steps/from-csv.json",
+		"testdata/golden/bool-string-conversion.json",
+	)
+	// internal.CompareWitGoldenFile(t, *updateFlag, "testdata/golden/reprocessed-from-csv.json", )
+
+}
