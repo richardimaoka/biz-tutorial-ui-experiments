@@ -360,6 +360,23 @@ func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 	return step
 }
 
+func (state *InnerState) markdownStep(s *RoughStep) DetailedStep {
+	subId := "markdownStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+
+	step := DetailedStep{
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:             stepId,
+		MarkdownContents: s.Instruction,
+	}
+
+	return step
+}
+
 //////////////////////////////////////////////////////
 // Other utils
 //////////////////////////////////////////////////////
