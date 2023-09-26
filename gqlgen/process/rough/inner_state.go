@@ -142,7 +142,7 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 
 	// Insert file-tree step if current column != "Source Code"
 	if prevColumn != "Source Code" {
-		fileTreeStep := state.fileTreeStep(s, files[0])
+		fileTreeStep := fileTreeStep(s, state.uuidFinder, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
@@ -151,7 +151,7 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 		// if prev step is "Source Code", then fileTreeStep is skipped, so the commit should be included in the 0-th openFileStep
 		includeCommit := prevColumn == "Source Code" && i == 0
 
-		openFileStep := state.openFileStep(s, i, file, includeCommit)
+		openFileStep := openFileStep(s, state.uuidFinder, i, file, includeCommit)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
@@ -180,23 +180,23 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 
 	// insert move-to-terminal step if current column != "Terminal"
 	if state.currentColumn != "Terminal" && state.currentSeqNo != 0 {
-		moveToTerminalStep := state.moveToTerminalStep(s)
+		moveToTerminalStep := moveToTerminalStep(s, state.uuidFinder)
 		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
 
 	// command step
-	cmdStep := state.terminalCommandStep(s)
+	cmdStep := terminalCommandStep(s, state.uuidFinder)
 	detailedSteps = append(detailedSteps, cmdStep)
 
 	// cd step
 	if strings.HasPrefix(s.Instruction, "cd ") {
-		cmdStep := state.terminalCdStep(s)
+		cmdStep := terminalCdStep(s, state.uuidFinder)
 		detailedSteps = append(detailedSteps, cmdStep)
 	}
 
 	// output step
 	if s.Instruction2 != "" {
-		outputStep := state.terminalOutputStep(s)
+		outputStep := terminalOutputStep(s, state.uuidFinder)
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
@@ -213,7 +213,7 @@ func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) 
 
 	// - step creation
 
-	sourceErrorStep := state.sourceErrorStep(s)
+	sourceErrorStep := sourceErrorStep(s, state.uuidFinder)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
 	// - udpate the state
@@ -236,7 +236,7 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 	split := strings.Split(s.Instruction, ",")
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := state.browserStep(s, i, browserImageName)
+		browserStep := browserStep(s, state.uuidFinder, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
@@ -252,9 +252,9 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 // DetailedStep generation methods
 //////////////////////////////////////////////////////
 
-func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
+func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, file string) DetailedStep {
 	subId := "fileTreeStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -271,9 +271,9 @@ func (state *InnerState) fileTreeStep(s *RoughStep, file string) DetailedStep {
 	return step
 }
 
-func (state *InnerState) openFileStep(s *RoughStep, index int, file string, includeCommit bool) DetailedStep {
+func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, index int, file string, includeCommit bool) DetailedStep {
 	subId := fmt.Sprintf("openFileStep-%d", index)
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
 	var commit string
 	if includeCommit {
@@ -296,9 +296,9 @@ func (state *InnerState) openFileStep(s *RoughStep, index int, file string, incl
 	return step
 }
 
-func (state *InnerState) moveToTerminalStep(s *RoughStep) DetailedStep {
+func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "moveToTerminalStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -312,9 +312,9 @@ func (state *InnerState) moveToTerminalStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) terminalOutputStep(s *RoughStep) DetailedStep {
+func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "terminalOutputStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -330,9 +330,9 @@ func (state *InnerState) terminalOutputStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) sourceErrorStep(s *RoughStep) DetailedStep {
+func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "sourceErrorStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -347,9 +347,9 @@ func (state *InnerState) sourceErrorStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) browserStep(s *RoughStep, index int, browserImageName string) DetailedStep {
+func browserStep(s *RoughStep, uuidFinder *UUIDFinder, index int, browserImageName string) DetailedStep {
 	subId := fmt.Sprintf("browserStep-%d", index)
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
 		FromRoughStep: true,
@@ -364,9 +364,9 @@ func (state *InnerState) browserStep(s *RoughStep, index int, browserImageName s
 	return step
 }
 
-func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
+func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "terminalCommandStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
@@ -384,11 +384,11 @@ func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) terminalCdStep(s *RoughStep) DetailedStep {
+func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	currentDir := strings.TrimPrefix(s.Instruction, "cd ")
 
 	subId := "terminalCdStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
@@ -406,9 +406,9 @@ func (state *InnerState) terminalCdStep(s *RoughStep) DetailedStep {
 	return step
 }
 
-func (state *InnerState) markdownStep(s *RoughStep) DetailedStep {
+func markdownStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "markdownStep"
-	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
 	step := DetailedStep{
 		// fields to make the step searchable for re-generation
