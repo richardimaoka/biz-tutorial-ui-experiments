@@ -1,6 +1,7 @@
 package rough_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -53,10 +54,11 @@ func TestTerminalSteps(t *testing.T) {
 
 func TestCommitSteps(t *testing.T) {
 	cases := []struct {
-		inputFile  string
-		goldenFile string
+		inputFile       string
+		goldenFile      string
+		expectedColumns []string
 	}{
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json"},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", []string{"Source Code"}},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
@@ -76,12 +78,16 @@ func TestCommitSteps(t *testing.T) {
 
 			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, err := rough.CommitConvertInternal(&roughStep, repo, uuidFinder, "", "")
+			converted, usedColumns, err := rough.CommitConvertInternal(&roughStep, repo, uuidFinder, "", "")
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+
+			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
+				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
+			}
 		})
 	}
 }
