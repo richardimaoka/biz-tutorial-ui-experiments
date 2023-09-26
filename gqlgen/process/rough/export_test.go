@@ -11,6 +11,7 @@ var CommitConvertInternal = commitConvertInternal
 var TerminalConvertInternal = terminalConvertInternal
 var SourceErrorConvertInternal = sourceErrorConvertInternal
 var BrowserConvertInternal = browserConvertInternal
+var MarkdownConvertInternal = markdownConvertInternal
 
 func PredictableInnerState(currentColumn, targetFile string, repo *git.Repository) *InnerState {
 	state, err := NewInnerState(targetFile, repo)

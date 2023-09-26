@@ -164,6 +164,19 @@ func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
 	return detailedSteps, nil
 }
 
+func (state *InnerState) markdownConvert(s *RoughStep) ([]DetailedStep, error) {
+	detailedSteps, err := markdownConvertInternal(s, state.uuidFinder)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
+	state.currentColumn = "Markdown"
+	state.appendColumnIfNotExist(state.currentColumn)
+
+	return detailedSteps, nil
+}
+
 /////////////////////////////////////////////////////
 // RoughStep to DetailedStep internal methods
 //////////////////////////////////////////////////////
@@ -267,7 +280,7 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, fmt.Errorf("instruction is missing for browser step, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+		return nil, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
 	// browser steps
@@ -277,6 +290,21 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 		browserStep := browserStep(s, uuidFinder, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
+
+	return detailedSteps, nil
+}
+
+func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
+	var detailedSteps []DetailedStep
+
+	// precondition for RoughStep
+	if s.Instruction == "" {
+		return nil, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+	}
+
+	// browser steps
+	markdownStep := markdownStep(s, uuidFinder)
+	detailedSteps = append(detailedSteps, markdownStep)
 
 	return detailedSteps, nil
 }

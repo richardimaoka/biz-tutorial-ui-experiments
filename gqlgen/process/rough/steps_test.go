@@ -150,6 +150,35 @@ func TestBrowserSteps(t *testing.T) {
 	}
 }
 
+func TestMarkdownSteps(t *testing.T) {
+	cases := []struct {
+		inputFile  string
+		goldenFile string
+	}{
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json"},
+	}
+
+	for _, c := range cases {
+		t.Run(c.inputFile, func(t *testing.T) {
+			// 1. read rough step from file
+			var roughStep rough.RoughStep
+			err := internal.JsonRead2(c.inputFile, &roughStep)
+			if err != nil {
+				t.Fatalf("failed to unmarshal json: %v", err)
+			}
+
+			// 3. convert to detailed step and verify
+			uuidFinder := rough.StaticUUIDFinder("")
+			converted, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder)
+			if err != nil {
+				t.Fatalf("failed to convert rough step: %v", err)
+			}
+			result := rough.ToOmitEmptyStructs(converted)
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+		})
+	}
+}
+
 // func TestRoughSteps(t *testing.T) {
 // 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
 // 	repo, err := test_util.GitOpenOrClone(repoUrl)
