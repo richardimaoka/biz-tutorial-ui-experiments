@@ -92,22 +92,27 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 //////////////////////////////////////////////////////
 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	var steps []DetailedStep
+	var usedColumns []string
+	var err error
+
+	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
-		return state.terminalConvert(s, repo)
+		steps, usedColumns, err = terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	case "commit":
-		return state.commitConvert(s, repo)
+		steps, usedColumns, err = commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
-		return state.sourceErrorConvert(s, repo)
+		steps, usedColumns, err = sourceErrorConvertInternal(s, repo, state.uuidFinder)
 	case "browser":
-		return state.browserConvert(s)
+		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder)
+	case "markdown":
+		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder)
 	default:
-		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
+		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
-}
 
-func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, usedColumns, err := commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
+	// check if results are valid
 	if err != nil {
 		return nil, err
 	}
@@ -119,71 +124,7 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	state.currentColumn = usedColumns[len(usedColumns)-1]
 	state.appendColumnIfNotExist(state.currentColumn)
 
-	return detailedSteps, nil
-}
-
-func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, usedColumns, err := terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
-	if err != nil {
-		return nil, err
-	}
-	if len(usedColumns) == 0 {
-		return nil, fmt.Errorf("usedColumns is empty")
-	}
-
-	// - udpate the state
-	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
-}
-
-func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, usedColumns, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
-	if err != nil {
-		return nil, err
-	}
-	if len(usedColumns) == 0 {
-		return nil, fmt.Errorf("usedColumns is empty")
-	}
-
-	// - udpate the state
-	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
-}
-
-func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
-	detailedSteps, usedColumns, err := browserConvertInternal(s, state.uuidFinder)
-	if err != nil {
-		return nil, err
-	}
-	if len(usedColumns) == 0 {
-		return nil, fmt.Errorf("usedColumns is empty")
-	}
-
-	// - udpate the state
-	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
-}
-
-func (state *InnerState) markdownConvert(s *RoughStep) ([]DetailedStep, error) {
-	detailedSteps, usedColumns, err := markdownConvertInternal(s, state.uuidFinder)
-	if err != nil {
-		return nil, err
-	}
-	if len(usedColumns) == 0 {
-		return nil, fmt.Errorf("usedColumns is empty")
-	}
-
-	// - udpate the state
-	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
+	return steps, nil
 }
 
 /////////////////////////////////////////////////////
