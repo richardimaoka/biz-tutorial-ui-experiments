@@ -107,8 +107,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 }
 
 func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	prevColumn := state.currentColumn
-	detailedSteps, err := commitConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit)
+	detailedSteps, err := commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +120,7 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 }
 
 func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	prevColumn := state.currentColumn
-	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit, state.currentSeqNo)
+	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	if err != nil {
 		return nil, err
 	}
