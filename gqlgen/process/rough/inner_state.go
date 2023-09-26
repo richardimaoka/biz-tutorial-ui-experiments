@@ -139,7 +139,10 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 			break
 		}
 	}
+
+	// Udpate the state
 	state.currentColumn = "Source Code"
+	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
@@ -176,6 +179,7 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 
 	// Udpate the state
 	state.currentColumn = "Terminal"
+	state.appendColumnIfNotExist(state.currentColumn)
 
 	// source code steps
 	if s.Commit != "" {
@@ -198,6 +202,7 @@ func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) 
 
 	// udpate the state
 	state.currentColumn = "Source Code"
+	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
@@ -219,6 +224,7 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 
 	// 2. udpate the state
 	state.currentColumn = "Browser"
+	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
