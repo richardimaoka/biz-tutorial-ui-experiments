@@ -33,20 +33,18 @@ func TestTerminalSteps(t *testing.T) {
 		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.inputFile, &roughStep)
-			if err != nil {
-				t.Fatalf("failed to unmarshal json: %v", err)
-			}
+			test_util.JsonRead(t, c.inputFile, &roughStep)
 
-			// convert to detailed step and verify
+			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
 			converted, usedColumns, err := rough.TerminalConvertInternal(&roughStep, repo, uuidFinder, c.prevColumn, c.prevCommit, c.seqNo)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 
+			// verify results
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
 				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
 			}
@@ -70,20 +68,18 @@ func TestCommitSteps(t *testing.T) {
 		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.inputFile, &roughStep)
-			if err != nil {
-				t.Fatalf("failed to unmarshal json: %v", err)
-			}
+			test_util.JsonRead(t, c.inputFile, &roughStep)
 
-			// convert to detailed step and verify
+			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
 			converted, usedColumns, err := rough.CommitConvertInternal(&roughStep, repo, uuidFinder, "", "")
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 
+			// verify results
+			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
 				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
 			}
@@ -106,17 +102,16 @@ func TestSourceErrorSteps(t *testing.T) {
 		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.inputFile, &roughStep)
-			if err != nil {
-				t.Fatalf("failed to unmarshal json: %v", err)
-			}
+			test_util.JsonRead(t, c.inputFile, &roughStep)
 
-			// convert to detailed step and verify
+			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
 			converted, err := rough.SourceErrorConvertInternal(&roughStep, repo, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
+
+			// verify results
 			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
@@ -133,20 +128,19 @@ func TestBrowserSteps(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			// 1. read rough step from file
+			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.inputFile, &roughStep)
-			if err != nil {
-				t.Fatalf("failed to unmarshal json: %v", err)
-			}
+			test_util.JsonRead(t, c.inputFile, &roughStep)
 
-			// 3. convert to detailed step and verify
+			// convert to detailed step
 			uuidFinder := rough.StaticUUIDFinder("")
 			converted, err := rough.BrowserConvertInternal(&roughStep, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
+
+			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
@@ -162,20 +156,19 @@ func TestMarkdownSteps(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			// 1. read rough step from file
+			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.inputFile, &roughStep)
-			if err != nil {
-				t.Fatalf("failed to unmarshal json: %v", err)
-			}
+			test_util.JsonRead(t, c.inputFile, &roughStep)
 
-			// 3. convert to detailed step and verify
+			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
 			converted, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
+
+			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
