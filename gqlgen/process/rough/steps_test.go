@@ -6,6 +6,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/test_util"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
@@ -23,7 +24,7 @@ func TestBrowserSteps(t *testing.T) {
 
 func TestRoughSteps(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
+	repo, err := test_util.GitOpenOrClone(repoUrl)
 	if err != nil {
 		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
 	}

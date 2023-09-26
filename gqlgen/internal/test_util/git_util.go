@@ -1,4 +1,4 @@
-package gitutil
+package test_util
 
 import (
 	"fmt"
