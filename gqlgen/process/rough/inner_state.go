@@ -94,7 +94,21 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {
 	case "terminal":
-		return state.terminalConvert(s, repo)
+		//terminal steps
+		steps, err := state.terminalConvert(s, repo)
+		if err != nil {
+			return nil, err
+		}
+
+		// source code steps
+		if s.Commit != "" {
+			commitSteps, err := state.commitConvert(s, repo)
+			if err != nil {
+				return nil, fmt.Errorf("failed to convert commit steps, %s", err)
+			}
+			steps = append(steps, commitSteps...)
+		}
+		return steps, nil
 	case "commit":
 		return state.commitConvert(s, repo)
 	case "source error":
@@ -110,10 +124,14 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	var detailedSteps []DetailedStep
 	prevColumn := state.currentColumn
 
+	// - precondition for RoughStep
+
 	// Get info from git
 	if s.Commit == "" {
 		return nil, fmt.Errorf("commit is missing for manual commit, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
+
+	// - step creation
 
 	// find files from commit
 	files, err := CommitFiles(repo, s.Commit, state.prevCommit)
@@ -140,7 +158,8 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 		}
 	}
 
-	// Udpate the state
+	// - udpate the state
+
 	state.currentColumn = "Source Code"
 	state.appendColumnIfNotExist(state.currentColumn)
 
@@ -150,10 +169,14 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
+	// - precondition for RoughStep
+
 	// check if it's a valid terminal step
 	if s.Instruction == "" && s.Instruction2 == "" {
 		return nil, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
+
+	// - step creation
 
 	// insert move-to-terminal step if current column != "Terminal"
 	if state.currentColumn != "Terminal" && state.currentSeqNo != 0 {
@@ -177,18 +200,10 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
-	// Udpate the state
+	// - udpate the state
+
 	state.currentColumn = "Terminal"
 	state.appendColumnIfNotExist(state.currentColumn)
-
-	// source code steps
-	if s.Commit != "" {
-		commitSteps, err := state.commitConvert(s, repo)
-		if err != nil {
-			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
-		}
-		detailedSteps = append(detailedSteps, commitSteps...)
-	}
 
 	return detailedSteps, nil
 }
@@ -196,11 +211,13 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
-	// source code step
+	// - step creation
+
 	sourceErrorStep := state.sourceErrorStep(s)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
-	// udpate the state
+	// - udpate the state
+
 	state.currentColumn = "Source Code"
 	state.appendColumnIfNotExist(state.currentColumn)
 
@@ -210,6 +227,7 @@ func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) 
 func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
+	// precondition for RoughStep
 	if s.Instruction == "" {
 		return nil, fmt.Errorf("instruction is missing for browser step, phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
@@ -222,7 +240,8 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	// 2. udpate the state
+	// - udpate the state
+
 	state.currentColumn = "Browser"
 	state.appendColumnIfNotExist(state.currentColumn)
 
