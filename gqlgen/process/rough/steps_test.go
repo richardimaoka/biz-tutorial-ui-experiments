@@ -9,6 +9,18 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
+func TestTerminalSteps(t *testing.T) {
+}
+
+func TestCommitSteps(t *testing.T) {
+}
+
+func TestSourceErrorSteps(t *testing.T) {
+}
+
+func TestBrowserSteps(t *testing.T) {
+}
+
 func TestRoughSteps(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
