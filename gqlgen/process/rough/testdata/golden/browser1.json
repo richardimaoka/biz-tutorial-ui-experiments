@@ -1,0 +1,23 @@
+[
+  {
+    "fromRoughStep": true,
+    "subId": "browserStep-0",
+    "step": "",
+    "focusColumn": "Browser",
+    "browserImageName": "browser1"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "browserStep-1",
+    "step": "",
+    "focusColumn": "Browser",
+    "browserImageName": "browser2"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "browserStep-2",
+    "step": "",
+    "focusColumn": "Browser",
+    "browserImageName": "browser3"
+  }
+]

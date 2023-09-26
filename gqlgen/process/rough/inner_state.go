@@ -100,7 +100,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "source error":
 		return state.sourceErrorConvert(s, repo)
 	case "browser":
-		return state.browserConvert(s, repo)
+		return state.browserConvert(s)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s', phase = '%s', comment = '%s'", s.Type, s.Phase, s.Comment)
 	}
@@ -245,7 +245,7 @@ func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) 
 	return detailedSteps, nil
 }
 
-func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
@@ -257,12 +257,20 @@ func (state *InnerState) browserConvert(s *RoughStep, repo *git.Repository) ([]D
 	split := strings.Split(s.Instruction, ",")
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := browserStep(s, state.uuidFinder, i, browserImageName)
+		browserStep := browserStep(s, uuidFinder, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	// - udpate the state
+	return detailedSteps, nil
+}
 
+func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
+	detailedSteps, err := browserConvertInternal(s, state.uuidFinder)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
 	state.currentColumn = "Browser"
 	state.appendColumnIfNotExist(state.currentColumn)
 

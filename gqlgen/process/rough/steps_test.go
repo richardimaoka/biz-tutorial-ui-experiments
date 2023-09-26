@@ -88,8 +88,8 @@ func TestCommitSteps(t *testing.T) {
 
 func TestSourceErrorSteps(t *testing.T) {
 	cases := []struct {
-		roughStepFile string
-		goldenFile    string
+		inputFile  string
+		goldenFile string
 	}{
 		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json"},
 	}
@@ -101,10 +101,10 @@ func TestSourceErrorSteps(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		t.Run(c.roughStepFile, func(t *testing.T) {
+		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.roughStepFile, &roughStep)
+			err := internal.JsonRead2(c.inputFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}
@@ -123,28 +123,24 @@ func TestSourceErrorSteps(t *testing.T) {
 
 func TestBrowserSteps(t *testing.T) {
 	cases := []struct {
-		roughStepFile string
-		goldenFile    string
-		InnerState    *rough.InnerState
-	}{}
-
-	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := test_util.GitOpenOrClone(repoUrl)
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
+		inputFile  string
+		goldenFile string
+	}{
+		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json"},
 	}
 
 	for _, c := range cases {
-		t.Run(c.roughStepFile, func(t *testing.T) {
+		t.Run(c.inputFile, func(t *testing.T) {
 			// 1. read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.roughStepFile, &roughStep)
+			err := internal.JsonRead2(c.inputFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}
 
 			// 3. convert to detailed step and verify
-			converted, err := c.InnerState.Conversion(&roughStep, repo)
+			uuidFinder := rough.StaticUUIDFinder("")
+			converted, err := rough.BrowserConvertInternal(&roughStep, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
