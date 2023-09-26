@@ -38,7 +38,8 @@ func TestTerminalSteps(t *testing.T) {
 			}
 
 			// convert to detailed step and verify
-			converted, err := c.InnerState.Conversion(&roughStep, repo)
+			uuidFinder := rough.StaticUUIDFinder("")
+			converted, err := rough.TerminalConvertInternal(&roughStep, repo, uuidFinder, "Terminal", "", 0)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}

@@ -94,21 +94,7 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	switch s.Type {
 	case "terminal":
-		//terminal steps
-		steps, err := state.terminalConvert(s, repo)
-		if err != nil {
-			return nil, err
-		}
-
-		// source code steps
-		if s.Commit != "" {
-			commitSteps, err := state.commitConvert(s, repo)
-			if err != nil {
-				return nil, fmt.Errorf("failed to convert commit steps, %s", err)
-			}
-			steps = append(steps, commitSteps...)
-		}
-		return steps, nil
+		return state.terminalConvert(s, repo)
 	case "commit":
 		return state.commitConvert(s, repo)
 	case "source error":
@@ -173,8 +159,8 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	return detailedSteps, nil
 }
 
-func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, currentSeqNo int) ([]DetailedStep, error) {
-	var detailedSteps []DetailedStep
+func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, prevCommit string, currentSeqNo int) ([]DetailedStep, error) {
+	var steps []DetailedStep
 
 	// - precondition for RoughStep
 
@@ -188,37 +174,50 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	// insert move-to-terminal step if current column != "Terminal"
 	if prevColumn != "Terminal" && currentSeqNo != 0 {
 		moveToTerminalStep := moveToTerminalStep(s, uuidFinder)
-		detailedSteps = append(detailedSteps, moveToTerminalStep)
+		steps = append(steps, moveToTerminalStep)
 	}
 
 	// command step
 	cmdStep := terminalCommandStep(s, uuidFinder)
-	detailedSteps = append(detailedSteps, cmdStep)
+	steps = append(steps, cmdStep)
 
 	// cd step
 	if strings.HasPrefix(s.Instruction, "cd ") {
 		cmdStep := terminalCdStep(s, uuidFinder)
-		detailedSteps = append(detailedSteps, cmdStep)
+		steps = append(steps, cmdStep)
 	}
 
 	// output step
 	if s.Instruction2 != "" {
 		outputStep := terminalOutputStep(s, uuidFinder)
-		detailedSteps = append(detailedSteps, outputStep)
+		steps = append(steps, outputStep)
 	}
 
-	return detailedSteps, nil
+	// - source code steps
+	if s.Commit != "" {
+		commitSteps, err := commitConvertInternal(s, repo, uuidFinder, "Terminal", prevCommit)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
+		}
+		steps = append(steps, commitSteps...)
+	}
+
+	return steps, nil
 }
 
 func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	prevColumn := state.currentColumn
-	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.currentSeqNo)
+	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit, state.currentSeqNo)
 	if err != nil {
 		return nil, err
 	}
 
 	// - udpate the state
-	state.currentColumn = "Terminal"
+	if s.Commit != "" {
+		state.currentColumn = "Source Code"
+	} else {
+		state.currentColumn = "Terminal"
+	}
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
