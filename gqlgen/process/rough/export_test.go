@@ -7,6 +7,8 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
+var CommitConvertInternal = commitConvertInternal
+
 func PredictableInnerState(currentColumn, targetFile string, repo *git.Repository) *InnerState {
 	state, err := NewInnerState(targetFile, repo)
 	if err != nil {
@@ -22,6 +24,12 @@ func PredictableInnerState(currentColumn, targetFile string, repo *git.Repositor
 	state.currentColumn = currentColumn
 
 	return state
+}
+
+func StaticUUIDFinder(staticUUID string) *UUIDFinder {
+	return &UUIDFinder{
+		uuidGenerator: func() string { return "" },
+	}
 }
 
 func PredictableUUIDFinder(targetFile string) (*UUIDFinder, error) {

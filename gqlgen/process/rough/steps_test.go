@@ -58,9 +58,8 @@ func TestCommitSteps(t *testing.T) {
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
-		InnerState    *rough.InnerState
 	}{
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.PredictableInnerState("Terminal", "", repo)},
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json"},
 	}
 
 	for _, c := range cases {
@@ -73,7 +72,8 @@ func TestCommitSteps(t *testing.T) {
 			}
 
 			// convert to detailed step and verify
-			converted, err := c.InnerState.Conversion(&roughStep, repo)
+			uuidFinder := rough.StaticUUIDFinder("")
+			converted, err := rough.CommitConvertInternal(&roughStep, repo, uuidFinder, "", "")
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
