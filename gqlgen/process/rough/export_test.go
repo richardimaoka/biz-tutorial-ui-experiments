@@ -9,6 +9,7 @@ import (
 
 var CommitConvertInternal = commitConvertInternal
 var TerminalConvertInternal = terminalConvertInternal
+var SourceErrorConvertInternal = sourceErrorConvertInternal
 
 func PredictableInnerState(currentColumn, targetFile string, repo *git.Repository) *InnerState {
 	state, err := NewInnerState(targetFile, repo)

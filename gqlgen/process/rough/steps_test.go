@@ -90,9 +90,8 @@ func TestSourceErrorSteps(t *testing.T) {
 	cases := []struct {
 		roughStepFile string
 		goldenFile    string
-		InnerState    *rough.InnerState
 	}{
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.PredictableInnerState("Source Code", "", repo)},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json"},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
@@ -111,7 +110,8 @@ func TestSourceErrorSteps(t *testing.T) {
 			}
 
 			// convert to detailed step and verify
-			converted, err := c.InnerState.Conversion(&roughStep, repo)
+			uuidFinder := rough.StaticUUIDFinder("")
+			converted, err := rough.SourceErrorConvertInternal(&roughStep, repo, uuidFinder)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}

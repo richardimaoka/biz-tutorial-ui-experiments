@@ -223,16 +223,22 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 	return detailedSteps, nil
 }
 
-func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
-	// - step creation
-
-	sourceErrorStep := sourceErrorStep(s, state.uuidFinder)
+	sourceErrorStep := sourceErrorStep(s, uuidFinder)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
-	// - udpate the state
+	return detailedSteps, nil
+}
 
+func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	detailedSteps, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
 	state.currentColumn = "Source Code"
 	state.appendColumnIfNotExist(state.currentColumn)
 
