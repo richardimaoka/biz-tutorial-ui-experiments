@@ -11,7 +11,7 @@
     "column4": "",
     "column5": "",
     "comment": "mkdir gqlgen-todos",
-    "duration": 0,
+    "durationSeconds": 0,
     "isTrivialStep": false,
     "modalText": "プロジェクトディレクトリを作成",
     "modalPosition": "",

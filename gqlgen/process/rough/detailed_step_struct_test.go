@@ -22,7 +22,7 @@ type DetailedStepTest struct {
 	Comment string `json:"comment,omitempty"`
 
 	// animation
-	DurationSeconds int  `json:"duration,omitempty"`
+	DurationSeconds int  `json:"durationSeconds,omitempty"`
 	IsTrivialStep   bool `json:"isTrivialStep,omitempty"`
 
 	// modal
