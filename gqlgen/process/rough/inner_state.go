@@ -123,17 +123,16 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 }
 
 func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
+	detailedSteps, usedColumns, err := terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	if err != nil {
 		return nil, err
 	}
+	if len(usedColumns) == 0 {
+		return nil, fmt.Errorf("usedColumns is empty")
+	}
 
 	// - udpate the state
-	if s.Commit != "" {
-		state.currentColumn = "Source Code"
-	} else {
-		state.currentColumn = "Terminal"
-	}
+	state.currentColumn = usedColumns[len(usedColumns)-1]
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
@@ -222,7 +221,7 @@ func commitConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDF
 	return detailedSteps, usedColumns, nil
 }
 
-func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, prevCommit string, currentSeqNo int) ([]DetailedStep, error) {
+func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, prevCommit string, currentSeqNo int) ([]DetailedStep, []string, error) {
 	var steps []DetailedStep
 	var usedColumns []string
 
@@ -230,7 +229,7 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 
 	// check if it's a valid terminal step
 	if s.Instruction == "" && s.Instruction2 == "" {
-		return nil, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+		return nil, nil, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
 
 	// - step creation
@@ -264,13 +263,13 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	if s.Commit != "" {
 		commitSteps, commitColumns, err := commitConvertInternal(s, repo, uuidFinder, "Terminal", prevCommit)
 		if err != nil {
-			return nil, fmt.Errorf("failed to convert commit steps, %s", err)
+			return nil, nil, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
 		steps = append(steps, commitSteps...)
 		usedColumns = append(usedColumns, commitColumns...)
 	}
 
-	return steps, nil
+	return steps, usedColumns, nil
 }
 
 func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, error) {

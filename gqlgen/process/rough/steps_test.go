@@ -13,16 +13,17 @@ import (
 
 func TestTerminalSteps(t *testing.T) {
 	cases := []struct {
-		inputFile  string
-		goldenFile string
-		prevColumn string
-		prevCommit string
-		seqNo      int
+		inputFile       string
+		goldenFile      string
+		prevColumn      string
+		prevCommit      string
+		seqNo           int
+		expectedColumns []string
 	}{
-		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", "", "", 0},
-		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", "", "", 0},
-		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", "", "", 0},
-		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", "", "", 0},
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", "", "", 0, []string{"Terminal"}},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", "", "", 0, []string{"Terminal"}},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", "", "", 0, []string{"Terminal", "Source Code"}},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", "", "", 0, []string{"Terminal"}},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
@@ -42,12 +43,16 @@ func TestTerminalSteps(t *testing.T) {
 
 			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, err := rough.TerminalConvertInternal(&roughStep, repo, uuidFinder, c.prevColumn, c.prevCommit, c.seqNo)
+			converted, usedColumns, err := rough.TerminalConvertInternal(&roughStep, repo, uuidFinder, c.prevColumn, c.prevCommit, c.seqNo)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+
+			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
+				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
+			}
 		})
 	}
 }
