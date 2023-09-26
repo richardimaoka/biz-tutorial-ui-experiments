@@ -162,6 +162,12 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 	cmdStep := state.terminalCommandStep(s)
 	detailedSteps = append(detailedSteps, cmdStep)
 
+	// cd step
+	if strings.HasPrefix(s.Instruction, "cd ") {
+		cmdStep := state.terminalCdStep(s)
+		detailedSteps = append(detailedSteps, cmdStep)
+	}
+
 	// output step
 	if s.Instruction2 != "" {
 		outputStep := state.terminalOutputStep(s)
@@ -334,12 +340,6 @@ func (state *InnerState) browserStep(s *RoughStep, index int, browserImageName s
 }
 
 func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
-	// * check if it's a 'cd' command
-	var currentDir string
-	if strings.HasPrefix(s.Instruction, "cd ") {
-		currentDir = strings.TrimPrefix(s.Instruction, "cd ")
-	}
-
 	subId := "terminalCommandStep"
 	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -353,6 +353,27 @@ func (state *InnerState) terminalCommandStep(s *RoughStep) DetailedStep {
 		FocusColumn:  "Terminal",
 		TerminalType: "command",
 		TerminalText: s.Instruction,
+		TerminalName: s.Instruction3, // Go zero value is ""
+	}
+
+	return step
+}
+
+func (state *InnerState) terminalCdStep(s *RoughStep) DetailedStep {
+	currentDir := strings.TrimPrefix(s.Instruction, "cd ")
+
+	subId := "terminalCdStep"
+	stepId := state.uuidFinder.FindOrGenerateUUID(s, subId)
+
+	step := DetailedStep{
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "cd",
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
 	}

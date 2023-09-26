@@ -5,7 +5,14 @@
     "step": "",
     "focusColumn": "Terminal",
     "terminalType": "command",
-    "terminalText": "cd gqlgen-todos",
+    "terminalText": "cd gqlgen-todos"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "terminalCdStep",
+    "step": "",
+    "focusColumn": "Terminal",
+    "terminalType": "cd",
     "currentDir": "gqlgen-todos"
   }
 ]
