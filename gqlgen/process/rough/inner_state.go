@@ -106,6 +106,68 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	}
 }
 
+func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	prevColumn := state.currentColumn
+	detailedSteps, err := commitConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
+	state.currentColumn = "Source Code"
+	state.appendColumnIfNotExist(state.currentColumn)
+
+	return detailedSteps, nil
+}
+
+func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	prevColumn := state.currentColumn
+	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit, state.currentSeqNo)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
+	if s.Commit != "" {
+		state.currentColumn = "Source Code"
+	} else {
+		state.currentColumn = "Terminal"
+	}
+	state.appendColumnIfNotExist(state.currentColumn)
+
+	return detailedSteps, nil
+}
+
+func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	detailedSteps, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
+	state.currentColumn = "Source Code"
+	state.appendColumnIfNotExist(state.currentColumn)
+
+	return detailedSteps, nil
+}
+
+func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
+	detailedSteps, err := browserConvertInternal(s, state.uuidFinder)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
+	state.currentColumn = "Browser"
+	state.appendColumnIfNotExist(state.currentColumn)
+
+	return detailedSteps, nil
+}
+
+/////////////////////////////////////////////////////
+// RoughStep to DetailedStep internal methods
+//////////////////////////////////////////////////////
+
 func commitConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn, prevCommit string) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
@@ -145,20 +207,6 @@ func commitConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDF
 	return detailedSteps, nil
 }
 
-func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	prevColumn := state.currentColumn
-	detailedSteps, err := commitConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit)
-	if err != nil {
-		return nil, err
-	}
-
-	// - udpate the state
-	state.currentColumn = "Source Code"
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
-}
-
 func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, prevCommit string, currentSeqNo int) ([]DetailedStep, error) {
 	var steps []DetailedStep
 
@@ -193,7 +241,7 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 		steps = append(steps, outputStep)
 	}
 
-	// - source code steps
+	// source code steps
 	if s.Commit != "" {
 		commitSteps, err := commitConvertInternal(s, repo, uuidFinder, "Terminal", prevCommit)
 		if err != nil {
@@ -205,42 +253,11 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	return steps, nil
 }
 
-func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	prevColumn := state.currentColumn
-	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.prevCommit, state.currentSeqNo)
-	if err != nil {
-		return nil, err
-	}
-
-	// - udpate the state
-	if s.Commit != "" {
-		state.currentColumn = "Source Code"
-	} else {
-		state.currentColumn = "Terminal"
-	}
-	state.appendColumnIfNotExist(state.currentColumn)
-
-	return detailedSteps, nil
-}
-
 func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	sourceErrorStep := sourceErrorStep(s, uuidFinder)
 	detailedSteps = append(detailedSteps, sourceErrorStep)
-
-	return detailedSteps, nil
-}
-
-func (state *InnerState) sourceErrorConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
-	detailedSteps, err := sourceErrorConvertInternal(s, repo, state.uuidFinder)
-	if err != nil {
-		return nil, err
-	}
-
-	// - udpate the state
-	state.currentColumn = "Source Code"
-	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
@@ -260,19 +277,6 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 		browserStep := browserStep(s, uuidFinder, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
-
-	return detailedSteps, nil
-}
-
-func (state *InnerState) browserConvert(s *RoughStep) ([]DetailedStep, error) {
-	detailedSteps, err := browserConvertInternal(s, state.uuidFinder)
-	if err != nil {
-		return nil, err
-	}
-
-	// - udpate the state
-	state.currentColumn = "Browser"
-	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
