@@ -24,6 +24,32 @@ func ToBool(s string) bool {
 	}
 }
 
+func alterStringToBool(jsonObj internal.JsonObj, field reflect.StructField) error {
+	// for those struct fields where type = bool, convert string to bool
+	if field.Type.String() == "bool" {
+		// validate st
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == "" {
+			return fmt.Errorf("json tag not found for field %s", field.Name)
+		}
+
+		jsonValue, ok := jsonObj[jsonTag]
+		if !ok {
+			// if not existent in jsonObj then skip
+			return nil
+		}
+
+		s, ok := jsonValue.(string)
+		if !ok {
+			return fmt.Errorf("failed to convert \"%s\" in %v to bool", field.Name, jsonObj)
+		}
+
+		jsonObj[field.Name] = ToBool(s)
+	}
+
+	return nil
+}
+
 func ConvertBoolean(inputFile, targetFile string) error {
 	jsonObjArray, err := internal.JsonReadArray(inputFile)
 	if err != nil {
@@ -35,27 +61,7 @@ func ConvertBoolean(inputFile, targetFile string) error {
 
 	for i, jsonMap := range jsonObjArray {
 		for _, field := range structFields {
-
-			// for those struct fields where type = bool, convert string to bool
-			if field.Type.String() == "bool" {
-				jsonTag := field.Tag.Get("json")
-				if jsonTag == "" {
-					return fmt.Errorf("json tag not found for field %s", field.Name)
-				}
-
-				jsonValue, ok := jsonMap[jsonTag]
-				if !ok {
-					// if not existent in jsonMap (i.e.) input file, then skip
-					continue
-				}
-
-				s, ok := jsonValue.(string)
-				if !ok {
-					return fmt.Errorf("failed to convert \"%s\" in %v to bool", field.Name, jsonMap)
-				}
-
-				jsonMap[field.Name] = ToBool(s)
-			}
+			alterStringToBool(jsonMap, field)
 		}
 		jsonObjArray[i] = jsonMap
 	}
