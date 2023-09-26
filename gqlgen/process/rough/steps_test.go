@@ -27,10 +27,7 @@ func TestTerminalSteps(t *testing.T) {
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := test_util.GitOpenOrClone(repoUrl)
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
-	}
+	repo := test_util.GitOpenOrClone(t, repoUrl)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
@@ -67,10 +64,7 @@ func TestCommitSteps(t *testing.T) {
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := test_util.GitOpenOrClone(repoUrl)
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
-	}
+	repo := test_util.GitOpenOrClone(t, repoUrl)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
@@ -106,10 +100,7 @@ func TestSourceErrorSteps(t *testing.T) {
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := test_util.GitOpenOrClone(repoUrl)
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
-	}
+	repo := test_util.GitOpenOrClone(t, repoUrl)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
