@@ -56,17 +56,17 @@ func TestCommitSteps(t *testing.T) {
 	}
 
 	cases := []struct {
-		roughStepFile string
-		goldenFile    string
+		inputFile  string
+		goldenFile string
 	}{
 		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json"},
 	}
 
 	for _, c := range cases {
-		t.Run(c.roughStepFile, func(t *testing.T) {
+		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.roughStepFile, &roughStep)
+			err := internal.JsonRead2(c.inputFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}

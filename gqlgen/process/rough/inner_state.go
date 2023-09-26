@@ -167,14 +167,13 @@ func (state *InnerState) commitConvert(s *RoughStep, repo *git.Repository) ([]De
 	}
 
 	// - udpate the state
-
 	state.currentColumn = "Source Code"
 	state.appendColumnIfNotExist(state.currentColumn)
 
 	return detailedSteps, nil
 }
 
-func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder, prevColumn string, currentSeqNo int) ([]DetailedStep, error) {
 	var detailedSteps []DetailedStep
 
 	// - precondition for RoughStep
@@ -187,29 +186,38 @@ func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]
 	// - step creation
 
 	// insert move-to-terminal step if current column != "Terminal"
-	if state.currentColumn != "Terminal" && state.currentSeqNo != 0 {
-		moveToTerminalStep := moveToTerminalStep(s, state.uuidFinder)
+	if prevColumn != "Terminal" && currentSeqNo != 0 {
+		moveToTerminalStep := moveToTerminalStep(s, uuidFinder)
 		detailedSteps = append(detailedSteps, moveToTerminalStep)
 	}
 
 	// command step
-	cmdStep := terminalCommandStep(s, state.uuidFinder)
+	cmdStep := terminalCommandStep(s, uuidFinder)
 	detailedSteps = append(detailedSteps, cmdStep)
 
 	// cd step
 	if strings.HasPrefix(s.Instruction, "cd ") {
-		cmdStep := terminalCdStep(s, state.uuidFinder)
+		cmdStep := terminalCdStep(s, uuidFinder)
 		detailedSteps = append(detailedSteps, cmdStep)
 	}
 
 	// output step
 	if s.Instruction2 != "" {
-		outputStep := terminalOutputStep(s, state.uuidFinder)
+		outputStep := terminalOutputStep(s, uuidFinder)
 		detailedSteps = append(detailedSteps, outputStep)
 	}
 
-	// - udpate the state
+	return detailedSteps, nil
+}
 
+func (state *InnerState) terminalConvert(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+	prevColumn := state.currentColumn
+	detailedSteps, err := terminalConvertInternal(s, repo, state.uuidFinder, prevColumn, state.currentSeqNo)
+	if err != nil {
+		return nil, err
+	}
+
+	// - udpate the state
 	state.currentColumn = "Terminal"
 	state.appendColumnIfNotExist(state.currentColumn)
 
