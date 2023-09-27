@@ -126,9 +126,10 @@ func TestBrowserSteps(t *testing.T) {
 	cases := []struct {
 		inputFile       string
 		goldenFile      string
-		expectedColumns []string
+		state           *rough.InnerState
+		expectedColumns rough.UsedColumns
 	}{
-		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json", []string{"Browser"}},
+		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json", rough.InitStateForUnitTest(nil), rough.UsedColumns{"Browser"}},
 	}
 
 	for _, c := range cases {
@@ -138,8 +139,7 @@ func TestBrowserSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.BrowserConvertInternal(&roughStep, uuidFinder)
+			converted, usedColumns, err := rough.BrowserConvertInternal(&roughStep, c.state)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -147,6 +147,7 @@ func TestBrowserSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+
 			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
 				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
 			}
@@ -179,6 +180,7 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+
 			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
 				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
 			}

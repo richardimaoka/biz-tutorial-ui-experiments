@@ -4,6 +4,7 @@
     "subId": "browserStep-0",
     "step": "",
     "focusColumn": "Browser",
+    "column1": "Browser",
     "browserImageName": "browser1"
   },
   {
@@ -11,6 +12,7 @@
     "subId": "browserStep-1",
     "step": "",
     "focusColumn": "Browser",
+    "column1": "Browser",
     "browserImageName": "browser2"
   },
   {
@@ -18,6 +20,7 @@
     "subId": "browserStep-2",
     "step": "",
     "focusColumn": "Browser",
+    "column1": "Browser",
     "browserImageName": "browser3"
   }
 ]

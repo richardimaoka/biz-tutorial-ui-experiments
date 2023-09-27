@@ -109,7 +109,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "source error":
 		steps, usedColumns, err = sourceErrorConvertInternal(s, repo, state.uuidFinder)
 	case "browser":
-		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder)
+		steps, _, err = browserConvertInternal(s, state)
 	case "markdown":
 		steps, _, err = markdownConvertInternal(s, state)
 	default:
@@ -236,28 +236,33 @@ func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *
 	return detailedSteps, usedColumns, nil
 }
 
-func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
+func browserConvertInternal(
+	s *RoughStep,
+	state *InnerState, // DO NOT alter state in the method
+) ([]DetailedStep, UsedColumns, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, nil, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
+		return nil, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
 	// browser steps
+	usedColumns := appendIfNotExists(state.existingCols, "Browser")
 	split := strings.Split(s.Instruction, ",")
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := browserStep(s, uuidFinder, i, browserImageName)
+		browserStep := browserStep(s, state.uuidFinder, i, browserImageName, usedColumns)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	usedColumns := []string{"Browser"}
 	return detailedSteps, usedColumns, nil
 }
 
-// Do NOT alter arguments
-func markdownConvertInternal(s *RoughStep, state *InnerState) ([]DetailedStep, UsedColumns, error) {
+func markdownConvertInternal(
+	s *RoughStep,
+	state *InnerState, // DO NOT alter state in the method
+) ([]DetailedStep, UsedColumns, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
@@ -372,23 +377,6 @@ func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	return step
 }
 
-func browserStep(s *RoughStep, uuidFinder *UUIDFinder, index int, browserImageName string) DetailedStep {
-	subId := fmt.Sprintf("browserStep-%d", index)
-	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
-	step := DetailedStep{
-		// fields to make the step searchable for re-generation
-		FromRoughStep: true,
-		ParentStep:    s.Step,
-		SubID:         subId,
-		// other fields
-		Step:             stepId,
-		FocusColumn:      "Browser",
-		BrowserImageName: browserImageName,
-	}
-
-	return step
-}
-
 func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "terminalCommandStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
@@ -427,6 +415,24 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
 	}
+
+	return step
+}
+
+func browserStep(s *RoughStep, uuidFinder *UUIDFinder, index int, browserImageName string, usedColumns UsedColumns) DetailedStep {
+	subId := fmt.Sprintf("browserStep-%d", index)
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
+	step := DetailedStep{
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:             stepId,
+		FocusColumn:      "Browser",
+		BrowserImageName: browserImageName,
+	}
+	step.setColumns(usedColumns)
 
 	return step
 }
