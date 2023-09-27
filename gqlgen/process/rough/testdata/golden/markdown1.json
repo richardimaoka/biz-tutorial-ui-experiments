@@ -3,6 +3,8 @@
     "fromRoughStep": true,
     "subId": "markdownStep",
     "step": "",
+    "focusColumn": "Markdown",
+    "column1": "Markdown",
     "markdownContents": "まずは公式ドキュメントに従って初期設定を行います"
   }
 ]

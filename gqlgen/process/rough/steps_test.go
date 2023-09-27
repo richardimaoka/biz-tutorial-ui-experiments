@@ -158,9 +158,9 @@ func TestMarkdownSteps(t *testing.T) {
 	cases := []struct {
 		inputFile       string
 		goldenFile      string
-		expectedColumns []string
+		expectedColumns [5]string
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", []string{"Markdown"}},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", [5]string{"Markdown"}},
 	}
 
 	for _, c := range cases {

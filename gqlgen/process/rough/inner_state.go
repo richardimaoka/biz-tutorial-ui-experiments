@@ -18,6 +18,8 @@ type InnerState struct {
 	prevCommit    string
 }
 
+var emptyColumns = [5]string{}
+
 func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
 	finder, err := NewUUIDFinder(targetFile)
 	if err != nil {
@@ -107,7 +109,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "browser":
 		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder)
 	case "markdown":
-		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, _, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -122,7 +124,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 
 	// - udpate the state
 	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnsIfNotExist(usedColumns)
+	// state.appendColumnsIfNotExist(usedColumns)
 
 	return steps, nil
 }
@@ -252,19 +254,19 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 	return detailedSteps, usedColumns, nil
 }
 
-func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols [5]string) ([]DetailedStep, []string, error) {
+func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols [5]string) ([]DetailedStep, [5]string, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, nil, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+		return nil, emptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
-	// browser steps
-	markdownStep := markdownStep(s, uuidFinder, existingCols)
+	// markdown step
+	usedColumns := appendIfNotExists(existingCols, "Markdown")
+	markdownStep := markdownStep(s, uuidFinder, usedColumns)
 	detailedSteps = append(detailedSteps, markdownStep)
 
-	usedColumns := []string{"Markdown"}
 	return detailedSteps, usedColumns, nil
 }
 
@@ -426,7 +428,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	return step
 }
 
-func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, currentColumns [5]string) DetailedStep {
+func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns [5]string) DetailedStep {
 	subId := "markdownStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -437,9 +439,10 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, currentColumns [5]string
 		SubID:         subId,
 		// other fields
 		Step:             stepId,
+		FocusColumn:      "Markdown",
 		MarkdownContents: s.Instruction,
 	}
-	step.setColumns(currentColumns)
+	step.setColumns(usedColumns)
 
 	return step
 }
@@ -448,37 +451,31 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, currentColumns [5]string
 // Other utils
 //////////////////////////////////////////////////////
 
-func (state *InnerState) isColumnExist(colName string) bool {
-	for _, col := range state.existingCols {
-		if col == colName {
-			return true
-		}
-	}
-	return false
-}
-
-func (state *InnerState) appendColumnIfNotExist(colName string) {
-	for _, col := range state.existingCols {
+func appendIfNotExists(columns [5]string, colName string) [5]string {
+	for _, col := range columns {
 		if col == colName {
 			// if already exists, do nothing
-			return
+			return columns
 		}
 	}
 
 	// here we didn't find the column, so append it
-	for i, col := range state.existingCols {
+	for i, col := range columns {
 		if col == "" {
-			state.existingCols[i] = colName
+			// columns is copied as an argument, so we can modify it without affecting the caller
+			columns[i] = colName
 			break
 		}
 	}
+
+	return columns
 }
 
-func (state *InnerState) appendColumnsIfNotExist(cols []string) {
-	for _, col := range cols {
-		state.appendColumnIfNotExist(col)
-	}
-}
+// func (state *InnerState) appendColumnsIfNotExist(cols []string) {
+// 	for _, col := range cols {
+// 		state.appendColumnIfNotExist(col)
+// 	}
+// }
 
 func (ds *DetailedStep) setColumns(cols [5]string) bool {
 	ds.Column1 = cols[0]
