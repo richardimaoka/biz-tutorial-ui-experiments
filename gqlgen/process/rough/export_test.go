@@ -13,21 +13,12 @@ var SourceErrorConvertInternal = sourceErrorConvertInternal
 var BrowserConvertInternal = browserConvertInternal
 var MarkdownConvertInternal = markdownConvertInternal
 
-func PredictableInnerState(currentColumn, targetFile string, repo *git.Repository) *InnerState {
-	state, err := NewInnerState(targetFile, repo)
-	if err != nil {
-		panic(fmt.Errorf("failed to create InnerState: %s", err))
+func PredictableInnerState(repo *git.Repository, currentColumn, staticUUID string) *InnerState {
+	return &InnerState{
+		repo:          repo,
+		currentColumn: currentColumn,
+		uuidFinder:    StaticUUIDFinder(staticUUID),
 	}
-
-	finder, err := PredictableUUIDFinder(targetFile)
-	if err != nil {
-		panic(fmt.Errorf("failed to create UUIDFinder: %s", err))
-	}
-
-	state.uuidFinder = finder
-	state.currentColumn = currentColumn
-
-	return state
 }
 
 func StaticUUIDFinder(staticUUID string) *UUIDFinder {

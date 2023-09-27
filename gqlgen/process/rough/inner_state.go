@@ -111,7 +111,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "browser":
 		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder)
 	case "markdown":
-		steps, _, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, _, err = markdownConvertInternal(s, state)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -256,7 +256,8 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 	return detailedSteps, usedColumns, nil
 }
 
-func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols UsedColumns) ([]DetailedStep, UsedColumns, error) {
+// Do NOT alter arguments
+func markdownConvertInternal(s *RoughStep, state *InnerState) ([]DetailedStep, UsedColumns, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
@@ -265,8 +266,8 @@ func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols 
 	}
 
 	// markdown step
-	usedColumns := appendIfNotExists(existingCols, "Markdown")
-	markdownStep := markdownStep(s, uuidFinder, usedColumns)
+	usedColumns := appendIfNotExists(state.existingCols, "Markdown")
+	markdownStep := markdownStep(s, state.uuidFinder, usedColumns)
 	detailedSteps = append(detailedSteps, markdownStep)
 
 	return detailedSteps, usedColumns, nil

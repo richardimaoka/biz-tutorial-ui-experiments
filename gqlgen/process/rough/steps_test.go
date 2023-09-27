@@ -158,9 +158,10 @@ func TestMarkdownSteps(t *testing.T) {
 	cases := []struct {
 		inputFile       string
 		goldenFile      string
+		state           *rough.InnerState
 		expectedColumns rough.UsedColumns
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.UsedColumns{"Markdown"}},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.PredictableInnerState(nil, "", ""), rough.UsedColumns{"Markdown"}},
 	}
 
 	for _, c := range cases {
@@ -170,8 +171,7 @@ func TestMarkdownSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step and verify
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder, rough.EmptyColumns)
+			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, c.state)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -240,7 +240,7 @@ func TestRoughStepSequence(t *testing.T) {
 		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
 	}
 
-	state := rough.PredictableInnerState("", "", repo)
+	state := rough.PredictableInnerState(repo, "", "")
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
