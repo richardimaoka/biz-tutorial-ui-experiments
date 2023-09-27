@@ -171,7 +171,7 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder)
+			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder, [5]string{})
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}

@@ -107,7 +107,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "browser":
 		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder)
 	case "markdown":
-		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder)
+		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -122,7 +122,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 
 	// - udpate the state
 	state.currentColumn = usedColumns[len(usedColumns)-1]
-	state.appendColumnIfNotExist(state.currentColumn)
+	state.appendColumnsIfNotExist(usedColumns)
 
 	return steps, nil
 }
@@ -252,7 +252,7 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 	return detailedSteps, usedColumns, nil
 }
 
-func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
+func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols [5]string) ([]DetailedStep, []string, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
@@ -261,7 +261,7 @@ func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSt
 	}
 
 	// browser steps
-	markdownStep := markdownStep(s, uuidFinder)
+	markdownStep := markdownStep(s, uuidFinder, existingCols)
 	detailedSteps = append(detailedSteps, markdownStep)
 
 	usedColumns := []string{"Markdown"}
@@ -426,7 +426,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	return step
 }
 
-func markdownStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
+func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, currentColumns [5]string) DetailedStep {
 	subId := "markdownStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -439,6 +439,7 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		Step:             stepId,
 		MarkdownContents: s.Instruction,
 	}
+	step.setColumns(currentColumns)
 
 	return step
 }
@@ -470,6 +471,12 @@ func (state *InnerState) appendColumnIfNotExist(colName string) {
 			state.existingCols[i] = colName
 			break
 		}
+	}
+}
+
+func (state *InnerState) appendColumnsIfNotExist(cols []string) {
+	for _, col := range cols {
+		state.appendColumnIfNotExist(col)
 	}
 }
 
