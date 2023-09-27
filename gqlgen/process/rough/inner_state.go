@@ -13,12 +13,14 @@ type InnerState struct {
 	repo          *git.Repository
 	currentSeqNo  int
 	currentColumn string
-	existingCols  [5]string //fixed size, according to DetailedStep
+	existingCols  UsedColumns //fixed size, according to DetailedStep
 	uuidFinder    *UUIDFinder
 	prevCommit    string
 }
 
-var emptyColumns = [5]string{}
+type UsedColumns = [5]string
+
+var EmptyColumns = UsedColumns{}
 
 func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
 	finder, err := NewUUIDFinder(targetFile)
@@ -254,12 +256,12 @@ func browserConvertInternal(s *RoughStep, uuidFinder *UUIDFinder) ([]DetailedSte
 	return detailedSteps, usedColumns, nil
 }
 
-func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols [5]string) ([]DetailedStep, [5]string, error) {
+func markdownConvertInternal(s *RoughStep, uuidFinder *UUIDFinder, existingCols UsedColumns) ([]DetailedStep, UsedColumns, error) {
 	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, emptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+		return nil, EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
 	// markdown step
@@ -428,7 +430,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	return step
 }
 
-func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns [5]string) DetailedStep {
+func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "markdownStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -451,7 +453,7 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns [5]string) D
 // Other utils
 //////////////////////////////////////////////////////
 
-func appendIfNotExists(columns [5]string, colName string) [5]string {
+func appendIfNotExists(columns UsedColumns, colName string) UsedColumns {
 	for _, col := range columns {
 		if col == colName {
 			// if already exists, do nothing
@@ -477,7 +479,7 @@ func appendIfNotExists(columns [5]string, colName string) [5]string {
 // 	}
 // }
 
-func (ds *DetailedStep) setColumns(cols [5]string) bool {
+func (ds *DetailedStep) setColumns(cols UsedColumns) bool {
 	ds.Column1 = cols[0]
 	ds.Column2 = cols[1]
 	ds.Column3 = cols[2]

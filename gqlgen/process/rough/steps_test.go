@@ -158,9 +158,9 @@ func TestMarkdownSteps(t *testing.T) {
 	cases := []struct {
 		inputFile       string
 		goldenFile      string
-		expectedColumns [5]string
+		expectedColumns rough.UsedColumns
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", [5]string{"Markdown"}},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.UsedColumns{"Markdown"}},
 	}
 
 	for _, c := range cases {
@@ -171,7 +171,7 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// convert to detailed step and verify
 			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder, [5]string{})
+			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder, rough.EmptyColumns)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
