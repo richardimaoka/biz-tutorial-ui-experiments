@@ -161,7 +161,7 @@ func TestMarkdownSteps(t *testing.T) {
 		state           *rough.InnerState
 		expectedColumns rough.UsedColumns
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.PredictableInnerState(nil, "", ""), rough.UsedColumns{"Markdown"}},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.InitStateForUnitTest(nil), rough.UsedColumns{"Markdown"}},
 	}
 
 	for _, c := range cases {
@@ -240,7 +240,7 @@ func TestRoughStepSequence(t *testing.T) {
 		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
 	}
 
-	state := rough.PredictableInnerState(repo, "", "")
+	state := rough.InitStateForUnitTest(repo)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {

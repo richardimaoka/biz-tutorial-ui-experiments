@@ -13,11 +13,12 @@ var SourceErrorConvertInternal = sourceErrorConvertInternal
 var BrowserConvertInternal = browserConvertInternal
 var MarkdownConvertInternal = markdownConvertInternal
 
-func PredictableInnerState(repo *git.Repository, currentColumn, staticUUID string) *InnerState {
+func InitStateForUnitTest(
+	repo *git.Repository, // can be nil if not used
+) *InnerState {
 	return &InnerState{
-		repo:          repo,
-		currentColumn: currentColumn,
-		uuidFinder:    StaticUUIDFinder(staticUUID),
+		repo:       repo,
+		uuidFinder: StaticUUIDFinder(""),
 	}
 }
 
