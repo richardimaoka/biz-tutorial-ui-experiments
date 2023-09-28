@@ -259,7 +259,7 @@ func browserConvertInternal(
 	var detailedSteps []DetailedStep
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := browserStep(s, state.uuidFinder, i, browserImageName, usedColumns)
+		browserStep := browserStep(s, state.uuidFinder, usedColumns, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
@@ -424,7 +424,7 @@ func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColum
 	return step
 }
 
-func browserStep(s *RoughStep, uuidFinder *UUIDFinder, index int, browserImageName string, usedColumns UsedColumns) DetailedStep {
+func browserStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, browserImageName string) DetailedStep {
 	subId := fmt.Sprintf("browserStep-%d", index)
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
