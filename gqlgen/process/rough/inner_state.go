@@ -19,6 +19,7 @@ type InnerState struct {
 }
 
 type UsedColumns = [5]string
+type CurrentColumn = string
 
 var EmptyColumns = UsedColumns{}
 
@@ -98,6 +99,8 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
 	var steps []DetailedStep
 	var usedColumns []string
+	var currentColumn string
+	var existingCols [5]string
 	var err error
 
 	// call internal conversion logic
@@ -107,11 +110,11 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "commit":
 		steps, usedColumns, err = commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, _, err = sourceErrorConvertInternal(s, state)
+		steps, currentColumn, existingCols, err = sourceErrorConvertInternal(s, state)
 	case "browser":
-		steps, _, err = browserConvertInternal(s, state)
+		steps, currentColumn, existingCols, err = browserConvertInternal(s, state)
 	case "markdown":
-		steps, _, err = markdownConvertInternal(s, state)
+		steps, currentColumn, existingCols, err = markdownConvertInternal(s, state)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -122,10 +125,15 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	}
 
 	// - udpate the state
-	if len(usedColumns) != 0 {
+	if currentColumn != "" {
+		state.currentColumn = currentColumn
+	} else if len(usedColumns) != 0 {
 		state.currentColumn = usedColumns[len(usedColumns)-1]
 	}
-	// state.appendColumnsIfNotExist(usedColumns)
+
+	if existingCols != EmptyColumns {
+		// state.appendColumnsIfNotExist(usedColumns)
+	}
 
 	return steps, nil
 }
@@ -225,24 +233,22 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	return steps, usedColumns, nil
 }
 
-func sourceErrorConvertInternal(s *RoughStep, state *InnerState) ([]DetailedStep, UsedColumns, error) {
+func sourceErrorConvertInternal(
+	s *RoughStep,
+	state *InnerState, // DO NOT alter state in the method
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	usedColumns := appendIfNotExists(state.existingCols, "Source Code")
 	sourceErrorStep := sourceErrorStep(s, state.uuidFinder, usedColumns)
-
-	var detailedSteps []DetailedStep
-	detailedSteps = append(detailedSteps, sourceErrorStep)
-
-	return detailedSteps, usedColumns, nil
+	return []DetailedStep{sourceErrorStep}, "Source Code", usedColumns, nil
 }
 
 func browserConvertInternal(
 	s *RoughStep,
 	state *InnerState, // DO NOT alter state in the method
-) ([]DetailedStep, UsedColumns, error) {
-
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
+		return nil, "", EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
 	usedColumns := appendIfNotExists(state.existingCols, "Browser")
@@ -256,25 +262,23 @@ func browserConvertInternal(
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	return detailedSteps, usedColumns, nil
+	return detailedSteps, "Browser", usedColumns, nil
 }
 
 func markdownConvertInternal(
 	s *RoughStep,
 	state *InnerState, // DO NOT alter state in the method
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+		return nil, "", EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
 	// markdown step
-	var detailedSteps []DetailedStep
 	usedColumns := appendIfNotExists(state.existingCols, "Markdown")
 	markdownStep := markdownStep(s, state.uuidFinder, usedColumns)
-	detailedSteps = append(detailedSteps, markdownStep)
 
-	return detailedSteps, usedColumns, nil
+	return []DetailedStep{markdownStep}, "Markdown", usedColumns, nil
 }
 
 //////////////////////////////////////////////////////
