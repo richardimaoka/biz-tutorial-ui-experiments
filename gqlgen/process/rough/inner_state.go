@@ -110,11 +110,11 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	case "commit":
 		steps, usedColumns, err = commitConvertInternal(s, state.repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, existingCols, err = sourceErrorConvertInternal(s, state.uuidFinder, existingCols)
+		steps, existingCols, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "browser":
-		steps, existingCols, err = browserConvertInternal(s, state.uuidFinder, existingCols)
+		steps, existingCols, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "markdown":
-		steps, existingCols, err = markdownConvertInternal(s, state.uuidFinder, existingCols)
+		steps, existingCols, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -130,10 +130,6 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 		state.currentColumn = currentColumn
 	} else if len(usedColumns) != 0 {
 		state.currentColumn = usedColumns[len(usedColumns)-1]
-	}
-
-	if existingCols != EmptyColumns {
-		// state.appendColumnsIfNotExist(usedColumns)
 	}
 
 	return steps, nil
