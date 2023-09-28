@@ -9,6 +9,12 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
+type UsedColumns = [5]string
+type CurrentColumn = string
+
+var EmptyColumns = UsedColumns{}
+var NoColumn = ""
+
 type InnerState struct {
 	repo          *git.Repository
 	currentSeqNo  int
@@ -17,11 +23,6 @@ type InnerState struct {
 	uuidFinder    *UUIDFinder
 	prevCommit    string
 }
-
-type UsedColumns = [5]string
-type CurrentColumn = string
-
-var EmptyColumns = UsedColumns{}
 
 func NewInnerState(targetFile string, repo *git.Repository) (*InnerState, error) {
 	finder, err := NewUUIDFinder(targetFile)
@@ -98,23 +99,15 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
-		steps, usedColumns, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
-		currentColumn = "Terminal"
-		if s.Commit != "" {
-			currentColumn = "Source Code"
-		}
+		steps, currentColumn, usedColumns, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	case "commit":
-		steps, usedColumns, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
-		currentColumn = "Source Code"
+		steps, currentColumn, usedColumns, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, usedColumns, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
-		currentColumn = "Source Code"
+		steps, currentColumn, usedColumns, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "browser":
-		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
-		currentColumn = "Browser"
+		steps, currentColumn, usedColumns, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "markdown":
-		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
-		currentColumn = "Markdown"
+		steps, currentColumn, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -125,12 +118,12 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	}
 
 	// udpate the state
-	state.currentColumn = currentColumn
 	if s.Commit != "" {
 		state.prevCommit = s.Commit
 	}
-	state.currentSeqNo++
+	state.currentColumn = currentColumn
 	state.existingCols = usedColumns
+	state.currentSeqNo++
 
 	return steps, nil
 }
@@ -146,20 +139,20 @@ func commitConvertInternal(
 	repo *git.Repository,
 	prevColumn string,
 	prevCommit string,
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	usedColumns := appendIfNotExists(existingColumns, "Source Code")
 
 	// - precondition for RoughStep
 
 	// get info from git
 	if s.Commit == "" {
-		return nil, EmptyColumns, fmt.Errorf("commit is missing for step = '%s'", s.Step)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("commit is missing for step = '%s'", s.Step)
 	}
 
 	// find files from commit
 	files, err := CommitFiles(repo, s.Commit, prevCommit)
 	if err != nil {
-		return nil, EmptyColumns, fmt.Errorf("failed to get files for commit = %s, prevCommit = %s, %s", s.Commit, prevCommit, err)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("failed to get files for commit = %s, prevCommit = %s, %s", s.Commit, prevCommit, err)
 	}
 
 	// - step creation
@@ -183,7 +176,7 @@ func commitConvertInternal(
 		}
 	}
 
-	return detailedSteps, usedColumns, nil
+	return detailedSteps, "Source Code", usedColumns, nil
 }
 
 func terminalConvertInternal(
@@ -194,14 +187,14 @@ func terminalConvertInternal(
 	prevColumn string,
 	prevCommit string,
 	currentSeqNo int,
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
 
 	// - precondition for RoughStep
 
 	// check if it's a valid terminal step
 	if s.Instruction == "" && s.Instruction2 == "" {
-		return nil, EmptyColumns, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
 	}
 
 	// - step creation
@@ -229,37 +222,40 @@ func terminalConvertInternal(
 		steps = append(steps, outputStep)
 	}
 
+	currentColumn := "Terminal"
+
 	// source code steps
 	if s.Commit != "" {
-		commitSteps, commitUsedColumns, err := commitConvertInternal(s, uuidFinder, usedColumns, repo, "Terminal", prevCommit)
+		commitSteps, commitColumn, commitUsedColumns, err := commitConvertInternal(s, uuidFinder, usedColumns, repo, "Terminal", prevCommit)
 		if err != nil {
-			return nil, EmptyColumns, fmt.Errorf("failed to convert commit steps, %s", err)
+			return nil, NoColumn, EmptyColumns, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
 		steps = append(steps, commitSteps...)
 		usedColumns = commitUsedColumns
+		currentColumn = commitColumn
 	}
 
-	return steps, usedColumns, nil
+	return steps, currentColumn, usedColumns, nil
 }
 
 func sourceErrorConvertInternal(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	usedColumns := appendIfNotExists(existingColumns, "Source Code")
 	sourceErrorStep := sourceErrorStep(s, uuidFinder, usedColumns)
-	return []DetailedStep{sourceErrorStep}, usedColumns, nil
+	return []DetailedStep{sourceErrorStep}, "Source Code", usedColumns, nil
 }
 
 func browserConvertInternal(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
 	usedColumns := appendIfNotExists(existingColumns, "Browser")
@@ -273,24 +269,24 @@ func browserConvertInternal(
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
-	return detailedSteps, usedColumns, nil
+	return detailedSteps, "Browser", usedColumns, nil
 }
 
 func markdownConvertInternal(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
-) ([]DetailedStep, UsedColumns, error) {
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
 	// markdown step
 	usedColumns := appendIfNotExists(existingColumns, "Markdown")
 	markdownStep := markdownStep(s, uuidFinder, usedColumns)
 
-	return []DetailedStep{markdownStep}, usedColumns, nil
+	return []DetailedStep{markdownStep}, "Markdown", usedColumns, nil
 }
 
 //////////////////////////////////////////////////////
