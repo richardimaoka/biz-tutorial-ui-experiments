@@ -98,23 +98,21 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 
 func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	var steps []DetailedStep
-	var usedColumns []string
-	var currentColumn string
-	var existingCols [5]string
+	var usedColumns [5]string
 	var err error
 
 	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
-		steps, existingCols, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
+		steps, usedColumns, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	case "commit":
-		steps, existingCols, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
+		steps, usedColumns, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, existingCols, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, usedColumns, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "browser":
-		steps, existingCols, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
 	case "markdown":
-		steps, existingCols, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -125,12 +123,7 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	}
 
 	// - udpate the state
-	currentColumn = getCurrentColumn(existingCols)
-	if currentColumn != "" {
-		state.currentColumn = currentColumn
-	} else if len(usedColumns) != 0 {
-		state.currentColumn = usedColumns[len(usedColumns)-1]
-	}
+	state.currentColumn = getCurrentColumn(usedColumns)
 
 	return steps, nil
 }
