@@ -22,6 +22,17 @@ func InitStateForUnitTest(
 	}
 }
 
+func StateWithColumnForUnitTest(
+	repo *git.Repository,
+	currentColumn string,
+) *InnerState {
+	return &InnerState{
+		repo:          repo,
+		currentColumn: currentColumn,
+		uuidFinder:    StaticUUIDFinder(""),
+	}
+}
+
 func StaticUUIDFinder(staticUUID string) *UUIDFinder {
 	return &UUIDFinder{
 		uuidGenerator: func() string { return "" },

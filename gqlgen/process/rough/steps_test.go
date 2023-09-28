@@ -1,7 +1,6 @@
 package rough_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -12,22 +11,19 @@ import (
 )
 
 func TestTerminalSteps(t *testing.T) {
-	cases := []struct {
-		inputFile       string
-		goldenFile      string
-		prevColumn      string
-		prevCommit      string
-		seqNo           int
-		expectedColumns []string
-	}{
-		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", "", "", 0, []string{"Terminal"}},
-		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", "", "", 0, []string{"Terminal"}},
-		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", "", "", 0, []string{"Terminal", "Source Code"}},
-		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", "", "", 0, []string{"Terminal"}},
-	}
-
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
 	repo := test_util.GitOpenOrClone(t, repoUrl)
+
+	cases := []struct {
+		inputFile  string
+		goldenFile string
+		state      *rough.InnerState
+	}{
+		{"testdata/rough-steps/terminal1.json", "testdata/golden/terminal1.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+	}
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
@@ -36,8 +32,7 @@ func TestTerminalSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.TerminalConvertInternal(&roughStep, repo, uuidFinder, c.prevColumn, c.prevCommit, c.seqNo)
+			converted, err := c.state.Conversion(&roughStep)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -45,24 +40,21 @@ func TestTerminalSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
-			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
-				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
-			}
 		})
 	}
 }
 
 func TestCommitSteps(t *testing.T) {
-	cases := []struct {
-		inputFile       string
-		goldenFile      string
-		expectedColumns []string
-	}{
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", []string{"Source Code"}},
-	}
-
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
 	repo := test_util.GitOpenOrClone(t, repoUrl)
+
+	cases := []struct {
+		inputFile  string
+		goldenFile string
+		state      *rough.InnerState
+	}{
+		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.InitStateForUnitTest(repo)},
+	}
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
@@ -71,8 +63,7 @@ func TestCommitSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.CommitConvertInternal(&roughStep, repo, uuidFinder, "", "")
+			converted, err := c.state.Conversion(&roughStep)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -80,9 +71,6 @@ func TestCommitSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
-			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
-				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
-			}
 		})
 	}
 }
