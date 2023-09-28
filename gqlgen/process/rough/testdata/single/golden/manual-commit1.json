@@ -4,6 +4,7 @@
     "subId": "fileTreeStep",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "commit": "c8a922d8850d7b5f738f649a8ad61947f1202edd",
     "defaultOpenFilePath": "data/todo.json"
   },
@@ -12,6 +13,7 @@
     "subId": "openFileStep-0",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "data/todo.json",
     "isFoldFileTree": true
   },
@@ -20,6 +22,7 @@
     "subId": "openFileStep-1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -28,6 +31,7 @@
     "subId": "openFileStep-2",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "go.sum",
     "isFoldFileTree": true
   },
@@ -36,6 +40,7 @@
     "subId": "openFileStep-3",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "gqlgen.yml",
     "isFoldFileTree": true
   },
@@ -44,6 +49,7 @@
     "subId": "openFileStep-4",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "graph/generated.go",
     "isFoldFileTree": true
   },
@@ -52,6 +58,7 @@
     "subId": "openFileStep-5",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Source Code",
     "defaultOpenFilePath": "graph/model/models_gen.go",
     "isFoldFileTree": true
   }

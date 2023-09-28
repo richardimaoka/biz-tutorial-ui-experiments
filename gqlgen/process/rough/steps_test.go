@@ -3,8 +3,6 @@ package rough_test
 import (
 	"testing"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/test_util"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
@@ -203,25 +201,21 @@ func TestMarkdownSteps(t *testing.T) {
 // }
 
 func TestRoughStepSequence(t *testing.T) {
+	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
+	repo := test_util.GitOpenOrClone(t, repoUrl)
+
 	cases := []struct {
 		inputFile  string
 		goldenFile string
+		state      *rough.InnerState
 	}{
-		{"testdata/rough-steps1.json", "testdata/detailed-steps-golden1.json"},
-		{"testdata/rough-steps2.json", "testdata/detailed-steps-golden2.json"},
+		{"testdata/rough-steps1.json", "testdata/detailed-steps-golden1.json", rough.InitStateForUnitTest(repo)},
+		{"testdata/rough-steps2.json", "testdata/detailed-steps-golden2.json", rough.InitStateForUnitTest(repo)},
 	}
-
-	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
-	if err != nil {
-		t.Fatalf("cannot clone repo %s, %s", repoUrl, err)
-	}
-
-	state := rough.InitStateForUnitTest(repo)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			converted, err := state.GenerateTarget(c.inputFile)
+			converted, err := c.state.GenerateTarget(c.inputFile)
 			if err != nil {
 				t.Fatalf("failed to generate detailed steps: %v", err)
 			}

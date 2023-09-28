@@ -5,6 +5,7 @@
     "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "command",
     "terminalText": "mkdir gqlgen-todos"
   },
@@ -14,6 +15,7 @@
     "parentStep": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "command",
     "terminalText": "cd gqlgen-todos"
   },
@@ -23,6 +25,7 @@
     "parentStep": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "cd",
     "currentDir": "gqlgen-todos"
   },
@@ -32,6 +35,7 @@
     "parentStep": "3d13f191-09bb-4896-9e61-50b2f425690c",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "command",
     "terminalText": "go mod init github.com/[username]/gqlgen-todos"
   },
@@ -41,6 +45,8 @@
     "parentStep": "3d13f191-09bb-4896-9e61-50b2f425690c",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "f71bd4db513263c346a78a347c7d91a9e8685a10",
     "defaultOpenFilePath": "go.mod"
   },
@@ -50,6 +56,8 @@
     "parentStep": "3d13f191-09bb-4896-9e61-50b2f425690c",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -59,6 +67,8 @@
     "parentStep": "5a8e3fbc-7921-4b7b-86fd-c021663e1aca",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "09e168580be4bb3fc8479fc6e7f7560a024456ec",
     "defaultOpenFilePath": "tools.go",
     "isFoldFileTree": true
@@ -69,6 +79,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "comment": "(move)"
   },
   {
@@ -77,6 +89,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "terminalType": "command",
     "terminalText": "go mod tidy"
   },
@@ -86,6 +100,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "f2a4aff4a83fb1e8cddf8577ab416239de6dd3eb",
     "defaultOpenFilePath": "go.mod"
   },
@@ -95,6 +111,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -104,6 +122,8 @@
     "parentStep": "9e4193a7-d651-475f-99ca-ecab0ab92964",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.sum",
     "isFoldFileTree": true
   },
@@ -113,6 +133,8 @@
     "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "comment": "(move)"
   },
   {
@@ -121,6 +143,8 @@
     "parentStep": "4b0b48ef-a775-46dd-9d59-1a6cb9b3e9fe",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "terminalType": "command",
     "terminalText": "go get -d github.com/99designs/gqlgen@latest"
   },
@@ -130,6 +154,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "terminalType": "command",
     "terminalText": "go run github.com/99designs/gqlgen init"
   },
@@ -139,6 +165,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
     "defaultOpenFilePath": "go.mod"
   },
@@ -148,6 +176,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -157,6 +187,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "gqlgen.yml",
     "isFoldFileTree": true
   },
@@ -166,6 +198,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/generated.go",
     "isFoldFileTree": true
   },
@@ -175,6 +209,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/model/models_gen.go",
     "isFoldFileTree": true
   },
@@ -184,6 +220,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/resolver.go",
     "isFoldFileTree": true
   },
@@ -193,6 +231,8 @@
     "parentStep": "ede9f16d-b55d-435e-9d59-4152d321b0d1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/schema.graphqls",
     "isFoldFileTree": true
   },
@@ -202,7 +242,8 @@
     "parentStep": "cc49f5b3-40c4-4457-a754-e8b780f0fbf8",
     "step": "",
     "focusColumn": "Source Code",
-    "column1": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "# source error"
   },
   {
@@ -211,6 +252,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "comment": "(move)"
   },
   {
@@ -219,6 +262,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "terminalType": "command",
     "terminalText": "go mod tidy"
   },
@@ -228,6 +273,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "2a40664382db572026fa7e80c40dfb73c7bd15a6",
     "defaultOpenFilePath": "go.mod"
   },
@@ -237,6 +284,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -246,6 +295,8 @@
     "parentStep": "936e2571-73c8-4f37-a86b-aa9d13a9c5e9",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.sum",
     "isFoldFileTree": true
   }

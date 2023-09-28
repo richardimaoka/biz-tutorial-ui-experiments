@@ -4,6 +4,7 @@
     "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "command",
     "terminalText": "go run github.com/99designs/gqlgen init"
   },
@@ -12,6 +13,8 @@
     "subId": "fileTreeStep",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
     "defaultOpenFilePath": "go.mod"
   },
@@ -20,6 +23,8 @@
     "subId": "openFileStep-0",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.mod",
     "isFoldFileTree": true
   },
@@ -28,6 +33,8 @@
     "subId": "openFileStep-1",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "go.sum",
     "isFoldFileTree": true
   },
@@ -36,6 +43,8 @@
     "subId": "openFileStep-2",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "gqlgen.yml",
     "isFoldFileTree": true
   },
@@ -44,6 +53,8 @@
     "subId": "openFileStep-3",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/generated.go",
     "isFoldFileTree": true
   },
@@ -52,6 +63,8 @@
     "subId": "openFileStep-4",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/model/models_gen.go",
     "isFoldFileTree": true
   },
@@ -60,6 +73,8 @@
     "subId": "openFileStep-5",
     "step": "",
     "focusColumn": "Source Code",
+    "column1": "Terminal",
+    "column2": "Source Code",
     "defaultOpenFilePath": "graph/resolver.go",
     "isFoldFileTree": true
   }

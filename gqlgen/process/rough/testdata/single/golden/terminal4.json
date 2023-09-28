@@ -4,6 +4,7 @@
     "subId": "terminalCommandStep",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "command",
     "terminalText": "go run ."
   },
@@ -12,6 +13,7 @@
     "subId": "terminalOutputStep",
     "step": "",
     "focusColumn": "Terminal",
+    "column1": "Terminal",
     "terminalType": "output",
     "terminalText": "2023/09/02 23:42:54 connect to http://localhost:8080/ for GraphQL playground"
   }

@@ -92,20 +92,29 @@ func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error
 func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	var steps []DetailedStep
 	var usedColumns [5]string
+	var currentColumn string
 	var err error
 
 	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
 		steps, usedColumns, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
+		currentColumn = "Terminal"
+		if s.Commit != "" {
+			currentColumn = "Source Code"
+		}
 	case "commit":
 		steps, usedColumns, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
+		currentColumn = "Source Code"
 	case "source error":
 		steps, usedColumns, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
+		currentColumn = "Source Code"
 	case "browser":
 		steps, usedColumns, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
+		currentColumn = "Browser"
 	case "markdown":
 		steps, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
+		currentColumn = "Markdown"
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -116,11 +125,12 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	}
 
 	// udpate the state
-	state.currentColumn = getCurrentColumn(usedColumns)
+	state.currentColumn = currentColumn
 	if s.Commit != "" {
 		state.prevCommit = s.Commit
 	}
 	state.currentSeqNo++
+	state.existingCols = usedColumns
 
 	return steps, nil
 }
@@ -137,7 +147,7 @@ func commitConvertInternal(
 	prevColumn string,
 	prevCommit string,
 ) ([]DetailedStep, UsedColumns, error) {
-	var detailedSteps []DetailedStep
+	usedColumns := appendIfNotExists(existingColumns, "Source Code")
 
 	// - precondition for RoughStep
 
@@ -153,10 +163,11 @@ func commitConvertInternal(
 	}
 
 	// - step creation
+	var detailedSteps []DetailedStep
 
 	// insert file-tree step if prev column != "Source Code"
 	if prevColumn != "Source Code" {
-		fileTreeStep := fileTreeStep(s, uuidFinder, files[0])
+		fileTreeStep := fileTreeStep(s, uuidFinder, usedColumns, files[0])
 		detailedSteps = append(detailedSteps, fileTreeStep)
 	}
 
@@ -165,14 +176,13 @@ func commitConvertInternal(
 		// if prev step is "Source Code", then fileTreeStep is skipped, so the commit should be included in the 0-th openFileStep
 		includeCommit := prevColumn == "Source Code" && i == 0
 
-		openFileStep := openFileStep(s, uuidFinder, i, file, includeCommit)
+		openFileStep := openFileStep(s, uuidFinder, usedColumns, i, file, includeCommit)
 		detailedSteps = append(detailedSteps, openFileStep)
 		if i == 5 {
 			break
 		}
 	}
 
-	usedColumns := appendIfNotExists(existingColumns, "Source Code")
 	return detailedSteps, usedColumns, nil
 }
 
@@ -185,7 +195,7 @@ func terminalConvertInternal(
 	prevCommit string,
 	currentSeqNo int,
 ) ([]DetailedStep, UsedColumns, error) {
-	var steps []DetailedStep
+	usedColumns := appendIfNotExists(existingColumns, "Terminal")
 
 	// - precondition for RoughStep
 
@@ -195,31 +205,29 @@ func terminalConvertInternal(
 	}
 
 	// - step creation
+	var steps []DetailedStep
 
 	// insert move-to-terminal step if current column != "Terminal"
 	if prevColumn != "Terminal" && currentSeqNo != 0 {
-		moveToTerminalStep := moveToTerminalStep(s, uuidFinder)
+		moveToTerminalStep := moveToTerminalStep(s, uuidFinder, usedColumns)
 		steps = append(steps, moveToTerminalStep)
 	}
 
 	// command step
-	cmdStep := terminalCommandStep(s, uuidFinder)
+	cmdStep := terminalCommandStep(s, uuidFinder, usedColumns)
 	steps = append(steps, cmdStep)
 
 	// cd step
 	if strings.HasPrefix(s.Instruction, "cd ") {
-		cmdStep := terminalCdStep(s, uuidFinder)
+		cmdStep := terminalCdStep(s, uuidFinder, usedColumns)
 		steps = append(steps, cmdStep)
 	}
 
 	// output step
 	if s.Instruction2 != "" {
-		outputStep := terminalOutputStep(s, uuidFinder)
+		outputStep := terminalOutputStep(s, uuidFinder, usedColumns)
 		steps = append(steps, outputStep)
 	}
-
-	// update used columns
-	usedColumns := appendIfNotExists(existingColumns, "Terminal")
 
 	// source code steps
 	if s.Commit != "" {
@@ -289,7 +297,7 @@ func markdownConvertInternal(
 // DetailedStep generation methods
 //////////////////////////////////////////////////////
 
-func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, file string) DetailedStep {
+func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, file string) DetailedStep {
 	subId := "fileTreeStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -304,11 +312,12 @@ func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, file string) DetailedSte
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
 	}
+	step.setColumns(usedColumns)
 
 	return step
 }
 
-func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, index int, file string, includeCommit bool) DetailedStep {
+func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, file string, includeCommit bool) DetailedStep {
 	subId := fmt.Sprintf("openFileStep-%d", index)
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -329,11 +338,12 @@ func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, index int, file string, 
 		IsFoldFileTree:      true,
 		Commit:              commit,
 	}
+	step.setColumns(usedColumns)
 
 	return step
 }
 
-func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
+func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "moveToTerminalStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -346,10 +356,12 @@ func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		FocusColumn: "Terminal",
 		Comment:     "(move)",
 	}
+	step.setColumns(usedColumns)
+
 	return step
 }
 
-func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
+func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "terminalOutputStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -363,11 +375,12 @@ func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		TerminalType: "output",
 		TerminalText: s.Instruction2,
 	}
+	step.setColumns(usedColumns)
 
 	return step
 }
 
-func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
+func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "terminalCommandStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -383,11 +396,12 @@ func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		TerminalText: s.Instruction,
 		TerminalName: s.Instruction3, // Go zero value is ""
 	}
+	step.setColumns(usedColumns)
 
 	return step
 }
 
-func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
+func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	currentDir := strings.TrimPrefix(s.Instruction, "cd ")
 
 	subId := "terminalCdStep"
@@ -405,6 +419,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
 	}
+	step.setColumns(usedColumns)
 
 	return step
 }
@@ -467,20 +482,6 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns)
 //////////////////////////////////////////////////////
 // Other utils
 //////////////////////////////////////////////////////
-
-func getCurrentColumn(columns UsedColumns) string {
-	for i, col := range columns {
-		if col == "" {
-			if i == 0 {
-				return ""
-			} else {
-				return columns[i-1]
-			}
-		}
-	}
-
-	return ""
-}
 
 func appendIfNotExists(columns UsedColumns, colName string) UsedColumns {
 	for _, col := range columns {
