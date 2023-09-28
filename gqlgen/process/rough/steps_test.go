@@ -53,7 +53,7 @@ func TestCommitSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.InitStateForUnitTest(repo)},
+		{"testdata/rough-steps/manual-commit1.json", "testdata/golden/manual-commit1.json", rough.InitStateForUnitTest(repo)},
 	}
 
 	for _, c := range cases {
@@ -178,7 +178,7 @@ func TestMarkdownSteps(t *testing.T) {
 // 		{"testdata/rough-steps/terminal2.json", "testdata/golden/terminal2.json", rough.PredictableInnerState("Terminal", "", repo)},
 // 		{"testdata/rough-steps/terminal3.json", "testdata/golden/terminal3.json", rough.PredictableInnerState("Terminal", "", repo)},
 // 		{"testdata/rough-steps/terminal4.json", "testdata/golden/terminal4.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/rough-steps/manual1.json", "testdata/golden/manual1.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/rough-steps/manual-commit1.json", "testdata/golden/manual-commit1.json", rough.PredictableInnerState("Terminal", "", repo)},
 // 		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.PredictableInnerState("Source Code", "", repo)},
 // 	}
 
