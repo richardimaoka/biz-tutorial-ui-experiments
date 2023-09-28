@@ -92,12 +92,11 @@ func TestSourceErrorSteps(t *testing.T) {
 	repo := test_util.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
-		inputFile       string
-		goldenFile      string
-		state           *rough.InnerState
-		expectedColumns rough.UsedColumns
+		inputFile  string
+		goldenFile string
+		state      *rough.InnerState
 	}{
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.InitStateForUnitTest(repo), [5]string{"Source Code"}},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.InitStateForUnitTest(repo)},
 	}
 
 	for _, c := range cases {
@@ -107,8 +106,7 @@ func TestSourceErrorSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.SourceErrorConvertInternal(&roughStep, uuidFinder, rough.EmptyColumns)
+			converted, err := c.state.Conversion(&roughStep, nil)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -116,21 +114,17 @@ func TestSourceErrorSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
-			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
-				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
-			}
 		})
 	}
 }
 
 func TestBrowserSteps(t *testing.T) {
 	cases := []struct {
-		inputFile       string
-		goldenFile      string
-		state           *rough.InnerState
-		expectedColumns rough.UsedColumns
+		inputFile  string
+		goldenFile string
+		state      *rough.InnerState
 	}{
-		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json", rough.InitStateForUnitTest(nil), rough.UsedColumns{"Browser"}},
+		{"testdata/rough-steps/browser1.json", "testdata/golden/browser1.json", rough.InitStateForUnitTest(nil)},
 	}
 
 	for _, c := range cases {
@@ -140,8 +134,7 @@ func TestBrowserSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.BrowserConvertInternal(&roughStep, uuidFinder, rough.EmptyColumns)
+			converted, err := c.state.Conversion(&roughStep, nil)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -149,22 +142,17 @@ func TestBrowserSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
-
-			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
-				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
-			}
 		})
 	}
 }
 
 func TestMarkdownSteps(t *testing.T) {
 	cases := []struct {
-		inputFile       string
-		goldenFile      string
-		state           *rough.InnerState
-		expectedColumns rough.UsedColumns
+		inputFile  string
+		goldenFile string
+		state      *rough.InnerState
 	}{
-		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.InitStateForUnitTest(nil), rough.UsedColumns{"Markdown"}},
+		{"testdata/rough-steps/markdown1.json", "testdata/golden/markdown1.json", rough.InitStateForUnitTest(nil)},
 	}
 
 	for _, c := range cases {
@@ -174,8 +162,7 @@ func TestMarkdownSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step and verify
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.MarkdownConvertInternal(&roughStep, uuidFinder, rough.EmptyColumns)
+			converted, err := c.state.Conversion(&roughStep, nil)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -183,10 +170,6 @@ func TestMarkdownSteps(t *testing.T) {
 
 			// verify results
 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
-
-			if !reflect.DeepEqual(c.expectedColumns, usedColumns) {
-				t.Fatalf("expected %v, but got %v", c.expectedColumns, usedColumns)
-			}
 		})
 	}
 }
