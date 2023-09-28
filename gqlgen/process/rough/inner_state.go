@@ -107,7 +107,7 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "commit":
 		steps, usedColumns, err = commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, usedColumns, err = sourceErrorConvertInternal(s, repo, state.uuidFinder)
+		steps, _, err = sourceErrorConvertInternal(s, state)
 	case "browser":
 		steps, _, err = browserConvertInternal(s, state)
 	case "markdown":
@@ -120,12 +120,11 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	if err != nil {
 		return nil, err
 	}
-	if len(usedColumns) == 0 {
-		return nil, fmt.Errorf("usedColumns is empty")
-	}
 
 	// - udpate the state
-	state.currentColumn = usedColumns[len(usedColumns)-1]
+	if len(usedColumns) != 0 {
+		state.currentColumn = usedColumns[len(usedColumns)-1]
+	}
 	// state.appendColumnsIfNotExist(usedColumns)
 
 	return steps, nil
@@ -226,13 +225,13 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 	return steps, usedColumns, nil
 }
 
-func sourceErrorConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUIDFinder) ([]DetailedStep, []string, error) {
-	var detailedSteps []DetailedStep
+func sourceErrorConvertInternal(s *RoughStep, state *InnerState) ([]DetailedStep, UsedColumns, error) {
+	usedColumns := appendIfNotExists(state.existingCols, "Source Code")
+	sourceErrorStep := sourceErrorStep(s, state.uuidFinder, usedColumns)
 
-	sourceErrorStep := sourceErrorStep(s, uuidFinder)
+	var detailedSteps []DetailedStep
 	detailedSteps = append(detailedSteps, sourceErrorStep)
 
-	usedColumns := []string{"Source Code"}
 	return detailedSteps, usedColumns, nil
 }
 
@@ -240,16 +239,17 @@ func browserConvertInternal(
 	s *RoughStep,
 	state *InnerState, // DO NOT alter state in the method
 ) ([]DetailedStep, UsedColumns, error) {
-	var detailedSteps []DetailedStep
 
 	// precondition for RoughStep
 	if s.Instruction == "" {
 		return nil, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
-	// browser steps
 	usedColumns := appendIfNotExists(state.existingCols, "Browser")
 	split := strings.Split(s.Instruction, ",")
+
+	// browser steps
+	var detailedSteps []DetailedStep
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
 		browserStep := browserStep(s, state.uuidFinder, i, browserImageName, usedColumns)
@@ -263,14 +263,13 @@ func markdownConvertInternal(
 	s *RoughStep,
 	state *InnerState, // DO NOT alter state in the method
 ) ([]DetailedStep, UsedColumns, error) {
-	var detailedSteps []DetailedStep
-
 	// precondition for RoughStep
 	if s.Instruction == "" {
 		return nil, EmptyColumns, fmt.Errorf("instruction is missing for markdown step = '%s'", s.Step)
 	}
 
 	// markdown step
+	var detailedSteps []DetailedStep
 	usedColumns := appendIfNotExists(state.existingCols, "Markdown")
 	markdownStep := markdownStep(s, state.uuidFinder, usedColumns)
 	detailedSteps = append(detailedSteps, markdownStep)
@@ -360,23 +359,6 @@ func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	return step
 }
 
-func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
-	subId := "sourceErrorStep"
-	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
-	step := DetailedStep{
-		// fields to make the step searchable for re-generation
-		FromRoughStep: true,
-		ParentStep:    s.Step,
-		SubID:         subId,
-		// other fields
-		Step:                stepId,
-		FocusColumn:         "Source Code",
-		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
-	}
-
-	return step
-}
-
 func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 	subId := "terminalCommandStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
@@ -415,6 +397,24 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder) DetailedStep {
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
 	}
+
+	return step
+}
+
+func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+	subId := "sourceErrorStep"
+	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
+	step := DetailedStep{
+		// fields to make the step searchable for re-generation
+		FromRoughStep: true,
+		ParentStep:    s.Step,
+		SubID:         subId,
+		// other fields
+		Step:                stepId,
+		FocusColumn:         "Source Code",
+		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
+	}
+	step.setColumns(usedColumns)
 
 	return step
 }

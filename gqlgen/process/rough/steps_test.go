@@ -88,16 +88,17 @@ func TestCommitSteps(t *testing.T) {
 }
 
 func TestSourceErrorSteps(t *testing.T) {
+	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
+	repo := test_util.GitOpenOrClone(t, repoUrl)
+
 	cases := []struct {
 		inputFile       string
 		goldenFile      string
-		expectedColumns []string
+		state           *rough.InnerState
+		expectedColumns rough.UsedColumns
 	}{
-		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", []string{"Source Code"}},
+		{"testdata/rough-steps/source_error1.json", "testdata/golden/source_error1.json", rough.InitStateForUnitTest(repo), [5]string{"Source Code"}},
 	}
-
-	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo := test_util.GitOpenOrClone(t, repoUrl)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
@@ -106,8 +107,7 @@ func TestSourceErrorSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			uuidFinder := rough.StaticUUIDFinder("")
-			converted, usedColumns, err := rough.SourceErrorConvertInternal(&roughStep, repo, uuidFinder)
+			converted, usedColumns, err := rough.SourceErrorConvertInternal(&roughStep, c.state)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}

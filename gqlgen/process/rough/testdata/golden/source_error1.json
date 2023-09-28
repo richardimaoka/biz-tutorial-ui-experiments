@@ -3,6 +3,7 @@
     "fromRoughStep": true,
     "subId": "sourceErrorStep",
     "step": "",
-    "focusColumn": "Source Code"
+    "focusColumn": "Source Code",
+    "column1": "Source Code"
   }
 ]
