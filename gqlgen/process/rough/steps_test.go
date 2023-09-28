@@ -106,7 +106,7 @@ func TestSourceErrorSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			converted, err := c.state.Conversion(&roughStep, nil)
+			converted, err := c.state.Conversion(&roughStep)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -134,7 +134,7 @@ func TestBrowserSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step
-			converted, err := c.state.Conversion(&roughStep, nil)
+			converted, err := c.state.Conversion(&roughStep)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}
@@ -162,7 +162,7 @@ func TestMarkdownSteps(t *testing.T) {
 			test_util.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step and verify
-			converted, err := c.state.Conversion(&roughStep, nil)
+			converted, err := c.state.Conversion(&roughStep)
 			if err != nil {
 				t.Fatalf("failed to convert rough step: %v", err)
 			}

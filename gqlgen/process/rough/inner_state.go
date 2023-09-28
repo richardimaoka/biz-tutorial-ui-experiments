@@ -76,7 +76,7 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 	var detailedSteps []DetailedStep
 	for _, s := range roughSteps {
 		// step conversion
-		dSteps, err := state.Conversion(&s, state.repo)
+		dSteps, err := state.Conversion(&s)
 		if err != nil {
 			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
 		}
@@ -96,7 +96,7 @@ func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, 
 // RoughStep to DetailedStep conversion methods
 //////////////////////////////////////////////////////
 
-func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]DetailedStep, error) {
+func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	var steps []DetailedStep
 	var usedColumns []string
 	var currentColumn string
@@ -106,9 +106,9 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
-		steps, usedColumns, err = terminalConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
+		steps, usedColumns, err = terminalConvertInternal(s, state.repo, state.uuidFinder, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	case "commit":
-		steps, usedColumns, err = commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
+		steps, usedColumns, err = commitConvertInternal(s, state.repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
 		steps, existingCols, err = sourceErrorConvertInternal(s, state.uuidFinder, existingCols)
 	case "browser":
