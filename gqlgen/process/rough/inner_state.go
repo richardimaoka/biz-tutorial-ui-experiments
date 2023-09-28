@@ -110,11 +110,11 @@ func (state *InnerState) Conversion(s *RoughStep, repo *git.Repository) ([]Detai
 	case "commit":
 		steps, usedColumns, err = commitConvertInternal(s, repo, state.uuidFinder, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, existingCols, err = sourceErrorConvertInternal(s, state)
+		steps, existingCols, err = sourceErrorConvertInternal(s, state.uuidFinder, existingCols)
 	case "browser":
-		steps, existingCols, err = browserConvertInternal(s, state)
+		steps, existingCols, err = browserConvertInternal(s, state.uuidFinder, existingCols)
 	case "markdown":
-		steps, existingCols, err = markdownConvertInternal(s, state)
+		steps, existingCols, err = markdownConvertInternal(s, state.uuidFinder, existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -236,30 +236,32 @@ func terminalConvertInternal(s *RoughStep, repo *git.Repository, uuidFinder *UUI
 
 func sourceErrorConvertInternal(
 	s *RoughStep,
-	state *InnerState, // DO NOT alter state in the method
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
 ) ([]DetailedStep, UsedColumns, error) {
-	usedColumns := appendIfNotExists(state.existingCols, "Source Code")
-	sourceErrorStep := sourceErrorStep(s, state.uuidFinder, usedColumns)
+	usedColumns := appendIfNotExists(existingColumns, "Source Code")
+	sourceErrorStep := sourceErrorStep(s, uuidFinder, usedColumns)
 	return []DetailedStep{sourceErrorStep}, usedColumns, nil
 }
 
 func browserConvertInternal(
 	s *RoughStep,
-	state *InnerState, // DO NOT alter state in the method
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
 ) ([]DetailedStep, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
 		return nil, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
 	}
 
-	usedColumns := appendIfNotExists(state.existingCols, "Browser")
+	usedColumns := appendIfNotExists(existingColumns, "Browser")
 	split := strings.Split(s.Instruction, ",")
 
 	// browser steps
 	var detailedSteps []DetailedStep
 	for i, each := range split {
 		browserImageName := strings.ReplaceAll(each, " ", "")
-		browserStep := browserStep(s, state.uuidFinder, usedColumns, i, browserImageName)
+		browserStep := browserStep(s, uuidFinder, usedColumns, i, browserImageName)
 		detailedSteps = append(detailedSteps, browserStep)
 	}
 
@@ -268,7 +270,8 @@ func browserConvertInternal(
 
 func markdownConvertInternal(
 	s *RoughStep,
-	state *InnerState, // DO NOT alter state in the method
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
 ) ([]DetailedStep, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
@@ -276,8 +279,8 @@ func markdownConvertInternal(
 	}
 
 	// markdown step
-	usedColumns := appendIfNotExists(state.existingCols, "Markdown")
-	markdownStep := markdownStep(s, state.uuidFinder, usedColumns)
+	usedColumns := appendIfNotExists(existingColumns, "Markdown")
+	markdownStep := markdownStep(s, uuidFinder, usedColumns)
 
 	return []DetailedStep{markdownStep}, usedColumns, nil
 }
