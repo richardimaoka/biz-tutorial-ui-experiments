@@ -5,6 +5,7 @@
     "step": "",
     "focusColumn": "Source Code",
     "column1": "Source Code",
+    "comment": "(file tree)",
     "commit": "c8a922d8850d7b5f738f649a8ad61947f1202edd",
     "defaultOpenFilePath": "data/todo.json"
   },

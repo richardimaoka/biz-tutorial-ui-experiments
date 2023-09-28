@@ -47,6 +47,7 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
+    "comment": "(file tree)",
     "commit": "f71bd4db513263c346a78a347c7d91a9e8685a10",
     "defaultOpenFilePath": "go.mod"
   },
@@ -81,7 +82,7 @@
     "focusColumn": "Terminal",
     "column1": "Terminal",
     "column2": "Source Code",
-    "comment": "(move)"
+    "comment": "(move to Terminal)"
   },
   {
     "fromRoughStep": true,
@@ -102,6 +103,7 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
+    "comment": "(file tree)",
     "commit": "f2a4aff4a83fb1e8cddf8577ab416239de6dd3eb",
     "defaultOpenFilePath": "go.mod"
   },
@@ -135,7 +137,7 @@
     "focusColumn": "Terminal",
     "column1": "Terminal",
     "column2": "Source Code",
-    "comment": "(move)"
+    "comment": "(move to Terminal)"
   },
   {
     "fromRoughStep": true,
@@ -167,6 +169,7 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
+    "comment": "(file tree)",
     "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
     "defaultOpenFilePath": "go.mod"
   },
@@ -254,7 +257,7 @@
     "focusColumn": "Terminal",
     "column1": "Terminal",
     "column2": "Source Code",
-    "comment": "(move)"
+    "comment": "(move to Terminal)"
   },
   {
     "fromRoughStep": true,
@@ -275,6 +278,7 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
+    "comment": "(file tree)",
     "commit": "2a40664382db572026fa7e80c40dfb73c7bd15a6",
     "defaultOpenFilePath": "go.mod"
   },

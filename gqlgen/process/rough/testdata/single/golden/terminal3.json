@@ -15,6 +15,7 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
+    "comment": "(file tree)",
     "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
     "defaultOpenFilePath": "go.mod"
   },

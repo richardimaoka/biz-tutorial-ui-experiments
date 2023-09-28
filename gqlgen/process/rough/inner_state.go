@@ -307,6 +307,7 @@ func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns,
 		Commit:              s.Commit,
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
+		Comment:             "(file tree)",
 	}
 	step.setColumns(usedColumns)
 
@@ -350,7 +351,7 @@ func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedCo
 		// other fields
 		Step:        stepId,
 		FocusColumn: "Terminal",
-		Comment:     "(move)",
+		Comment:     "(move to Terminal)",
 	}
 	step.setColumns(usedColumns)
 
