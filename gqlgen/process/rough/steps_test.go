@@ -208,6 +208,7 @@ func TestRoughStepSequence(t *testing.T) {
 		goldenFile string
 	}{
 		{"testdata/rough-steps1.json", "testdata/detailed-steps-golden1.json"},
+		{"testdata/rough-steps2.json", "testdata/detailed-steps-golden2.json"},
 	}
 
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"

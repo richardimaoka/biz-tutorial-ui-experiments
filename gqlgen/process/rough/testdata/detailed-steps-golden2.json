@@ -1,0 +1,46 @@
+[
+  {
+    "fromRoughStep": true,
+    "subId": "markdownStep",
+    "parentStep": "144566fd-bba6-4661-964a-7806cff42ea7",
+    "step": "",
+    "focusColumn": "Markdown",
+    "column1": "Markdown",
+    "markdownContents": "まずは公式ドキュメントに従って初期設定を行います"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "moveToTerminalStep",
+    "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
+    "step": "",
+    "focusColumn": "Terminal",
+    "comment": "(move)"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "terminalCommandStep",
+    "parentStep": "625bce57-59fe-4480-92b1-cfb208b85e4f",
+    "step": "",
+    "focusColumn": "Terminal",
+    "terminalType": "command",
+    "terminalText": "mkdir gqlgen-todos"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "terminalCommandStep",
+    "parentStep": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
+    "step": "",
+    "focusColumn": "Terminal",
+    "terminalType": "command",
+    "terminalText": "cd gqlgen-todos"
+  },
+  {
+    "fromRoughStep": true,
+    "subId": "terminalCdStep",
+    "parentStep": "c8238063-dd5a-4cd4-9d62-5c9c8ebd35ec",
+    "step": "",
+    "focusColumn": "Terminal",
+    "terminalType": "cd",
+    "currentDir": "gqlgen-todos"
+  }
+]
