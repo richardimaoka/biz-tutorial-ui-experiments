@@ -7,12 +7,6 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-var CommitConvertInternal = commitConvertInternal
-var TerminalConvertInternal = terminalConvertInternal
-var SourceErrorConvertInternal = sourceErrorConvertInternal
-var BrowserConvertInternal = browserConvertInternal
-var MarkdownConvertInternal = markdownConvertInternal
-
 func InitStateForUnitTest(
 	repo *git.Repository, // can be nil if not used
 ) *InnerState {
