@@ -19,10 +19,10 @@ func TestTerminalSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/unit/input/terminal1.json", "testdata/unit/golden/terminal1.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
-		{"testdata/unit/input/terminal2.json", "testdata/unit/golden/terminal2.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
-		{"testdata/unit/input/terminal3.json", "testdata/unit/golden/terminal3.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
-		{"testdata/unit/input/terminal4.json", "testdata/unit/golden/terminal4.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/single/input/terminal1.json", "testdata/single/golden/terminal1.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/single/input/terminal2.json", "testdata/single/golden/terminal2.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/single/input/terminal3.json", "testdata/single/golden/terminal3.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/single/input/terminal4.json", "testdata/single/golden/terminal4.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
 	}
 
 	for _, c := range cases {
@@ -53,7 +53,7 @@ func TestCommitSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/unit/input/manual-commit1.json", "testdata/unit/golden/manual-commit1.json", rough.InitStateForUnitTest(repo)},
+		{"testdata/single/input/manual-commit1.json", "testdata/single/golden/manual-commit1.json", rough.InitStateForUnitTest(repo)},
 	}
 
 	for _, c := range cases {
@@ -84,7 +84,7 @@ func TestSourceErrorSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/unit/input/source_error1.json", "testdata/unit/golden/source_error1.json", rough.InitStateForUnitTest(repo)},
+		{"testdata/single/input/source_error1.json", "testdata/single/golden/source_error1.json", rough.InitStateForUnitTest(repo)},
 	}
 
 	for _, c := range cases {
@@ -112,7 +112,7 @@ func TestBrowserSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/unit/input/browser1.json", "testdata/unit/golden/browser1.json", rough.InitStateForUnitTest(nil)},
+		{"testdata/single/input/browser1.json", "testdata/single/golden/browser1.json", rough.InitStateForUnitTest(nil)},
 	}
 
 	for _, c := range cases {
@@ -140,7 +140,7 @@ func TestMarkdownSteps(t *testing.T) {
 		goldenFile string
 		state      *rough.InnerState
 	}{
-		{"testdata/unit/input/markdown1.json", "testdata/unit/golden/markdown1.json", rough.InitStateForUnitTest(nil)},
+		{"testdata/single/input/markdown1.json", "testdata/single/golden/markdown1.json", rough.InitStateForUnitTest(nil)},
 	}
 
 	for _, c := range cases {
@@ -174,12 +174,12 @@ func TestMarkdownSteps(t *testing.T) {
 // 		goldenFile    string
 // 		InnerState    *rough.InnerState
 // 	}{
-// 		{"testdata/unit/input/terminal1.json", "testdata/unit/golden/terminal1.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/unit/input/terminal2.json", "testdata/unit/golden/terminal2.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/unit/input/terminal3.json", "testdata/unit/golden/terminal3.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/unit/input/terminal4.json", "testdata/unit/golden/terminal4.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/unit/input/manual-commit1.json", "testdata/unit/golden/manual-commit1.json", rough.PredictableInnerState("Terminal", "", repo)},
-// 		{"testdata/unit/input/source_error1.json", "testdata/unit/golden/source_error1.json", rough.PredictableInnerState("Source Code", "", repo)},
+// 		{"testdata/single/input/terminal1.json", "testdata/single/golden/terminal1.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/single/input/terminal2.json", "testdata/single/golden/terminal2.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/single/input/terminal3.json", "testdata/single/golden/terminal3.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/single/input/terminal4.json", "testdata/single/golden/terminal4.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/single/input/manual-commit1.json", "testdata/single/golden/manual-commit1.json", rough.PredictableInnerState("Terminal", "", repo)},
+// 		{"testdata/single/input/source_error1.json", "testdata/single/golden/source_error1.json", rough.PredictableInnerState("Source Code", "", repo)},
 // 	}
 
 // 	for _, c := range cases {
