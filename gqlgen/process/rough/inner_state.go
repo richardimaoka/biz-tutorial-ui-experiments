@@ -66,27 +66,20 @@ func Process(dir, repoUrl string) error {
 	return nil
 }
 
-func (state *InnerState) generateTarget(roughStepsFile string) ([]DetailedStep, error) {
+func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
-	err := internal.JsonRead2(roughStepsFile, &roughSteps)
+	err := internal.JsonRead2(inputFile, &roughSteps)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateTarget error - failed to read from json: %v", err)
 	}
 
 	var detailedSteps []DetailedStep
 	for _, s := range roughSteps {
-		// step conversion
 		dSteps, err := state.Conversion(&s)
 		if err != nil {
 			return nil, fmt.Errorf("GenerateTarget error - failed to convert rough step: %v", err)
 		}
 		detailedSteps = append(detailedSteps, dSteps...)
-
-		// inner state update
-		if s.Commit != "" {
-			state.prevCommit = s.Commit
-		}
-		state.currentSeqNo++
 	}
 
 	return detailedSteps, nil
@@ -122,8 +115,12 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 		return nil, err
 	}
 
-	// - udpate the state
+	// udpate the state
 	state.currentColumn = getCurrentColumn(usedColumns)
+	if s.Commit != "" {
+		state.prevCommit = s.Commit
+	}
+	state.currentSeqNo++
 
 	return steps, nil
 }
