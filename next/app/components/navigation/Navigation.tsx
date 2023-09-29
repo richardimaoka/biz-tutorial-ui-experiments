@@ -27,7 +27,7 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
       {fragment.step && <StepDisplay step={fragment.step} />}
       <div className={styles.buttons}>
         {fragment.prevStep && (
-          <PrevButton href={`?step=${fragment.prevStep}&skipAnimation=true`} />
+          <PrevButton href={`/?step=${fragment.prevStep}&skipAnimation=true`} />
         )}
         {fragment.nextStep && (
           <AutoPlayButton
@@ -37,7 +37,7 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
           />
         )}
         {fragment.nextStep && (
-          <NextButton href={`?step=${fragment.nextStep}`} />
+          <NextButton href={`/?step=${fragment.nextStep}`} />
         )}
       </div>
     </nav>
