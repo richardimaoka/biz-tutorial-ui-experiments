@@ -255,7 +255,7 @@ func browserConvertInternal(
 ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
 	// precondition for RoughStep
 	if s.Instruction == "" {
-		return nil, NoColumn, EmptyColumns, fmt.Errorf("instruction is missing for browser step = '%s'", s.Step)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("instruction (for image file names) is missing at browser step = '%s'", s.Step)
 	}
 
 	usedColumns := appendIfNotExists(existingColumns, "Browser")
