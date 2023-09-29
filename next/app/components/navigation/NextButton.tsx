@@ -7,7 +7,10 @@ interface NextButtonProps {
 }
 
 export const NextButton = ({ href }: NextButtonProps) => (
-  <Link href={href}>
+  <Link
+    href={href}
+    replace /* TODO: replace parameter not working.... it adds a new entry in Chrome's history*/
+  >
     <button className={styles.next}>
       <div className={`${styles.text} ${styles.smartphone}`}>
         <ArrowRightIcon />

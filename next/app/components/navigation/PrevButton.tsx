@@ -7,7 +7,10 @@ interface PrevButtonProps {
 }
 
 export const PrevButton = ({ href }: PrevButtonProps) => (
-  <Link href={href}>
+  <Link
+    href={href}
+    replace /* TODO: replace parameter not working.... it adds a new entry in Chrome's history*/
+  >
     <button className={styles.prev}>
       <div className={`${styles.text} ${styles.smartphone}`}>
         <ArrowLeftIcon />
