@@ -21,6 +21,7 @@ func TestTerminalSteps(t *testing.T) {
 		{"testdata/single/input/terminal2.json", "testdata/single/golden/terminal2.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
 		{"testdata/single/input/terminal3.json", "testdata/single/golden/terminal3.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
 		{"testdata/single/input/terminal4.json", "testdata/single/golden/terminal4.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
+		{"testdata/single/input/terminal5.json", "testdata/single/golden/terminal5.json", rough.StateWithColumnForUnitTest(repo, "Terminal")},
 	}
 
 	for _, c := range cases {

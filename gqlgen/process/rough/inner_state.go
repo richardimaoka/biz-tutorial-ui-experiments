@@ -308,6 +308,7 @@ func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns,
 		IsFoldFileTree:      false,
 		DefaultOpenFilePath: file,
 		Comment:             "(file tree)",
+		ModalText:           s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -334,6 +335,7 @@ func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns,
 		DefaultOpenFilePath: file,
 		IsFoldFileTree:      true,
 		Commit:              commit,
+		ModalText:           s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -371,6 +373,7 @@ func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedCo
 		FocusColumn:  "Terminal",
 		TerminalType: "output",
 		TerminalText: s.Instruction2,
+		ModalText:    s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -392,6 +395,7 @@ func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedC
 		TerminalType: "command",
 		TerminalText: s.Instruction,
 		TerminalName: s.Instruction3, // Go zero value is ""
+		ModalText:    s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -415,6 +419,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumn
 		TerminalType: "cd",
 		TerminalName: s.Instruction3, // Go zero value is ""
 		CurrentDir:   currentDir,     // Go zero value is ""
+		ModalText:    s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -434,6 +439,7 @@ func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColum
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
 		IsFoldFileTree:      true,
+		ModalText:           s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -452,6 +458,7 @@ func browserStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, 
 		Step:             stepId,
 		FocusColumn:      "Browser",
 		BrowserImageName: browserImageName,
+		ModalText:        s.ModalText,
 	}
 	step.setColumns(usedColumns)
 
@@ -471,6 +478,7 @@ func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns)
 		Step:             stepId,
 		FocusColumn:      "Markdown",
 		MarkdownContents: s.Instruction,
+		ModalText:        s.ModalText,
 	}
 	step.setColumns(usedColumns)
 

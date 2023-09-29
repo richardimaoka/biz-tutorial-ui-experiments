@@ -7,6 +7,7 @@ type RoughStep struct {
 	Instruction  string `json:"instruction"`
 	Instruction2 string `json:"instruction2"`
 	Instruction3 string `json:"instruction3"`
+	ModalText    string `json:"modalText"`
 	Commit       string `json:"commit"`
 	Comment      string `json:"comment"`
 }
