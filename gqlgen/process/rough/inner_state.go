@@ -433,6 +433,7 @@ func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColum
 		Step:                stepId,
 		FocusColumn:         "Source Code",
 		DefaultOpenFilePath: s.Instruction, // Go zero value is ""
+		IsFoldFileTree:      true,
 	}
 	step.setColumns(usedColumns)
 

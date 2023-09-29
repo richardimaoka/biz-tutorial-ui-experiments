@@ -4,6 +4,7 @@
     "subId": "sourceErrorStep",
     "step": "",
     "focusColumn": "Source Code",
-    "column1": "Source Code"
+    "column1": "Source Code",
+    "isFoldFileTree": true
   }
 ]

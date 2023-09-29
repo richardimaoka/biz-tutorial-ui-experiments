@@ -247,7 +247,8 @@
     "focusColumn": "Source Code",
     "column1": "Terminal",
     "column2": "Source Code",
-    "defaultOpenFilePath": "# source error"
+    "defaultOpenFilePath": "# source error",
+    "isFoldFileTree": true
   },
   {
     "fromRoughStep": true,
