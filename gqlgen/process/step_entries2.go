@@ -265,7 +265,7 @@ func ReadStepEntries2(filePath string) (StepEntries2, error) {
 func Process2(tutorial, repoUrl string) error {
 	dirName := "data/" + tutorial
 
-	entries, err := ReadStepEntries2(dirName + "/steps2.json")
+	entries, err := ReadStepEntries2(dirName + "/detailed-steps.json")
 	if err != nil {
 		return fmt.Errorf("Process2 failed, %s", err)
 	}
