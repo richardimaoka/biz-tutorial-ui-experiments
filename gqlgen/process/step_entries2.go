@@ -45,9 +45,7 @@ type StepEntry2 struct {
 	IsFoldFileTree      string `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
 
 	// browser
-	BrowserImageName   string `json:"browserImageName,omitempty"`
-	BrowserImageWidth  int    `json:"browserImageWidth,omitempty"`
-	BrowserImageHeight int    `json:"browserImageHeight,omitempty"`
+	BrowserImageName string `json:"browserImageName,omitempty"`
 
 	// dev tools
 	DevToolsImageName   string `json:"devtoolsImageName,omitempty"`
@@ -156,7 +154,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 				column = srcColmnState.ToGraphQLSourceCodeColumn()
 
 			case "Browser":
-				err := browserColumnState.Process(tutorial, e.BrowserImageName, e.BrowserImageWidth, e.BrowserImageHeight)
+				err := browserColumnState.Process(tutorial, e.BrowserImageName)
 				if err != nil {
 					return nil, fmt.Errorf("ToGraphQLPages failed to process Browser column at step = %s, %s", e.Step, err)
 				}

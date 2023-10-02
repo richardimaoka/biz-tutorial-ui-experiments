@@ -22,19 +22,19 @@ func NewBrowserColumn() *BrowserColumn {
 	return &BrowserColumn{}
 }
 
-func (p *BrowserColumn) Process(tutorial, imageName string, width, height int) error {
+func (p *BrowserColumn) Process(tutorial, imageName string) error {
 	if imageName == "" {
 		return nil //keep the current state
-	}
-	if width <= 0 {
-		return fmt.Errorf("Process() failed as width = %d is less than 1", width)
-	}
-	if height <= 0 {
-		return fmt.Errorf("Process() failed as height = %d is less than 1", height)
 	}
 
 	// *Next.js <Image> requires a leading slash in path
 	imagePath := "/images/" + tutorial + "/" + imageName
+	nextJsImagePath := "../next/public/images" + imagePath
+
+	width, height, err := p.ImageDimension(nextJsImagePath)
+	if err != nil {
+		return fmt.Errorf("ImageDimension() failed, %s", err)
+	}
 
 	// stateless, always new state
 	p.Width = width
