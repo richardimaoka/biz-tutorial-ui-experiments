@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process"
@@ -11,14 +12,22 @@ import (
 func main() {
 
 	if len(os.Args) > 1 && os.Args[1] == "process" {
-		// err := process.Process2("sign-in-with-google", "https://github.com/richardimaoka/sign-in-with-google-experiment.git")
-		// err := process.Process2("live-server", "https://github.com/richardimaoka/tutorial-html-live-server.git")
-		err := process.Process2("gqlgen-getting-started", "https://github.com/richardimaoka/article-gqlgen-getting-started.git")
+		if len(os.Args) != 3 {
+			panic("process sub command needs extra argument")
+		}
+
+		tutorial := os.Args[2]
+		err := process.Process2(tutorial, fmt.Sprintf("https://github.com/richardimaoka/article-%s.git", tutorial))
 		if err != nil {
 			panic(err)
 		}
 	} else if len(os.Args) > 1 && os.Args[1] == "rough" {
-		err := rough.Process("data/gqlgen-getting-started", "https://github.com/richardimaoka/article-gqlgen-getting-started.git")
+		if len(os.Args) != 3 {
+			panic("rough sub command needs extra argument")
+		}
+
+		tutorial := os.Args[2]
+		err := rough.Process("data/"+tutorial, fmt.Sprintf("https://github.com/richardimaoka/article-%s.git", tutorial))
 		if err != nil {
 			panic(err)
 		}

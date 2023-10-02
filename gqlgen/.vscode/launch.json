@@ -19,7 +19,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["process"]
+      "args": ["rough", "docker-cmd-entrypoint"]
     }
   ]
 }
