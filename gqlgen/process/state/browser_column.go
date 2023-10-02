@@ -29,7 +29,7 @@ func (p *BrowserColumn) Process(tutorial, imageName string) error {
 
 	// *Next.js <Image> requires a leading slash in path
 	imagePath := "/images/" + tutorial + "/" + imageName
-	nextJsImagePath := "../next/public/images" + imagePath
+	nextJsImagePath := "../next/public" + imagePath
 
 	width, height, err := p.ImageDimension(nextJsImagePath)
 	if err != nil {
