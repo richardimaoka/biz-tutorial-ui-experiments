@@ -2,9 +2,14 @@ package state
 
 import (
 	"fmt"
+	"image"
+	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+
+	_ "image/jpeg"
+	_ "image/png"
 )
 
 type BrowserColumn struct {
@@ -37,6 +42,20 @@ func (p *BrowserColumn) Process(tutorial, imageName string, width, height int) e
 	p.Path = imagePath
 
 	return nil
+}
+
+func (p *BrowserColumn) ImageDimension(imagePath string) (int, int, error) {
+	file, err := os.Open(imagePath)
+	if err != nil {
+		return 0, 0, fmt.Errorf("ImageDimension() failed to open file, %s", err)
+	}
+
+	image, _, err := image.DecodeConfig(file)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %v\n", imagePath, err)
+	}
+
+	return image.Width, image.Height, nil
 }
 
 func (p *BrowserColumn) ToGraphQLBrowserCol() *model.BrowserColumn {
