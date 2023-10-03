@@ -5,6 +5,7 @@
 .prev {
   /* positioning */
   position: absolute;
+  z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
   bottom: 0px;
   left: 0px;
 
@@ -20,6 +21,7 @@
 .next {
   /* positioning */
   position: absolute;
+  z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
   bottom: 0px;
   right: 0px;
 
@@ -35,6 +37,7 @@
 .autoplay {
   /* positioning */
   position: absolute;
+  z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0%);
@@ -57,7 +60,6 @@
   background-color: rgba(255, 255, 255, 0.5);
   color: black;
   border-style: none;
-  z-index: 100;
 }
 
 @media (max-width: 768px) {
