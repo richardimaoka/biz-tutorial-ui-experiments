@@ -110,7 +110,3 @@
   flex-shrink: 0;
   scroll-snap-align: start;
 }
-
-.bottom {
-  z-index: 1000;
-}

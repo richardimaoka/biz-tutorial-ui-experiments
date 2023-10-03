@@ -23,23 +23,19 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   return (
-    <nav className={styles.navigation}>
+    <>
       {fragment.step && <StepDisplay step={fragment.step} />}
-      <div className={styles.buttons}>
-        {fragment.prevStep && (
-          <PrevButton href={`/?step=${fragment.prevStep}&skipAnimation=true`} />
-        )}
-        {fragment.nextStep && (
-          <AutoPlayButton
-            nextStep={fragment.nextStep}
-            durationSeconds={fragment.durationSeconds}
-            isTrivialStep={fragment.isTrivialStep}
-          />
-        )}
-        {fragment.nextStep && (
-          <NextButton href={`/?step=${fragment.nextStep}`} />
-        )}
-      </div>
-    </nav>
+      {fragment.prevStep && (
+        <PrevButton href={`/?step=${fragment.prevStep}&skipAnimation=true`} />
+      )}
+      {fragment.nextStep && (
+        <AutoPlayButton
+          nextStep={fragment.nextStep}
+          durationSeconds={fragment.durationSeconds}
+          isTrivialStep={fragment.isTrivialStep}
+        />
+      )}
+      {fragment.nextStep && <NextButton href={`/?step=${fragment.nextStep}`} />}
+    </>
   );
 };

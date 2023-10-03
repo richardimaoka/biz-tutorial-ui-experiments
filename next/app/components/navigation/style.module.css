@@ -1,19 +1,15 @@
-.buttons {
-  position: relative;
-}
-
 .prev {
   /* positioning */
   position: absolute;
   z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
-  bottom: 0px;
+  top: 70%;
   left: 0px;
 
   /* sizing */
   padding: 8px;
 
   /* color and styles */
-  background-color: var(--color-theme-blue);
+  background-color: var(--color-theme-transparent-white);
   color: var(--color-primary-text);
   border-style: none;
 }
@@ -22,14 +18,14 @@
   /* positioning */
   position: absolute;
   z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
-  bottom: 0px;
+  top: 70%;
   right: 0px;
 
   /* sizing */
   padding: 8px;
 
   /* color and styles */
-  background-color: var(--color-theme-blue);
+  background-color: var(--color-theme-transparent-white);
   color: var(--color-primary-text);
   border-style: none;
 }
@@ -53,6 +49,7 @@
 
 .step {
   position: fixed;
+  z-index: 200; /*z-index is applied to position: relative, absolute and fixed only*/
   bottom: 40px;
   right: 0px;
   font-size: 8px;

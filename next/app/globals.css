@@ -10,6 +10,8 @@
   --color-theme-blue: #007acc;
   --color-theme-green: #00cc9b;
 
+  --color-theme-transparent-white: rgb(255, 255, 255, 0.1);
+
   --color-sourcecode-file-highlighted: #748d2e;
   --color-sourcecode-surface-openfile: #232323;
   --color-sourcecode-surface-filetree: #2e2e2e;

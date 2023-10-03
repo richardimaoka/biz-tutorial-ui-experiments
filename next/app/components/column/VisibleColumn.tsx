@@ -62,9 +62,7 @@ export const VisibleColumn = (props: VisibleColumnProps) => {
           skipAnimation={props.skipAnimation}
         />
       </div>
-      <div className={styles.bottom}>
-        <Navigation fragment={fragment} />
-      </div>
+      <Navigation fragment={fragment} />
     </div>
   );
 };
