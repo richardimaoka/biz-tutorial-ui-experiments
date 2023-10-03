@@ -42,7 +42,7 @@ type StepEntry2 struct {
 	PrevCommit          string `json:"prevCommit,omitempty"`
 	RepoUrl             string `json:"repoUrl,omitempty"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath,omitempty"`
-	IsFoldFileTree      string `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
+	IsFoldFileTree      bool   `json:"isFoldFileTree,omitempty"` // string, as CSV from Google Spreadsheet has TRUE as upper-case 'TRUE'
 
 	// browser
 	BrowserImageName string `json:"browserImageName,omitempty"`

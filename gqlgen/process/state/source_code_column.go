@@ -55,7 +55,7 @@ func (c *SourceCodeColumn) ForwardCommit(step, commit string) error {
 	return nil
 }
 
-func (c *SourceCodeColumn) Process(step, commit, defaultOpenFilePath, isFoldFileTree string) error {
+func (c *SourceCodeColumn) Process(step, commit, defaultOpenFilePath string, isFoldFileTree bool) error {
 	if commit != "" {
 		err := c.ForwardCommit(step, commit)
 		if err != nil {
@@ -63,7 +63,7 @@ func (c *SourceCodeColumn) Process(step, commit, defaultOpenFilePath, isFoldFile
 		}
 	}
 
-	updateOnlyOnFalse := isFoldFileTree == "FALSE"
+	updateOnlyOnFalse := !isFoldFileTree
 	if updateOnlyOnFalse {
 		c.UpdateIsFoldFileTree(false)
 	} else {
