@@ -24,7 +24,6 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
 
   return (
     <>
-      {fragment.step && <StepDisplay step={fragment.step} />}
       {fragment.prevStep && (
         <PrevButton href={`/?step=${fragment.prevStep}&skipAnimation=true`} />
       )}
@@ -36,6 +35,7 @@ export const Navigation = (props: NavigationProps): JSX.Element => {
         />
       )}
       {fragment.nextStep && <NextButton href={`/?step=${fragment.nextStep}`} />}
+      {fragment.step && <StepDisplay step={fragment.step} />}
     </>
   );
 };
