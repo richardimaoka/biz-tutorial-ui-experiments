@@ -32,7 +32,8 @@ export default async function Home({ searchParams }: PageParams) {
     variables: {
       // tutorial: "sign-in-with-google",
       // tutorial: "live-server",
-      tutorial: "gqlgen-getting-started",
+      // tutorial: "gqlgen-getting-started",
+      tutorial: "docker-cmd-entrypoint",
       openFilePath: openFilePath,
       step: searchParams.step,
       column: searchParams.column,
