@@ -100,6 +100,10 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	switch s.Type {
 	case "terminal":
 		steps, currentColumn, usedColumns, err = terminalConvert(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
+	case "terminal command":
+		steps, currentColumn, usedColumns, err = terminalCommandConvert(s, state.uuidFinder, state.existingCols, state.currentColumn)
+	case "terminal output":
+		steps, currentColumn, usedColumns, err = terminalOutputConvert(s, state.uuidFinder, state.existingCols)
 	case "commit":
 		steps, currentColumn, usedColumns, err = commitConvert(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
 	case "source error":
@@ -236,6 +240,68 @@ func terminalConvert(
 	}
 
 	return steps, currentColumn, usedColumns, nil
+}
+
+func terminalCommandConvert(
+	s *RoughStep,
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
+	prevColumn string,
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
+	usedColumns := appendIfNotExists(existingColumns, "Terminal")
+
+	// - precondition for RoughStep
+
+	// check if it's a valid terminal step
+	if s.Instruction == "" {
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s'", s.Step)
+	}
+
+	// - step creation
+	var steps []DetailedStep
+
+	// insert move-to-terminal step if current column != "Terminal"
+	if prevColumn != "Terminal" && prevColumn != "" {
+		moveToTerminalStep := moveToTerminalStep(s, uuidFinder, usedColumns)
+		steps = append(steps, moveToTerminalStep)
+	}
+
+	// command step
+	cmdStep := terminalCommandStep(s, uuidFinder, usedColumns)
+	steps = append(steps, cmdStep)
+
+	// cd step
+	if strings.HasPrefix(s.Instruction, "cd ") {
+		cmdStep := terminalCdStep(s, uuidFinder, usedColumns)
+		steps = append(steps, cmdStep)
+	}
+
+	return steps, "Terminal", usedColumns, nil
+}
+
+func terminalOutputConvert(
+	s *RoughStep,
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
+	usedColumns := appendIfNotExists(existingColumns, "Terminal")
+
+	// - precondition for RoughStep
+
+	// check if it's a valid terminal step
+	if s.Instruction == "" {
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is 'instruction', step = '%s'", s.Step)
+	}
+
+	// - step creation
+	var steps []DetailedStep
+
+	// output step
+	s.Instruction2 = s.Instruction //TODO: workaround for now
+	outputStep := terminalOutputStep(s, uuidFinder, usedColumns)
+	steps = append(steps, outputStep)
+
+	return steps, "Terminal", usedColumns, nil
 }
 
 func sourceErrorConvert(
