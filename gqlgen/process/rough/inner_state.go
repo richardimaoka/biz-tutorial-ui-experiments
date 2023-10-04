@@ -99,15 +99,15 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 	// call internal conversion logic
 	switch s.Type {
 	case "terminal":
-		steps, currentColumn, usedColumns, err = terminalConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
+		steps, currentColumn, usedColumns, err = terminalConvert(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit, state.currentSeqNo)
 	case "commit":
-		steps, currentColumn, usedColumns, err = commitConvertInternal(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
+		steps, currentColumn, usedColumns, err = commitConvert(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
 	case "source error":
-		steps, currentColumn, usedColumns, err = sourceErrorConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, currentColumn, usedColumns, err = sourceErrorConvert(s, state.uuidFinder, state.existingCols)
 	case "browser":
-		steps, currentColumn, usedColumns, err = browserConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, currentColumn, usedColumns, err = browserConvert(s, state.uuidFinder, state.existingCols)
 	case "markdown":
-		steps, currentColumn, usedColumns, err = markdownConvertInternal(s, state.uuidFinder, state.existingCols)
+		steps, currentColumn, usedColumns, err = markdownConvert(s, state.uuidFinder, state.existingCols)
 	default:
 		return nil, fmt.Errorf("unknown type = '%s' for step = '%s'", s.Type, s.Step)
 	}
@@ -132,7 +132,7 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 // RoughStep to DetailedStep internal methods
 //////////////////////////////////////////////////////
 
-func commitConvertInternal(
+func commitConvert(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
@@ -179,7 +179,7 @@ func commitConvertInternal(
 	return detailedSteps, "Source Code", usedColumns, nil
 }
 
-func terminalConvertInternal(
+func terminalConvert(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
@@ -226,7 +226,7 @@ func terminalConvertInternal(
 
 	// source code steps
 	if s.Commit != "" {
-		commitSteps, commitColumn, commitUsedColumns, err := commitConvertInternal(s, uuidFinder, usedColumns, repo, "Terminal", prevCommit)
+		commitSteps, commitColumn, commitUsedColumns, err := commitConvert(s, uuidFinder, usedColumns, repo, "Terminal", prevCommit)
 		if err != nil {
 			return nil, NoColumn, EmptyColumns, fmt.Errorf("failed to convert commit steps, %s", err)
 		}
@@ -238,7 +238,7 @@ func terminalConvertInternal(
 	return steps, currentColumn, usedColumns, nil
 }
 
-func sourceErrorConvertInternal(
+func sourceErrorConvert(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
@@ -248,7 +248,7 @@ func sourceErrorConvertInternal(
 	return []DetailedStep{sourceErrorStep}, "Source Code", usedColumns, nil
 }
 
-func browserConvertInternal(
+func browserConvert(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
@@ -272,7 +272,7 @@ func browserConvertInternal(
 	return detailedSteps, "Browser", usedColumns, nil
 }
 
-func markdownConvertInternal(
+func markdownConvert(
 	s *RoughStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
