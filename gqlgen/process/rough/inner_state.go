@@ -198,7 +198,7 @@ func terminalConvert(
 
 	// check if it's a valid terminal step
 	if s.Instruction == "" && s.Instruction2 == "" {
-		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing both 'instruction' and 'instruction2', phase = '%s', type = '%s', comment = '%s'", s.Phase, s.Type, s.Comment)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing both 'instruction' and 'instruction2', step = '%s', type = '%s'", s.Step, s.Type)
 	}
 
 	// - step creation
@@ -254,7 +254,7 @@ func terminalCommandConvert(
 
 	// check if it's a valid terminal step
 	if s.Instruction == "" {
-		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s'", s.Step)
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", s.Step, s.Type)
 	}
 
 	// - step creation
@@ -289,9 +289,9 @@ func terminalOutputConvert(
 	// - precondition for RoughStep
 
 	// check if it's a valid terminal step
-	if s.Instruction == "" {
-		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is 'instruction', step = '%s'", s.Step)
-	}
+	// if s.Instruction == "" {
+	// 	return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", s.Step, s.Type)
+	// }
 
 	// - step creation
 	var steps []DetailedStep
