@@ -106,6 +106,8 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 		steps, currentColumn, usedColumns, err = terminalOutputConvert(s, state.uuidFinder, state.existingCols)
 	case "commit":
 		steps, currentColumn, usedColumns, err = commitConvert(s, state.uuidFinder, state.existingCols, state.repo, state.currentColumn, state.prevCommit)
+	case "source code":
+		steps, currentColumn, usedColumns, err = sourceCodeConvert(s, state.uuidFinder, state.existingCols, state.currentColumn)
 	case "source error":
 		steps, currentColumn, usedColumns, err = sourceErrorConvert(s, state.uuidFinder, state.existingCols)
 	case "browser":
@@ -179,6 +181,34 @@ func commitConvert(
 			break
 		}
 	}
+
+	return detailedSteps, "Source Code", usedColumns, nil
+}
+
+func sourceCodeConvert(
+	s *RoughStep,
+	uuidFinder *UUIDFinder,
+	existingColumns UsedColumns,
+	prevColumn string,
+) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
+	usedColumns := appendIfNotExists(existingColumns, "Source Code")
+
+	// - precondition for RoughStep
+	if s.Instruction == "" {
+		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", s.Step, s.Type)
+	}
+
+	// - step creation
+	var detailedSteps []DetailedStep
+
+	// insert file-tree step if prev column != "Source Code"
+	if prevColumn != "Source Code" {
+		fileTreeStep := fileTreeStep(s, uuidFinder, usedColumns, s.Instruction)
+		detailedSteps = append(detailedSteps, fileTreeStep)
+	}
+
+	openFileStep := openFileStep(s, uuidFinder, usedColumns, 0, s.Instruction, false)
+	detailedSteps = append(detailedSteps, openFileStep)
 
 	return detailedSteps, "Source Code", usedColumns, nil
 }
