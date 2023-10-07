@@ -318,11 +318,6 @@ func terminalOutputConvert(
 
 	// - precondition for RoughStep
 
-	// check if it's a valid terminal step
-	// if s.Instruction == "" {
-	// 	return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", s.Step, s.Type)
-	// }
-
 	// - step creation
 	var steps []DetailedStep
 
