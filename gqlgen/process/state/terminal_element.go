@@ -11,30 +11,36 @@ type TerminalElement interface {
 
 type TerminalCommand struct {
 	Command         string
+	Tooltip         string
 	BeforeExecution bool
 }
 
 type TerminalOutput struct {
-	Output string
+	Output  string
+	Tooltip string
 }
 
 func (p *TerminalCommand) ToGraphQLTerminalElement() model.TerminalElement {
 	// copy to avoid mutation effect afterwards
 	command := internal.StringRef(p.Command)
+	tooltip := internal.StringRef(p.Tooltip)
 	beforeExecution := p.BeforeExecution
 
 	return &model.TerminalCommand{
 		BeforeExecution: &beforeExecution,
 		Command:         command,
+		Tooltip:         tooltip,
 	}
 }
 
 func (p *TerminalOutput) ToGraphQLTerminalElement() model.TerminalElement {
 	// copy to avoid mutation effect afterwards
 	output := internal.StringRef(p.Output)
+	tooltip := internal.StringRef(p.Tooltip)
 
 	return &model.TerminalOutput{
-		Output: output,
+		Output:  output,
+		Tooltip: tooltip,
 	}
 
 }

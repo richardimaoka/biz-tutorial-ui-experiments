@@ -32,9 +32,10 @@ type StepEntry2 struct {
 	ModalPosition string `json:"modalPosition,omitempty"`
 
 	// terminal
-	TerminalText string `json:"terminalText,omitempty"`
-	TerminalType string `json:"terminalType,omitempty"`
-	CurrentDir   string `json:"currentDir,omitempty"`
+	TerminalText    string `json:"terminalText,omitempty"`
+	TerminalType    string `json:"terminalType,omitempty"`
+	TerminalTooltip string `json:"terminalTooltip,omitempty"`
+	CurrentDir      string `json:"currentDir,omitempty"`
 
 	// git
 	Commit              string `json:"commit,omitempty"`

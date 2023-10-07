@@ -40,6 +40,10 @@ func (t *Terminal) MarkAllExecuted() {
 	for _, e := range t.elements {
 		if c, ok := e.(*TerminalCommand); ok {
 			c.BeforeExecution = false
+			c.Tooltip = ""
+		}
+		if o, ok := e.(*TerminalOutput); ok {
+			o.Tooltip = ""
 		}
 	}
 }
