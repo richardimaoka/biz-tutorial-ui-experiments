@@ -176,6 +176,7 @@ func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 type TerminalCommand struct {
 	BeforeExecution *bool   `json:"beforeExecution"`
 	Command         *string `json:"command"`
+	Tooltip         *string `json:"tooltip"`
 }
 
 func (TerminalCommand) IsTerminalElement() {}
@@ -185,7 +186,8 @@ type TerminalNode struct {
 }
 
 type TerminalOutput struct {
-	Output *string `json:"output"`
+	Output  *string `json:"output"`
+	Tooltip *string `json:"tooltip"`
 }
 
 func (TerminalOutput) IsTerminalElement() {}

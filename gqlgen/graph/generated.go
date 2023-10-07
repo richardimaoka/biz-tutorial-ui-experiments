@@ -194,6 +194,7 @@ type ComplexityRoot struct {
 	TerminalCommand struct {
 		BeforeExecution func(childComplexity int) int
 		Command         func(childComplexity int) int
+		Tooltip         func(childComplexity int) int
 	}
 
 	TerminalNode struct {
@@ -201,7 +202,8 @@ type ComplexityRoot struct {
 	}
 
 	TerminalOutput struct {
-		Output func(childComplexity int) int
+		Output  func(childComplexity int) int
+		Tooltip func(childComplexity int) int
 	}
 
 	YouTubeColumn struct {
@@ -850,6 +852,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalCommand.Command(childComplexity), true
 
+	case "TerminalCommand.tooltip":
+		if e.complexity.TerminalCommand.Tooltip == nil {
+			break
+		}
+
+		return e.complexity.TerminalCommand.Tooltip(childComplexity), true
+
 	case "TerminalNode.content":
 		if e.complexity.TerminalNode.Content == nil {
 			break
@@ -863,6 +872,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalOutput.Output(childComplexity), true
+
+	case "TerminalOutput.tooltip":
+		if e.complexity.TerminalOutput.Tooltip == nil {
+			break
+		}
+
+		return e.complexity.TerminalOutput.Tooltip(childComplexity), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -2979,6 +2995,8 @@ func (ec *executionContext) fieldContext_NextAction_terminalCommand(ctx context.
 				return ec.fieldContext_TerminalCommand_beforeExecution(ctx, field)
 			case "command":
 				return ec.fieldContext_TerminalCommand_command(ctx, field)
+			case "tooltip":
+				return ec.fieldContext_TerminalCommand_tooltip(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TerminalCommand", field.Name)
 		},
@@ -4915,6 +4933,47 @@ func (ec *executionContext) fieldContext_TerminalCommand_command(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _TerminalCommand_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalCommand_tooltip(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tooltip, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalCommand_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalCommand",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TerminalNode_content(ctx context.Context, field graphql.CollectedField, obj *model.TerminalNode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TerminalNode_content(ctx, field)
 	if err != nil {
@@ -4985,6 +5044,47 @@ func (ec *executionContext) _TerminalOutput_output(ctx context.Context, field gr
 }
 
 func (ec *executionContext) fieldContext_TerminalOutput_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TerminalOutput_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.TerminalOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalOutput_tooltip(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tooltip, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalOutput_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TerminalOutput",
 		Field:      field,
@@ -7924,6 +8024,10 @@ func (ec *executionContext) _TerminalCommand(ctx context.Context, sel ast.Select
 
 			out.Values[i] = ec._TerminalCommand_command(ctx, field, obj)
 
+		case "tooltip":
+
+			out.Values[i] = ec._TerminalCommand_tooltip(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7973,6 +8077,10 @@ func (ec *executionContext) _TerminalOutput(ctx context.Context, sel ast.Selecti
 		case "output":
 
 			out.Values[i] = ec._TerminalOutput_output(ctx, field, obj)
+
+		case "tooltip":
+
+			out.Values[i] = ec._TerminalOutput_tooltip(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

@@ -131,10 +131,12 @@ union TerminalElement = TerminalCommand | TerminalOutput
 type TerminalCommand {
   beforeExecution: Boolean
   command: String
+  tooltip: String
 }
 
 type TerminalOutput {
   output: String
+  tooltip: String
 }
 
 # TerminalNode wraps around TerminalElement, which is friendly for frontend pattern-matching

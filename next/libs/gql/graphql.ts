@@ -226,6 +226,7 @@ export type TerminalCommand = {
   __typename: "TerminalCommand";
   beforeExecution?: Maybe<Scalars["Boolean"]["output"]>;
   command?: Maybe<Scalars["String"]["output"]>;
+  tooltip?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type TerminalElement = TerminalCommand | TerminalOutput;
@@ -238,6 +239,7 @@ export type TerminalNode = {
 export type TerminalOutput = {
   __typename: "TerminalOutput";
   output?: Maybe<Scalars["String"]["output"]>;
+  tooltip?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type YouTubeColumn = Column & {
