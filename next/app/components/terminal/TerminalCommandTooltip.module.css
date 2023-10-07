@@ -1,0 +1,21 @@
+.component {
+  padding: 8px;
+  margin: 8px;
+  background-color: var(--color-menu);
+  color: var(--color-primary-text);
+  font-weight: 400;
+  font-size: 14px;
+
+  /* for :after's top/left to take effect */
+  position: relative;
+}
+
+.component::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent var(--color-menu) transparent;
+}

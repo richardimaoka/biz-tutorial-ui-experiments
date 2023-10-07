@@ -523,11 +523,20 @@ export type TerminalColumn_FragmentFragment = {
     | null;
 } & { " $fragmentName"?: "TerminalColumn_FragmentFragment" };
 
-export type TerminalCommand_FragmentFragment = {
+export type TerminalCommand_FragmentFragment = ({
   __typename: "TerminalCommand";
   command?: string | null;
   beforeExecution?: boolean | null;
-} & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
+} & {
+  " $fragmentRefs"?: {
+    TerminalCommandTooltipFragment: TerminalCommandTooltipFragment;
+  };
+}) & { " $fragmentName"?: "TerminalCommand_FragmentFragment" };
+
+export type TerminalCommandTooltipFragment = {
+  __typename: "TerminalCommand";
+  tooltip?: string | null;
+} & { " $fragmentName"?: "TerminalCommandTooltipFragment" };
 
 export type TerminalComponent_FragmentFragment = ({ __typename: "Terminal" } & {
   " $fragmentRefs"?: {
@@ -1443,6 +1452,25 @@ export const TerminalCurrentDirectory_FragmentFragmentDoc = {
   TerminalCurrentDirectory_FragmentFragment,
   unknown
 >;
+export const TerminalCommandTooltipFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TerminalCommandTooltipFragment, unknown>;
 export const TerminalCommand_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1458,6 +1486,24 @@ export const TerminalCommand_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
         ],
       },
     },
@@ -1548,6 +1594,20 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -1558,6 +1618,10 @@ export const TerminalNodeComponent_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -1611,6 +1675,20 @@ export const TerminalContentsComponent_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -1621,6 +1699,10 @@ export const TerminalContentsComponent_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -1730,6 +1812,20 @@ export const TerminalComponent_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -1740,6 +1836,10 @@ export const TerminalComponent_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -1908,6 +2008,20 @@ export const TerminalColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -1918,6 +2032,10 @@ export const TerminalColumn_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -2553,6 +2671,20 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -2563,6 +2695,10 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -3167,6 +3303,20 @@ export const Carousel_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3177,6 +3327,10 @@ export const Carousel_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -3978,6 +4132,20 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -3988,6 +4156,10 @@ export const VisibleColumn_FragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },
@@ -4866,6 +5038,20 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "TerminalCommandTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "tooltip" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "TerminalCommand_Fragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4876,6 +5062,10 @@ export const PageQueryDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "command" } },
           { kind: "Field", name: { kind: "Name", value: "beforeExecution" } },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "TerminalCommandTooltip" },
+          },
         ],
       },
     },

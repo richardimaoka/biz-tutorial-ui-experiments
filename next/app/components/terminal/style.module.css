@@ -27,16 +27,6 @@
   flex-grow: 1;
 }
 
-.command {
-  padding: 4px;
-  background-color: var(--color-surface);
-  color: var(--color-primary-text);
-}
-
-.command code {
-  font-size: 12px;
-}
-
 .prompt {
   display: inline-block;
   width: 8px;

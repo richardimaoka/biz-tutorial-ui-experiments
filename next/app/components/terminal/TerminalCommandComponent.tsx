@@ -1,6 +1,7 @@
+import { TerminalCommandTooltip } from "./TerminalCommandTooltip";
 import { TerminalCommandTypeIn } from "./TerminalCommandTypeIn";
 import { TerminalPrompt } from "./TerminalPrompt";
-import styles from "./style.module.css";
+import styles from "./TerminalCommandComponent.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
@@ -8,6 +9,7 @@ const fragmentDefinition = graphql(`
   fragment TerminalCommand_Fragment on TerminalCommand {
     command
     beforeExecution
+    ...TerminalCommandTooltip
   }
 `);
 
@@ -34,13 +36,16 @@ export const TerminalCommandComponent = (
   }
 
   return (
-    <pre className={styles.command}>
-      <TerminalPrompt />
-      {fragment.beforeExecution && !props.skipAnimation ? (
-        <TerminalCommandTypeIn command={fragment.command} />
-      ) : (
-        <TerminalCommandStatic command={fragment.command} />
-      )}
-    </pre>
+    <div className={styles.component}>
+      <pre className={styles.command}>
+        <TerminalPrompt />
+        {fragment.beforeExecution && !props.skipAnimation ? (
+          <TerminalCommandTypeIn command={fragment.command} />
+        ) : (
+          <TerminalCommandStatic command={fragment.command} />
+        )}
+      </pre>
+      <TerminalCommandTooltip fragment={fragment} />
+    </div>
   );
 };

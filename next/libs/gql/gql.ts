@@ -61,8 +61,10 @@ const documents = {
     types.TerminalCurrentDirectory_FragmentFragmentDoc,
   "\n  fragment TerminalColumn_Fragment on TerminalColumn {\n    terminal {\n      ...TerminalComponent_Fragment\n    }\n  }\n":
     types.TerminalColumn_FragmentFragmentDoc,
-  "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n":
+  "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n    ...TerminalCommandTooltip\n  }\n":
     types.TerminalCommand_FragmentFragmentDoc,
+  "\n  fragment TerminalCommandTooltip on TerminalCommand {\n    tooltip\n  }\n":
+    types.TerminalCommandTooltipFragmentDoc,
   "\n  fragment TerminalComponent_Fragment on Terminal {\n    ...TerminalCurrentDirectory_Fragment\n    ...TerminalContentsComponent_Fragment\n  }\n":
     types.TerminalComponent_FragmentFragmentDoc,
   "\n  fragment TerminalContentsComponent_Fragment on Terminal {\n    nodes {\n      ...TerminalNodeComponent_Fragment\n    }\n  }\n":
@@ -241,8 +243,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n",
-): (typeof documents)["\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n  }\n"];
+  source: "\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n    ...TerminalCommandTooltip\n  }\n",
+): (typeof documents)["\n  fragment TerminalCommand_Fragment on TerminalCommand {\n    command\n    beforeExecution\n    ...TerminalCommandTooltip\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment TerminalCommandTooltip on TerminalCommand {\n    tooltip\n  }\n",
+): (typeof documents)["\n  fragment TerminalCommandTooltip on TerminalCommand {\n    tooltip\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
