@@ -284,3 +284,26 @@ func Process2(tutorial, repoUrl string) error {
 
 	return nil
 }
+
+func ClearDirectory(dirName string) error {
+	if err := os.RemoveAll(dirName + "/state"); err != nil {
+		return fmt.Errorf("ClearDirectory failed, %s", err)
+	}
+	if err := os.Mkdir(dirName+"/state", 0744); err != nil {
+		return fmt.Errorf("ClearDirectory failed, %s", err)
+	}
+
+	return nil
+}
+
+func WriteResults(dirName string, pages []model.Page) error {
+	for _, p := range pages {
+		filename := fmt.Sprintf("%s/state/%s.json", dirName, *p.Step)
+		err := internal.WriteJsonToFile(p, filename)
+		if err != nil {
+			return fmt.Errorf("WriteResults failed, %s", err)
+		}
+	}
+
+	return nil
+}

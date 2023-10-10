@@ -36,8 +36,6 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-	} else if len(os.Args) > 1 && os.Args[1] == "processing" {
-		process.Process("data/sign-in-with-google-1st-half")
 	} else if len(os.Args) > 1 && os.Args[1] == "commits" {
 		err := commits.Committtssss("gqlgen-getting-started")
 		if err != nil {
