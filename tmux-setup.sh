@@ -18,21 +18,23 @@ tmux split-window -v -t "$SESSION"
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
 tmux send-keys -t "$SESSION:0.3" '(cd next && npm run codegen)' C-m
 
-tmux split-window -v -t "$SESSION" 
-tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.4" '(cd next && npm run compile)' C-m
+# vs code's bottom panel shows TypeScript errors as "Problems"
+# tmux split-window -v -t "$SESSION" 
+# tmux select-layout even-vertical   # to avoid 'no space for new pane' 
+# tmux send-keys -t "$SESSION:0.4" '(cd next && npm run compile)' C-m
+
+# vs code's bottom panel shows TypeScript errors as "Problems"
+# tmux split-window -v -t "$SESSION" 
+# tmux select-layout even-vertical   # to avoid 'no space for new pane' 
+# tmux send-keys -t "$SESSION:0.4" '(cd next && npm run lint-watch)' C-m
 
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.5" '(cd next && npm run lint-watch)' C-m
-
-tmux split-window -v -t "$SESSION" 
-tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.6" '(cd gqlgen && gow -e=go,json,gql -c -v test ./...)' C-m
+tmux send-keys -t "$SESSION:0.4" '(cd gqlgen && gow -e=go,json,gql -c -v test ./...)' C-m
 
 # open editors
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.7" '(cd gqlgen && code .) && (cd next && code .)' C-m
+tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .)' C-m
 
 tmux attach -t "$SESSION"
