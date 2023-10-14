@@ -28,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/[tutorial]",
-    "./jest.setup.ts"
+    "app/[tutorial]"
   ],
   "exclude": ["node_modules"]
 }
