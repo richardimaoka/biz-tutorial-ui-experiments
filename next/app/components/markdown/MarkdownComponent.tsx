@@ -10,14 +10,16 @@ interface Props {
 }
 
 export async function MarkdownComponent(props: Props) {
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkRehype)
-    .use(rehypeReact, {
-      createElement: React.createElement,
-      Fragment: React.Fragment,
-    })
-    .process(props.markdownBody);
+  // console.log("------------------------------------------------------");
+  // console.log(props);
+  // const processed = await unified()
+  //   .use(remarkParse)
+  //   .use(remarkRehype)
+  //   .use(rehypeReact, {
+  //     createElement: React.createElement,
+  //     Fragment: React.Fragment,
+  //   })
+  //   .process(props.markdownBody);
 
-  return <div data-testid="markdown">{props.markdownBody}</div>;
+  return <div data-testid="markdown">{"processed.result"}</div>;
 }
