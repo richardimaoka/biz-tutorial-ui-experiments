@@ -4,13 +4,10 @@ import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlig
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export default function Page() {
-  const codeString = `(num) => num + 1
-(num) => num + 1
-(num) => num + 1
-(num) => num + 1
-`;
+  const codeString = `markdown-it`;
   return (
-    <div>
+    <p style={{ backgroundColor: "white" }}>
+      The killer feature of
       <SyntaxHighlighter
         language="javascript"
         style={docco}
@@ -18,7 +15,7 @@ export default function Page() {
       >
         {codeString}
       </SyntaxHighlighter>
-      <div>add add add</div>
-    </div>
+      is very effective support of
+    </p>
   );
 }
