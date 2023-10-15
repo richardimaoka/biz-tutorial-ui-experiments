@@ -20,12 +20,20 @@ function isSingleCodeElement(
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
 
+const InnerComponent = (props: any) => {
+  console.log("InnerComponent", props.children);
+  return <pre>{props.children}</pre>;
+};
+
 export function CustomElementPre(props: Props) {
   const children = props.children;
-  console.log("CustomPre, called");
+  console.log(
+    `CustomElementPre called for typeof children = ${typeof children}`,
+    children
+  );
   // if (!children) return <></>;
   // if (!isReactNodeArray(children)) return <></>;
   // console.log(children[0]);
   // console.log(children[0].type);
-  return <pre>{children}</pre>;
+  return <InnerComponent>{children}</InnerComponent>;
 }

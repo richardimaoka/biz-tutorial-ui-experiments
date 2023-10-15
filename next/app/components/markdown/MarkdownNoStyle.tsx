@@ -5,6 +5,7 @@ import { ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
+import { CustomElementCode } from "./CustomElementCode";
 import { CustomElementPre } from "./CustomElementPre";
 
 interface Props {
@@ -20,6 +21,7 @@ export async function MarkdownNoStyle(props: Props) {
     // Directly placing this `components` into `use(rehypeReact, {...})` will cause an unfriendly type error,
     // because TypeScript unexpectedly thinks the second argumetn to `use(rehypeReact, {...})` became boolean due to function overload
     pre: CustomElementPre,
+    // code: CustomElementCode,
     // a: CustomLink,
   };
 
