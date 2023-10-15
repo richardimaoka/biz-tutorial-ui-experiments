@@ -5,9 +5,9 @@ interface Props {
   markdownBody: string;
 }
 
-export function MarkdownDefaultStyle(props: Props) {
+export async function MarkdownDefaultStyle(props: Props) {
   return (
-    <div className={styles.component}>
+    <div className={styles.defaultStyle}>
       <MarkdownNoStyle markdownBody={props.markdownBody} />
     </div>
   );
