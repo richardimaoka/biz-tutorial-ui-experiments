@@ -1,26 +1,17 @@
-import React, { DetailedHTMLProps, HTMLAttributes } from "react";
+import React from "react";
 
 import rehypeReact from "rehype-react";
 import { ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
+import { CustomElementPre } from "./CustomElementPre";
 
 interface Props {
   markdownBody: string;
 }
 
 // type CCProps = any;
-type CCProps = DetailedHTMLProps<
-  HTMLAttributes<HTMLPreElement>,
-  HTMLPreElement
->;
-
-const CustomFC: React.FC<CCProps> = (props) => {
-  const value = props.children?.valueOf();
-  console.log(value);
-  return <pre>{props.children}</pre>;
-};
 
 export async function MarkdownNoStyle(props: Props) {
   // Custom React component mappings
@@ -28,7 +19,8 @@ export async function MarkdownNoStyle(props: Props) {
     //              ComponentsWithoutNodeOptions["components"] is a trick to get friendly type error message for `components`.
     // Directly placing this `components` into `use(rehypeReact, {...})` will cause an unfriendly type error,
     // because TypeScript unexpectedly thinks the second argumetn to `use(rehypeReact, {...})` became boolean due to function overload
-    pre: CustomFC,
+    pre: CustomElementPre,
+    // a: CustomLink,
   };
 
   const processed = await unified()
