@@ -1,6 +1,6 @@
 here is the code:
 
-```js
+```javascript
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 const Component = () => {
@@ -12,3 +12,5 @@ const Component = () => {
   );
 };
 ```
+
+here is the inline code `var a: []string` in Go.

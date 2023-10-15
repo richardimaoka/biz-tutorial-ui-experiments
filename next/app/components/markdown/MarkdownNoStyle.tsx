@@ -21,7 +21,7 @@ export async function MarkdownNoStyle(props: Props) {
     // Directly placing this `components` into `use(rehypeReact, {...})` will cause an unfriendly type error,
     // because TypeScript unexpectedly thinks the second argumetn to `use(rehypeReact, {...})` became boolean due to function overload
     pre: CustomElementPre,
-    // code: CustomElementCode,
+    code: CustomElementCode,
     // a: CustomLink,
   };
 

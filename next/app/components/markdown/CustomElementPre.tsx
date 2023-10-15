@@ -1,39 +1,9 @@
-import { DetailedHTMLProps, HTMLAttributes, ReactElement } from "react";
-
-function isReactNodeArray(children: any): children is ReactElement[] {
-  return (
-    typeof children == "object" &&
-    children.isArray && // isArray() func exists
-    children.isArray()
-  );
-}
-
-function isSingleCodeElement(
-  children: any
-): children is JSX.IntrinsicElements["code"] {
-  return (
-    typeof children == "object" &&
-    children.isArray && // isArray() func exists
-    children.isArray()
-  );
-}
-
-type Props = DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
-
-const InnerComponent = (props: any) => {
-  console.log("InnerComponent", props.children);
-  return <pre>{props.children}</pre>;
-};
+type Props = JSX.IntrinsicElements["pre"];
 
 export function CustomElementPre(props: Props) {
   const children = props.children;
-  console.log(
-    `CustomElementPre called for typeof children = ${typeof children}`,
-    children
-  );
-  // if (!children) return <></>;
-  // if (!isReactNodeArray(children)) return <></>;
-  // console.log(children[0]);
-  // console.log(children[0].type);
-  return <InnerComponent>{children}</InnerComponent>;
+
+  // since <pre> is added by react-syntax-highlight in CustomCodeElement,
+  // do not add outer <pre></pre> here
+  return <>{children}</>;
 }
