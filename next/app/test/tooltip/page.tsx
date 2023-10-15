@@ -6,5 +6,11 @@ export default async function Page() {
     process.cwd() + "/app/test/tooltip/tooltip.md",
     "utf-8"
   );
-  return <Tooltip body={md} />;
+  return (
+    <div
+      style={{ height: "100%", backgroundColor: "grey", paddingTop: "100px" }}
+    >
+      <Tooltip body={md} />
+    </div>
+  );
 }
