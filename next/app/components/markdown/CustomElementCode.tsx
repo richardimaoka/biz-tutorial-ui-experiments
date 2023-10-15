@@ -20,7 +20,7 @@ export async function CustomElementCode(props: Props) {
   ) : (
     // inline code snippet
     <SyntaxHighlighter
-      customStyle={{ display: "inline" }}
+      customStyle={{ display: "inline", padding: "0" }}
       style={a11yDark}
       PreTag={"span"}
     >

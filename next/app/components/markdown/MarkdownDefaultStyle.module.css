@@ -65,24 +65,10 @@
   color: var(--color-primary-text);
 }
 
-.defaultStyle code {
-  font-family: "Roboto Mono";
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 18px;
-  padding: 1px 4px;
-  color: var(--color-primary-text);
-}
-
 .defaultStyle pre {
   margin: 16px 0px;
   padding: 8px;
   background-color: var(--color-sourcecode-surface-openfile);
-}
-
-.defaultStyle pre > code {
-  font-size: 14px;
-  line-height: 20px;
 }
 
 .defaultStyle blockquote {

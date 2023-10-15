@@ -1,4 +1,4 @@
-import { MarkdownNoStyle } from "../../components/markdown/MarkdownNoStyle";
+import { MarkdownDefaultStyle } from "../../components/markdown/MarkdownDefaultStyle";
 import { promises as fs } from "fs";
 
 export default async function Page() {
@@ -6,5 +6,5 @@ export default async function Page() {
     process.cwd() + "/app/test/markdown/sample-js.md",
     "utf-8"
   );
-  return <MarkdownNoStyle markdownBody={md} />;
+  return <MarkdownDefaultStyle markdownBody={md} />;
 }
