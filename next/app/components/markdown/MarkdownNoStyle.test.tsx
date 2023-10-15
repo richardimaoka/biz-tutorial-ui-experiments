@@ -1,12 +1,12 @@
 import { expect, test } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MarkdownComponent } from "./MarkdownComponent";
+import { MarkdownNoStyle } from "./MarkdownNoStyle";
 
 test("markdown comoponent rendered", async () => {
   // Trick to test async server component with react-testing library
-  const Component = await MarkdownComponent({ markdownBody: "bodybody" });
+  const Component = await MarkdownNoStyle({ markdownBody: "bodybody" });
   // you can't do `render(<MarkdownComponent />)`
   render(Component);
 
-  expect(screen.getByTestId("markdown")).toBeDefined();
+  expect(screen.getByText("bodybody")).toBeDefined();
 });

@@ -9,7 +9,7 @@ interface Props {
   markdownBody: string;
 }
 
-export async function MarkdownComponent(props: Props) {
+export async function MarkdownNoStyle(props: Props) {
   const processed = await unified()
     .use(remarkParse)
     .use(remarkRehype)
