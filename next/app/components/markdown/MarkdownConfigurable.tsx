@@ -8,6 +8,7 @@ import { unified } from "unified";
 
 interface Props {
   markdownBody: string;
+  className?: string;
   components?: ComponentsWithoutNodeOptions["components"];
 }
 
@@ -27,5 +28,9 @@ export async function MarkdownConfigurable(props: Props) {
     })
     .process(props.markdownBody);
 
-  return <div data-testid="markdown">{processed.result}</div>;
+  return (
+    <div className={props.className} data-testid="markdown">
+      {processed.result}
+    </div>
+  );
 }

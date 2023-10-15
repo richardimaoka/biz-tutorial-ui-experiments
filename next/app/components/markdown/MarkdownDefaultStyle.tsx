@@ -20,11 +20,10 @@ export async function MarkdownDefaultStyle(props: Props) {
   };
 
   return (
-    <div className={styles.defaultStyle}>
-      <MarkdownConfigurable
-        components={components}
-        markdownBody={props.markdownBody}
-      />
-    </div>
+    <MarkdownConfigurable
+      components={components}
+      className={styles.defaultStyle}
+      markdownBody={props.markdownBody}
+    />
   );
 }
