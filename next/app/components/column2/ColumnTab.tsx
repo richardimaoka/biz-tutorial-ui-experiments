@@ -1,19 +1,17 @@
 "use client";
 
-import { TerminalIcon } from "../icons/TerminalIcon";
 import styles from "./ColumnTab.module.css";
 import { useRouter } from "next/navigation";
+import { TabProperties } from "./tabTypes";
+import { ColumnTabIcon } from "./ColumnTabIcon";
 
-export interface Props {
-  isSelected: boolean;
-  name: string;
-  href: string;
-}
+type Props = TabProperties;
 
 export function ColumnTab(props: Props) {
   const router = useRouter();
 
   function onClick() {
+    // need to use router.replace instaed of <Link> not to mess up the browser history
     router.replace(props.href);
   }
 
@@ -23,7 +21,7 @@ export function ColumnTab(props: Props) {
   return (
     <button className={outerClassName} onClick={onClick}>
       <span className={styles.smartphone}>
-        <TerminalIcon />
+        <ColumnTabIcon name={props.name} />
       </span>
       <span className={styles.desktop}>{props.name}</span>
     </button>

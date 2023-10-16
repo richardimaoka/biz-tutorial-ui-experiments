@@ -11,6 +11,7 @@ export function PrevButton(props: Props) {
   const router = useRouter();
 
   function onClick() {
+    // need to use router.replace instaed of <Link> not to mess up the browser history
     router.replace(props.href);
   }
 
