@@ -10,7 +10,9 @@ export default async function Page() {
 
   return (
     <Column tabs={tabs} selectColumn="SourceCode">
-      <div style={{ backgroundColor: "white" }} />
+      <div style={{ backgroundColor: "white", height: "100%" }} />
+      <div style={{ backgroundColor: "white", height: "100%" }} />
+      <div style={{ backgroundColor: "white", height: "100%" }} />
     </Column>
   );
 }
