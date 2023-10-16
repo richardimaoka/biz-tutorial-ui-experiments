@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/app/components/column2/ColumnHeader";
+import { TutorialHeader } from "@/app/components/column2/TutorialHeader";
 import { ColumnName } from "@/app/components/column2/definitions";
 
 export default async function Page() {
@@ -19,7 +19,7 @@ export default async function Page() {
 
   return (
     <div>
-      <ColumnHeader tabs={tabs} selectTab="Browser" />
+      <TutorialHeader tabs={tabs} selectTab="Browser" />
     </div>
   );
 }

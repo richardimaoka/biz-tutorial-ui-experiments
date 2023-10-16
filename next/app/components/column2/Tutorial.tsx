@@ -1,7 +1,7 @@
 import { Carousel } from "./Carousel";
 import styles from "./Tutorial.module.css";
 import { ColumnContents } from "./ColumnContents";
-import { ColumnHeader } from "./ColumnHeader";
+import { TutorialHeader } from "./TutorialHeader";
 import { ColumnName } from "./definitions";
 
 interface Props {
@@ -17,10 +17,10 @@ interface Props {
 
 export async function Tutorial(props: Props) {
   return (
-    //  Column consists of two parts,ColumnHeader and Carousel
+    //  Column consists of two parts,TutorialHeader and Carousel
     <div className={styles.component}>
       <div className={styles.headerHeight}>
-        <ColumnHeader tabs={props.tabs} selectTab={props.selectColumn} />
+        <TutorialHeader tabs={props.tabs} selectTab={props.selectColumn} />
       </div>
       <div className={styles.carouselHeight}>
         <Carousel currentIndex={0}>
