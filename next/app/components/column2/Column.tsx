@@ -17,10 +17,10 @@ interface Props {
 export async function Column(props: Props) {
   return (
     <div className={styles.component}>
-      <div className={styles.header}>
+      <div className={styles.headerHeight}>
         <ColumnHeader tabs={props.tabs} selectTab={props.selectColumn} />
       </div>
-      <div className={styles.contents}>
+      <div className={styles.contentsHeight}>
         <ColumnContents>{props.children}</ColumnContents>
       </div>
     </div>

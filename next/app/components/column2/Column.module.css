@@ -17,10 +17,10 @@
   }
 }
 
-.header {
+.headerHeight {
   flex-grow: 0;
 }
 
-.contents {
+.contentsHeight {
   flex-grow: 1;
 }
