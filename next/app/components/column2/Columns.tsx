@@ -1,4 +1,4 @@
-import { Column } from "./Column";
+import { Column } from "./column/Column";
 import styles from "./Columns.module.css";
 
 interface Props {}
