@@ -1,18 +1,24 @@
 .component {
-  /* sizing */
-  padding: 8px;
-
   /* color and styles */
   background-color: var(--color-theme-transparent-white);
   color: var(--color-primary-text);
-  border-style: none;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.selected {
+  /* sizing */
+  padding: 4px 8px 8px 8px;
+  /* border */
+  border: solid 1px var(--color-primary-text);
+  border-bottom: none;
+}
+
+.unselected {
+  /* sizing */
+  padding: 4px 8px;
 }
 
 @media (max-width: 768px) {
-  .component {
-    padding: 4px 8px;
-  }
-
   .smartphone {
     font-size: 12px;
   }

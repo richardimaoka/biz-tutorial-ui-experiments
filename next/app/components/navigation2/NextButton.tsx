@@ -17,6 +17,7 @@ export function NextButton(props: Props) {
   return (
     <button className={styles.component} onClick={onClick}>
       <div className={styles.smartphone}>
+        <div>next</div>
         <ChevronDownIcon />
       </div>
       <div className={styles.desktop}>
