@@ -5,6 +5,18 @@
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .component {
+    width: 100svw;
+  }
+}
+
+@media (min-width: 769px) {
+  .component {
+    width: 768px;
+  }
+}
+
 .header {
   flex-grow: 0;
 }
