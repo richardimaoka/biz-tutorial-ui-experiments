@@ -1,5 +1,13 @@
 .component {
+  /* flex layout */
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* padding */
+  padding: 13px 10px 0px 8px;
+
+  /* color and styles */
+  border-bottom: 1px solid var(--common-primary-text, #fff);
+  background: var(--common-background, #212121);
 }

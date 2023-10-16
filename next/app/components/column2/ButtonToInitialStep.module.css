@@ -1,3 +1,4 @@
 .component {
   display: block;
+  color: var(--color-primary-text);
 }
