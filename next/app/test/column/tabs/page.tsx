@@ -1,5 +1,5 @@
 import { ColumnTabs } from "@/app/components/column2/ColumnTabs";
-import { ColumnName } from "@/app/components/column2/tabTypes";
+import { ColumnName } from "@/app/components/column2/definitions";
 
 export default async function Page() {
   const tabs = [

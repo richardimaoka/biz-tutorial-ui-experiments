@@ -1,5 +1,5 @@
-import { Column } from "@/app/components/column2/Column";
-import { ColumnName } from "@/app/components/column2/tabTypes";
+import { Tutorial } from "@/app/components/column2/Tutorial";
+import { ColumnName } from "@/app/components/column2/definitions";
 
 export default async function Page() {
   const tabs = [
@@ -9,10 +9,10 @@ export default async function Page() {
   ];
 
   return (
-    <Column tabs={tabs} selectColumn="SourceCode">
+    <Tutorial tabs={tabs} selectColumn="SourceCode">
       <div
         style={{ backgroundColor: "white", height: "90%", margin: "100px" }}
       />
-    </Column>
+    </Tutorial>
   );
 }

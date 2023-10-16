@@ -1,8 +1,8 @@
+import { Carousel } from "./Carousel";
+import styles from "./Tutorial.module.css";
 import { ColumnContents } from "./ColumnContents";
 import { ColumnHeader } from "./ColumnHeader";
 import { ColumnName } from "./definitions";
-import styles from "./Column.module.css";
-import { Carousel } from "./Carousel";
 
 interface Props {
   selectColumn: ColumnName;
@@ -15,7 +15,7 @@ interface Props {
   // skipAnimation?: boolean;
 }
 
-export async function Column(props: Props) {
+export async function Tutorial(props: Props) {
   return (
     //  Column consists of two parts,ColumnHeader and Carousel
     <div className={styles.component}>
