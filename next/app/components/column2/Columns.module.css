@@ -1,0 +1,9 @@
+.component {
+  display: flex;
+  height: 100%;
+  row-gap: 20px;
+}
+
+.eachColumn {
+  height: 100%;
+}

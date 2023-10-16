@@ -7,6 +7,7 @@ interface Props {
 }
 
 export async function Carousel(props: Props) {
+  // TODO: might throw on currentIndex > maxIndex, to render error route
   return (
     <div className={styles.component}>
       <div

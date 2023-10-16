@@ -1,6 +1,6 @@
 import { Carousel } from "./Carousel";
 import styles from "./Tutorial.module.css";
-import { ColumnContents } from "./ColumnContents";
+import { Columns } from "./Columns";
 import { TutorialHeader } from "./TutorialHeader";
 import { ColumnName } from "./definitions";
 
@@ -23,21 +23,8 @@ export async function Tutorial(props: Props) {
         <TutorialHeader tabs={props.tabs} selectTab={props.selectColumn} />
       </div>
       <div className={styles.carouselHeight}>
-        <Carousel currentIndex={0}>
-          <div style={{ display: "flex", height: "100%" }}>
-            <ColumnContents>
-              <div>0</div>
-            </ColumnContents>
-            <ColumnContents>
-              <div>1</div>
-            </ColumnContents>
-            <ColumnContents>
-              <div>2</div>
-            </ColumnContents>
-            <ColumnContents>
-              <div>3</div>
-            </ColumnContents>
-          </div>
+        <Carousel currentIndex={8}>
+          <Columns />
         </Carousel>
       </div>
     </div>
