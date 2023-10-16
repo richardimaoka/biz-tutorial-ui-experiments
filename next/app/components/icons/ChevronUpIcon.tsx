@@ -5,7 +5,7 @@ import styles from "./style.module.css";
 export function ChevronUpIcon() {
   return (
     <div className={styles.icon}>
-      <FontAwesomeIcon icon={faChevronUp} />
+      <FontAwesomeIcon fixedWidth icon={faChevronUp} />
     </div>
   );
 }
