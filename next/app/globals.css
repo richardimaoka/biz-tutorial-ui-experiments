@@ -133,6 +133,7 @@ a {
 button {
   border: none;
   background: none;
+  padding: 0;
 }
 
 code {
