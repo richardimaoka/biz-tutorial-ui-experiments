@@ -2,6 +2,6 @@ interface Props {
   command: string;
 }
 
-export function CommandStatic(props: Props) {
+export function CommandStringStatic(props: Props) {
   return <code>{props.command}</code>;
 }

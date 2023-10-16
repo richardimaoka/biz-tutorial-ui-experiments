@@ -1,14 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FlickeringTrail } from "./FlickeringTrail";
-import styles from "./CommandAnimation.module.css";
-import { CommandPrompt } from "./CommandPrompt";
 
 interface Props {
   command: string;
 }
 
-export function CommandAnimation(props: Props) {
+export function CommandStringAnimation(props: Props) {
   const [writtenLength, setWrittenLength] = useState(0);
   const command = props.command;
 
@@ -26,14 +24,9 @@ export function CommandAnimation(props: Props) {
   });
 
   return (
-    <div className={styles.component}>
-      <pre>
-        <CommandPrompt />
-        <code>
-          {command?.substring(0, writtenLength)}
-          {writtenLength >= command?.length && <FlickeringTrail />}
-        </code>
-      </pre>
-    </div>
+    <code>
+      {command?.substring(0, writtenLength)}
+      {writtenLength >= command?.length && <FlickeringTrail />}
+    </code>
   );
 }
