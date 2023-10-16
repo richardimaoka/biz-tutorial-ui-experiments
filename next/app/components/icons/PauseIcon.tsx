@@ -1,11 +1,11 @@
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faPause } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./style.module.css";
 
-export function PlayIcon() {
+export function PauseIcon() {
   return (
     <div className={styles.icon}>
-      <FontAwesomeIcon fixedWidth icon={faPlay} />
+      <FontAwesomeIcon fixedWidth icon={faPause} />
     </div>
   );
 }
