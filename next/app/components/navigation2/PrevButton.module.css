@@ -1,4 +1,4 @@
-.prev {
+.component {
   /* sizing */
   padding: 8px;
 
@@ -9,24 +9,25 @@
 }
 
 @media (max-width: 768px) {
-  .next {
+  .component {
     padding: 4px 8px;
   }
-  .text.smartphone {
-    font-size: 10px;
+
+  .smartphone {
+    font-size: 12px;
   }
 
-  .text.desktop {
+  .desktop {
     display: none;
   }
 }
 
 @media (min-width: 769px) {
-  .text.smartphone {
+  .smartphone {
     display: none;
   }
 
-  .text.desktop {
+  .desktop {
     font-size: 16px;
   }
 }

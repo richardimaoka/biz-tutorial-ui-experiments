@@ -1,25 +1,29 @@
-import Link from "next/link";
-import { ChevronDownIcon } from "../icons/ChevronDownIcon";
+"use client";
+import { useRouter } from "next/navigation";
+import { ChevronUpIcon } from "../icons/ChevronUpIcon";
 import styles from "./PrevButton.module.css";
 
-interface PrevButtonProps {
+interface Props {
   href: string;
 }
 
-export const PrevButton = ({ href }: PrevButtonProps) => (
-  <Link
-    href={href}
-    replace /* TODO: replace parameter not working.... it adds a new entry in Chrome's history*/
-  >
-    <button className={styles.prev}>
-      <div className={`${styles.text} ${styles.smartphone}`}>
+export function PrevButton(props: Props) {
+  const router = useRouter();
+
+  function onClick() {
+    router.replace(props.href);
+  }
+
+  return (
+    <button className={styles.component} onClick={onClick}>
+      <div className={styles.smartphone}>
         <div>prev</div>
-        <ChevronDownIcon />
+        <ChevronUpIcon />
       </div>
-      <div className={`${styles.text} ${styles.desktop}`}>
-        <div>Prev</div>
-        <div>Step</div>
+      <div className={styles.desktop}>
+        <ChevronUpIcon />
+        <div>PREV</div>
       </div>
     </button>
-  </Link>
-);
+  );
+}
