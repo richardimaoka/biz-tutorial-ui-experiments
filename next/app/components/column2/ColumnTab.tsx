@@ -2,12 +2,37 @@
 
 import styles from "./ColumnTab.module.css";
 import { useRouter } from "next/navigation";
-import { TabProperties } from "./tabTypes";
+import { TabName } from "./tabTypes";
 import { ColumnTabIcon } from "./ColumnTabIcon";
 
-type Props = TabProperties;
+function displayName(name: TabName): string {
+  switch (name) {
+    case "BackgroundImage":
+      return "Background Image";
+    case "Browser":
+      return "Browser";
+    case "DevTools":
+      return "Dev Tools";
+    case "ImageDescription":
+      return "Image Description";
+    case "Markdown":
+      return "Markdown";
+    case "SourceCode":
+      return "Source Code";
+    case "Terminal":
+      return "Terminal";
+    case "YouTube":
+      return "YouTube";
+  }
+}
 
-export function ColumnTab(props: Props) {
+export type ColumnTabProps = {
+  isSelected?: boolean;
+  name: TabName;
+  href: string;
+};
+
+export function ColumnTab(props: ColumnTabProps) {
   const router = useRouter();
 
   function onClick() {
@@ -17,13 +42,14 @@ export function ColumnTab(props: Props) {
 
   const selectStyle = props.isSelected ? styles.selected : styles.unselected;
   const outerClassName = `${styles.component} ${selectStyle}`;
+  const tabName = displayName(props.name);
 
   return (
     <button className={outerClassName} onClick={onClick}>
       <span className={styles.smartphone}>
         <ColumnTabIcon name={props.name} />
       </span>
-      <span className={styles.desktop}>{props.name}</span>
+      <span className={styles.desktop}>{tabName}</span>
     </button>
   );
 }

@@ -7,9 +7,3 @@ export type TabName =
   | "YouTube"
   | "Browser"
   | "DevTools";
-
-export type TabProperties = {
-  isSelected: boolean;
-  name: TabName;
-  href: string;
-};
