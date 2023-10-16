@@ -1,9 +1,10 @@
 import { Carousel } from "@/app/components/column2/Carousel";
+import { columnWidthPx } from "@/app/components/column2/definitions";
 
 export default async function Page() {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
-    <Carousel fromIndex={0} toIndex={10}>
+    <Carousel currentIndex={1}>
       <div
         style={{
           display: "flex",
@@ -14,7 +15,7 @@ export default async function Page() {
             key={n}
             style={{
               backgroundColor: "white",
-              width: "400px",
+              width: `${columnWidthPx}px`,
               height: "200px",
               display: "flex",
               justifyContent: "center",
