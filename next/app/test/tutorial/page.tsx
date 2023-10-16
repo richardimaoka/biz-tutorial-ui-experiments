@@ -1,5 +1,5 @@
-import { Tutorial } from "@/app/components/column2/Tutorial";
-import { ColumnName } from "@/app/components/column2/definitions";
+import { Tutorial } from "@/app/components/tutorial/Tutorial";
+import { ColumnName } from "@/app/components/tutorial/definitions";
 
 export default async function Page() {
   const tabs = [

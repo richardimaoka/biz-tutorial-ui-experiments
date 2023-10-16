@@ -1,5 +1,5 @@
-import { Carousel } from "@/app/components/column2/Carousel";
-import { columnWidthPx } from "@/app/components/column2/definitions";
+import { Carousel } from "@/app/components/tutorial/Carousel";
+import { columnWidthPx } from "@/app/components/tutorial/definitions";
 
 export default async function Page() {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
