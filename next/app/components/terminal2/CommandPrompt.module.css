@@ -1,0 +1,7 @@
+.component {
+  display: inline-block;
+  width: 8px;
+  font-size: 12px;
+  margin-right: 2px;
+  color: var(--color-prompt);
+}

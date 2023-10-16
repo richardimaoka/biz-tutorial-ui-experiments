@@ -1,9 +1,9 @@
-import { CommandTypeIn } from "@/app/components/terminal2/CommandTypeIn";
+import { CommandAnimation } from "@/app/components/terminal2/CommandAnimation";
 
 export default async function Page() {
   return (
     <div>
-      <CommandTypeIn command="npx live-server" />
+      <CommandAnimation command="npx live-server" />
     </div>
   );
 }
