@@ -11,3 +11,15 @@
   border-bottom: 1px solid var(--common-primary-text, #fff);
   background: var(--common-background, #212121);
 }
+
+@media (max-width: 768px) {
+  .component {
+    width: 100svw;
+  }
+}
+
+@media (min-width: 769px) {
+  .component {
+    width: 768px;
+  }
+}

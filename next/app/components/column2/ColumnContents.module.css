@@ -1,3 +1,8 @@
+.component {
+  height: 100%;
+  background-color: var(--color-background);
+}
+
 @media (max-width: 768px) {
   .component {
     width: 100svw;
