@@ -11,7 +11,7 @@ interface Props {
   }[];
 }
 
-export function ColumnHeader(props: Props) {
+export async function ColumnHeader(props: Props) {
   return (
     <div className={styles.component}>
       <ColumnTabs tabs={props.tabs} selectTab={props.selectTab} />

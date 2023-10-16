@@ -14,7 +14,7 @@ interface Props {
   // skipAnimation?: boolean;
 }
 
-export function Column(props: Props) {
+export async function Column(props: Props) {
   return (
     <div className={styles.component}>
       <div className={styles.header}>

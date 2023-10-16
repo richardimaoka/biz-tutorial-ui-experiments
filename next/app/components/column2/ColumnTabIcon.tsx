@@ -9,7 +9,7 @@ interface Props {
   name: ColumnName;
 }
 
-export function ColumnTabIcon({ name }: Props): JSX.Element {
+export async function ColumnTabIcon({ name }: Props): Promise<JSX.Element> {
   switch (name) {
     case "BackgroundImage":
       return <ChromeIcon />;
