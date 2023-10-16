@@ -1,15 +1,20 @@
 import { ButtonToInitialStep } from "./ButtonToInitialStep";
-import { ColumnTabProps } from "./ColumnTab";
 import { ColumnTabs } from "./ColumnTabs";
+import { TabName } from "./tabTypes";
+import styles from "./ColumnHeader.module.css";
 
 interface Props {
-  tabs: ColumnTabProps[];
+  selectTab: TabName;
+  tabs: {
+    name: TabName;
+    href: string;
+  }[];
 }
 
 export function ColumnHeader(props: Props) {
   return (
-    <div>
-      <ColumnTabs tabs={props.tabs} />
+    <div className={styles.component}>
+      <ColumnTabs tabs={props.tabs} selectTab={props.selectTab} />
       <ButtonToInitialStep href="" />
     </div>
   );

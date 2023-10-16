@@ -1,8 +1,13 @@
 import styles from "./ColumnTabs.module.css";
-import { ColumnTab, ColumnTabProps } from "./ColumnTab";
+import { ColumnTab } from "./ColumnTab";
+import { TabName } from "./tabTypes";
 
 type Props = {
-  tabs: ColumnTabProps[];
+  tabs: {
+    name: TabName;
+    href: string;
+  }[];
+  selectTab: TabName;
 };
 
 export async function ColumnTabs(props: Props) {
@@ -12,7 +17,7 @@ export async function ColumnTabs(props: Props) {
         <ColumnTab
           key={x.name}
           href={x.href}
-          isSelected={x.isSelected}
+          isSelected={x.name === props.selectTab}
           name={x.name}
         />
       ))}

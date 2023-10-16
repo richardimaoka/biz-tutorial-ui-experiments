@@ -26,13 +26,13 @@ function displayName(name: TabName): string {
   }
 }
 
-export type ColumnTabProps = {
+export type Props = {
   isSelected?: boolean;
   name: TabName;
   href: string;
 };
 
-export function ColumnTab(props: ColumnTabProps) {
+export function ColumnTab(props: Props) {
   const router = useRouter();
 
   function onClick() {

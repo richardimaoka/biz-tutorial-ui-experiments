@@ -1,18 +1,25 @@
-import { ColumnTabs } from "@/app/components/column2/ColumnTabs";
-import { ColumnTabProps } from "@/app/components/column2/ColumnTab";
-import { ButtonToInitialStep } from "@/app/components/column2/ButtonToInitialStep";
+import { ColumnHeader } from "@/app/components/column2/ColumnHeader";
+import { TabName } from "@/app/components/column2/tabTypes";
 
 export default async function Page() {
-  const tabs: ColumnTabProps[] = [
-    { href: "/", isSelected: true, name: "Terminal" },
-    { href: "/", isSelected: false, name: "SourceCode" },
-    { href: "/", name: "Browser" },
+  const tabs = [
+    { href: "/", name: "Terminal" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "Terminal" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "Terminal" as TabName },
+    { href: "/", name: "Browser" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "Terminal" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "Terminal" as TabName },
+    { href: "/", name: "SourceCode" as TabName },
   ];
 
   return (
     <div>
-      <ColumnTabs tabs={tabs} />
-      <ButtonToInitialStep href="" />
+      <ColumnHeader tabs={tabs} selectTab="Browser" />
     </div>
   );
 }

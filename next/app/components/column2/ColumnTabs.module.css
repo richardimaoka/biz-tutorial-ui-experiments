@@ -1,5 +1,9 @@
 .component {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  column-gap: 8px;
+
+  /* wrap settings*/
+  row-gap: 16px;
+  flex-wrap: wrap;
 }
