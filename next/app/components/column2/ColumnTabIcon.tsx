@@ -1,4 +1,4 @@
-import { ColumnName } from "./tabTypes";
+import { ColumnName } from "./definitions";
 import { ChromeIcon } from "../icons/ChromeIcon";
 import { FileLinesIcon } from "../icons/FileLinesIcon";
 import { SourceCodeIcon } from "../icons/SourceCodeIcon";

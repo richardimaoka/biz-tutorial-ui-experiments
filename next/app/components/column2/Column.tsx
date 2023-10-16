@@ -1,6 +1,6 @@
 import { ColumnContents } from "./ColumnContents";
 import { ColumnHeader } from "./ColumnHeader";
-import { ColumnName } from "./tabTypes";
+import { ColumnName } from "./definitions";
 import styles from "./Column.module.css";
 
 interface Props {

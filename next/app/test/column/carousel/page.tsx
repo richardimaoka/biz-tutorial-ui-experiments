@@ -3,7 +3,7 @@ import { Carousel } from "@/app/components/column2/Carousel";
 export default async function Page() {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
-    <Carousel fromIndex={0} toIndex={0}>
+    <Carousel fromIndex={0} toIndex={10}>
       <div
         style={{
           display: "flex",

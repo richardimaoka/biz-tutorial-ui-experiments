@@ -7,3 +7,5 @@ export type ColumnName =
   | "YouTube"
   | "Browser"
   | "DevTools";
+
+export const columnWidthPx = 768;
