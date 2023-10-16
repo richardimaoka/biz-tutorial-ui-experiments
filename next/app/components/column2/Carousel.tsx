@@ -6,25 +6,19 @@ interface Props {
   currentIndex: number;
 }
 
-export function Carousel(props: Props) {
-  // Carousel is a client component, having client-side state
-  // const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  // React.useEffect(() => {
-  //   setCurrentIndex(props.currentIndex);
-  // }, [props.currentIndex]);
-
-  // Supported Pattern: Passing Server Components to Client Components as Props:
-  //   https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#supported-pattern-passing-server-components-to-client-components-as-props
+export async function Carousel(props: Props) {
   return (
     <div className={styles.component}>
       <div
-        // carousel slider
+        className={styles.carouselSlider}
         style={{
+          // simple props can make client-side animations!!
           transition: "transform 0.3s ease-in-out",
           transform: `translate(-${columnWidthPx * props.currentIndex}px)`,
         }}
       >
+        {/* props.children should be wider-than <Carousel> */}
+        {/* props.children should be an array */}
         {props.children}
       </div>
     </div>

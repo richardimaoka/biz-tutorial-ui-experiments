@@ -2,6 +2,7 @@ import { ColumnContents } from "./ColumnContents";
 import { ColumnHeader } from "./ColumnHeader";
 import { ColumnName } from "./definitions";
 import styles from "./Column.module.css";
+import { Carousel } from "./Carousel";
 
 interface Props {
   selectColumn: ColumnName;
@@ -16,12 +17,28 @@ interface Props {
 
 export async function Column(props: Props) {
   return (
+    //  Column consists of two parts,ColumnHeader and Carousel
     <div className={styles.component}>
       <div className={styles.headerHeight}>
         <ColumnHeader tabs={props.tabs} selectTab={props.selectColumn} />
       </div>
-      <div className={styles.contentsHeight}>
-        <ColumnContents>{props.children}</ColumnContents>
+      <div className={styles.carouselHeight}>
+        <Carousel currentIndex={0}>
+          <div style={{ display: "flex", height: "100%" }}>
+            <ColumnContents>
+              <div>0</div>
+            </ColumnContents>
+            <ColumnContents>
+              <div>1</div>
+            </ColumnContents>
+            <ColumnContents>
+              <div>2</div>
+            </ColumnContents>
+            <ColumnContents>
+              <div>3</div>
+            </ColumnContents>
+          </div>
+        </Carousel>
       </div>
     </div>
   );
