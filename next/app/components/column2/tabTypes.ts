@@ -1,4 +1,4 @@
-export type TabName =
+export type ColumnName =
   | "Terminal"
   | "SourceCode"
   | "ImageDescription"

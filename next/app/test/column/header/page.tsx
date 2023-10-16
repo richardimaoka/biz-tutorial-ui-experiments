@@ -1,20 +1,20 @@
 import { ColumnHeader } from "@/app/components/column2/ColumnHeader";
-import { TabName } from "@/app/components/column2/tabTypes";
+import { ColumnName } from "@/app/components/column2/tabTypes";
 
 export default async function Page() {
   const tabs = [
-    { href: "/", name: "Terminal" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
-    { href: "/", name: "Terminal" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
-    { href: "/", name: "Terminal" as TabName },
-    { href: "/", name: "Browser" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
-    { href: "/", name: "Terminal" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
-    { href: "/", name: "Terminal" as TabName },
-    { href: "/", name: "SourceCode" as TabName },
+    { href: "/", name: "Terminal" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
+    { href: "/", name: "Terminal" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
+    { href: "/", name: "Terminal" as ColumnName },
+    { href: "/", name: "Browser" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
+    { href: "/", name: "Terminal" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
+    { href: "/", name: "Terminal" as ColumnName },
+    { href: "/", name: "SourceCode" as ColumnName },
   ];
 
   return (

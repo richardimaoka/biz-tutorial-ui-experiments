@@ -2,10 +2,10 @@
 
 import styles from "./ColumnTab.module.css";
 import { useRouter } from "next/navigation";
-import { TabName } from "./tabTypes";
+import { ColumnName } from "./tabTypes";
 import { ColumnTabIcon } from "./ColumnTabIcon";
 
-function displayName(name: TabName): string {
+function displayName(name: ColumnName): string {
   switch (name) {
     case "BackgroundImage":
       return "Background Image";
@@ -28,7 +28,7 @@ function displayName(name: TabName): string {
 
 export type Props = {
   isSelected?: boolean;
-  name: TabName;
+  name: ColumnName;
   href: string;
 };
 

@@ -1,12 +1,12 @@
 import { ButtonToInitialStep } from "./ButtonToInitialStep";
 import { ColumnTabs } from "./ColumnTabs";
-import { TabName } from "./tabTypes";
+import { ColumnName } from "./tabTypes";
 import styles from "./ColumnHeader.module.css";
 
 interface Props {
-  selectTab: TabName;
+  selectTab: ColumnName;
   tabs: {
-    name: TabName;
+    name: ColumnName;
     href: string;
   }[];
 }

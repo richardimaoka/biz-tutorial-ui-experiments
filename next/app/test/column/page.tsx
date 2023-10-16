@@ -1,4 +1,4 @@
-import { ColumnTabs } from "@/app/components/column2/ColumnTabs";
+import { Column } from "@/app/components/column2/Column";
 import { ColumnName } from "@/app/components/column2/tabTypes";
 
 export default async function Page() {
@@ -9,8 +9,8 @@ export default async function Page() {
   ];
 
   return (
-    <div>
-      <ColumnTabs tabs={tabs} selectTab="SourceCode" />
-    </div>
+    <Column tabs={tabs} selectColumn="SourceCode">
+      <div style={{ backgroundColor: "white" }} />
+    </Column>
   );
 }

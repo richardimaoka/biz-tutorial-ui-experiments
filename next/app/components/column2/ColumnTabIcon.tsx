@@ -1,4 +1,4 @@
-import { TabName } from "./tabTypes";
+import { ColumnName } from "./tabTypes";
 import { ChromeIcon } from "../icons/ChromeIcon";
 import { FileLinesIcon } from "../icons/FileLinesIcon";
 import { SourceCodeIcon } from "../icons/SourceCodeIcon";
@@ -6,7 +6,7 @@ import { TerminalIcon } from "../icons/TerminalIcon";
 import { VideoIcon } from "../icons/VideoIcon";
 
 interface Props {
-  name: TabName;
+  name: ColumnName;
 }
 
 export function ColumnTabIcon({ name }: Props): JSX.Element {

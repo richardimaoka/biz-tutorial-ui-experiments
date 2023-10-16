@@ -1,13 +1,13 @@
 import styles from "./ColumnTabs.module.css";
 import { ColumnTab } from "./ColumnTab";
-import { TabName } from "./tabTypes";
+import { ColumnName } from "./tabTypes";
 
 type Props = {
   tabs: {
-    name: TabName;
+    name: ColumnName;
     href: string;
   }[];
-  selectTab: TabName;
+  selectTab: ColumnName;
 };
 
 export async function ColumnTabs(props: Props) {
