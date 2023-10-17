@@ -1,0 +1,21 @@
+.component {
+  /* color and styles */
+  border-radius: 4px 4px 0px 0px;
+}
+
+.selected {
+  /* color and styles */
+  color: var(--color-primary-text);
+  background-color: var(--color-terminal-surface);
+  /* sizing */
+  padding: 4px 8px 8px 8px;
+  /* border */
+}
+
+.unselected {
+  /* color and styles */
+  color: var(--color-disabled-text);
+  background-color: var(--color-terminal-surface);
+  /* sizing */
+  padding: 4px 8px;
+}

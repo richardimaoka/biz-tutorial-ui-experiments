@@ -1,20 +1,20 @@
-import styles from "./ColumnTabs.module.css";
-import { ColumnTab } from "./ColumnTab";
-import { ColumnName } from "./definitions";
+import { useRouter } from "next/navigation";
+import styles from "./TerminalTabs.module.css";
+import { TerminalTab } from "./TerminalTab";
 
-type Props = {
+interface Props {
   tabs: {
-    name: ColumnName;
+    name: string;
     href: string; //TODO, calculate href??
   }[];
-  selectTab: ColumnName;
-};
+  selectTab: string;
+}
 
-export async function ColumnTabs(props: Props) {
+export function TerminalTabs(props: Props) {
   return (
     <div className={styles.component}>
       {props.tabs.map((x) => (
-        <ColumnTab
+        <TerminalTab
           key={x.name}
           href={x.href}
           isSelected={x.name === props.selectTab}

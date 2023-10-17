@@ -10,6 +10,7 @@
   --color-theme-blue: #007acc;
   --color-theme-green: #00cc9b;
 
+  /* TODO replace this !!? why transparent !? */
   --color-theme-transparent-white: rgb(255, 255, 255, 0.1);
 
   --color-sourcecode-file-highlighted: #748d2e;
