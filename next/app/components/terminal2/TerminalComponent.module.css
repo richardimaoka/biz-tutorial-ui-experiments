@@ -1,0 +1,13 @@
+.component {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  flex-grow: 0;
+}
+
+.contents {
+  flex-grow: 1;
+}

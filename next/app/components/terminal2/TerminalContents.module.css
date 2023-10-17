@@ -1,0 +1,4 @@
+.component {
+  background-color: var(--color-terminal-surface);
+  height: 100%;
+}
