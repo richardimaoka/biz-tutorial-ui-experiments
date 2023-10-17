@@ -2,7 +2,7 @@ import { Carousel } from "./Carousel";
 import styles from "./Tutorial.module.css";
 import { Columns } from "./Columns";
 import { TutorialHeader } from "./TutorialHeader";
-import { ColumnName, TutorialColumnProps } from "./definitions";
+import { ColumnName, TutorialColumnProps, columnWidthPx } from "./definitions";
 
 interface Props {
   selectColumn: ColumnName;
@@ -24,7 +24,7 @@ export async function TutorialComponent(props: Props) {
       </div>
       {/* contents part */}
       <div className={styles.contents}>
-        <Carousel currentIndex={8}>
+        <Carousel currentIndex={8} columnWidth={columnWidthPx}>
           <Columns />
         </Carousel>
       </div>

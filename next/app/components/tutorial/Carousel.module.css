@@ -1,6 +1,5 @@
 .component {
   height: 100%;
-  width: 768px;
   background-color: var(--color-background);
 
   overflow-x: hidden;
