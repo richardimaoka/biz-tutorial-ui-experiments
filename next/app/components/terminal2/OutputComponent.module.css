@@ -1,6 +1,6 @@
 .component {
   background-color: var(--color-terminal-surface);
-  color: var(--color-primary-text);
+  color: var(--color-secondary-text);
 
   padding: 4px;
 }
