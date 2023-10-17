@@ -4,7 +4,7 @@ import { TerminalTabs } from "./TerminalTabs";
 
 interface Props {
   currentDirectory: string;
-  tabs: {
+  tabs?: {
     name: string;
     href: string;
   }[];
@@ -17,7 +17,7 @@ export function TerminalHeader(props: Props) {
   return (
     <div className={styles.component}>
       <CurrentDirectory currentDirectory={props.currentDirectory} />
-      {props.tabs.length > 1 && (
+      {props.tabs && props.tabs.length > 1 && (
         <TerminalTabs tabs={props.tabs} selectTab={props.selectTab} />
       )}
     </div>

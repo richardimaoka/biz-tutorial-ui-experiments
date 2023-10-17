@@ -33,13 +33,13 @@ export default function Page() {
   ];
 
   return (
-    <div style={{ height: "100svh" }}>
+    <div style={{ height: "100svh", width: "600px" }}>
       <Column
         column={{
           kind: "Terminal",
-          currentDirectory: "",
+          currentDirectory: "myapp",
           entries: entries,
-          selectTab: "Terminal",
+          selectTab: "default",
           tabs: [
             {
               name: "Terminal",
