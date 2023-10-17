@@ -1,5 +1,5 @@
-import { source_code_pro } from "../fonts/fonts";
-import { DirectoryIcon } from "../icons/DirectoryIcon";
+import { source_code_pro } from "../../fonts/fonts";
+import { DirectoryIcon } from "../../icons/DirectoryIcon";
 import styles from "./CurrentDirectory.module.css";
 
 interface Props {

@@ -1,6 +1,6 @@
 import { CurrentDirectory } from "./CurrentDirectory";
 import styles from "./TerminalHeader.module.css";
-import { TerminalTabs } from "./TerminalTabs";
+import { TerminalTabs } from "../TerminalTabs";
 
 interface Props {
   currentDirectory: string;
