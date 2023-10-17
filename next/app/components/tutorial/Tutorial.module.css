@@ -17,10 +17,10 @@
   }
 }
 
-.headerHeight {
+.header {
   flex-grow: 0;
 }
 
-.carouselHeight {
+.contents {
   flex-grow: 1;
 }

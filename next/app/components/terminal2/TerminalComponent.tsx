@@ -4,6 +4,8 @@ import styles from "./TerminalComponent.module.css";
 
 type Props = TerminalContentsProps & TerminalHeaderProps;
 
+export type TerminalComponentProps = Props;
+
 export function TerminalComponent(props: Props) {
   return (
     <div className={styles.component}>

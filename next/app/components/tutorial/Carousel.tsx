@@ -19,8 +19,8 @@ export async function Carousel(props: Props) {
         }}
       >
         {/* props.children should be wider-than <Carousel> */}
-        {/* props.children should be an array */}
-        {props.children}
+        {/* props.children should be an array of <Column>'s */}
+        {props.children /* children, for loose coupling */}
       </div>
     </div>
   );

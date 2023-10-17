@@ -2,7 +2,7 @@ import { Carousel } from "./Carousel";
 import styles from "./Tutorial.module.css";
 import { Columns } from "./Columns";
 import { TutorialHeader } from "./TutorialHeader";
-import { ColumnName } from "./definitions";
+import { ColumnName, TutorialColumnProps } from "./definitions";
 
 interface Props {
   selectColumn: ColumnName;
@@ -11,18 +11,19 @@ interface Props {
     name: ColumnName;
     href: string;
   }[];
-  // selectColumn?: string;
+  column?: TutorialColumnProps;
   // skipAnimation?: boolean;
 }
 
-export async function Tutorial(props: Props) {
+export async function TutorialComponent(props: Props) {
   return (
-    //  Column consists of two parts,TutorialHeader and Carousel
     <div className={styles.component}>
-      <div className={styles.headerHeight}>
+      {/* header part */}
+      <div className={styles.header}>
         <TutorialHeader tabs={props.tabs} selectTab={props.selectColumn} />
       </div>
-      <div className={styles.carouselHeight}>
+      {/* contents part */}
+      <div className={styles.contents}>
         <Carousel currentIndex={8}>
           <Columns />
         </Carousel>
