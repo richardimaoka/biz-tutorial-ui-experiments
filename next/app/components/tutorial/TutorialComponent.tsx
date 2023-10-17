@@ -11,7 +11,7 @@ interface Props {
     name: ColumnName;
     href: string;
   }[];
-  column?: TutorialColumnProps;
+  columns: TutorialColumnProps[];
   // skipAnimation?: boolean;
 }
 
@@ -25,7 +25,7 @@ export async function TutorialComponent(props: Props) {
       {/* contents part */}
       <div className={styles.contents}>
         <Carousel currentIndex={8} columnWidth={columnWidthPx}>
-          <Columns />
+          <Columns columns={props.columns} />
         </Carousel>
       </div>
     </div>

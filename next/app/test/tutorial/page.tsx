@@ -9,7 +9,7 @@ export default async function Page() {
   ];
 
   return (
-    <TutorialComponent tabs={tabs} selectColumn="SourceCode">
+    <TutorialComponent tabs={tabs} selectColumn="SourceCode" columns={[]}>
       <div
         style={{ backgroundColor: "white", height: "90%", margin: "100px" }}
       />

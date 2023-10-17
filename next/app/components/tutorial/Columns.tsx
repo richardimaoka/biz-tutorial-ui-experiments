@@ -1,28 +1,17 @@
-import { Column } from "./column/Column";
+import { Column } from "./Column";
 import styles from "./Columns.module.css";
+import { TutorialColumnProps } from "./definitions";
 
-interface Props {}
+interface Props {
+  columns: TutorialColumnProps[];
+}
 
 export async function Columns(props: Props) {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
     <div className={styles.component}>
-      {arr.map((x, index) => (
-        <div key={index} className={styles.eachColumn}>
-          <Column>
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                color: "white",
-                fontSize: "80px",
-              }}
-            >
-              {index}
-            </div>
-          </Column>
+      {props.columns.map((c) => (
+        <div key={c.kind} className={styles.column}>
+          <Column column={c} />
         </div>
       ))}
     </div>
