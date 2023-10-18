@@ -10,7 +10,7 @@ export function CurrentDirectory(props: Props) {
   return (
     <div className={styles.component}>
       {props.currentDirectory && <DirectoryIcon />}
-      <span className={source_code_pro.className}>
+      <span>
         {props.currentDirectory ? props.currentDirectory : "Terminal"}
       </span>
     </div>

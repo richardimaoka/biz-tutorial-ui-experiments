@@ -17,7 +17,11 @@ export function TerminalComponent(props: Props) {
         />
       </div>
       <div className={styles.contents}>
-        <TerminalContents entries={props.entries} tooltip={props.tooltip} />
+        <TerminalContents
+          entries={props.entries}
+          tooltip={props.tooltip}
+          isAnimate={props.isAnimate}
+        />
       </div>
     </div>
   );

@@ -2,24 +2,29 @@
 
 import { ReactNode, useEffect, useRef } from "react";
 
-interface TerminalScrollIntoViewoProps {
+function ExtraPadding() {
+  return <div style={{ height: "50px" }} />;
+}
+
+interface Props {
   children: ReactNode;
   doScroll?: boolean;
 }
 
-export const TerminalScrollIntoView = ({
-  children,
-  doScroll,
-}: TerminalScrollIntoViewoProps) => {
+export const TerminalScrollIntoView = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const scrollIntoView = () => {
-    if (ref && doScroll) {
+  useEffect(() => {
+    console.log("called", ref, props.doScroll);
+    if (ref && props.doScroll) {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     }
-  };
+  });
 
-  useEffect(scrollIntoView);
-
-  return <div ref={ref}>{children}</div>;
+  return (
+    <div ref={ref}>
+      {props.children}
+      {props.doScroll && <ExtraPadding />}
+    </div>
+  );
 };

@@ -16,6 +16,7 @@ type Props = {
 export type TerminalContentsProps = Props;
 
 export function TerminalContents(props: Props) {
+  console.log("TerminalContents:", props.isAnimate);
   return (
     <div className={styles.component}>
       {props.entries.map((e, i) => (
