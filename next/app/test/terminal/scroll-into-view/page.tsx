@@ -1,0 +1,27 @@
+"use client";
+
+import { TerminalComponent } from "@/app/components/terminal2/TerminalComponent";
+import { entries } from "./entries";
+import React from "react";
+
+export default function Page() {
+  const [sliceEnd, setSliceEnd] = React.useState(1);
+
+  function onClick() {
+    setSliceEnd(sliceEnd + 1);
+  }
+
+  return (
+    <div style={{ height: "100svh", width: "100%" }} onClick={onClick}>
+      <TerminalComponent
+        tabs={[
+          { name: "default", href: "/test/terminal/" },
+          { name: "another", href: "/test/terminal/" },
+        ]}
+        currentDirectory="/test/terminal"
+        selectTab="default"
+        entries={entries.slice(0, sliceEnd)}
+      />
+    </div>
+  );
+}

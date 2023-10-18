@@ -5,7 +5,7 @@ export default async function Page() {
   const routingPath = "/test/tutorial";
   const cwd = process.cwd();
   const pwd = `${cwd}/app` + routingPath;
-
+  console.log(cwd);
   const subDirEnts = await fs.readdir(pwd, { withFileTypes: true });
   const subDirs = subDirEnts
     .filter((dirent) => dirent.isDirectory())
