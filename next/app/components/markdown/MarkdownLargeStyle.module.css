@@ -38,7 +38,7 @@
 }
 
 .defaultStyle p {
-  font-size: 14px;
+  font-size: 20px;
   margin: 16px 0px;
   color: var(--color-primary-text);
 }
@@ -63,6 +63,12 @@
 .defaultStyle li {
   font-size: 14px;
   color: var(--color-primary-text);
+}
+
+.defaultStyle pre {
+  margin: 16px 0px;
+  padding: 8px;
+  background-color: var(--color-sourcecode-surface-openfile);
 }
 
 .defaultStyle blockquote {

@@ -10,7 +10,7 @@ export default async function Page() {
     <div
       style={{ height: "100%", backgroundColor: "grey", paddingTop: "100px" }}
     >
-      <Tooltip body={md} />
+      <Tooltip markdownBody={md} />
     </div>
   );
 }

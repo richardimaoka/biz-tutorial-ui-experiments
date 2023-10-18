@@ -1,4 +1,5 @@
-import { Tooltip } from "../../tooltip/Tooltip";
+import { MarkdownDefaultStyle } from "../../markdown/MarkdownDefaultStyle";
+import styles from "./TerminalTooltip.module.css";
 
 interface Props {
   markdownBody: string;
@@ -8,5 +9,11 @@ interface Props {
 export type TerminalTooltipProps = Props;
 
 export function TerminalTooltip(props: Props) {
-  return <Tooltip markdownBody={props.markdownBody} />;
+  return (
+    <div className={styles.component}>
+      <div className={styles.tooltip}>
+        <MarkdownDefaultStyle markdownBody={props.markdownBody} />
+      </div>
+    </div>
+  );
 }
