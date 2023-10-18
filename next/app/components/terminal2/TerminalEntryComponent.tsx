@@ -1,4 +1,5 @@
 import { CommandComponent } from "./command/CommandComponent";
+import { TerminalEntry } from "./definitions";
 import { OutputComponent } from "./output/OutputComponent";
 
 interface Props {
@@ -13,5 +14,4 @@ export function TerminalEntryComponent(props: Props): JSX.Element {
     case "output":
       return <OutputComponent output={props.entry.output} />;
   }
-  return <div></div>;
 }
