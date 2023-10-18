@@ -31,6 +31,12 @@ export default async function Page() {
      => => writing image sha256:710d7aba73162de2e4f1a7759908ddc6164ce9ea2deb0c7eccee358fdc701c16                                                                                                                0.0s
      => => naming to docker.io/library/cmd1`,
     },
+    {
+      kind: "command",
+      id: "cmd-1",
+      command: "docker build -t cmd1 -f Dockerfile.cmd1 .",
+      isExecuted: false,
+    },
   ];
 
   return (
@@ -48,6 +54,7 @@ export default async function Page() {
             "作成したDockerfileを元に、Docker imageをビルドしましょう",
           hidden: false,
         }}
+        isAnimate
       />
     </div>
   );

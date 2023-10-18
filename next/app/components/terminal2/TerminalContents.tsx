@@ -16,26 +16,29 @@ type Props = {
 export type TerminalContentsProps = Props;
 
 export function TerminalContents(props: Props) {
-  console.log("TerminalContents:", props.isAnimate);
+  function isLastEntry(i: number) {
+    return i === props.entries.length - 1;
+  }
+
   return (
     <div className={styles.component}>
       {props.entries.map((e, i) => (
         <TerminalScrollIntoView
           key={e.id}
-          doScroll={props.isAnimate && i === props.entries.length - 1}
+          doScroll={props.isAnimate && isLastEntry(i)}
         >
           <TerminalEntryComponent entry={e} />
+          {
+            // Terminal tooltip can be shown only at the bottom
+            props.tooltip && isLastEntry(i) && (
+              <TerminalTooltip
+                markdownBody={props.tooltip.markdownBody}
+                hidden={props.tooltip.hidden}
+              />
+            )
+          }
         </TerminalScrollIntoView>
       ))}
-      {
-        // Terminal tooltip can be shown only at the bottom
-        props.tooltip && (
-          <TerminalTooltip
-            markdownBody={props.tooltip.markdownBody}
-            hidden={props.tooltip.hidden}
-          />
-        )
-      }
     </div>
   );
 }
