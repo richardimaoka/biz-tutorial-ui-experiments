@@ -1,6 +1,6 @@
 import styles from "./ColumnTabs.module.css";
 import { ColumnTab } from "./ColumnTab";
-import { ColumnName } from "./definitions";
+import { ColumnName } from "../definitions";
 
 type Props = {
   tabs: {

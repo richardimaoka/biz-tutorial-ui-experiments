@@ -1,6 +1,6 @@
 import { Column } from "./Column";
 import styles from "./Columns.module.css";
-import { TutorialColumnProps } from "./definitions";
+import { TutorialColumnProps } from "../definitions";
 
 interface Props {
   columns: TutorialColumnProps[];

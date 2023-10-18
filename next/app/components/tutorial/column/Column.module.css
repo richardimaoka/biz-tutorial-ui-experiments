@@ -1,17 +1,4 @@
 .component {
   height: 100%;
-  background-color: var(--color-background);
-  overflow-y: auto;
-}
-
-@media (max-width: 768px) {
-  .component {
-    width: 100svw;
-  }
-}
-
-@media (min-width: 769px) {
-  .component {
-    width: 768px;
-  }
+  background-color: var(--color-surface);
 }

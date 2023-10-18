@@ -1,7 +1,7 @@
-import { Carousel } from "./Carousel";
+import { Carousel } from "./carousel/Carousel";
 import styles from "./Tutorial.module.css";
-import { Columns } from "./Columns";
-import { TutorialHeader } from "./TutorialHeader";
+import { Columns } from "./column/Columns";
+import { TutorialHeader } from "./header/TutorialHeader";
 import { ColumnName, TutorialColumnProps, columnWidthPx } from "./definitions";
 
 interface Props {

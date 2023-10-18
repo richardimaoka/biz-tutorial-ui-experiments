@@ -1,9 +1,9 @@
-import { ColumnName } from "./definitions";
-import { ChromeIcon } from "../icons/ChromeIcon";
-import { FileLinesIcon } from "../icons/FileLinesIcon";
-import { SourceCodeIcon } from "../icons/SourceCodeIcon";
-import { TerminalIcon } from "../icons/TerminalIcon";
-import { VideoIcon } from "../icons/VideoIcon";
+import { ColumnName } from "../definitions";
+import { ChromeIcon } from "../../icons/ChromeIcon";
+import { FileLinesIcon } from "../../icons/FileLinesIcon";
+import { SourceCodeIcon } from "../../icons/SourceCodeIcon";
+import { TerminalIcon } from "../../icons/TerminalIcon";
+import { VideoIcon } from "../../icons/VideoIcon";
 
 interface Props {
   name: ColumnName;

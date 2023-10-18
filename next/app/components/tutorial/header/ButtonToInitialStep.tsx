@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { BackwardFastIcon } from "../icons/BackwardFast";
+import { BackwardFastIcon } from "../../icons/BackwardFast";
 import styles from "./ButtonToInitialStep.module.css";
 
 interface Props {

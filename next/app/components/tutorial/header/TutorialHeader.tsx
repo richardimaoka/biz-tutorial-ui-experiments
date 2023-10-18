@@ -1,6 +1,6 @@
 import { ButtonToInitialStep } from "./ButtonToInitialStep";
 import { ColumnTabs } from "./ColumnTabs";
-import { ColumnName } from "./definitions";
+import { ColumnName } from "../definitions";
 import styles from "./TutorialHeader.module.css";
 
 interface Props {

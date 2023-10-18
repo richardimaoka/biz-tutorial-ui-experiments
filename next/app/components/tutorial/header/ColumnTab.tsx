@@ -2,7 +2,7 @@
 
 import styles from "./ColumnTab.module.css";
 import { useRouter } from "next/navigation";
-import { ColumnName } from "./definitions";
+import { ColumnName } from "../definitions";
 import { ColumnTabIcon } from "./ColumnTabIcon";
 
 function displayName(name: ColumnName): string {
