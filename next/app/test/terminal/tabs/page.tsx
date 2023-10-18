@@ -1,4 +1,4 @@
-import { TerminalTabs } from "@/app/components/terminal2/TerminalTabs";
+import { TerminalTabs } from "@/app/components/terminal2/header/TerminalTabs";
 
 export default async function Page() {
   return (

@@ -9,7 +9,7 @@ import { unified } from "unified";
 interface Props {
   markdownBody: string;
   className?: string;
-  components?: ComponentsWithoutNodeOptions["components"];
+  customComponents?: ComponentsWithoutNodeOptions["components"];
 }
 
 // type CCProps = any;
@@ -24,7 +24,7 @@ export async function MarkdownConfigurable(props: Props) {
       // To use custom compenents, instead of intrinsic elements like <p>, <h1>, etc.
       // https://github.com/rehypejs/rehype-react#components
       // Each key is a tag name typed in JSX.IntrinsicElements. Each value is either a different tag name, or a component accepting the corresponding props (and an optional node prop if passNode is on).
-      components: props.components,
+      components: props.customComponents,
     })
     .process(props.markdownBody);
 

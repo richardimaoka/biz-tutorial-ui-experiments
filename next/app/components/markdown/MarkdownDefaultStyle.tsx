@@ -21,7 +21,7 @@ export async function MarkdownDefaultStyle(props: Props) {
 
   return (
     <MarkdownConfigurable
-      components={components}
+      customComponents={components}
       className={styles.defaultStyle}
       markdownBody={props.markdownBody}
     />
