@@ -1,4 +1,4 @@
-import { MarkdownDefaultStyle } from "../../markdown/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../../markdown2/MarkdownDefaultStyle";
 import styles from "./TerminalTooltip.module.css";
 
 interface Props {

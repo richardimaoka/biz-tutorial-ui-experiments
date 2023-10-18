@@ -1,4 +1,4 @@
-import { MarkdownDefaultStyle } from "../../components/markdown/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../../components/markdown2/MarkdownDefaultStyle";
 import { promises as fs } from "fs";
 
 export default async function Page() {
