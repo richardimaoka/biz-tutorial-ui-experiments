@@ -2,7 +2,7 @@ import Link from "next/link";
 import { promises as fs } from "fs";
 
 export default async function Page() {
-  const routingPath = "/test";
+  const routingPath = "/test/terminal";
   const cwd = process.cwd();
   const pwd = `${cwd}/app` + routingPath;
 
