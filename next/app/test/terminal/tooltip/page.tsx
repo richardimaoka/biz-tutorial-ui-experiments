@@ -1,4 +1,5 @@
 import { TerminalComponent } from "@/app/components/terminal2/TerminalComponent";
+import { TerminalEntry } from "@/app/components/terminal2/definitions";
 
 export default async function Page() {
   const entries: TerminalEntry[] = [

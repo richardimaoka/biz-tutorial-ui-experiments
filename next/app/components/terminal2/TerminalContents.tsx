@@ -4,6 +4,7 @@ import {
   TerminalTooltip,
   TerminalTooltipProps,
 } from "./tooltip/TerminalTooltip";
+import { TerminalEntry } from "./definitions";
 
 type Props = {
   entries: TerminalEntry[];

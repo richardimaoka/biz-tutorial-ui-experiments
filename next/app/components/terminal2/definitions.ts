@@ -11,4 +11,4 @@ type TerminalEntryOutput = {
   output: string;
 };
 
-type TerminalEntry = TerminalEntryCommand | TerminalEntryOutput;
+export type TerminalEntry = TerminalEntryCommand | TerminalEntryOutput;
