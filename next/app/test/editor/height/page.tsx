@@ -1,4 +1,4 @@
-import { EditorWrapper } from "@/app/components/editor/EditorWrapper";
+import { EditorHeightGetter } from "@/app/components/editor/EditorHeightGetter";
 import React from "react";
 import { promises as fs } from "fs";
 
@@ -15,7 +15,7 @@ export default async function Page() {
 
   return (
     <div style={{ height: "700px" }}>
-      <EditorWrapper dummy={srcStr} />
+      <EditorHeightGetter dummy={srcStr} />
     </div>
   );
 }

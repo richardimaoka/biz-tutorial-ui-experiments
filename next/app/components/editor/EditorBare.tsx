@@ -18,6 +18,19 @@ export function EditorBare(props: Props) {
     <Editor
       options={{
         readOnly: true,
+        theme: "vs-dark",
+
+        // save width for mobile - folding displays small vertical bar
+        folding: false,
+        lineNumbers: "off",
+        minimap: {
+          enabled: false,
+        },
+        // scroll bar visible, as "hidden" doesn't completely hide it, and meks it just awkward
+        // scrollbar: {
+        //   vertical: "visible",
+        //   horizontal: "visible",
+        // },
       }}
       onMount={props.onDidMount}
     />

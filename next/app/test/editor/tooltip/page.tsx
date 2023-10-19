@@ -3,7 +3,7 @@
 import React from "react";
 import * as fs from "fs";
 import { EditorEditable } from "@/app/components/editor/EditorEditable";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function Page() {
   const pathname = usePathname();

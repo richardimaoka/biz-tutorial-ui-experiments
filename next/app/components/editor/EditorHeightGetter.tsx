@@ -8,7 +8,7 @@ interface Props {
   dummy: string;
 }
 
-export function EditorWrapper(props: Props) {
+export function EditorHeightGetter(props: Props) {
   const [editorInsntance, onDidMount] = useEditorInstance();
 
   useEffect(() => {

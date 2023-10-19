@@ -1,4 +1,3 @@
-import { EditorWrapper } from "@/app/components/editor/EditorWrapper";
 import React from "react";
 import { promises as fs } from "fs";
 import { EditorEditable } from "@/app/components/editor/EditorEditable";
