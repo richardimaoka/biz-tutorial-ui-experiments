@@ -12,7 +12,7 @@ function calculateEdit(
     range: {
       startLineNumber: startLineNumber,
       startColumn: 1,
-      endLineNumber: startLineNumber + numLines,
+      endLineNumber: startLineNumber,
       endColumn: 1,
     },
     text: insertText,

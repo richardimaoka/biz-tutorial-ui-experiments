@@ -1,9 +1,9 @@
-import { EditorWithTooltip } from "@/app/components/editor/EditorWithTooltip";
 import { promises as fs } from "fs";
+import { Toggler } from "./Toggler";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
-  // but that requires client component
+  // but that requires client component, which can't import "fs"
   const pathname = "app/test/editor/tooltip";
 
   const cwd = process.cwd();
@@ -12,13 +12,5 @@ export default async function Page() {
     "utf-8"
   );
 
-  return (
-    <div style={{ height: "700px" }}>
-      <EditorWithTooltip
-        editorText={srcStr}
-        language="go"
-        tooltip={{ startLineNumber: 3, numLines: 2 }}
-      />
-    </div>
-  );
+  return <Toggler editorText={srcStr} />;
 }

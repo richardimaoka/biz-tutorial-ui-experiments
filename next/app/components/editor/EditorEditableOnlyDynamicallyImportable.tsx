@@ -42,10 +42,22 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
 
   // execute edits
   useEffect(() => {
-    if (editorInstance && props.edits) {
-      editorInstance.updateOptions({ readOnly: false });
-      const result = editorInstance.executeEdits("", props.edits);
-      editorInstance.updateOptions({ readOnly: true });
+    if (editorInstance) {
+      if (props.edits) {
+        // adding tooltip
+        editorInstance.updateOptions({ readOnly: false });
+        const result = editorInstance.executeEdits("", props.edits);
+        if (!result) {
+          // TODO: throw error to trigger error.tsx
+          console.log("executeEdits for monaco editor failed!");
+        }
+        editorInstance.updateOptions({ readOnly: true });
+      } else {
+        //removing tooltip
+        editorInstance.updateOptions({ readOnly: false });
+        editorInstance.trigger("", "undo", null);
+        editorInstance.updateOptions({ readOnly: true });
+      }
     }
   }, [editorInstance, props.edits]);
 
