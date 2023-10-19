@@ -1,15 +1,16 @@
 import { editor } from "monaco-editor";
-import { MutableRefObject, useRef } from "react";
+import { useState } from "react";
 
 export function useEditorInstance(): [
-  MutableRefObject<editor.IStandaloneCodeEditor | null>,
+  editor.IStandaloneCodeEditor | null,
   (editorInstance: editor.IStandaloneCodeEditor) => void
 ] {
-  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const [editorInstance, setEditorInstance] =
+    useState<editor.IStandaloneCodeEditor | null>(null);
 
-  function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
-    editorRef.current = editorInstance;
+  function handleEditorDidMount(instance: editor.IStandaloneCodeEditor) {
+    setEditorInstance(instance);
   }
 
-  return [editorRef, handleEditorDidMount];
+  return [editorInstance, handleEditorDidMount];
 }

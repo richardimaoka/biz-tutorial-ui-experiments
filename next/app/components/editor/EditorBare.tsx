@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function EditorBare(props: Props) {
-  console.log("EditorBare component is re-rendered");
+  console.log("EditorBare component is rendered");
 
   return (
     <Editor

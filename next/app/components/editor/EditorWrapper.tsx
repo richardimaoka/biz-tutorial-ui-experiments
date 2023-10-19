@@ -9,15 +9,15 @@ interface Props {
 }
 
 export function EditorWrapper(props: Props) {
-  const [editorInstance, onDidMount] = useEditorInstance();
+  const [editorInsntance, onDidMount] = useEditorInstance();
 
   useEffect(() => {
-    console.log("EditorWrapper useEffect", editorInstance);
-    editorInstance.current &&
+    console.log("EditorWrapper useEffect", editorInsntance);
+    editorInsntance &&
       console.log(
         "line Height=",
-        editorInstance.current?.getOption(
-          // somehow, NOT `enum lineHeight` but `enum lineHeight - 1`*/
+        editorInsntance.getOption(
+          // somehow, NOT `enum lineHeight` but `enum lineHeight - 1`
           65
         )
       );
