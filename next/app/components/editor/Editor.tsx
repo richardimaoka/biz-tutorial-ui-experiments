@@ -7,22 +7,19 @@ import styles from "./Editor.module.css";
 type Monaco = typeof monaco;
 
 interface Props {
-  name: string;
+  srcStr: string;
 }
 
 export function Editor(props: Props) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-  console.log("Editor component is re-rendered, name=", props.name);
+  console.log("Editor component is re-rendered, name=", props.srcStr);
 
   useEffect(() => {
     console.log("editorRef.current?.getModel()", editorRef.current?.getModel());
-    editorRef.current?.setValue(props.name);
-  }, [props.name]);
+    editorRef.current?.setValue(props.srcStr);
+  }, [props.srcStr]);
 
-  function handleEditorDidMount(
-    editorInstance: editor.IStandaloneCodeEditor,
-    monaco: Monaco
-  ) {
+  function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
     // here is the editor instance
     // you can store it in `useRef` for further usage
     editorRef.current = editorInstance;
@@ -32,7 +29,7 @@ export function Editor(props: Props) {
   return (
     <div className={styles.component}>
       <MonacoEditor
-        height="90vh"
+        height="50%"
         defaultLanguage="javascript"
         defaultValue="console.log('A')"
         options={{
