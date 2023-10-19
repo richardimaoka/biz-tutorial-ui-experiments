@@ -15,7 +15,6 @@ export const TerminalScrollIntoView = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("called", ref, props.doScroll);
     if (ref && props.doScroll) {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     }
