@@ -6,7 +6,7 @@ import { EditorEditable } from "@/app/components/editor/EditorEditable";
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
   // but that requires client component
-  const pathname = "app/test/editor";
+  const pathname = "app/test/editor/editable";
 
   const cwd = process.cwd();
   const srcStr = await fs.readFile(

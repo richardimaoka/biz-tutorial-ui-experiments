@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
-import { EditorBare } from "./EditorBare";
-import { useEditorInstance } from "./useEditorInstance";
-// import { editor } from "monaco-editor";
+// To avoid an error `ReferenceError: navigator is not defined`, dynamic import with ssr false is needed.
+// This is because "monaco-editor" module uses browser-side `navigator` inside.
+import dynamic from "next/dynamic";
+const EditorEditableInner = dynamic(
+  () => import("./EditorEditableOnlyDynamicallyImportable"),
+  {
+    ssr: false,
+  }
+);
 
 interface Props {
   editorText: string;
@@ -11,22 +16,10 @@ interface Props {
 }
 
 export function EditorEditable(props: Props) {
-  const [editorInstance, onDidMount] = useEditorInstance();
-
-  // update editorText
-  useEffect(() => {
-    if (editorInstance) {
-      editorInstance.setValue(props.editorText);
-    }
-  }, [editorInstance, props.editorText]);
-
-  // // update language
-  // useEffect(() => {
-  //   const model = editorInstance?.getModel();
-  //   if (model) {
-  //     editor.setModelLanguage(model, props.language);
-  //   }
-  // }, [editorInstance, props.language]);
-
-  return <EditorBare onDidMount={onDidMount} />;
+  return (
+    <EditorEditableInner
+      editorText={props.editorText}
+      language={props.language}
+    />
+  );
 }
