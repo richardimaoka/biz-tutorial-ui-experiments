@@ -10,16 +10,17 @@ const EditorEditableInner = dynamic(
   }
 );
 
-interface Props {
-  editorText: string;
-  language: string;
-}
+// this is ok with static import
+import { EditorEditableInnerProps } from "./EditorEditableOnlyDynamicallyImportable";
+
+type Props = EditorEditableInnerProps;
 
 export function EditorEditable(props: Props) {
   return (
     <EditorEditableInner
       editorText={props.editorText}
       language={props.language}
+      edits={props.edits}
     />
   );
 }

@@ -13,7 +13,13 @@ import { editor } from "monaco-editor";
 interface Props {
   editorText: string;
   language: string;
+
+  // `edits` are immediately executed by useEffect,
+  // so the resulting component = editorText + edits
+  edits?: editor.IIdentifiedSingleEditOperation[];
 }
+
+export type EditorEditableInnerProps = Props;
 
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
@@ -33,6 +39,15 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
       editor.setModelLanguage(model, props.language);
     }
   }, [editorInstance, props.language]);
+
+  // execute edits
+  useEffect(() => {
+    if (editorInstance && props.edits) {
+      editorInstance.updateOptions({ readOnly: false });
+      const result = editorInstance.executeEdits("", props.edits);
+      editorInstance.updateOptions({ readOnly: true });
+    }
+  }, [editorInstance, props.edits]);
 
   return <EditorBare onDidMount={onDidMount} />;
 }
