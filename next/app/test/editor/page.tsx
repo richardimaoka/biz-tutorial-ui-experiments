@@ -15,7 +15,7 @@ export default async function Page() {
 
   return (
     <div style={{ height: "700px" }}>
-      <Editor srcStr={srcStr} />
+      <Editor editorText={srcStr} />
     </div>
   );
 }

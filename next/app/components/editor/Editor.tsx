@@ -3,21 +3,50 @@ import MonacoEditor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { useEffect, useRef } from "react";
-import styles from "./Editor.module.css";
-type Monaco = typeof monaco;
 
 interface Props {
-  srcStr: string;
+  editorText: string;
 }
 
 export function Editor(props: Props) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-  console.log("Editor component is re-rendered, name=", props.srcStr);
+  const current = editorRef.current;
+  console.log("Editor component is re-rendered");
+
+  const contentWidget = {
+    getId: function () {
+      return "my.content.widget";
+    },
+    getDomNode: function (): HTMLElement {
+      const domNode = document.createElement("div");
+      domNode.innerHTML = "My content widget";
+      domNode.style.background = "grey";
+      domNode.style.opacity = "0.6";
+      domNode.style.width = "500px";
+      domNode.style.height = `${50}px`;
+      domNode.hidden = true;
+      return domNode;
+    },
+    getPosition: function (): monaco.editor.IContentWidgetPosition {
+      return {
+        position: {
+          lineNumber: 1,
+          column: 20,
+        },
+        preference: [monaco.editor.ContentWidgetPositionPreference.EXACT],
+      };
+    },
+    // allowEditorOverflow: true,
+  };
 
   useEffect(() => {
-    console.log("editorRef.current?.getModel()", editorRef.current?.getModel());
-    editorRef.current?.setValue(props.srcStr);
-  }, [props.srcStr]);
+    console.log("editorText useEffect", editorRef.current);
+    current?.setValue(props.editorText);
+  }, [props.editorText, current]);
+
+  useEffect(() => {
+    editorRef.current?.addContentWidget(contentWidget);
+  });
 
   function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
     // here is the editor instance
@@ -27,16 +56,12 @@ export function Editor(props: Props) {
   }
 
   return (
-    <div className={styles.component}>
-      <MonacoEditor
-        height="50%"
-        defaultLanguage="javascript"
-        defaultValue="console.log('A')"
-        options={{
-          readOnly: true, // also tried with readOnly: true
-        }}
-        onMount={handleEditorDidMount}
-      />
-    </div>
+    <MonacoEditor
+      defaultValue={props.editorText}
+      options={{
+        readOnly: true, // also tried with readOnly: true
+      }}
+      onMount={handleEditorDidMount}
+    />
   );
 }
