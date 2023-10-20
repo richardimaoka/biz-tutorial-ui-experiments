@@ -1,7 +1,7 @@
 "use client";
 
 import { editor } from "monaco-editor";
-import { EditorEditable } from "./EditorEditable";
+import { EditorEditable } from "./editor/EditorEditable";
 import { useRef } from "react";
 
 function calculateEdit(

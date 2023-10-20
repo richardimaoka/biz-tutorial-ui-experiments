@@ -1,4 +1,4 @@
-import { EditorTooltip } from "@/app/components/editor/tooltip/EditorTooltip";
+import { EditorTooltip } from "@/app/components/sourcecode2/tooltip/EditorTooltip";
 
 interface Props {
   markdownBody: string;

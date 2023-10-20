@@ -1,11 +1,11 @@
-import { EditorWithTooltip } from "@/app/components/editor/EditorWithTooltip";
-import { EditorTooltip } from "@/app/components/editor/tooltip/EditorTooltip";
 import { promises as fs } from "fs";
+import { Toggler } from "./Toggler";
+import { EditorTooltip } from "@/app/components/editor/EditorTooltip";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
   // but that requires client component, which can't import "fs"
-  const pathname = "app/test/editor/tooltip";
+  const pathname = "app/test/sourcecode/tooltip";
 
   const cwd = process.cwd();
   const goSource = await fs.readFile(
@@ -18,11 +18,9 @@ export default async function Page() {
   );
 
   return (
-    <div>
-      <div style={{ height: "500px" }}>
-        <EditorWithTooltip editorText={goSource} language="go" />
-      </div>
+    <>
+      <Toggler editorText={goSource} />
       <EditorTooltip markdownBody={mdContents} />
-    </div>
+    </>
   );
 }

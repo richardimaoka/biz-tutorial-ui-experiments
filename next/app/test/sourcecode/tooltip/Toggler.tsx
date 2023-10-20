@@ -1,6 +1,6 @@
 "use client";
 
-import { EditorWithTooltip } from "@/app/components/editor/EditorWithTooltip";
+import { EditorWithTooltip } from "@/app/components/sourcecode2/EditorWithTooltip";
 import { useState } from "react";
 
 interface Props {
