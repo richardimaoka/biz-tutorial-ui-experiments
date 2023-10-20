@@ -9,6 +9,7 @@ interface Props {
     lineNumber: number;
     markdownBody: string;
     hidden?: boolean;
+    offsetContent?: boolean;
   };
 }
 
@@ -31,7 +32,6 @@ export function EditorWithTooltip(props: Props) {
       <Editor
         editorText={props.editorText}
         language={props.language}
-        lineHeight={19}
         tooltip={tooltip}
       />
     </div>

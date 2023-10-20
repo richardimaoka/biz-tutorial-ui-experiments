@@ -56,21 +56,32 @@ interface Rect {
 
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
+  // For editor instance
   const [editorInstance, onDidMount] = useEditorInstance();
-
-  // For rect
-  const boundingBoxRef = useRef<HTMLDivElement | null>(null);
 
   // For content widget
   const [contentWidgetContainer] = useState<HTMLDivElement>(
     document.createElement("div")
   );
-  const rootRef = useRef<Root | null>(null);
+  const boundingBoxRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<Root | null>(null); //React root to render
+  const lineHeight = useRef<number>(0);
+  function setLineHeight() {
+    if (editorInstance) {
+      const h = editorInstance.getOption(
+        65 // somehow, NOT `enum lineHeight = 66`, but `enum lineHeight - 1` works
+      );
+      if (typeof h === "number") {
+        lineHeight.current = h;
+        console.log("line hegith =", h);
+      }
+    }
+  }
 
   // React hooks starts here ---------------------------------
 
   // To update content widget width upon initial rendering and window resize
-  const updateContentWidgetWidth = useCallback(() => {
+  const onContentAreaSizeChange = useCallback(() => {
     const bbox = boundingBoxRef.current;
     if (bbox && contentWidgetContainer) {
       contentWidgetContainer.style.width = `${bbox.offsetWidth}px`;
@@ -79,9 +90,9 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
 
   // Register event listner on window resize, to set rect
   useEffect(() => {
-    window.addEventListener("resize", updateContentWidgetWidth);
-    return () => window.removeEventListener("resize", updateContentWidgetWidth);
-  }, [editorInstance, updateContentWidgetWidth]);
+    window.addEventListener("resize", onContentAreaSizeChange);
+    return () => window.removeEventListener("resize", onContentAreaSizeChange);
+  }, [editorInstance, onContentAreaSizeChange]);
 
   // Update editorText
   useEffect(() => {
@@ -144,11 +155,16 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
 
   // Rendering defined in JSX ---------------------------------
 
+  function onChange() {
+    onContentAreaSizeChange();
+    setLineHeight();
+  }
+
   return (
     <div className={styles.component} ref={boundingBoxRef}>
       <EditorBare
         onDidMount={onDidMount}
-        onChange={updateContentWidgetWidth}
+        onChange={onChange}
         lineHeight={props.lineHeight}
       />
     </div>
