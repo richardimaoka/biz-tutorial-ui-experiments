@@ -1,15 +1,19 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
+import Editor, { OnChange } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 
 interface Props {
-  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) => void;
-  // pass-in a callback like below to manipulate editor instance
+  // onDidMount: pass-in a callback like below to manipulate editor instance
   //
   //   function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
   //     editorRef.current = editorInstance;
   //   }
+  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) => void;
+
+  // onChange: this is also called when the first rendering is finisehd
+  onChange?: OnChange;
+
   lineHeight?: number;
 }
 
@@ -38,6 +42,7 @@ export function EditorBare(props: Props) {
         lineHeight: lineHeight,
       }}
       onMount={props.onDidMount}
+      onChange={props.onChange}
     />
   );
 }

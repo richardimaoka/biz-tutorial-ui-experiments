@@ -5,7 +5,7 @@
 // due to "monaco-editor" module using browser-side `navigator` inside.
 // !!!!
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { EditorBare } from "./EditorBare";
 import { useEditorInstance } from "../useEditorInstance";
 import { editor } from "monaco-editor";
@@ -48,13 +48,40 @@ function createWidget(element: HTMLElement, lineNumber: number) {
   };
 }
 
+interface Rect {
+  width: number;
+  height: number;
+}
+
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
+
+  // for content widget
   const [contentWidgetContainer] = useState<HTMLDivElement>(
     document.createElement("div")
   );
   const rootRef = useRef<Root | null>(null);
+  const [rect, setRect] = useState<Rect>({ height: 0, width: 0 });
+
+  // register event listner on window resize
+  useEffect(() => {
+    function handleWindowResize() {
+      if (editorInstance) {
+        const currentWidth = Math.max(
+          editorInstance.getContentWidth(),
+          editorInstance.getScrollWidth()
+        );
+        const currentHeight = Math.max(
+          editorInstance.getContentHeight(),
+          editorInstance.getScrollHeight()
+        );
+        setRect({ width: currentWidth, height: currentHeight });
+      }
+    }
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, [editorInstance]);
 
   // update editorText
   useEffect(() => {
@@ -97,12 +124,12 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
     const tooltip = props.tooltip;
 
     if (editorInstance && tooltip) {
+      // To avoid the following warning, you need to check if createRoot() is already called.
+      //   > Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
       if (!rootRef.current) {
         rootRef.current = createRoot(contentWidgetContainer);
       }
-
-      let root = rootRef.current;
-      root.render(tooltip.children);
+      rootRef.current.render(tooltip.children);
 
       const contentWidget = createWidget(
         contentWidgetContainer,
@@ -112,10 +139,15 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
       editorInstance.addContentWidget(contentWidget);
       return () => {
         editorInstance.removeContentWidget(contentWidget);
-        root.unmount();
       };
     }
   }, [contentWidgetContainer, editorInstance, props.tooltip]);
 
-  return <EditorBare onDidMount={onDidMount} lineHeight={props.lineHeight} />;
+  return (
+    <EditorBare
+      onDidMount={onDidMount}
+      onChange={() => {}}
+      lineHeight={props.lineHeight}
+    />
+  );
 }
