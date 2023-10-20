@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { EditorBare } from "./EditorBare";
+import { EditorBare } from "./internal/EditorBare";
 import { useEditorInstance } from "./useEditorInstance";
 
 interface Props {

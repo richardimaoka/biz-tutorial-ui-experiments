@@ -1,6 +1,6 @@
 import React from "react";
 import { promises as fs } from "fs";
-import { EditorEditable } from "@/app/components/sourcecode2/editor/EditorEditable";
+import { Editor } from "@/app/components/sourcecode2/editor/EditorEditable";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
@@ -15,7 +15,7 @@ export default async function Page() {
 
   return (
     <div style={{ height: "700px" }}>
-      <EditorEditable editorText={srcStr} language="go" />
+      <Editor editorText={srcStr} language="go" />
     </div>
   );
 }

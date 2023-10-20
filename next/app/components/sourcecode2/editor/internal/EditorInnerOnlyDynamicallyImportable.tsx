@@ -7,7 +7,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { EditorBare } from "./EditorBare";
-import { useEditorInstance } from "./useEditorInstance";
+import { useEditorInstance } from "../useEditorInstance";
 import { editor } from "monaco-editor";
 import { Root, createRoot } from "react-dom/client";
 
@@ -24,8 +24,6 @@ interface Props {
     children: ReactNode;
   };
 }
-
-export type EditorEditableInnerProps = Props;
 
 function createWidget(element: HTMLElement, lineNumber: number) {
   return {
@@ -51,7 +49,7 @@ function createWidget(element: HTMLElement, lineNumber: number) {
 }
 
 // `default` export, for easier use with Next.js dynamic import
-export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
+export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
   const [contentWidgetContainer] = useState<HTMLDivElement>(
     document.createElement("div")

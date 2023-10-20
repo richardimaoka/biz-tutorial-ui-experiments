@@ -1,8 +1,7 @@
 "use client";
+
 import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
-import { useState } from "react";
-import { createRoot } from "react-dom/client";
 
 interface Props {
   onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) => void;
