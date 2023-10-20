@@ -1,11 +1,12 @@
 .component {
   background-color: var(--color-menu);
-  margin: 20px 10px 10px 10px;
+  margin-top: 20px;
+  margin-left: 0px; /* 0px since there is left gutter in monaco-editor */
+  margin-right: 15px;
+  margin-bottom: 0px;
 
   /* to display tooltip arrow */
   position: relative;
-
-  width: 100%;
 }
 
 /* ::before to place triangle at the top of the tooltip */

@@ -10,6 +10,7 @@ import { EditorBare } from "./EditorBare";
 import { useEditorInstance } from "../useEditorInstance";
 import { editor } from "monaco-editor";
 import { Root, createRoot } from "react-dom/client";
+import styles from "./EditorInnerOnlyDynamicallyImportable.module.css";
 
 interface Props {
   editorText: string;
@@ -57,40 +58,38 @@ interface Rect {
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
 
-  // for content widget
+  // For rect
+  const boundingBoxRef = useRef<HTMLDivElement | null>(null);
+
+  // For content widget
   const [contentWidgetContainer] = useState<HTMLDivElement>(
     document.createElement("div")
   );
   const rootRef = useRef<Root | null>(null);
-  const [rect, setRect] = useState<Rect>({ height: 0, width: 0 });
 
-  // register event listner on window resize
-  useEffect(() => {
-    function handleWindowResize() {
-      if (editorInstance) {
-        const currentWidth = Math.max(
-          editorInstance.getContentWidth(),
-          editorInstance.getScrollWidth()
-        );
-        const currentHeight = Math.max(
-          editorInstance.getContentHeight(),
-          editorInstance.getScrollHeight()
-        );
-        setRect({ width: currentWidth, height: currentHeight });
-      }
+  // React hooks starts here ---------------------------------
+
+  // To update content widget width upon initial rendering and window resize
+  const updateContentWidgetWidth = useCallback(() => {
+    const bbox = boundingBoxRef.current;
+    if (bbox && contentWidgetContainer) {
+      contentWidgetContainer.style.width = `${bbox.offsetWidth}px`;
     }
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
-  }, [editorInstance]);
+  }, [contentWidgetContainer]);
 
-  // update editorText
+  // Register event listner on window resize, to set rect
+  useEffect(() => {
+    window.addEventListener("resize", updateContentWidgetWidth);
+    return () => window.removeEventListener("resize", updateContentWidgetWidth);
+  }, [editorInstance, updateContentWidgetWidth]);
+
+  // Update editorText
   useEffect(() => {
     if (editorInstance) {
       editorInstance.setValue(props.editorText);
     }
   }, [editorInstance, props.editorText]);
-
-  // update language
+  // Update language
   useEffect(() => {
     const model = editorInstance?.getModel();
     if (model) {
@@ -98,7 +97,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
     }
   }, [editorInstance, props.language]);
 
-  // execute edits
+  // Execute edits
   useEffect(() => {
     if (editorInstance) {
       if (props.edits) {
@@ -119,7 +118,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
     }
   }, [editorInstance, props.edits]);
 
-  // add content widget
+  // Add content widget
   useEffect(() => {
     const tooltip = props.tooltip;
 
@@ -143,11 +142,15 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
     }
   }, [contentWidgetContainer, editorInstance, props.tooltip]);
 
+  // Rendering defined in JSX ---------------------------------
+
   return (
-    <EditorBare
-      onDidMount={onDidMount}
-      onChange={() => {}}
-      lineHeight={props.lineHeight}
-    />
+    <div className={styles.component} ref={boundingBoxRef}>
+      <EditorBare
+        onDidMount={onDidMount}
+        onChange={updateContentWidgetWidth}
+        lineHeight={props.lineHeight}
+      />
+    </div>
   );
 }
