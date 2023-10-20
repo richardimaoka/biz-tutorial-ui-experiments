@@ -1,0 +1,10 @@
+.component {
+  height: 100%;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+
+  width: 100%;
+}

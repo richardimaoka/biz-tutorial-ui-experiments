@@ -16,7 +16,7 @@ export function Toggler(props: Props) {
       <EditorWithTooltip
         editorText={props.editorText}
         language="go"
-        tooltip={showToolTip ? { startLineNumber: 3, numLines: 2 } : undefined}
+        // tooltip={showToolTip ? { startLineNumber: 3, numLines: 2 } : undefined}
       />
     </div>
   );

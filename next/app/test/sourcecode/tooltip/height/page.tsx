@@ -19,7 +19,7 @@ export default async function Page() {
 
   return (
     <div>
-      <div style={{ height: "500px" }}>
+      <div style={{ height: "100svh" }}>
         <EditorWithTooltip editorText={goSource} language="go" />
       </div>
       <EditorTooltip markdownBody={mdContents} />

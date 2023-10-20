@@ -17,6 +17,7 @@ interface Props {
   // `edits` are immediately executed by useEffect,
   // so the resulting component = editorText + edits
   edits?: editor.IIdentifiedSingleEditOperation[];
+  lineHeight?: number;
 }
 
 export type EditorEditableInnerProps = Props;
@@ -61,5 +62,5 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
     }
   }, [editorInstance, props.edits]);
 
-  return <EditorBare onDidMount={onDidMount} />;
+  return <EditorBare onDidMount={onDidMount} lineHeight={props.lineHeight} />;
 }

@@ -1,6 +1,5 @@
 import { promises as fs } from "fs";
-import { Toggler } from "./Toggler";
-import { EditorTooltip } from "@/app/components/editor/EditorTooltip";
+import { EditorWithTooltip } from "@/app/components/sourcecode2/EditorWithTooltip";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
@@ -18,9 +17,12 @@ export default async function Page() {
   );
 
   return (
-    <>
-      <Toggler editorText={goSource} />
-      <EditorTooltip markdownBody={mdContents} />
-    </>
+    <div style={{ height: "100svh" }}>
+      <EditorWithTooltip
+        editorText={goSource}
+        language="go"
+        tooltip={{ markdownBody: mdContents }}
+      />
+    </div>
   );
 }
