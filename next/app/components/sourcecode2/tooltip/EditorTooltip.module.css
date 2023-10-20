@@ -1,0 +1,20 @@
+.component {
+  background-color: var(--color-menu);
+  margin: 20px 10px 10px 10px;
+
+  /* to display tooltip arrow */
+  position: relative;
+}
+
+/* ::before to place triangle at the top of the tooltip */
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: -40px; /* At the top the tooltip, double of triangle height */
+  left: 50%;
+  margin-left: -10px;
+  border-width: 20px; /* equal to triangle height, half of triangle width*/
+  border-style: solid;
+  /* tooltip triangle upward direction*/
+  border-color: transparent transparent var(--color-menu) transparent;
+}

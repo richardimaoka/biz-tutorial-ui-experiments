@@ -1,7 +1,7 @@
 import { MarkdownConfigurable } from "./MarkdownConfigurable";
 import styles from "./MarkdownDefaultStyle.module.css";
-import { CustomElementCode } from "../../markdown/CustomElementCode";
-import { CustomElementPre } from "../../markdown/CustomElementPre";
+import { CustomElementCode } from "../custom/CustomElementCode";
+import { CustomElementPre } from "../custom/CustomElementPre";
 import { ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 
 interface Props {
