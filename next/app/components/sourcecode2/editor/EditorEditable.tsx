@@ -12,10 +12,13 @@ const EditorEditableInner = dynamic(
 
 // this is ok with static import
 import { EditorEditableInnerProps } from "./EditorEditableOnlyDynamicallyImportable";
+import { useRef } from "react";
 
 type Props = EditorEditableInnerProps;
 
 export function EditorEditable(props: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <EditorEditableInner
       editorText={props.editorText}

@@ -17,7 +17,7 @@ export default async function Page() {
   );
 
   return (
-    <div style={{ height: "100svh" }}>
+    <div style={{ height: "80svh" }}>
       <EditorWithTooltip
         editorText={goSource}
         language="go"

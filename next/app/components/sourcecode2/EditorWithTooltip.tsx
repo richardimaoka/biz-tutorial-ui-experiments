@@ -24,7 +24,7 @@ export function EditorWithTooltip(props: Props) {
       {
         //tooltip is passed and not-hidden, then render tooltip
         props.tooltip && !props.tooltip.hidden && (
-          <div className={styles.tooltip} style={{ top: "0px" }}>
+          <div className={styles.tooltip} style={{ top: "100px" }}>
             <EditorTooltip markdownBody={props.tooltip?.markdownBody} />
           </div>
         )

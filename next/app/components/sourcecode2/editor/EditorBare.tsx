@@ -1,6 +1,8 @@
 "use client";
 import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 
 interface Props {
   onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) => void;
@@ -37,6 +39,7 @@ export function EditorBare(props: Props) {
         lineHeight: lineHeight,
       }}
       onMount={props.onDidMount}
+      onChange={(e) => console.log("on change", e)}
     />
   );
 }

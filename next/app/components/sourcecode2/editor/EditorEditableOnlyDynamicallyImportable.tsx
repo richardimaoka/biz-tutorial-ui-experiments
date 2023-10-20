@@ -18,6 +18,7 @@ interface Props {
   // so the resulting component = editorText + edits
   edits?: editor.IIdentifiedSingleEditOperation[];
   lineHeight?: number;
+  // contentWidgetElement?: HTMLElement;
 }
 
 export type EditorEditableInnerProps = Props;
@@ -61,6 +62,34 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
       }
     }
   }, [editorInstance, props.edits]);
+
+  // add content widget
+  // useEffect(() => {
+  //   const domNode = props.contentWidgetElement;
+  //   if (editorInstance && domNode) {
+  //     const contentWidget = {
+  //       getId: function () {
+  //         return "my.content.widget";
+  //       },
+  //       getDomNode: function () {
+  //         return domNode;
+  //       },
+  //       getPosition: function () {
+  //         return {
+  //           position: {
+  //             lineNumber: 7,
+  //             column: 8,
+  //           },
+  //           preference: [
+  //             editor.ContentWidgetPositionPreference.ABOVE,
+  //             editor.ContentWidgetPositionPreference.BELOW,
+  //           ],
+  //         };
+  //       },
+  //     };
+  //     editorInstance.addContentWidget(contentWidget);
+  //   }
+  // }, [editorInstance, props.contentWidgetElement]);
 
   return <EditorBare onDidMount={onDidMount} lineHeight={props.lineHeight} />;
 }
