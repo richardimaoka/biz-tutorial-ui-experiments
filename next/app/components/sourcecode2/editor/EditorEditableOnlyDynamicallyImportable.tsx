@@ -5,11 +5,11 @@
 // due to "monaco-editor" module using browser-side `navigator` inside.
 // !!!!
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { EditorBare } from "./EditorBare";
 import { useEditorInstance } from "./useEditorInstance";
 import { editor } from "monaco-editor";
-import { createRoot } from "react-dom/client";
+import { Root, createRoot } from "react-dom/client";
 
 interface Props {
   editorText: string;
@@ -27,12 +27,36 @@ interface Props {
 
 export type EditorEditableInnerProps = Props;
 
+function createWidget(element: HTMLElement, lineNumber: number) {
+  return {
+    getId: function () {
+      return "my.content.widget";
+    },
+    getDomNode: function () {
+      return element;
+    },
+    getPosition: function () {
+      return {
+        position: {
+          lineNumber: lineNumber,
+          column: 1,
+        },
+        preference: [
+          editor.ContentWidgetPositionPreference.BELOW,
+          editor.ContentWidgetPositionPreference.ABOVE,
+        ],
+      };
+    },
+  };
+}
+
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
   const [contentWidgetContainer] = useState<HTMLDivElement>(
     document.createElement("div")
   );
+  const rootRef = useRef<Root | null>(null);
 
   // update editorText
   useEffect(() => {
@@ -75,31 +99,22 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
     const tooltip = props.tooltip;
 
     if (editorInstance && tooltip) {
-      const root = createRoot(contentWidgetContainer);
+      if (!rootRef.current) {
+        rootRef.current = createRoot(contentWidgetContainer);
+      }
+
+      let root = rootRef.current;
       root.render(tooltip.children);
-      const contentWidget = {
-        getId: function () {
-          return "my.content.widget";
-        },
-        getDomNode: function () {
-          return contentWidgetContainer;
-        },
-        getPosition: function () {
-          return {
-            position: {
-              lineNumber: tooltip.lineNumber,
-              column: 1,
-            },
-            preference: [
-              editor.ContentWidgetPositionPreference.BELOW,
-              editor.ContentWidgetPositionPreference.ABOVE,
-            ],
-          };
-        },
-      };
+
+      const contentWidget = createWidget(
+        contentWidgetContainer,
+        tooltip.lineNumber
+      );
+
       editorInstance.addContentWidget(contentWidget);
       return () => {
         editorInstance.removeContentWidget(contentWidget);
+        root.unmount();
       };
     }
   }, [contentWidgetContainer, editorInstance, props.tooltip]);

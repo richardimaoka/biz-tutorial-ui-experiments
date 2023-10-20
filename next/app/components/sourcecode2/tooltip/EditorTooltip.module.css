@@ -4,6 +4,8 @@
 
   /* to display tooltip arrow */
   position: relative;
+
+  width: 100%;
 }
 
 /* ::before to place triangle at the top of the tooltip */

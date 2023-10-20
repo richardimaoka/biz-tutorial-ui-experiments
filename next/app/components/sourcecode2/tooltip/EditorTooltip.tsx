@@ -1,4 +1,4 @@
-import styles from "./EditorTooltipCC.module.css";
+import styles from "./EditorTooltip.module.css";
 import { MarkdownDefaultStyle } from "../../markdown2/server-component/MarkdownDefaultStyle";
 
 interface Props {
