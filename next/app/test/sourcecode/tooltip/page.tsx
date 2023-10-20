@@ -21,7 +21,7 @@ export default async function Page() {
       <EditorWithTooltip
         editorText={goSource}
         language="go"
-        tooltip={{ markdownBody: mdContents }}
+        tooltip={{ markdownBody: mdContents, lineNumber: 5 }}
       />
     </div>
   );

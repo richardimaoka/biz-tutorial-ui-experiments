@@ -39,7 +39,6 @@ export function EditorBare(props: Props) {
         lineHeight: lineHeight,
       }}
       onMount={props.onDidMount}
-      onChange={(e) => console.log("on change", e)}
     />
   );
 }

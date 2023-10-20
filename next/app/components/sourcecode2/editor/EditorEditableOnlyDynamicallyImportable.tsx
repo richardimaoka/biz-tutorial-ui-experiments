@@ -5,10 +5,11 @@
 // due to "monaco-editor" module using browser-side `navigator` inside.
 // !!!!
 
-import { useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { EditorBare } from "./EditorBare";
 import { useEditorInstance } from "./useEditorInstance";
 import { editor } from "monaco-editor";
+import { createRoot } from "react-dom/client";
 
 interface Props {
   editorText: string;
@@ -18,7 +19,10 @@ interface Props {
   // so the resulting component = editorText + edits
   edits?: editor.IIdentifiedSingleEditOperation[];
   lineHeight?: number;
-  contentWidgetElement?: HTMLElement;
+  tooltip?: {
+    lineNumber: number;
+    children: ReactNode;
+  };
 }
 
 export type EditorEditableInnerProps = Props;
@@ -26,6 +30,9 @@ export type EditorEditableInnerProps = Props;
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
+  const [contentWidgetContainer] = useState<HTMLDivElement>(
+    document.createElement("div")
+  );
 
   // update editorText
   useEffect(() => {
@@ -65,31 +72,37 @@ export default function EditorEditableOnlyDynamicallyImportable(props: Props) {
 
   // add content widget
   useEffect(() => {
-    const domNode = props.contentWidgetElement;
-    if (editorInstance && domNode) {
+    const tooltip = props.tooltip;
+
+    if (editorInstance && tooltip) {
+      const root = createRoot(contentWidgetContainer);
+      root.render(tooltip.children);
       const contentWidget = {
         getId: function () {
           return "my.content.widget";
         },
         getDomNode: function () {
-          return domNode;
+          return contentWidgetContainer;
         },
         getPosition: function () {
           return {
             position: {
-              lineNumber: 7,
-              column: 8,
+              lineNumber: tooltip.lineNumber,
+              column: 1,
             },
             preference: [
-              editor.ContentWidgetPositionPreference.ABOVE,
               editor.ContentWidgetPositionPreference.BELOW,
+              editor.ContentWidgetPositionPreference.ABOVE,
             ],
           };
         },
       };
       editorInstance.addContentWidget(contentWidget);
+      return () => {
+        editorInstance.removeContentWidget(contentWidget);
+      };
     }
-  }, [editorInstance, props.contentWidgetElement]);
+  }, [contentWidgetContainer, editorInstance, props.tooltip]);
 
   return <EditorBare onDidMount={onDidMount} lineHeight={props.lineHeight} />;
 }
