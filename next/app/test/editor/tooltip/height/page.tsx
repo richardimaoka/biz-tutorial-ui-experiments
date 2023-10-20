@@ -1,6 +1,6 @@
-import { promises as fs } from "fs";
-import { Child } from "./Child";
 import { EditorWithTooltip } from "@/app/components/editor/EditorWithTooltip";
+import { EditorTooltip } from "@/app/components/editor/tooltip/EditorTooltip";
+import { promises as fs } from "fs";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
@@ -22,7 +22,7 @@ export default async function Page() {
       <div style={{ height: "500px" }}>
         <EditorWithTooltip editorText={goSource} language="go" />
       </div>
-      <Child markdownBody={mdContents} />
+      <EditorTooltip markdownBody={mdContents} />
     </div>
   );
 }

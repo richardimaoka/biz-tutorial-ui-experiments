@@ -7,7 +7,20 @@ function pxToNumber(pxValue: string): number | null {
   return pxValue.endsWith("px") ? Number(pxValue.replace("px", "")) : null;
 }
 
+function heightIncludingMargin(element: HTMLElement): number | null {
+  const style = window.getComputedStyle(element);
+  const marginTop = pxToNumber(style.marginTop);
+  const marginBottom = pxToNumber(style.marginBottom);
+  if (marginTop && marginBottom) {
+    return element.offsetHeight + marginTop + marginBottom;
+  } else {
+    return null;
+  }
+}
+
 interface Props {
+  // Since Markdown component is a server component with async rehype-react,
+  // client component needs to interleave with the server component using children-passing
   children: ReactNode;
 }
 
@@ -19,16 +32,15 @@ export function EditorTooltipCC(props: Props) {
 
   useEffect(() => {
     if (ref.current) {
-      const style = window.getComputedStyle(ref.current);
-      const marginTop = pxToNumber(style.marginTop);
-      const marginBottom = pxToNumber(style.marginBottom);
-      if (marginTop && marginBottom) {
-        setHeight(ref.current.offsetHeight + marginTop + marginBottom);
+      const refHeight = heightIncludingMargin(ref.current);
+
+      if (refHeight) {
+        setHeight(refHeight);
       } else {
         //TODO: throw, and handle error in error.tsx
       }
     }
-  }, []);
+  }, [ref]);
 
   useEffect(() => {
     if (ref.current) {
