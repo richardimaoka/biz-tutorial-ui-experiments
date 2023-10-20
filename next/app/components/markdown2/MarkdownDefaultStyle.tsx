@@ -8,8 +8,8 @@ interface Props {
   markdownBody: string;
 }
 
-export async function MarkdownDefaultStyle(props: Props) {
-  // // Custom React component mappings
+export function MarkdownDefaultStyle(props: Props) {
+  // Custom React component mappings
   const components: ComponentsWithoutNodeOptions["components"] = {
     //              ComponentsWithoutNodeOptions["components"] is a trick to get friendly type error message for `components`.
     // Directly placing this `components` into `use(rehypeReact, {...})` will cause an unfriendly type error,

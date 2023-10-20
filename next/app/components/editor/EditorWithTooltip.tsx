@@ -39,25 +39,23 @@ interface Props {
 // get rect from created element
 
 export function EditorWithTooltip(props: Props) {
-  const tooltipRef = useRef(document.createElement("div"));
+  // const tooltipRef = useRef(document.createElement("div"));
 
-  function domNode() {
-    tooltipRef.current.innerHTML = "My content widget";
-    tooltipRef.current.style.background = "grey";
-    return domNode;
-  }
+  // function domNode() {
+  //   tooltipRef.current.innerHTML = "My content widget";
+  //   tooltipRef.current.style.background = "grey";
+  //   return domNode;
+  // }
 
   const edits = props.tooltip
     ? [calculateEdit(props.tooltip.startLineNumber, props.tooltip.numLines)] // single operation in array
     : undefined;
 
   return (
-    <>
-      <EditorEditable
-        editorText={props.editorText}
-        language={props.language}
-        edits={edits}
-      />
-    </>
+    <EditorEditable
+      editorText={props.editorText}
+      language={props.language}
+      edits={edits}
+    />
   );
 }
