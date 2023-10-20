@@ -1,4 +1,4 @@
-import { MarkdownDefaultStyle } from "../../markdown2/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../../markdown2/server-component/MarkdownDefaultStyle";
 import { EditorTooltipCC } from "./EditorTooltipCC";
 
 interface Props {
