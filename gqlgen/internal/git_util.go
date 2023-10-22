@@ -26,7 +26,7 @@ type Chunk struct {
 	// Content contains the portion of the file.
 	Content string
 	// Type contains the Operation to do with this Chunk.
-	Type Operation
+	Type string
 }
 
 // FileWithinPatch contains all the file metadata necessary to print some patch formats.
@@ -34,7 +34,7 @@ type FileWithinPatch struct {
 	// Hash returns the File Hash.
 	Hash string
 	// Mode returns the FileMode.
-	Mode filemode.FileMode
+	Mode string
 	// Path returns the complete Path to the file, including the filename.
 	Path string
 }
@@ -50,22 +50,52 @@ type FilePatch struct {
 	FromFile *FileWithinPatch
 	ToFile   *FileWithinPatch
 
+	Type string
+
 	// Chunks represent a slice of ordered changes to transform "from" File into
 	// "to" File. If the file is a binary one, Chunks will be empty.
 	Chunks []Chunk
 }
 
 func toChunk(chunk diff.Chunk) *Chunk {
+	var chunkType string
+	switch chunk.Type() {
+	case diff.Equal:
+		chunkType = "Equal"
+	case diff.Add:
+		chunkType = "Add"
+	case diff.Delete:
+		chunkType = "Delete"
+	}
+
 	return &Chunk{
 		Content: chunk.Content(),
-		Type:    Operation(chunk.Type()),
+		Type:    chunkType,
 	}
 }
 
 func toFileInPatch(file diff.File) *FileWithinPatch {
+	var fileMode string
+	switch file.Mode() {
+	case filemode.Empty:
+		fileMode = "Empty"
+	case filemode.Dir:
+		fileMode = "Dir"
+	case filemode.Regular:
+		fileMode = "Regular"
+	case filemode.Deprecated:
+		fileMode = "Deprecated"
+	case filemode.Executable:
+		fileMode = "Executable"
+	case filemode.Symlink:
+		fileMode = "Symlink"
+	case filemode.Submodule:
+		fileMode = "Submodule"
+	}
+
 	return &FileWithinPatch{
 		Hash: file.Hash().String(),
-		Mode: file.Mode(),
+		Mode: fileMode,
 		Path: file.Path(),
 	}
 }
@@ -126,7 +156,19 @@ func GetPatch(repo *git.Repository, fromCommitHash, toCommitHash string) (*objec
 
 func FindFilePatch(filePatches []diff.FilePatch, fileFullPath string) *FilePatch {
 	for _, patch := range filePatches {
+		// Files returns the from and to Files, with all the necessary metadata
+		// about them. If the patch creates a new file, "from" will be nil.
+		// If the patch deletes a file, "to" will be nil.
 		from, to := patch.Files()
+
+		var patchType string
+		if from == nil {
+			patchType = "Add"
+		} else if to == nil {
+			patchType = "Delete"
+		} else if from != nil && to != nil {
+			patchType = "Update"
+		}
 
 		// Even with file rename, there must be only one file/patch matching givne `fileFullPath`
 		// (i.e.) within a git commit, there can't be both rename-from and rename-to with the same file name
@@ -137,6 +179,7 @@ func FindFilePatch(filePatches []diff.FilePatch, fileFullPath string) *FilePatch
 			}
 
 			return &FilePatch{
+				Type:     patchType,
 				IsBinary: patch.IsBinary(),
 				FromFile: toFileInPatch(from),
 				ToFile:   toFileInPatch(to),
