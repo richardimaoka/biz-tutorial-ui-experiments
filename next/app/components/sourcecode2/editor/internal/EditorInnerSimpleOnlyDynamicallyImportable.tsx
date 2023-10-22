@@ -23,6 +23,17 @@ interface Props {
   };
 }
 
+function executeEditsOneshot(
+  editorInstance: editor.IStandaloneCodeEditor,
+  edits: editor.IIdentifiedSingleEditOperation[]
+) {
+  const result = editorInstance.executeEdits("", edits);
+  if (!result) {
+    // TODO: throw error to trigger error.tsx
+    console.log("executeEdits for monaco editor failed!");
+  }
+}
+
 // `default` export, for easier use with Next.js dynamic import
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
@@ -42,14 +53,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
         if (isEditsMade) {
           editorInstance.trigger("", "undo", null);
         }
-
-        for (let index = 0; index < edits.length; index++) {
-          const result = editorInstance.executeEdits("", [edits[index]]);
-          if (!result) {
-            // TODO: throw error to trigger error.tsx
-            console.log("executeEdits for monaco editor failed!");
-          }
-        }
+        executeEditsOneshot(editorInstance, edits);
         isEditsMade.current = true;
 
         editorInstance.updateOptions({ readOnly: true });

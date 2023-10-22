@@ -22,7 +22,7 @@ export function EditorSimple(props: Props) {
     <EditorInnerSimple
       editorText={props.editorText}
       language={props.language}
-      edits={props.edits}
+      editSequence={props.edits ? { edits: props.edits } : undefined}
     />
   );
 }
