@@ -23,15 +23,54 @@ interface Props {
   };
 }
 
+function executeEditCallback(
+  editorInstance: editor.IStandaloneCodeEditor,
+  editCallback: () => void
+) {
+  try {
+    editorInstance.updateOptions({ readOnly: false });
+    editCallback();
+  } finally {
+    editorInstance.updateOptions({ readOnly: true });
+  }
+}
+
 function executeEditsOneshot(
   editorInstance: editor.IStandaloneCodeEditor,
   edits: editor.IIdentifiedSingleEditOperation[]
 ) {
-  const result = editorInstance.executeEdits("", edits);
-  if (!result) {
-    // TODO: throw error to trigger error.tsx
-    console.log("executeEdits for monaco editor failed!");
+  executeEditCallback(editorInstance, () => {
+    const result = editorInstance.executeEdits("", edits);
+    if (!result) {
+      // TODO: throw error to trigger error.tsx
+      console.log("executeEdits for monaco editor failed!");
+    }
+  });
+}
+
+function executeEditsAnimation(
+  editorInstance: editor.IStandaloneCodeEditor,
+  edits: editor.IIdentifiedSingleEditOperation[]
+) {
+  const setTimeoutInterval = 20; // milliseconds
+
+  function executeAtomicEdit(at: number) {
+    executeEditCallback(editorInstance, () => {
+      const result = editorInstance.executeEdits("", [edits[at]]);
+      if (!result) {
+        // TODO: throw error to trigger error.tsx
+        console.log("executeEdits for monaco editor failed!");
+      }
+    });
+
+    if (at < edits.length - 1) {
+      window.setTimeout(() => executeAtomicEdit(at + 1), setTimeoutInterval);
+    }
   }
+
+  window.setTimeout(() => {
+    executeAtomicEdit(0);
+  }, setTimeoutInterval);
 }
 
 // `default` export, for easier use with Next.js dynamic import
@@ -47,16 +86,19 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
     if (editorInstance) {
       const edits = props.editSequence?.edits;
       if (edits && edits.length > 0) {
-        editorInstance.updateOptions({ readOnly: false });
-
         // clear previous edits upon props change
         if (isEditsMade) {
-          editorInstance.trigger("", "undo", null);
+          executeEditCallback(editorInstance, () => {
+            editorInstance.trigger("", "undo", null);
+          });
         }
-        executeEditsOneshot(editorInstance, edits);
-        isEditsMade.current = true;
 
-        editorInstance.updateOptions({ readOnly: true });
+        if (props.editSequence?.animate) {
+          executeEditsAnimation(editorInstance, edits);
+        } else {
+          executeEditsOneshot(editorInstance, edits);
+        }
+        isEditsMade.current = true;
       } else {
         // clear edits if edits is undefined or []
         editorInstance.updateOptions({ readOnly: false });

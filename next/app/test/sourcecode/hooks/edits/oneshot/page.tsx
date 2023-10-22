@@ -6,7 +6,7 @@ import { Interactive } from "./Interactive";
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
   // but that requires client component
-  const pathname = "app/test/sourcecode/hooks";
+  const pathname = "app/test/sourcecode/hooks/edits/oneshot";
 
   const cwd = process.cwd();
   const newSrcStr = await fs.readFile(

@@ -14,7 +14,10 @@ import { editor } from "monaco-editor";
 interface Props {
   editorText: string;
   language: string;
-  edits?: editor.IIdentifiedSingleEditOperation[];
+  editSequence?: {
+    edits: editor.IIdentifiedSingleEditOperation[];
+    animate?: boolean;
+  };
 }
 
 export function EditorSimple(props: Props) {
@@ -22,7 +25,7 @@ export function EditorSimple(props: Props) {
     <EditorInnerSimple
       editorText={props.editorText}
       language={props.language}
-      editSequence={props.edits ? { edits: props.edits } : undefined}
+      editSequence={props.editSequence}
     />
   );
 }

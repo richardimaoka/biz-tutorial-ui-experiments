@@ -1,4 +1,5 @@
 import { expect, test } from "vitest";
+import { toOperation } from "./edits";
 
 function insertAt(original: string, at: number, toInsert: string): string {
   return original.slice(0, at) + toInsert + original.slice(at);
@@ -26,6 +27,32 @@ test("edits add", () => {
 
   cases.forEach((c) => {
     const result = insertAt(c.fromText, c.edit.at, c.edit.diff);
-    expect(result).toBe(c.toText);
+    expect(result).toStrictEqual(c.toText);
+  });
+});
+
+test("edits convert", () => {
+  const cases = [
+    {
+      edit: {
+        at: 13, // zero-start index in string
+        diff: `, { OnChange }`,
+        lineNumber: 1,
+      },
+      op: {
+        range: {
+          startLineNumber: 1,
+          startColumn: 14,
+          endLineNumber: 1,
+          endColumn: 14,
+        },
+        text: `, { OnChange }`,
+      },
+    },
+  ];
+
+  cases.forEach((c) => {
+    const result = toOperation(c.edit);
+    expect(result).toStrictEqual(c.op);
   });
 });

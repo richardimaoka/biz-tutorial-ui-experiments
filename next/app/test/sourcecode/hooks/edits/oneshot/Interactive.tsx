@@ -10,7 +10,7 @@ interface Props {
   oldLanguage: string;
 }
 
-const predefinedEdits: editor.IIdentifiedSingleEditOperation[] = [
+const predefinedOneshotEdits: editor.IIdentifiedSingleEditOperation[] = [
   {
     range: {
       startLineNumber: 3,
@@ -84,9 +84,9 @@ export function Interactive(props: Props) {
 
   function proceedToNextEdit() {
     const nextEnd =
-      edits.length < predefinedEdits.length ? edits.length + 1 : 0;
+      edits.length < predefinedOneshotEdits.length ? edits.length + 1 : 0;
 
-    setEdits(predefinedEdits.slice(0, nextEnd));
+    setEdits(predefinedOneshotEdits.slice(0, nextEnd));
   }
 
   return (
@@ -103,7 +103,13 @@ export function Interactive(props: Props) {
       >
         next edit
       </button>
-      <EditorSimple editorText={editorText} language={language} edits={edits} />
+      <EditorSimple
+        editorText={editorText}
+        language={language}
+        editSequence={{
+          edits: predefinedOneshotEdits,
+        }}
+      />
     </>
   );
 }
