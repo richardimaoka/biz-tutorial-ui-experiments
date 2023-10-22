@@ -5,14 +5,27 @@ function insertAt(original: string, at: number, toInsert: string): string {
 }
 
 test("edits add", () => {
-  const oldText = `import Editor from "@monaco-editor/react";`;
-  const newText = `import Editor, { OnChange } from "@monaco-editor/react";`;
+  const cases = [
+    {
+      fromText: `import Editor from "@monaco-editor/react";`,
+      toText: `import Editor, { OnChange } from "@monaco-editor/react";`,
+      edit: {
+        at: 13, // zero-start index in string
+        diff: `, { OnChange }`,
+      },
+    },
+    {
+      fromText: `bbbccc`,
+      toText: `aaabbbccc`,
+      edit: {
+        at: 0, // zero-start index in string
+        diff: `aaa`,
+      },
+    },
+  ];
 
-  const edit = {
-    at: 13, // zero-start index in string
-    diff: `, { OnChange }`,
-  };
-
-  const result = insertAt(oldText, edit.at, edit.diff);
-  expect(result).toBe(newText);
+  cases.forEach((c) => {
+    const result = insertAt(c.fromText, c.edit.at, c.edit.diff);
+    expect(result).toBe(c.toText);
+  });
 });
