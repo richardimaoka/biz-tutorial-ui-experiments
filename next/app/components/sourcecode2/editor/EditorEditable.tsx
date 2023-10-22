@@ -27,7 +27,7 @@ interface Props {
   };
 }
 
-export function Editor(props: Props) {
+export function EditorEditable(props: Props) {
   return (
     <EditorInner
       editorText={props.editorText}
