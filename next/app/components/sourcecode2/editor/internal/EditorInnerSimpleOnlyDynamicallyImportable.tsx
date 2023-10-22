@@ -21,7 +21,7 @@ interface Props {
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
   useEditorTextUpdate(editorInstance, props.editorText);
-  useLanguageUpdate(editorInstance, props.language);
+  useLanguageUpdate(editorInstance, props.language, props.editorText);
 
   return <EditorBare onDidMount={onDidMount} />;
 }

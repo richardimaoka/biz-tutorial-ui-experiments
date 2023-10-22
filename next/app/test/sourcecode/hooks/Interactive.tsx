@@ -22,7 +22,7 @@ export function Interactive(props: Props) {
     } else {
       // supposedly newOrOld === "old"
       setEditorText(props.oldEditorText);
-      setLanguage(props.oldEditorText);
+      setLanguage(props.oldLanguage);
     }
   }, [newOrOld, props]);
 

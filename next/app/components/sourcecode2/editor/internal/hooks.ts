@@ -53,12 +53,18 @@ export function useLanguageUpdate(
   editorInstance: editor.IStandaloneCodeEditor | null,
 
   // Prop to be passed from the parent component
-  language: string
+  language: string,
+
+  // Prop to be passed from the parent component
+  editorText: string
 ) {
   useEffect(() => {
-    const model = editorInstance?.getModel();
-    if (model) {
-      editor.setModelLanguage(model, language);
+    if (editorInstance) {
+      const model = editorInstance.getModel();
+      if (model) {
+        alert("changing model language to" + language);
+        editor.setModelLanguage(model, language);
+      }
     }
   }, [editorInstance, language]);
 }
