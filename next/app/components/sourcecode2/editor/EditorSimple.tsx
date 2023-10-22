@@ -9,10 +9,12 @@ const EditorInnerSimple = dynamic(
     ssr: false,
   }
 );
+import { editor } from "monaco-editor";
 
 interface Props {
   editorText: string;
   language: string;
+  edits?: editor.IIdentifiedSingleEditOperation[];
 }
 
 export function EditorSimple(props: Props) {
@@ -20,6 +22,7 @@ export function EditorSimple(props: Props) {
     <EditorInnerSimple
       editorText={props.editorText}
       language={props.language}
+      edits={props.edits}
     />
   );
 }

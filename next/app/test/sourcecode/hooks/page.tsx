@@ -14,7 +14,7 @@ export default async function Page() {
     "utf-8"
   );
   const oldSrcStr = await fs.readFile(
-    `${cwd}/${pathname}/os_windows_old.go.txt`,
+    `${cwd}/${pathname}/EditorBare.tsx.old.txt`,
     "utf-8"
   );
 
@@ -24,7 +24,7 @@ export default async function Page() {
         newEditorText={newSrcStr}
         oldEditorText={oldSrcStr}
         newLanguage={"typescript"}
-        oldLanguage="go"
+        oldLanguage="typescript"
       />
     </div>
   );
