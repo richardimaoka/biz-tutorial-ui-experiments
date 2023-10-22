@@ -5,18 +5,12 @@ import (
 	"io"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func gitFilesForCommit(repo *git.Repository, commitHashStr string) ([]string, error) {
-	commitHash := plumbing.NewHash(commitHashStr)
-	if commitHash.String() != commitHashStr {
-		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())
-	}
-
-	commit, err := repo.CommitObject(commitHash)
+	commit, err := internal.GetCommit(repo, commitHashStr)
 	if err != nil {
 		return nil, fmt.Errorf("failed in gitFilesForCommit, cannot get commit = %s, %s", commitHashStr, err)
 	}
@@ -32,7 +26,7 @@ func gitFilesForCommit(repo *git.Repository, commitHashStr string) ([]string, er
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return nil, fmt.Errorf("error in commit file traversal in commit %s, %v", commitHash, err)
+			return nil, fmt.Errorf("error in commit file traversal in commit %s, %v", commitHashStr, err)
 		}
 		files = append(files, file.Name)
 	}
