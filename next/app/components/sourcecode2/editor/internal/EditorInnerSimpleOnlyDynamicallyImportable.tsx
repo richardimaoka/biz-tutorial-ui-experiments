@@ -6,11 +6,9 @@
 // !!!!
 import { editor } from "monaco-editor";
 import { EditorBare } from "./EditorBare";
-import {
-  useEditorInstance,
-  useEditorTextUpdate,
-  useLanguageUpdate,
-} from "./hooks";
+import { useEditorInstance } from "./useEditorInstance";
+import { useLanguageUpdate } from "./useLanguageUpdate";
+import { useEditorTextUpdate } from "./useEditorTextUpdate";
 import { useEffect, useRef } from "react";
 
 interface Props {

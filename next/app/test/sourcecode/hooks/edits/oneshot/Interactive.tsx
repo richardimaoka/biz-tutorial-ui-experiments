@@ -107,7 +107,7 @@ export function Interactive(props: Props) {
         editorText={editorText}
         language={language}
         editSequence={{
-          edits: predefinedOneshotEdits,
+          edits: edits,
         }}
       />
     </>
