@@ -1,5 +1,8 @@
 import { expect, test } from "vitest";
 import { toOperation } from "./edits";
+import { useEditorInstance } from "../useEditorInstance";
+import { EditorBare } from "../EditorBare";
+import { render } from "@testing-library/react";
 
 function insertAt(original: string, at: number, toInsert: string): string {
   return original.slice(0, at) + toInsert + original.slice(at);
@@ -56,3 +59,10 @@ test("edits convert", () => {
     expect(result).toStrictEqual(c.op);
   });
 });
+
+// test("useEditorInstance", () => {
+//   const [editorInstance, onDidMount] = useEditorInstance();
+
+//   render(<EditorBare onDidMount={onDidMount} />);
+//   expect(editorInstance).toBeInstanceOf("object");
+// });

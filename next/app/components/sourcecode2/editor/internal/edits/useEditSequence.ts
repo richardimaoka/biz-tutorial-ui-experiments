@@ -16,6 +16,7 @@ export function useEditSequence(
     animate?: boolean;
   }
 ) {
+  // Save the edit-made flag to clear previous edits, upon editSequence change
   // useRef, since monaco editor is separate from React state.
   const isEditsMade = useRef(false);
 
@@ -24,10 +25,11 @@ export function useEditSequence(
     if (editorInstance) {
       const edits = editSequence?.edits;
 
-      /**
-       * If edits are non-empty
-       */
       if (edits && edits.length > 0) {
+        /**
+         * If edits are non-empty
+         */
+
         // clear previous edits upon props change
         if (isEditsMade) {
           executeEditCallback(editorInstance, () => {
@@ -48,6 +50,7 @@ export function useEditSequence(
         /**
          * Else if edits are empty
          */
+
         // clear previous edits
         executeEditCallback(editorInstance, () => {
           editorInstance.trigger("", "undo", null);
