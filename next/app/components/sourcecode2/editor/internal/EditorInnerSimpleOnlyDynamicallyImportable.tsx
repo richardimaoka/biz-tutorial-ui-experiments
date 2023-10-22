@@ -17,7 +17,10 @@ interface Props {
   editorText: string;
   language: string;
 
-  edits?: editor.IIdentifiedSingleEditOperation[];
+  editSequence?: {
+    edits: editor.IIdentifiedSingleEditOperation[];
+    animate?: boolean;
+  };
 }
 
 // `default` export, for easier use with Next.js dynamic import
@@ -31,7 +34,8 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   // Execute edits
   useEffect(() => {
     if (editorInstance) {
-      if (props.edits && props.edits.length > 0) {
+      const edits = props.editSequence?.edits;
+      if (edits && edits.length > 0) {
         editorInstance.updateOptions({ readOnly: false });
 
         // clear previous edits upon props change
@@ -39,10 +43,12 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
           editorInstance.trigger("", "undo", null);
         }
 
-        const result = editorInstance.executeEdits("", props.edits);
-        if (!result) {
-          // TODO: throw error to trigger error.tsx
-          console.log("executeEdits for monaco editor failed!");
+        for (let index = 0; index < edits.length; index++) {
+          const result = editorInstance.executeEdits("", [edits[index]]);
+          if (!result) {
+            // TODO: throw error to trigger error.tsx
+            console.log("executeEdits for monaco editor failed!");
+          }
         }
         isEditsMade.current = true;
 
@@ -57,7 +63,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
         editorInstance.updateOptions({ readOnly: true });
       }
     }
-  }, [editorInstance, props.edits]);
+  }, [editorInstance, props.editSequence]);
 
   return <EditorBare onDidMount={onDidMount} />;
 }

@@ -27,7 +27,7 @@ const predefinedEdits: editor.IIdentifiedSingleEditOperation[] = [
       endLineNumber: 3,
       endColumn: 14,
     },
-    text: " ",
+    text: "*",
   },
   {
     range: {
@@ -45,7 +45,7 @@ const predefinedEdits: editor.IIdentifiedSingleEditOperation[] = [
       endLineNumber: 3,
       endColumn: 14,
     },
-    text: " ",
+    text: "*",
   },
   {
     range: {
