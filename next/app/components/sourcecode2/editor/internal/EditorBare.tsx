@@ -1,7 +1,6 @@
 "use client";
 
-import Editor, { OnChange } from "@monaco-editor/react";
-import { editor } from "monaco-editor";
+import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 
 interface Props {
   // onDidMount: pass-in a callback like below to manipulate editor instance
@@ -9,7 +8,7 @@ interface Props {
   //   function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
   //     editorRef.current = editorInstance;
   //   }
-  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) => void;
+  onDidMount?: OnMount;
 
   // onChange: this is also called when the first rendering is finisehd
   onChange?: OnChange;
