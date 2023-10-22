@@ -6,10 +6,10 @@
 // !!!!
 import { editor } from "monaco-editor";
 import { EditorBare } from "./EditorBare";
-import { useEditSequence } from "./edits/useEditSequence";
-import { useEditorInstance } from "./useEditorInstance";
-import { useEditorTextUpdate } from "./useEditorTextUpdate";
-import { useLanguageUpdate } from "./useLanguageUpdate";
+import { useEditSequence } from "./hooks/useEditSequence";
+import { useEditorInstance } from "./hooks/useEditorInstance";
+import { useEditorTextUpdate } from "./hooks/useEditorTextUpdate";
+import { useLanguageUpdate } from "./hooks/useLanguageUpdate";
 
 interface Props {
   editorText: string;

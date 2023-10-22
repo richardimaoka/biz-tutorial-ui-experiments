@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { EditorBare } from "./internal/EditorBare";
-import { useEditorInstance } from "./internal/useEditorInstance";
+import { useEditorInstance } from "./internal/hooks/useEditorInstance";
 
 interface Props {
   dummy: string;

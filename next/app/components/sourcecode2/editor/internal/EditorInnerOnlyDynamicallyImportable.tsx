@@ -7,7 +7,7 @@
 
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { EditorBare } from "./EditorBare";
-import { useEditorInstance } from "./useEditorInstance";
+import { useEditorInstance } from "./hooks/useEditorInstance";
 import { editor } from "monaco-editor";
 import { Root, createRoot } from "react-dom/client";
 import styles from "./EditorInnerOnlyDynamicallyImportable.module.css";
