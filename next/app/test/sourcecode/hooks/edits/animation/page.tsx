@@ -51,6 +51,59 @@ const predefinedAnimationEdits: editor.IIdentifiedSingleEditOperation[] = [
   },
 ];
 
+function range(line: number, column: number) {
+  return {
+    startLineNumber: line,
+    startColumn: column,
+    endLineNumber: line,
+    endColumn: column,
+  };
+}
+
+const predefinedAnimationEditsByWord: editor.IIdentifiedSingleEditOperation[] =
+  [
+    {
+      range: range(7, 2),
+      text: "\n",
+    },
+    {
+      range: range(7, 2),
+      text: "// ",
+    },
+    {
+      range: range(7, 5),
+      text: "onDidMount: ",
+    },
+    {
+      range: range(7, 2),
+      text: "pass-in ",
+    },
+    {
+      range: range(7, 2),
+      text: "a callback",
+    },
+    {
+      range: range(7, 2),
+      text: "like ",
+    },
+    {
+      range: range(7, 2),
+      text: "below ",
+    },
+    {
+      range: range(7, 2),
+      text: "to ",
+    },
+    {
+      range: range(7, 2),
+      text: "manipulate ",
+    },
+    {
+      range: range(7, 3),
+      text: "editor instance",
+    },
+  ];
+
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
   // but that requires client component
@@ -68,7 +121,7 @@ export default async function Page() {
         editorText={oldSrcStr}
         language={"typescript"}
         editSequence={{
-          edits: predefinedAnimationEdits,
+          edits: predefinedAnimationEditsByWord,
           animate: true,
         }}
       />
