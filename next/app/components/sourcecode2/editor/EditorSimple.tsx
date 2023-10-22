@@ -15,7 +15,7 @@ interface Props {
   language: string;
 }
 
-export function Editor(props: Props) {
+export function EditorSimple(props: Props) {
   return (
     <EditorInnerSimple
       editorText={props.editorText}
