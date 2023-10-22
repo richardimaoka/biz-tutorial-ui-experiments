@@ -7,22 +7,8 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
-
-// TODO duplicated implementation to be unified
-func getCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
-	commitHash := plumbing.NewHash(hashStr)
-	if commitHash.String() != hashStr {
-		return nil, fmt.Errorf("commit hash = %s mismatched with re-calculated hash = %s", hashStr, commitHash.String())
-	}
-
-	commit, err := repo.CommitObject(commitHash)
-	if err != nil {
-		return nil, fmt.Errorf("cannot get commit = %s, %s", hashStr, err)
-	}
-
-	return commit, nil
-}
 
 func gitFilesForCommit(repo *git.Repository, commitHashStr string) ([]string, error) {
 	commitHash := plumbing.NewHash(commitHashStr)
@@ -87,12 +73,12 @@ func filesForDiffInternal(repo *git.Repository, currentCommit, prevCommit *objec
 }
 
 func filesForDiff(repo *git.Repository, currentCommitHash, prevCommitHash string) ([]string, error) {
-	currentCommit, err := getCommit(repo, currentCommitHash)
+	currentCommit, err := internal.GetCommit(repo, currentCommitHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed in GitFilesForDiff, %s", err)
 	}
 
-	prevCommit, err := getCommit(repo, prevCommitHash)
+	prevCommit, err := internal.GetCommit(repo, prevCommitHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed in GitFilesForDiff, %s", err)
 	}
