@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 )
 
-func SplitSingleLineAdd(singleLine string) []string {
+func splitSingleLineAdd(singleLine string) []string {
 	split := strings.SplitAfter(singleLine, "\n")
 
 	// if singleLine ends in "\n", the new-line character
@@ -18,7 +18,7 @@ func SplitSingleLineAdd(singleLine string) []string {
 	return split
 }
 
-func MoveNewLineToHead(singleLine string) []string {
+func moveNewLineToHead(singleLine string) []string {
 	if singleLine == "\n" {
 		return []string{"\n"}
 	}
@@ -33,7 +33,13 @@ func MoveNewLineToHead(singleLine string) []string {
 	return []string{singleLine}
 }
 
-func OneLetterAdditions(toAdd string) []string {
+const (
+	EACH_CHARACTER_ADDITIONS = "each-character"
+	WORD_BY_WORD_ADDITIONS   = "word-by-word"
+	WHOLE_LINE_ADDITIONS     = "whole-line"
+)
+
+func eachCharacterAdditions(toAdd string) []string {
 	if toAdd == "" {
 		return []string{""}
 	}
@@ -52,12 +58,37 @@ func OneLetterAdditions(toAdd string) []string {
 	return additions
 }
 
-func WordByWordAdditions(toAdd string) []string {
+func wordByWordAdditions(toAdd string) []string {
 	return strings.SplitAfter(toAdd, " ")
 }
 
-func WholeLineAddition(toAdd string) string {
-	return ""
+func wholeLineAddition(toAdd string) []string {
+	return []string{toAdd}
+}
+
+func condition(toAdd string) string {
+	length := len(toAdd)
+	if length < 10 {
+		return EACH_CHARACTER_ADDITIONS
+	} else if length < 100 {
+		return WORD_BY_WORD_ADDITIONS
+	} else {
+		return WHOLE_LINE_ADDITIONS
+	}
+}
+
+func conditionalAdditions(toAdd string) []string {
+	cond := condition(toAdd)
+	switch cond {
+	case EACH_CHARACTER_ADDITIONS:
+		return eachCharacterAdditions(toAdd)
+	case WORD_BY_WORD_ADDITIONS:
+		return wordByWordAdditions(toAdd)
+	case WHOLE_LINE_ADDITIONS:
+		return wholeLineAddition(toAdd)
+	default:
+		return wholeLineAddition(toAdd)
+	}
 }
 
 // type AtomicAddition struct {
