@@ -57,12 +57,12 @@ func moveNewLineToHead(singleLine string) []string {
 }
 
 const (
-	EACH_CHARACTER_ADDITIONS = "each-character"
-	WORD_BY_WORD_ADDITIONS   = "word-by-word"
-	WHOLE_LINE_ADDITIONS     = "whole-line"
+	BREAKDOWN_TO_CHARACTERS = "each-character"
+	BREAKDOWN_TO_WORDS      = "word-by-word"
+	BREAKDOWN_TO_WHOLE_LINE = "whole-line"
 )
 
-func eachCharacterAdditions(toAdd string) []string {
+func breakdownToCharacters(toAdd string) []string {
 	if toAdd == "" {
 		return []string{""}
 	}
@@ -81,36 +81,36 @@ func eachCharacterAdditions(toAdd string) []string {
 	return additions
 }
 
-func wordByWordAdditions(toAdd string) []string {
+func breakdownToWords(toAdd string) []string {
 	return strings.SplitAfter(toAdd, " ")
 }
 
-func wholeLineAddition(toAdd string) []string {
+func breakdownToWholeLine(toAdd string) []string {
 	return []string{toAdd}
 }
 
 func condition(toAdd string) string {
 	length := len(toAdd)
 	if length < 10 {
-		return EACH_CHARACTER_ADDITIONS
+		return BREAKDOWN_TO_CHARACTERS
 	} else if length < 100 {
-		return WORD_BY_WORD_ADDITIONS
+		return BREAKDOWN_TO_WORDS
 	} else {
-		return WHOLE_LINE_ADDITIONS
+		return BREAKDOWN_TO_WHOLE_LINE
 	}
 }
 
-func conditionalAdditions(toAdd string) []string {
+func breakdownAddition(toAdd string) []string {
 	cond := condition(toAdd)
 	switch cond {
-	case EACH_CHARACTER_ADDITIONS:
-		return eachCharacterAdditions(toAdd)
-	case WORD_BY_WORD_ADDITIONS:
-		return wordByWordAdditions(toAdd)
-	case WHOLE_LINE_ADDITIONS:
-		return wholeLineAddition(toAdd)
+	case BREAKDOWN_TO_CHARACTERS:
+		return breakdownToCharacters(toAdd)
+	case BREAKDOWN_TO_WORDS:
+		return breakdownToWords(toAdd)
+	case BREAKDOWN_TO_WHOLE_LINE:
+		return breakdownToWholeLine(toAdd)
 	default:
-		return wholeLineAddition(toAdd)
+		return breakdownToWholeLine(toAdd)
 	}
 }
 

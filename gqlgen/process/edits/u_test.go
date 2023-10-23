@@ -110,7 +110,7 @@ func TestOneLetterAdditions(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := eachCharacterAdditions(c.input)
+			result := breakdownToCharacters(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
@@ -141,7 +141,7 @@ func TestWordByWordAdditions(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := wordByWordAdditions(c.input)
+			result := breakdownToWords(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
@@ -173,7 +173,7 @@ func TestWholeLineAddition(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := wholeLineAddition(c.input)
+			result := breakdownToWholeLine(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
@@ -191,24 +191,24 @@ func TestConditionalAdditions(t *testing.T) {
 	}{
 		{
 			"import Editor from \"@monaco-editor/react\";",
-			WORD_BY_WORD_ADDITIONS,
+			BREAKDOWN_TO_WORDS,
 			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
 		},
 		{
 			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			EACH_CHARACTER_ADDITIONS,
+			BREAKDOWN_TO_CHARACTERS,
 			[]string{""},
 		},
 		{
 			`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`,
-			WHOLE_LINE_ADDITIONS,
+			BREAKDOWN_TO_WHOLE_LINE,
 			[]string{`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`},
 		},
 	}
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := conditionalAdditions(c.input)
+			result := breakdownAddition(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
