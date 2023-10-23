@@ -3,7 +3,30 @@ package edits
 import (
 	"strings"
 	"unicode/utf8"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
+
+type PositionedChunk struct {
+	LineNumber int            `json:"lineNumber"`
+	Column     int            `json:"column"`
+	Chunk      internal.Chunk `json:"chunk"`
+}
+
+type state struct {
+	lineNumber int
+	column     int
+}
+
+func Convert(fileChunks []internal.Chunk) []PositionedChunk {
+	s := state{0, 0}
+
+	// placeholder operation to avoid compilation error `declared but not used`
+	s.lineNumber = 0
+
+	// 1. for each chunks
+	return nil
+}
 
 func splitSingleLineAdd(singleLine string) []string {
 	split := strings.SplitAfter(singleLine, "\n")

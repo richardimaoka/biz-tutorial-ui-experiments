@@ -1,0 +1,42 @@
+[
+  {
+    "lineNumber": 0,
+    "column": 0,
+    "chunk": {
+      "content": "\n",
+      "type": "Add"
+    }
+  },
+  {
+    "lineNumber": 0,
+    "column": 0,
+    "chunk": {
+      "content": "import ",
+      "type": "Add"
+    }
+  },
+  {
+    "lineNumber": 0,
+    "column": 0,
+    "chunk": {
+      "content": "Editor ",
+      "type": "Add"
+    }
+  },
+  {
+    "lineNumber": 0,
+    "column": 0,
+    "chunk": {
+      "content": "from ",
+      "type": "Add"
+    }
+  },
+  {
+    "lineNumber": 0,
+    "column": 0,
+    "chunk": {
+      "content": "\"@monaco-editor/react\";",
+      "type": "Add"
+    }
+  }
+]
