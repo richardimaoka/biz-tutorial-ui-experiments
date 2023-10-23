@@ -15,6 +15,21 @@ func SplitSingleLineAdd(singleLine string) []string {
 	return split
 }
 
+func MoveNewLineToHead(singleLine string) []string {
+	if singleLine == "\n" {
+		return []string{"\n"}
+	}
+
+	if strings.HasSuffix(singleLine, "\n") {
+		lastIndex := len(singleLine) - 1
+		lastNewLineOmitted := singleLine[0:lastIndex]
+
+		return []string{"\n", lastNewLineOmitted}
+	}
+
+	return []string{singleLine}
+}
+
 // type AtomicAddition struct {
 // 	// LineNumber int
 // 	ToAdd string

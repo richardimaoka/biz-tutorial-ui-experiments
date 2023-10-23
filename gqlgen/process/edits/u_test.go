@@ -39,6 +39,51 @@ func TestSplitSingleLineAdd(t *testing.T) {
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
+				// t.Fatalf(cmp.Diff(c.expected, result))
+			}
+		})
+	}
+}
+
+func TestMovesNewLineToHead(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected []string
+	}{
+		{"import Editor from \"@monaco-editor/react\";\n",
+			[]string{"\n", "import Editor from \"@monaco-editor/react\";"},
+		},
+		{
+			"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n",
+			[]string{
+				"\n",
+				"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
+			},
+		},
+		{
+			"  // pass-in a callback like below to manipulate editor instance\n",
+			[]string{
+				"\n",
+				"  // pass-in a callback like below to manipulate editor instance",
+			},
+		},
+		{
+			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
+			[]string{""},
+		},
+		{
+			// if only "\n", then only return "\n"
+			"\n",
+			[]string{"\n"},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := edits.MoveNewLineToHead(c.input)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf("expected: %s", c.expected)
+				t.Errorf("result  : %s", result)
 				t.Fatalf(cmp.Diff(c.expected, result))
 			}
 		})
