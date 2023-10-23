@@ -120,3 +120,34 @@ func TestOneLetterAdditions(t *testing.T) {
 		})
 	}
 }
+
+func TestWordByWordAdditions(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected []string
+	}{
+		{"import Editor from \"@monaco-editor/react\";",
+			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
+		},
+		{
+			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
+			[]string{""},
+		},
+		{
+			// if only "\n", then only return "\n"
+			"\n",
+			[]string{"\n"},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := edits.WordByWordAdditions(c.input)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf("expected: %s", c.expected)
+				t.Errorf("result  : %s", result)
+				t.Fatalf(cmp.Diff(c.expected, result))
+			}
+		})
+	}
+}

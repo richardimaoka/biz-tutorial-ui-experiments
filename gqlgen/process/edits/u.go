@@ -53,7 +53,7 @@ func OneLetterAdditions(toAdd string) []string {
 }
 
 func WordByWordAdditions(toAdd string) []string {
-	return []string{""}
+	return strings.SplitAfter(toAdd, " ")
 }
 
 func WholeLineAddition(toAdd string) string {
