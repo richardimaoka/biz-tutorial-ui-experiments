@@ -16,6 +16,21 @@ func TestSplitSingleLineAdd(t *testing.T) {
 		{"import Editor from \"@monaco-editor/react\";\n",
 			[]string{"import Editor from \"@monaco-editor/react\";\n"},
 		},
+		{
+			"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n  // pass-in a callback like below to manipulate editor instance\n",
+			[]string{
+				"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n",
+				"  // pass-in a callback like below to manipulate editor instance\n",
+			},
+		},
+		{
+			"",         // if it happends to be an empty change, ...
+			[]string{}, // then it's safe to omit
+		},
+		{
+			"\n",
+			[]string{"\n"},
+		},
 	}
 
 	for index, c := range cases {
