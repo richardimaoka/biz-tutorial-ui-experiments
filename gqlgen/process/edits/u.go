@@ -1,6 +1,9 @@
 package edits
 
-import "strings"
+import (
+	"strings"
+	"unicode/utf8"
+)
 
 func SplitSingleLineAdd(singleLine string) []string {
 	split := strings.SplitAfter(singleLine, "\n")
@@ -28,6 +31,33 @@ func MoveNewLineToHead(singleLine string) []string {
 	}
 
 	return []string{singleLine}
+}
+
+func OneLetterAdditions(toAdd string) []string {
+	if toAdd == "" {
+		return []string{""}
+	}
+
+	var additions []string
+
+	// From プログラミング言語Go chap. 3, p. 78
+	// since a UTF-8 character varies in its size, we need to use rune (via utf8.DecodeRuneInString)
+	// to extract each character. (e.g.) Source code comments can have multi-byte characters.
+	for i := 0; i < len(toAdd); {
+		r, size := utf8.DecodeRuneInString(toAdd[i:])
+		additions = append(additions, string(r))
+		i += size
+	}
+
+	return additions
+}
+
+func WordByWordAdditions(toAdd string) []string {
+	return []string{""}
+}
+
+func WholeLineAddition(toAdd string) string {
+	return ""
 }
 
 // type AtomicAddition struct {
