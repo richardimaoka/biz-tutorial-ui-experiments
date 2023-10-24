@@ -54,19 +54,28 @@ func splitIntoSingleLines(chunkContent string) []string {
 	return split
 }
 
-func moveNewLineToHead(singleLineToAdd string) []string {
+// Returns a pair indicating 1) whether the input has a new character '\n'
+// and 2) the string without '\n'
+// parameters:
+//   singleLineToAdd: the input string, which potentially has '\n' at the end
+//                    but cannot have '\n' in the middle
+//
+// returns:
+//   bool   : whether there is `\n` at the end
+//   string : the remaining string without '\n'
+func stripNewLineAtEnd(singleLineToAdd string) (bool, string) {
 	if singleLineToAdd == "\n" {
-		return []string{"\n"}
+		return true, "" // the latter is empty "", since there is no remaining string after omitting '\n'
 	}
 
 	if strings.HasSuffix(singleLineToAdd, "\n") {
 		lastIndex := len(singleLineToAdd) - 1
 		lastNewLineOmitted := singleLineToAdd[0:lastIndex]
 
-		return []string{"\n", lastNewLineOmitted}
+		return true, lastNewLineOmitted
 	}
 
-	return []string{singleLineToAdd}
+	return false, singleLineToAdd
 }
 
 const (
@@ -131,17 +140,17 @@ func breakdownAddition(toAdd string) []string {
 //
 //   singleLineToAdd: a string add, which potentially has '\n' at the end
 //                    (but cannot have '\n' in the middle)
-func breakDownSingleLine(singleLineToAdd string) []string {
-	sliced := moveNewLineToHead(singleLineToAdd)
+// func breakDownSingleLine(singleLineToAdd string) []string {
+// 	sliced := moveNewLineToHead(singleLineToAdd)
 
-	var split []string
-	for _, s := range sliced {
-		breakDowns := breakdownAddition(s)
-		split = append(split, breakDowns...)
-	}
+// 	var split []string
+// 	for _, s := range sliced {
+// 		breakDowns := breakdownAddition(s)
+// 		split = append(split, breakDowns...)
+// 	}
 
-	return split
-}
+// 	return split
+// }
 
 // type AtomicAddition struct {
 // 	// LineNumber int

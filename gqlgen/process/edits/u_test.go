@@ -45,45 +45,65 @@ func TestSplitSingleLineAdd(t *testing.T) {
 }
 
 func TestMovesNewLineToHead(t *testing.T) {
+	type Expectation struct {
+		HasNewLetter          bool
+		ContentWithoutNewLine string
+	}
+
 	cases := []struct {
 		input    string
-		expected []string
+		expected Expectation
 	}{
-		{"import Editor from \"@monaco-editor/react\";\n",
-			[]string{"\n", "import Editor from \"@monaco-editor/react\";"},
+		{
+			"import Editor from \"@monaco-editor/react\";\n",
+			Expectation{
+				true,
+				"import Editor from \"@monaco-editor/react\";",
+			},
 		},
 		{
 			"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n",
-			[]string{
-				"\n",
+			Expectation{
+				true,
 				"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
 			},
 		},
 		{
 			"  // pass-in a callback like below to manipulate editor instance\n",
-			[]string{
-				"\n",
+			Expectation{
+				true,
 				"  // pass-in a callback like below to manipulate editor instance",
 			},
 		},
 		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			[]string{""},
+			" some word vvvv",
+			Expectation{
+				false,
+				" some word vvvv",
+			},
+		}, {
+			"",
+			Expectation{
+				false,
+				"",
+			},
 		},
 		{
-			// if only "\n", then only return "\n"
+			// if only "\n", then it 1) has '\n' as indicated by `true`, but 2) the content without '\n' is empty string
 			"\n",
-			[]string{"\n"},
+			Expectation{
+				true,
+				"",
+			},
 		},
 	}
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := moveNewLineToHead(c.input)
-			if !cmp.Equal(c.expected, result) {
-				t.Errorf("expected: %s", c.expected)
-				t.Errorf("result  : %s", result)
-				t.Fatalf(cmp.Diff(c.expected, result))
+			hasNewLine, remainder := stripNewLineAtEnd(c.input)
+			if hasNewLine != c.expected.HasNewLetter || remainder != c.expected.ContentWithoutNewLine {
+				t.Errorf("expected: %t, '%s'", c.expected.HasNewLetter, c.expected.ContentWithoutNewLine)
+				t.Errorf("result  : %t, '%s'", hasNewLine, remainder)
 			}
 		})
 	}
