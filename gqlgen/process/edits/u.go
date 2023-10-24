@@ -8,9 +8,9 @@ import (
 )
 
 type PositionedChunk struct {
-	LineNumber int            `json:"lineNumber"`
-	Column     int            `json:"column"`
-	Chunk      internal.Chunk `json:"chunk"`
+	LineNumber int              `json:"lineNumber"`
+	Column     int              `json:"column"`
+	Chunks     []internal.Chunk `json:"chunks"`
 }
 
 type state struct {
@@ -28,8 +28,21 @@ func Convert(fileChunks []internal.Chunk) []PositionedChunk {
 	return nil
 }
 
-func splitSingleLineAdd(singleLine string) []string {
-	split := strings.SplitAfter(singleLine, "\n")
+// Split chunkContent, which potentially has many '\n' characters inside,
+// into slice of single-line strings, where each of them can have '\n' at the end.
+//
+// (e.g.)
+//    chunkContent = "func myFunc() int {\n  var myVar string\n  var anotherVar int"
+//
+//  will be split into:
+//
+//    []string {
+//      "func myFunc() int {\n",   // '\n' at the end.
+//      "var myVar string\n",      // '\n' at the end
+//      "var anotherVar int",      // doesn't have '\n'
+//    }
+func splitIntoSingleLines(chunkContent string) []string {
+	split := strings.SplitAfter(chunkContent, "\n")
 
 	// if singleLine ends in "\n", the new-line character
 	lastIndex := len(split) - 1
@@ -41,19 +54,19 @@ func splitSingleLineAdd(singleLine string) []string {
 	return split
 }
 
-func moveNewLineToHead(singleLine string) []string {
-	if singleLine == "\n" {
+func moveNewLineToHead(singleLineToAdd string) []string {
+	if singleLineToAdd == "\n" {
 		return []string{"\n"}
 	}
 
-	if strings.HasSuffix(singleLine, "\n") {
-		lastIndex := len(singleLine) - 1
-		lastNewLineOmitted := singleLine[0:lastIndex]
+	if strings.HasSuffix(singleLineToAdd, "\n") {
+		lastIndex := len(singleLineToAdd) - 1
+		lastNewLineOmitted := singleLineToAdd[0:lastIndex]
 
 		return []string{"\n", lastNewLineOmitted}
 	}
 
-	return []string{singleLine}
+	return []string{singleLineToAdd}
 }
 
 const (
@@ -112,6 +125,22 @@ func breakdownAddition(toAdd string) []string {
 	default:
 		return breakdownToWholeLine(toAdd)
 	}
+}
+
+// Split a single-line change (addition) into a slice of small-piece `string`s
+//
+//   singleLineToAdd: a string add, which potentially has '\n' at the end
+//                    (but cannot have '\n' in the middle)
+func breakDownSingleLine(singleLineToAdd string) []string {
+	sliced := moveNewLineToHead(singleLineToAdd)
+
+	var split []string
+	for _, s := range sliced {
+		breakDowns := breakdownAddition(s)
+		split = append(split, breakDowns...)
+	}
+
+	return split
 }
 
 // type AtomicAddition struct {

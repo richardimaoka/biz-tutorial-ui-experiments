@@ -34,7 +34,7 @@ func TestSplitSingleLineAdd(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := splitSingleLineAdd(c.input)
+			result := splitIntoSingleLines(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
@@ -217,3 +217,37 @@ func TestConditionalAdditions(t *testing.T) {
 		})
 	}
 }
+
+// func TestConversion(t *testing.T) {
+// 	cases := []struct {
+// 		inputLineNumber int
+// 		inputColumn     int
+// 		inputChunk      internal.Chunk
+// 		expected        []internal.Chunk
+// 	}{
+// 		{
+// 			0, 0, internal.Chunk{
+// 				Content: "import Editor from \"@monaco-editor/react\";\n",
+// 				Type:    "Add",
+// 			},
+// 			[]internal.Chunk{
+// 				{Type: "Add", Content: "\n"},
+// 				{Type: "Add", Content: "import "},
+// 				{Type: "Add", Content: "Editor "},
+// 				{Type: "Add", Content: "from "},
+// 				{Type: "Add", Content: "\"@monaco-editor/react\";"},
+// 			},
+// 		},
+// 	}
+
+// 	for index, c := range cases {
+// 		t.Run(strconv.Itoa(index), func(t *testing.T) {
+// 			result := breakDownSingleLine(c.inputChunk, c.inputLineNumber, c.inputColumn)
+// 			if !cmp.Equal(c.expected, result) {
+// 				t.Errorf("expected: %v", c.expected)
+// 				t.Errorf("result  : %v", result)
+// 				t.Fatalf(cmp.Diff(c.expected, result))
+// 			}
+// 		})
+// 	}
+// }
