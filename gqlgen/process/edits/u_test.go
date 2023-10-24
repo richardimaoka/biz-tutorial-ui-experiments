@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func TestSplitSingleLineAdd(t *testing.T) {
@@ -238,36 +239,36 @@ func TestConditionalAdditions(t *testing.T) {
 	}
 }
 
-// func TestConversion(t *testing.T) {
-// 	cases := []struct {
-// 		inputLineNumber int
-// 		inputColumn     int
-// 		inputChunk      internal.Chunk
-// 		expected        []internal.Chunk
-// 	}{
-// 		{
-// 			0, 0, internal.Chunk{
-// 				Content: "import Editor from \"@monaco-editor/react\";\n",
-// 				Type:    "Add",
-// 			},
-// 			[]internal.Chunk{
-// 				{Type: "Add", Content: "\n"},
-// 				{Type: "Add", Content: "import "},
-// 				{Type: "Add", Content: "Editor "},
-// 				{Type: "Add", Content: "from "},
-// 				{Type: "Add", Content: "\"@monaco-editor/react\";"},
-// 			},
-// 		},
-// 	}
+func TestSplitIntoChunks(t *testing.T) {
+	cases := []struct {
+		inputLineNumber int
+		inputColumn     int
+		inputChunk      internal.Chunk
+		expected        []PositionedChunk
+	}{
+		{
+			0, 0, internal.Chunk{
+				Content: "import Editor from \"@monaco-editor/react\";\n",
+				Type:    "Add",
+			},
+			[]PositionedChunk{
+				{LineNumber: 0, Column: 0, Type: "Add", Content: "\n"},
+				{LineNumber: 0, Column: 0, Type: "Add", Content: "import "},
+				{LineNumber: 0, Column: 7, Type: "Add", Content: "Editor "},
+				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
+				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
+			},
+		},
+	}
 
-// 	for index, c := range cases {
-// 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-// 			result := breakDownSingleLine(c.inputChunk, c.inputLineNumber, c.inputColumn)
-// 			if !cmp.Equal(c.expected, result) {
-// 				t.Errorf("expected: %v", c.expected)
-// 				t.Errorf("result  : %v", result)
-// 				t.Fatalf(cmp.Diff(c.expected, result))
-// 			}
-// 		})
-// 	}
-// }
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := splitIntoChunks(c.inputChunk.Content, c.inputLineNumber, c.inputColumn)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf("expected: %v", c.expected)
+				t.Errorf("result  : %v", result)
+				t.Fatalf(cmp.Diff(c.expected, result))
+			}
+		})
+	}
+}

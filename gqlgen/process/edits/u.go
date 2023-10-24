@@ -8,9 +8,10 @@ import (
 )
 
 type PositionedChunk struct {
-	LineNumber int              `json:"lineNumber"`
-	Column     int              `json:"column"`
-	Chunks     []internal.Chunk `json:"chunks"`
+	LineNumber int    `json:"lineNumber"`
+	Column     int    `json:"column"`
+	Content    string `json:"contentn"`
+	Type       string `json:"type"`
 }
 
 type state struct {
@@ -138,19 +139,39 @@ func breakdownAddition(toAdd string) []string {
 
 // Split a single-line change (addition) into a slice of small-piece `string`s
 //
-//   singleLineToAdd: a string add, which potentially has '\n' at the end
-//                    (but cannot have '\n' in the middle)
-// func breakDownSingleLine(singleLineToAdd string) []string {
-// 	sliced := moveNewLineToHead(singleLineToAdd)
+// parameters:
+//   singleLineToAdd: the input string, which potentially has '\n' at the end
+//                    but cannot have '\n' in the middle
+func splitIntoChunks(singleLineToAdd string, lineNumber, column int) []PositionedChunk {
+	hasNewLine, contentWithoutNewLine := stripNewLineAtEnd(singleLineToAdd)
 
-// 	var split []string
-// 	for _, s := range sliced {
-// 		breakDowns := breakdownAddition(s)
-// 		split = append(split, breakDowns...)
-// 	}
+	var pChunks []PositionedChunk
 
-// 	return split
-// }
+	if hasNewLine {
+		firstChunk := PositionedChunk{
+			LineNumber: lineNumber,
+			Column:     column,
+			Type:       "Add",
+			Content:    "\n",
+		}
+		pChunks = append(pChunks, firstChunk)
+	}
+
+	currentColumn := column
+	breakDowns := breakdownAddition(contentWithoutNewLine)
+	for _, b := range breakDowns {
+		c := PositionedChunk{
+			LineNumber: lineNumber,
+			Column:     currentColumn,
+			Type:       "Add",
+			Content:    b,
+		}
+		pChunks = append(pChunks, c)
+		currentColumn += utf8.RuneCountInString(b)
+	}
+
+	return pChunks
+}
 
 // type AtomicAddition struct {
 // 	// LineNumber int
