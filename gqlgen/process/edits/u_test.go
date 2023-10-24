@@ -35,7 +35,7 @@ func TestSplitSingleLineAdd(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := splitIntoSingleLines(c.input)
+			result := splitAfterNewLine(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %s", c.expected)
 				t.Errorf("result  : %s", result)
@@ -53,38 +53,38 @@ func TestMovesNewLineToHead(t *testing.T) {
 
 	cases := []struct {
 		input    string
-		expected Expectation
+		expected SingleLineToAdd
 	}{
 		{
 			"import Editor from \"@monaco-editor/react\";\n",
-			Expectation{
+			SingleLineToAdd{
 				true,
 				"import Editor from \"@monaco-editor/react\";",
 			},
 		},
 		{
 			"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n",
-			Expectation{
+			SingleLineToAdd{
 				true,
 				"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
 			},
 		},
 		{
 			"  // pass-in a callback like below to manipulate editor instance\n",
-			Expectation{
+			SingleLineToAdd{
 				true,
 				"  // pass-in a callback like below to manipulate editor instance",
 			},
 		},
 		{
 			" some word vvvv",
-			Expectation{
+			SingleLineToAdd{
 				false,
 				" some word vvvv",
 			},
 		}, {
 			"",
-			Expectation{
+			SingleLineToAdd{
 				false,
 				"",
 			},
@@ -92,7 +92,7 @@ func TestMovesNewLineToHead(t *testing.T) {
 		{
 			// if only "\n", then it 1) has '\n' as indicated by `true`, but 2) the content without '\n' is empty string
 			"\n",
-			Expectation{
+			SingleLineToAdd{
 				true,
 				"",
 			},
@@ -102,8 +102,8 @@ func TestMovesNewLineToHead(t *testing.T) {
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
 			hasNewLine, remainder := stripNewLineAtEnd(c.input)
-			if hasNewLine != c.expected.HasNewLetter || remainder != c.expected.ContentWithoutNewLine {
-				t.Errorf("expected: %t, '%s'", c.expected.HasNewLetter, c.expected.ContentWithoutNewLine)
+			if hasNewLine != c.expected.NewLineAtEnd || remainder != c.expected.Content {
+				t.Errorf("expected: %t, '%s'", c.expected.NewLineAtEnd, c.expected.Content)
 				t.Errorf("result  : %t, '%s'", hasNewLine, remainder)
 			}
 		})

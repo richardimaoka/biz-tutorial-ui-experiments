@@ -14,6 +14,11 @@ type PositionedChunk struct {
 	Type       string `json:"type"`
 }
 
+type SingleLineToAdd struct {
+	NewLineAtEnd bool
+	Content      string
+}
+
 type state struct {
 	lineNumber int
 	column     int
@@ -42,11 +47,11 @@ func Convert(fileChunks []internal.Chunk) []PositionedChunk {
 //      "var myVar string\n",      // '\n' at the end
 //      "var anotherVar int",      // doesn't have '\n'
 //    }
-func splitIntoSingleLines(chunkContent string) []string {
+func splitAfterNewLine(chunkContent string) []string {
 	split := strings.SplitAfter(chunkContent, "\n")
 
-	// if singleLine ends in "\n", the new-line character
 	lastIndex := len(split) - 1
+	// if chunkContent ends in "\n", strings.SplitAfter() returns "" as the last element.
 	if split[lastIndex] == "" {
 		// then omit the last "", empty string
 		return split[0:lastIndex]
@@ -78,6 +83,19 @@ func stripNewLineAtEnd(singleLineToAdd string) (bool, string) {
 
 	return false, singleLineToAdd
 }
+
+// func splitIntoSingleLines2(chunkContent string) []SingleLineToAdd {
+// 	singleLineChanges := splitAfterNewLine(chunkContent)
+
+// 	// if singleLine ends in "\n", the new-line character
+// 	lastIndex := len(split) - 1
+// 	if split[lastIndex] == "" {
+// 		// then omit the last "", empty string
+// 		return split[0:lastIndex]
+// 	}
+
+// 	return split
+// }
 
 const (
 	BREAKDOWN_TO_CHARACTERS = "each-character"
@@ -172,24 +190,3 @@ func splitIntoChunks(singleLineToAdd string, lineNumber, column int) []Positione
 
 	return pChunks
 }
-
-// type AtomicAddition struct {
-// 	// LineNumber int
-// 	ToAdd string
-// }
-
-// func OneLetterAdditions(toAdd string) []AtomicAddition {
-// }
-
-// func WordByWordAdditions(toAdd string) []AtomicAddition {
-// }
-
-// func WholeLineAddition(toAdd string) AtomicAddition {
-// }
-
-// func SplitChange(toAdd string) []string {
-// 	return strings.SplitAfter(toAdd, "\n")
-// }
-
-// func InsertNewLineFirst(toAdd string) (AtomicAddition, []AtomicAddition) {
-// }
