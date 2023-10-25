@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 func TestSplitAfterNewLine(t *testing.T) {
@@ -44,7 +45,7 @@ func TestSplitAfterNewLine(t *testing.T) {
 	}
 }
 
-func TestMovesNewLineToHead(t *testing.T) {
+func TestDetectNewLines(t *testing.T) {
 	type Expectation struct {
 		HasNewLetter          bool
 		ContentWithoutNewLine string
@@ -100,7 +101,7 @@ func TestMovesNewLineToHead(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := toSingleLineToAdd(c.input)
+			result := detectNewLine(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %t, '%s'", c.expected.NewLineAtEnd, c.expected.ContentWithoutNewLine)
 				t.Errorf("result  : %t, '%s'", result.NewLineAtEnd, result.ContentWithoutNewLine)
@@ -109,71 +110,69 @@ func TestMovesNewLineToHead(t *testing.T) {
 	}
 }
 
-func TestConditionalAdditions(t *testing.T) {
+func TestSplitIntoSingleLines(t *testing.T) {
 	cases := []struct {
-		input        string
-		additionType string
-		expected     []string
+		input    internal.Chunk
+		expected []SingleLineToAdd
 	}{
 		{
-			"import Editor from \"@monaco-editor/react\";",
-			BREAKDOWN_TO_WORDS,
-			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
-		},
-		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			BREAKDOWN_TO_CHARACTERS,
-			[]string{""},
-		},
-		{
-			`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`,
-			BREAKDOWN_TO_WHOLE_LINE,
-			[]string{`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`},
+			input: internal.Chunk{
+				Content: "  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n  // pass-in a callback like below to manipulate editor instance\n",
+				Type:    "Add",
+			},
+			expected: []SingleLineToAdd{
+				{
+					true,
+					"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
+				},
+				{
+					true,
+					"  // pass-in a callback like below to manipulate editor instance",
+				},
+			},
 		},
 	}
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := breakdownAddition(c.input)
+			result := chunkToLines(c.input)
 			if !cmp.Equal(c.expected, result) {
-				t.Errorf("expected: %s", c.expected)
-				t.Errorf("result  : %s", result)
 				t.Fatalf(cmp.Diff(c.expected, result))
 			}
 		})
 	}
 }
 
-// func TestSplitIntoChunks(t *testing.T) {
-// 	cases := []struct {
-// 		inputLineNumber int
-// 		inputColumn     int
-// 		inputChunk      internal.Chunk
-// 		expected        []PositionedChunk
-// 	}{
-// 		{
-// 			0, 0, internal.Chunk{
-// 				Content: "import Editor from \"@monaco-editor/react\";\n",
-// 				Type:    "Add",
-// 			},
-// 			[]PositionedChunk{
-// 				{LineNumber: 0, Column: 0, Type: "Add", Content: "\n"},
-// 				{LineNumber: 0, Column: 0, Type: "Add", Content: "import "},
-// 				{LineNumber: 0, Column: 7, Type: "Add", Content: "Editor "},
-// 				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
-// 				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
-// 			},
-// 		},
-// 	}
+func TestLineToPosChunks(t *testing.T) {
+	cases := []struct {
+		inputLineNumber int
+		inputColumn     int
+		inputLine       SingleLineToAdd
+		expected        []PositionedChunk
+	}{
+		{
+			0, 0, SingleLineToAdd{
+				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
+				NewLineAtEnd:          true,
+			},
+			[]PositionedChunk{
+				{LineNumber: 0, Column: 0, Type: "Add", Content: "\n"},
+				{LineNumber: 0, Column: 0, Type: "Add", Content: "import "},
+				{LineNumber: 0, Column: 7, Type: "Add", Content: "Editor "},
+				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
+				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
+			},
+		},
+	}
 
-// 	for index, c := range cases {
-// 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-// 			result := splitIntoChunks(c.inputChunk.Content, c.inputLineNumber, c.inputColumn)
-// 			if !cmp.Equal(c.expected, result) {
-// 				t.Errorf("expected: %v", c.expected)
-// 				t.Errorf("result  : %v", result)
-// 				t.Fatalf(cmp.Diff(c.expected, result))
-// 			}
-// 		})
-// 	}
-// }
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf("expected: %v", c.expected)
+				t.Errorf("result  : %v", result)
+				t.Fatalf(cmp.Diff(c.expected, result))
+			}
+		})
+	}
+}

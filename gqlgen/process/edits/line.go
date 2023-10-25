@@ -2,6 +2,7 @@ package edits
 
 import (
 	"strings"
+	"unicode/utf8"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
@@ -64,7 +65,7 @@ func splitAfterNewLine(chunkContent string) []string {
 // parameters:
 //   lineToAdd: the input string, which potentially has '\n' at the end
 //              but cannot have '\n' in the middle
-func toSingleLineToAdd(lineToAdd string) SingleLineToAdd {
+func detectNewLine(lineToAdd string) SingleLineToAdd {
 	if lineToAdd == "\n" {
 		return SingleLineToAdd{
 			NewLineAtEnd:          true,
@@ -88,13 +89,14 @@ func toSingleLineToAdd(lineToAdd string) SingleLineToAdd {
 	}
 }
 
-func splitIntoSingleLines(chunk internal.Chunk) []SingleLineToAdd {
+// Returns single-line changes with flags indicating new-line characters '\n' are included
+func chunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 	splitContent := splitAfterNewLine(chunk.Content)
 
 	var ret []SingleLineToAdd
 	for _, c := range splitContent {
-		sa := toSingleLineToAdd(c)
-		ret = append(ret, sa)
+		lineToAdd := detectNewLine(c)
+		ret = append(ret, lineToAdd)
 	}
 
 	return ret
@@ -105,33 +107,32 @@ func splitIntoSingleLines(chunk internal.Chunk) []SingleLineToAdd {
 // parameters:
 //   singleLineToAdd: the input string, which potentially has '\n' at the end
 //                    but cannot have '\n' in the middle
-// func splitIntoChunks(singleLineToAdd string, lineNumber, column int) []PositionedChunk {
-// 	hasNewLine, contentWithoutNewLine := toSingleLineToAdd(singleLineToAdd)
+func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) []PositionedChunk {
+	var pChunks []PositionedChunk
 
-// 	var pChunks []PositionedChunk
+	if lineToAdd.NewLineAtEnd {
+		// if new line '\n' at the end, then moves it to the beginning
+		firstChunk := PositionedChunk{
+			LineNumber: lineNumber,
+			Column:     column,
+			Type:       "Add",
+			Content:    "\n",
+		}
+		pChunks = append(pChunks, firstChunk)
+	}
 
-// 	if hasNewLine {
-// 		firstChunk := PositionedChunk{
-// 			LineNumber: lineNumber,
-// 			Column:     column,
-// 			Type:       "Add",
-// 			Content:    "\n",
-// 		}
-// 		pChunks = append(pChunks, firstChunk)
-// 	}
+	currentColumn := column
+	breakDowns := breakdownLineToAdd(lineToAdd.ContentWithoutNewLine)
+	for _, b := range breakDowns {
+		c := PositionedChunk{
+			LineNumber: lineNumber,
+			Column:     currentColumn,
+			Type:       "Add",
+			Content:    b,
+		}
+		pChunks = append(pChunks, c)
+		currentColumn += utf8.RuneCountInString(b)
+	}
 
-// 	currentColumn := column
-// 	breakDowns := breakdownAddition(contentWithoutNewLine)
-// 	for _, b := range breakDowns {
-// 		c := PositionedChunk{
-// 			LineNumber: lineNumber,
-// 			Column:     currentColumn,
-// 			Type:       "Add",
-// 			Content:    b,
-// 		}
-// 		pChunks = append(pChunks, c)
-// 		currentColumn += utf8.RuneCountInString(b)
-// 	}
-
-// 	return pChunks
-// }
+	return pChunks
+}

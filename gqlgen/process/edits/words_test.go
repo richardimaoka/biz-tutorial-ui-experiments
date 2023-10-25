@@ -100,3 +100,38 @@ func TestWholeLineAddition(t *testing.T) {
 		})
 	}
 }
+
+func TestConditionalAdditions(t *testing.T) {
+	cases := []struct {
+		input        string
+		additionType string
+		expected     []string
+	}{
+		{
+			"import Editor from \"@monaco-editor/react\";",
+			BREAKDOWN_TO_WORDS,
+			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
+		},
+		{
+			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
+			BREAKDOWN_TO_CHARACTERS,
+			[]string{""},
+		},
+		{
+			`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`,
+			BREAKDOWN_TO_WHOLE_LINE,
+			[]string{`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := breakdownLineToAdd(c.input)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf("expected: %s", c.expected)
+				t.Errorf("result  : %s", result)
+				t.Fatalf(cmp.Diff(c.expected, result))
+			}
+		})
+	}
+}

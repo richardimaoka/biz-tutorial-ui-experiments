@@ -11,17 +11,17 @@ const (
 	BREAKDOWN_TO_WHOLE_LINE = "whole-line"
 )
 
-func breakdownAddition(toAdd string) []string {
-	cond := condition(toAdd)
+func breakdownLineToAdd(lineToAdd string) []string {
+	cond := condition(lineToAdd)
 	switch cond {
 	case BREAKDOWN_TO_CHARACTERS:
-		return breakdownToCharacters(toAdd)
+		return breakdownToCharacters(lineToAdd)
 	case BREAKDOWN_TO_WORDS:
-		return breakdownToWords(toAdd)
+		return breakdownToWords(lineToAdd)
 	case BREAKDOWN_TO_WHOLE_LINE:
-		return breakdownToWholeLine(toAdd)
+		return breakdownToWholeLine(lineToAdd)
 	default:
-		return breakdownToWholeLine(toAdd)
+		return breakdownToWholeLine(lineToAdd)
 	}
 }
 
