@@ -18,6 +18,16 @@ type TypingPosition struct {
 	Column     int `json:"column"`
 }
 
+type Range struct {
+	LineNumber  int
+	StartColumn int
+	EndColumn   int
+}
+
+type DeleteChunk struct {
+	Range Range
+}
+
 type SingleLineToAdd struct {
 	NewLineAtEnd          bool
 	ContentWithoutNewLine string
@@ -167,4 +177,33 @@ func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPositio
 	}
 
 	return currentPos, pChunks
+}
+
+func processEqual(chunk internal.Chunk, pos TypingPosition) TypingPosition {
+	split := strings.Split(chunk.Content, "\n")
+	lastLineChange := split[len(split)-1]
+
+	return TypingPosition{
+		LineNumber: pos.LineNumber + len(split) - 1,
+		Column:     utf8.RuneCountInString(lastLineChange),
+	}
+}
+
+func processDelete(chunk internal.Chunk, pos TypingPosition) []DeleteChunk {
+	linesToDelete := splitAfterNewLine(chunk.Content)
+
+	var dChunks []DeleteChunk
+	for _, lineString := range linesToDelete {
+		nChars := utf8.RuneCountInString(lineString)
+		c := DeleteChunk{
+			Range: Range{
+				LineNumber:  pos.LineNumber,
+				StartColumn: pos.Column,
+				EndColumn:   pos.Column + nChars,
+			},
+		}
+		dChunks = append(dChunks, c)
+	}
+
+	return dChunks
 }
