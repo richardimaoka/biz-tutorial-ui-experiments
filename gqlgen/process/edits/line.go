@@ -8,10 +8,14 @@ import (
 )
 
 type PositionedChunk struct {
-	LineNumber int    `json:"lineNumber"`
-	Column     int    `json:"column"`
-	Content    string `json:"contentn"`
-	Type       string `json:"type"`
+	TypingPosition
+	Content string `json:"content"`
+	Type    string `json:"type"`
+}
+
+type TypingPosition struct {
+	LineNumber int `json:"lineNumber"`
+	Column     int `json:"column"`
 }
 
 type SingleLineToAdd struct {
@@ -107,16 +111,18 @@ func chunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 // parameters:
 //   singleLineToAdd: the input string, which potentially has '\n' at the end
 //                    but cannot have '\n' in the middle
-func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (int, []PositionedChunk) {
+func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (TypingPosition, []PositionedChunk) {
 	var pChunks []PositionedChunk
 
 	if lineToAdd.NewLineAtEnd {
 		// if new line '\n' at the end, then moves it to the beginning
 		firstChunk := PositionedChunk{
-			LineNumber: lineNumber,
-			Column:     column,
-			Type:       "Add",
-			Content:    "\n",
+			TypingPosition: TypingPosition{
+				LineNumber: lineNumber,
+				Column:     column,
+			},
+			Type:    "Add",
+			Content: "\n",
 		}
 		pChunks = append(pChunks, firstChunk)
 	}
@@ -125,34 +131,36 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (int, []
 	breakDowns := breakdownLineToAdd(lineToAdd.ContentWithoutNewLine)
 	for _, b := range breakDowns {
 		c := PositionedChunk{
-			LineNumber: lineNumber,
-			Column:     currentColumn,
-			Type:       "Add",
-			Content:    b,
+			TypingPosition: TypingPosition{
+				LineNumber: lineNumber,
+				Column:     currentColumn,
+			},
+			Type:    "Add",
+			Content: b,
 		}
 		pChunks = append(pChunks, c)
 		currentColumn += utf8.RuneCountInString(b)
 	}
 
 	if lineToAdd.NewLineAtEnd {
-		return 1, pChunks
+		return TypingPosition{LineNumber: lineNumber + 1, Column: 1}, pChunks
 	} else {
-		return currentColumn, pChunks
+		return TypingPosition{LineNumber: lineNumber, Column: currentColumn}, pChunks
 	}
 }
 
-func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) (int, []PositionedChunk) {
-	linesToAdd := chunkToLines(chunk)
+// func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) (int, []PositionedChunk) {
+// 	linesToAdd := chunkToLines(chunk)
 
-	var pChunks []PositionedChunk
-	var currentLine int = lineNumber
-	var currentColumn int = column
-	for _, v := range linesToAdd {
-		newColumn, newPosChunks := lineToPosChunks(v, currentLine, currentColumn)
-		pChunks = append(pChunks, newPosChunks...)
-		currentLine += 1
-		currentColumn = newColumn
-	}
+// 	var pChunks []PositionedChunk
+// 	var currentLine int = lineNumber
+// 	var currentColumn int = column
+// 	for _, v := range linesToAdd {
+// 		newColumn, newPosChunks := lineToPosChunks(v, currentLine, currentColumn)
+// 		pChunks = append(pChunks, newPosChunks...)
+// 		currentLine += 1
+// 		currentColumn = newColumn
+// 	}
 
-	return currentColumn, pChunks
-}
+// 	return currentColumn, pChunks
+// }

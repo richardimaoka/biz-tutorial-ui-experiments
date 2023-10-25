@@ -149,48 +149,52 @@ func TestLineToPosChunks(t *testing.T) {
 		inputColumn     int
 		inputLine       SingleLineToAdd
 		expected        []PositionedChunk
-		expectedColumn  int
+		expectedPos     TypingPosition
 	}{
 		{
-			0, 1, SingleLineToAdd{
+			1, 1, SingleLineToAdd{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          false,
 			},
 			[]PositionedChunk{
-				{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
-				{LineNumber: 0, Column: 8, Type: "Add", Content: "Editor "},
-				{LineNumber: 0, Column: 15, Type: "Add", Content: "from "},
-				{LineNumber: 0, Column: 20, Type: "Add", Content: "\"@monaco-editor/react\";"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "Editor "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 15}, Type: "Add", Content: "from "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 20}, Type: "Add", Content: "\"@monaco-editor/react\";"},
 			},
-			43,
+			TypingPosition{
+				LineNumber: 1,
+				Column:     43,
+			},
 		},
 		{
-			0, 1, SingleLineToAdd{
+			1, 1, SingleLineToAdd{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          true, // + '\n' to the above content
 			},
 			[]PositionedChunk{
-				{LineNumber: 0, Column: 1, Type: "Add", Content: "\n"},
-				{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
-				{LineNumber: 0, Column: 8, Type: "Add", Content: "Editor "},
-				{LineNumber: 0, Column: 15, Type: "Add", Content: "from "},
-				{LineNumber: 0, Column: 20, Type: "Add", Content: "\"@monaco-editor/react\";"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "Editor "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 15}, Type: "Add", Content: "from "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 20}, Type: "Add", Content: "\"@monaco-editor/react\";"},
 			},
-			1,
+			TypingPosition{
+				LineNumber: 2,
+				Column:     1,
+			},
 		},
 	}
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			resultCol, result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
+			resultPos, result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
 			if !cmp.Equal(c.expected, result) {
-				t.Errorf("expected: %v", c.expected)
-				t.Errorf("result  : %v", result)
-				t.Fatalf(cmp.Diff(c.expected, result))
+				t.Errorf(cmp.Diff(c.expected, result))
 			}
-			if resultCol != c.expectedColumn {
-				t.Errorf("expected column: %v", c.expectedColumn)
-				t.Errorf("result column  : %v", resultCol)
+			if resultPos != c.expectedPos {
+				t.Errorf("expected pos: %v", c.expectedPos)
+				t.Errorf("result pos  : %v", resultPos)
 			}
 		})
 	}
