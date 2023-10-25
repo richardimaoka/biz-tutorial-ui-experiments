@@ -149,11 +149,12 @@ func TestLineToPosChunks(t *testing.T) {
 		inputColumn     int
 		inputLine       SingleLineToAdd
 		expected        []PositionedChunk
+		expectedColumn  int
 	}{
 		{
 			0, 0, SingleLineToAdd{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
-				NewLineAtEnd:          true,
+				NewLineAtEnd:          true, // + '\n' to the above content
 			},
 			[]PositionedChunk{
 				{LineNumber: 0, Column: 0, Type: "Add", Content: "\n"},
@@ -162,17 +163,69 @@ func TestLineToPosChunks(t *testing.T) {
 				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
 				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
 			},
+			42,
+		},
+		{
+			0, 0, SingleLineToAdd{
+				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
+				NewLineAtEnd:          false, // + '\n' to the above content
+			},
+			[]PositionedChunk{
+				{LineNumber: 0, Column: 0, Type: "Add", Content: "import "},
+				{LineNumber: 0, Column: 7, Type: "Add", Content: "Editor "},
+				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
+				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
+			},
+			42,
 		},
 	}
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
+			resultCol, result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf("expected: %v", c.expected)
 				t.Errorf("result  : %v", result)
 				t.Fatalf(cmp.Diff(c.expected, result))
 			}
+			if resultCol != c.expectedColumn {
+				t.Errorf("expected column: %v", c.expectedColumn)
+				t.Errorf("result column  : %v", resultCol)
+			}
 		})
 	}
 }
+
+// func TestLineToPosChunks(t *testing.T) {
+// 	cases := []struct {
+// 		inputLineNumber int
+// 		inputColumn     int
+// 		inputLine       SingleLineToAdd
+// 		expected        []PositionedChunk
+// 	}{
+// 		{
+// 			0, 0, SingleLineToAdd{
+// 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
+// 				NewLineAtEnd:          true,
+// 			},
+// 			[]PositionedChunk{
+// 				{LineNumber: 0, Column: 0, Type: "Add", Content: "\n"},
+// 				{LineNumber: 0, Column: 0, Type: "Add", Content: "import "},
+// 				{LineNumber: 0, Column: 7, Type: "Add", Content: "Editor "},
+// 				{LineNumber: 0, Column: 14, Type: "Add", Content: "from "},
+// 				{LineNumber: 0, Column: 19, Type: "Add", Content: "\"@monaco-editor/react\";"},
+// 			},
+// 		},
+// 	}
+
+// 	for index, c := range cases {
+// 		t.Run(strconv.Itoa(index), func(t *testing.T) {
+// 			result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
+// 			if !cmp.Equal(c.expected, result) {
+// 				t.Errorf("expected: %v", c.expected)
+// 				t.Errorf("result  : %v", result)
+// 				t.Fatalf(cmp.Diff(c.expected, result))
+// 			}
+// 		})
+// 	}
+// }

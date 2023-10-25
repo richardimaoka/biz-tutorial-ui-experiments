@@ -107,7 +107,7 @@ func chunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 // parameters:
 //   singleLineToAdd: the input string, which potentially has '\n' at the end
 //                    but cannot have '\n' in the middle
-func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) []PositionedChunk {
+func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (int, []PositionedChunk) {
 	var pChunks []PositionedChunk
 
 	if lineToAdd.NewLineAtEnd {
@@ -132,6 +132,20 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) []Positi
 		}
 		pChunks = append(pChunks, c)
 		currentColumn += utf8.RuneCountInString(b)
+	}
+
+	return currentColumn, pChunks
+}
+
+func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) []PositionedChunk {
+	linesToAdd := chunkToLines(chunk)
+
+	var pChunks []PositionedChunk
+	var currentColumn int = column
+	for _, v := range linesToAdd {
+		newColumn, newPosChunks := lineToPosChunks(v, lineNumber, currentColumn)
+		pChunks = append(pChunks, newPosChunks...)
+		currentColumn = newColumn
 	}
 
 	return pChunks
