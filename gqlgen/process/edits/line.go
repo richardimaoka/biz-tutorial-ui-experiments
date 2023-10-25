@@ -94,7 +94,7 @@ func detectNewLine(lineToAdd string) SingleLineToAdd {
 }
 
 // Returns single-line changes with flags indicating new-line characters '\n' are included
-func chunkToLines(chunk internal.Chunk) []SingleLineToAdd {
+func splitChunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 	splitContent := splitAfterNewLine(chunk.Content)
 
 	var ret []SingleLineToAdd
@@ -149,18 +149,22 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (TypingP
 	}
 }
 
-// func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) (int, []PositionedChunk) {
-// 	linesToAdd := chunkToLines(chunk)
+// Split the given chunk to single-line changes,
+// then convert each line into a slice of positioned chunks
+//
+// inernal.Chunk  : represents a chunk from git diff
+// TypingPosition : is the position at which the function call is made
+func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []PositionedChunk) {
+	linesToAdd := splitChunkToLines(chunk)
 
-// 	var pChunks []PositionedChunk
-// 	var currentLine int = lineNumber
-// 	var currentColumn int = column
-// 	for _, v := range linesToAdd {
-// 		newColumn, newPosChunks := lineToPosChunks(v, currentLine, currentColumn)
-// 		pChunks = append(pChunks, newPosChunks...)
-// 		currentLine += 1
-// 		currentColumn = newColumn
-// 	}
+	var pChunks []PositionedChunk
+	var currentPos TypingPosition = pos
+	for _, v := range linesToAdd {
+		var newPosChunks []PositionedChunk
+		currentPos, newPosChunks = lineToPosChunks(v, currentPos.LineNumber, currentPos.Column)
 
-// 	return currentColumn, pChunks
-// }
+		pChunks = append(pChunks, newPosChunks...)
+	}
+
+	return currentPos, pChunks
+}

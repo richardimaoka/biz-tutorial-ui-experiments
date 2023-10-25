@@ -135,7 +135,7 @@ func TestSplitIntoSingleLines(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			result := chunkToLines(c.input)
+			result := splitChunkToLines(c.input)
 			if !cmp.Equal(c.expected, result) {
 				t.Fatalf(cmp.Diff(c.expected, result))
 			}
@@ -200,64 +200,63 @@ func TestLineToPosChunks(t *testing.T) {
 	}
 }
 
-// func TestToPositionedChunks(t *testing.T) {
-// 	cases := []struct {
-// 		inputLineNumber int
-// 		inputColumn     int
-// 		inputChunk      internal.Chunk
-// 		expected        []PositionedChunk
-// 		expectedColumn  int
-// 	}{
-// 		{
-// 			0, 1, internal.Chunk{
-// 				Content: "import { editor } from \"monaco-editor\";\n",
-// 				Type:    "Delete",
-// 			},
-// 			[]PositionedChunk{
-// 				{LineNumber: 0, Column: 1, Type: "Add", Content: "\n"},
-// 				{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
-// 				{LineNumber: 0, Column: 8, Type: "Add", Content: "{ "},
-// 				{LineNumber: 0, Column: 10, Type: "Add", Content: "editor "},
-// 				{LineNumber: 0, Column: 17, Type: "Add", Content: "} "},
-// 				{LineNumber: 0, Column: 19, Type: "Add", Content: "from "},
-// 				{LineNumber: 0, Column: 24, Type: "Add", Content: "\"monaco-editor\";"},
-// 			},
-// 			40,
-// 		},
-// 		{
-// 			0, 1, internal.Chunk{
-// 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
-// 				Type:    "Delete",
-// 			},
-// 			[]PositionedChunk{
-// 				{LineNumber: 0, Column: 1, Type: "Add", Content: "\n"},
-// 				{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
-// 				{LineNumber: 0, Column: 8, Type: "Add", Content: "{ "},
-// 				{LineNumber: 0, Column: 10, Type: "Add", Content: "editor "},
-// 				{LineNumber: 0, Column: 17, Type: "Add", Content: "} "},
-// 				{LineNumber: 0, Column: 19, Type: "Add", Content: "from "},
-// 				{LineNumber: 0, Column: 24, Type: "Add", Content: "\"monaco-editor\";"},
-// 				{LineNumber: 1, Column: 1, Type: "Add", Content: "\n"},
-// 				{LineNumber: 1, Column: 1, Type: "Add", Content: ""},
-// 				{LineNumber: 2, Column: 1, Type: "Add", Content: "\n"},
-// 				{LineNumber: 2, Column: 39, Type: "Add", Content: "interface "},
-// 				{LineNumber: 2, Column: 39, Type: "Add", Content: "Props "},
-// 				{LineNumber: 2, Column: 39, Type: "Add", Content: "{"},
-// 			},
-// 			39,
-// 		},
-// 	}
+func TestToPositionedChunks(t *testing.T) {
+	cases := []struct {
+		inputPos    TypingPosition
+		inputChunk  internal.Chunk
+		expected    []PositionedChunk
+		expectedPos TypingPosition
+	}{
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			internal.Chunk{
+				Content: "import { editor } from \"monaco-editor\";\n",
+				Type:    "Delete",
+			},
+			[]PositionedChunk{
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 10}, Type: "Add", Content: "editor "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 17}, Type: "Add", Content: "} "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 19}, Type: "Add", Content: "from "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 24}, Type: "Add", Content: "\"monaco-editor\";"},
+			},
+			TypingPosition{LineNumber: 2, Column: 1},
+		},
+		// {
+		// 	0, 1, internal.Chunk{
+		// 		Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
+		// 		Type:    "Delete",
+		// 	},
+		// 	[]PositionedChunk{
+		// 		{LineNumber: 0, Column: 1, Type: "Add", Content: "\n"},
+		// 		{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
+		// 		{LineNumber: 0, Column: 8, Type: "Add", Content: "{ "},
+		// 		{LineNumber: 0, Column: 10, Type: "Add", Content: "editor "},
+		// 		{LineNumber: 0, Column: 17, Type: "Add", Content: "} "},
+		// 		{LineNumber: 0, Column: 19, Type: "Add", Content: "from "},
+		// 		{LineNumber: 0, Column: 24, Type: "Add", Content: "\"monaco-editor\";"},
+		// 		{LineNumber: 1, Column: 1, Type: "Add", Content: "\n"},
+		// 		{LineNumber: 1, Column: 1, Type: "Add", Content: ""},
+		// 		{LineNumber: 2, Column: 1, Type: "Add", Content: "\n"},
+		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "interface "},
+		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "Props "},
+		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "{"},
+		// 	},
+		// 	39,
+		// },
+	}
 
-// 	for index, c := range cases {
-// 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-// 			resultCol, result := toPositionedChunks(c.inputChunk, c.inputLineNumber, c.inputColumn)
-// 			if !cmp.Equal(c.expected, result) {
-// 				t.Fatalf(cmp.Diff(c.expected, result))
-// 			}
-// 			if resultCol != c.expectedColumn {
-// 				t.Errorf("expected column: %v", c.expectedColumn)
-// 				t.Errorf("result column  : %v", resultCol)
-// 			}
-// 		})
-// 	}
-// }
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			resultPos, result := toPositionedChunks(c.inputChunk, c.inputPos)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf(cmp.Diff(c.expected, result))
+			}
+			if resultPos != c.expectedPos {
+				t.Errorf(cmp.Diff(c.expectedPos, resultPos))
+			}
+		})
+	}
+}
