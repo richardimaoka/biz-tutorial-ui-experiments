@@ -27,7 +27,7 @@ func breakdownLineToAdd(lineToAdd string) []string {
 
 func breakdownToCharacters(toAdd string) []string {
 	if toAdd == "" {
-		return []string{""}
+		return []string{}
 	}
 
 	var additions []string
@@ -45,10 +45,18 @@ func breakdownToCharacters(toAdd string) []string {
 }
 
 func breakdownToWords(toAdd string) []string {
+	if toAdd == "" {
+		return []string{}
+	}
+
 	return strings.SplitAfter(toAdd, " ")
 }
 
 func breakdownToWholeLine(toAdd string) []string {
+	if toAdd == "" {
+		return []string{}
+	}
+
 	return []string{toAdd}
 }
 

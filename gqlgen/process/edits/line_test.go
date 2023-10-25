@@ -162,10 +162,7 @@ func TestLineToPosChunks(t *testing.T) {
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 15}, Type: "Add", Content: "from "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 20}, Type: "Add", Content: "\"@monaco-editor/react\";"},
 			},
-			TypingPosition{
-				LineNumber: 1,
-				Column:     43,
-			},
+			TypingPosition{LineNumber: 1, Column: 43},
 		},
 		{
 			1, 1, SingleLineToAdd{
@@ -179,10 +176,17 @@ func TestLineToPosChunks(t *testing.T) {
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 15}, Type: "Add", Content: "from "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 20}, Type: "Add", Content: "\"@monaco-editor/react\";"},
 			},
-			TypingPosition{
-				LineNumber: 2,
-				Column:     1,
+			TypingPosition{LineNumber: 2, Column: 1},
+		},
+		{
+			1, 1, SingleLineToAdd{
+				ContentWithoutNewLine: "",
+				NewLineAtEnd:          true, // '\n' only
 			},
+			[]PositionedChunk{
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
+			},
+			TypingPosition{LineNumber: 2, Column: 1},
 		},
 	}
 
@@ -211,7 +215,7 @@ func TestToPositionedChunks(t *testing.T) {
 			TypingPosition{LineNumber: 1, Column: 1},
 			internal.Chunk{
 				Content: "import { editor } from \"monaco-editor\";\n",
-				Type:    "Delete",
+				Type:    "Add",
 			},
 			[]PositionedChunk{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
@@ -224,28 +228,49 @@ func TestToPositionedChunks(t *testing.T) {
 			},
 			TypingPosition{LineNumber: 2, Column: 1},
 		},
-		// {
-		// 	0, 1, internal.Chunk{
-		// 		Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
-		// 		Type:    "Delete",
-		// 	},
-		// 	[]PositionedChunk{
-		// 		{LineNumber: 0, Column: 1, Type: "Add", Content: "\n"},
-		// 		{LineNumber: 0, Column: 1, Type: "Add", Content: "import "},
-		// 		{LineNumber: 0, Column: 8, Type: "Add", Content: "{ "},
-		// 		{LineNumber: 0, Column: 10, Type: "Add", Content: "editor "},
-		// 		{LineNumber: 0, Column: 17, Type: "Add", Content: "} "},
-		// 		{LineNumber: 0, Column: 19, Type: "Add", Content: "from "},
-		// 		{LineNumber: 0, Column: 24, Type: "Add", Content: "\"monaco-editor\";"},
-		// 		{LineNumber: 1, Column: 1, Type: "Add", Content: "\n"},
-		// 		{LineNumber: 1, Column: 1, Type: "Add", Content: ""},
-		// 		{LineNumber: 2, Column: 1, Type: "Add", Content: "\n"},
-		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "interface "},
-		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "Props "},
-		// 		{LineNumber: 2, Column: 39, Type: "Add", Content: "{"},
-		// 	},
-		// 	39,
-		// },
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			internal.Chunk{
+				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
+				Type:    "Add",
+			},
+			[]PositionedChunk{
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 10}, Type: "Add", Content: "editor "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 17}, Type: "Add", Content: "} "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 19}, Type: "Add", Content: "from "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 24}, Type: "Add", Content: "\"monaco-editor\";"},
+				{TypingPosition: TypingPosition{LineNumber: 2, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 1}, Type: "Add", Content: "interface "},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 11}, Type: "Add", Content: "Props "},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 17}, Type: "Add", Content: "{"},
+			},
+			TypingPosition{LineNumber: 4, Column: 1},
+		},
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			internal.Chunk{
+				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {",
+				Type:    "Add",
+			},
+			[]PositionedChunk{
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 10}, Type: "Add", Content: "editor "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 17}, Type: "Add", Content: "} "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 19}, Type: "Add", Content: "from "},
+				{TypingPosition: TypingPosition{LineNumber: 1, Column: 24}, Type: "Add", Content: "\"monaco-editor\";"},
+				{TypingPosition: TypingPosition{LineNumber: 2, Column: 1}, Type: "Add", Content: "\n"},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 1}, Type: "Add", Content: "interface "},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 11}, Type: "Add", Content: "Props "},
+				{TypingPosition: TypingPosition{LineNumber: 3, Column: 17}, Type: "Add", Content: "{"},
+			},
+			TypingPosition{LineNumber: 3, Column: 18},
+		},
 	}
 
 	for index, c := range cases {

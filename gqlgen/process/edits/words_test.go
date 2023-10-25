@@ -16,8 +16,8 @@ func TestOneLetterAdditions(t *testing.T) {
 			[]string{"i", "m", "p", "o", "r", "t", " ", "E", "d", "i", "t", "o", "r", " ", "f", "r", "o", "m", " ", "\"", "@", "m", "o", "n", "a", "c", "o", "-", "e", "d", "i", "t", "o", "r", "/", "r", "e", "a", "c", "t", `"`, ";"},
 		},
 		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			[]string{""},
+			"", //if it's an empty string, we can just skip it (i.e.) zero-element slice
+			[]string{},
 		},
 		{
 			// if only "\n", then only return "\n"
@@ -47,8 +47,8 @@ func TestWordByWordAdditions(t *testing.T) {
 			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
 		},
 		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			[]string{""},
+			"", //if it's an empty string, we can just skip it (i.e.) zero-element slice
+			[]string{},
 		},
 		{
 			// if only "\n", then only return "\n"
@@ -79,8 +79,8 @@ func TestWholeLineAddition(t *testing.T) {
 			[]string{"import Editor from \"@monaco-editor/react\";"},
 		},
 		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
-			[]string{""},
+			"", //if it's an empty string, we can just skip it (i.e.) zero-element slice
+			[]string{},
 		},
 		{
 			// if only "\n", then only return "\n"
@@ -113,9 +113,9 @@ func TestConditionalAdditions(t *testing.T) {
 			[]string{"import ", "Editor ", "from ", "\"@monaco-editor/react\";"},
 		},
 		{
-			"", //even if it's an empty string, we don't care, just return what's given as it has no "\n|
+			"", //if it's an empty string, we can just skip it (i.e.) zero-element slice
 			BREAKDOWN_TO_CHARACTERS,
-			[]string{""},
+			[]string{},
 		},
 		{
 			`		return nil, fmt.Errorf("failed in gitFilesForCommit, commit hash = %s is invalid as its re-calculated hash is mismatched = %s", commitHashStr, commitHash.String())`,
