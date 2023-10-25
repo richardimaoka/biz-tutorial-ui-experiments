@@ -134,19 +134,25 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (int, []
 		currentColumn += utf8.RuneCountInString(b)
 	}
 
-	return currentColumn, pChunks
+	if lineToAdd.NewLineAtEnd {
+		return 1, pChunks
+	} else {
+		return currentColumn, pChunks
+	}
 }
 
-func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) []PositionedChunk {
+func toPositionedChunks(chunk internal.Chunk, lineNumber, column int) (int, []PositionedChunk) {
 	linesToAdd := chunkToLines(chunk)
 
 	var pChunks []PositionedChunk
+	var currentLine int = lineNumber
 	var currentColumn int = column
 	for _, v := range linesToAdd {
-		newColumn, newPosChunks := lineToPosChunks(v, lineNumber, currentColumn)
+		newColumn, newPosChunks := lineToPosChunks(v, currentLine, currentColumn)
 		pChunks = append(pChunks, newPosChunks...)
+		currentLine += 1
 		currentColumn = newColumn
 	}
 
-	return pChunks
+	return currentColumn, pChunks
 }
