@@ -111,15 +111,15 @@ func splitChunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 // parameters:
 //   singleLineToAdd: the input string, which potentially has '\n' at the end
 //                    but cannot have '\n' in the middle
-func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (TypingPosition, []PositionedChunk) {
+func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []PositionedChunk) {
 	var pChunks []PositionedChunk
 
 	if lineToAdd.NewLineAtEnd {
 		// if new line '\n' at the end, then moves it to the beginning
 		firstChunk := PositionedChunk{
 			TypingPosition: TypingPosition{
-				LineNumber: lineNumber,
-				Column:     column,
+				LineNumber: pos.LineNumber,
+				Column:     pos.Column,
 			},
 			Type:    "Add",
 			Content: "\n",
@@ -127,12 +127,12 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (TypingP
 		pChunks = append(pChunks, firstChunk)
 	}
 
-	currentColumn := column
+	currentColumn := pos.Column
 	breakDowns := breakdownLineToAdd(lineToAdd.ContentWithoutNewLine)
 	for _, b := range breakDowns {
 		c := PositionedChunk{
 			TypingPosition: TypingPosition{
-				LineNumber: lineNumber,
+				LineNumber: pos.LineNumber,
 				Column:     currentColumn,
 			},
 			Type:    "Add",
@@ -143,9 +143,9 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, lineNumber, column int) (TypingP
 	}
 
 	if lineToAdd.NewLineAtEnd {
-		return TypingPosition{LineNumber: lineNumber + 1, Column: 1}, pChunks
+		return TypingPosition{LineNumber: pos.LineNumber + 1, Column: 1}, pChunks
 	} else {
-		return TypingPosition{LineNumber: lineNumber, Column: currentColumn}, pChunks
+		return TypingPosition{LineNumber: pos.LineNumber, Column: currentColumn}, pChunks
 	}
 }
 
@@ -161,7 +161,7 @@ func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPositio
 	var currentPos TypingPosition = pos
 	for _, v := range linesToAdd {
 		var newPosChunks []PositionedChunk
-		currentPos, newPosChunks = lineToPosChunks(v, currentPos.LineNumber, currentPos.Column)
+		currentPos, newPosChunks = lineToPosChunks(v, currentPos)
 
 		pChunks = append(pChunks, newPosChunks...)
 	}

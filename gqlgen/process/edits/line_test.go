@@ -145,14 +145,14 @@ func TestSplitIntoSingleLines(t *testing.T) {
 
 func TestLineToPosChunks(t *testing.T) {
 	cases := []struct {
-		inputLineNumber int
-		inputColumn     int
-		inputLine       SingleLineToAdd
-		expected        []PositionedChunk
-		expectedPos     TypingPosition
+		inputPos    TypingPosition
+		inputLine   SingleLineToAdd
+		expected    []PositionedChunk
+		expectedPos TypingPosition
 	}{
 		{
-			1, 1, SingleLineToAdd{
+			TypingPosition{LineNumber: 1, Column: 1},
+			SingleLineToAdd{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          false,
 			},
@@ -165,7 +165,8 @@ func TestLineToPosChunks(t *testing.T) {
 			TypingPosition{LineNumber: 1, Column: 43},
 		},
 		{
-			1, 1, SingleLineToAdd{
+			TypingPosition{LineNumber: 1, Column: 1},
+			SingleLineToAdd{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          true, // + '\n' to the above content
 			},
@@ -179,7 +180,8 @@ func TestLineToPosChunks(t *testing.T) {
 			TypingPosition{LineNumber: 2, Column: 1},
 		},
 		{
-			1, 1, SingleLineToAdd{
+			TypingPosition{1, 1},
+			SingleLineToAdd{
 				ContentWithoutNewLine: "",
 				NewLineAtEnd:          true, // '\n' only
 			},
@@ -192,7 +194,7 @@ func TestLineToPosChunks(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			resultPos, result := lineToPosChunks(c.inputLine, c.inputLineNumber, c.inputColumn)
+			resultPos, result := lineToPosChunks(c.inputLine, c.inputPos)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf(cmp.Diff(c.expected, result))
 			}
