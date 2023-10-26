@@ -147,7 +147,7 @@ func TestLineToPosChunks(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
 		inputLine   SingleLineToAdd
-		expected    []PositionedChunk
+		expected    []ChunkToAdd
 		expectedPos TypingPosition
 	}{
 		{
@@ -156,7 +156,7 @@ func TestLineToPosChunks(t *testing.T) {
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          false,
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "Editor "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 15}, Type: "Add", Content: "from "},
@@ -170,7 +170,7 @@ func TestLineToPosChunks(t *testing.T) {
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          true, // + '\n' to the above content
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "Editor "},
@@ -185,7 +185,7 @@ func TestLineToPosChunks(t *testing.T) {
 				ContentWithoutNewLine: "",
 				NewLineAtEnd:          true, // '\n' only
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
 			},
 			TypingPosition{LineNumber: 2, Column: 1},
@@ -210,7 +210,7 @@ func TestToPositionedChunks(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
 		inputChunk  internal.Chunk
-		expected    []PositionedChunk
+		expected    []ChunkToAdd
 		expectedPos TypingPosition
 	}{
 		{
@@ -219,7 +219,7 @@ func TestToPositionedChunks(t *testing.T) {
 				Content: "import { editor } from \"monaco-editor\";\n",
 				Type:    "Add",
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},
@@ -236,7 +236,7 @@ func TestToPositionedChunks(t *testing.T) {
 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
 				Type:    "Add",
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},
@@ -258,7 +258,7 @@ func TestToPositionedChunks(t *testing.T) {
 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {",
 				Type:    "Add",
 			},
-			[]PositionedChunk{
+			[]ChunkToAdd{
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "\n"},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 1}, Type: "Add", Content: "import "},
 				{TypingPosition: TypingPosition{LineNumber: 1, Column: 8}, Type: "Add", Content: "{ "},

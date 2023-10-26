@@ -7,7 +7,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
-type PositionedChunk struct {
+type ChunkToAdd struct {
 	TypingPosition
 	Content string `json:"content"`
 	Type    string `json:"type"`
@@ -18,14 +18,14 @@ type TypingPosition struct {
 	Column     int `json:"column"`
 }
 
-type Range struct {
+type RangeToDelete struct {
 	LineNumber  int
 	StartColumn int
 	EndColumn   int
 }
 
-type DeleteChunk struct {
-	Range Range
+type ChunkToDelete struct {
+	Range RangeToDelete
 }
 
 type SingleLineToAdd struct {
@@ -38,7 +38,7 @@ type state struct {
 	column     int
 }
 
-func Convert(fileChunks []internal.Chunk) []PositionedChunk {
+func Convert(fileChunks []internal.Chunk) []ChunkToAdd {
 	s := state{0, 0}
 
 	// placeholder operation to avoid compilation error `declared but not used`
@@ -121,12 +121,12 @@ func splitChunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 // parameters:
 //   singleLineToAdd: the input string, which potentially has '\n' at the end
 //                    but cannot have '\n' in the middle
-func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []PositionedChunk) {
-	var pChunks []PositionedChunk
+func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+	var pChunks []ChunkToAdd
 
 	if lineToAdd.NewLineAtEnd {
 		// if new line '\n' at the end, then moves it to the beginning
-		firstChunk := PositionedChunk{
+		firstChunk := ChunkToAdd{
 			TypingPosition: TypingPosition{
 				LineNumber: pos.LineNumber,
 				Column:     pos.Column,
@@ -140,7 +140,7 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosit
 	currentColumn := pos.Column
 	breakDowns := breakdownLineToAdd(lineToAdd.ContentWithoutNewLine)
 	for _, b := range breakDowns {
-		c := PositionedChunk{
+		c := ChunkToAdd{
 			TypingPosition: TypingPosition{
 				LineNumber: pos.LineNumber,
 				Column:     currentColumn,
@@ -164,13 +164,13 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosit
 //
 // inernal.Chunk  : represents a chunk from git diff
 // TypingPosition : is the position at which the function call is made
-func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []PositionedChunk) {
+func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
 	linesToAdd := splitChunkToLines(chunk)
 
-	var pChunks []PositionedChunk
+	var pChunks []ChunkToAdd
 	var currentPos TypingPosition = pos
 	for _, v := range linesToAdd {
-		var newPosChunks []PositionedChunk
+		var newPosChunks []ChunkToAdd
 		currentPos, newPosChunks = lineToPosChunks(v, currentPos)
 
 		pChunks = append(pChunks, newPosChunks...)
@@ -189,14 +189,14 @@ func processEqual(chunk internal.Chunk, pos TypingPosition) TypingPosition {
 	}
 }
 
-func processDelete(chunk internal.Chunk, pos TypingPosition) []DeleteChunk {
+func processDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
 	linesToDelete := splitAfterNewLine(chunk.Content)
 
-	var dChunks []DeleteChunk
+	var dChunks []ChunkToDelete
 	for _, lineString := range linesToDelete {
 		nChars := utf8.RuneCountInString(lineString)
-		c := DeleteChunk{
-			Range: Range{
+		c := ChunkToDelete{
+			Range: RangeToDelete{
 				LineNumber:  pos.LineNumber,
 				StartColumn: pos.Column,
 				EndColumn:   pos.Column + nChars,
