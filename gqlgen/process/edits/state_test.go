@@ -32,7 +32,7 @@ func TestProcessChunk(t *testing.T) {
 				Type:    "Delete",
 			},
 			[]edits.SingleEditOperation{
-				{Range: edits.Range{StartLineNumber: 3, StartColumn: 1, EndLineNumber: 3, EndColumn: 43}, Text: ""},
+				{Range: edits.Range{StartLineNumber: 3, StartColumn: 1, EndLineNumber: 4, EndColumn: 0}, Text: ""},
 			},
 			edits.TypingPosition{LineNumber: 3, Column: 1},
 		},

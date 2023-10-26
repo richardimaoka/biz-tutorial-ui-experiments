@@ -182,19 +182,38 @@ func lineToChunksToDelete(lineToDelete SingleLineChange, pos TypingPosition) (Ty
 // TypingPosition : is the position at which the function call is made
 func toChunksToAdd(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
 	// Split into single-line changes first.
-	// For addition, special handling on '\n' is needed, so a slice of '\n'-aware structure is used
+	// Special handling on '\n' is needed, so a slice of '\n'-aware structure is used
 	linesToAdd := splitChunkToLines(chunk)
 
 	var chunksToAdd []ChunkToAdd
 	var currentPos TypingPosition = pos
 	for _, v := range linesToAdd {
-		var newPosChunks []ChunkToAdd
-		currentPos, newPosChunks = lineToChunksToAdd(v, currentPos)
+		var newChunksToAdd []ChunkToAdd
+		currentPos, newChunksToAdd = lineToChunksToAdd(v, currentPos)
 
-		chunksToAdd = append(chunksToAdd, newPosChunks...)
+		chunksToAdd = append(chunksToAdd, newChunksToAdd...)
 	}
 
 	return currentPos, chunksToAdd
+}
+
+// If internal.Chunk has Type == "Add", then return chunks to add.
+// No need to move the typing position for deletion.
+func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
+	// Split into single-line changes first.
+	// Special handling on '\n' is needed, so a slice of '\n'-aware structure is used
+	linesToDelete := splitChunkToLines(chunk)
+
+	var chunksToDelete []ChunkToDelete
+	var currentPos TypingPosition = pos
+	for _, v := range linesToDelete {
+		var newChunksToDelete []ChunkToDelete
+		currentPos, newChunksToDelete = lineToChunksToDelete(v, currentPos)
+
+		chunksToDelete = append(chunksToDelete, newChunksToDelete...)
+	}
+
+	return chunksToDelete
 }
 
 // If internal.Chunk has Type == "Equal", then move the typing position but no edits to make
@@ -206,31 +225,6 @@ func moveTypingPosition(chunk internal.Chunk, pos TypingPosition) TypingPosition
 		LineNumber: pos.LineNumber + len(split) - 1,
 		Column:     utf8.RuneCountInString(lastLineChange) + 1,
 	}
-}
-
-// If internal.Chunk has Type == "Add", then return chunks to add.
-// No need to move the typing position for deletion.
-func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
-	// Split into single-line changes first.
-	// For deletion, no need for special handling on '\n', so simply []string is ok
-	linesToDelete := splitAfterNewLine(chunk.Content)
-
-	var chunksToDelete []ChunkToDelete
-	for _, lineString := range linesToDelete {
-		nChars := utf8.RuneCountInString(lineString)
-		c := ChunkToDelete{
-			Content: lineString,
-			RangeToDelete: RangeToDelete{
-				StartLineNumber: pos.LineNumber,
-				EndLineNumber:   pos.LineNumber,
-				StartColumn:     pos.Column,
-				EndColumn:       pos.Column + nChars - 1,
-			},
-		}
-		chunksToDelete = append(chunksToDelete, c)
-	}
-
-	return chunksToDelete
 }
 
 func toOpToAdd(chunk ChunkToAdd) SingleEditOperation {
