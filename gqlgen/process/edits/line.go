@@ -25,7 +25,8 @@ type RangeToDelete struct {
 }
 
 type ChunkToDelete struct {
-	Range RangeToDelete
+	RangeToDelete
+	Content string //this is not necessary but convenient for debugging
 }
 
 type SingleLineToAdd struct {
@@ -117,12 +118,8 @@ func splitChunkToLines(chunk internal.Chunk) []SingleLineToAdd {
 }
 
 // Split a single-line change (addition) into a slice of small-piece `string`s
-//
-// parameters:
-//   singleLineToAdd: the input string, which potentially has '\n' at the end
-//                    but cannot have '\n' in the middle
-func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
-	var pChunks []ChunkToAdd
+func lineToChunksToAdd(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+	var chunks []ChunkToAdd
 
 	if lineToAdd.NewLineAtEnd {
 		// if new line '\n' at the end, then moves it to the beginning
@@ -134,7 +131,7 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosit
 			Type:    "Add",
 			Content: "\n",
 		}
-		pChunks = append(pChunks, firstChunk)
+		chunks = append(chunks, firstChunk)
 	}
 
 	currentColumn := pos.Column
@@ -148,38 +145,40 @@ func lineToPosChunks(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosit
 			Type:    "Add",
 			Content: b,
 		}
-		pChunks = append(pChunks, c)
+		chunks = append(chunks, c)
 		currentColumn += utf8.RuneCountInString(b)
 	}
 
 	if lineToAdd.NewLineAtEnd {
-		return TypingPosition{LineNumber: pos.LineNumber + 1, Column: 1}, pChunks
+		return TypingPosition{LineNumber: pos.LineNumber + 1, Column: 1}, chunks
 	} else {
-		return TypingPosition{LineNumber: pos.LineNumber, Column: currentColumn}, pChunks
+		return TypingPosition{LineNumber: pos.LineNumber, Column: currentColumn}, chunks
 	}
 }
 
-// Split the given chunk to single-line changes,
-// then convert each line into a slice of positioned chunks
+// If internal.Chunk has Type == "Add", then return chunks to add.
 //
 // inernal.Chunk  : represents a chunk from git diff
 // TypingPosition : is the position at which the function call is made
-func toPositionedChunks(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+func toChunksToAdd(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+	// Split into single-line changes first.
+	// For addition, special handling on '\n' is needed, so a slice of '\n'-aware structure is used
 	linesToAdd := splitChunkToLines(chunk)
 
-	var pChunks []ChunkToAdd
+	var chunksToAdd []ChunkToAdd
 	var currentPos TypingPosition = pos
 	for _, v := range linesToAdd {
 		var newPosChunks []ChunkToAdd
-		currentPos, newPosChunks = lineToPosChunks(v, currentPos)
+		currentPos, newPosChunks = lineToChunksToAdd(v, currentPos)
 
-		pChunks = append(pChunks, newPosChunks...)
+		chunksToAdd = append(chunksToAdd, newPosChunks...)
 	}
 
-	return currentPos, pChunks
+	return currentPos, chunksToAdd
 }
 
-func processEqual(chunk internal.Chunk, pos TypingPosition) TypingPosition {
+// If internal.Chunk has Type == "Equal", then move the typing position but no edits to make
+func moveTypingPosition(chunk internal.Chunk, pos TypingPosition) TypingPosition {
 	split := strings.Split(chunk.Content, "\n")
 	lastLineChange := split[len(split)-1]
 
@@ -189,21 +188,26 @@ func processEqual(chunk internal.Chunk, pos TypingPosition) TypingPosition {
 	}
 }
 
-func processDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
+// If internal.Chunk has Type == "Add", then return chunks to add.
+// No need to move the typing position for deletion.
+func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
+	// Split into single-line changes first.
+	// For deletion, no need for special handling on '\n', so simply []string is ok
 	linesToDelete := splitAfterNewLine(chunk.Content)
 
-	var dChunks []ChunkToDelete
+	var chunksToDelete []ChunkToDelete
 	for _, lineString := range linesToDelete {
 		nChars := utf8.RuneCountInString(lineString)
 		c := ChunkToDelete{
-			Range: RangeToDelete{
+			Content: lineString,
+			RangeToDelete: RangeToDelete{
 				LineNumber:  pos.LineNumber,
 				StartColumn: pos.Column,
 				EndColumn:   pos.Column + nChars,
 			},
 		}
-		dChunks = append(dChunks, c)
+		chunksToDelete = append(chunksToDelete, c)
 	}
 
-	return dChunks
+	return chunksToDelete
 }

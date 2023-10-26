@@ -110,7 +110,7 @@ func TestDetectNewLines(t *testing.T) {
 	}
 }
 
-func TestSplitIntoSingleLines(t *testing.T) {
+func TestSplitChunkToLines(t *testing.T) {
 	cases := []struct {
 		input    internal.Chunk
 		expected []SingleLineToAdd
@@ -143,7 +143,7 @@ func TestSplitIntoSingleLines(t *testing.T) {
 	}
 }
 
-func TestLineToPosChunks(t *testing.T) {
+func TestLineToChunksToAdd(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
 		inputLine   SingleLineToAdd
@@ -194,7 +194,7 @@ func TestLineToPosChunks(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			resultPos, result := lineToPosChunks(c.inputLine, c.inputPos)
+			resultPos, result := lineToChunksToAdd(c.inputLine, c.inputPos)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf(cmp.Diff(c.expected, result))
 			}
@@ -206,7 +206,7 @@ func TestLineToPosChunks(t *testing.T) {
 	}
 }
 
-func TestToPositionedChunks(t *testing.T) {
+func TestToChunksToAdd(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
 		inputChunk  internal.Chunk
@@ -277,12 +277,63 @@ func TestToPositionedChunks(t *testing.T) {
 
 	for index, c := range cases {
 		t.Run(strconv.Itoa(index), func(t *testing.T) {
-			resultPos, result := toPositionedChunks(c.inputChunk, c.inputPos)
+			resultPos, result := toChunksToAdd(c.inputChunk, c.inputPos)
 			if !cmp.Equal(c.expected, result) {
 				t.Errorf(cmp.Diff(c.expected, result))
 			}
 			if resultPos != c.expectedPos {
 				t.Errorf(cmp.Diff(c.expectedPos, resultPos))
+			}
+		})
+	}
+}
+
+func TestToChunksToDelete(t *testing.T) {
+	cases := []struct {
+		inputPos   TypingPosition
+		inputChunk internal.Chunk
+		expected   []ChunkToDelete
+	}{
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			internal.Chunk{
+				Content: "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
+				Type:    "Delete",
+			},
+			[]ChunkToDelete{
+				{
+					Content:       "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 58}},
+			},
+		},
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			internal.Chunk{
+				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
+				Type:    "Delete",
+			},
+			[]ChunkToDelete{
+				{
+					Content:       "import { editor } from \"monaco-editor\";\n",
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 41},
+				},
+				{
+					Content:       "\n",
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 2},
+				},
+				{
+					Content:       "interface Props {\n",
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 19},
+				},
+			},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			result := toChunksToDelete(c.inputChunk, c.inputPos)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf(cmp.Diff(c.expected, result))
 			}
 		})
 	}
