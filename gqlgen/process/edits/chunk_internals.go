@@ -13,6 +13,11 @@ type ChunkToAdd struct {
 	Type    string `json:"type"`
 }
 
+type ChunkToDelete struct {
+	RangeToDelete
+	Content string //this is not necessary but convenient for debugging
+}
+
 type TypingPosition struct {
 	LineNumber int `json:"lineNumber"`
 	Column     int `json:"column"`
@@ -23,11 +28,6 @@ type RangeToDelete struct {
 	EndLineNumber   int
 	StartColumn     int
 	EndColumn       int
-}
-
-type ChunkToDelete struct {
-	RangeToDelete
-	Content string //this is not necessary but convenient for debugging
 }
 
 type SingleLineChange struct {
@@ -225,48 +225,4 @@ func moveTypingPosition(chunk internal.Chunk, pos TypingPosition) TypingPosition
 		LineNumber: pos.LineNumber + len(split) - 1,
 		Column:     utf8.RuneCountInString(lastLineChange) + 1,
 	}
-}
-
-func toOpToAdd(chunk ChunkToAdd) SingleEditOperation {
-	return SingleEditOperation{
-		Text: chunk.Content,
-		Range: Range{
-			StartLineNumber: chunk.LineNumber,
-			EndLineNumber:   chunk.LineNumber,
-			StartColumn:     chunk.Column,
-			EndColumn:       chunk.Column,
-		},
-	}
-}
-
-func toOpToDelete(chunk ChunkToDelete) SingleEditOperation {
-	return SingleEditOperation{
-		Text: "", // replace by "" means deletion of the range
-		Range: Range{
-			StartLineNumber: chunk.StartLineNumber,
-			EndLineNumber:   chunk.EndLineNumber,
-			StartColumn:     chunk.StartColumn,
-			EndColumn:       chunk.EndColumn,
-		},
-	}
-}
-
-func toOpsToAdd(chunks []ChunkToAdd) []SingleEditOperation {
-	var ops []SingleEditOperation
-	for _, v := range chunks {
-		op := toOpToAdd(v)
-		ops = append(ops, op)
-	}
-
-	return ops
-}
-
-func toOpsToDelete(chunks []ChunkToDelete) []SingleEditOperation {
-	var ops []SingleEditOperation
-	for _, v := range chunks {
-		op := toOpToDelete(v)
-		ops = append(ops, op)
-	}
-
-	return ops
 }
