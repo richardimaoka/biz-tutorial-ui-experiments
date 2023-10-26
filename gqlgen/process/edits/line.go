@@ -169,7 +169,7 @@ func moveTypingPosition(chunk internal.Chunk, pos TypingPosition) TypingPosition
 
 	return TypingPosition{
 		LineNumber: pos.LineNumber + len(split) - 1,
-		Column:     utf8.RuneCountInString(lastLineChange),
+		Column:     utf8.RuneCountInString(lastLineChange) + 1,
 	}
 }
 
@@ -239,25 +239,4 @@ func toOpsToDelete(chunks []ChunkToDelete) []SingleEditOperation {
 	}
 
 	return ops
-}
-
-func processChunk(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []SingleEditOperation) {
-	currentPos := pos
-
-	var ops []SingleEditOperation
-	switch chunk.Type {
-	case "Add":
-		var chunks []ChunkToAdd
-		currentPos, chunks = toChunksToAdd(chunk, currentPos)
-		newOps := toOpsToAdd(chunks)
-		ops = append(ops, newOps...)
-	case "Equal":
-		currentPos = moveTypingPosition(chunk, pos)
-	case "Delete":
-		chunks := toChunksToDelete(chunk, currentPos)
-		newOps := toOpsToDelete(chunks)
-		ops = append(ops, newOps...)
-	}
-
-	return currentPos, ops
 }

@@ -3,117 +3,108 @@
     "text": "",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 3,
-      "endColumn": 43
+      "endColumn": 44
     }
   },
   {
     "text": "\n",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 3,
-      "endColumn": 0
+      "endColumn": 1
     }
   },
   {
     "text": "import ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 3,
-      "endColumn": 0
+      "endColumn": 1
     }
   },
   {
     "text": "Editor, ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 7,
+      "startColumn": 8,
       "endLineNumber": 3,
-      "endColumn": 7
+      "endColumn": 8
     }
   },
   {
     "text": "{ ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 15,
+      "startColumn": 16,
       "endLineNumber": 3,
-      "endColumn": 15
+      "endColumn": 16
     }
   },
   {
     "text": "OnChange ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 17,
+      "startColumn": 18,
       "endLineNumber": 3,
-      "endColumn": 17
+      "endColumn": 18
     }
   },
   {
     "text": "} ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 26,
+      "startColumn": 27,
       "endLineNumber": 3,
-      "endColumn": 26
+      "endColumn": 27
     }
   },
   {
     "text": "from ",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 28,
+      "startColumn": 29,
       "endLineNumber": 3,
-      "endColumn": 28
+      "endColumn": 29
     }
   },
   {
     "text": "\"@monaco-editor/react\";",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 33,
+      "startColumn": 34,
       "endLineNumber": 3,
-      "endColumn": 33
+      "endColumn": 34
     }
   },
   {
     "text": "",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 7,
-      "endColumn": 71
+      "endColumn": 72
     }
   },
   {
     "text": "",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 7,
-      "endColumn": 65
+      "endColumn": 66
     }
   },
   {
     "text": "\n",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 7,
-      "endColumn": 0
-    }
-  },
-  {
-    "text": " ",
-    "range": {
-      "startLineNumber": 7,
-      "startColumn": 0,
-      "endLineNumber": 7,
-      "endColumn": 0
+      "endColumn": 1
     }
   },
   {
@@ -123,123 +114,123 @@
       "startColumn": 1,
       "endLineNumber": 7,
       "endColumn": 1
+    }
+  },
+  {
+    "text": " ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 2,
+      "endLineNumber": 7,
+      "endColumn": 2
     }
   },
   {
     "text": "// ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 2,
+      "startColumn": 3,
       "endLineNumber": 7,
-      "endColumn": 2
+      "endColumn": 3
     }
   },
   {
     "text": "onDidMount: ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 5,
+      "startColumn": 6,
       "endLineNumber": 7,
-      "endColumn": 5
+      "endColumn": 6
     }
   },
   {
     "text": "pass-in ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 17,
+      "startColumn": 18,
       "endLineNumber": 7,
-      "endColumn": 17
+      "endColumn": 18
     }
   },
   {
     "text": "a ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 25,
+      "startColumn": 26,
       "endLineNumber": 7,
-      "endColumn": 25
+      "endColumn": 26
     }
   },
   {
     "text": "callback ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 27,
+      "startColumn": 28,
       "endLineNumber": 7,
-      "endColumn": 27
+      "endColumn": 28
     }
   },
   {
     "text": "like ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 36,
+      "startColumn": 37,
       "endLineNumber": 7,
-      "endColumn": 36
+      "endColumn": 37
     }
   },
   {
     "text": "below ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 41,
+      "startColumn": 42,
       "endLineNumber": 7,
-      "endColumn": 41
+      "endColumn": 42
     }
   },
   {
     "text": "to ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 47,
+      "startColumn": 48,
       "endLineNumber": 7,
-      "endColumn": 47
+      "endColumn": 48
     }
   },
   {
     "text": "manipulate ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 50,
+      "startColumn": 51,
       "endLineNumber": 7,
-      "endColumn": 50
+      "endColumn": 51
     }
   },
   {
     "text": "editor ",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 61,
+      "startColumn": 62,
       "endLineNumber": 7,
-      "endColumn": 61
+      "endColumn": 62
     }
   },
   {
     "text": "instance",
     "range": {
       "startLineNumber": 7,
-      "startColumn": 68,
+      "startColumn": 69,
       "endLineNumber": 7,
-      "endColumn": 68
+      "endColumn": 69
     }
   },
   {
     "text": "\n",
     "range": {
       "startLineNumber": 12,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 12,
-      "endColumn": 0
-    }
-  },
-  {
-    "text": " ",
-    "range": {
-      "startLineNumber": 12,
-      "startColumn": 0,
-      "endLineNumber": 12,
-      "endColumn": 0
+      "endColumn": 1
     }
   },
   {
@@ -252,7 +243,7 @@
     }
   },
   {
-    "text": "onDidMount?: ",
+    "text": " ",
     "range": {
       "startLineNumber": 12,
       "startColumn": 2,
@@ -261,39 +252,48 @@
     }
   },
   {
+    "text": "onDidMount?: ",
+    "range": {
+      "startLineNumber": 12,
+      "startColumn": 3,
+      "endLineNumber": 12,
+      "endColumn": 3
+    }
+  },
+  {
     "text": "(editorInstance: ",
     "range": {
       "startLineNumber": 12,
-      "startColumn": 15,
+      "startColumn": 16,
       "endLineNumber": 12,
-      "endColumn": 15
+      "endColumn": 16
     }
   },
   {
     "text": "editor.IStandaloneCodeEditor) ",
     "range": {
       "startLineNumber": 12,
-      "startColumn": 32,
+      "startColumn": 33,
       "endLineNumber": 12,
-      "endColumn": 32
+      "endColumn": 33
     }
   },
   {
     "text": "=\u003e ",
     "range": {
       "startLineNumber": 12,
-      "startColumn": 62,
+      "startColumn": 63,
       "endLineNumber": 12,
-      "endColumn": 62
+      "endColumn": 63
     }
   },
   {
     "text": "void;",
     "range": {
       "startLineNumber": 12,
-      "startColumn": 65,
+      "startColumn": 66,
       "endLineNumber": 12,
-      "endColumn": 65
+      "endColumn": 66
     }
   },
   {
@@ -498,18 +498,9 @@
     "text": "\n",
     "range": {
       "startLineNumber": 45,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 45,
-      "endColumn": 0
-    }
-  },
-  {
-    "text": " ",
-    "range": {
-      "startLineNumber": 45,
-      "startColumn": 0,
-      "endLineNumber": 45,
-      "endColumn": 0
+      "endColumn": 1
     }
   },
   {
@@ -558,12 +549,21 @@
     }
   },
   {
-    "text": "onChange={props.onChange}",
+    "text": " ",
     "range": {
       "startLineNumber": 45,
       "startColumn": 6,
       "endLineNumber": 45,
       "endColumn": 6
+    }
+  },
+  {
+    "text": "onChange={props.onChange}",
+    "range": {
+      "startLineNumber": 45,
+      "startColumn": 7,
+      "endLineNumber": 45,
+      "endColumn": 7
     }
   }
 ]
