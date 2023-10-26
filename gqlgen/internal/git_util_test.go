@@ -20,8 +20,8 @@ func TestGitDiff(t *testing.T) {
 	}{
 		{
 			"testdata/commit1.json",
+			"2f551fc2d64dc17b590388dd04c3774869044eb8",
 			"8446ae73ef2df52a841b49840b776ecfd11751b4",
-			"cc43c06d4ada58059d7defb899a7f191e012555b",
 			"next/app/components/sourcecode2/editor/internal/EditorBare.tsx",
 		},
 	}
@@ -33,8 +33,12 @@ func TestGitDiff(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			filePatch := internal.FindFilePatch(patch.FilePatches(), c.filePath)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.inputFile, filePatch)
+			patchType, diffFilePatch := internal.FindFilePatch(patch, c.filePath)
+			if diffFilePatch == nil {
+				t.Fatal("diffFilePatch is nil")
+			}
+			result := internal.ToFilePatch(diffFilePatch, patchType)
+			internal.CompareWitGoldenFile(t, *updateFlag, c.inputFile, result)
 		})
 	}
 }
