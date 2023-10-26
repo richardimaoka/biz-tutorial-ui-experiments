@@ -19,9 +19,10 @@ type TypingPosition struct {
 }
 
 type RangeToDelete struct {
-	LineNumber  int
-	StartColumn int
-	EndColumn   int
+	StartLineNumber int
+	EndLineNumber   int
+	StartColumn     int
+	EndColumn       int
 }
 
 type ChunkToDelete struct {
@@ -141,6 +142,40 @@ func lineToChunksToAdd(lineToAdd SingleLineChange, pos TypingPosition) (TypingPo
 	}
 }
 
+// Split a single-line change (addition) into a slice of small-piece `string`s
+func lineToChunksToDelete(lineToDelete SingleLineChange, pos TypingPosition) (TypingPosition, []ChunkToDelete) {
+	var chunks []ChunkToDelete
+
+	if lineToDelete.NewLineAtEnd {
+		c := ChunkToDelete{
+			Content: lineToDelete.ContentWithoutNewLine + "\n",
+			RangeToDelete: RangeToDelete{
+				StartLineNumber: pos.LineNumber,
+				StartColumn:     pos.Column,
+				EndLineNumber:   pos.LineNumber + 1,
+				EndColumn:       0,
+			},
+		}
+		chunks = append(chunks, c)
+		newPos := TypingPosition{LineNumber: pos.LineNumber, Column: 1}
+		return newPos, chunks
+	} else {
+		nChars := utf8.RuneCountInString(lineToDelete.ContentWithoutNewLine)
+		c := ChunkToDelete{
+			Content: lineToDelete.ContentWithoutNewLine,
+			RangeToDelete: RangeToDelete{
+				StartLineNumber: pos.LineNumber,
+				EndLineNumber:   pos.LineNumber,
+				StartColumn:     pos.Column,
+				EndColumn:       pos.Column + nChars - 1,
+			},
+		}
+		chunks = append(chunks, c)
+		newPos := TypingPosition{LineNumber: pos.LineNumber, Column: 1}
+		return newPos, chunks
+	}
+}
+
 // If internal.Chunk has Type == "Add", then return chunks to add.
 //
 // inernal.Chunk  : represents a chunk from git diff
@@ -186,9 +221,10 @@ func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete 
 		c := ChunkToDelete{
 			Content: lineString,
 			RangeToDelete: RangeToDelete{
-				LineNumber:  pos.LineNumber,
-				StartColumn: pos.Column,
-				EndColumn:   pos.Column + nChars - 1,
+				StartLineNumber: pos.LineNumber,
+				EndLineNumber:   pos.LineNumber,
+				StartColumn:     pos.Column,
+				EndColumn:       pos.Column + nChars - 1,
 			},
 		}
 		chunksToDelete = append(chunksToDelete, c)
@@ -213,8 +249,8 @@ func toOpToDelete(chunk ChunkToDelete) SingleEditOperation {
 	return SingleEditOperation{
 		Text: "", // replace by "" means deletion of the range
 		Range: Range{
-			StartLineNumber: chunk.LineNumber, // start and end on the same line
-			EndLineNumber:   chunk.LineNumber, // start and end on the same line
+			StartLineNumber: chunk.StartLineNumber,
+			EndLineNumber:   chunk.EndLineNumber,
 			StartColumn:     chunk.StartColumn,
 			EndColumn:       chunk.EndColumn,
 		},

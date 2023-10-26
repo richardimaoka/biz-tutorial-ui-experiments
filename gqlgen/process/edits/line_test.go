@@ -206,6 +206,43 @@ func TestLineToChunksToAdd(t *testing.T) {
 	}
 }
 
+func TestLineToChunksToDelete(t *testing.T) {
+	cases := []struct {
+		inputPos    TypingPosition
+		inputLine   SingleLineChange
+		expected    []ChunkToDelete
+		expectedPos TypingPosition
+	}{
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			SingleLineChange{
+				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
+				NewLineAtEnd:          true,
+			},
+			[]ChunkToDelete{
+				{
+					Content:       "import Editor from \"@monaco-editor/react\";\n",
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 2, StartColumn: 1, EndColumn: 0},
+				},
+			},
+			TypingPosition{LineNumber: 1, Column: 1},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			resultPos, result := lineToChunksToDelete(c.inputLine, c.inputPos)
+			if !cmp.Equal(c.expected, result) {
+				t.Errorf(cmp.Diff(c.expected, result))
+			}
+			if resultPos != c.expectedPos {
+				t.Errorf("expected pos: %v", c.expectedPos)
+				t.Errorf("result pos  : %v", resultPos)
+			}
+		})
+	}
+}
+
 func TestToChunksToAdd(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
@@ -303,7 +340,7 @@ func TestToChunksToDelete(t *testing.T) {
 			[]ChunkToDelete{
 				{
 					Content:       "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 57}},
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 57}},
 			},
 		},
 		{
@@ -315,15 +352,15 @@ func TestToChunksToDelete(t *testing.T) {
 			[]ChunkToDelete{
 				{
 					Content:       "import { editor } from \"monaco-editor\";\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 40},
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 40},
 				},
 				{
 					Content:       "\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 1},
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 1},
 				},
 				{
 					Content:       "interface Props {\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 18},
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 18},
 				},
 			},
 		},
