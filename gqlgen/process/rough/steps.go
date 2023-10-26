@@ -8,6 +8,43 @@ type RoughStep struct {
 	Instruction2 string `json:"instruction2"`
 	Instruction3 string `json:"instruction3"`
 	ModalText    string `json:"modalText"`
+	Tooltip      string `json:"tooltip"`
 	Commit       string `json:"commit"`
 	Comment      string `json:"comment"`
+}
+
+type TerminalCommandStep struct {
+	Comment string
+	Command string
+	Commit  string
+	Output  string
+	Tooltip string
+}
+
+type TerminalOutputStep struct {
+	Comment string
+	Output  string
+	Tooltip string
+}
+
+type SourceCodeCommitStep struct {
+	Comment string
+	Commit  string
+	Tooltip string
+}
+
+type BrowserStep struct {
+	Comment string
+	Commit  string
+	Tooltip string
+}
+
+func toTerminalCommandStep(roughStep RoughStep) TerminalCommandStep {
+	return TerminalCommandStep{
+		Comment: roughStep.Comment,
+		Command: roughStep.Instruction,
+		Commit:  roughStep.Commit,
+		Output:  roughStep.Instruction2,
+		Tooltip: roughStep.Tooltip,
+	}
 }
