@@ -7,8 +7,9 @@ type Range struct {
 	EndColumn       int `json:"endColumn"`
 }
 
-type SingleEditOperatoin struct {
-	Range Range `json:"range"`
+type SingleEditOperation struct {
+	Text  string `json:"text"`
+	Range Range  `json:"range"`
 }
 
 func a() {}

@@ -34,21 +34,6 @@ type SingleLineToAdd struct {
 	ContentWithoutNewLine string
 }
 
-type state struct {
-	lineNumber int
-	column     int
-}
-
-func Convert(fileChunks []internal.Chunk) []ChunkToAdd {
-	s := state{0, 0}
-
-	// placeholder operation to avoid compilation error `declared but not used`
-	s.lineNumber = 0
-
-	// 1. for each chunks
-	return nil
-}
-
 // Split chunkContent, which potentially has many '\n' characters inside,
 // into slice of single-line strings, where each of them can have '\n' at the end.
 //
@@ -210,4 +195,69 @@ func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete 
 	}
 
 	return chunksToDelete
+}
+
+func toOpToAdd(chunk ChunkToAdd) SingleEditOperation {
+	return SingleEditOperation{
+		Text: chunk.Content,
+		Range: Range{
+			StartLineNumber: chunk.LineNumber,
+			EndLineNumber:   chunk.LineNumber,
+			StartColumn:     chunk.Column,
+			EndColumn:       chunk.Column,
+		},
+	}
+}
+
+func toOpToDelete(chunk ChunkToDelete) SingleEditOperation {
+	return SingleEditOperation{
+		Text: "", // replace by "" means deletion of the range
+		Range: Range{
+			StartLineNumber: chunk.LineNumber, // start and end on the same line
+			EndLineNumber:   chunk.LineNumber, // start and end on the same line
+			StartColumn:     chunk.StartColumn,
+			EndColumn:       chunk.EndColumn,
+		},
+	}
+}
+
+func toOpsToAdd(chunks []ChunkToAdd) []SingleEditOperation {
+	var ops []SingleEditOperation
+	for _, v := range chunks {
+		op := toOpToAdd(v)
+		ops = append(ops, op)
+	}
+
+	return ops
+}
+
+func toOpsToDelete(chunks []ChunkToDelete) []SingleEditOperation {
+	var ops []SingleEditOperation
+	for _, v := range chunks {
+		op := toOpToDelete(v)
+		ops = append(ops, op)
+	}
+
+	return ops
+}
+
+func processChunk(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []SingleEditOperation) {
+	currentPos := pos
+
+	var ops []SingleEditOperation
+	switch chunk.Type {
+	case "Add":
+		var chunks []ChunkToAdd
+		currentPos, chunks = toChunksToAdd(chunk, currentPos)
+		newOps := toOpsToAdd(chunks)
+		ops = append(ops, newOps...)
+	case "Equal":
+		currentPos = moveTypingPosition(chunk, pos)
+	case "Delete":
+		chunks := toChunksToDelete(chunk, currentPos)
+		newOps := toOpsToDelete(chunks)
+		ops = append(ops, newOps...)
+	}
+
+	return currentPos, ops
 }

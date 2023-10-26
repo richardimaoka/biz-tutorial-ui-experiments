@@ -1,0 +1,308 @@
+[
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 0,
+      "endLineNumber": 3,
+      "endColumn": 57
+    }
+  },
+  {
+    "text": "\n",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 0,
+      "endLineNumber": 3,
+      "endColumn": 0
+    }
+  },
+  {
+    "text": "import ",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 0,
+      "endLineNumber": 3,
+      "endColumn": 0
+    }
+  },
+  {
+    "text": "Editor ",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 7,
+      "endLineNumber": 3,
+      "endColumn": 7
+    }
+  },
+  {
+    "text": "from ",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 14,
+      "endLineNumber": 3,
+      "endColumn": 14
+    }
+  },
+  {
+    "text": "\"@monaco-editor/react\";",
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 19,
+      "endLineNumber": 3,
+      "endColumn": 19
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 0,
+      "endLineNumber": 7,
+      "endColumn": 77
+    }
+  },
+  {
+    "text": "\n",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 0,
+      "endLineNumber": 7,
+      "endColumn": 0
+    }
+  },
+  {
+    "text": " ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 0,
+      "endLineNumber": 7,
+      "endColumn": 0
+    }
+  },
+  {
+    "text": " ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 1,
+      "endLineNumber": 7,
+      "endColumn": 1
+    }
+  },
+  {
+    "text": "onDidMount?: ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 2,
+      "endLineNumber": 7,
+      "endColumn": 2
+    }
+  },
+  {
+    "text": "(editorInstance: ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 15,
+      "endLineNumber": 7,
+      "endColumn": 15
+    }
+  },
+  {
+    "text": "editor.IStandaloneCodeEditor) ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 32,
+      "endLineNumber": 7,
+      "endColumn": 32
+    }
+  },
+  {
+    "text": "=\u003e ",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 62,
+      "endLineNumber": 7,
+      "endColumn": 62
+    }
+  },
+  {
+    "text": "void;",
+    "range": {
+      "startLineNumber": 7,
+      "startColumn": 65,
+      "endLineNumber": 7,
+      "endColumn": 65
+    }
+  },
+  {
+    "text": "\n",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 1,
+      "endLineNumber": 8,
+      "endColumn": 1
+    }
+  },
+  {
+    "text": " ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 1,
+      "endLineNumber": 8,
+      "endColumn": 1
+    }
+  },
+  {
+    "text": " ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 2,
+      "endLineNumber": 8,
+      "endColumn": 2
+    }
+  },
+  {
+    "text": "// ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 3,
+      "endLineNumber": 8,
+      "endColumn": 3
+    }
+  },
+  {
+    "text": "pass-in ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 6,
+      "endLineNumber": 8,
+      "endColumn": 6
+    }
+  },
+  {
+    "text": "a ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 14,
+      "endLineNumber": 8,
+      "endColumn": 14
+    }
+  },
+  {
+    "text": "callback ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 16,
+      "endLineNumber": 8,
+      "endColumn": 16
+    }
+  },
+  {
+    "text": "like ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 25,
+      "endLineNumber": 8,
+      "endColumn": 25
+    }
+  },
+  {
+    "text": "below ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 30,
+      "endLineNumber": 8,
+      "endColumn": 30
+    }
+  },
+  {
+    "text": "to ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 36,
+      "endLineNumber": 8,
+      "endColumn": 36
+    }
+  },
+  {
+    "text": "manipulate ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 39,
+      "endLineNumber": 8,
+      "endColumn": 39
+    }
+  },
+  {
+    "text": "editor ",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 50,
+      "endLineNumber": 8,
+      "endColumn": 50
+    }
+  },
+  {
+    "text": "instance",
+    "range": {
+      "startLineNumber": 8,
+      "startColumn": 57,
+      "endLineNumber": 8,
+      "endColumn": 57
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 13,
+      "startColumn": 0,
+      "endLineNumber": 13,
+      "endColumn": 71
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 13,
+      "startColumn": 0,
+      "endLineNumber": 13,
+      "endColumn": 1
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 13,
+      "startColumn": 0,
+      "endLineNumber": 13,
+      "endColumn": 72
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 13,
+      "startColumn": 0,
+      "endLineNumber": 13,
+      "endColumn": 23
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 13,
+      "startColumn": 0,
+      "endLineNumber": 13,
+      "endColumn": 1
+    }
+  },
+  {
+    "text": "",
+    "range": {
+      "startLineNumber": 41,
+      "startColumn": 0,
+      "endLineNumber": 41,
+      "endColumn": 32
+    }
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "Content": "\"use client\";\n\n",
+    "Type": "Equal"
+  },
+  {
+    "Content": "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
+    "Type": "Delete"
+  },
+  {
+    "Content": "import Editor from \"@monaco-editor/react\";\n",
+    "Type": "Add"
+  },
+  {
+    "Content": "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
+    "Type": "Equal"
+  },
+  {
+    "Content": "  // onDidMount: pass-in a callback like below to manipulate editor instance\n",
+    "Type": "Delete"
+  },
+  {
+    "Content": "  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n  // pass-in a callback like below to manipulate editor instance\n",
+    "Type": "Add"
+  },
+  {
+    "Content": "  //\n  //   function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {\n  //     editorRef.current = editorInstance;\n  //   }\n",
+    "Type": "Equal"
+  },
+  {
+    "Content": "  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n\n  // onChange: this is also called when the first rendering is finisehd\n  onChange?: OnChange;\n\n",
+    "Type": "Delete"
+  },
+  {
+    "Content": "  lineHeight?: number;\n}\n\nexport function EditorBare(props: Props) {\n  console.log(\"EditorBare component is rendered\");\n  const lineHeight = props.lineHeight ? props.lineHeight : 19;\n\n  return (\n    \u003cEditor\n      options={{\n        readOnly: true,\n        theme: \"vs-dark\",\n\n        // save width for mobile - folding displays small vertical bar\n        folding: false,\n        lineNumbers: \"off\",\n        minimap: {\n          enabled: false,\n        },\n        // scroll bar visible, as \"hidden\" doesn't completely hide it, and meks it just awkward\n        // scrollbar: {\n        //   vertical: \"visible\",\n        //   horizontal: \"visible\",\n        // },\n\n        lineHeight: lineHeight,\n      }}\n      onMount={props.onDidMount}\n",
+    "Type": "Equal"
+  },
+  {
+    "Content": "      onChange={props.onChange}\n",
+    "Type": "Delete"
+  },
+  {
+    "Content": "    /\u003e\n  );\n}\n",
+    "Type": "Equal"
+  }
+]
