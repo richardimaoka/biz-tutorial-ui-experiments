@@ -6,7 +6,7 @@ import { editor } from "monaco-editor";
 interface Props {
   original: string;
   modified: string;
-
+  language: string;
   onDidMount?: (editorInstance: editor.IDiffEditor) => void;
   // pass-in a callback like below to manipulate editor instance
   //
@@ -22,6 +22,7 @@ export function DiffEditorBare(props: Props) {
     <DiffEditor
       original={props.original}
       modified={props.modified}
+      language={props.language}
       options={{
         readOnly: true,
         renderSideBySide: false,

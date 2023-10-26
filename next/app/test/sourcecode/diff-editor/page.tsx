@@ -1,6 +1,6 @@
 import React from "react";
 import { promises as fs } from "fs";
-import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
+import { Interactive } from "./Interactive";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
@@ -18,7 +18,7 @@ export default async function Page() {
   );
   return (
     <div style={{ height: "700px" }}>
-      <DiffEditorBare original={oldSrc} modified={newSrc} />
+      <Interactive original={oldSrc} modified={newSrc} language="typescript" />
     </div>
   );
 }
