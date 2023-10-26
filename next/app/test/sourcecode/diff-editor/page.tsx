@@ -1,6 +1,6 @@
 import React from "react";
 import { promises as fs } from "fs";
-import { DiffEditorBare } from "@/app/components/sourcecode2/DiffEditorBare";
+import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
