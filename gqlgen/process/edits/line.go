@@ -29,7 +29,7 @@ type ChunkToDelete struct {
 	Content string //this is not necessary but convenient for debugging
 }
 
-type SingleLineToAdd struct {
+type SingleLineChange struct {
 	NewLineAtEnd          bool
 	ContentWithoutNewLine string
 }
@@ -65,45 +65,45 @@ func splitAfterNewLine(chunkContent string) []string {
 // parameters:
 //   lineToAdd: the input string, which potentially has '\n' at the end
 //              but cannot have '\n' in the middle
-func detectNewLine(lineToAdd string) SingleLineToAdd {
-	if lineToAdd == "\n" {
-		return SingleLineToAdd{
+func detectNewLine(lineChange string) SingleLineChange {
+	if lineChange == "\n" {
+		return SingleLineChange{
 			NewLineAtEnd:          true,
 			ContentWithoutNewLine: "", // the latter is empty "", since there is no remaining string after omitting '\n'
 		}
 	}
 
-	if strings.HasSuffix(lineToAdd, "\n") {
-		lastIndex := len(lineToAdd) - 1
-		lastNewLineOmitted := lineToAdd[0:lastIndex]
+	if strings.HasSuffix(lineChange, "\n") {
+		lastIndex := len(lineChange) - 1
+		lastNewLineOmitted := lineChange[0:lastIndex]
 
-		return SingleLineToAdd{
+		return SingleLineChange{
 			NewLineAtEnd:          true,
 			ContentWithoutNewLine: lastNewLineOmitted,
 		}
 	}
 
-	return SingleLineToAdd{
+	return SingleLineChange{
 		NewLineAtEnd:          false,
-		ContentWithoutNewLine: lineToAdd,
+		ContentWithoutNewLine: lineChange,
 	}
 }
 
 // Returns single-line changes with flags indicating new-line characters '\n' are included
-func splitChunkToLines(chunk internal.Chunk) []SingleLineToAdd {
+func splitChunkToLines(chunk internal.Chunk) []SingleLineChange {
 	splitContent := splitAfterNewLine(chunk.Content)
 
-	var ret []SingleLineToAdd
+	var ret []SingleLineChange
 	for _, c := range splitContent {
-		lineToAdd := detectNewLine(c)
-		ret = append(ret, lineToAdd)
+		lineChange := detectNewLine(c)
+		ret = append(ret, lineChange)
 	}
 
 	return ret
 }
 
 // Split a single-line change (addition) into a slice of small-piece `string`s
-func lineToChunksToAdd(lineToAdd SingleLineToAdd, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+func lineToChunksToAdd(lineToAdd SingleLineChange, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
 	var chunks []ChunkToAdd
 
 	if lineToAdd.NewLineAtEnd {

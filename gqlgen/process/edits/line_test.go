@@ -53,38 +53,38 @@ func TestDetectNewLines(t *testing.T) {
 
 	cases := []struct {
 		input    string
-		expected SingleLineToAdd
+		expected SingleLineChange
 	}{
 		{
 			"import Editor from \"@monaco-editor/react\";\n",
-			SingleLineToAdd{
+			SingleLineChange{
 				true,
 				"import Editor from \"@monaco-editor/react\";",
 			},
 		},
 		{
 			"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n",
-			SingleLineToAdd{
+			SingleLineChange{
 				true,
 				"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
 			},
 		},
 		{
 			"  // pass-in a callback like below to manipulate editor instance\n",
-			SingleLineToAdd{
+			SingleLineChange{
 				true,
 				"  // pass-in a callback like below to manipulate editor instance",
 			},
 		},
 		{
 			" some word vvvv",
-			SingleLineToAdd{
+			SingleLineChange{
 				false,
 				" some word vvvv",
 			},
 		}, {
 			"",
-			SingleLineToAdd{
+			SingleLineChange{
 				false,
 				"",
 			},
@@ -92,7 +92,7 @@ func TestDetectNewLines(t *testing.T) {
 		{
 			// if only "\n", then it 1) has '\n' as indicated by `true`, but 2) the content without '\n' is empty string
 			"\n",
-			SingleLineToAdd{
+			SingleLineChange{
 				true,
 				"",
 			},
@@ -113,14 +113,14 @@ func TestDetectNewLines(t *testing.T) {
 func TestSplitChunkToLines(t *testing.T) {
 	cases := []struct {
 		input    internal.Chunk
-		expected []SingleLineToAdd
+		expected []SingleLineChange
 	}{
 		{
 			input: internal.Chunk{
 				Content: "  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n  // pass-in a callback like below to manipulate editor instance\n",
 				Type:    "Add",
 			},
-			expected: []SingleLineToAdd{
+			expected: []SingleLineChange{
 				{
 					true,
 					"  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;",
@@ -146,13 +146,13 @@ func TestSplitChunkToLines(t *testing.T) {
 func TestLineToChunksToAdd(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
-		inputLine   SingleLineToAdd
+		inputLine   SingleLineChange
 		expected    []ChunkToAdd
 		expectedPos TypingPosition
 	}{
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			SingleLineToAdd{
+			SingleLineChange{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          false,
 			},
@@ -166,7 +166,7 @@ func TestLineToChunksToAdd(t *testing.T) {
 		},
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			SingleLineToAdd{
+			SingleLineChange{
 				ContentWithoutNewLine: "import Editor from \"@monaco-editor/react\";",
 				NewLineAtEnd:          true, // + '\n' to the above content
 			},
@@ -181,7 +181,7 @@ func TestLineToChunksToAdd(t *testing.T) {
 		},
 		{
 			TypingPosition{1, 1},
-			SingleLineToAdd{
+			SingleLineChange{
 				ContentWithoutNewLine: "",
 				NewLineAtEnd:          true, // '\n' only
 			},
