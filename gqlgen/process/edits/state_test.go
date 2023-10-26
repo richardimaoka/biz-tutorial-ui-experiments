@@ -25,6 +25,17 @@ func TestProcessChunk(t *testing.T) {
 			[]edits.SingleEditOperation{},
 			edits.TypingPosition{LineNumber: 3, Column: 1},
 		},
+		{
+			edits.TypingPosition{LineNumber: 3, Column: 1},
+			internal.Chunk{
+				Content: "import Editor from \"@monaco-editor/react\";\n",
+				Type:    "Delete",
+			},
+			[]edits.SingleEditOperation{
+				{Range: edits.Range{StartLineNumber: 3, StartColumn: 1, EndLineNumber: 3, EndColumn: 43}, Text: ""},
+			},
+			edits.TypingPosition{LineNumber: 3, Column: 1},
+		},
 	}
 
 	for index, c := range cases {

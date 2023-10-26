@@ -303,7 +303,7 @@ func TestToChunksToDelete(t *testing.T) {
 			[]ChunkToDelete{
 				{
 					Content:       "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 58}},
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 57}},
 			},
 		},
 		{
@@ -315,15 +315,15 @@ func TestToChunksToDelete(t *testing.T) {
 			[]ChunkToDelete{
 				{
 					Content:       "import { editor } from \"monaco-editor\";\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 41},
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 40},
 				},
 				{
 					Content:       "\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 2},
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 1},
 				},
 				{
 					Content:       "interface Props {\n",
-					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 19},
+					RangeToDelete: RangeToDelete{LineNumber: 1, StartColumn: 1, EndColumn: 18},
 				},
 			},
 		},

@@ -3,36 +3,9 @@
     "text": "",
     "range": {
       "startLineNumber": 3,
-      "startColumn": 0,
+      "startColumn": 1,
       "endLineNumber": 3,
-      "endColumn": 43
-    }
-  },
-  {
-    "text": "\n",
-    "range": {
-      "startLineNumber": 3,
-      "startColumn": 0,
-      "endLineNumber": 3,
-      "endColumn": 0
-    }
-  },
-  {
-    "text": "import ",
-    "range": {
-      "startLineNumber": 3,
-      "startColumn": 0,
-      "endLineNumber": 3,
-      "endColumn": 0
-    }
-  },
-  {
-    "text": "Editor, ",
-    "range": {
-      "startLineNumber": 3,
-      "startColumn": 7,
-      "endLineNumber": 3,
-      "endColumn": 7
+      "endColumn": 44
     }
   }
 ]

@@ -188,7 +188,7 @@ func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete 
 			RangeToDelete: RangeToDelete{
 				LineNumber:  pos.LineNumber,
 				StartColumn: pos.Column,
-				EndColumn:   pos.Column + nChars,
+				EndColumn:   pos.Column + nChars - 1,
 			},
 		}
 		chunksToDelete = append(chunksToDelete, c)
