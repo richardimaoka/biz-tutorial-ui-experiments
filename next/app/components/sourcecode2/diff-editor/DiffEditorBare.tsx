@@ -28,6 +28,7 @@ export function DiffEditorBare(props: Props) {
         renderSideBySide: false,
         lineNumbers: "off",
         renderOverviewRuler: false,
+        diffWordWrap: "on",
       }}
       theme={"vs-dark"}
       onMount={props.onDidMount}

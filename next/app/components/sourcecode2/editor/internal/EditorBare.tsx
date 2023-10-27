@@ -32,6 +32,7 @@ export function EditorBare(props: Props) {
         minimap: {
           enabled: false,
         },
+        wordWrap: "on",
         // scroll bar visible, as "hidden" doesn't completely hide it, and meks it just awkward
         // scrollbar: {
         //   vertical: "visible",
