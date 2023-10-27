@@ -1,6 +1,6 @@
-import { CommandComponent } from "./command/CommandComponent";
-import { TerminalEntry } from "./definitions";
-import { OutputComponent } from "./output/OutputComponent";
+import { CommandComponent } from "../command/CommandComponent";
+import { TerminalEntry } from "../definitions";
+import { OutputComponent } from "../output/OutputComponent";
 
 interface Props {
   entry: TerminalEntry;

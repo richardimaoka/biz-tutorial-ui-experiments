@@ -3,8 +3,8 @@ import styles from "./TerminalContents.module.css";
 import {
   TerminalTooltip,
   TerminalTooltipProps,
-} from "./tooltip/TerminalTooltip";
-import { TerminalEntry } from "./definitions";
+} from "../tooltip/TerminalTooltip";
+import { TerminalEntry } from "../definitions";
 import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 type Props = {

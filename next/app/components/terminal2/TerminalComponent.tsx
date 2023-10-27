@@ -1,4 +1,7 @@
-import { TerminalContents, TerminalContentsProps } from "./TerminalContents";
+import {
+  TerminalContents,
+  TerminalContentsProps,
+} from "./contents/TerminalContents";
 import { TerminalHeader, TerminalHeaderProps } from "./header/TerminalHeader";
 import styles from "./TerminalComponent.module.css";
 
