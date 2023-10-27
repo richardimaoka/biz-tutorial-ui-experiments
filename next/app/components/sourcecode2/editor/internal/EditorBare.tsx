@@ -24,6 +24,7 @@ export function EditorBare(props: Props) {
     <Editor
       options={{
         readOnly: true,
+        domReadOnly: true,
         theme: "vs-dark",
 
         // save width for mobile - folding displays small vertical bar

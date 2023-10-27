@@ -25,6 +25,7 @@ export function DiffEditorBare(props: Props) {
       language={props.language}
       options={{
         readOnly: true,
+        domReadOnly: true,
         renderSideBySide: false,
         lineNumbers: "off",
         renderOverviewRuler: false,
