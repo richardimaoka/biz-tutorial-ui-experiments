@@ -1,4 +1,5 @@
-import { Column } from "@/app/components/tutorial/Column";
+import { TerminalEntry } from "@/app/components/terminal2/definitions";
+import { Column } from "@/app/components/tutorial/column/Column";
 
 export default function Page() {
   const entries: TerminalEntry[] = [
