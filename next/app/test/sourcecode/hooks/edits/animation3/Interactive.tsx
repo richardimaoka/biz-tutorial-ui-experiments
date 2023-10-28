@@ -28,6 +28,9 @@ export function Interactive(props: Props) {
 
   return (
     <>
+      <button style={{ marginRight: "10px" }} onClick={() => setState("old")}>
+        old
+      </button>
       <button
         style={{ marginRight: "10px" }}
         onClick={() => setState("animate")}
