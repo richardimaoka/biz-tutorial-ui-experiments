@@ -5,26 +5,6 @@ import (
 	"strings"
 )
 
-type TooltipTiming = string
-
-const (
-	BEGINNING TooltipTiming = "beginning"
-	END       TooltipTiming = "end"
-)
-
-func toTooltipTiming(s string) (TooltipTiming, error) {
-	switch strings.ToLower(s) {
-	case BEGINNING:
-		return BEGINNING, nil
-	case END:
-		return END, nil
-	case "":
-		return END, nil
-	default:
-		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
-	}
-}
-
 type TerminalTooltip struct {
 	Contents string        `json:"contents"`
 	Timing   TooltipTiming `json:"timing"`

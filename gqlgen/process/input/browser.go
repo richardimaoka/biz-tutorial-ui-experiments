@@ -5,8 +5,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type ImageFileSuffix = string
@@ -63,40 +61,22 @@ func toBrowserSingle(ab *Abstract) (*BrowserSingle, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
-	// fileBaseName := ab.Instruction
-
-	// suffix, err := toImageFileSuffix(ab.Instruction2)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("%s,'instruction2' is wrong, %s", errorPrefix, err)
-	// }
-
-	// imageFileNme := fmt.Sprintf("%s.%s", fileBaseName, suffix)
-
-	var imageFileNme string
-	split := strings.Split(ab.Instruction, ".")
-	if len(split) == 1 {
-		fileBaseName := split[0] // confirmed non-empty already
-
-		suffix, err := toImageFileSuffix(ab.Instruction2)
-		if err != nil {
-			return nil, fmt.Errorf("%s,'instruction2' is wrong, %s", errorPrefix, err)
-		}
-
-		imageFileNme = fmt.Sprintf("%s.%s", fileBaseName, suffix)
-	} else if len(split) == 2 {
-		_, err := toImageFileSuffix(split[1])
-		if err != nil {
-			return nil, fmt.Errorf("%s,'instruction' has wrong file suffix, %s", errorPrefix, err)
-		}
-		imageFileNme = ab.Instruction
-	} else {
-		return nil, fmt.Errorf("%s,'instruction' has too many dots", errorPrefix)
+	baseName, err := fileBaseName(ab.Instruction)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
 	}
+
+	suffix, err := fileSuffix(ab.Instruction, ab)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	imageFileName := fmt.Sprintf("%s.%s", baseName, suffix)
 
 	return &BrowserSingle{
 		StepId:        ab.StepId,
 		Comment:       ab.Comment,
-		ImageFileName: imageFileNme,
+		ImageFileName: imageFileName,
 	}, nil
 }
 
@@ -130,48 +110,27 @@ func toBrowserNumSeq(ab *Abstract) (*BrowserNumSeq, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
-	found := BrowserNumSeqPattern.FindString(ab.Instruction)
-	if found == "" {
-		return nil, fmt.Errorf("%s, 'instruction' should be the form of 'filebase[${num}]'", errorPrefix)
+	// extract num from (e.g.) filename[30].png
+	num, err := positiveNumInSqBracket(ab.Instruction)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
 	}
 
-	// found = (e.g.) [30]
-	num, err := strconv.Atoi(found[1 : len(found)-1]) // remove '[' and ']' from 'found'
+	baseName, err := fileBaseName(ab.Instruction)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
+	}
+	baseName = removeSqBrackets(baseName)
+
+	suffix, err := fileSuffix(ab.Instruction, ab)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
-	}
-	if num < 1 {
-		return nil, fmt.Errorf("%s, 'instruction' must have a positive number in 'filebase[${num}]'", errorPrefix)
-	}
-
-	var imageBaseName string
-	var suffix string
-	splitByDot := strings.Split(ab.Instruction, ".")
-	if len(splitByDot) == 1 {
-		splitBySquareBracket := strings.Split(ab.Instruction, "[")
-		imageBaseName = splitBySquareBracket[0] // confirmed non-empty already
-
-		suffix, err = toImageFileSuffix(ab.Instruction2)
-		if err != nil {
-			return nil, fmt.Errorf("%s,'instruction2' is empty, %s", errorPrefix, err)
-		}
-
-	} else if len(splitByDot) == 2 {
-		splitBySquareBracket := strings.Split(ab.Instruction, "[")
-		imageBaseName = splitBySquareBracket[0] // confirmed non-empty already
-
-		suffix, err = toImageFileSuffix(splitByDot[1])
-		if err != nil {
-			return nil, fmt.Errorf("%s, 'instruction' has wrong file suffix, %s", errorPrefix, err)
-		}
-	} else {
-		return nil, fmt.Errorf("%s, 'instruction' has too many dots", errorPrefix)
 	}
 
 	return &BrowserNumSeq{
 		StepId:          ab.StepId,
 		Comment:         ab.Comment,
-		ImageBaseName:   imageBaseName,
+		ImageBaseName:   baseName,
 		ImageFileSuffix: suffix,
 		NumImages:       num,
 	}, nil
@@ -203,33 +162,18 @@ func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
-	fileBaseNames := strings.Split(ab.Instruction, ",")
+	splitByComma := strings.Split(ab.Instruction, ",")
 	var imgFiles []string
-	for i, v := range fileBaseNames {
-		if v == "" {
-			return nil, fmt.Errorf("%s, %s comma-separated element in 'instruction' is empty", errorPrefix, internal.Ordinal(i))
+	for _, v := range splitByComma {
+		baseName, err := fileBaseName(v)
+		if err != nil {
+			return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
 		}
-
-		split := strings.Split(v, ".")
-		if len(split) == 1 {
-			fileBaseName := split[0] // confirmed non-empty already
-
-			suffix, err := toImageFileSuffix(ab.Instruction2)
-			if err != nil {
-				return nil, fmt.Errorf("%s,'instruction2' is wrong, %s", errorPrefix, err)
-			}
-
-			imgFiles = append(imgFiles, fmt.Sprintf("%s.%s", fileBaseName, suffix))
-		} else if len(split) == 2 {
-			_, err := toImageFileSuffix(split[1])
-			if err != nil {
-				return nil, fmt.Errorf("%s,'instruction' has wrong file suffix, %s", errorPrefix, err)
-			}
-			imgFiles = append(imgFiles, v)
-		} else {
-			return nil, fmt.Errorf("%s,'instruction' has too many dots", errorPrefix)
+		suffix, err := fileSuffix(v, ab)
+		if err != nil {
+			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}
-
+		imgFiles = append(imgFiles, fmt.Sprintf("%s.%s", baseName, suffix))
 	}
 
 	return &BrowserSequence{
@@ -237,4 +181,66 @@ func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
 		Comment:        ab.Comment,
 		ImageFileNames: imgFiles,
 	}, nil
+}
+
+func removeSqBrackets(s string) string {
+	split := strings.Split(s, "[")
+	return split[0]
+}
+
+// get file base name from given file-name candidate
+func fileBaseName(s string) (string, error) {
+	if s == "" {
+		return "", fmt.Errorf("file name is empty")
+	}
+
+	splitByDot := strings.Split(s, ".")
+	if len(splitByDot) == 1 {
+		return s, nil
+	} else if len(splitByDot) == 2 {
+		return splitByDot[0], nil
+	} else {
+		return "", fmt.Errorf("file name has too many dots")
+	}
+}
+
+// get file suffix from 1) given file-name candidate, 2) if not there, try finding from Abstract
+func fileSuffix(fileNameCandidate string, ab *Abstract) (string, error) {
+	splitByDot := strings.Split(fileNameCandidate, ".")
+	if len(splitByDot) == 1 {
+		// if 'instruction' doesn't have a '.', then the suffix must be in 'instruction2'
+		suffix, err := toImageFileSuffix(ab.Instruction2)
+		if err != nil {
+			return "", fmt.Errorf("file name = '%s' has a wrong suffix, %s", fileNameCandidate, err)
+		}
+		return suffix, nil
+	} else if len(splitByDot) == 2 {
+		// if 'instruction' has a '.', then the suffix follows that .
+		suffix, err := toImageFileSuffix(splitByDot[1])
+		if err != nil {
+			return "", fmt.Errorf("'instruction2' has a wrong suffix, %s", err)
+		}
+		return suffix, nil
+	} else {
+		return "", fmt.Errorf("file name = '%s' has too many dots", fileNameCandidate)
+	}
+}
+
+// extract number from square bracket
+func positiveNumInSqBracket(s string) (int, error) {
+	found := BrowserNumSeqPattern.FindString(s)
+	if found == "" {
+		return 0, fmt.Errorf("the string doesn't have the form '[${num}]'")
+	}
+
+	// found = (e.g.) [30]
+	num, err := strconv.Atoi(found[1 : len(found)-1]) // remove '[' and ']' from 'found'
+	if err != nil {
+		return 0, err
+	}
+	if num < 1 {
+		return 0, fmt.Errorf("number in '[${num}]' is a negative number = %d", num)
+	}
+
+	return num, nil
 }

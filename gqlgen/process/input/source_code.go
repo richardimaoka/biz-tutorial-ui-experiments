@@ -1,17 +1,10 @@
 package input
 
-type PositionPreference = string
-
-const (
-	ABOVE PositionPreference = "ABOVE"
-	BELOW PositionPreference = "BELOW"
-	EXACT PositionPreference = "EXACT"
-)
-
 type SourceCodeTooltip struct {
-	Contents           string
-	LineNumber         int
-	PositionPreference PositionPreference
+	Contents           string             `json:"contents"`
+	LineNumber         int                `json:"lineNumber"`
+	PositionPreference PositionPreference `json:"positionPreference"`
+	Timing             TooltipTiming      `json:"timing"`
 }
 
 type SourceCodeCommit struct {
