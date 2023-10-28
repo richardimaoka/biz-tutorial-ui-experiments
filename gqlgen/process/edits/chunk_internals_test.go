@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 )
 
 func TestSplitAfterNewLine(t *testing.T) {
@@ -112,11 +112,11 @@ func TestDetectNewLines(t *testing.T) {
 
 func TestSplitChunkToLines(t *testing.T) {
 	cases := []struct {
-		input    internal.Chunk
+		input    gitwrap.Chunk
 		expected []SingleLineChange
 	}{
 		{
-			input: internal.Chunk{
+			input: gitwrap.Chunk{
 				Content: "  onDidMount?: (editorInstance: editor.IStandaloneCodeEditor) =\u003e void;\n  // pass-in a callback like below to manipulate editor instance\n",
 				Type:    "Add",
 			},
@@ -246,13 +246,13 @@ func TestLineToChunksToDelete(t *testing.T) {
 func TestToChunksToAdd(t *testing.T) {
 	cases := []struct {
 		inputPos    TypingPosition
-		inputChunk  internal.Chunk
+		inputChunk  gitwrap.Chunk
 		expected    []ChunkToAdd
 		expectedPos TypingPosition
 	}{
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import { editor } from \"monaco-editor\";\n",
 				Type:    "Add",
 			},
@@ -269,7 +269,7 @@ func TestToChunksToAdd(t *testing.T) {
 		},
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
 				Type:    "Add",
 			},
@@ -291,7 +291,7 @@ func TestToChunksToAdd(t *testing.T) {
 		},
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {",
 				Type:    "Add",
 			},
@@ -328,12 +328,12 @@ func TestToChunksToAdd(t *testing.T) {
 func TestToChunksToDelete(t *testing.T) {
 	cases := []struct {
 		inputPos   TypingPosition
-		inputChunk internal.Chunk
+		inputChunk gitwrap.Chunk
 		expected   []ChunkToDelete
 	}{
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import Editor, { OnChange } from \"@monaco-editor/react\";",
 				Type:    "Delete",
 			},
@@ -346,7 +346,7 @@ func TestToChunksToDelete(t *testing.T) {
 		},
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import Editor, { OnChange } from \"@monaco-editor/react\";\n",
 				Type:    "Delete",
 			},
@@ -359,7 +359,7 @@ func TestToChunksToDelete(t *testing.T) {
 		},
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import { editor } from \"monaco-editor\";\n\ninterface Props {\n",
 				Type:    "Delete",
 			},

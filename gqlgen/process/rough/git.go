@@ -6,11 +6,12 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 )
 
 func gitFilesForCommit(repo *git.Repository, commitHashStr string) ([]string, error) {
-	commit, err := internal.GetCommit(repo, commitHashStr)
+	commit, err := gitwrap.GetCommit(repo, commitHashStr)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed in gitFilesForCommit, cannot get commit = %s, %s", commitHashStr, err)
 	}
@@ -67,12 +68,12 @@ func filesForDiffInternal(repo *git.Repository, currentCommit, prevCommit *objec
 }
 
 func filesForDiff(repo *git.Repository, currentCommitHash, prevCommitHash string) ([]string, error) {
-	currentCommit, err := internal.GetCommit(repo, currentCommitHash)
+	currentCommit, err := gitwrap.GetCommit(repo, currentCommitHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed in GitFilesForDiff, %s", err)
 	}
 
-	prevCommit, err := internal.GetCommit(repo, prevCommitHash)
+	prevCommit, err := gitwrap.GetCommit(repo, prevCommitHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed in GitFilesForDiff, %s", err)
 	}

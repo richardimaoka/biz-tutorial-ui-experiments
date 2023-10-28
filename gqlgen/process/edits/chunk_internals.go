@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 )
 
 type ChunkToAdd struct {
@@ -91,7 +91,7 @@ func detectNewLine(lineChange string) SingleLineChange {
 }
 
 // Returns single-line changes with flags indicating new-line characters '\n' are included
-func splitChunkToLines(chunk internal.Chunk) []SingleLineChange {
+func splitChunkToLines(chunk gitwrap.Chunk) []SingleLineChange {
 	splitContent := splitAfterNewLine(chunk.Content)
 
 	var ret []SingleLineChange
@@ -176,11 +176,11 @@ func lineToChunksToDelete(lineToDelete SingleLineChange, pos TypingPosition) (Ty
 	}
 }
 
-// If internal.Chunk has Type == "Add", then return chunks to add.
+// If gitwrap.Chunk has Type == "Add", then return chunks to add.
 //
 // inernal.Chunk  : represents a chunk from git diff
 // TypingPosition : is the position at which the function call is made
-func toChunksToAdd(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
+func toChunksToAdd(chunk gitwrap.Chunk, pos TypingPosition) (TypingPosition, []ChunkToAdd) {
 	// Split into single-line changes first.
 	// Special handling on '\n' is needed, so a slice of '\n'-aware structure is used
 	linesToAdd := splitChunkToLines(chunk)
@@ -197,9 +197,9 @@ func toChunksToAdd(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []
 	return currentPos, chunksToAdd
 }
 
-// If internal.Chunk has Type == "Add", then return chunks to add.
+// If gitwrap.Chunk has Type == "Add", then return chunks to add.
 // No need to move the typing position for deletion.
-func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete {
+func toChunksToDelete(chunk gitwrap.Chunk, pos TypingPosition) []ChunkToDelete {
 	// Split into single-line changes first.
 	// Special handling on '\n' is needed, so a slice of '\n'-aware structure is used
 	linesToDelete := splitChunkToLines(chunk)
@@ -216,8 +216,8 @@ func toChunksToDelete(chunk internal.Chunk, pos TypingPosition) []ChunkToDelete 
 	return chunksToDelete
 }
 
-// If internal.Chunk has Type == "Equal", then move the typing position but no edits to make
-func moveTypingPosition(chunk internal.Chunk, pos TypingPosition) TypingPosition {
+// If gitwrap.Chunk has Type == "Equal", then move the typing position but no edits to make
+func moveTypingPosition(chunk gitwrap.Chunk, pos TypingPosition) TypingPosition {
 	split := strings.Split(chunk.Content, "\n")
 	lastLineChange := split[len(split)-1]
 

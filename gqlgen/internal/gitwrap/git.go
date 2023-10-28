@@ -1,4 +1,4 @@
-package internal
+package gitwrap
 
 import (
 	"fmt"
@@ -9,7 +9,11 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
-func validateCommitHash(hashStr string) (plumbing.Hash, error) {
+func errroMessage(prefix, leadingMessage string, underlyingError error) error {
+	return fmt.Errorf("%s - %s, %s", prefix, leadingMessage, underlyingError)
+}
+
+func ValidateCommitHash(hashStr string) (plumbing.Hash, error) {
 	commitHash := plumbing.NewHash(hashStr)
 	if commitHash.String() != hashStr {
 		return plumbing.ZeroHash, fmt.Errorf("commit hash = %s mismatched with re-calculated hash = %s", hashStr, commitHash.String())
@@ -18,16 +22,12 @@ func validateCommitHash(hashStr string) (plumbing.Hash, error) {
 	return commitHash, nil
 }
 
-func errroMessage(prefix, leadingMessage string, underlyingError error) error {
-	return fmt.Errorf("%s - %s, %s", prefix, leadingMessage, underlyingError)
-}
-
 // Get git commit object from hash string
 // bit easier than go-get's equivalent, as this function works with string, not plumbing.Hash
 func GetCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
-	funcName := "internal.GetCommit"
+	funcName := "gitwrap.GetCommit"
 
-	commitHash, err := validateCommitHash(hashStr)
+	commitHash, err := ValidateCommitHash(hashStr)
 	if err != nil {
 		return nil, errroMessage(funcName, "validation error", err)
 	}
@@ -43,7 +43,7 @@ func GetCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 // Get git patch object from hash strings
 // bit easier than go-get's equivalent, as this function works with string, not plumbing.Hash
 func GetPatch(repo *git.Repository, fromCommitHash, toCommitHash string) (*object.Patch, error) {
-	funcName := "internal.GetPatch"
+	funcName := "gitwrap.GetPatch"
 
 	fromCommit, err := GetCommit(repo, fromCommitHash)
 	if err != nil {

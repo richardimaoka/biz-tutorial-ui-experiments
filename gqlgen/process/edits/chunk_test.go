@@ -6,19 +6,20 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
 
 func TestProcessChunk(t *testing.T) {
 	cases := []struct {
 		inputPos    edits.TypingPosition
-		inputChunk  internal.Chunk
+		inputChunk  gitwrap.Chunk
 		expected    []edits.SingleEditOperation
 		expectedPos edits.TypingPosition
 	}{
 		{
 			edits.TypingPosition{LineNumber: 1, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "\"use client\";\n\n",
 				Type:    "Equal",
 			},
@@ -27,7 +28,7 @@ func TestProcessChunk(t *testing.T) {
 		},
 		{
 			edits.TypingPosition{LineNumber: 3, Column: 1},
-			internal.Chunk{
+			gitwrap.Chunk{
 				Content: "import Editor from \"@monaco-editor/react\";\n",
 				Type:    "Delete",
 			},
@@ -61,7 +62,7 @@ func TestProcessChunks(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var chunks []internal.Chunk
+			var chunks []gitwrap.Chunk
 			err := internal.JsonRead2(c.inputFile, &chunks)
 			if err != nil {
 				t.Fatal(err)

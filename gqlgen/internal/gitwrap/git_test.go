@@ -1,9 +1,10 @@
-package internal_test
+package gitwrap_test
 
 import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/test_util"
 )
 
@@ -28,16 +29,16 @@ func TestGitDiff(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			patch, err := internal.GetPatch(repo, c.fromCommit, c.toCommit)
+			patch, err := gitwrap.GetPatch(repo, c.fromCommit, c.toCommit)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			patchType, diffFilePatch := internal.FindFilePatch(patch, c.filePath)
+			patchType, diffFilePatch := gitwrap.FindFilePatch(patch, c.filePath)
 			if diffFilePatch == nil {
 				t.Fatal("diffFilePatch is nil")
 			}
-			result := internal.ToFilePatch(diffFilePatch, patchType)
+			result := gitwrap.ToFilePatch(diffFilePatch, patchType)
 			internal.CompareWitGoldenFile(t, *updateFlag, c.inputFile, result)
 		})
 	}

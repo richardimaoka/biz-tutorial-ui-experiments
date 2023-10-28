@@ -1,8 +1,8 @@
 package edits
 
-import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 
-func ProcessChunk(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []SingleEditOperation) {
+func ProcessChunk(chunk gitwrap.Chunk, pos TypingPosition) (TypingPosition, []SingleEditOperation) {
 	currentPos := pos
 
 	var ops []SingleEditOperation = []SingleEditOperation{}
@@ -23,7 +23,7 @@ func ProcessChunk(chunk internal.Chunk, pos TypingPosition) (TypingPosition, []S
 	return currentPos, ops
 }
 
-func ProcessChunks(chunks []internal.Chunk) []SingleEditOperation {
+func ProcessChunks(chunks []gitwrap.Chunk) []SingleEditOperation {
 	currentPos := TypingPosition{LineNumber: 1, Column: 1}
 
 	var ops []SingleEditOperation
