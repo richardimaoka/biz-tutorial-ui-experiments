@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process"
@@ -10,8 +11,15 @@ import (
 )
 
 func main() {
+	subCmdError := "Sub-command not provided. Specify 'process', 'input', 'rough', 'csv', 'commits', or 'server'."
+	if len(os.Args) < 2 {
+		log.Fatalf(subCmdError)
+	}
 
-	if len(os.Args) > 1 && os.Args[1] == "process" {
+	subCmd := os.Args[1]
+
+	switch subCmd {
+	case "process":
 		if len(os.Args) != 3 {
 			panic("process sub command needs extra argument")
 		}
@@ -21,7 +29,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-	} else if len(os.Args) > 1 && os.Args[1] == "rough" {
+	case "rough":
 		if len(os.Args) != 3 {
 			panic("rough sub command needs extra argument")
 		}
@@ -31,18 +39,19 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-	} else if len(os.Args) > 1 && os.Args[1] == "csv" {
+	case "csv":
 		err := rough.ConvertBoolean("data/gqlgen-getting-started/steps2.json", "data/gqlgen-getting-started/steps3.json")
 		if err != nil {
 			panic(err)
 		}
-	} else if len(os.Args) > 1 && os.Args[1] == "commits" {
+	case "commits":
 		err := commits.Committtssss("gqlgen-getting-started")
 		if err != nil {
 			panic(err)
 		}
-
-	} else {
+	case "server":
 		Server()
+	default:
+		log.Fatalf(subCmdError)
 	}
 }
