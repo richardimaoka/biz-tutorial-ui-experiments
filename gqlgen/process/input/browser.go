@@ -7,38 +7,29 @@ import (
 	"strings"
 )
 
-type ImageFileSuffix = string
-
-const (
-	JPG  ImageFileSuffix = "jpg"
-	JPEG ImageFileSuffix = "jpeg"
-
-	GIF ImageFileSuffix = "gif"
-
-	PNG ImageFileSuffix = "png"
-)
-
-func toImageFileSuffix(s string) (ImageFileSuffix, error) {
-	switch strings.ToLower(s) {
-	case JPG:
-		return JPG, nil
-	case JPEG:
-		return JPEG, nil
-	case GIF:
-		return GIF, nil
-	case PNG:
-		return PNG, nil
-	case "":
-		return PNG, nil
-	default:
-		return "", fmt.Errorf("ImageFileSuffix value = '%s' is invalid", s)
-	}
-}
+var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
 type BrowserSingle struct {
-	StepId        string
-	Comment       string
-	ImageFileName string
+	StepId        string `json:"stepId"`
+	Trivial       bool   `json:"trivial"`
+	Comment       string `json:"comment"`
+	ImageFileName string `json:"imageFileName"`
+}
+
+type BrowserNumSeq struct {
+	StepId          string `json:"stepId"`
+	Trivial         bool   `json:"trivial"`
+	Comment         string `json:"comment"`
+	ImageBaseName   string `json:"imageFileBaseName"`
+	ImageFileSuffix string `json:"imageFileSuffix"`
+	NumImages       int    `json:"numImages"`
+}
+
+type BrowserSequence struct {
+	StepId         string   `json:"stepId"`
+	Trivial        bool     `json:"trivial"`
+	Comment        string   `json:"comment"`
+	ImageFileNames []string `json:"imageFileNames"`
 }
 
 func toBrowserSingle(ab *Abstract) (*BrowserSingle, error) {
@@ -73,22 +64,21 @@ func toBrowserSingle(ab *Abstract) (*BrowserSingle, error) {
 
 	imageFileName := fmt.Sprintf("%s.%s", baseName, suffix)
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &BrowserSingle{
 		StepId:        ab.StepId,
+		Trivial:       trivial,
 		Comment:       ab.Comment,
 		ImageFileName: imageFileName,
 	}, nil
 }
-
-type BrowserNumSeq struct {
-	StepId          string
-	Comment         string
-	ImageBaseName   string
-	ImageFileSuffix string
-	NumImages       int
-}
-
-var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
 func toBrowserNumSeq(ab *Abstract) (*BrowserNumSeq, error) {
 	errorPrefix := "failed to convert to BrowserNumSeq"
@@ -127,19 +117,22 @@ func toBrowserNumSeq(ab *Abstract) (*BrowserNumSeq, error) {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &BrowserNumSeq{
 		StepId:          ab.StepId,
+		Trivial:         trivial,
 		Comment:         ab.Comment,
 		ImageBaseName:   baseName,
 		ImageFileSuffix: suffix,
 		NumImages:       num,
 	}, nil
-}
-
-type BrowserSequence struct {
-	StepId         string
-	Comment        string
-	ImageFileNames []string
 }
 
 func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
@@ -176,8 +169,17 @@ func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
 		imgFiles = append(imgFiles, fmt.Sprintf("%s.%s", baseName, suffix))
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &BrowserSequence{
 		StepId:         ab.StepId,
+		Trivial:        trivial,
 		Comment:        ab.Comment,
 		ImageFileNames: imgFiles,
 	}, nil

@@ -1,7 +1,8 @@
 {
-  "StepId": "f52c491d-3d06-4331-af48-d406957e9efd",
-  "Comment": "",
-  "ImageFileNames": [
+  "stepId": "f52c491d-3d06-4331-af48-d406957e9efd",
+  "trivial": false,
+  "comment": "",
+  "imageFileNames": [
     "aaa.jpg",
     "bbb.jpg",
     "ccc.jpg"

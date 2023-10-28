@@ -14,11 +14,28 @@ type SourceCodeTooltip struct {
 
 type SourceCodeCommit struct {
 	StepId          string             `json:"stepId"`
+	Trivial         bool               `json:"trivial"`
 	Comment         string             `json:"comment"`
 	Commit          string             `json:"commit"`
 	Tooltip         *SourceCodeTooltip `json:"tooltip"`
 	TypingAnimation bool               `json:"typingAnimation"`
 	ShowDiff        bool               `json:"showDiff"`
+}
+
+type SourceCodeOpen struct {
+	StepId   string             `json:"stepId"`
+	Trivial  bool               `json:"trivial"`
+	Comment  string             `json:"comment"`
+	FilePath string             `json:"filePath"`
+	Tooltip  *SourceCodeTooltip `json:"tooltip"`
+}
+
+type SourceCodeError struct {
+	StepId   string             `json:"stepId"`
+	Trivial  bool               `json:"trivial"`
+	Comment  string             `json:"comment"`
+	FilePath string             `json:"filePath"`
+	Tooltip  *SourceCodeTooltip `json:"tooltip"`
 }
 
 func toSourceCodeCommit(ab *Abstract) (*SourceCodeCommit, error) {
@@ -41,6 +58,14 @@ func toSourceCodeCommit(ab *Abstract) (*SourceCodeCommit, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
+	//
+	// Check tooltip fields
+	//
+	tooltip, err := toSourceCodeTooltip(ab)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
 	typingAnimation, err := strToBool(ab.Instruction2)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'instruction2' is invalid, %s", errorPrefix, err)
@@ -52,28 +77,22 @@ func toSourceCodeCommit(ab *Abstract) (*SourceCodeCommit, error) {
 	}
 
 	//
-	// Check tooltip fields
+	// Check trivial field
 	//
-	tooltip, err := toSourceCodeTooltip(ab)
+	trivial, err := strToBool(ab.Trivial)
 	if err != nil {
-		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
 	return &SourceCodeCommit{
 		StepId:          ab.StepId,
+		Trivial:         trivial,
 		Comment:         ab.Comment,
 		Commit:          ab.Instruction,
 		Tooltip:         tooltip,
 		TypingAnimation: typingAnimation,
 		ShowDiff:        showDiff,
 	}, nil
-}
-
-type SourceCodeOpen struct {
-	StepId   string             `json:"stepId"`
-	Comment  string             `json:"comment"`
-	FilePath string             `json:"filePath"`
-	Tooltip  *SourceCodeTooltip `json:"tooltip"`
 }
 
 func toSourceCodeOpen(ab *Abstract) (*SourceCodeOpen, error) {
@@ -104,19 +123,21 @@ func toSourceCodeOpen(ab *Abstract) (*SourceCodeOpen, error) {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &SourceCodeOpen{
 		StepId:   ab.StepId,
+		Trivial:  trivial,
 		Comment:  ab.Comment,
 		FilePath: ab.Instruction,
 		Tooltip:  tooltip,
 	}, nil
-}
-
-type SourceCodeError struct {
-	StepId   string             `json:"stepId"`
-	Comment  string             `json:"comment"`
-	FilePath string             `json:"filePath"`
-	Tooltip  *SourceCodeTooltip `json:"tooltip"`
 }
 
 func toSourceCodeError(ab *Abstract) (*SourceCodeError, error) {
@@ -150,8 +171,17 @@ func toSourceCodeError(ab *Abstract) (*SourceCodeError, error) {
 		return nil, fmt.Errorf("%s, source code error needs the error detail in 'tooltip'", errorPrefix)
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &SourceCodeError{
 		StepId:   ab.StepId,
+		Trivial:  trivial,
 		Comment:  ab.Comment,
 		FilePath: ab.Instruction,
 		Tooltip:  tooltip,

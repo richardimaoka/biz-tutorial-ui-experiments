@@ -12,8 +12,17 @@ type TerminalTooltip struct {
 
 type TerminalCommand struct {
 	StepId  string           `json:"stepId"`
+	Trivial bool             `json:"trivial"`
 	Comment string           `json:"comment"`
 	Command string           `json:"command"`
+	Tooltip *TerminalTooltip `json:"tooltip"`
+}
+
+type TerminalOutput struct {
+	StepId  string           `json:"stepId"`
+	Trivial bool             `json:"trivial"`
+	Comment string           `json:"comment"`
+	Output  string           `json:"output"`
 	Tooltip *TerminalTooltip `json:"tooltip"`
 }
 
@@ -45,19 +54,21 @@ func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &TerminalCommand{
 		StepId:  ab.StepId,
+		Trivial: trivial,
 		Comment: ab.Comment,
 		Command: ab.Instruction,
 		Tooltip: terminalTooltip,
 	}, nil
-}
-
-type TerminalOutput struct {
-	StepId  string           `json:"stepId"`
-	Comment string           `json:"comment"`
-	Output  string           `json:"output"`
-	Tooltip *TerminalTooltip `json:"tooltip"`
 }
 
 func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
@@ -88,8 +99,17 @@ func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(ab.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
 	return &TerminalOutput{
 		StepId:  ab.StepId,
+		Trivial: trivial,
 		Comment: ab.Comment,
 		Output:  ab.Instruction,
 		Tooltip: terminalTooltip,

@@ -5,6 +5,7 @@ type Abstract struct {
 	Phase           string `json:"phase"`
 	Column          string `json:"column"`
 	Type            string `json:"type"`
+	Trivial         string `json:"trivial"`
 	Instruction     string `json:"instruction"`
 	Instruction2    string `json:"instruction2"`
 	Instruction3    string `json:"instruction3"`
