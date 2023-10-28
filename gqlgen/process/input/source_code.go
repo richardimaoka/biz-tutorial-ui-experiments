@@ -6,10 +6,9 @@ import (
 )
 
 type SourceCodeTooltip struct {
-	Contents           string             `json:"contents"`
-	LineNumber         int                `json:"lineNumber"`
-	PositionPreference PositionPreference `json:"positionPreference"`
-	Timing             TooltipTiming      `json:"timing"`
+	Contents   string        `json:"contents"`
+	LineNumber int           `json:"lineNumber"`
+	Timing     TooltipTiming `json:"timing"`
 }
 
 type SourceCodeCommit struct {
@@ -200,14 +199,13 @@ func toSourceCodeTooltip(ab *Abstract) (*SourceCodeTooltip, error) {
 		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
 	}
 
-	tooltipPosition, err := toPositionPreference(ab.TooltipTiming)
-	if err != nil {
-		return nil, fmt.Errorf("'tooltipPosition' field is wrong, %s", err)
+	if ab.TooltipLine == 0 {
+		return nil, fmt.Errorf("'tooltipLine' cannot be 0")
 	}
 
 	return &SourceCodeTooltip{
-		Contents:           contents,
-		Timing:             tooltipTiming,
-		PositionPreference: tooltipPosition,
+		Contents:   contents,
+		Timing:     tooltipTiming,
+		LineNumber: ab.TooltipLine,
 	}, nil
 }
