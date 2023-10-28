@@ -1,4 +1,4 @@
-package test_util
+package gitwrap
 
 import (
 	"testing"

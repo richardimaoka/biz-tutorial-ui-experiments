@@ -4,13 +4,14 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/test_util"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
 func TestTerminalSteps(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo := test_util.GitOpenOrClone(t, repoUrl)
+	repo := gitwrap.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
 		inputFile  string
@@ -64,7 +65,7 @@ func TestTerminalSteps(t *testing.T) {
 
 func TestRoughStepSequence(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo := test_util.GitOpenOrClone(t, repoUrl)
+	repo := gitwrap.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
 		inputFile  string
