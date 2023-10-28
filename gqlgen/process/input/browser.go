@@ -227,13 +227,14 @@ func fileSuffix(fileNameCandidate string, ab *Abstract) (string, error) {
 }
 
 // extract number from square bracket
+// s to be form of (e.g.) 'filename[42]'
 func positiveNumInSqBracket(s string) (int, error) {
 	found := BrowserNumSeqPattern.FindString(s)
 	if found == "" {
 		return 0, fmt.Errorf("the string doesn't have the form '[${num}]'")
 	}
 
-	// found = (e.g.) [30]
+	// found = (e.g.) '[42]'
 	num, err := strconv.Atoi(found[1 : len(found)-1]) // remove '[' and ']' from 'found'
 	if err != nil {
 		return 0, err

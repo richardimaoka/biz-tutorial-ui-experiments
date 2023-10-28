@@ -40,26 +40,16 @@ func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
 	//
 	// Check tooltip fields
 	//
-	var tooltip *TerminalTooltip
-	if ab.Tooltip != "" {
-		contents := ab.Tooltip
-
-		tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
-		if err != nil {
-			return nil, fmt.Errorf("%s, 'tooltipTiming' field is wrong, %s", errorPrefix, err)
-		}
-
-		tooltip = &TerminalTooltip{
-			Contents: contents,
-			Timing:   tooltipTiming,
-		}
+	terminalTooltip, err := toTerminalTooltip(ab)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
 	return &TerminalCommand{
 		StepId:  ab.StepId,
 		Comment: ab.Comment,
 		Command: ab.Instruction,
-		Tooltip: tooltip,
+		Tooltip: terminalTooltip,
 	}, nil
 }
 
@@ -93,25 +83,32 @@ func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
 	//
 	// Check tooltip fields
 	//
-	var tooltip *TerminalTooltip
-	if ab.Tooltip != "" {
-		contents := ab.Tooltip
-
-		tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
-		if err != nil {
-			return nil, fmt.Errorf("%s, 'tooltipTiming' field is wrong, %s", errorPrefix, err)
-		}
-
-		tooltip = &TerminalTooltip{
-			Contents: contents,
-			Timing:   tooltipTiming,
-		}
+	terminalTooltip, err := toTerminalTooltip(ab)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
 	return &TerminalOutput{
 		StepId:  ab.StepId,
 		Comment: ab.Comment,
 		Output:  ab.Instruction,
-		Tooltip: tooltip,
+		Tooltip: terminalTooltip,
+	}, nil
+}
+
+func toTerminalTooltip(ab *Abstract) (*TerminalTooltip, error) {
+	if ab.Tooltip == "" {
+		return nil, nil
+	}
+	contents := ab.Tooltip
+
+	tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
+	if err != nil {
+		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
+	}
+
+	return &TerminalTooltip{
+		Contents: contents,
+		Timing:   tooltipTiming,
 	}, nil
 }
