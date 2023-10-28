@@ -38,17 +38,35 @@ type TerminalCommand struct {
 }
 
 func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
-	if ab.Instruction == "" {
-		return nil, fmt.Errorf("failed to convert to TerminalCommand, 'instruction' was empty")
+	errorPrefix := "failed to convert to TerminalCommand"
+
+	//
+	// Check column and type
+	//
+	if strings.ToLower(ab.Column) != "browser" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	}
+	if ab.Type != "" && strings.ToLower(ab.Type) != "single" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
 	}
 
+	//
+	// Check instruction fields
+	//
+	if ab.Instruction == "" {
+		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+	}
+
+	//
+	// Check tooltip fields
+	//
 	var tooltip *TerminalTooltip
 	if ab.Tooltip != "" {
 		contents := ab.Tooltip
 
 		tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
 		if err != nil {
-			return nil, fmt.Errorf("failed to convert to TerminalCommand, 'tooltipTiming' field is wrong, %s", err)
+			return nil, fmt.Errorf("%s, 'tooltipTiming' field is wrong, %s", errorPrefix, err)
 		}
 
 		tooltip = &TerminalTooltip{
@@ -73,17 +91,35 @@ type TerminalOutput struct {
 }
 
 func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
-	if ab.Instruction == "" {
-		return nil, fmt.Errorf("failed to convert to TerminalOutput, 'instruction' was empty")
+	errorPrefix := "failed to convert to TerminalOutput"
+
+	//
+	// Check column and type
+	//
+	if strings.ToLower(ab.Column) != "browser" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	}
+	if ab.Type != "" && strings.ToLower(ab.Type) != "single" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
 	}
 
+	//
+	// Check instruction fields
+	//
+	if ab.Instruction == "" {
+		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+	}
+
+	//
+	// Check tooltip fields
+	//
 	var tooltip *TerminalTooltip
 	if ab.Tooltip != "" {
 		contents := ab.Tooltip
 
 		tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
 		if err != nil {
-			return nil, fmt.Errorf("failed to convert to TerminalOutput, 'tooltipTiming' field is wrong, %s", err)
+			return nil, fmt.Errorf("%s, 'tooltipTiming' field is wrong, %s", errorPrefix, err)
 		}
 
 		tooltip = &TerminalTooltip{
