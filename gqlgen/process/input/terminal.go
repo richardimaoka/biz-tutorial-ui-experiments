@@ -12,25 +12,6 @@ const (
 	END       TooltipTiming = "end"
 )
 
-type TerminalTooltip struct {
-	Contents string        `json:"contents"`
-	Timing   TooltipTiming `json:"timing"`
-}
-
-type TerminalCommand struct {
-	StepId  string           `json:"stepId"`
-	Comment string           `json:"comment"`
-	Command string           `json:"command"`
-	Tooltip *TerminalTooltip `json:"tooltip"`
-}
-
-type TerminalOutput struct {
-	StepId  string           `json:"stepId"`
-	Comment string           `json:"comment"`
-	Output  string           `json:"output"`
-	Tooltip *TerminalTooltip `json:"tooltip"`
-}
-
 func toTooltipTiming(s string) (TooltipTiming, error) {
 	switch strings.ToLower(s) {
 	case BEGINNING:
@@ -42,6 +23,18 @@ func toTooltipTiming(s string) (TooltipTiming, error) {
 	default:
 		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
 	}
+}
+
+type TerminalTooltip struct {
+	Contents string        `json:"contents"`
+	Timing   TooltipTiming `json:"timing"`
+}
+
+type TerminalCommand struct {
+	StepId  string           `json:"stepId"`
+	Comment string           `json:"comment"`
+	Command string           `json:"command"`
+	Tooltip *TerminalTooltip `json:"tooltip"`
 }
 
 func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
@@ -68,6 +61,41 @@ func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
 		StepId:  ab.StepId,
 		Comment: ab.Comment,
 		Command: ab.Instruction,
+		Tooltip: tooltip,
+	}, nil
+}
+
+type TerminalOutput struct {
+	StepId  string           `json:"stepId"`
+	Comment string           `json:"comment"`
+	Output  string           `json:"output"`
+	Tooltip *TerminalTooltip `json:"tooltip"`
+}
+
+func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
+	if ab.Instruction == "" {
+		return nil, fmt.Errorf("failed to convert to TerminalOutput, 'instruction' was empty")
+	}
+
+	var tooltip *TerminalTooltip
+	if ab.Tooltip != "" {
+		contents := ab.Tooltip
+
+		tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert to TerminalOutput, 'tooltipTiming' field is wrong, %s", err)
+		}
+
+		tooltip = &TerminalTooltip{
+			Contents: contents,
+			Timing:   tooltipTiming,
+		}
+	}
+
+	return &TerminalOutput{
+		StepId:  ab.StepId,
+		Comment: ab.Comment,
+		Output:  ab.Instruction,
 		Tooltip: tooltip,
 	}, nil
 }
