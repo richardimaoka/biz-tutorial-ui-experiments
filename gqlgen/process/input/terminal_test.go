@@ -11,8 +11,8 @@ func TestToTerminalCommand(t *testing.T) {
 		inputFile  string
 		goldenFile string
 	}{
-		{"testdata/cmd1.json", "testdata/cmd1-golden.json"},
-		{"testdata/cmd2.json", "testdata/cmd2-golden.json"},
+		{"testdata/terminal/cmd1.json", "testdata/terminal/cmd1-golden.json"},
+		{"testdata/terminal/cmd2.json", "testdata/terminal/cmd2-golden.json"},
 	}
 
 	for _, c := range cases {
@@ -37,8 +37,8 @@ func TestToTerminalCommandError(t *testing.T) {
 	cases := []struct {
 		inputFile string
 	}{
-		{"testdata/cmd-error1.json"},
-		{"testdata/cmd-error2.json"},
+		{"testdata/terminal/cmd-error1.json"},
+		{"testdata/terminal/cmd-error2.json"},
 	}
 
 	for _, c := range cases {
@@ -62,8 +62,8 @@ func TestToTerminalOutput(t *testing.T) {
 		inputFile  string
 		goldenFile string
 	}{
-		{"testdata/output1.json", "testdata/output1-golden.json"},
-		{"testdata/output2.json", "testdata/output2-golden.json"},
+		{"testdata/terminal/output1.json", "testdata/terminal/output1-golden.json"},
+		{"testdata/terminal/output2.json", "testdata/terminal/output2-golden.json"},
 	}
 
 	for _, c := range cases {
@@ -88,8 +88,8 @@ func TestToTerminalOutputError(t *testing.T) {
 	cases := []struct {
 		inputFile string
 	}{
-		// {"testdata/output-error1.json"},
-		{"testdata/output-error2.json"},
+		{"testdata/terminal/output-error1.json"},
+		{"testdata/terminal/output-error2.json"},
 	}
 
 	for _, c := range cases {

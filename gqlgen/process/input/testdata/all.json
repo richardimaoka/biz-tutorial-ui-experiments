@@ -1,0 +1,47 @@
+[
+  {
+    "stepId": "66105871-d23c-4e54-98f4-b715b330a0da",
+    "phase": "CMD の動作理解",
+    "comment": "",
+    "column": "terminal",
+    "type": "command",
+    "instruction": "mkdir myproj",
+    "tooltip": "チュートリアル用ディレクトリを作成します",
+    "tooltipTiming": "",
+    "tooltipPosition": "",
+    "instruction2": "",
+    "instruction3": "",
+    "instruction4": "",
+    "instruction5": ""
+  },
+  {
+    "stepId": "68b0d161-d61d-45b2-bf8a-e7842a59375d",
+    "phase": "CMD の動作理解",
+    "comment": "",
+    "column": "terminal",
+    "type": "command",
+    "instruction": "cd myproj",
+    "tooltip": "チュートリアル用ディレクトリに移動します",
+    "tooltipTiming": "",
+    "tooltipPosition": "",
+    "instruction2": "",
+    "instruction3": "",
+    "instruction4": "",
+    "instruction5": ""
+  },
+  {
+    "stepId": "1fd65263-a163-4856-9e8e-22846794bf30",
+    "phase": "CMD の動作理解",
+    "comment": "",
+    "column": "terminal",
+    "type": "command",
+    "instruction": "touch Dockerfile.cmd1",
+    "tooltip": "空のDockerfileを作成します",
+    "tooltipTiming": "",
+    "tooltipPosition": "",
+    "instruction2": "",
+    "instruction3": "",
+    "instruction4": "",
+    "instruction5": ""
+  }
+]
