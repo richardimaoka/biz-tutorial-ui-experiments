@@ -7,6 +7,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/commits"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
@@ -19,6 +20,8 @@ func main() {
 	subCmd := os.Args[1]
 
 	switch subCmd {
+	case "input":
+		input.Run(os.Args[2:])
 	case "process":
 		if len(os.Args) != 3 {
 			panic("process sub command needs extra argument")
