@@ -4,7 +4,7 @@ import { TerminalEntry } from "@/app/components/terminal2/definitions";
 import { promises as fs } from "fs";
 
 export default async function Page() {
-  const routingPath = "/test/terminal/tooltip";
+  const routingPath = "/test/terminal/tooltip-md";
   const cwd = process.cwd();
   const pwd = `${cwd}/app` + routingPath;
   const md = await fs.readFile(pwd + "/tooltip.md", "utf-8");
