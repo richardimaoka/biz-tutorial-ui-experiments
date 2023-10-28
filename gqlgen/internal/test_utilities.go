@@ -36,29 +36,29 @@ func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
 	expectedBytes, err := os.ReadFile(expectedJsonFile)
 	if err != nil {
-		t.Errorf("%s failed to read", expectedJsonFile)
+		t.Errorf("failed to read file = '%s'", expectedJsonFile)
 		return
 	}
 
 	resultBytes, err := json.Marshal(result)
 	if err != nil {
-		t.Errorf("%s failed to get marshaled result to compare against", expectedJsonFile)
+		t.Errorf("failed to get marshaled result to compare against file = '%s'", expectedJsonFile)
 		return
 	}
 
 	if err := compareJsonBytes(expectedBytes, resultBytes); err != nil {
-		t.Fatalf("%s failed to match with result, %s", expectedJsonFile, err)
+		t.Fatalf("failed to match file = '%s' with result, %s", expectedJsonFile, err)
 	}
 }
 
 func writeGoldenFile(t *testing.T, filePath string, v any) {
 	jsonBytes, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
-		t.Fatalf("error writing golden file %s: %v", filePath, err)
+		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
 	}
 
 	if err := os.WriteFile(filePath, jsonBytes, 0644); err != nil {
-		t.Fatalf("error writing golden file %s: %v", filePath, err)
+		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
 	}
 }
 
