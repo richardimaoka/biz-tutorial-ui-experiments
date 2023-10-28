@@ -43,10 +43,10 @@ func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "browser" {
+	if strings.ToLower(ab.Column) != "terminal" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
 	}
-	if ab.Type != "" && strings.ToLower(ab.Type) != "single" {
+	if ab.Type != "" && strings.ToLower(ab.Type) != "command" {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
 	}
 
@@ -96,10 +96,10 @@ func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "browser" {
+	if strings.ToLower(ab.Column) != "terminal" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
 	}
-	if ab.Type != "" && strings.ToLower(ab.Type) != "single" {
+	if ab.Type != "" && strings.ToLower(ab.Type) != "output" {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
 	}
 
