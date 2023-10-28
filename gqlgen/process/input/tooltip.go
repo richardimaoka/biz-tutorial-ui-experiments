@@ -8,14 +8,14 @@ import (
 type TooltipTiming = string
 
 const (
-	BEGINNING TooltipTiming = "beginning"
-	END       TooltipTiming = "end"
+	START TooltipTiming = "start"
+	END   TooltipTiming = "end"
 )
 
 func toTooltipTiming(s string) (TooltipTiming, error) {
 	switch strings.ToLower(s) {
-	case BEGINNING:
-		return BEGINNING, nil
+	case START:
+		return START, nil
 	case END:
 		return END, nil
 	case "":
