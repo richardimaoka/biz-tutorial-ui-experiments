@@ -3,11 +3,11 @@
   "phase": "CMD の動作理解",
   "comment": "",
   "column": "browser",
-  "type": "numseq",
-  "instruction": "httpd",
+  "type": "sequence",
+  "instruction": "aaa,bbb,ccc",
+  "instruction2": "png",
+  "instruction3": "",
   "tooltip": "Apache HTTP Serverが立ち上がりました",
   "tooltipTiming": "",
-  "tooltipPosition": "",
-  "instruction2": "png",
-  "instruction3": 5
+  "tooltipPosition": ""
 }

@@ -5,8 +5,8 @@
   "column": "browser",
   "type": "single",
   "instruction": "httpd",
+  "instruction2": "png",
   "tooltip": "Apache HTTP Serverが立ち上がりました",
   "tooltipTiming": "",
-  "tooltipPosition": "",
-  "instruction2": "png"
+  "tooltipPosition": ""
 }
