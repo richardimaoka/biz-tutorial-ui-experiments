@@ -9,8 +9,9 @@
     "lint": "next lint",
     "lint-watch": "nodemon --ext tsx,ts,js.jsx,mjs,json --exec \"next lint\"",
     "codegen": "graphql-codegen --config codegen.ts",
-    "compile": "tsc -w --noEmit",
-    "test": "vitest"
+    "compile": "tsc --noEmit",
+    "test": "vitest",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
@@ -47,6 +48,7 @@
     "@vitejs/plugin-react": "^4.1.0",
     "jsdom": "^22.1.0",
     "typescript": "^5.1.6",
-    "vitest": "^0.34.6"
+    "vitest": "^0.34.6",
+    "husky": "^8.0.0"
   }
 }

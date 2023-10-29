@@ -1,4 +1,4 @@
-import { ColumnTabs } from "@/app/components/tutorial/ColumnTabs";
+import { ColumnTabs } from "@/app/components/tutorial/header/ColumnTabs";
 import { ColumnName } from "@/app/components/tutorial/definitions";
 
 export default async function Page() {

@@ -1,4 +1,4 @@
-import { TutorialHeader } from "@/app/components/tutorial/TutorialHeader";
+import { TutorialHeader } from "@/app/components/tutorial/header/TutorialHeader";
 import { ColumnName } from "@/app/components/tutorial/definitions";
 
 export default async function Page() {
