@@ -226,6 +226,10 @@ type TerminalTooltip2 struct {
 	Timing       *TerminalTooltipTiming2 `json:"timing"`
 }
 
+type TestObjs struct {
+	Terminal *Terminal2 `json:"terminal"`
+}
+
 type YouTubeColumn struct {
 	Placeholder *string       `json:"_placeholder"`
 	Youtube     *YouTubeEmbed `json:"youtube"`

@@ -1,3 +1,4 @@
+import { TerminalHeaderGqlFragment } from "@/libs/gql/graphql";
 import { TerminalHeader } from "./TerminalHeader";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
@@ -13,7 +14,10 @@ interface Props {
 }
 
 export function TerminalHeaderGql(props: Props) {
-  const fragment = useFragment(fragmentDefinition, props.fragment);
+  const fragment: TerminalHeaderGqlFragment = useFragment(
+    fragmentDefinition,
+    props.fragment
+  );
   const currentDirectory = fragment.currentDirectory
     ? fragment.currentDirectory
     : "";

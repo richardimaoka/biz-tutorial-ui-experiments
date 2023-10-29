@@ -42,6 +42,11 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 	return &page, nil
 }
 
+// Test is the resolver for the _test field.
+func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
+	panic(fmt.Errorf("not implemented: Test - _test"))
+}
+
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
 	var dirName = fmt.Sprintf("data/%s/state", obj.Tutorial)
