@@ -1,4 +1,4 @@
-import { TerminalHeader } from "@/app/components/terminal2/TerminalHeader";
+import { TerminalHeader } from "@/app/components/terminal2/header/TerminalHeader";
 
 export default async function Page() {
   return (
