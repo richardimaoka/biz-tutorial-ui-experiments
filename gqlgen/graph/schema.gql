@@ -152,6 +152,48 @@ type Terminal {
 }
 
 ###################################################
+# Terminal related object types 2
+###################################################
+
+enum TerminalTooltipTiming2 {
+  START
+  END
+}
+
+type TerminalTooltip2 {
+  markdownBody: String!
+  timing: TerminalTooltipTiming2
+}
+
+# # TerminalElement
+interface TerminalEntry2 {
+  id: ID!
+}
+
+type TerminalCommand2 implements TerminalEntry2 {
+  id: ID!
+  command: String!
+}
+
+type TerminalOutput2 implements TerminalEntry2 {
+  id: ID!
+  output: String!
+}
+
+# TerminalNode wraps around TerminalElement, which is friendly for frontend pattern-matching
+# type TerminalNode2 {
+#   content: TerminalEntry2
+# }
+
+type Terminal2 {
+  step: String
+  name: String
+  currentDirectory: String!
+  nodes: [TerminalEntry2!]!
+  tooltip: TerminalTooltip2
+}
+
+###################################################
 # Source code related object types
 ###################################################
 

@@ -17,6 +17,11 @@ type TerminalElement interface {
 	IsTerminalElement()
 }
 
+type TerminalEntry2 interface {
+	IsTerminalEntry2()
+	GetID() string
+}
+
 type BackgroundImageColumn struct {
 	Placeholder *string `json:"_placeholder"`
 	Width       *int    `json:"width"`
@@ -165,6 +170,14 @@ type Terminal struct {
 	Nodes            []*TerminalNode `json:"nodes"`
 }
 
+type Terminal2 struct {
+	Step             *string           `json:"step"`
+	Name             *string           `json:"name"`
+	CurrentDirectory string            `json:"currentDirectory"`
+	Nodes            []TerminalEntry2  `json:"nodes"`
+	Tooltip          *TerminalTooltip2 `json:"tooltip"`
+}
+
 type TerminalColumn struct {
 	Placeholder *string   `json:"_placeholder"`
 	Terminal    *Terminal `json:"terminal"`
@@ -181,6 +194,14 @@ type TerminalCommand struct {
 
 func (TerminalCommand) IsTerminalElement() {}
 
+type TerminalCommand2 struct {
+	ID      string `json:"id"`
+	Command string `json:"command"`
+}
+
+func (TerminalCommand2) IsTerminalEntry2()  {}
+func (this TerminalCommand2) GetID() string { return this.ID }
+
 type TerminalNode struct {
 	Content TerminalElement `json:"content"`
 }
@@ -191,6 +212,19 @@ type TerminalOutput struct {
 }
 
 func (TerminalOutput) IsTerminalElement() {}
+
+type TerminalOutput2 struct {
+	ID     string `json:"id"`
+	Output string `json:"output"`
+}
+
+func (TerminalOutput2) IsTerminalEntry2()  {}
+func (this TerminalOutput2) GetID() string { return this.ID }
+
+type TerminalTooltip2 struct {
+	MarkdownBody string                  `json:"markdownBody"`
+	Timing       *TerminalTooltipTiming2 `json:"timing"`
+}
 
 type YouTubeColumn struct {
 	Placeholder *string       `json:"_placeholder"`
@@ -412,5 +446,46 @@ func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ModalPosition) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TerminalTooltipTiming2 string
+
+const (
+	TerminalTooltipTiming2Start TerminalTooltipTiming2 = "START"
+	TerminalTooltipTiming2End   TerminalTooltipTiming2 = "END"
+)
+
+var AllTerminalTooltipTiming2 = []TerminalTooltipTiming2{
+	TerminalTooltipTiming2Start,
+	TerminalTooltipTiming2End,
+}
+
+func (e TerminalTooltipTiming2) IsValid() bool {
+	switch e {
+	case TerminalTooltipTiming2Start, TerminalTooltipTiming2End:
+		return true
+	}
+	return false
+}
+
+func (e TerminalTooltipTiming2) String() string {
+	return string(e)
+}
+
+func (e *TerminalTooltipTiming2) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TerminalTooltipTiming2(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TerminalTooltipTiming2", str)
+	}
+	return nil
+}
+
+func (e TerminalTooltipTiming2) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
