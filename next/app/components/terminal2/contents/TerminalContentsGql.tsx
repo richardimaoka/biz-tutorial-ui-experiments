@@ -3,7 +3,7 @@ import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { TerminalTooltipGql } from "../tooltip/TerminalTooltipGql";
-import { TerminalEntryComponentGql } from "./TerminalEntryComponentGql";
+import { TerminalEntryComponentGql } from "../entry/TerminalEntryComponentGql";
 
 const fragmentDefinition = graphql(`
   fragment TerminalContentsGql on Terminal2 {

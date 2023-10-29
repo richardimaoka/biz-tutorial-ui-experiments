@@ -191,6 +191,7 @@ type Terminal2 {
   currentDirectory: String!
   nodes: [TerminalEntry2!]!
   tooltip: TerminalTooltip2
+  # terminalTabs
 }
 
 ###################################################
