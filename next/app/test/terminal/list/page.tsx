@@ -1,4 +1,4 @@
-import { CommandComponent } from "@/app/components/terminal2/CommandComponent";
+import { CommandComponent } from "@/app/components/terminal2/command/CommandComponent";
 import { OutputComponent } from "@/app/components/terminal2/output/OutputComponent";
 
 export default async function Page() {
