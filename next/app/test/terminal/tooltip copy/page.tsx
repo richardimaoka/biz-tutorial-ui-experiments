@@ -1,4 +1,4 @@
-import { TerminalComponent } from "@/app/components/terminal2/TerminalComponent";
+import { TerminalComponent } from "@/app/components/terminal2/__TerminalComponent";
 import { TerminalEntry } from "@/app/components/terminal2/definitions";
 
 import { promises as fs } from "fs";

@@ -1,4 +1,4 @@
-import { TerminalContents } from "@/app/components/terminal2/contents/TerminalContents";
+import { TerminalContents } from "@/app/components/terminal2/contents/__TerminalContents";
 import { TerminalEntry } from "@/app/components/terminal2/definitions";
 
 export default async function Page() {

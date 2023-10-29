@@ -1,4 +1,4 @@
-import { TerminalComponent } from "../../terminal2/TerminalComponent";
+import { TerminalComponent } from "../../terminal2/__TerminalComponent";
 import styles from "./Column.module.css";
 import { TutorialColumnProps } from "../definitions";
 

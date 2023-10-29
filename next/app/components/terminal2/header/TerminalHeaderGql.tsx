@@ -3,7 +3,7 @@ import { TerminalHeader } from "./TerminalHeader";
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
-  fragment TerminalHeaderGql on Terminal {
+  fragment TerminalHeaderGql on Terminal2 {
     currentDirectory
   }
 `);

@@ -73,13 +73,15 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
+  "\n  fragment TerminalComponentGql on Terminal2 {\n    ...TerminalHeaderGql\n    ...TerminalContentsGql\n  }\n":
+    types.TerminalComponentGqlFragmentDoc,
   "\n  fragment CommandComponentGql on TerminalCommand2 {\n    command\n  }\n":
     types.CommandComponentGqlFragmentDoc,
   "\n  fragment TerminalContentsGql on Terminal2 {\n    nodes {\n      id\n      ...TerminalEntryComponentGql\n    }\n    tooltip {\n      ...TerminalTooltipGql\n    }\n  }\n":
     types.TerminalContentsGqlFragmentDoc,
   "\n  fragment TerminalEntryComponentGql on TerminalEntry2 {\n    ... on TerminalCommand2 {\n      ...CommandComponentGql\n    }\n    ... on TerminalOutput2 {\n      ...OutputComponentGql\n    }\n  }\n":
     types.TerminalEntryComponentGqlFragmentDoc,
-  "\n  fragment TerminalHeaderGql on Terminal {\n    currentDirectory\n  }\n":
+  "\n  fragment TerminalHeaderGql on Terminal2 {\n    currentDirectory\n  }\n":
     types.TerminalHeaderGqlFragmentDoc,
   "\n  fragment OutputComponentGql on TerminalOutput2 {\n    output\n  }\n":
     types.OutputComponentGqlFragmentDoc,
@@ -291,6 +293,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment TerminalComponentGql on Terminal2 {\n    ...TerminalHeaderGql\n    ...TerminalContentsGql\n  }\n",
+): (typeof documents)["\n  fragment TerminalComponentGql on Terminal2 {\n    ...TerminalHeaderGql\n    ...TerminalContentsGql\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment CommandComponentGql on TerminalCommand2 {\n    command\n  }\n",
 ): (typeof documents)["\n  fragment CommandComponentGql on TerminalCommand2 {\n    command\n  }\n"];
 /**
@@ -309,8 +317,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment TerminalHeaderGql on Terminal {\n    currentDirectory\n  }\n",
-): (typeof documents)["\n  fragment TerminalHeaderGql on Terminal {\n    currentDirectory\n  }\n"];
+  source: "\n  fragment TerminalHeaderGql on Terminal2 {\n    currentDirectory\n  }\n",
+): (typeof documents)["\n  fragment TerminalHeaderGql on Terminal2 {\n    currentDirectory\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

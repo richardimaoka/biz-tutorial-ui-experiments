@@ -1,6 +1,6 @@
 "use client";
 
-import { TerminalComponent } from "@/app/components/terminal2/TerminalComponent";
+import { TerminalComponent } from "@/app/components/terminal2/__TerminalComponent";
 import { entries } from "./entries";
 import React from "react";
 

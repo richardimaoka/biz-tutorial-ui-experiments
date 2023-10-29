@@ -1,4 +1,4 @@
-import { TerminalComponentProps } from "../terminal2/TerminalComponent";
+import { TerminalComponentProps } from "../terminal2/__TerminalComponent";
 
 export type ColumnName =
   | "Terminal"

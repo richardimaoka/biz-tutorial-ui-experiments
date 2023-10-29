@@ -1,4 +1,4 @@
-import { TerminalComponent } from "@/app/components/terminal2/TerminalComponent";
+import { TerminalComponent } from "@/app/components/terminal2/__TerminalComponent";
 
 export default async function Page() {
   return (
