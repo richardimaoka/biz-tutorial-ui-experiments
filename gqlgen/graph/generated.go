@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
-	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -232,7 +231,7 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		Terminal func(childComplexity int) int
+		AppTestTerminalTooltipPage func(childComplexity int) int
 	}
 
 	YouTubeColumn struct {
@@ -994,12 +993,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalTooltip2.Timing(childComplexity), true
 
-	case "TestObjs.terminal":
-		if e.complexity.TestObjs.Terminal == nil {
+	case "TestObjs.appTestTerminalTooltipPage":
+		if e.complexity.TestObjs.AppTestTerminalTooltipPage == nil {
 			break
 		}
 
-		return e.complexity.TestObjs.Terminal(childComplexity), true
+		return e.complexity.TestObjs.AppTestTerminalTooltipPage(childComplexity), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -4264,14 +4263,11 @@ func (ec *executionContext) _Query__test(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.TestObjs)
 	fc.Result = res
-	return ec.marshalNTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx, field.Selections, res)
+	return ec.marshalOTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4282,8 +4278,8 @@ func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field 
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "terminal":
-				return ec.fieldContext_TestObjs_terminal(ctx, field)
+			case "appTestTerminalTooltipPage":
+				return ec.fieldContext_TestObjs_appTestTerminalTooltipPage(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TestObjs", field.Name)
 		},
@@ -5744,8 +5740,8 @@ func (ec *executionContext) fieldContext_TerminalTooltip2_timing(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _TestObjs_terminal(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TestObjs_terminal(ctx, field)
+func (ec *executionContext) _TestObjs_appTestTerminalTooltipPage(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TestObjs_appTestTerminalTooltipPage(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5758,24 +5754,21 @@ func (ec *executionContext) _TestObjs_terminal(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Terminal, nil
+		return obj.AppTestTerminalTooltipPage, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Terminal2)
 	fc.Result = res
-	return ec.marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, field.Selections, res)
+	return ec.marshalOTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TestObjs_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TestObjs_appTestTerminalTooltipPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TestObjs",
 		Field:      field,
@@ -8570,9 +8563,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query__test(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -9001,13 +8991,10 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TestObjs")
-		case "terminal":
+		case "appTestTerminalTooltipPage":
 
-			out.Values[i] = ec._TestObjs_terminal(ctx, field, obj)
+			out.Values[i] = ec._TestObjs_appTestTerminalTooltipPage(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9444,16 +9431,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx context.Context, sel ast.SelectionSet, v *model.Terminal2) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Terminal2(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNTerminalEntry22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2(ctx context.Context, sel ast.SelectionSet, v model.TerminalEntry2) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9506,20 +9483,6 @@ func (ec *executionContext) marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimao
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalNTestObjs2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v model.TestObjs) graphql.Marshaler {
-	return ec._TestObjs(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v *model.TestObjs) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._TestObjs(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -10146,6 +10109,13 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
+func (ec *executionContext) marshalOTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx context.Context, sel ast.SelectionSet, v *model.Terminal2) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Terminal2(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10277,6 +10247,13 @@ func (ec *executionContext) marshalOTerminalTooltipTiming22ᚖgithubᚗcomᚋric
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalOTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v *model.TestObjs) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TestObjs(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx context.Context, sel ast.SelectionSet, v *model.YouTubeEmbed) graphql.Marshaler {

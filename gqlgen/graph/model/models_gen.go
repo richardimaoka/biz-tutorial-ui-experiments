@@ -227,7 +227,7 @@ type TerminalTooltip2 struct {
 }
 
 type TestObjs struct {
-	Terminal *Terminal2 `json:"terminal"`
+	AppTestTerminalTooltipPage *Terminal2 `json:"appTestTerminalTooltipPage"`
 }
 
 type YouTubeColumn struct {

@@ -10,11 +10,11 @@ type Query {
   # without passing step argument, you get the first step page
   page(tutorial: String!, step: String): Page
 
-  _test: TestObjs!
+  _test: TestObjs
 }
 
 type TestObjs {
-  terminal: Terminal2!
+  appTestTerminalTooltipPage: Terminal2
 }
 
 ###################################################

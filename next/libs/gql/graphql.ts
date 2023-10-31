@@ -181,7 +181,7 @@ export type PageState = {
 
 export type Query = {
   __typename: "Query";
-  _test: TestObjs;
+  _test?: Maybe<TestObjs>;
   page?: Maybe<Page>;
 };
 
@@ -278,7 +278,7 @@ export type TerminalTooltipTiming2 = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
-  terminal: Terminal2;
+  appTestTerminalTooltipPage?: Maybe<Terminal2>;
 };
 
 export type YouTubeColumn = Column & {
@@ -728,6 +728,24 @@ export type PageQueryQuery = {
         };
       })
     | null;
+};
+
+export type AppTestTerminalTooltipPageQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppTestTerminalTooltipPageQuery = {
+  __typename: "Query";
+  _test?: {
+    __typename: "TestObjs";
+    appTestTerminalTooltipPage?:
+      | ({ __typename: "Terminal2" } & {
+          " $fragmentRefs"?: {
+            GqlTerminalComponentFragment: GqlTerminalComponentFragment;
+          };
+        })
+      | null;
+  } | null;
 };
 
 export const ColumnTab_FragmentFragmentDoc = {
@@ -6158,3 +6176,206 @@ export const PageQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
+export const AppTestTerminalTooltipPageDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "appTestTerminalTooltipPage" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "_test" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "appTestTerminalTooltipPage" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTerminalComponent" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlCommandComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalCommand2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "command" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOutputComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalOutput2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "output" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalEntry2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "InlineFragment",
+            typeCondition: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "TerminalCommand2" },
+            },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlCommandComponent" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "InlineFragment",
+            typeCondition: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "TerminalOutput2" },
+            },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlOutputComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalTooltip2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "timing" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalContents" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "nodes" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalTooltip" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlTerminalHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlTerminalContents" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AppTestTerminalTooltipPageQuery,
+  AppTestTerminalTooltipPageQueryVariables
+>;
