@@ -171,31 +171,22 @@ type TerminalTooltip2 {
   timing: TerminalTooltipTiming2
 }
 
-# # TerminalElement
-interface TerminalEntry2 {
-  id: ID!
+enum TerminalEntryType {
+  COMMAND
+  OUTPUT
 }
 
-type TerminalCommand2 implements TerminalEntry2 {
+type TerminalEntry {
   id: ID!
-  command: String!
+  entryType: TerminalEntryType!
+  text: String! # command or output
 }
-
-type TerminalOutput2 implements TerminalEntry2 {
-  id: ID!
-  output: String!
-}
-
-# TerminalNode wraps around TerminalElement, which is friendly for frontend pattern-matching
-# type TerminalNode2 {
-#   content: TerminalEntry2
-# }
 
 type Terminal2 {
   step: String
   name: String
   currentDirectory: String!
-  nodes: [TerminalEntry2!]!
+  nodes: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
   tooltip: TerminalTooltip2
   # terminalTabs
 }

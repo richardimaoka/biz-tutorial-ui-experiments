@@ -17,11 +17,6 @@ type TerminalElement interface {
 	IsTerminalElement()
 }
 
-type TerminalEntry2 interface {
-	IsTerminalEntry2()
-	GetID() string
-}
-
 type BackgroundImageColumn struct {
 	Placeholder *string `json:"_placeholder"`
 	Width       *int    `json:"width"`
@@ -174,7 +169,7 @@ type Terminal2 struct {
 	Step             *string           `json:"step"`
 	Name             *string           `json:"name"`
 	CurrentDirectory string            `json:"currentDirectory"`
-	Nodes            []TerminalEntry2  `json:"nodes"`
+	Nodes            []*TerminalEntry  `json:"nodes"`
 	Tooltip          *TerminalTooltip2 `json:"tooltip"`
 }
 
@@ -194,13 +189,11 @@ type TerminalCommand struct {
 
 func (TerminalCommand) IsTerminalElement() {}
 
-type TerminalCommand2 struct {
-	ID      string `json:"id"`
-	Command string `json:"command"`
+type TerminalEntry struct {
+	ID        string            `json:"id"`
+	EntryType TerminalEntryType `json:"entryType"`
+	Text      string            `json:"text"`
 }
-
-func (TerminalCommand2) IsTerminalEntry2()  {}
-func (this TerminalCommand2) GetID() string { return this.ID }
 
 type TerminalNode struct {
 	Content TerminalElement `json:"content"`
@@ -212,14 +205,6 @@ type TerminalOutput struct {
 }
 
 func (TerminalOutput) IsTerminalElement() {}
-
-type TerminalOutput2 struct {
-	ID     string `json:"id"`
-	Output string `json:"output"`
-}
-
-func (TerminalOutput2) IsTerminalEntry2()  {}
-func (this TerminalOutput2) GetID() string { return this.ID }
 
 type TerminalTooltip2 struct {
 	MarkdownBody string                  `json:"markdownBody"`
@@ -450,6 +435,47 @@ func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ModalPosition) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TerminalEntryType string
+
+const (
+	TerminalEntryTypeCommand TerminalEntryType = "COMMAND"
+	TerminalEntryTypeOutput  TerminalEntryType = "OUTPUT"
+)
+
+var AllTerminalEntryType = []TerminalEntryType{
+	TerminalEntryTypeCommand,
+	TerminalEntryTypeOutput,
+}
+
+func (e TerminalEntryType) IsValid() bool {
+	switch e {
+	case TerminalEntryTypeCommand, TerminalEntryTypeOutput:
+		return true
+	}
+	return false
+}
+
+func (e TerminalEntryType) String() string {
+	return string(e)
+}
+
+func (e *TerminalEntryType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TerminalEntryType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TerminalEntryType", str)
+	}
+	return nil
+}
+
+func (e TerminalEntryType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

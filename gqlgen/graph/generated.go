@@ -206,9 +206,10 @@ type ComplexityRoot struct {
 		Tooltip         func(childComplexity int) int
 	}
 
-	TerminalCommand2 struct {
-		Command func(childComplexity int) int
-		ID      func(childComplexity int) int
+	TerminalEntry struct {
+		EntryType func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Text      func(childComplexity int) int
 	}
 
 	TerminalNode struct {
@@ -218,11 +219,6 @@ type ComplexityRoot struct {
 	TerminalOutput struct {
 		Output  func(childComplexity int) int
 		Tooltip func(childComplexity int) int
-	}
-
-	TerminalOutput2 struct {
-		ID     func(childComplexity int) int
-		Output func(childComplexity int) int
 	}
 
 	TerminalTooltip2 struct {
@@ -930,19 +926,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalCommand.Tooltip(childComplexity), true
 
-	case "TerminalCommand2.command":
-		if e.complexity.TerminalCommand2.Command == nil {
+	case "TerminalEntry.entryType":
+		if e.complexity.TerminalEntry.EntryType == nil {
 			break
 		}
 
-		return e.complexity.TerminalCommand2.Command(childComplexity), true
+		return e.complexity.TerminalEntry.EntryType(childComplexity), true
 
-	case "TerminalCommand2.id":
-		if e.complexity.TerminalCommand2.ID == nil {
+	case "TerminalEntry.id":
+		if e.complexity.TerminalEntry.ID == nil {
 			break
 		}
 
-		return e.complexity.TerminalCommand2.ID(childComplexity), true
+		return e.complexity.TerminalEntry.ID(childComplexity), true
+
+	case "TerminalEntry.text":
+		if e.complexity.TerminalEntry.Text == nil {
+			break
+		}
+
+		return e.complexity.TerminalEntry.Text(childComplexity), true
 
 	case "TerminalNode.content":
 		if e.complexity.TerminalNode.Content == nil {
@@ -964,20 +967,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalOutput.Tooltip(childComplexity), true
-
-	case "TerminalOutput2.id":
-		if e.complexity.TerminalOutput2.ID == nil {
-			break
-		}
-
-		return e.complexity.TerminalOutput2.ID(childComplexity), true
-
-	case "TerminalOutput2.output":
-		if e.complexity.TerminalOutput2.Output == nil {
-			break
-		}
-
-		return e.complexity.TerminalOutput2.Output(childComplexity), true
 
 	case "TerminalTooltip2.markdownBody":
 		if e.complexity.TerminalTooltip2.MarkdownBody == nil {
@@ -5076,9 +5065,9 @@ func (ec *executionContext) _Terminal2_nodes(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.TerminalEntry2)
+	res := resTmp.([]*model.TerminalEntry)
 	fc.Result = res
-	return ec.marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2ᚄ(ctx, field.Selections, res)
+	return ec.marshalNTerminalEntry2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Terminal2_nodes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5088,7 +5077,15 @@ func (ec *executionContext) fieldContext_Terminal2_nodes(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TerminalEntry_id(ctx, field)
+			case "entryType":
+				return ec.fieldContext_TerminalEntry_entryType(ctx, field)
+			case "text":
+				return ec.fieldContext_TerminalEntry_text(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TerminalEntry", field.Name)
 		},
 	}
 	return fc, nil
@@ -5356,8 +5353,8 @@ func (ec *executionContext) fieldContext_TerminalCommand_tooltip(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalCommand2_id(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalCommand2_id(ctx, field)
+func (ec *executionContext) _TerminalEntry_id(ctx context.Context, field graphql.CollectedField, obj *model.TerminalEntry) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalEntry_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5387,9 +5384,9 @@ func (ec *executionContext) _TerminalCommand2_id(ctx context.Context, field grap
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalCommand2_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalEntry_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalCommand2",
+		Object:     "TerminalEntry",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -5400,8 +5397,8 @@ func (ec *executionContext) fieldContext_TerminalCommand2_id(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalCommand2_command(ctx context.Context, field graphql.CollectedField, obj *model.TerminalCommand2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalCommand2_command(ctx, field)
+func (ec *executionContext) _TerminalEntry_entryType(ctx context.Context, field graphql.CollectedField, obj *model.TerminalEntry) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalEntry_entryType(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5414,7 +5411,51 @@ func (ec *executionContext) _TerminalCommand2_command(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Command, nil
+		return obj.EntryType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.TerminalEntryType)
+	fc.Result = res
+	return ec.marshalNTerminalEntryType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalEntry_entryType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalEntry",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type TerminalEntryType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TerminalEntry_text(ctx context.Context, field graphql.CollectedField, obj *model.TerminalEntry) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalEntry_text(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Text, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5431,9 +5472,9 @@ func (ec *executionContext) _TerminalCommand2_command(ctx context.Context, field
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalCommand2_command(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalEntry_text(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalCommand2",
+		Object:     "TerminalEntry",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -5557,94 +5598,6 @@ func (ec *executionContext) _TerminalOutput_tooltip(ctx context.Context, field g
 func (ec *executionContext) fieldContext_TerminalOutput_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TerminalOutput",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TerminalOutput2_id(ctx context.Context, field graphql.CollectedField, obj *model.TerminalOutput2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalOutput2_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TerminalOutput2_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TerminalOutput2",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TerminalOutput2_output(ctx context.Context, field graphql.CollectedField, obj *model.TerminalOutput2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalOutput2_output(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Output, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TerminalOutput2_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TerminalOutput2",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -7871,29 +7824,6 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 	}
 }
 
-func (ec *executionContext) _TerminalEntry2(ctx context.Context, sel ast.SelectionSet, obj model.TerminalEntry2) graphql.Marshaler {
-	switch obj := (obj).(type) {
-	case nil:
-		return graphql.Null
-	case model.TerminalCommand2:
-		return ec._TerminalCommand2(ctx, sel, &obj)
-	case *model.TerminalCommand2:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TerminalCommand2(ctx, sel, obj)
-	case model.TerminalOutput2:
-		return ec._TerminalOutput2(ctx, sel, &obj)
-	case *model.TerminalOutput2:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TerminalOutput2(ctx, sel, obj)
-	default:
-		panic(fmt.Errorf("unexpected type %T", obj))
-	}
-}
-
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
@@ -8825,26 +8755,33 @@ func (ec *executionContext) _TerminalCommand(ctx context.Context, sel ast.Select
 	return out
 }
 
-var terminalCommand2Implementors = []string{"TerminalCommand2", "TerminalEntry2"}
+var terminalEntryImplementors = []string{"TerminalEntry"}
 
-func (ec *executionContext) _TerminalCommand2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalCommand2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminalCommand2Implementors)
+func (ec *executionContext) _TerminalEntry(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalEntry) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, terminalEntryImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TerminalCommand2")
+			out.Values[i] = graphql.MarshalString("TerminalEntry")
 		case "id":
 
-			out.Values[i] = ec._TerminalCommand2_id(ctx, field, obj)
+			out.Values[i] = ec._TerminalEntry_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "command":
+		case "entryType":
 
-			out.Values[i] = ec._TerminalCommand2_command(ctx, field, obj)
+			out.Values[i] = ec._TerminalEntry_entryType(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "text":
+
+			out.Values[i] = ec._TerminalEntry_text(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -8903,41 +8840,6 @@ func (ec *executionContext) _TerminalOutput(ctx context.Context, sel ast.Selecti
 
 			out.Values[i] = ec._TerminalOutput_tooltip(ctx, field, obj)
 
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var terminalOutput2Implementors = []string{"TerminalOutput2", "TerminalEntry2"}
-
-func (ec *executionContext) _TerminalOutput2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalOutput2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminalOutput2Implementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("TerminalOutput2")
-		case "id":
-
-			out.Values[i] = ec._TerminalOutput2_id(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "output":
-
-			out.Values[i] = ec._TerminalOutput2_output(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9431,17 +9333,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTerminalEntry22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2(ctx context.Context, sel ast.SelectionSet, v model.TerminalEntry2) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._TerminalEntry2(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2ᚄ(ctx context.Context, sel ast.SelectionSet, v []model.TerminalEntry2) graphql.Marshaler {
+func (ec *executionContext) marshalNTerminalEntry2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TerminalEntry) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9465,7 +9357,7 @@ func (ec *executionContext) marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimao
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTerminalEntry22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2(ctx, sel, v[i])
+			ret[i] = ec.marshalNTerminalEntry2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9483,6 +9375,26 @@ func (ec *executionContext) marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimao
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNTerminalEntry2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry(ctx context.Context, sel ast.SelectionSet, v *model.TerminalEntry) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TerminalEntry(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNTerminalEntryType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryType(ctx context.Context, v interface{}) (model.TerminalEntryType, error) {
+	var res model.TerminalEntryType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTerminalEntryType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryType(ctx context.Context, sel ast.SelectionSet, v model.TerminalEntryType) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
