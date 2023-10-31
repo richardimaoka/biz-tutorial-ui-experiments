@@ -1,14 +1,14 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { CommandComponentGql } from "../command/CommandComponentGql";
-import { OutputComponentGql } from "../output/OutputComponentGql";
+import { GqlCommandComponent } from "../command/GqlCommandComponent";
+import { GqlOutputComponent } from "../output/GqlOutputComponent";
 
 const fragmentDefinition = graphql(`
-  fragment TerminalEntryComponentGql on TerminalEntry2 {
+  fragment GqlTerminalEntryComponent on TerminalEntry2 {
     ... on TerminalCommand2 {
-      ...CommandComponentGql
+      ...GqlCommandComponent
     }
     ... on TerminalOutput2 {
-      ...OutputComponentGql
+      ...GqlOutputComponent
     }
   }
 `);
@@ -18,15 +18,15 @@ interface Props {
   animate: boolean;
 }
 
-export function TerminalEntryComponentGql(props: Props): JSX.Element {
+export function GqlTerminalEntryComponent(props: Props): JSX.Element {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   switch (fragment.__typename) {
     case "TerminalCommand2":
       return (
-        <CommandComponentGql fragment={fragment} animate={props.animate} />
+        <GqlCommandComponent fragment={fragment} animate={props.animate} />
       );
     case "TerminalOutput2":
-      return <OutputComponentGql fragment={fragment} />;
+      return <GqlOutputComponent fragment={fragment} />;
   }
 }

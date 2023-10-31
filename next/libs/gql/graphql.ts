@@ -617,78 +617,78 @@ export type TerminalOutput_FragmentFragment = {
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
-export type TerminalComponentGqlFragment = ({ __typename: "Terminal2" } & {
+export type GqlTerminalComponentFragment = ({ __typename: "Terminal2" } & {
   " $fragmentRefs"?: {
-    TerminalHeaderGqlFragment: TerminalHeaderGqlFragment;
-    TerminalContentsGqlFragment: TerminalContentsGqlFragment;
+    GqlTerminalHeaderFragment: GqlTerminalHeaderFragment;
+    GqlTerminalContentsFragment: GqlTerminalContentsFragment;
   };
-}) & { " $fragmentName"?: "TerminalComponentGqlFragment" };
+}) & { " $fragmentName"?: "GqlTerminalComponentFragment" };
 
-export type CommandComponentGqlFragment = {
+export type GqlCommandComponentFragment = {
   __typename: "TerminalCommand2";
   command: string;
-} & { " $fragmentName"?: "CommandComponentGqlFragment" };
+} & { " $fragmentName"?: "GqlCommandComponentFragment" };
 
-export type TerminalContentsGqlFragment = {
+export type GqlTerminalContentsFragment = {
   __typename: "Terminal2";
   nodes: Array<
     | ({ __typename: "TerminalCommand2"; id: string } & {
         " $fragmentRefs"?: {
-          TerminalEntryComponentGql_TerminalCommand2_Fragment: TerminalEntryComponentGql_TerminalCommand2_Fragment;
+          GqlTerminalEntryComponent_TerminalCommand2_Fragment: GqlTerminalEntryComponent_TerminalCommand2_Fragment;
         };
       })
     | ({ __typename: "TerminalOutput2"; id: string } & {
         " $fragmentRefs"?: {
-          TerminalEntryComponentGql_TerminalOutput2_Fragment: TerminalEntryComponentGql_TerminalOutput2_Fragment;
+          GqlTerminalEntryComponent_TerminalOutput2_Fragment: GqlTerminalEntryComponent_TerminalOutput2_Fragment;
         };
       })
   >;
   tooltip?:
     | ({ __typename: "TerminalTooltip2" } & {
         " $fragmentRefs"?: {
-          TerminalTooltipGqlFragment: TerminalTooltipGqlFragment;
+          GqlTerminalTooltipFragment: GqlTerminalTooltipFragment;
         };
       })
     | null;
-} & { " $fragmentName"?: "TerminalContentsGqlFragment" };
+} & { " $fragmentName"?: "GqlTerminalContentsFragment" };
 
-type TerminalEntryComponentGql_TerminalCommand2_Fragment = ({
+type GqlTerminalEntryComponent_TerminalCommand2_Fragment = ({
   __typename: "TerminalCommand2";
 } & {
   " $fragmentRefs"?: {
-    CommandComponentGqlFragment: CommandComponentGqlFragment;
+    GqlCommandComponentFragment: GqlCommandComponentFragment;
   };
 }) & {
-  " $fragmentName"?: "TerminalEntryComponentGql_TerminalCommand2_Fragment";
+  " $fragmentName"?: "GqlTerminalEntryComponent_TerminalCommand2_Fragment";
 };
 
-type TerminalEntryComponentGql_TerminalOutput2_Fragment = ({
+type GqlTerminalEntryComponent_TerminalOutput2_Fragment = ({
   __typename: "TerminalOutput2";
 } & {
-  " $fragmentRefs"?: { OutputComponentGqlFragment: OutputComponentGqlFragment };
+  " $fragmentRefs"?: { GqlOutputComponentFragment: GqlOutputComponentFragment };
 }) & {
-  " $fragmentName"?: "TerminalEntryComponentGql_TerminalOutput2_Fragment";
+  " $fragmentName"?: "GqlTerminalEntryComponent_TerminalOutput2_Fragment";
 };
 
-export type TerminalEntryComponentGqlFragment =
-  | TerminalEntryComponentGql_TerminalCommand2_Fragment
-  | TerminalEntryComponentGql_TerminalOutput2_Fragment;
+export type GqlTerminalEntryComponentFragment =
+  | GqlTerminalEntryComponent_TerminalCommand2_Fragment
+  | GqlTerminalEntryComponent_TerminalOutput2_Fragment;
 
-export type TerminalHeaderGqlFragment = {
+export type GqlTerminalHeaderFragment = {
   __typename: "Terminal2";
   currentDirectory: string;
-} & { " $fragmentName"?: "TerminalHeaderGqlFragment" };
+} & { " $fragmentName"?: "GqlTerminalHeaderFragment" };
 
-export type OutputComponentGqlFragment = {
+export type GqlOutputComponentFragment = {
   __typename: "TerminalOutput2";
   output: string;
-} & { " $fragmentName"?: "OutputComponentGqlFragment" };
+} & { " $fragmentName"?: "GqlOutputComponentFragment" };
 
-export type TerminalTooltipGqlFragment = {
+export type GqlTerminalTooltipFragment = {
   __typename: "TerminalTooltip2";
   markdownBody: string;
   timing?: TerminalTooltipTiming2 | null;
-} & { " $fragmentName"?: "TerminalTooltipGqlFragment" };
+} & { " $fragmentName"?: "GqlTerminalTooltipFragment" };
 
 export type YouTubeColumn_FragmentFragment = {
   __typename: "YouTubeColumn";
@@ -4758,12 +4758,12 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
-export const TerminalHeaderGqlFragmentDoc = {
+export const GqlTerminalHeaderFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalHeaderGql" },
+      name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Terminal2" },
@@ -4776,13 +4776,13 @@ export const TerminalHeaderGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<TerminalHeaderGqlFragment, unknown>;
-export const CommandComponentGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlTerminalHeaderFragment, unknown>;
+export const GqlCommandComponentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CommandComponentGql" },
+      name: { kind: "Name", value: "GqlCommandComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalCommand2" },
@@ -4795,13 +4795,13 @@ export const CommandComponentGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<CommandComponentGqlFragment, unknown>;
-export const OutputComponentGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlCommandComponentFragment, unknown>;
+export const GqlOutputComponentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "OutputComponentGql" },
+      name: { kind: "Name", value: "GqlOutputComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalOutput2" },
@@ -4814,13 +4814,13 @@ export const OutputComponentGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<OutputComponentGqlFragment, unknown>;
-export const TerminalEntryComponentGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlOutputComponentFragment, unknown>;
+export const GqlTerminalEntryComponentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalEntryComponentGql" },
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalEntry2" },
@@ -4839,7 +4839,7 @@ export const TerminalEntryComponentGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "CommandComponentGql" },
+                  name: { kind: "Name", value: "GqlCommandComponent" },
                 },
               ],
             },
@@ -4855,7 +4855,7 @@ export const TerminalEntryComponentGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "OutputComponentGql" },
+                  name: { kind: "Name", value: "GqlOutputComponent" },
                 },
               ],
             },
@@ -4865,7 +4865,7 @@ export const TerminalEntryComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CommandComponentGql" },
+      name: { kind: "Name", value: "GqlCommandComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalCommand2" },
@@ -4879,7 +4879,7 @@ export const TerminalEntryComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "OutputComponentGql" },
+      name: { kind: "Name", value: "GqlOutputComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalOutput2" },
@@ -4892,13 +4892,13 @@ export const TerminalEntryComponentGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<TerminalEntryComponentGqlFragment, unknown>;
-export const TerminalTooltipGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlTerminalEntryComponentFragment, unknown>;
+export const GqlTerminalTooltipFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalTooltipGql" },
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalTooltip2" },
@@ -4912,13 +4912,13 @@ export const TerminalTooltipGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<TerminalTooltipGqlFragment, unknown>;
-export const TerminalContentsGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlTerminalTooltipFragment, unknown>;
+export const GqlTerminalContentsFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalContentsGql" },
+      name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Terminal2" },
@@ -4935,7 +4935,7 @@ export const TerminalContentsGqlFragmentDoc = {
                 { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "TerminalEntryComponentGql" },
+                  name: { kind: "Name", value: "GqlTerminalEntryComponent" },
                 },
               ],
             },
@@ -4948,7 +4948,7 @@ export const TerminalContentsGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "TerminalTooltipGql" },
+                  name: { kind: "Name", value: "GqlTerminalTooltip" },
                 },
               ],
             },
@@ -4958,7 +4958,7 @@ export const TerminalContentsGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CommandComponentGql" },
+      name: { kind: "Name", value: "GqlCommandComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalCommand2" },
@@ -4972,7 +4972,7 @@ export const TerminalContentsGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "OutputComponentGql" },
+      name: { kind: "Name", value: "GqlOutputComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalOutput2" },
@@ -4986,7 +4986,7 @@ export const TerminalContentsGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalEntryComponentGql" },
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalEntry2" },
@@ -5005,7 +5005,7 @@ export const TerminalContentsGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "CommandComponentGql" },
+                  name: { kind: "Name", value: "GqlCommandComponent" },
                 },
               ],
             },
@@ -5021,7 +5021,7 @@ export const TerminalContentsGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "OutputComponentGql" },
+                  name: { kind: "Name", value: "GqlOutputComponent" },
                 },
               ],
             },
@@ -5031,7 +5031,7 @@ export const TerminalContentsGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalTooltipGql" },
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalTooltip2" },
@@ -5045,13 +5045,13 @@ export const TerminalContentsGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<TerminalContentsGqlFragment, unknown>;
-export const TerminalComponentGqlFragmentDoc = {
+} as unknown as DocumentNode<GqlTerminalContentsFragment, unknown>;
+export const GqlTerminalComponentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalComponentGql" },
+      name: { kind: "Name", value: "GqlTerminalComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Terminal2" },
@@ -5061,18 +5061,18 @@ export const TerminalComponentGqlFragmentDoc = {
         selections: [
           {
             kind: "FragmentSpread",
-            name: { kind: "Name", value: "TerminalHeaderGql" },
+            name: { kind: "Name", value: "GqlTerminalHeader" },
           },
           {
             kind: "FragmentSpread",
-            name: { kind: "Name", value: "TerminalContentsGql" },
+            name: { kind: "Name", value: "GqlTerminalContents" },
           },
         ],
       },
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CommandComponentGql" },
+      name: { kind: "Name", value: "GqlCommandComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalCommand2" },
@@ -5086,7 +5086,7 @@ export const TerminalComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "OutputComponentGql" },
+      name: { kind: "Name", value: "GqlOutputComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalOutput2" },
@@ -5100,7 +5100,7 @@ export const TerminalComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalEntryComponentGql" },
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalEntry2" },
@@ -5119,7 +5119,7 @@ export const TerminalComponentGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "CommandComponentGql" },
+                  name: { kind: "Name", value: "GqlCommandComponent" },
                 },
               ],
             },
@@ -5135,7 +5135,7 @@ export const TerminalComponentGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "OutputComponentGql" },
+                  name: { kind: "Name", value: "GqlOutputComponent" },
                 },
               ],
             },
@@ -5145,7 +5145,7 @@ export const TerminalComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalTooltipGql" },
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TerminalTooltip2" },
@@ -5160,7 +5160,7 @@ export const TerminalComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalHeaderGql" },
+      name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Terminal2" },
@@ -5174,7 +5174,7 @@ export const TerminalComponentGqlFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "TerminalContentsGql" },
+      name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Terminal2" },
@@ -5191,7 +5191,7 @@ export const TerminalComponentGqlFragmentDoc = {
                 { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "TerminalEntryComponentGql" },
+                  name: { kind: "Name", value: "GqlTerminalEntryComponent" },
                 },
               ],
             },
@@ -5204,7 +5204,7 @@ export const TerminalComponentGqlFragmentDoc = {
               selections: [
                 {
                   kind: "FragmentSpread",
-                  name: { kind: "Name", value: "TerminalTooltipGql" },
+                  name: { kind: "Name", value: "GqlTerminalTooltip" },
                 },
               ],
             },
@@ -5213,7 +5213,7 @@ export const TerminalComponentGqlFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<TerminalComponentGqlFragment, unknown>;
+} as unknown as DocumentNode<GqlTerminalComponentFragment, unknown>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [

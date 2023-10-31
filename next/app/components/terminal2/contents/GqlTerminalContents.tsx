@@ -2,17 +2,17 @@ import styles from "./TerminalContents.module.css";
 import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { TerminalTooltipGql } from "../tooltip/TerminalTooltipGql";
-import { TerminalEntryComponentGql } from "../entry/TerminalEntryComponentGql";
+import { GqlTerminalTooltip } from "../tooltip/GqlTerminalTooltip";
+import { GqlTerminalEntryComponent } from "../entry/GqlTerminalEntryComponent";
 
 const fragmentDefinition = graphql(`
-  fragment TerminalContentsGql on Terminal2 {
+  fragment GqlTerminalContents on Terminal2 {
     nodes {
       id
-      ...TerminalEntryComponentGql
+      ...GqlTerminalEntryComponent
     }
     tooltip {
-      ...TerminalTooltipGql
+      ...GqlTerminalTooltip
     }
   }
 `);
@@ -22,7 +22,7 @@ interface Props {
   isAnimate: boolean;
 }
 
-export function TerminalContentsGql(props: Props) {
+export function GqlTerminalContents(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   function isLastEntry(i: number) {
@@ -36,14 +36,14 @@ export function TerminalContentsGql(props: Props) {
           key={n.id}
           doScroll={props.isAnimate && isLastEntry(i)}
         >
-          <TerminalEntryComponentGql
+          <GqlTerminalEntryComponent
             fragment={n}
             animate={props.isAnimate && isLastEntry(i)}
           />
           {
             // Terminal tooltip can be shown only at the bottom
             fragment.tooltip && isLastEntry(i) && (
-              <TerminalTooltipGql
+              <GqlTerminalTooltip
                 fragment={fragment.tooltip}
                 // hidden={props.tooltip.hidden}
               />
