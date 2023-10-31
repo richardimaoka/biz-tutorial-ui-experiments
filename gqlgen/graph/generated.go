@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
+	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -4263,11 +4264,14 @@ func (ec *executionContext) _Query__test(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.TestObjs)
 	fc.Result = res
-	return ec.marshalOTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx, field.Selections, res)
+	return ec.marshalNTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5761,11 +5765,14 @@ func (ec *executionContext) _TestObjs_terminal(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Terminal2)
 	fc.Result = res
-	return ec.marshalOTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, field.Selections, res)
+	return ec.marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_TestObjs_terminal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8563,6 +8570,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query__test(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -8995,6 +9005,9 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._TestObjs_terminal(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9431,6 +9444,16 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
+func (ec *executionContext) marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx context.Context, sel ast.SelectionSet, v *model.Terminal2) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Terminal2(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNTerminalEntry22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntry2(ctx context.Context, sel ast.SelectionSet, v model.TerminalEntry2) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9483,6 +9506,20 @@ func (ec *executionContext) marshalNTerminalEntry22ᚕgithubᚗcomᚋrichardimao
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNTestObjs2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v model.TestObjs) graphql.Marshaler {
+	return ec._TestObjs(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v *model.TestObjs) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TestObjs(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -10109,13 +10146,6 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx context.Context, sel ast.SelectionSet, v *model.Terminal2) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Terminal2(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10247,13 +10277,6 @@ func (ec *executionContext) marshalOTerminalTooltipTiming22ᚖgithubᚗcomᚋric
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalOTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTestObjs(ctx context.Context, sel ast.SelectionSet, v *model.TestObjs) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TestObjs(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx context.Context, sel ast.SelectionSet, v *model.YouTubeEmbed) graphql.Marshaler {

@@ -181,7 +181,7 @@ export type PageState = {
 
 export type Query = {
   __typename: "Query";
-  _test?: Maybe<TestObjs>;
+  _test: TestObjs;
   page?: Maybe<Page>;
 };
 
@@ -278,7 +278,7 @@ export type TerminalTooltipTiming2 = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
-  terminal?: Maybe<Terminal2>;
+  terminal: Terminal2;
 };
 
 export type YouTubeColumn = Column & {
