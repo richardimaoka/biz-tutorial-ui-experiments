@@ -1,7 +1,7 @@
 "use client";
 import { ArrowLeftIcon } from "@/app/components/icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "@/app/components/icons/ArrowRightIcon";
-import { Carousel } from "@/app/components/tutorial/carousel/Carousel";
+import { Carousel } from "@/app/components/carousel/Carousel";
 import React from "react";
 
 export default function Page() {

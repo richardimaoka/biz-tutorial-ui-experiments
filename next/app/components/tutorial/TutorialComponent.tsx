@@ -1,4 +1,4 @@
-import { Carousel } from "./carousel/Carousel";
+import { Carousel } from "../carousel/Carousel";
 import styles from "./TutorialComponent.module.css";
 import { Columns } from "./column/Columns";
 import { TutorialHeader } from "./header/TutorialHeader";

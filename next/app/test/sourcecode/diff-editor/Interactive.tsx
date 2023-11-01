@@ -2,7 +2,7 @@
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
 import { EditorEditable } from "@/app/components/sourcecode2/editor/EditorEditable";
-import { Carousel } from "@/app/components/tutorial/carousel/Carousel";
+import { Carousel } from "@/app/components/carousel/Carousel";
 import { useState } from "react";
 
 interface Props {
