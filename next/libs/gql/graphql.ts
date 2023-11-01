@@ -221,6 +221,7 @@ export type Terminal2 = {
   __typename: "Terminal2";
   currentDirectory: Scalars["String"]["output"];
   entries: Array<TerminalEntry>;
+  name?: Maybe<Scalars["String"]["output"]>;
   tooltip?: Maybe<TerminalTooltip2>;
 };
 
@@ -228,6 +229,11 @@ export type TerminalColumn = Column & {
   __typename: "TerminalColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   terminal?: Maybe<Terminal>;
+};
+
+export type TerminalColumn2 = {
+  __typename: "TerminalColumn2";
+  terminals: Array<Terminal2>;
 };
 
 export type TerminalCommand = {
@@ -269,7 +275,11 @@ export type TerminalTooltipTiming2 = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
-  appTestTerminalTooltipMdPage?: Maybe<Terminal2>;
+  appTestTerminalPage?: Maybe<TerminalColumn2>;
+};
+
+export type TestObjsAppTestTerminalPageArgs = {
+  step?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type YouTubeColumn = Column & {
@@ -608,12 +618,18 @@ export type TerminalOutput_FragmentFragment = {
   output?: string | null;
 } & { " $fragmentName"?: "TerminalOutput_FragmentFragment" };
 
-export type GqlTerminalComponentFragment = ({ __typename: "Terminal2" } & {
-  " $fragmentRefs"?: {
-    GqlTerminalHeaderFragment: GqlTerminalHeaderFragment;
-    GqlTerminalContentsFragment: GqlTerminalContentsFragment;
-  };
-}) & { " $fragmentName"?: "GqlTerminalComponentFragment" };
+export type GqlTerminalColumnFragment = ({
+  __typename: "TerminalColumn2";
+  terminals: Array<
+    { __typename: "Terminal2" } & {
+      " $fragmentRefs"?: {
+        GqlTerminalContentsFragment: GqlTerminalContentsFragment;
+      };
+    }
+  >;
+} & {
+  " $fragmentRefs"?: { GqlTerminalHeaderFragment: GqlTerminalHeaderFragment };
+}) & { " $fragmentName"?: "GqlTerminalColumnFragment" };
 
 export type GqlTerminalContentsFragment = {
   __typename: "Terminal2";
@@ -640,8 +656,12 @@ export type GqlTerminalEntryComponentFragment = {
 } & { " $fragmentName"?: "GqlTerminalEntryComponentFragment" };
 
 export type GqlTerminalHeaderFragment = {
-  __typename: "Terminal2";
-  currentDirectory: string;
+  __typename: "TerminalColumn2";
+  terminals: Array<{
+    __typename: "Terminal2";
+    name?: string | null;
+    currentDirectory: string;
+  }>;
 } & { " $fragmentName"?: "GqlTerminalHeaderFragment" };
 
 export type GqlTerminalTooltipFragment = {
@@ -690,18 +710,18 @@ export type PageQueryQuery = {
     | null;
 };
 
-export type AppTestTerminalTooltipMdPageQueryVariables = Exact<{
-  [key: string]: never;
+export type AppTestTerminalPageQueryVariables = Exact<{
+  step?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
-export type AppTestTerminalTooltipMdPageQuery = {
+export type AppTestTerminalPageQuery = {
   __typename: "Query";
   _test?: {
     __typename: "TestObjs";
-    appTestTerminalTooltipMdPage?:
-      | ({ __typename: "Terminal2" } & {
+    appTestTerminalPage?:
+      | ({ __typename: "TerminalColumn2" } & {
           " $fragmentRefs"?: {
-            GqlTerminalComponentFragment: GqlTerminalComponentFragment;
+            GqlTerminalColumnFragment: GqlTerminalColumnFragment;
           };
         })
       | null;
@@ -4744,12 +4764,25 @@ export const GqlTerminalHeaderFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "TerminalColumn2" },
       },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentDirectory" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -4870,15 +4903,15 @@ export const GqlTerminalContentsFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlTerminalContentsFragment, unknown>;
-export const GqlTerminalComponentFragmentDoc = {
+export const GqlTerminalColumnFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTerminalComponent" },
+      name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "TerminalColumn2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -4888,8 +4921,17 @@ export const GqlTerminalComponentFragmentDoc = {
             name: { kind: "Name", value: "GqlTerminalHeader" },
           },
           {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlTerminalContents" },
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalContents" },
+                },
+              ],
+            },
           },
         ],
       },
@@ -4929,12 +4971,25 @@ export const GqlTerminalComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "TerminalColumn2" },
       },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentDirectory" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -4979,7 +5034,7 @@ export const GqlTerminalComponentFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<GqlTerminalComponentFragment, unknown>;
+} as unknown as DocumentNode<GqlTerminalColumnFragment, unknown>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [
@@ -5924,13 +5979,20 @@ export const PageQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
-export const AppTestTerminalTooltipMdPageDocument = {
+export const AppTestTerminalPageDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "appTestTerminalTooltipMdPage" },
+      name: { kind: "Name", value: "appTestTerminalPage" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -5942,13 +6004,23 @@ export const AppTestTerminalTooltipMdPageDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "appTestTerminalTooltipMdPage" },
+                  name: { kind: "Name", value: "appTestTerminalPage" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "step" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "step" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
                       {
                         kind: "FragmentSpread",
-                        name: { kind: "Name", value: "GqlTerminalComponent" },
+                        name: { kind: "Name", value: "GqlTerminalColumn" },
                       },
                     ],
                   },
@@ -5964,12 +6036,25 @@ export const AppTestTerminalTooltipMdPageDocument = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "TerminalColumn2" },
       },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "currentDirectory" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentDirectory" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -6045,10 +6130,10 @@ export const AppTestTerminalTooltipMdPageDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTerminalComponent" },
+      name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "TerminalColumn2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6058,14 +6143,23 @@ export const AppTestTerminalTooltipMdPageDocument = {
             name: { kind: "Name", value: "GqlTerminalHeader" },
           },
           {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlTerminalContents" },
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalContents" },
+                },
+              ],
+            },
           },
         ],
       },
     },
   ],
 } as unknown as DocumentNode<
-  AppTestTerminalTooltipMdPageQuery,
-  AppTestTerminalTooltipMdPageQueryVariables
+  AppTestTerminalPageQuery,
+  AppTestTerminalPageQueryVariables
 >;

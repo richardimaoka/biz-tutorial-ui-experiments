@@ -1,28 +1,40 @@
-import Link from "next/link";
-import { promises as fs } from "fs";
+import { GqlTerminalColumn } from "@/app/components/terminal2/GqlTerminalColumn";
+import { graphql } from "@/libs/gql";
+import { request } from "graphql-request";
 
-export default async function Page() {
-  const routingPath = "/test/terminal";
-  const cwd = process.cwd();
-  const pwd = `${cwd}/app` + routingPath;
+const queryDefinition = graphql(`
+  query appTestTerminalPage($step: String) {
+    _test {
+      appTestTerminalPage(step: $step) {
+        ...GqlTerminalColumn
+      }
+    }
+  }
+`);
 
-  const subDirEnts = await fs.readdir(pwd, { withFileTypes: true });
-  const subDirs = subDirEnts
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+interface PageParams {
+  searchParams: {
+    step?: string;
+  };
+}
+
+export default async function Page({ searchParams }: PageParams) {
+  const variables = { step: searchParams.step };
+  const data = await request(
+    "http://localhost:8080/query",
+    queryDefinition,
+    variables
+  );
+
+  const fragment = data._test?.appTestTerminalPage;
+
+  if (!fragment) {
+    return <>no data</>;
+  }
 
   return (
-    <ul style={{ margin: "40px" }}>
-      {subDirs.map((l) => (
-        <li key={l} style={{ marginBottom: "10px", fontSize: "20px" }}>
-          <Link
-            href={routingPath + "/" + l}
-            style={{ color: "blue", textDecoration: "underline" }}
-          >
-            {l}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div style={{ height: "95svh" }}>
+      <GqlTerminalColumn fragment={fragment} selectIndex={0} />
+    </div>
   );
 }

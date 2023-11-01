@@ -49,7 +49,7 @@ func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
 
 	var err error
 
-	err = internal.JsonRead2("data/_test/appTestTerminalTooltipMdPage.json", &testObj.AppTestTerminalTooltipMdPage)
+	err = internal.JsonRead2("data/_test/appTestTerminalPage.json", &testObj.AppTestTerminalPage)
 	if err != nil {
 		return nil, err
 	}

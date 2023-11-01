@@ -5,25 +5,33 @@ import styles from "./TerminalComponent.module.css";
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTerminalComponent on Terminal2 {
+  fragment GqlTerminalColumn on TerminalColumn2 {
     ...GqlTerminalHeader
-    ...GqlTerminalContents
+    terminals {
+      ...GqlTerminalContents
+    }
   }
 `);
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
+  selectIndex: number;
 }
 
-export function GqlTerminalComponent(props: Props) {
+export function GqlTerminalColumn(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
+  const selectTerminal = fragment.terminals[props.selectIndex];
+
   return (
     <div className={styles.component}>
       <div className={styles.header}>
-        <GqlTerminalHeader fragment={fragment} />
+        <GqlTerminalHeader
+          fragment={fragment}
+          selectIndex={props.selectIndex}
+        />
       </div>
       <div className={styles.contents}>
-        <GqlTerminalContents fragment={fragment} isAnimate={true} />
+        <GqlTerminalContents fragment={selectTerminal} isAnimate={true} />
       </div>
     </div>
   );

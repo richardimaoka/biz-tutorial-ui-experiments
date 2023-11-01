@@ -166,6 +166,7 @@ type Terminal struct {
 }
 
 type Terminal2 struct {
+	Name             *string           `json:"name"`
 	CurrentDirectory string            `json:"currentDirectory"`
 	Entries          []*TerminalEntry  `json:"entries"`
 	Tooltip          *TerminalTooltip2 `json:"tooltip"`
@@ -178,6 +179,10 @@ type TerminalColumn struct {
 
 func (TerminalColumn) IsColumn()                    {}
 func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
+
+type TerminalColumn2 struct {
+	Terminals []*Terminal2 `json:"terminals"`
+}
 
 type TerminalCommand struct {
 	BeforeExecution *bool   `json:"beforeExecution"`
@@ -210,7 +215,7 @@ type TerminalTooltip2 struct {
 }
 
 type TestObjs struct {
-	AppTestTerminalTooltipMdPage *Terminal2 `json:"appTestTerminalTooltipMdPage"`
+	AppTestTerminalPage *TerminalColumn2 `json:"appTestTerminalPage"`
 }
 
 type YouTubeColumn struct {

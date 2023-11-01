@@ -73,13 +73,13 @@ const documents = {
     types.TerminalNodeComponent_FragmentFragmentDoc,
   "\n  fragment TerminalOutput_Fragment on TerminalOutput {\n    output\n  }\n":
     types.TerminalOutput_FragmentFragmentDoc,
-  "\n  fragment GqlTerminalComponent on Terminal2 {\n    ...GqlTerminalHeader\n    ...GqlTerminalContents\n  }\n":
-    types.GqlTerminalComponentFragmentDoc,
+  "\n  fragment GqlTerminalColumn on TerminalColumn2 {\n    ...GqlTerminalHeader\n    terminals {\n      ...GqlTerminalContents\n    }\n  }\n":
+    types.GqlTerminalColumnFragmentDoc,
   "\n  fragment GqlTerminalContents on Terminal2 {\n    entries {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n":
     types.GqlTerminalContentsFragmentDoc,
   "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n  }\n":
     types.GqlTerminalEntryComponentFragmentDoc,
-  "\n  fragment GqlTerminalHeader on Terminal2 {\n    currentDirectory\n  }\n":
+  "\n  fragment GqlTerminalHeader on TerminalColumn2 {\n    terminals {\n      name\n      currentDirectory\n    }\n  }\n":
     types.GqlTerminalHeaderFragmentDoc,
   "\n  fragment GqlTerminalTooltip on TerminalTooltip2 {\n    markdownBody\n    timing\n  }\n":
     types.GqlTerminalTooltipFragmentDoc,
@@ -89,8 +89,8 @@ const documents = {
     types.YouTube_FragmentFragmentDoc,
   "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n":
     types.PageQueryDocument,
-  "\n  query appTestTerminalTooltipMdPage {\n    _test {\n      appTestTerminalTooltipMdPage {\n        ...GqlTerminalComponent\n      }\n    }\n  }\n":
-    types.AppTestTerminalTooltipMdPageDocument,
+  "\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
+    types.AppTestTerminalPageDocument,
 };
 
 /**
@@ -291,8 +291,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlTerminalComponent on Terminal2 {\n    ...GqlTerminalHeader\n    ...GqlTerminalContents\n  }\n",
-): (typeof documents)["\n  fragment GqlTerminalComponent on Terminal2 {\n    ...GqlTerminalHeader\n    ...GqlTerminalContents\n  }\n"];
+  source: "\n  fragment GqlTerminalColumn on TerminalColumn2 {\n    ...GqlTerminalHeader\n    terminals {\n      ...GqlTerminalContents\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlTerminalColumn on TerminalColumn2 {\n    ...GqlTerminalHeader\n    terminals {\n      ...GqlTerminalContents\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -309,8 +309,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlTerminalHeader on Terminal2 {\n    currentDirectory\n  }\n",
-): (typeof documents)["\n  fragment GqlTerminalHeader on Terminal2 {\n    currentDirectory\n  }\n"];
+  source: "\n  fragment GqlTerminalHeader on TerminalColumn2 {\n    terminals {\n      name\n      currentDirectory\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlTerminalHeader on TerminalColumn2 {\n    terminals {\n      name\n      currentDirectory\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -339,8 +339,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestTerminalTooltipMdPage {\n    _test {\n      appTestTerminalTooltipMdPage {\n        ...GqlTerminalComponent\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestTerminalTooltipMdPage {\n    _test {\n      appTestTerminalTooltipMdPage {\n        ...GqlTerminalComponent\n      }\n    }\n  }\n"];
+  source: "\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

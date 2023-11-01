@@ -14,7 +14,7 @@ type Query {
 }
 
 type TestObjs {
-  appTestTerminalTooltipMdPage: Terminal2
+  appTestTerminalPage(step: String): TerminalColumn2
 }
 
 ###################################################
@@ -183,10 +183,15 @@ type TerminalEntry {
 }
 
 type Terminal2 {
+  name: String
   currentDirectory: String!
   entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
   tooltip: TerminalTooltip2
   # terminalTabs
+}
+
+type TerminalColumn2 {
+  terminals: [Terminal2!]!
 }
 
 ###################################################
