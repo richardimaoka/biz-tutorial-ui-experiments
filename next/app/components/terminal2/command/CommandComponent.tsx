@@ -6,6 +6,7 @@ import { CommandStringAnimation } from "./CommandStringAnimation";
 interface Props {
   command: string;
   animate?: boolean;
+  completedCallback?: () => void;
 }
 
 export function CommandComponent(props: Props) {
@@ -14,7 +15,10 @@ export function CommandComponent(props: Props) {
       <pre>
         <CommandPrompt />
         {props.animate ? (
-          <CommandStringAnimation command={props.command} />
+          <CommandStringAnimation
+            command={props.command}
+            completedCallback={props.completedCallback}
+          />
         ) : (
           <CommandStringStatic command={props.command} />
         )}
