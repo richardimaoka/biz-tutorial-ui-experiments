@@ -38,6 +38,7 @@ type Config struct {
 type ResolverRoot interface {
 	Query() QueryResolver
 	SourceCode() SourceCodeResolver
+	TestObjs() TestObjsResolver
 }
 
 type DirectiveRoot struct {
@@ -230,7 +231,7 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		AppTestTerminalPage func(childComplexity int, step *string) int
+		AppTestTerminalPage func(childComplexity int, step *int) int
 	}
 
 	YouTubeColumn struct {
@@ -251,6 +252,9 @@ type QueryResolver interface {
 }
 type SourceCodeResolver interface {
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
+}
+type TestObjsResolver interface {
+	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
 }
 
 type executableSchema struct {
@@ -995,7 +999,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.TestObjs.AppTestTerminalPage(childComplexity, args["step"].(*string)), true
+		return e.complexity.TestObjs.AppTestTerminalPage(childComplexity, args["step"].(*int)), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -1160,10 +1164,10 @@ func (ec *executionContext) field_SourceCode_openFile_args(ctx context.Context, 
 func (ec *executionContext) field_TestObjs_appTestTerminalPage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 *int
 	if tmp, ok := rawArgs["step"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("step"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5743,7 +5747,7 @@ func (ec *executionContext) _TestObjs_appTestTerminalPage(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.AppTestTerminalPage, nil
+		return ec.resolvers.TestObjs().AppTestTerminalPage(rctx, obj, fc.Args["step"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5761,8 +5765,8 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalPage(ctx contex
 	fc = &graphql.FieldContext{
 		Object:     "TestObjs",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "terminals":
@@ -8957,9 +8961,22 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TestObjs")
 		case "appTestTerminalPage":
+			field := field
 
-			out.Values[i] = ec._TestObjs_appTestTerminalPage(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TestObjs_appTestTerminalPage(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -279,7 +279,7 @@ export type TestObjs = {
 };
 
 export type TestObjsAppTestTerminalPageArgs = {
-  step?: InputMaybe<Scalars["String"]["input"]>;
+  step?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type YouTubeColumn = Column & {
@@ -711,7 +711,7 @@ export type PageQueryQuery = {
 };
 
 export type AppTestTerminalPageQueryVariables = Exact<{
-  step?: InputMaybe<Scalars["String"]["input"]>;
+  step?: InputMaybe<Scalars["Int"]["input"]>;
 }>;
 
 export type AppTestTerminalPageQuery = {
@@ -5990,7 +5990,7 @@ export const AppTestTerminalPageDocument = {
         {
           kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
-          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
       ],
       selectionSet: {

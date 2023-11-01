@@ -89,7 +89,7 @@ const documents = {
     types.YouTube_FragmentFragmentDoc,
   "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n":
     types.PageQueryDocument,
-  "\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
+  "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
 };
 
@@ -339,8 +339,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestTerminalPage($step: String) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n"];
+  source: "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

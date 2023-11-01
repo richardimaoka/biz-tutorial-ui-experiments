@@ -64,3 +64,7 @@ models:
   SourceCode:
     model:
       - github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model.SourceCode
+  TestObjs:
+    fields:
+      appTestTerminalPage:
+        resolver: true

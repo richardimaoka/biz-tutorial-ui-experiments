@@ -46,14 +46,6 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 // Test is the resolver for the _test field.
 func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
 	testObj := model.TestObjs{}
-
-	var err error
-
-	err = internal.JsonRead2("data/_test/appTestTerminalPage.json", &testObj.AppTestTerminalPage)
-	if err != nil {
-		return nil, err
-	}
-
 	return &testObj, nil
 }
 
@@ -123,14 +115,36 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 	return &openFile, nil
 }
 
+// AppTestTerminalPage is the resolver for the appTestTerminalPage field.
+func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error) {
+	var filename string
+	if step == nil {
+		filename = "data/_test/appTestTerminalPage/1.json"
+	} else {
+		filename = fmt.Sprintf("data/_test/appTestTerminalPage/%d.json", *step)
+	}
+
+	var m model.TerminalColumn2
+	err := internal.JsonRead2(filename, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	return &m, nil
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 // SourceCode returns SourceCodeResolver implementation.
 func (r *Resolver) SourceCode() SourceCodeResolver { return &sourceCodeResolver{r} }
 
+// TestObjs returns TestObjsResolver implementation.
+func (r *Resolver) TestObjs() TestObjsResolver { return &testObjsResolver{r} }
+
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
+type testObjsResolver struct{ *Resolver }
 
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
