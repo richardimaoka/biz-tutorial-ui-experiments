@@ -221,8 +221,6 @@ export type Terminal2 = {
   __typename: "Terminal2";
   currentDirectory: Scalars["String"]["output"];
   entries: Array<TerminalEntry>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  step?: Maybe<Scalars["String"]["output"]>;
   tooltip?: Maybe<TerminalTooltip2>;
 };
 
@@ -271,7 +269,7 @@ export type TerminalTooltipTiming2 = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
-  appTestTerminalTooltipPage?: Maybe<Terminal2>;
+  appTestTerminalTooltipMdPage?: Maybe<Terminal2>;
 };
 
 export type YouTubeColumn = Column & {
@@ -692,15 +690,15 @@ export type PageQueryQuery = {
     | null;
 };
 
-export type AppTestTerminalTooltipPageQueryVariables = Exact<{
+export type AppTestTerminalTooltipMdPageQueryVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type AppTestTerminalTooltipPageQuery = {
+export type AppTestTerminalTooltipMdPageQuery = {
   __typename: "Query";
   _test?: {
     __typename: "TestObjs";
-    appTestTerminalTooltipPage?:
+    appTestTerminalTooltipMdPage?:
       | ({ __typename: "Terminal2" } & {
           " $fragmentRefs"?: {
             GqlTerminalComponentFragment: GqlTerminalComponentFragment;
@@ -5926,13 +5924,13 @@ export const PageQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
-export const AppTestTerminalTooltipPageDocument = {
+export const AppTestTerminalTooltipMdPageDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "appTestTerminalTooltipPage" },
+      name: { kind: "Name", value: "appTestTerminalTooltipMdPage" },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -5944,7 +5942,7 @@ export const AppTestTerminalTooltipPageDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "appTestTerminalTooltipPage" },
+                  name: { kind: "Name", value: "appTestTerminalTooltipMdPage" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -6068,6 +6066,6 @@ export const AppTestTerminalTooltipPageDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  AppTestTerminalTooltipPageQuery,
-  AppTestTerminalTooltipPageQueryVariables
+  AppTestTerminalTooltipMdPageQuery,
+  AppTestTerminalTooltipMdPageQueryVariables
 >;

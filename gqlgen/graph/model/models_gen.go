@@ -166,8 +166,6 @@ type Terminal struct {
 }
 
 type Terminal2 struct {
-	Step             *string           `json:"step"`
-	Name             *string           `json:"name"`
 	CurrentDirectory string            `json:"currentDirectory"`
 	Entries          []*TerminalEntry  `json:"entries"`
 	Tooltip          *TerminalTooltip2 `json:"tooltip"`
@@ -212,7 +210,7 @@ type TerminalTooltip2 struct {
 }
 
 type TestObjs struct {
-	AppTestTerminalTooltipPage *Terminal2 `json:"appTestTerminalTooltipPage"`
+	AppTestTerminalTooltipMdPage *Terminal2 `json:"appTestTerminalTooltipMdPage"`
 }
 
 type YouTubeColumn struct {

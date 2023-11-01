@@ -47,7 +47,9 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
 	testObj := model.TestObjs{}
 
-	err := internal.JsonRead2("data/_test/appTestTerminalTooltipPage.json", &testObj.AppTestTerminalTooltipPage)
+	var err error
+
+	err = internal.JsonRead2("data/_test/appTestTerminalTooltipMdPage.json", &testObj.AppTestTerminalTooltipMdPage)
 	if err != nil {
 		return nil, err
 	}

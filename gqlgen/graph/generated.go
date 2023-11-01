@@ -190,8 +190,6 @@ type ComplexityRoot struct {
 	Terminal2 struct {
 		CurrentDirectory func(childComplexity int) int
 		Entries          func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Step             func(childComplexity int) int
 		Tooltip          func(childComplexity int) int
 	}
 
@@ -227,7 +225,7 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		AppTestTerminalTooltipPage func(childComplexity int) int
+		AppTestTerminalTooltipMdPage func(childComplexity int) int
 	}
 
 	YouTubeColumn struct {
@@ -870,20 +868,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Terminal2.Entries(childComplexity), true
 
-	case "Terminal2.name":
-		if e.complexity.Terminal2.Name == nil {
-			break
-		}
-
-		return e.complexity.Terminal2.Name(childComplexity), true
-
-	case "Terminal2.step":
-		if e.complexity.Terminal2.Step == nil {
-			break
-		}
-
-		return e.complexity.Terminal2.Step(childComplexity), true
-
 	case "Terminal2.tooltip":
 		if e.complexity.Terminal2.Tooltip == nil {
 			break
@@ -982,12 +966,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalTooltip2.Timing(childComplexity), true
 
-	case "TestObjs.appTestTerminalTooltipPage":
-		if e.complexity.TestObjs.AppTestTerminalTooltipPage == nil {
+	case "TestObjs.appTestTerminalTooltipMdPage":
+		if e.complexity.TestObjs.AppTestTerminalTooltipMdPage == nil {
 			break
 		}
 
-		return e.complexity.TestObjs.AppTestTerminalTooltipPage(childComplexity), true
+		return e.complexity.TestObjs.AppTestTerminalTooltipMdPage(childComplexity), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -4267,8 +4251,8 @@ func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field 
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "appTestTerminalTooltipPage":
-				return ec.fieldContext_TestObjs_appTestTerminalTooltipPage(ctx, field)
+			case "appTestTerminalTooltipMdPage":
+				return ec.fieldContext_TestObjs_appTestTerminalTooltipMdPage(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TestObjs", field.Name)
 		},
@@ -4908,88 +4892,6 @@ func (ec *executionContext) fieldContext_Terminal_nodes(ctx context.Context, fie
 				return ec.fieldContext_TerminalNode_content(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TerminalNode", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Terminal2_step(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_step(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Step, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Terminal2_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Terminal2_name(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_name(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Terminal2_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5693,8 +5595,8 @@ func (ec *executionContext) fieldContext_TerminalTooltip2_timing(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _TestObjs_appTestTerminalTooltipPage(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TestObjs_appTestTerminalTooltipPage(ctx, field)
+func (ec *executionContext) _TestObjs_appTestTerminalTooltipMdPage(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TestObjs_appTestTerminalTooltipMdPage(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5707,7 +5609,7 @@ func (ec *executionContext) _TestObjs_appTestTerminalTooltipPage(ctx context.Con
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.AppTestTerminalTooltipPage, nil
+		return obj.AppTestTerminalTooltipMdPage, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5721,7 +5623,7 @@ func (ec *executionContext) _TestObjs_appTestTerminalTooltipPage(ctx context.Con
 	return ec.marshalOTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TestObjs_appTestTerminalTooltipPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TestObjs_appTestTerminalTooltipMdPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TestObjs",
 		Field:      field,
@@ -5729,10 +5631,6 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalTooltipPage(ctx
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "step":
-				return ec.fieldContext_Terminal2_step(ctx, field)
-			case "name":
-				return ec.fieldContext_Terminal2_name(ctx, field)
 			case "currentDirectory":
 				return ec.fieldContext_Terminal2_currentDirectory(ctx, field)
 			case "entries":
@@ -8656,14 +8554,6 @@ func (ec *executionContext) _Terminal2(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Terminal2")
-		case "step":
-
-			out.Values[i] = ec._Terminal2_step(ctx, field, obj)
-
-		case "name":
-
-			out.Values[i] = ec._Terminal2_name(ctx, field, obj)
-
 		case "currentDirectory":
 
 			out.Values[i] = ec._Terminal2_currentDirectory(ctx, field, obj)
@@ -8893,9 +8783,9 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TestObjs")
-		case "appTestTerminalTooltipPage":
+		case "appTestTerminalTooltipMdPage":
 
-			out.Values[i] = ec._TestObjs_appTestTerminalTooltipPage(ctx, field, obj)
+			out.Values[i] = ec._TestObjs_appTestTerminalTooltipMdPage(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
