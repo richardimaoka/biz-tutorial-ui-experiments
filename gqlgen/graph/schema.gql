@@ -180,6 +180,7 @@ type TerminalEntry {
   id: ID!
   entryType: TerminalEntryType!
   text: String! # command or output
+  tooltip: TerminalTooltip2
 }
 
 type Terminal2 {

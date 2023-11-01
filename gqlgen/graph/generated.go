@@ -214,6 +214,7 @@ type ComplexityRoot struct {
 		EntryType func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Text      func(childComplexity int) int
+		Tooltip   func(childComplexity int) int
 	}
 
 	TerminalNode struct {
@@ -953,6 +954,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalEntry.Text(childComplexity), true
+
+	case "TerminalEntry.tooltip":
+		if e.complexity.TerminalEntry.Tooltip == nil {
+			break
+		}
+
+		return e.complexity.TerminalEntry.Tooltip(childComplexity), true
 
 	case "TerminalNode.content":
 		if e.complexity.TerminalNode.Content == nil {
@@ -5070,6 +5078,8 @@ func (ec *executionContext) fieldContext_Terminal2_entries(ctx context.Context, 
 				return ec.fieldContext_TerminalEntry_entryType(ctx, field)
 			case "text":
 				return ec.fieldContext_TerminalEntry_text(ctx, field)
+			case "tooltip":
+				return ec.fieldContext_TerminalEntry_tooltip(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TerminalEntry", field.Name)
 		},
@@ -5520,6 +5530,53 @@ func (ec *executionContext) fieldContext_TerminalEntry_text(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TerminalEntry_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.TerminalEntry) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalEntry_tooltip(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tooltip, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TerminalTooltip2)
+	fc.Result = res
+	return ec.marshalOTerminalTooltip22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip2(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalEntry_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalEntry",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "markdownBody":
+				return ec.fieldContext_TerminalTooltip2_markdownBody(ctx, field)
+			case "timing":
+				return ec.fieldContext_TerminalTooltip2_timing(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TerminalTooltip2", field.Name)
 		},
 	}
 	return fc, nil
@@ -8853,6 +8910,10 @@ func (ec *executionContext) _TerminalEntry(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "tooltip":
+
+			out.Values[i] = ec._TerminalEntry_tooltip(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
