@@ -12,7 +12,6 @@ const fragmentDefinition = graphql(`
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
   animate: boolean;
-  completedCallback?: () => void;
 }
 
 export function GqlTerminalEntryComponent(props: Props): JSX.Element {
@@ -21,11 +20,7 @@ export function GqlTerminalEntryComponent(props: Props): JSX.Element {
   switch (fragment.entryType) {
     case "COMMAND":
       return (
-        <CommandComponent
-          command={fragment.text}
-          animate={props.animate}
-          completedCallback={props.completedCallback}
-        />
+        <CommandComponent command={fragment.text} animate={props.animate} />
       );
     case "OUTPUT":
       return <OutputComponent output={fragment.text} />;

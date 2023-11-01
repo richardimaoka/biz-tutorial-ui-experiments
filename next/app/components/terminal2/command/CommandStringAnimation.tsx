@@ -4,7 +4,6 @@ import { FlickeringTrail } from "./FlickeringTrail";
 
 interface Props {
   command: string;
-  completedCallback?: () => void;
 }
 
 export function CommandStringAnimation(props: Props) {
@@ -21,8 +20,6 @@ export function CommandStringAnimation(props: Props) {
       setTimeout(() => {
         setWrittenLength(nextLength);
       }, 20);
-    } else {
-      props.completedCallback && props.completedCallback();
     }
   });
 

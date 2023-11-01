@@ -1,4 +1,4 @@
-import styles from "./GqlTerminalContents.module.css";
+import styles from "./TerminalContents.module.css";
 import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
@@ -20,7 +20,6 @@ const fragmentDefinition = graphql(`
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
   isAnimate: boolean;
-  completedCallback?: () => void;
 }
 
 export function GqlTerminalContents(props: Props) {
@@ -40,7 +39,6 @@ export function GqlTerminalContents(props: Props) {
           <GqlTerminalEntryComponent
             fragment={n}
             animate={props.isAnimate && isLastEntry(i)}
-            completedCallback={props.completedCallback}
           />
           {
             // Terminal tooltip can be shown only at the bottom

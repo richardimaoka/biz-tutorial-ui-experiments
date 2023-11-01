@@ -3,7 +3,7 @@ import {
   TerminalContentsProps,
 } from "./contents/__TerminalContents";
 import { TerminalHeader, TerminalHeaderProps } from "./header/TerminalHeader";
-import styles from "./__TerminalComponent.module.css";
+import styles from "./TerminalComponent.module.css";
 
 type Props = TerminalContentsProps & TerminalHeaderProps;
 
