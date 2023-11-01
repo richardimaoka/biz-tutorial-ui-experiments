@@ -7,7 +7,7 @@ import { GqlTerminalEntryComponent } from "../entry/GqlTerminalEntryComponent";
 
 const fragmentDefinition = graphql(`
   fragment GqlTerminalContents on Terminal2 {
-    nodes {
+    entries {
       id
       ...GqlTerminalEntryComponent
     }
@@ -26,12 +26,12 @@ export function GqlTerminalContents(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   function isLastEntry(i: number) {
-    return i === fragment.nodes.length - 1;
+    return i === fragment.entries.length - 1;
   }
 
   return (
     <div className={styles.component}>
-      {fragment.nodes.map((n, i) => (
+      {fragment.entries.map((n, i) => (
         <TerminalScrollIntoView
           key={n.id}
           doScroll={props.isAnimate && isLastEntry(i)}

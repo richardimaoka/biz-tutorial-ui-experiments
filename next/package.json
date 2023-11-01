@@ -10,8 +10,7 @@
     "lint-watch": "nodemon --ext tsx,ts,js.jsx,mjs,json --exec \"next lint\"",
     "codegen": "graphql-codegen --config codegen.ts",
     "compile": "tsc --noEmit",
-    "test": "vitest",
-    "prepare": "husky install"
+    "test": "vitest"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",

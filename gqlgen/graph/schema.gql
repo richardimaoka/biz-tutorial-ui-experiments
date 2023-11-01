@@ -186,7 +186,7 @@ type Terminal2 {
   step: String
   name: String
   currentDirectory: String!
-  nodes: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
+  entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
   tooltip: TerminalTooltip2
   # terminalTabs
 }

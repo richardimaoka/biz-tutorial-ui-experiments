@@ -169,7 +169,7 @@ type Terminal2 struct {
 	Step             *string           `json:"step"`
 	Name             *string           `json:"name"`
 	CurrentDirectory string            `json:"currentDirectory"`
-	Nodes            []*TerminalEntry  `json:"nodes"`
+	Entries          []*TerminalEntry  `json:"entries"`
 	Tooltip          *TerminalTooltip2 `json:"tooltip"`
 }
 

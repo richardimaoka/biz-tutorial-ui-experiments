@@ -75,7 +75,7 @@ const documents = {
     types.TerminalOutput_FragmentFragmentDoc,
   "\n  fragment GqlTerminalComponent on Terminal2 {\n    ...GqlTerminalHeader\n    ...GqlTerminalContents\n  }\n":
     types.GqlTerminalComponentFragmentDoc,
-  "\n  fragment GqlTerminalContents on Terminal2 {\n    nodes {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n":
+  "\n  fragment GqlTerminalContents on Terminal2 {\n    entries {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n":
     types.GqlTerminalContentsFragmentDoc,
   "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n  }\n":
     types.GqlTerminalEntryComponentFragmentDoc,
@@ -297,8 +297,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlTerminalContents on Terminal2 {\n    nodes {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlTerminalContents on Terminal2 {\n    nodes {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n"];
+  source: "\n  fragment GqlTerminalContents on Terminal2 {\n    entries {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlTerminalContents on Terminal2 {\n    entries {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

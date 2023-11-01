@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 // Page is the resolver for the page field.
@@ -44,7 +45,14 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 
 // Test is the resolver for the _test field.
 func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
-	panic(fmt.Errorf("not implemented: Test - _test"))
+	testObj := model.TestObjs{}
+
+	err := internal.JsonRead2("data/_test/appTestTerminalTooltipPage.json", &testObj.AppTestTerminalTooltipPage)
+	if err != nil {
+		return nil, err
+	}
+
+	return &testObj, nil
 }
 
 // OpenFile is the resolver for the openFile field.

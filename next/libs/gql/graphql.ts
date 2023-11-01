@@ -220,8 +220,8 @@ export type Terminal = {
 export type Terminal2 = {
   __typename: "Terminal2";
   currentDirectory: Scalars["String"]["output"];
+  entries: Array<TerminalEntry>;
   name?: Maybe<Scalars["String"]["output"]>;
-  nodes: Array<TerminalEntry>;
   step?: Maybe<Scalars["String"]["output"]>;
   tooltip?: Maybe<TerminalTooltip2>;
 };
@@ -619,7 +619,7 @@ export type GqlTerminalComponentFragment = ({ __typename: "Terminal2" } & {
 
 export type GqlTerminalContentsFragment = {
   __typename: "Terminal2";
-  nodes: Array<
+  entries: Array<
     { __typename: "TerminalEntry"; id: string } & {
       " $fragmentRefs"?: {
         GqlTerminalEntryComponentFragment: GqlTerminalEntryComponentFragment;
@@ -4812,7 +4812,7 @@ export const GqlTerminalContentsFragmentDoc = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "nodes" },
+            name: { kind: "Name", value: "entries" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -4952,7 +4952,7 @@ export const GqlTerminalComponentFragmentDoc = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "nodes" },
+            name: { kind: "Name", value: "entries" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -6017,7 +6017,7 @@ export const AppTestTerminalTooltipPageDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "nodes" },
+            name: { kind: "Name", value: "entries" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [

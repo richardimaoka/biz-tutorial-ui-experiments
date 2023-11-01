@@ -189,8 +189,8 @@ type ComplexityRoot struct {
 
 	Terminal2 struct {
 		CurrentDirectory func(childComplexity int) int
+		Entries          func(childComplexity int) int
 		Name             func(childComplexity int) int
-		Nodes            func(childComplexity int) int
 		Step             func(childComplexity int) int
 		Tooltip          func(childComplexity int) int
 	}
@@ -863,19 +863,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Terminal2.CurrentDirectory(childComplexity), true
 
+	case "Terminal2.entries":
+		if e.complexity.Terminal2.Entries == nil {
+			break
+		}
+
+		return e.complexity.Terminal2.Entries(childComplexity), true
+
 	case "Terminal2.name":
 		if e.complexity.Terminal2.Name == nil {
 			break
 		}
 
 		return e.complexity.Terminal2.Name(childComplexity), true
-
-	case "Terminal2.nodes":
-		if e.complexity.Terminal2.Nodes == nil {
-			break
-		}
-
-		return e.complexity.Terminal2.Nodes(childComplexity), true
 
 	case "Terminal2.step":
 		if e.complexity.Terminal2.Step == nil {
@@ -5039,8 +5039,8 @@ func (ec *executionContext) fieldContext_Terminal2_currentDirectory(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Terminal2_nodes(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_nodes(ctx, field)
+func (ec *executionContext) _Terminal2_entries(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal2_entries(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5053,7 +5053,7 @@ func (ec *executionContext) _Terminal2_nodes(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
+		return obj.Entries, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5070,7 +5070,7 @@ func (ec *executionContext) _Terminal2_nodes(ctx context.Context, field graphql.
 	return ec.marshalNTerminalEntry2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Terminal2_nodes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal2_entries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Terminal2",
 		Field:      field,
@@ -5735,8 +5735,8 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalTooltipPage(ctx
 				return ec.fieldContext_Terminal2_name(ctx, field)
 			case "currentDirectory":
 				return ec.fieldContext_Terminal2_currentDirectory(ctx, field)
-			case "nodes":
-				return ec.fieldContext_Terminal2_nodes(ctx, field)
+			case "entries":
+				return ec.fieldContext_Terminal2_entries(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_Terminal2_tooltip(ctx, field)
 			}
@@ -8671,9 +8671,9 @@ func (ec *executionContext) _Terminal2(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "nodes":
+		case "entries":
 
-			out.Values[i] = ec._Terminal2_nodes(ctx, field, obj)
+			out.Values[i] = ec._Terminal2_entries(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
