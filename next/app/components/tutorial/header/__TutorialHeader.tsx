@@ -1,7 +1,7 @@
 import { ButtonToInitialStep } from "./ButtonToInitialStep";
-import { ColumnTabs } from "./ColumnTabs";
+import { ColumnTabs } from "./__ColumnTabs";
 import { ColumnName } from "../definitions";
-import styles from "./TutorialHeader.module.css";
+import styles from "./__TutorialHeader.module.css";
 
 interface Props {
   selectTab: ColumnName;

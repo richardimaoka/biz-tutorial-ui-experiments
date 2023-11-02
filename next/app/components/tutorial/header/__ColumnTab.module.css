@@ -1,0 +1,43 @@
+.component {
+  /* color and styles */
+  background-color: var(--color-theme-transparent-white);
+  border-radius: 4px 4px 0px 0px;
+}
+
+.selected {
+  /* color and styles */
+  color: var(--color-primary-text);
+  /* sizing */
+  padding: 4px 8px 8px 8px;
+  /* border */
+  border: solid 1px var(--color-primary-text);
+  border-bottom: none;
+}
+
+.unselected {
+  /* color and styles */
+  color: var(--color-disabled-text);
+  background-color: var(--color-surface);
+  /* sizing */
+  padding: 4px 8px;
+}
+
+@media (max-width: 768px) {
+  .smartphone {
+    font-size: 12px;
+  }
+
+  .desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .smartphone {
+    display: none;
+  }
+
+  .desktop {
+    font-size: 16px;
+  }
+}

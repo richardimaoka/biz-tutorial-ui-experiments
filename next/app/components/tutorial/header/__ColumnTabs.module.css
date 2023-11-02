@@ -1,0 +1,10 @@
+.component {
+  /* flex settings */
+  display: flex;
+  align-items: flex-start;
+  column-gap: 8px;
+
+  /* wrap settings */
+  row-gap: 16px;
+  flex-wrap: wrap;
+}

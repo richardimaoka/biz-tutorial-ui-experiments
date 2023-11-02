@@ -1,10 +1,8 @@
 "use client";
 
-import styles from "./ColumnTab.module.css";
-import { useRouter } from "next/navigation";
-import { ColumnTabIcon } from "./__ColumnTabIcon";
-
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import { useRouter } from "next/navigation";
+import styles from "./GqlColumnTab.module.css";
 import { GqlColumnTabIcon } from "./GqlColumnTabIcon";
 
 const fragmentDefinition = graphql(`

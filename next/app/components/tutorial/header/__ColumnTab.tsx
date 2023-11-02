@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./ColumnTab.module.css";
+import styles from "./__ColumnTab.module.css";
 import { useRouter } from "next/navigation";
 import { ColumnName } from "../definitions";
 import { ColumnTabIcon } from "./__ColumnTabIcon";

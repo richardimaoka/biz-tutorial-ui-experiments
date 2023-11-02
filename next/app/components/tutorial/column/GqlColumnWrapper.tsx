@@ -1,5 +1,5 @@
 import { GqlTerminalColumn } from "../../terminal2/GqlTerminalColumn";
-import styles from "./Column.module.css";
+import styles from "./GqlColumnWrapper.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 

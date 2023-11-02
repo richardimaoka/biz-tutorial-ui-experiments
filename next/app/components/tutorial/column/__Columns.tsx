@@ -1,5 +1,5 @@
 import { Column } from "./__Column";
-import styles from "./Columns.module.css";
+import styles from "./__Columns.module.css";
 import { TutorialColumnProps } from "../definitions";
 
 interface Props {

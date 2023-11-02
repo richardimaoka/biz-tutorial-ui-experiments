@@ -1,5 +1,5 @@
 import { TerminalComponent } from "../../terminal2/__TerminalComponent";
-import styles from "./Column.module.css";
+import styles from "./__Column.module.css";
 import { TutorialColumnProps } from "../definitions";
 
 interface Props {
