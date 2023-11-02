@@ -16,6 +16,7 @@ type Query {
 type TestObjs {
   appTestTerminalPage(step: Int): TerminalColumn2
   appTestTutorialColumnsPage: Page2
+  appTestTutorialTutorialPage: Page2
 }
 
 ###################################################

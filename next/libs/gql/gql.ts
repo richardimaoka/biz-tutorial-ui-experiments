@@ -83,6 +83,8 @@ const documents = {
     types.GqlTerminalHeaderFragmentDoc,
   "\n  fragment GqlTerminalTooltip on TerminalTooltip2 {\n    markdownBody\n    timing\n  }\n":
     types.GqlTerminalTooltipFragmentDoc,
+  "\n  fragment GqlTutorialComponent on Page2 {\n    ...GqlTutorialHeader\n    ...GqlColumnWrappers\n  }\n":
+    types.GqlTutorialComponentFragmentDoc,
   "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.GqlColumnWrapperFragmentDoc,
   "\n  fragment GqlColumnWrappers on Page2 {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n":
@@ -103,8 +105,10 @@ const documents = {
     types.PageQueryDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
-  "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        columns {\n          ...GqlColumnWrapper\n        }\n      }\n    }\n  }\n":
+  "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n":
     types.AppTestTutorialColumnsPageDocument,
+  "\n  query appTestTutorialTutorialPage {\n    _test {\n      appTestTutorialTutorialPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n":
+    types.AppTestTutorialTutorialPageDocument,
 };
 
 /**
@@ -335,6 +339,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment GqlTutorialComponent on Page2 {\n    ...GqlTutorialHeader\n    ...GqlColumnWrappers\n  }\n",
+): (typeof documents)["\n  fragment GqlTutorialComponent on Page2 {\n    ...GqlTutorialHeader\n    ...GqlColumnWrappers\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n"];
 /**
@@ -395,8 +405,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        columns {\n          ...GqlColumnWrapper\n        }\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        columns {\n          ...GqlColumnWrapper\n        }\n      }\n    }\n  }\n"];
+  source: "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query appTestTutorialTutorialPage {\n    _test {\n      appTestTutorialTutorialPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTutorialTutorialPage {\n    _test {\n      appTestTutorialTutorialPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -1,5 +1,5 @@
 import { Carousel } from "../carousel/Carousel";
-import styles from "./TutorialComponent.module.css";
+import styles from "./__TutorialComponent.module.css";
 import { Columns } from "./column/__Columns";
 import { TutorialHeader } from "./header/__TutorialHeader";
 import { ColumnName, TutorialColumnProps, columnWidthPx } from "./definitions";

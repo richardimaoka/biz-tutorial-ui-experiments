@@ -235,8 +235,9 @@ type TerminalTooltip2 struct {
 }
 
 type TestObjs struct {
-	AppTestTerminalPage        *TerminalColumn2 `json:"appTestTerminalPage"`
-	AppTestTutorialColumnsPage *Page2           `json:"appTestTutorialColumnsPage"`
+	AppTestTerminalPage         *TerminalColumn2 `json:"appTestTerminalPage"`
+	AppTestTutorialColumnsPage  *Page2           `json:"appTestTutorialColumnsPage"`
+	AppTestTutorialTutorialPage *Page2           `json:"appTestTutorialTutorialPage"`
 }
 
 type YouTubeColumn struct {

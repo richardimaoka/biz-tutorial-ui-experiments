@@ -1,4 +1,4 @@
-import { GqlColumnWrapper } from "@/app/components/tutorial/column/GqlColumnWrapper";
+import { GqlColumnWrappers } from "@/app/components/tutorial/column/GqlColumnWrappers";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 
@@ -6,9 +6,7 @@ const queryDefinition = graphql(`
   query appTestTutorialColumnsPage {
     _test {
       appTestTutorialColumnsPage {
-        columns {
-          ...GqlColumnWrapper
-        }
+        ...GqlColumnWrappers
       }
     }
   }
@@ -26,17 +24,11 @@ export default async function Page({ searchParams }: PageParams) {
     // variables
   );
 
-  const columns = data._test?.appTestTutorialColumnsPage?.columns;
-
-  if (!columns || columns.length < 1) {
-    return <>no data</>;
-  }
-
-  const col = columns[0];
+  const fragment = data._test?.appTestTutorialColumnsPage;
 
   return (
     <div style={{ height: "95svh" }}>
-      {col && <GqlColumnWrapper fragment={col} />}
+      {fragment && <GqlColumnWrappers fragment={fragment} />}
     </div>
   );
 }

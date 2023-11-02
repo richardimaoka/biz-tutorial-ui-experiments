@@ -8,10 +8,14 @@
   /* color and styles */
   color: var(--color-primary-text);
   /* sizing */
-  padding: 4px 8px 8px 8px;
+  padding-top: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 7px; /* 8px - 1px(border) */
   /* border */
   border: solid 1px var(--color-primary-text);
   border-bottom: none;
+  position: relative;
 }
 
 .unselected {
@@ -19,7 +23,10 @@
   color: var(--color-disabled-text);
   background-color: var(--color-surface);
   /* sizing */
-  padding: 4px 8px;
+  padding-top: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 8px;
 }
 
 @media (max-width: 768px) {

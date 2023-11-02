@@ -70,3 +70,5 @@ models:
         resolver: true
       appTestTutorialColumnsPage:
         resolver: true
+      appTestTutorialTutorialPage:
+        resolver: true

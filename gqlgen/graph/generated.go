@@ -243,8 +243,9 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		AppTestTerminalPage        func(childComplexity int, step *int) int
-		AppTestTutorialColumnsPage func(childComplexity int) int
+		AppTestTerminalPage         func(childComplexity int, step *int) int
+		AppTestTutorialColumnsPage  func(childComplexity int) int
+		AppTestTutorialTutorialPage func(childComplexity int) int
 	}
 
 	YouTubeColumn struct {
@@ -269,6 +270,7 @@ type SourceCodeResolver interface {
 type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
 	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error)
+	AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error)
 }
 
 type executableSchema struct {
@@ -1063,6 +1065,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TestObjs.AppTestTutorialColumnsPage(childComplexity), true
+
+	case "TestObjs.appTestTutorialTutorialPage":
+		if e.complexity.TestObjs.AppTestTutorialTutorialPage == nil {
+			break
+		}
+
+		return e.complexity.TestObjs.AppTestTutorialTutorialPage(childComplexity), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -4537,6 +4546,8 @@ func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field 
 				return ec.fieldContext_TestObjs_appTestTerminalPage(ctx, field)
 			case "appTestTutorialColumnsPage":
 				return ec.fieldContext_TestObjs_appTestTutorialColumnsPage(ctx, field)
+			case "appTestTutorialTutorialPage":
+				return ec.fieldContext_TestObjs_appTestTutorialTutorialPage(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TestObjs", field.Name)
 		},
@@ -6154,6 +6165,53 @@ func (ec *executionContext) _TestObjs_appTestTutorialColumnsPage(ctx context.Con
 }
 
 func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TestObjs",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "columns":
+				return ec.fieldContext_Page2_columns(ctx, field)
+			case "defaultSelectColumn":
+				return ec.fieldContext_Page2_defaultSelectColumn(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Page2", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TestObjs_appTestTutorialTutorialPage(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TestObjs_appTestTutorialTutorialPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.TestObjs().AppTestTutorialTutorialPage(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Page2)
+	fc.Result = res
+	return ec.marshalOPage22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage2(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TestObjs_appTestTutorialTutorialPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TestObjs",
 		Field:      field,
@@ -9461,6 +9519,23 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._TestObjs_appTestTutorialColumnsPage(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "appTestTutorialTutorialPage":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TestObjs_appTestTutorialTutorialPage(ctx, field, obj)
 				return res
 			}
 

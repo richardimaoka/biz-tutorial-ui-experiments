@@ -1,18 +1,36 @@
-import { TutorialComponent } from "@/app/components/tutorial/TutorialComponent";
-import { ColumnName } from "@/app/components/tutorial/definitions";
+import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialComponent";
+import { graphql } from "@/libs/gql";
+import { request } from "graphql-request";
 
-export default async function Page() {
-  const tabs = [
-    { href: "/", name: "Terminal" as ColumnName },
-    { href: "/", name: "SourceCode" as ColumnName },
-    { href: "/", name: "Browser" as ColumnName },
-  ];
+const queryDefinition = graphql(`
+  query appTestTutorialTutorialPage {
+    _test {
+      appTestTutorialTutorialPage {
+        ...GqlTutorialComponent
+      }
+    }
+  }
+`);
+
+interface PageParams {
+  searchParams: {};
+}
+
+export default async function Page({ searchParams }: PageParams) {
+  // const variables = { step: stepNum };
+  const data = await request(
+    "http://localhost:8080/query",
+    queryDefinition
+    // variables
+  );
+
+  const fragment = data._test?.appTestTutorialTutorialPage;
 
   return (
-    <TutorialComponent tabs={tabs} selectColumn="SourceCode" columns={[]}>
-      <div
-        style={{ backgroundColor: "white", height: "90%", margin: "100px" }}
-      />
-    </TutorialComponent>
+    <div style={{ height: "95svh" }}>
+      {fragment && (
+        <GqlTutorialComponent fragment={fragment} selectTab="Terminal" />
+      )}
+    </div>
   );
 }

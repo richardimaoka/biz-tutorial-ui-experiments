@@ -1,7 +1,7 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { nonNullArray } from "@/libs/nonNullArray";
 import { GqlColumnTab } from "./GqlColumnTab";
-import styles from "./GqlTutorialHeader.module.css";
+import styles from "./GqlColumnTabs.module.css";
 
 const fragmentDefinition = graphql(`
   fragment GqlColumnTabs on Page2 {
@@ -14,7 +14,7 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
-  selectTab?: string;
+  selectTab: string;
 }
 
 export function GqlColumnTabs(props: Props) {
@@ -29,7 +29,11 @@ export function GqlColumnTabs(props: Props) {
   return (
     <div className={styles.component}>
       {columns.map((c) => (
-        <GqlColumnTab key={c.columnName} fragment={c} />
+        <GqlColumnTab
+          key={c.columnName}
+          fragment={c}
+          isSelected={props.selectTab === c.columnName}
+        />
       ))}
     </div>
   );
