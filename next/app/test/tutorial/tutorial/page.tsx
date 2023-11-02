@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: PageParams) {
   const fragment = data._test?.appTestTutorialTutorialPage;
 
   return (
-    <div style={{ height: "95svh" }}>
+    <div>
       {fragment && (
         <GqlTutorialComponent fragment={fragment} selectTab="Terminal" />
       )}
