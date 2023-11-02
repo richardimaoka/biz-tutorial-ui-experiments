@@ -158,6 +158,11 @@ type ComplexityRoot struct {
 		Step            func(childComplexity int) int
 	}
 
+	Page2 struct {
+		Columns             func(childComplexity int) int
+		DefaultSelectColumn func(childComplexity int) int
+	}
+
 	PageState struct {
 		Markdown   func(childComplexity int) int
 		NextAction func(childComplexity int) int
@@ -263,7 +268,7 @@ type SourceCodeResolver interface {
 }
 type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
-	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.ColumnWrapper2, error)
+	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error)
 }
 
 type executableSchema struct {
@@ -735,6 +740,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Page.Step(childComplexity), true
+
+	case "Page2.columns":
+		if e.complexity.Page2.Columns == nil {
+			break
+		}
+
+		return e.complexity.Page2.Columns(childComplexity), true
+
+	case "Page2.defaultSelectColumn":
+		if e.complexity.Page2.DefaultSelectColumn == nil {
+			break
+		}
+
+		return e.complexity.Page2.DefaultSelectColumn(childComplexity), true
 
 	case "PageState.markdown":
 		if e.complexity.PageState.Markdown == nil {
@@ -3995,6 +4014,94 @@ func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field g
 	return fc, nil
 }
 
+func (ec *executionContext) _Page2_columns(ctx context.Context, field graphql.CollectedField, obj *model.Page2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page2_columns(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Columns, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ColumnWrapper2)
+	fc.Result = res
+	return ec.marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page2_columns(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "column":
+				return ec.fieldContext_ColumnWrapper2_column(ctx, field)
+			case "columnName":
+				return ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper2", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page2_defaultSelectColumn(ctx context.Context, field graphql.CollectedField, obj *model.Page2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page2_defaultSelectColumn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DefaultSelectColumn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page2_defaultSelectColumn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageState_step(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageState_step(ctx, field)
 	if err != nil {
@@ -6041,9 +6148,9 @@ func (ec *executionContext) _TestObjs_appTestTutorialColumnsPage(ctx context.Con
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.ColumnWrapper2)
+	res := resTmp.(*model.Page2)
 	fc.Result = res
-	return ec.marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, field.Selections, res)
+	return ec.marshalOPage22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6054,12 +6161,12 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "column":
-				return ec.fieldContext_ColumnWrapper2_column(ctx, field)
-			case "columnName":
-				return ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+			case "columns":
+				return ec.fieldContext_Page2_columns(ctx, field)
+			case "defaultSelectColumn":
+				return ec.fieldContext_Page2_defaultSelectColumn(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Page2", field.Name)
 		},
 	}
 	return fc, nil
@@ -8765,6 +8872,35 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
+var page2Implementors = []string{"Page2"}
+
+func (ec *executionContext) _Page2(ctx context.Context, sel ast.SelectionSet, obj *model.Page2) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, page2Implementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Page2")
+		case "columns":
+
+			out.Values[i] = ec._Page2_columns(ctx, field, obj)
+
+		case "defaultSelectColumn":
+
+			out.Values[i] = ec._Page2_defaultSelectColumn(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var pageStateImplementors = []string{"PageState"}
 
 func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet, obj *model.PageState) graphql.Marshaler {
@@ -10198,6 +10334,47 @@ func (ec *executionContext) marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋric
 	return v
 }
 
+func (ec *executionContext) marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper2) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v *model.ColumnWrapper2) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10485,6 +10662,13 @@ func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._OpenFile(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPage22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage2(ctx context.Context, sel ast.SelectionSet, v *model.Page2) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Page2(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOPage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPage(ctx context.Context, sel ast.SelectionSet, v *model.Page) graphql.Marshaler {

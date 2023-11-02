@@ -15,7 +15,16 @@ type Query {
 
 type TestObjs {
   appTestTerminalPage(step: Int): TerminalColumn2
-  appTestTutorialColumnsPage: ColumnWrapper2
+  appTestTutorialColumnsPage: Page2
+}
+
+###################################################
+# Page 2
+###################################################
+
+type Page2 {
+  columns: [ColumnWrapper2]
+  defaultSelectColumn: String
 }
 
 ###################################################

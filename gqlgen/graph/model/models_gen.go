@@ -150,6 +150,11 @@ type Page struct {
 	Modal           *Modal           `json:"modal"`
 }
 
+type Page2 struct {
+	Columns             []*ColumnWrapper2 `json:"columns"`
+	DefaultSelectColumn *string           `json:"defaultSelectColumn"`
+}
+
 type PageState struct {
 	Step       *string      `json:"step"`
 	NextStep   *string      `json:"nextStep"`
@@ -231,7 +236,7 @@ type TerminalTooltip2 struct {
 
 type TestObjs struct {
 	AppTestTerminalPage        *TerminalColumn2 `json:"appTestTerminalPage"`
-	AppTestTutorialColumnsPage *ColumnWrapper2  `json:"appTestTutorialColumnsPage"`
+	AppTestTutorialColumnsPage *Page2           `json:"appTestTutorialColumnsPage"`
 }
 
 type YouTubeColumn struct {

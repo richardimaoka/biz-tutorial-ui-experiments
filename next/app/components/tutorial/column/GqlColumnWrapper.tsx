@@ -22,6 +22,9 @@ interface Props {
 export function GqlColumnWrapper(props: Props): JSX.Element {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const column = fragment.column;
+  console.log("----------------------------------------------");
+  console.log(fragment);
+  console.log(fragment.column);
 
   if (!column.__typename) {
     throw new Error(

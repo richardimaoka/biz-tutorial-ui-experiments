@@ -6,7 +6,9 @@ const queryDefinition = graphql(`
   query appTestTutorialColumnsPage {
     _test {
       appTestTutorialColumnsPage {
-        ...GqlColumnWrapper
+        columns {
+          ...GqlColumnWrapper
+        }
       }
     }
   }
@@ -24,15 +26,17 @@ export default async function Page({ searchParams }: PageParams) {
     // variables
   );
 
-  const fragment = data._test?.appTestTutorialColumnsPage;
+  const columns = data._test?.appTestTutorialColumnsPage?.columns;
 
-  if (!fragment) {
+  if (!columns || columns.length < 1) {
     return <>no data</>;
   }
 
+  const col = columns[0];
+
   return (
     <div style={{ height: "95svh" }}>
-      <GqlColumnWrapper fragment={fragment} />
+      {col && <GqlColumnWrapper fragment={col} />}
     </div>
   );
 }
