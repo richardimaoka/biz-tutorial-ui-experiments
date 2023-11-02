@@ -4,7 +4,7 @@ PWD=$(pwd)
 SESSION=$(basename "$PWD")
 
 tmux new-session -s "$SESSION" -d
-tmux send-keys -t "$SESSION:0.0" '(cd gqlgen && gow -e=gql run github.com/99designs/gqlgen generate)' C-m
+tmux send-keys -t "$SESSION:0.0" '(cd gqlgen && gow -e=gql,yml run github.com/99designs/gqlgen generate)' C-m
 
 tmux split-window -v -t "$SESSION"
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
@@ -35,6 +35,6 @@ tmux send-keys -t "$SESSION:0.4" '(cd gqlgen && gow -e=go,json,gql -c -v test ./
 # open editors
 tmux split-window -v -t "$SESSION" 
 tmux select-layout even-vertical   # to avoid 'no space for new pane' 
-tmux send-keys -t "$SESSION:0.5" '(cd gqlgen && code .) && (cd next && code .)' C-m
+tmux send-keys -t "$SESSION:0.5" 'code gqlgen && code next' C-m
 
 tmux attach -t "$SESSION"
