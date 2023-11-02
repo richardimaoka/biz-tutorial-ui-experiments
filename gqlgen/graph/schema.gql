@@ -15,6 +15,59 @@ type Query {
 
 type TestObjs {
   appTestTerminalPage(step: Int): TerminalColumn2
+  appTestTutorialColumnsPage: ColumnWrapper2
+}
+
+###################################################
+# Column 2
+###################################################
+
+interface Column2 {
+  columnName: String!
+}
+
+type ColumnWrapper2 {
+  column: Column2!
+  columnName: String!
+}
+
+###################################################
+# Terminal related object types 2
+###################################################
+
+enum TerminalTooltipTiming2 {
+  START
+  END
+}
+
+type TerminalTooltip2 {
+  markdownBody: String!
+  timing: TerminalTooltipTiming2
+}
+
+enum TerminalEntryType {
+  COMMAND
+  OUTPUT
+}
+
+type TerminalEntry {
+  id: ID!
+  entryType: TerminalEntryType!
+  text: String! # command or output
+  tooltip: TerminalTooltip2
+}
+
+type Terminal2 {
+  name: String
+  currentDirectory: String!
+  entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
+  tooltip: TerminalTooltip2
+  # terminalTabs
+}
+
+type TerminalColumn2 implements Column2 {
+  columnName: String!
+  terminals: [Terminal2!]!
 }
 
 ###################################################
@@ -155,44 +208,6 @@ type Terminal {
   name: String
   currentDirectory: String
   nodes: [TerminalNode] # To make frontend pattern-matching easier, we return a list of concrete object types, instead of list of unions
-}
-
-###################################################
-# Terminal related object types 2
-###################################################
-
-enum TerminalTooltipTiming2 {
-  START
-  END
-}
-
-type TerminalTooltip2 {
-  markdownBody: String!
-  timing: TerminalTooltipTiming2
-}
-
-enum TerminalEntryType {
-  COMMAND
-  OUTPUT
-}
-
-type TerminalEntry {
-  id: ID!
-  entryType: TerminalEntryType!
-  text: String! # command or output
-  tooltip: TerminalTooltip2
-}
-
-type Terminal2 {
-  name: String
-  currentDirectory: String!
-  entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
-  tooltip: TerminalTooltip2
-  # terminalTabs
-}
-
-type TerminalColumn2 {
-  terminals: [Terminal2!]!
 }
 
 ###################################################

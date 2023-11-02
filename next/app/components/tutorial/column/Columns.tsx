@@ -1,4 +1,4 @@
-import { Column } from "./Column";
+import { Column } from "./__Column";
 import styles from "./Columns.module.css";
 import { TutorialColumnProps } from "../definitions";
 

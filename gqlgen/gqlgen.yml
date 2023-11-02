@@ -68,3 +68,5 @@ models:
     fields:
       appTestTerminalPage:
         resolver: true
+      appTestTutorialColumnsPage:
+        resolver: true

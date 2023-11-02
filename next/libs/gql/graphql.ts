@@ -51,6 +51,10 @@ export type Column = {
   _placeholder?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type Column2 = {
+  columnName: Scalars["String"]["output"];
+};
+
 export type ColumnVerticalPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type ColumnWrapper = {
@@ -58,6 +62,12 @@ export type ColumnWrapper = {
   column?: Maybe<Column>;
   index?: Maybe<Scalars["Int"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type ColumnWrapper2 = {
+  __typename: "ColumnWrapper2";
+  column: Column2;
+  columnName: Scalars["String"]["output"];
 };
 
 export type DevToolsColumn = Column & {
@@ -231,8 +241,9 @@ export type TerminalColumn = Column & {
   terminal?: Maybe<Terminal>;
 };
 
-export type TerminalColumn2 = {
+export type TerminalColumn2 = Column2 & {
   __typename: "TerminalColumn2";
+  columnName: Scalars["String"]["output"];
   terminals: Array<Terminal2>;
 };
 
@@ -277,6 +288,7 @@ export type TerminalTooltipTiming2 = "END" | "START";
 export type TestObjs = {
   __typename: "TestObjs";
   appTestTerminalPage?: Maybe<TerminalColumn2>;
+  appTestTutorialColumnsPage?: Maybe<ColumnWrapper2>;
 };
 
 export type TestObjsAppTestTerminalPageArgs = {
@@ -671,6 +683,14 @@ export type GqlTerminalTooltipFragment = {
   timing?: TerminalTooltipTiming2 | null;
 } & { " $fragmentName"?: "GqlTerminalTooltipFragment" };
 
+export type GqlColumnWrapperFragment = {
+  __typename: "ColumnWrapper2";
+  columnName: string;
+  column: { __typename: "TerminalColumn2" } & {
+    " $fragmentRefs"?: { GqlTerminalColumnFragment: GqlTerminalColumnFragment };
+  };
+} & { " $fragmentName"?: "GqlColumnWrapperFragment" };
+
 export type YouTubeColumn_FragmentFragment = {
   __typename: "YouTubeColumn";
   youtube?:
@@ -723,6 +743,24 @@ export type AppTestTerminalPageQuery = {
       | ({ __typename: "TerminalColumn2" } & {
           " $fragmentRefs"?: {
             GqlTerminalColumnFragment: GqlTerminalColumnFragment;
+          };
+        })
+      | null;
+  } | null;
+};
+
+export type AppTestTutorialColumnsPageQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppTestTutorialColumnsPageQuery = {
+  __typename: "Query";
+  _test?: {
+    __typename: "TestObjs";
+    appTestTutorialColumnsPage?:
+      | ({ __typename: "ColumnWrapper2" } & {
+          " $fragmentRefs"?: {
+            GqlColumnWrapperFragment: GqlColumnWrapperFragment;
           };
         })
       | null;
@@ -5036,6 +5074,178 @@ export const GqlTerminalColumnFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlTerminalColumnFragment, unknown>;
+export const GqlColumnWrapperFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlColumnWrapper" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentDirectory" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalEntry" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "entryType" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalTooltip2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "timing" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalContents" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "entries" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalTooltip" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlTerminalHeader" },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalContents" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlColumnWrapperFragment, unknown>;
 export const PageQueryDocument = {
   kind: "Document",
   definitions: [
@@ -6163,4 +6373,211 @@ export const AppTestTerminalPageDocument = {
 } as unknown as DocumentNode<
   AppTestTerminalPageQuery,
   AppTestTerminalPageQueryVariables
+>;
+export const AppTestTutorialColumnsPageDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "appTestTutorialColumnsPage" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "_test" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "appTestTutorialColumnsPage" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlColumnWrapper" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentDirectory" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalEntry" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "entryType" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalTooltip" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalTooltip2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "timing" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalContents" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Terminal2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "entries" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalEntryComponent" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalTooltip" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTerminalColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TerminalColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlTerminalHeader" },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "terminals" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlTerminalContents" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlColumnWrapper" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ColumnWrapper2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "column" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TerminalColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AppTestTutorialColumnsPageQuery,
+  AppTestTutorialColumnsPageQueryVariables
 >;

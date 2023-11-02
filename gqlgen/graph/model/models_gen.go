@@ -13,6 +13,11 @@ type Column interface {
 	GetPlaceholder() *string
 }
 
+type Column2 interface {
+	IsColumn2()
+	GetColumnName() string
+}
+
 type TerminalElement interface {
 	IsTerminalElement()
 }
@@ -43,6 +48,11 @@ type ColumnWrapper struct {
 	Index  *int    `json:"index"`
 	Column Column  `json:"column"`
 	Name   *string `json:"name"`
+}
+
+type ColumnWrapper2 struct {
+	Column     Column2 `json:"column"`
+	ColumnName string  `json:"columnName"`
 }
 
 type DevToolsColumn struct {
@@ -181,8 +191,12 @@ func (TerminalColumn) IsColumn()                    {}
 func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalColumn2 struct {
-	Terminals []*Terminal2 `json:"terminals"`
+	ColumnName string       `json:"columnName"`
+	Terminals  []*Terminal2 `json:"terminals"`
 }
+
+func (TerminalColumn2) IsColumn2()                 {}
+func (this TerminalColumn2) GetColumnName() string { return this.ColumnName }
 
 type TerminalCommand struct {
 	BeforeExecution *bool   `json:"beforeExecution"`
@@ -216,7 +230,8 @@ type TerminalTooltip2 struct {
 }
 
 type TestObjs struct {
-	AppTestTerminalPage *TerminalColumn2 `json:"appTestTerminalPage"`
+	AppTestTerminalPage        *TerminalColumn2 `json:"appTestTerminalPage"`
+	AppTestTutorialColumnsPage *ColumnWrapper2  `json:"appTestTutorialColumnsPage"`
 }
 
 type YouTubeColumn struct {

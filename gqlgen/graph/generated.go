@@ -67,6 +67,11 @@ type ComplexityRoot struct {
 		Name   func(childComplexity int) int
 	}
 
+	ColumnWrapper2 struct {
+		Column     func(childComplexity int) int
+		ColumnName func(childComplexity int) int
+	}
+
 	DevToolsColumn struct {
 		Height      func(childComplexity int) int
 		Path        func(childComplexity int) int
@@ -201,7 +206,8 @@ type ComplexityRoot struct {
 	}
 
 	TerminalColumn2 struct {
-		Terminals func(childComplexity int) int
+		ColumnName func(childComplexity int) int
+		Terminals  func(childComplexity int) int
 	}
 
 	TerminalCommand struct {
@@ -232,7 +238,8 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		AppTestTerminalPage func(childComplexity int, step *int) int
+		AppTestTerminalPage        func(childComplexity int, step *int) int
+		AppTestTutorialColumnsPage func(childComplexity int) int
 	}
 
 	YouTubeColumn struct {
@@ -256,6 +263,7 @@ type SourceCodeResolver interface {
 }
 type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
+	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.ColumnWrapper2, error)
 }
 
 type executableSchema struct {
@@ -363,6 +371,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ColumnWrapper.Name(childComplexity), true
+
+	case "ColumnWrapper2.column":
+		if e.complexity.ColumnWrapper2.Column == nil {
+			break
+		}
+
+		return e.complexity.ColumnWrapper2.Column(childComplexity), true
+
+	case "ColumnWrapper2.columnName":
+		if e.complexity.ColumnWrapper2.ColumnName == nil {
+			break
+		}
+
+		return e.complexity.ColumnWrapper2.ColumnName(childComplexity), true
 
 	case "DevToolsColumn.height":
 		if e.complexity.DevToolsColumn.Height == nil {
@@ -906,6 +928,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalColumn.Terminal(childComplexity), true
 
+	case "TerminalColumn2.columnName":
+		if e.complexity.TerminalColumn2.ColumnName == nil {
+			break
+		}
+
+		return e.complexity.TerminalColumn2.ColumnName(childComplexity), true
+
 	case "TerminalColumn2.terminals":
 		if e.complexity.TerminalColumn2.Terminals == nil {
 			break
@@ -1008,6 +1037,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TestObjs.AppTestTerminalPage(childComplexity, args["step"].(*int)), true
+
+	case "TestObjs.appTestTutorialColumnsPage":
+		if e.complexity.TestObjs.AppTestTutorialColumnsPage == nil {
+			break
+		}
+
+		return e.complexity.TestObjs.AppTestTutorialColumnsPage(childComplexity), true
 
 	case "YouTubeColumn._placeholder":
 		if e.complexity.YouTubeColumn.Placeholder == nil {
@@ -1751,6 +1787,94 @@ func (ec *executionContext) _ColumnWrapper_name(ctx context.Context, field graph
 func (ec *executionContext) fieldContext_ColumnWrapper_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ColumnWrapper",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ColumnWrapper2_column(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper2_column(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Column, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Column2)
+	fc.Result = res
+	return ec.marshalNColumn22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn2(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ColumnWrapper2_column(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ColumnWrapper2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ColumnWrapper2_columnName(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ColumnName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ColumnWrapper2_columnName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ColumnWrapper2",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -4304,6 +4428,8 @@ func (ec *executionContext) fieldContext_Query__test(ctx context.Context, field 
 			switch field.Name {
 			case "appTestTerminalPage":
 				return ec.fieldContext_TestObjs_appTestTerminalPage(ctx, field)
+			case "appTestTutorialColumnsPage":
+				return ec.fieldContext_TestObjs_appTestTutorialColumnsPage(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TestObjs", field.Name)
 		},
@@ -5226,6 +5352,50 @@ func (ec *executionContext) fieldContext_TerminalColumn_terminal(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _TerminalColumn2_columnName(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalColumn2_columnName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ColumnName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalColumn2_columnName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalColumn2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TerminalColumn2_terminals(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn2) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TerminalColumn2_terminals(ctx, field)
 	if err != nil {
@@ -5826,6 +5996,8 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalPage(ctx contex
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "columnName":
+				return ec.fieldContext_TerminalColumn2_columnName(ctx, field)
 			case "terminals":
 				return ec.fieldContext_TerminalColumn2_terminals(ctx, field)
 			}
@@ -5842,6 +6014,53 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalPage(ctx contex
 	if fc.Args, err = ec.field_TestObjs_appTestTerminalPage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TestObjs_appTestTutorialColumnsPage(ctx context.Context, field graphql.CollectedField, obj *model.TestObjs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TestObjs_appTestTutorialColumnsPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.TestObjs().AppTestTutorialColumnsPage(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ColumnWrapper2)
+	fc.Result = res
+	return ec.marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TestObjs",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "column":
+				return ec.fieldContext_ColumnWrapper2_column(ctx, field)
+			case "columnName":
+				return ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper2", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -7901,6 +8120,22 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 	}
 }
 
+func (ec *executionContext) _Column2(ctx context.Context, sel ast.SelectionSet, obj model.Column2) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.TerminalColumn2:
+		return ec._TerminalColumn2(ctx, sel, &obj)
+	case *model.TerminalColumn2:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TerminalColumn2(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.SelectionSet, obj model.TerminalElement) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -8032,6 +8267,41 @@ func (ec *executionContext) _ColumnWrapper(ctx context.Context, sel ast.Selectio
 
 			out.Values[i] = ec._ColumnWrapper_name(ctx, field, obj)
 
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var columnWrapper2Implementors = []string{"ColumnWrapper2"}
+
+func (ec *executionContext) _ColumnWrapper2(ctx context.Context, sel ast.SelectionSet, obj *model.ColumnWrapper2) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, columnWrapper2Implementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ColumnWrapper2")
+		case "column":
+
+			out.Values[i] = ec._ColumnWrapper2_column(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "columnName":
+
+			out.Values[i] = ec._ColumnWrapper2_columnName(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8818,7 +9088,7 @@ func (ec *executionContext) _TerminalColumn(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var terminalColumn2Implementors = []string{"TerminalColumn2"}
+var terminalColumn2Implementors = []string{"TerminalColumn2", "Column2"}
 
 func (ec *executionContext) _TerminalColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalColumn2) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, terminalColumn2Implementors)
@@ -8828,6 +9098,13 @@ func (ec *executionContext) _TerminalColumn2(ctx context.Context, sel ast.Select
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TerminalColumn2")
+		case "columnName":
+
+			out.Values[i] = ec._TerminalColumn2_columnName(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "terminals":
 
 			out.Values[i] = ec._TerminalColumn2_terminals(ctx, field, obj)
@@ -9031,6 +9308,23 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._TestObjs_appTestTerminalPage(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "appTestTutorialColumnsPage":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TestObjs_appTestTutorialColumnsPage(ctx, field, obj)
 				return res
 			}
 
@@ -9442,6 +9736,16 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNColumn22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn2(ctx context.Context, sel ast.SelectionSet, v model.Column2) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Column2(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -9892,6 +10196,13 @@ func (ec *executionContext) marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋric
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v *model.ColumnWrapper2) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ColumnWrapper2(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper) graphql.Marshaler {

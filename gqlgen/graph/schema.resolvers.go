@@ -133,6 +133,17 @@ func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.T
 	return &m, nil
 }
 
+// AppTestTutorialColumnsPage is the resolver for the appTestTutorialColumnsPage field.
+func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.ColumnWrapper2, error) {
+	var m model.ColumnWrapper2
+	err := internal.JsonRead2("data/_test/appTestTutorialColumnsPage.json", &m)
+	if err != nil {
+		return nil, err
+	}
+
+	return &m, nil
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
