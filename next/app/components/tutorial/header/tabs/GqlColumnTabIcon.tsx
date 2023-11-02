@@ -1,4 +1,4 @@
-import { TerminalIcon } from "../../icons/TerminalIcon";
+import { TerminalIcon } from "../../../icons/TerminalIcon";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 

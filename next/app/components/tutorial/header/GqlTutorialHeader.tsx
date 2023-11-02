@@ -1,6 +1,6 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { ButtonToInitialStep } from "./ButtonToInitialStep";
-import { GqlColumnTabs } from "./GqlColumnTabs";
+import { ButtonToInitialStep } from "./buttons/ButtonToInitialStep";
+import { GqlColumnTabs } from "./tabs/GqlColumnTabs";
 import styles from "./GqlTutorialHeader.module.css";
 
 const fragmentDefinition = graphql(`
