@@ -81,6 +81,10 @@ type TerminalColumn2 implements Column2 {
 }
 
 ###################################################
+# Source Code types 2
+###################################################
+
+###################################################
 # Page state related object types
 ###################################################
 
@@ -224,6 +228,22 @@ type Terminal {
 # Source code related object types
 ###################################################
 
+# FileEdit types
+
+type MonacoEditOperation {
+  text: String!
+  range: MonacoEditRange
+}
+
+type MonacoEditRange {
+  startLineNumber: int!
+  startColumn: int!
+  endLineNumber: int!
+  endColumn: int!
+}
+
+# FileNode types
+
 enum FileNodeType {
   FILE
   DIRECTORY
@@ -238,6 +258,9 @@ type FileNode {
   isDeleted: Boolean
 }
 
+# OpenFile types
+
+# To be deprecated as Monaco Diff Editor will be used
 type FileHighlight {
   fromLine: Int
   toLine: Int
@@ -247,17 +270,23 @@ type OpenFile {
   filePath: String
   fileName: String
   content: String
+  oldContent: String
   isFullContent: Boolean
   language: String
+  # To be deprecated as Monaco Diff Editor will be used
   highlight: [FileHighlight]
   size: Float
+  edits: [MonacoEditOperation!]
 }
+
+# SourceCode type
 
 type SourceCode {
   step: String
   projectDir: String
   fileTree: [FileNode]
   isFoldFileTree: Boolean
+  # If you don't pass `filePath` argument, you get the default OpenFile for the step
   openFile(filePath: String): OpenFile
 }
 
