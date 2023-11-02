@@ -1,9 +1,0 @@
-.component {
-  display: flex;
-  height: 100%;
-  row-gap: 20px;
-}
-
-.column {
-  height: 100%;
-}
