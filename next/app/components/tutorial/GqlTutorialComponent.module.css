@@ -19,8 +19,16 @@
 
 .header {
   flex-grow: 0;
+
+  /* Place header on top of contents, to allow select tab's bottom *merge* with content's top */
+  /* z-index works without `position` property, as this is a flex child*/
+  z-index: 2;
 }
 
 .contents {
   flex-grow: 1;
+
+  /* Place header on top of contents, to allow select tab's bottom *merge* with content's top */
+  /* z-index works without `position` property, as this is a flex child*/
+  z-index: 1;
 }

@@ -7,4 +7,8 @@
   /* wrap settings */
   row-gap: 16px;
   flex-wrap: wrap;
+
+  /*  to allow select tab's bottom *merge* with content's top */
+  position: relative;
+  top: 1px;
 }
