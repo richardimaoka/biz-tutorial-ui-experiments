@@ -8,6 +8,9 @@ const fragmentDefinition = graphql(`
     columnName
     column {
       __typename # if you forget this, the resulting fragment will have __typename = undefined
+      #
+      # for each column type
+      #
       ... on TerminalColumn2 {
         ...GqlTerminalColumn
       }
@@ -22,9 +25,6 @@ interface Props {
 export function GqlColumnWrapper(props: Props): JSX.Element {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const column = fragment.column;
-  console.log("----------------------------------------------");
-  console.log(fragment);
-  console.log(fragment.column);
 
   if (!column.__typename) {
     throw new Error(
