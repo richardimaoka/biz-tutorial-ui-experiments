@@ -1,5 +1,5 @@
 import { TerminalEntryComponent } from "../entry/__TerminalEntryComponent";
-import styles from "./TerminalContents.module.css";
+import styles from "./__TerminalContents.module.css";
 import {
   TerminalTooltip,
   TerminalTooltipProps,

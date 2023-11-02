@@ -1,4 +1,4 @@
-import styles from "./TerminalContents.module.css";
+import styles from "./GqlTerminalContents.module.css";
 import { TerminalScrollIntoView } from "./TerminalScrollIntoView";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
