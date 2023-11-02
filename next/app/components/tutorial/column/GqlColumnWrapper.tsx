@@ -7,7 +7,8 @@ const fragmentDefinition = graphql(`
   fragment GqlColumnWrapper on ColumnWrapper2 {
     columnName
     column {
-      __typename # if you forget this, the resulting fragment will have __typename = undefined
+      # if you forget this, the resulting fragment will have __typename = undefined
+      __typename
       #
       # for each column type
       #

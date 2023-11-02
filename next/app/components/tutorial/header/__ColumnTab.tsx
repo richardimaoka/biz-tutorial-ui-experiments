@@ -3,7 +3,7 @@
 import styles from "./ColumnTab.module.css";
 import { useRouter } from "next/navigation";
 import { ColumnName } from "../definitions";
-import { ColumnTabIcon } from "./ColumnTabIcon";
+import { ColumnTabIcon } from "./__ColumnTabIcon";
 
 function displayName(name: ColumnName): string {
   switch (name) {

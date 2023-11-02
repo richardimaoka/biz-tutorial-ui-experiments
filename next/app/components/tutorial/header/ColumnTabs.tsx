@@ -1,5 +1,5 @@
 import styles from "./ColumnTabs.module.css";
-import { ColumnTab } from "./ColumnTab";
+import { ColumnTab } from "./__ColumnTab";
 import { ColumnName } from "../definitions";
 
 type Props = {

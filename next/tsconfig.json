@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/[tutorial]"
+    "app/[tutorial]",
+    "app/components/tutorial/header/GqlColumnTabIcon.tsx"
   ],
   "exclude": ["node_modules"]
 }
