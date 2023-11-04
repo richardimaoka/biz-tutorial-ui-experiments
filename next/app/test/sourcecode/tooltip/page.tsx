@@ -1,6 +1,4 @@
 import { promises as fs } from "fs";
-import { EditorSimple } from "@/app/components/sourcecode2/editor/EditorSimple";
-import { Inner } from "./Inner";
 import { EditorWithTooltip } from "@/app/components/sourcecode2/EditorWithTooltip";
 
 export default async function Page() {

@@ -13,7 +13,6 @@ import { useLanguageUpdate } from "./hooks/useLanguageUpdate";
 import { useTooltip } from "./hooks/useTooltip";
 import { ReactNode, useRef } from "react";
 import styles from "./EditorInnerOnlyDynamicallyImportable.module.css";
-import { useEditorBoundingBox } from "./hooks/useBoundingBox";
 
 interface Props {
   editorText: string;
@@ -40,13 +39,15 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   useEditSequence(editorInstance, props.editSequence);
 
   // Tooltip
-  const { boundingBoxRef, rect, resizeWindow } = useEditorBoundingBox();
-  useTooltip(editorInstance, rect, props.tooltip);
+  const { boundingBoxRef, resizeWindowCallback } = useTooltip(
+    editorInstance,
+    props.tooltip
+  );
 
   return (
     // Needs the outer <div> for bounding box size retrieval
     <div className={styles.component} ref={boundingBoxRef}>
-      <EditorBare onMount={onDidMount} onChange={resizeWindow} />
+      <EditorBare onMount={onDidMount} onChange={resizeWindowCallback} />
     </div>
   );
 }

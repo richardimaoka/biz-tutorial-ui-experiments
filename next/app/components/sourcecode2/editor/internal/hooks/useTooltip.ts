@@ -1,7 +1,14 @@
 import { editor } from "monaco-editor";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Root, createRoot } from "react-dom/client";
-import { EditorBoundingRect } from "./useBoundingBox";
+import { EditorBoundingRect, useEditorBoundingBox } from "./useBoundingBox";
 
 /**
  * Custm hook to handle Editor Tooltip
@@ -11,7 +18,6 @@ import { EditorBoundingRect } from "./useBoundingBox";
 export function useTooltip(
   // Shared monaco-editor's editor instance, possibly null
   editorInstance: editor.IStandaloneCodeEditor | null,
-  rect: EditorBoundingRect,
 
   // Prop to be passed from the parent component
   // `tooltip?` (i.e.) Optional parameter, because a React hook should handle
@@ -20,7 +26,14 @@ export function useTooltip(
     lineNumber: number;
     children: ReactNode;
   }
-) {
+): {
+  /**
+   * @return boundingBoxRef: bounding box <div> element
+   * @return resizeWindow  : callback to call when
+   */
+  boundingBoxRef: MutableRefObject<HTMLDivElement | null>;
+  resizeWindowCallback: () => void;
+} {
   // React root to set the return of React.createRoot(), and call rootRef.render()
   // See - https://react.dev/reference/react-dom/client/createRoot
   const rootRef = useRef<Root | null>(null);
@@ -29,6 +42,9 @@ export function useTooltip(
   const [contentWidgetContainer] = useState<HTMLDivElement>(() =>
     document.createElement("div")
   );
+
+  // Tooltip has dependency on the bounding box surrounding the monaco editor
+  const { boundingBoxRef, rect, resizeWindowCallback } = useEditorBoundingBox();
 
   const resizeContentWidget = useCallback(() => {
     contentWidgetContainer.style.width = `${rect.width}px`;
@@ -60,6 +76,8 @@ export function useTooltip(
   useEffect(() => {
     resizeContentWidget();
   }, [resizeContentWidget, rect]);
+
+  return { boundingBoxRef, resizeWindowCallback };
 }
 
 /**

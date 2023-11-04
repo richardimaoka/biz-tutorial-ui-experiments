@@ -15,9 +15,11 @@ interface Props {
 }
 
 export function EditorWithTooltip(props: Props) {
-  const lineHeight = 19;
-
-  //tooltip is passed and not-hidden, then render tooltip
+  /**
+   * If tooltip is passed and not-hidden, then render tooltip
+   * <EditorTooltip>, a server-side component needs to be called
+   * outiside <EditorSimple>, a
+   */
   const tooltip =
     props.tooltip && !props.tooltip.hidden
       ? {

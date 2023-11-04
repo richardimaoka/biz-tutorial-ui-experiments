@@ -9,9 +9,16 @@ function isReactNodeArray(children: any): children is string[] {
 type Props = JSX.IntrinsicElements["code"];
 
 export function CustomElementCode(props: Props) {
-  if (!isReactNodeArray(props.children)) return <code></code>; //empty code
-  //const className = props.className;
-  const codeString = props.children[0];
+  let codeString = "";
+  if (isReactNodeArray(props.children)) {
+    codeString = props.children[0];
+  } else if (typeof props.children === "string") {
+    codeString = props.children;
+  } else {
+    // empty code
+    return <code></code>;
+  }
+
   const multiLine = codeString.includes("\n");
 
   return multiLine ? (

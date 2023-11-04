@@ -20,12 +20,12 @@ export function useEditorBoundingBox(): {
    */
   boundingBoxRef: MutableRefObject<HTMLDivElement | null>;
   rect: EditorBoundingRect;
-  resizeWindow: () => void;
+  resizeWindowCallback: () => void;
 } {
   const [rect, setRect] = useState<EditorBoundingRect>({ width: 0, height: 0 });
   const boundingBoxRef = useRef<HTMLDivElement | null>(null);
 
-  const resizeWindow = useCallback(() => {
+  const resizeWindowCallback = useCallback(() => {
     if (boundingBoxRef.current) {
       setRect({
         height: boundingBoxRef.current.offsetHeight,
@@ -36,10 +36,10 @@ export function useEditorBoundingBox(): {
 
   useEffect(() => {
     if (window) {
-      window.addEventListener("resize", resizeWindow);
-      return () => window.removeEventListener("resize", resizeWindow);
+      window.addEventListener("resize", resizeWindowCallback);
+      return () => window.removeEventListener("resize", resizeWindowCallback);
     }
   });
 
-  return { boundingBoxRef, rect, resizeWindow };
+  return { boundingBoxRef, rect, resizeWindowCallback };
 }
