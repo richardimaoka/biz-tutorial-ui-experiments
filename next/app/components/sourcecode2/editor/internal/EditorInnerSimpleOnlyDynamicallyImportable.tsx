@@ -10,14 +10,21 @@ import { useEditSequence } from "./hooks/useEditSequence";
 import { useEditorInstance } from "./hooks/useEditorInstance";
 import { useEditorTextUpdate } from "./hooks/useEditorTextUpdate";
 import { useLanguageUpdate } from "./hooks/useLanguageUpdate";
+import { useTooltip } from "./hooks/useTooltip";
+import { ReactNode, useRef } from "react";
+import styles from "./EditorInnerOnlyDynamicallyImportable.module.css";
+import { useEditorBoundingBox } from "./hooks/useBoundingBox";
 
 interface Props {
   editorText: string;
   language: string;
-
   editSequence?: {
     edits: editor.IIdentifiedSingleEditOperation[];
     animate?: boolean;
+  };
+  tooltip?: {
+    lineNumber: number;
+    children: ReactNode;
   };
 }
 
@@ -25,11 +32,21 @@ interface Props {
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
 
+  // Basic editor text and its language
   useEditorTextUpdate(editorInstance, props.editorText);
-
   useLanguageUpdate(editorInstance, props.language);
 
+  // Edits
   useEditSequence(editorInstance, props.editSequence);
 
-  return <EditorBare onDidMount={onDidMount} />;
+  // Tooltip
+  const { boundingBoxRef } = useEditorBoundingBox();
+  useTooltip(editorInstance, props.tooltip);
+
+  return (
+    // Needs the outer <div> for bounding box size retrieval
+    <div className={styles.component} ref={boundingBoxRef}>
+      <EditorBare onDidMount={onDidMount} />
+    </div>
+  );
 }

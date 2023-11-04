@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
-import { EditorWithTooltip } from "@/app/components/sourcecode2/EditorWithTooltip";
+import { EditorSimple } from "@/app/components/sourcecode2/editor/EditorSimple";
+import { Inner } from "./Inner";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),
@@ -18,11 +19,13 @@ export default async function Page() {
 
   return (
     <div style={{ height: "80svh", maxWidth: "768px" }}>
-      <EditorWithTooltip
-        editorText={goSource}
-        language="go"
-        tooltip={{ markdownBody: mdContents, lineNumber: 5 }}
-      />
+      <Inner>
+        <EditorSimple
+          editorText={goSource}
+          language="go"
+          // tooltip={{ markdownBody: mdContents, lineNumber: 5 }}
+        />
+      </Inner>
     </div>
   );
 }

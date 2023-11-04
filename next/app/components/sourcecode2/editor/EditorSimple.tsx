@@ -10,6 +10,7 @@ const EditorInnerSimple = dynamic(
   }
 );
 import { editor } from "monaco-editor";
+import { EditorTooltip } from "../tooltip/EditorTooltip";
 
 interface Props {
   editorText: string;
@@ -18,14 +19,32 @@ interface Props {
     edits: editor.IIdentifiedSingleEditOperation[];
     animate?: boolean;
   };
+  tooltip?: {
+    lineNumber: number;
+    markdownBody: string;
+    hidden?: boolean;
+    offsetContent?: boolean;
+  };
 }
 
 export function EditorSimple(props: Props) {
+  // If tooltip is passed and not-hidden, then render it
+  const tooltip =
+    props.tooltip && !props.tooltip.hidden
+      ? {
+          lineNumber: props.tooltip.lineNumber,
+          children: (
+            <EditorTooltip markdownBody={props.tooltip?.markdownBody} />
+          ),
+        }
+      : undefined;
+
   return (
     <EditorInnerSimple
       editorText={props.editorText}
       language={props.language}
       editSequence={props.editSequence}
+      tooltip={tooltip}
     />
   );
 }
