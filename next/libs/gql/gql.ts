@@ -57,6 +57,10 @@ const documents = {
     types.FileNameTab_FragmentFragmentDoc,
   "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n":
     types.FileNameTabBar_FragmentFragmentDoc,
+  "\n  fragment GqlFileContentPane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n":
+    types.GqlFileContentPaneFragmentDoc,
+  "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n":
+    types.GqlSourceCodeEditorFragmentDoc,
   "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n  }\n":
     types.GqlFileNameTabBarFragmentDoc,
   "\n  fragment TerminalCurrentDirectory_Fragment on Terminal {\n    currentDirectory\n  }\n":
@@ -259,6 +263,18 @@ export function graphql(
 export function graphql(
   source: "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n",
 ): (typeof documents)["\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GqlFileContentPane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n",
+): (typeof documents)["\n  fragment GqlFileContentPane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n",
+): (typeof documents)["\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

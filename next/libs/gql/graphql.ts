@@ -583,6 +583,19 @@ export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
   };
 }) & { " $fragmentName"?: "FileNameTabBar_FragmentFragment" };
 
+export type GqlFileContentPaneFragment = ({ __typename: "OpenFile" } & {
+  " $fragmentRefs"?: {
+    GqlFileNameTabBarFragment: GqlFileNameTabBarFragment;
+    GqlSourceCodeEditorFragment: GqlSourceCodeEditorFragment;
+  };
+}) & { " $fragmentName"?: "GqlFileContentPaneFragment" };
+
+export type GqlSourceCodeEditorFragment = {
+  __typename: "OpenFile";
+  content?: string | null;
+  language?: string | null;
+} & { " $fragmentName"?: "GqlSourceCodeEditorFragment" };
+
 export type GqlFileNameTabBarFragment = {
   __typename: "OpenFile";
   fileName?: string | null;
@@ -4905,6 +4918,81 @@ export const GqlFileNameTabBarFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlFileNameTabBarFragment, unknown>;
+export const GqlSourceCodeEditorFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlSourceCodeEditorFragment, unknown>;
+export const GqlFileContentPaneFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileContentPane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileContentPaneFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [

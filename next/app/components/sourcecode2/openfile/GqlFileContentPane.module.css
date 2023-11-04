@@ -1,0 +1,11 @@
+.component {
+  margin-left: 24px;
+  background-color: #1e1e1e;
+
+  /*regardless of contents height, fill the given space*/
+  height: 100%;
+
+  /*.contents to fill only the remaining space, and enable .contents scroll*/
+  display: flex;
+  flex-direction: column;
+}

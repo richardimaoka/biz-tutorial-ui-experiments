@@ -1,5 +1,5 @@
 import styles from "./SourceCodeEditor.module.css";
-import { EditorTooltip } from "./tooltip/EditorTooltip";
+import { EditorTooltip } from "../tooltip/EditorTooltip";
 
 // To avoid an error `ReferenceError: navigator is not defined`, dynamic import with ssr false is needed.
 // This is because "monaco-editor" module uses browser-side `navigator` inside.
