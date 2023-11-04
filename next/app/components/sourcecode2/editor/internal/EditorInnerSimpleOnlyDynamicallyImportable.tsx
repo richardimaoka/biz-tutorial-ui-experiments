@@ -12,7 +12,7 @@ import { useEditorTextUpdate } from "./hooks/useEditorTextUpdate";
 import { useLanguageUpdate } from "./hooks/useLanguageUpdate";
 import { useTooltip } from "./hooks/useTooltip";
 import { ReactNode, useRef } from "react";
-import styles from "./EditorInnerOnlyDynamicallyImportable.module.css";
+import styles from "./EditorInnerSimpleOnlyDynamicallyImportable.module.css";
 
 interface Props {
   editorText: string;

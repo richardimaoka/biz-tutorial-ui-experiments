@@ -1,9 +1,8 @@
 "use client";
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
-import { EditorEditable } from "@/app/components/sourcecode2/editor/EditorEditable";
-import { Carousel } from "@/app/components/carousel/Carousel";
 import { useState } from "react";
+import { EditorSimple } from "@/app/components/sourcecode2/editor/EditorSimple";
 
 interface Props {
   original: string;
@@ -30,7 +29,7 @@ export function Interactive(props: Props) {
         />
       </div>
       <div style={{ height: "100%", display: showDiff ? "block" : "none" }}>
-        <EditorEditable editorText={props.modified} language={props.language} />
+        <EditorSimple editorText={props.modified} language={props.language} />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { EditorEditable } from "./editor/EditorEditable";
 import { EditorSimple } from "./editor/EditorSimple";
 import styles from "./EditorWithTooltip.module.css";
 import { EditorTooltip } from "./tooltip/EditorTooltip";
