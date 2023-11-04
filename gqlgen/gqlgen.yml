@@ -72,3 +72,5 @@ models:
         resolver: true
       appTestTutorialTutorialPage:
         resolver: true
+      appTestSourcecodeFilecontentPage:
+        resolver: true

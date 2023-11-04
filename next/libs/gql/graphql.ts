@@ -309,6 +309,7 @@ export type TerminalTooltipTiming2 = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
+  appTestSourcecodeFilecontentPage?: Maybe<OpenFile>;
   appTestTerminalPage?: Maybe<TerminalColumn2>;
   appTestTutorialColumnsPage?: Maybe<Page2>;
   appTestTutorialTutorialPage?: Maybe<Page2>;
@@ -858,6 +859,24 @@ export type PageQueryQuery = {
         };
       })
     | null;
+};
+
+export type AppTestSourcecodeFilecontentPageQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppTestSourcecodeFilecontentPageQuery = {
+  __typename: "Query";
+  _test?: {
+    __typename: "TestObjs";
+    appTestSourcecodeFilecontentPage?:
+      | ({ __typename: "OpenFile" } & {
+          " $fragmentRefs"?: {
+            GqlFileContentPaneFragment: GqlFileContentPaneFragment;
+          };
+        })
+      | null;
+  } | null;
 };
 
 export type AppTestTerminalPageQueryVariables = Exact<{
@@ -7423,6 +7442,99 @@ export const PageQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<PageQueryQuery, PageQueryQueryVariables>;
+export const AppTestSourcecodeFilecontentPageDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "appTestSourcecodeFilecontentPage" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "_test" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: {
+                    kind: "Name",
+                    value: "appTestSourcecodeFilecontentPage",
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlFileContentPane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileContentPane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AppTestSourcecodeFilecontentPageQuery,
+  AppTestSourcecodeFilecontentPageQueryVariables
+>;
 export const AppTestTerminalPageDocument = {
   kind: "Document",
   definitions: [

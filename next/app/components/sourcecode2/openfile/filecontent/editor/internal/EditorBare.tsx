@@ -34,7 +34,11 @@ export function EditorBare(props: Props) {
 
         // save width for mobile - folding displays small vertical bar
         folding: false,
-        lineNumbers: "off",
+        // lineNumbers: "off",
+        // lineNumbers: (n: number) => `${n}`.slice(-1),
+        lineNumbersMinChars: 0,
+
+        // lineDecorationsWidth: "10px",
         minimap: {
           enabled: false,
         },

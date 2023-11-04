@@ -155,6 +155,17 @@ func (r *testObjsResolver) AppTestTutorialTutorialPage(ctx context.Context, obj 
 	return &m, nil
 }
 
+// AppTestSourcecodeFilecontentPage is the resolver for the appTestSourcecodeFilecontentPage field.
+func (r *testObjsResolver) AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs) (*model.OpenFile, error) {
+	var m model.OpenFile
+	err := internal.JsonRead2("data/_test/appTestSourcecodeFilecontentPage.json", &m)
+	if err != nil {
+		return nil, err
+	}
+
+	return &m, nil
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 

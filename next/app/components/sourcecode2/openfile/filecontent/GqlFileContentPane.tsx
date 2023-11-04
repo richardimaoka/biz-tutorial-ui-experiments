@@ -1,4 +1,4 @@
-import styles from "./style.module.css";
+import styles from "./GqlFileContentPane.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { GqlFileNameTabBar } from "../filetree/header/tab/GqlFileNameTabBar";
