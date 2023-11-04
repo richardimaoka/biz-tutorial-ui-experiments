@@ -1,4 +1,4 @@
-import { GqlFileContentPane } from "@/app/components/sourcecode2/openfile/filecontent/GqlFileContentPane";
+import { GqlOpenFile } from "@/app/components/sourcecode2/openfile/GqlOpenFile";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 import Link from "next/link";
@@ -7,7 +7,7 @@ const queryDefinition = graphql(`
   query appTestSourcecodeFilecontentPage {
     _test {
       appTestSourcecodeFilecontentPage {
-        ...GqlFileContentPane
+        ...GqlOpenFile
       }
     }
   }
@@ -35,7 +35,7 @@ export default async function Page({ searchParams }: PageParams) {
   return (
     <div style={{ height: "95svh" }}>
       <Link href={`/test/terminal?step=${nextStep}`}>next</Link>
-      <GqlFileContentPane fragment={fragment} />
+      <GqlOpenFile fragment={fragment} />
     </div>
   );
 }
