@@ -24,6 +24,7 @@ export function useTooltip(
   tooltip?: {
     lineNumber: number;
     children: ReactNode;
+    canRender: boolean;
   }
 ): {
   /**
@@ -51,7 +52,8 @@ export function useTooltip(
 
   // Render content widget
   useEffect(() => {
-    if (editorInstance && tooltip) {
+    console.log("useTooltip useEffect", tooltip);
+    if (editorInstance && tooltip?.canRender) {
       // To avoid the following warning, you need to check if createRoot() is already called.
       //   > Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
       if (!rootRef.current) {
@@ -69,7 +71,7 @@ export function useTooltip(
         editorInstance.removeContentWidget(contentWidget);
       };
     }
-  }, [contentWidgetContainer, editorInstance, tooltip]);
+  }, [contentWidgetContainer, editorInstance, tooltip, tooltip?.canRender]);
 
   // Resize content widget upon rect change
   useEffect(() => {

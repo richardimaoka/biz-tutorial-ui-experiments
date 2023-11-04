@@ -31,17 +31,33 @@ interface Props {
 export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const [editorInstance, onDidMount] = useEditorInstance();
 
-  // Basic editor text and its language
+  /**
+   * Basic editor text and its language
+   */
   useEditorTextUpdate(editorInstance, props.editorText);
   useLanguageUpdate(editorInstance, props.language);
 
-  // Edits
-  useEditSequence(editorInstance, props.editSequence);
+  /**
+   * Edits
+   */
+  const { isEditCompleted } = useEditSequence(
+    editorInstance,
+    props.editSequence
+  );
 
-  // Tooltip
+  /**
+   * Tooltip
+   */
+  const canRender =
+    isEditCompleted || // if edits are already completed, then ok to render tooltip
+    !props.editSequence || // if no edits, ok to render tooltip
+    props.editSequence.edits.length === 0; // if no edits, ok to render tooltip
+  const tooltip = props.tooltip
+    ? { ...props.tooltip, canRender: canRender }
+    : undefined;
   const { boundingBoxRef, resizeWindowCallback } = useTooltip(
     editorInstance,
-    props.tooltip
+    tooltip
   );
 
   return (

@@ -1,5 +1,5 @@
 import { editor } from "monaco-editor";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Custm hook to handle @param `editSequence` props update
@@ -20,6 +20,13 @@ export function useEditSequence(
   // useRef, since monaco editor is separate from React state.
   const isEditsMade = useRef(false);
 
+  // Similar to `isEditMade` flag above, but this is for the caller, to act on edit completion
+  const [isEditCompleted, setEditCompleted] = useState(false);
+
+  function markCompletion() {
+    setEditCompleted(true);
+  }
+
   // handle editSequence update, even when it becomes undefined
   useEffect(() => {
     if (editorInstance) {
@@ -39,9 +46,9 @@ export function useEditSequence(
 
         // execute edits
         if (editSequence.skipAnimation) {
-          executeEditsStatic(editorInstance, edits);
+          executeEditsStatic(editorInstance, edits, markCompletion);
         } else {
-          executeEditsAnimation(editorInstance, edits);
+          executeEditsAnimation(editorInstance, edits, markCompletion);
         }
 
         // save the edit-made flag
@@ -61,6 +68,13 @@ export function useEditSequence(
       }
     }
   }, [editorInstance, editSequence]);
+
+  useEffect(() => {
+    // Whenever edit sequence is updated, set the completed flag as false
+    setEditCompleted(false);
+  }, [editSequence]);
+
+  return { isEditCompleted };
 }
 
 function executeEditCallback(
@@ -77,7 +91,8 @@ function executeEditCallback(
 
 function executeEditsStatic(
   editorInstance: editor.IStandaloneCodeEditor,
-  edits: editor.IIdentifiedSingleEditOperation[]
+  edits: editor.IIdentifiedSingleEditOperation[],
+  markCompletion: () => void
 ) {
   for (const e of edits) {
     // for-loop is necessary - cannnot pass-in the whole `edits` to executeEdits()
@@ -91,11 +106,13 @@ function executeEditsStatic(
       }
     });
   }
+  markCompletion();
 }
 
 function executeEditsAnimation(
   editorInstance: editor.IStandaloneCodeEditor,
-  edits: editor.IIdentifiedSingleEditOperation[]
+  edits: editor.IIdentifiedSingleEditOperation[],
+  markCompletion: () => void
 ) {
   const setTimeoutInterval = 20; // milliseconds
 
@@ -110,6 +127,8 @@ function executeEditsAnimation(
 
     if (at < edits.length - 1) {
       window.setTimeout(() => executeAtomicEdit(at + 1), setTimeoutInterval);
+    } else {
+      markCompletion();
     }
   }
 
