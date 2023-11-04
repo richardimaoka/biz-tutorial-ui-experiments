@@ -1,6 +1,5 @@
 import React from "react";
 import { promises as fs } from "fs";
-import { EditorSimple } from "@/app/components/sourcecode2/editor/EditorSimple";
 import { editor } from "monaco-editor";
 import { Interactive } from "./Interactive";
 

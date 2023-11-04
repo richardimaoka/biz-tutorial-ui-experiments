@@ -10,10 +10,15 @@ const EditorInnerSimple = dynamic(
     ssr: false,
   }
 );
+import { editor } from "monaco-editor";
 
 interface Props {
   editorText: string;
   language: string;
+  editSequence?: {
+    edits: editor.IIdentifiedSingleEditOperation[];
+    animate?: boolean;
+  };
   tooltip?: {
     lineNumber: number;
     markdownBody: string;
@@ -43,6 +48,7 @@ export function EditorWithTooltip(props: Props) {
       <EditorInnerSimple
         editorText={props.editorText}
         language={props.language}
+        editSequence={props.editSequence}
         tooltip={tooltip}
       />
     </div>
