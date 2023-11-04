@@ -71,12 +71,12 @@ type FileHighlight struct {
 }
 
 type FileNode struct {
-	NodeType  *FileNodeType `json:"nodeType"`
-	Name      *string       `json:"name"`
-	FilePath  *string       `json:"filePath"`
-	Offset    *int          `json:"offset"`
-	IsUpdated *bool         `json:"isUpdated"`
-	IsDeleted *bool         `json:"isDeleted"`
+	NodeType  FileNodeType `json:"nodeType"`
+	Name      *string      `json:"name"`
+	FilePath  string       `json:"filePath"`
+	Offset    *int         `json:"offset"`
+	IsUpdated *bool        `json:"isUpdated"`
+	IsDeleted *bool        `json:"isDeleted"`
 }
 
 type ImageCentered struct {

@@ -1,8 +1,7 @@
-import { source_code_pro } from "@/app/components/fonts/fonts";
 import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { GqlFileNameTabBar } from "./tab/GqlFileNameTabBar";
+import { GqlFileNameTabBar } from "../filetree/header/tab/GqlFileNameTabBar";
 import { GqlSourceCodeEditor } from "./editor/GqlSourceCodeEditor";
 
 const fragmentDefinition = graphql(`

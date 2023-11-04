@@ -159,8 +159,8 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 	isDeleted := s.isDeleted
 
 	return &model.FileNode{
-		NodeType:  &fileType,
-		FilePath:  &filePath,
+		NodeType:  fileType,
+		FilePath:  filePath,
 		Name:      &fileName,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,

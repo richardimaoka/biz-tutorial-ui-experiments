@@ -2250,11 +2250,14 @@ func (ec *executionContext) _FileNode_nodeType(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.FileNodeType)
+	res := resTmp.(model.FileNodeType)
 	fc.Result = res
-	return ec.marshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx, field.Selections, res)
+	return ec.marshalNFileNodeType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FileNode_nodeType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2332,11 +2335,14 @@ func (ec *executionContext) _FileNode_filePath(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FileNode_filePath(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8991,6 +8997,9 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._FileNode_nodeType(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "name":
 
 			out.Values[i] = ec._FileNode_name(ctx, field, obj)
@@ -8999,6 +9008,9 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._FileNode_filePath(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "offset":
 
 			out.Values[i] = ec._FileNode_offset(ctx, field, obj)
@@ -10481,6 +10493,16 @@ func (ec *executionContext) marshalNColumn22githubᚗcomᚋrichardimaokaᚋbiz�
 	return ec._Column2(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNFileNodeType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, v interface{}) (model.FileNodeType, error) {
+	var res model.FileNodeType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFileNodeType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, sel ast.SelectionSet, v model.FileNodeType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -11146,22 +11168,6 @@ func (ec *executionContext) marshalOFileNode2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._FileNode(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, v interface{}) (*model.FileNodeType, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.FileNodeType)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOFileNodeType2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, sel ast.SelectionSet, v *model.FileNodeType) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {

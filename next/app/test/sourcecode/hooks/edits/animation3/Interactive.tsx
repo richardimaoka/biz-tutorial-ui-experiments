@@ -1,7 +1,7 @@
 "use client";
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
-import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/editor/SourceCodeEditor";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/filecontent/editor/SourceCodeEditor";
 import { editor } from "monaco-editor";
 import { useState } from "react";
 

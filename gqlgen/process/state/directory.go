@@ -221,8 +221,8 @@ func (s *Directory) ToGraphQLFileNode() *model.FileNode {
 	falseValue := false
 
 	return &model.FileNode{
-		NodeType:  &dirType,
-		FilePath:  &dirPath,
+		NodeType:  dirType,
+		FilePath:  dirPath,
 		Name:      &name,
 		Offset:    &offset,
 		IsUpdated: &falseValue, //git doesn't track standalone dir, so changes are always in contained files

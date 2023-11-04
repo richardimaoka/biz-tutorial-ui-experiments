@@ -250,9 +250,9 @@ enum FileNodeType {
 }
 
 type FileNode {
-  nodeType: FileNodeType
+  nodeType: FileNodeType!
   name: String
-  filePath: String
+  filePath: String!
   offset: Int
   isUpdated: Boolean
   isDeleted: Boolean

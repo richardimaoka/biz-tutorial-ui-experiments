@@ -86,11 +86,11 @@ export type FileHighlight = {
 
 export type FileNode = {
   __typename: "FileNode";
-  filePath?: Maybe<Scalars["String"]["output"]>;
+  filePath: Scalars["String"]["output"];
   isDeleted?: Maybe<Scalars["Boolean"]["output"]>;
   isUpdated?: Maybe<Scalars["Boolean"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
-  nodeType?: Maybe<FileNodeType>;
+  nodeType: FileNodeType;
   offset?: Maybe<Scalars["Int"]["output"]>;
 };
 
@@ -511,9 +511,9 @@ export type SourceCodeColumn_FragmentFragment = {
 
 export type FileNodeComponent_FragmentFragment = ({
   __typename: "FileNode";
-  nodeType?: FileNodeType | null;
+  nodeType: FileNodeType;
   name?: string | null;
-  filePath?: string | null;
+  filePath: string;
   offset?: number | null;
   isUpdated?: boolean | null;
 } & {
@@ -524,13 +524,13 @@ export type FileNodeComponent_FragmentFragment = ({
 
 export type FileNodeIcon_FragmentFragment = {
   __typename: "FileNode";
-  nodeType?: FileNodeType | null;
+  nodeType: FileNodeType;
 } & { " $fragmentName"?: "FileNodeIcon_FragmentFragment" };
 
 export type FileTreeComponent_FragmentFragment = {
   __typename: "SourceCode";
   fileTree?: Array<
-    | ({ __typename: "FileNode"; filePath?: string | null } & {
+    | ({ __typename: "FileNode"; filePath: string } & {
         " $fragmentRefs"?: {
           FileNodeComponent_FragmentFragment: FileNodeComponent_FragmentFragment;
         };
@@ -596,10 +596,53 @@ export type GqlSourceCodeEditorFragment = {
   language?: string | null;
 } & { " $fragmentName"?: "GqlSourceCodeEditorFragment" };
 
+export type GqlFileTreePaneFragment = ({
+  __typename: "SourceCode";
+  isFoldFileTree?: boolean | null;
+} & {
+  " $fragmentRefs"?: {
+    GqlFileTreeHeaderFragment: GqlFileTreeHeaderFragment;
+    GqlFileTreeComponentFragment: GqlFileTreeComponentFragment;
+  };
+}) & { " $fragmentName"?: "GqlFileTreePaneFragment" };
+
+export type GqlFileNodeComponentFragment = ({
+  __typename: "FileNode";
+  nodeType: FileNodeType;
+  name?: string | null;
+  filePath: string;
+  offset?: number | null;
+  isUpdated?: boolean | null;
+} & {
+  " $fragmentRefs"?: { GqlFileNodeIconFragment: GqlFileNodeIconFragment };
+}) & { " $fragmentName"?: "GqlFileNodeComponentFragment" };
+
+export type GqlFileNodeIconFragment = {
+  __typename: "FileNode";
+  nodeType: FileNodeType;
+} & { " $fragmentName"?: "GqlFileNodeIconFragment" };
+
+export type GqlFileTreeHeaderFragment = {
+  __typename: "SourceCode";
+  projectDir?: string | null;
+} & { " $fragmentName"?: "GqlFileTreeHeaderFragment" };
+
 export type GqlFileNameTabBarFragment = {
   __typename: "OpenFile";
   fileName?: string | null;
 } & { " $fragmentName"?: "GqlFileNameTabBarFragment" };
+
+export type GqlFileTreeComponentFragment = {
+  __typename: "SourceCode";
+  fileTree?: Array<
+    | ({ __typename: "FileNode"; filePath: string } & {
+        " $fragmentRefs"?: {
+          GqlFileNodeComponentFragment: GqlFileNodeComponentFragment;
+        };
+      })
+    | null
+  > | null;
+} & { " $fragmentName"?: "GqlFileTreeComponentFragment" };
 
 export type TerminalCurrentDirectory_FragmentFragment = {
   __typename: "Terminal";
@@ -4993,6 +5036,257 @@ export const GqlFileContentPaneFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlFileContentPaneFragment, unknown>;
+export const GqlFileTreeHeaderFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreeHeaderFragment, unknown>;
+export const GqlFileNodeIconFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNodeIconFragment, unknown>;
+export const GqlFileNodeComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNodeComponentFragment, unknown>;
+export const GqlFileTreeComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreeComponentFragment, unknown>;
+export const GqlFileTreePaneFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreePaneFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [

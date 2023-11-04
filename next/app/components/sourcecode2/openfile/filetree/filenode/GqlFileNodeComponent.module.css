@@ -1,0 +1,14 @@
+.filenode {
+  display: flex;
+  gap: 4px;
+  color: white;
+  padding: 3px 8px;
+}
+
+.filenode:hover {
+  background-color: #748d2e;
+}
+
+.filenode.updated {
+  background-color: #748d2e;
+}

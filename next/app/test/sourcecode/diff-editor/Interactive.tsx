@@ -2,7 +2,7 @@
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
 import { useState } from "react";
-import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/editor/SourceCodeEditor";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/filecontent/editor/SourceCodeEditor";
 
 interface Props {
   original: string;

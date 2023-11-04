@@ -1,0 +1,4 @@
+.component {
+  /* flex parent = .pane */
+  flex-grow: 1; /*grow in column direction*/
+}

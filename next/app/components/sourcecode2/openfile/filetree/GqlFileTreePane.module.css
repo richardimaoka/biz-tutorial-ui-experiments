@@ -1,0 +1,24 @@
+.pane {
+  height: 100svh;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-sourcecode-surface-filetree);
+
+  /* overlay */
+  position: absolute;
+  z-index: 100;
+
+  /* flex child = .header, .tree */
+}
+
+.pane.expanded {
+  width: fit-content;
+  max-width: 300px;
+  box-shadow: 4px 0px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.pane.folded {
+  width: 24px; /* (icon 16px) + 2x(padding 4px) */
+}

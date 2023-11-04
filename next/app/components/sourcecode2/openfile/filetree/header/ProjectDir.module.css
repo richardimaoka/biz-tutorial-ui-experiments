@@ -1,0 +1,9 @@
+.projectdir {
+  color: var(--color-primary-text);
+  font-size: 12px;
+
+  /* ellipsis settings*/
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

@@ -131,9 +131,9 @@ func (n *FileProcessorNode) ToGraphQLNode() *model.FileNode {
 	name := n.Name()
 
 	return &model.FileNode{
-		NodeType:  &nodeType,
+		NodeType:  nodeType,
 		Name:      &name,
-		FilePath:  &filePath,
+		FilePath:  filePath,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}
@@ -147,9 +147,9 @@ func (n *DirectoryProcessorNode) ToGraphQLNode() *model.FileNode {
 	name := n.Name()
 
 	return &model.FileNode{
-		NodeType:  &nodeType,
+		NodeType:  nodeType,
 		Name:      &name,
-		FilePath:  &filePath,
+		FilePath:  filePath,
 		Offset:    &offset,
 		IsUpdated: &isUpdated,
 	}

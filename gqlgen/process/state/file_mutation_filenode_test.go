@@ -57,10 +57,10 @@ func TestFileNodeMutation2(t *testing.T) {
 
 	// ... mutation to the materialized model ...
 	*gqlModel.Name = "package-mudated.json"
-	*gqlModel.FilePath = "next/package-mudated.json"
+	gqlModel.FilePath = "next/package-mudated.json"
 	*gqlModel.Offset = 5
 	*gqlModel.IsUpdated = !*gqlModel.IsUpdated
-	*gqlModel.NodeType = model.FileNodeTypeDirectory
+	gqlModel.NodeType = model.FileNodeTypeDirectory
 
 	// ... has NO effect on a RE-materialized GraphQL model
 	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLFileNode())

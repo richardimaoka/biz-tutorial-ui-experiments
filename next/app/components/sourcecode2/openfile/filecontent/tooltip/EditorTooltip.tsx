@@ -1,5 +1,5 @@
 import styles from "./EditorTooltip.module.css";
-import { MarkdownDefaultStyle } from "../../../markdown2/server-component/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../../../../markdown2/server-component/MarkdownDefaultStyle";
 
 interface Props {
   markdownBody: string;

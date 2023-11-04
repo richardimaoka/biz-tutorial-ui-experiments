@@ -1,0 +1,17 @@
+.header {
+  /* flex parent = .pane */
+
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-menu);
+}
+
+.header.folded {
+  background-color: var(--color-sourcecode-menu-unfocused);
+  padding: 5px 4px;
+}
+
+.header.expanded {
+  background-color: var(--color-menu);
+  padding: 5px 8px;
+}
