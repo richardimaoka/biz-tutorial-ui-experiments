@@ -1,7 +1,7 @@
 "use client";
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
-import { EditorWithTooltip } from "@/app/components/sourcecode2/editor/EditorWithTooltip";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/editor/SourceCodeEditor";
 import { editor } from "monaco-editor";
 import { useState } from "react";
 
@@ -54,7 +54,7 @@ export function Interactive(props: Props) {
         />
       </div>
       <div style={{ height: "100%", display: showDiff ? "none" : "block" }}>
-        <EditorWithTooltip
+        <SourceCodeEditor
           editorText={editorText}
           language={"typescript"}
           editSequence={editsSeq}

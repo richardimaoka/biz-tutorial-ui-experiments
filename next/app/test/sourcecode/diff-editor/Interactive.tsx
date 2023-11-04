@@ -2,7 +2,7 @@
 
 import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
 import { useState } from "react";
-import { EditorWithTooltip } from "@/app/components/sourcecode2/editor/EditorWithTooltip";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/editor/SourceCodeEditor";
 
 interface Props {
   original: string;
@@ -29,7 +29,7 @@ export function Interactive(props: Props) {
         />
       </div>
       <div style={{ height: "100%", display: showDiff ? "block" : "none" }}>
-        <EditorWithTooltip
+        <SourceCodeEditor
           editorText={props.modified}
           language={props.language}
         />
