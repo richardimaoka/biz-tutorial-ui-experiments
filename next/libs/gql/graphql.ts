@@ -583,6 +583,11 @@ export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
   };
 }) & { " $fragmentName"?: "FileNameTabBar_FragmentFragment" };
 
+export type GqlFileNameTabBarFragment = {
+  __typename: "OpenFile";
+  fileName?: string | null;
+} & { " $fragmentName"?: "GqlFileNameTabBarFragment" };
+
 export type TerminalCurrentDirectory_FragmentFragment = {
   __typename: "Terminal";
   currentDirectory?: string | null;
@@ -4881,6 +4886,25 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
+export const GqlFileNameTabBarFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNameTabBarFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [

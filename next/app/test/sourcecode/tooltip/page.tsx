@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { SourceCodeEditor } from "@/app/components/sourcecode2/editor/SourceCodeEditor";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/editor/SourceCodeEditor";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),

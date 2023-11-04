@@ -1,6 +1,6 @@
 "use client";
 
-import { SourceCodeEditor } from "@/app/components/sourcecode2/editor/SourceCodeEditor";
+import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/editor/SourceCodeEditor";
 import { editor } from "monaco-editor";
 import { useState } from "react";
 

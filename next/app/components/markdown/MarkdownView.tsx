@@ -9,6 +9,7 @@ import { unified } from "unified";
 import styles from "./style.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import * as prod from "react/jsx-runtime";
 
 const fragmentDefinition = graphql(`
   fragment MarkdownFragment on Markdown {

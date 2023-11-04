@@ -1,0 +1,7 @@
+.component {
+  width: fit-content;
+  font-size: 14px;
+  padding: 4px;
+  background-color: var(--color-sourcecode-surface-tab);
+  color: var(--color-primary-text);
+}

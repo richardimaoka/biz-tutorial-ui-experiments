@@ -6,6 +6,7 @@ import rehypeReact, { Components } from "rehype-react";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
+import * as prod from "react/jsx-runtime";
 
 interface Props {
   markdownBody: string;
