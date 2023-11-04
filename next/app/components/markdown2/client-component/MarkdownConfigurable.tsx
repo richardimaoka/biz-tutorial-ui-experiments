@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import rehypeReact from "rehype-react";
-import { ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
+import rehypeReact, { Components } from "rehype-react";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
@@ -11,21 +10,26 @@ import { unified } from "unified";
 interface Props {
   markdownBody: string;
   className?: string;
-  customComponents?: ComponentsWithoutNodeOptions["components"];
+  customComponents?: Partial<Components>;
   onRenderComplete?: () => void;
 }
 
+// @ts-expect-error: the react types are missing.
+const production = { Fragment: prod.Fragment, jsx: prod.jsx, jsxs: prod.jsxs };
+
 async function MarkdownInner({
   markdownBody,
+  customComponents,
 }: {
   markdownBody: string;
+  customComponents?: Partial<Components>;
 }): Promise<JSX.Element> {
   const file = await unified()
     .use(remarkParse)
     .use(remarkRehype)
     .use(rehypeReact, {
-      createElement: React.createElement,
-      Fragment: React.Fragment,
+      ...production,
+      components: customComponents,
     })
     .process(markdownBody);
 

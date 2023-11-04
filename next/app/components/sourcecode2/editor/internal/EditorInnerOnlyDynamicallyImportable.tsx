@@ -163,7 +163,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   return (
     <div className={styles.component} ref={boundingBoxRef}>
       <EditorBare
-        onDidMount={onDidMount}
+        onMount={onDidMount}
         onChange={onChange}
         lineHeight={props.lineHeight}
       />

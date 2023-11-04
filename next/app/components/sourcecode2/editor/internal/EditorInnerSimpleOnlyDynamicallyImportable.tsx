@@ -40,13 +40,21 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   useEditSequence(editorInstance, props.editSequence);
 
   // Tooltip
-  const { boundingBoxRef } = useEditorBoundingBox();
-  useTooltip(editorInstance, props.tooltip);
+  const { boundingBoxRef, rect } = useEditorBoundingBox();
+  const { resizeContentWidget } = useTooltip(editorInstance, props.tooltip);
 
   return (
     // Needs the outer <div> for bounding box size retrieval
     <div className={styles.component} ref={boundingBoxRef}>
-      <EditorBare onDidMount={onDidMount} />
+      <EditorBare
+        onMount={onDidMount}
+        onChange={() => {
+          console.log("onchange is called, rect = ", rect);
+          if (rect.width > 0) {
+            resizeContentWidget(rect.width);
+          }
+        }}
+      />
     </div>
   );
 }

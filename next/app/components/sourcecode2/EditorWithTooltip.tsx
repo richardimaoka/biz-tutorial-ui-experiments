@@ -1,4 +1,4 @@
-import { EditorEditable } from "./editor/EditorEditable";
+import { EditorSimple } from "./editor/EditorSimple";
 import styles from "./EditorWithTooltip.module.css";
 import { EditorTooltip } from "./tooltip/EditorTooltip";
 
@@ -29,7 +29,7 @@ export function EditorWithTooltip(props: Props) {
 
   return (
     <div className={styles.component}>
-      <EditorEditable
+      <EditorSimple
         editorText={props.editorText}
         language={props.language}
         tooltip={tooltip}

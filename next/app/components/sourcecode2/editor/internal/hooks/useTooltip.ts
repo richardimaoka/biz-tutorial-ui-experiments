@@ -50,6 +50,7 @@ export function useTooltip(
 
   const resizeContentWidget = useCallback(
     (boundingBoxWidth: number) => {
+      console.log("resizeContentWidget  called width = ", boundingBoxWidth);
       contentWidgetContainer.style.width = `${boundingBoxWidth}px`;
     },
     [contentWidgetContainer]

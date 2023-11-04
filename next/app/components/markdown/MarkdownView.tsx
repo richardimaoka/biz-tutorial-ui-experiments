@@ -17,14 +17,14 @@ const fragmentDefinition = graphql(`
   }
 `);
 
+// @ts-expect-error: the react types are missing.
+const production = { Fragment: prod.Fragment, jsx: prod.jsx, jsxs: prod.jsxs };
+
 const Markdown = async ({ input }: { input: string }): Promise<JSX.Element> => {
   const file = await unified()
     .use(remarkParse)
     .use(remarkRehype)
-    .use(rehypeReact, {
-      createElement: React.createElement,
-      Fragment: React.Fragment,
-    })
+    .use(rehypeReact, production)
     .process(input);
 
   return file.result;

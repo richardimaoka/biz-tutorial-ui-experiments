@@ -8,7 +8,7 @@ function isReactNodeArray(children: any): children is string[] {
 
 type Props = JSX.IntrinsicElements["code"];
 
-export async function CustomElementCode(props: Props) {
+export function CustomElementCode(props: Props) {
   if (!isReactNodeArray(props.children)) return <code></code>; //empty code
   //const className = props.className;
   const codeString = props.children[0];

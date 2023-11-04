@@ -3,14 +3,19 @@
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 
 interface Props {
-  // onDidMount: pass-in a callback like below to manipulate editor instance
+  // onMount: pass-in a callback like below to manipulate editor instance
   //
-  //   function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
-  //     editorRef.current = editorInstance;
-  //   }
-  onDidMount?: OnMount;
+  //  function handleEditorDidMount(editorInstance: editor.IStandaloneCodeEditor) {
+  //    editorRef.current = editorInstance;
+  //  }
+  //
+  //  https://github.com/suren-atoyan/monaco-react#props
+  //  An event is emitted when the editor is mounted. It gets the editor instance as a first argument and the monaco instance as a second
+  onMount?: OnMount;
 
-  // onChange: this is also called when the first rendering is finisehd
+  // onChange: this is called on model change, as well as when first rendering is finisehd
+  //   https://github.com/suren-atoyan/monaco-react#props
+  //   An event is emitted when the content of the current model is changed
   onChange?: OnChange;
 
   lineHeight?: number;
@@ -42,7 +47,7 @@ export function EditorBare(props: Props) {
 
         lineHeight: lineHeight,
       }}
-      onMount={props.onDidMount}
+      onMount={props.onMount}
       onChange={props.onChange}
     />
   );
