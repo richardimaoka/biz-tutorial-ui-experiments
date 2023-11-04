@@ -19,7 +19,7 @@ interface Props {
   language: string;
   editSequence?: {
     edits: editor.IIdentifiedSingleEditOperation[];
-    animate?: boolean;
+    skipAnimation?: boolean;
   };
   tooltip?: {
     lineNumber: number;

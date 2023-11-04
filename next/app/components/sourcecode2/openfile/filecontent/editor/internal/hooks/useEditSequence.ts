@@ -13,7 +13,7 @@ export function useEditSequence(
   // Prop to be passed from the parent component
   editSequence?: {
     edits: editor.IIdentifiedSingleEditOperation[];
-    animate?: boolean;
+    skipAnimation?: boolean;
   }
 ) {
   // Save the edit-made flag to clear previous edits, upon editSequence change
@@ -38,10 +38,10 @@ export function useEditSequence(
         }
 
         // execute edits
-        if (editSequence?.animate) {
-          executeEditsAnimation(editorInstance, edits);
+        if (editSequence.skipAnimation) {
+          executeEditsStatic(editorInstance, edits);
         } else {
-          executeEditsOneshot(editorInstance, edits);
+          executeEditsAnimation(editorInstance, edits);
         }
 
         // save the edit-made flag
@@ -75,17 +75,22 @@ function executeEditCallback(
   }
 }
 
-function executeEditsOneshot(
+function executeEditsStatic(
   editorInstance: editor.IStandaloneCodeEditor,
   edits: editor.IIdentifiedSingleEditOperation[]
 ) {
-  executeEditCallback(editorInstance, () => {
-    const result = editorInstance.executeEdits("", edits);
-    if (!result) {
-      // TODO: throw error to trigger error.tsx
-      console.log("executeEdits for monaco editor failed!");
-    }
-  });
+  for (const e of edits) {
+    // for-loop is necessary - cannnot pass-in the whole `edits` to executeEdits()
+    // in one-shot, because that could cause the below error:
+    //   Error: Overlapping ranges are not allowed!
+    executeEditCallback(editorInstance, () => {
+      const result = editorInstance.executeEdits("", [e]);
+      if (!result) {
+        // TODO: throw error to trigger error.tsx
+        console.log("executeEdits for monaco editor failed!");
+      }
+    });
+  }
 }
 
 function executeEditsAnimation(

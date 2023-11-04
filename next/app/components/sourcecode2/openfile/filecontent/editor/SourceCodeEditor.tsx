@@ -12,12 +12,14 @@ const EditorInner = dynamic(
 );
 import { editor } from "monaco-editor";
 
+export type EditOperation = editor.IIdentifiedSingleEditOperation;
+
 interface Props {
   editorText: string;
   language: string;
   editSequence?: {
-    edits: editor.IIdentifiedSingleEditOperation[];
-    animate?: boolean;
+    edits: EditOperation[];
+    skipAnimation?: boolean;
   };
   tooltip?: {
     lineNumber: number;

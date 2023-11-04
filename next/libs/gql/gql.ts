@@ -59,7 +59,7 @@ const documents = {
     types.FileNameTabBar_FragmentFragmentDoc,
   "\n  fragment GqlFileContentPane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n":
     types.GqlFileContentPaneFragmentDoc,
-  "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n":
+  "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n    edits {\n      text\n      range {\n        startLineNumber\n        startColumn\n        endLineNumber\n        endColumn\n      }\n    }\n    tooltip {\n      markdownBody\n      lineNumber\n    }\n  }\n":
     types.GqlSourceCodeEditorFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
     types.GqlFileTreePaneFragmentDoc,
@@ -285,8 +285,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n",
-): (typeof documents)["\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n  }\n"];
+  source: "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n    edits {\n      text\n      range {\n        startLineNumber\n        startColumn\n        endLineNumber\n        endColumn\n      }\n    }\n    tooltip {\n      markdownBody\n      lineNumber\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n    edits {\n      text\n      range {\n        startLineNumber\n        startColumn\n        endLineNumber\n        endColumn\n      }\n    }\n    tooltip {\n      markdownBody\n      lineNumber\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

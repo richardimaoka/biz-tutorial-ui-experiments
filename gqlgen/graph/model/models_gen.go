@@ -147,9 +147,10 @@ type OpenFile struct {
 	OldContent    *string                `json:"oldContent"`
 	IsFullContent *bool                  `json:"isFullContent"`
 	Language      *string                `json:"language"`
-	Highlight     []*FileHighlight       `json:"highlight"`
 	Size          *float64               `json:"size"`
 	Edits         []*MonacoEditOperation `json:"edits"`
+	Tooltip       *SourceCodeTooltip     `json:"tooltip"`
+	Highlight     []*FileHighlight       `json:"highlight"`
 }
 
 type Page struct {
@@ -186,6 +187,11 @@ type SourceCodeColumn struct {
 
 func (SourceCodeColumn) IsColumn()                    {}
 func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
+
+type SourceCodeTooltip struct {
+	MarkdownBody string `json:"markdownBody"`
+	LineNumber   int    `json:"lineNumber"`
+}
 
 type Terminal struct {
 	Step             *string         `json:"step"`

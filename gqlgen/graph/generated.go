@@ -158,6 +158,7 @@ type ComplexityRoot struct {
 		Language      func(childComplexity int) int
 		OldContent    func(childComplexity int) int
 		Size          func(childComplexity int) int
+		Tooltip       func(childComplexity int) int
 	}
 
 	Page struct {
@@ -203,6 +204,11 @@ type ComplexityRoot struct {
 	SourceCodeColumn struct {
 		Placeholder func(childComplexity int) int
 		SourceCode  func(childComplexity int) int
+	}
+
+	SourceCodeTooltip struct {
+		LineNumber   func(childComplexity int) int
+		MarkdownBody func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -752,6 +758,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OpenFile.Size(childComplexity), true
 
+	case "OpenFile.tooltip":
+		if e.complexity.OpenFile.Tooltip == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.Tooltip(childComplexity), true
+
 	case "Page.autoNextSeconds":
 		if e.complexity.Page.AutoNextSeconds == nil {
 			break
@@ -950,6 +963,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SourceCodeColumn.SourceCode(childComplexity), true
+
+	case "SourceCodeTooltip.lineNumber":
+		if e.complexity.SourceCodeTooltip.LineNumber == nil {
+			break
+		}
+
+		return e.complexity.SourceCodeTooltip.LineNumber(childComplexity), true
+
+	case "SourceCodeTooltip.markdownBody":
+		if e.complexity.SourceCodeTooltip.MarkdownBody == nil {
+			break
+		}
+
+		return e.complexity.SourceCodeTooltip.MarkdownBody(childComplexity), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -3360,11 +3387,14 @@ func (ec *executionContext) _MonacoEditOperation_range(ctx context.Context, fiel
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.MonacoEditRange)
 	fc.Result = res
-	return ec.marshalOMonacoEditRange2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditRange(ctx, field.Selections, res)
+	return ec.marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditRange(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MonacoEditOperation_range(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3949,53 +3979,6 @@ func (ec *executionContext) fieldContext_OpenFile_language(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _OpenFile_highlight(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OpenFile_highlight(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Highlight, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.FileHighlight)
-	fc.Result = res
-	return ec.marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_OpenFile_highlight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "OpenFile",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "fromLine":
-				return ec.fieldContext_FileHighlight_fromLine(ctx, field)
-			case "toLine":
-				return ec.fieldContext_FileHighlight_toLine(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type FileHighlight", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _OpenFile_size(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_size(ctx, field)
 	if err != nil {
@@ -4079,6 +4062,100 @@ func (ec *executionContext) fieldContext_OpenFile_edits(ctx context.Context, fie
 				return ec.fieldContext_MonacoEditOperation_range(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MonacoEditOperation", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpenFile_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_tooltip(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tooltip, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SourceCodeTooltip)
+	fc.Result = res
+	return ec.marshalOSourceCodeTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltip(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "markdownBody":
+				return ec.fieldContext_SourceCodeTooltip_markdownBody(ctx, field)
+			case "lineNumber":
+				return ec.fieldContext_SourceCodeTooltip_lineNumber(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SourceCodeTooltip", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpenFile_highlight(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_highlight(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Highlight, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.FileHighlight)
+	fc.Result = res
+	return ec.marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_highlight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "fromLine":
+				return ec.fieldContext_FileHighlight_fromLine(ctx, field)
+			case "toLine":
+				return ec.fieldContext_FileHighlight_toLine(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FileHighlight", field.Name)
 		},
 	}
 	return fc, nil
@@ -5356,12 +5433,14 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
 			case "language":
 				return ec.fieldContext_OpenFile_language(ctx, field)
-			case "highlight":
-				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			case "size":
 				return ec.fieldContext_OpenFile_size(ctx, field)
 			case "edits":
 				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "tooltip":
+				return ec.fieldContext_OpenFile_tooltip(ctx, field)
+			case "highlight":
+				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
@@ -5469,6 +5548,94 @@ func (ec *executionContext) fieldContext_SourceCodeColumn_sourceCode(ctx context
 				return ec.fieldContext_SourceCode_openFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCodeTooltip_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeTooltip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCodeTooltip_markdownBody(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MarkdownBody, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCodeTooltip_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCodeTooltip",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCodeTooltip_lineNumber(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeTooltip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCodeTooltip_lineNumber(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LineNumber, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCodeTooltip_lineNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCodeTooltip",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6728,12 +6895,14 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
 			case "language":
 				return ec.fieldContext_OpenFile_language(ctx, field)
-			case "highlight":
-				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			case "size":
 				return ec.fieldContext_OpenFile_size(ctx, field)
 			case "edits":
 				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "tooltip":
+				return ec.fieldContext_OpenFile_tooltip(ctx, field)
+			case "highlight":
+				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
@@ -9329,6 +9498,9 @@ func (ec *executionContext) _MonacoEditOperation(ctx context.Context, sel ast.Se
 
 			out.Values[i] = ec._MonacoEditOperation_range(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9456,10 +9628,6 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._OpenFile_language(ctx, field, obj)
 
-		case "highlight":
-
-			out.Values[i] = ec._OpenFile_highlight(ctx, field, obj)
-
 		case "size":
 
 			out.Values[i] = ec._OpenFile_size(ctx, field, obj)
@@ -9467,6 +9635,14 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 		case "edits":
 
 			out.Values[i] = ec._OpenFile_edits(ctx, field, obj)
+
+		case "tooltip":
+
+			out.Values[i] = ec._OpenFile_tooltip(ctx, field, obj)
+
+		case "highlight":
+
+			out.Values[i] = ec._OpenFile_highlight(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -9768,6 +9944,41 @@ func (ec *executionContext) _SourceCodeColumn(ctx context.Context, sel ast.Selec
 
 			out.Values[i] = ec._SourceCodeColumn_sourceCode(ctx, field, obj)
 
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var sourceCodeTooltipImplementors = []string{"SourceCodeTooltip"}
+
+func (ec *executionContext) _SourceCodeTooltip(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCodeTooltip) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCodeTooltipImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SourceCodeTooltip")
+		case "markdownBody":
+
+			out.Values[i] = ec._SourceCodeTooltip_markdownBody(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "lineNumber":
+
+			out.Values[i] = ec._SourceCodeTooltip_lineNumber(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10632,6 +10843,16 @@ func (ec *executionContext) marshalNMonacoEditOperation2ᚖgithubᚗcomᚋrichar
 	return ec._MonacoEditOperation(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditRange(ctx context.Context, sel ast.SelectionSet, v *model.MonacoEditRange) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MonacoEditRange(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -11414,13 +11635,6 @@ func (ec *executionContext) marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋric
 	return ret
 }
 
-func (ec *executionContext) marshalOMonacoEditRange2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditRange(ctx context.Context, sel ast.SelectionSet, v *model.MonacoEditRange) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._MonacoEditRange(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v *model.NextAction) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11454,6 +11668,13 @@ func (ec *executionContext) marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaoka�
 		return graphql.Null
 	}
 	return ec._SourceCode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOSourceCodeTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltip(ctx context.Context, sel ast.SelectionSet, v *model.SourceCodeTooltip) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SourceCodeTooltip(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

@@ -229,11 +229,18 @@ type Terminal {
 # Source code related object types
 ###################################################
 
+# Tooltip types
+
+type SourceCodeTooltip {
+  markdownBody: String!
+  lineNumber: Int!
+}
+
 # FileEdit types
 
 type MonacoEditOperation {
   text: String!
-  range: MonacoEditRange
+  range: MonacoEditRange!
 }
 
 type MonacoEditRange {
@@ -274,10 +281,12 @@ type OpenFile {
   oldContent: String
   isFullContent: Boolean
   language: String
-  # To be deprecated as Monaco Diff Editor will be used
-  highlight: [FileHighlight]
   size: Float
   edits: [MonacoEditOperation!]
+  tooltip: SourceCodeTooltip
+
+  # To be deprecated as Monaco Diff Editor will be used
+  highlight: [FileHighlight]
 }
 
 # SourceCode type
