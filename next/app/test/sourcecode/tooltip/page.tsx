@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { EditorWithTooltip } from "@/app/components/sourcecode2/EditorWithTooltip";
+import { EditorWithTooltip } from "@/app/components/sourcecode2/editor/EditorWithTooltip";
 
 export default async function Page() {
   // Necessary to hardcode this, as the only other way to get `pathname` is usePathname(),

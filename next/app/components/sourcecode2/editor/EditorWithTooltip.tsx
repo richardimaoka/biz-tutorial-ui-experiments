@@ -1,11 +1,11 @@
 import styles from "./EditorWithTooltip.module.css";
-import { EditorTooltip } from "./tooltip/EditorTooltip";
+import { EditorTooltip } from "../tooltip/EditorTooltip";
 
 // To avoid an error `ReferenceError: navigator is not defined`, dynamic import with ssr false is needed.
 // This is because "monaco-editor" module uses browser-side `navigator` inside.
 import dynamic from "next/dynamic";
 const EditorInnerSimple = dynamic(
-  () => import("./editor/internal/EditorInnerOnlyDynamicallyImportable"),
+  () => import("./internal/EditorInnerOnlyDynamicallyImportable"),
   {
     ssr: false,
   }
