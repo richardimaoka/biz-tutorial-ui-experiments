@@ -84,6 +84,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   const onContentAreaSizeChange = useCallback(() => {
     const bbox = boundingBoxRef.current;
     if (bbox && contentWidgetContainer) {
+      console.log("onContentAreaSizeChange called, width =", bbox.offsetWidth);
       contentWidgetContainer.style.width = `${bbox.offsetWidth}px`;
     }
   }, [contentWidgetContainer]);
@@ -156,6 +157,7 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   // Rendering defined in JSX ---------------------------------
 
   function onChange() {
+    console.log("onChange");
     onContentAreaSizeChange();
     setLineHeight();
   }

@@ -1,6 +1,7 @@
 import { editor } from "monaco-editor";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { Root, createRoot } from "react-dom/client";
+import { EditorBoundingRect } from "./useBoundingBox";
 
 /**
  * Custm hook to handle Editor Tooltip
@@ -10,8 +11,11 @@ import { Root, createRoot } from "react-dom/client";
 export function useTooltip(
   // Shared monaco-editor's editor instance, possibly null
   editorInstance: editor.IStandaloneCodeEditor | null,
+  rect: EditorBoundingRect,
 
   // Prop to be passed from the parent component
+  // `tooltip?` (i.e.) Optional parameter, because a React hook should handle
+  // if/else *inside*, to avoid conditionals before calling the hook
   tooltip?: {
     lineNumber: number;
     children: ReactNode;
@@ -25,6 +29,10 @@ export function useTooltip(
   const [contentWidgetContainer] = useState<HTMLDivElement>(() =>
     document.createElement("div")
   );
+
+  const resizeContentWidget = useCallback(() => {
+    contentWidgetContainer.style.width = `${rect.width}px`;
+  }, [contentWidgetContainer, rect]);
 
   // Render content widget
   useEffect(() => {
@@ -48,13 +56,10 @@ export function useTooltip(
     }
   }, [contentWidgetContainer, editorInstance, tooltip]);
 
-  const resizeContentWidget = useCallback(
-    (boundingBoxWidth: number) => {
-      console.log("resizeContentWidget  called width = ", boundingBoxWidth);
-      contentWidgetContainer.style.width = `${boundingBoxWidth}px`;
-    },
-    [contentWidgetContainer]
-  );
+  // Resize content widget upon rect change
+  useEffect(() => {
+    resizeContentWidget();
+  }, [resizeContentWidget, rect]);
 
   return { resizeContentWidget };
 }

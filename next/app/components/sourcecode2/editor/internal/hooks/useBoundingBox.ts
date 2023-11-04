@@ -1,4 +1,10 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export interface EditorBoundingRect {
   width: number;
@@ -14,25 +20,26 @@ export function useEditorBoundingBox(): {
    */
   boundingBoxRef: MutableRefObject<HTMLDivElement | null>;
   rect: EditorBoundingRect;
+  resizeWindow: () => void;
 } {
   const [rect, setRect] = useState<EditorBoundingRect>({ width: 0, height: 0 });
   const boundingBoxRef = useRef<HTMLDivElement | null>(null);
 
-  function onWindowResize() {
+  const resizeWindow = useCallback(() => {
     if (boundingBoxRef.current) {
       setRect({
         height: boundingBoxRef.current.offsetHeight,
         width: boundingBoxRef.current.offsetWidth,
       });
     }
-  }
+  }, []);
 
   useEffect(() => {
     if (window) {
-      window.addEventListener("resize", onWindowResize);
-      return () => window.removeEventListener("resize", onWindowResize);
+      window.addEventListener("resize", resizeWindow);
+      return () => window.removeEventListener("resize", resizeWindow);
     }
   });
 
-  return { boundingBoxRef, rect };
+  return { boundingBoxRef, rect, resizeWindow };
 }
