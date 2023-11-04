@@ -8,12 +8,11 @@ import {
   useState,
 } from "react";
 import { Root, createRoot } from "react-dom/client";
-import { EditorBoundingRect, useEditorBoundingBox } from "./useBoundingBox";
+import { useEditorBoundingBox } from "./useBoundingBox";
 
 /**
- * Custm hook to handle Editor Tooltip
- *
- * @return nothing, as it is an effectful hook
+ * Custm hook to handle Editor Tooltip.
+ * As described in the return types below, it exposes a bit of inner details as hook's return...
  */
 export function useTooltip(
   // Shared monaco-editor's editor instance, possibly null
@@ -28,7 +27,7 @@ export function useTooltip(
   }
 ): {
   /**
-   * @return boundingBoxRef: bounding box <div> element
+   * @return boundingBoxRef: bounding box <div> element, to be passed as <div ref={bondingBoxRef}>...</div>
    * @return resizeWindow  : callback to call when
    */
   boundingBoxRef: MutableRefObject<HTMLDivElement | null>;

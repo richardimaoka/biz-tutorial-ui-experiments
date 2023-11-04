@@ -4,7 +4,7 @@
 // This is because "monaco-editor" module uses browser-side `navigator` inside.
 import dynamic from "next/dynamic";
 const EditorInnerSimple = dynamic(
-  () => import("./internal/EditorInnerSimpleOnlyDynamicallyImportable"),
+  () => import("./internal/EditorInnerOnlyDynamicallyImportable"),
   {
     ssr: false,
   }
