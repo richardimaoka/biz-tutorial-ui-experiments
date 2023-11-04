@@ -60,8 +60,6 @@ export function useTooltip(
   useEffect(() => {
     resizeContentWidget();
   }, [resizeContentWidget, rect]);
-
-  return { resizeContentWidget };
 }
 
 /**

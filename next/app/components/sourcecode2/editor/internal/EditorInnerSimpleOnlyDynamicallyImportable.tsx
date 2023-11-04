@@ -41,11 +41,8 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
 
   // Tooltip
   const { boundingBoxRef, rect, resizeWindow } = useEditorBoundingBox();
-  const { resizeContentWidget } = useTooltip(
-    editorInstance,
-    rect,
-    props.tooltip
-  );
+  useTooltip(editorInstance, rect, props.tooltip);
+
   return (
     // Needs the outer <div> for bounding box size retrieval
     <div className={styles.component} ref={boundingBoxRef}>
