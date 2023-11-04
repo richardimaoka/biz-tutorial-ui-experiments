@@ -89,14 +89,14 @@ const documents = {
     types.GqlColumnWrapperFragmentDoc,
   "\n  fragment GqlColumnWrappers on Page2 {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n":
     types.GqlColumnWrappersFragmentDoc,
+  "\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n":
+    types.GqlTutorialHeaderFragmentDoc,
   "\n  fragment GqlColumnTab on ColumnWrapper2 {\n    columnName\n    ...GqlColumnTabIcon\n  }\n":
     types.GqlColumnTabFragmentDoc,
   "\n  fragment GqlColumnTabIcon on ColumnWrapper2 {\n    column {\n      __typename\n    }\n  }\n":
     types.GqlColumnTabIconFragmentDoc,
   "\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n":
     types.GqlColumnTabsFragmentDoc,
-  "\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n":
-    types.GqlTutorialHeaderFragmentDoc,
   "\n  fragment YouTubeColumn_Fragment on YouTubeColumn {\n    youtube {\n      ...YouTube_Fragment\n    }\n  }\n":
     types.YouTubeColumn_FragmentFragmentDoc,
   "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n":
@@ -357,6 +357,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n",
+): (typeof documents)["\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment GqlColumnTab on ColumnWrapper2 {\n    columnName\n    ...GqlColumnTabIcon\n  }\n",
 ): (typeof documents)["\n  fragment GqlColumnTab on ColumnWrapper2 {\n    columnName\n    ...GqlColumnTabIcon\n  }\n"];
 /**
@@ -371,12 +377,6 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n",
 ): (typeof documents)["\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n",
-): (typeof documents)["\n  fragment GqlTutorialHeader on Page2 {\n    ...GqlColumnTabs\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -147,6 +147,20 @@ export type Modal = {
 
 export type ModalPosition = "BOTTOM" | "CENTER" | "TOP";
 
+export type MonacoEditOperation = {
+  __typename: "MonacoEditOperation";
+  range?: Maybe<MonacoEditRange>;
+  text: Scalars["String"]["output"];
+};
+
+export type MonacoEditRange = {
+  __typename: "MonacoEditRange";
+  endColumn: Scalars["Int"]["output"];
+  endLineNumber: Scalars["Int"]["output"];
+  startColumn: Scalars["Int"]["output"];
+  startLineNumber: Scalars["Int"]["output"];
+};
+
 export type NextAction = {
   __typename: "NextAction";
   markdown?: Maybe<MarkdownOld>;
@@ -157,11 +171,13 @@ export type NextAction = {
 export type OpenFile = {
   __typename: "OpenFile";
   content?: Maybe<Scalars["String"]["output"]>;
+  edits?: Maybe<Array<MonacoEditOperation>>;
   fileName?: Maybe<Scalars["String"]["output"]>;
   filePath?: Maybe<Scalars["String"]["output"]>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
   isFullContent?: Maybe<Scalars["Boolean"]["output"]>;
   language?: Maybe<Scalars["String"]["output"]>;
+  oldContent?: Maybe<Scalars["String"]["output"]>;
   size?: Maybe<Scalars["Float"]["output"]>;
 };
 
@@ -717,6 +733,10 @@ export type GqlColumnWrappersFragment = {
   > | null;
 } & { " $fragmentName"?: "GqlColumnWrappersFragment" };
 
+export type GqlTutorialHeaderFragment = ({ __typename: "Page2" } & {
+  " $fragmentRefs"?: { GqlColumnTabsFragment: GqlColumnTabsFragment };
+}) & { " $fragmentName"?: "GqlTutorialHeaderFragment" };
+
 export type GqlColumnTabFragment = ({
   __typename: "ColumnWrapper2";
   columnName: string;
@@ -738,10 +758,6 @@ export type GqlColumnTabsFragment = {
     | null
   > | null;
 } & { " $fragmentName"?: "GqlColumnTabsFragment" };
-
-export type GqlTutorialHeaderFragment = ({ __typename: "Page2" } & {
-  " $fragmentRefs"?: { GqlColumnTabsFragment: GqlColumnTabsFragment };
-}) & { " $fragmentName"?: "GqlTutorialHeaderFragment" };
 
 export type YouTubeColumn_FragmentFragment = {
   __typename: "YouTubeColumn";

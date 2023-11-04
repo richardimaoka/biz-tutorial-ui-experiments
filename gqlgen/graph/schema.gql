@@ -236,10 +236,10 @@ type MonacoEditOperation {
 }
 
 type MonacoEditRange {
-  startLineNumber: int!
-  startColumn: int!
-  endLineNumber: int!
-  endColumn: int!
+  startLineNumber: Int!
+  startColumn: Int!
+  endLineNumber: Int!
+  endColumn: Int!
 }
 
 # FileNode types
