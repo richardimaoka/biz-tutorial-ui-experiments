@@ -20,7 +20,13 @@ interface Props {
 
   lineHeight?: number;
 }
-
+/**
+ * This component simply calls <Editor> from @monaco-editor/react
+ * with preferred settings passed to <Editor> as props.
+ *
+ * It doesn't hold logic nor any React hook for simplicity and separation
+ * of concern - those should be implemented in the caller of this component
+ */
 export function EditorBare(props: Props) {
   console.log("EditorBare component is rendered");
   const lineHeight = props.lineHeight ? props.lineHeight : 19;
