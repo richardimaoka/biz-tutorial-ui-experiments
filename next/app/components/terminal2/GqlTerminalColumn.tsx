@@ -1,6 +1,6 @@
 import { GqlTerminalContents } from "./contents/GqlTerminalContents";
 import { GqlTerminalHeader } from "./header/GqlTerminalHeader";
-import styles from "./TerminalComponent.module.css";
+import styles from "./GqlTerminalColumn.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
