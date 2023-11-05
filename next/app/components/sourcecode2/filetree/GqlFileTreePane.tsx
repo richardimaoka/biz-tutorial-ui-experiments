@@ -33,6 +33,12 @@ export const GqlFileTreePane = (props: Props): JSX.Element => {
     }
   }, [props.step, fragment.isFoldFileTree]);
 
+  // TODO: replace this after experiments finished
+  if (isFolded) {
+    console.log("GqlFileTreePane is showing nothing during experiments");
+    return <></>;
+  }
+
   return (
     <div
       className={`${styles.pane} ${isFolded ? styles.folded : styles.expanded}`}

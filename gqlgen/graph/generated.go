@@ -38,7 +38,6 @@ type Config struct {
 type ResolverRoot interface {
 	Query() QueryResolver
 	SourceCode() SourceCodeResolver
-	SourceCode2() SourceCode2Resolver
 	TestObjs() TestObjsResolver
 }
 
@@ -302,9 +301,6 @@ type QueryResolver interface {
 }
 type SourceCodeResolver interface {
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
-}
-type SourceCode2Resolver interface {
-	OpenFile(ctx context.Context, obj *model.SourceCode2, filePath *string) (*model.OpenFile, error)
 }
 type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
@@ -5767,7 +5763,7 @@ func (ec *executionContext) _SourceCode2_openFile(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.SourceCode2().OpenFile(rctx, obj, fc.Args["filePath"].(*string))
+		return obj.OpenFile, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5785,8 +5781,8 @@ func (ec *executionContext) fieldContext_SourceCode2_openFile(ctx context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "SourceCode2",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "filePath":
@@ -10480,22 +10476,9 @@ func (ec *executionContext) _SourceCode2(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = ec._SourceCode2_isFoldFileTree(ctx, field, obj)
 
 		case "openFile":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._SourceCode2_openFile(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._SourceCode2_openFile(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

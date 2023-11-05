@@ -115,11 +115,6 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 	return &openFile, nil
 }
 
-// OpenFile is the resolver for the openFile field.
-func (r *sourceCode2Resolver) OpenFile(ctx context.Context, obj *model.SourceCode2, filePath *string) (*model.OpenFile, error) {
-	panic(fmt.Errorf("not implemented: OpenFile - openFile"))
-}
-
 // AppTestTerminalPage is the resolver for the appTestTerminalPage field.
 func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error) {
 	var filename string
@@ -179,15 +174,11 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 // SourceCode returns SourceCodeResolver implementation.
 func (r *Resolver) SourceCode() SourceCodeResolver { return &sourceCodeResolver{r} }
 
-// SourceCode2 returns SourceCode2Resolver implementation.
-func (r *Resolver) SourceCode2() SourceCode2Resolver { return &sourceCode2Resolver{r} }
-
 // TestObjs returns TestObjsResolver implementation.
 func (r *Resolver) TestObjs() TestObjsResolver { return &testObjsResolver{r} }
 
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
-type sourceCode2Resolver struct{ *Resolver }
 type testObjsResolver struct{ *Resolver }
 
 // !!! WARNING !!!
@@ -196,32 +187,3 @@ type testObjsResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) PageState(ctx context.Context, step *string) (*model.PageState, error) {
-	var dirName = "data/apollo-client-getting-started/state"
-	var initialStep = "_initial"
-
-	var filename string
-	if step == nil {
-		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
-	} else {
-		filename = fmt.Sprintf(dirName+"/%s.json", *step)
-	}
-
-	log.Printf("reading data from %s", filename)
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	var pageState model.PageState
-	err = json.Unmarshal(data, &pageState)
-	if err != nil {
-		log.Printf("failed to read data from %s, %s", filename, err)
-		return nil, fmt.Errorf("internal server error %s", *step)
-	}
-
-	return &pageState, nil
-}
-func (r *queryResolver) SourceCode(ctx context.Context) (*model.SourceCode, error) {
-	panic(fmt.Errorf("not implemented: SourceCode - sourceCode"))
-}

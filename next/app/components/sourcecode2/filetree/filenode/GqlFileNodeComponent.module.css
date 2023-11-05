@@ -1,14 +1,14 @@
-.filenode {
+.component {
   display: flex;
   gap: 4px;
   color: white;
   padding: 3px 8px;
 }
 
-.filenode:hover {
+.component:hover {
   background-color: #748d2e;
 }
 
-.filenode.updated {
+.component.updated {
   background-color: #748d2e;
 }

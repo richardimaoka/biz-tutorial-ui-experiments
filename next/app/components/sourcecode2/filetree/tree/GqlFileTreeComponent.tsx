@@ -1,6 +1,6 @@
 import { nonNullArray } from "@/libs/nonNullArray";
 import { GqlFileNodeComponent } from "../filenode/GqlFileNodeComponent";
-import styles from "./style.module.css";
+import styles from "./GqlFileTreeComponent.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 

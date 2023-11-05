@@ -1,6 +1,6 @@
 import { AnglesLeftIcon } from "@/app/components/icons/AnglesLeftIcon";
 import { AnglesRightIcon } from "@/app/components/icons/AnglesRightIcon";
-import styles from "./style.module.css";
+import styles from "./GqlFileTreeHeader.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ProjectDir } from "./ProjectDir";
@@ -20,12 +20,12 @@ interface FileTreeHeaderProps {
 export const GqlFileTreeHeader = (props: FileTreeHeaderProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  const headerStyle = props.isFolded
-    ? `${styles.header} ${styles.folded}`
-    : `${styles.header} ${styles.expanded}`;
+  const componentStyle = props.isFolded
+    ? `${styles.component} ${styles.folded}`
+    : `${styles.component} ${styles.expanded}`;
 
   return (
-    <div className={headerStyle}>
+    <div className={componentStyle}>
       {!props.isFolded && <ProjectDir projectDir={fragment.projectDir} />}
       <button onClick={props.onButtonClick}>
         {props.isFolded ? <AnglesRightIcon /> : <AnglesLeftIcon />}

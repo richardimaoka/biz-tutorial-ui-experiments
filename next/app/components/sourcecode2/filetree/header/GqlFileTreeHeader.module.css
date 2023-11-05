@@ -1,4 +1,4 @@
-.header {
+.component {
   /* flex parent = .pane */
 
   display: flex;
@@ -6,12 +6,12 @@
   background-color: var(--color-menu);
 }
 
-.header.folded {
+.component.folded {
   background-color: var(--color-sourcecode-menu-unfocused);
   padding: 5px 4px;
 }
 
-.header.expanded {
+.component.expanded {
   background-color: var(--color-menu);
   padding: 5px 8px;
 }

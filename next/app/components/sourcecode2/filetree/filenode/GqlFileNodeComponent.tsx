@@ -1,5 +1,5 @@
 import { GqlFileNodeIcon } from "./GqlFileNodeIcon";
-import styles from "./style.module.css";
+import styles from "./GqlFileNodeComponent.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { LinkSearchParams } from "@/app/components/link/LinkSearchParams";

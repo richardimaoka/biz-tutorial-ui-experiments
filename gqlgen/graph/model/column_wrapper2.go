@@ -68,6 +68,12 @@ func columnFromBytes2(bytes []byte) (Column2, error) {
 			return nil, err
 		}
 		return &col, nil
+	case "SourceCodeColumn2":
+		var col SourceCodeColumn2
+		if err := json.Unmarshal(bytes, &col); err != nil {
+			return nil, err
+		}
+		return &col, nil
 	default:
 		return nil, fmt.Errorf("\"%s\" = %s is not a valid Column type. If it should be valid, define it in column_wrapper.go", fromField, typename)
 	}

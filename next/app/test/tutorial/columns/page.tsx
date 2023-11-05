@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: PageParams) {
   const fragment = data._test?.appTestTutorialColumnsPage;
 
   return (
-    <div style={{ height: "95svh" }}>
+    <div style={{ height: "100svh" }}>
       {fragment && <GqlColumnWrappers fragment={fragment} />}
     </div>
   );

@@ -1,5 +1,5 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import styles from "./GqlOpenFile.module.css";
+import styles from "./GqlSourceCodeColumn.module.css";
 import { GqlOpenFilePane } from "./openfile/GqlOpenFilePane";
 import { GqlFileTreePane } from "./filetree/GqlFileTreePane";
 
@@ -25,7 +25,7 @@ export function GqlSourceCodeColumn(props: Props) {
   return (
     <div className={`${styles.component}`}>
       <GqlFileTreePane step="" fragment={fragment.sourceCode} />
-      {/* TODO: display an empty open file pane instead of <></> if there is no open file */}
+      {/* TODO: display an empty open file pane instead of <></> if there is no open */}
       {fragment.sourceCode.openFile && (
         <GqlOpenFilePane fragment={fragment.sourceCode.openFile} />
       )}
