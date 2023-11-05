@@ -6,7 +6,7 @@ import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ProjectDir } from "./ProjectDir";
 
 const fragmentDefinition = graphql(`
-  fragment GqlFileTreeHeader on SourceCode {
+  fragment GqlFileTreeHeader on SourceCode2 {
     projectDir
   }
 `);

@@ -236,6 +236,19 @@ export type SourceCodeOpenFileArgs = {
   filePath?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type SourceCode2 = {
+  __typename: "SourceCode2";
+  fileTree?: Maybe<Array<Maybe<FileNode>>>;
+  isFoldFileTree?: Maybe<Scalars["Boolean"]["output"]>;
+  openFile?: Maybe<OpenFile>;
+  projectDir?: Maybe<Scalars["String"]["output"]>;
+  step?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type SourceCode2OpenFileArgs = {
+  filePath?: InputMaybe<Scalars["String"]["input"]>;
+};
+
 export type SourceCodeColumn = Column & {
   __typename: "SourceCodeColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
@@ -245,7 +258,7 @@ export type SourceCodeColumn = Column & {
 export type SourceCodeColumn2 = Column2 & {
   __typename: "SourceCodeColumn2";
   columnName: Scalars["String"]["output"];
-  sourceCode: SourceCode;
+  sourceCode: SourceCode2;
 };
 
 export type SourceCodeTooltip = {
@@ -607,7 +620,7 @@ export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
 export type GqlSourceCodeColumnFragment = {
   __typename: "SourceCodeColumn2";
   sourceCode: {
-    __typename: "SourceCode";
+    __typename: "SourceCode2";
     openFile?:
       | ({ __typename: "OpenFile" } & {
           " $fragmentRefs"?: {
@@ -621,7 +634,7 @@ export type GqlSourceCodeColumnFragment = {
 } & { " $fragmentName"?: "GqlSourceCodeColumnFragment" };
 
 export type GqlFileTreePaneFragment = ({
-  __typename: "SourceCode";
+  __typename: "SourceCode2";
   isFoldFileTree?: boolean | null;
 } & {
   " $fragmentRefs"?: {
@@ -647,12 +660,12 @@ export type GqlFileNodeIconFragment = {
 } & { " $fragmentName"?: "GqlFileNodeIconFragment" };
 
 export type GqlFileTreeHeaderFragment = {
-  __typename: "SourceCode";
+  __typename: "SourceCode2";
   projectDir?: string | null;
 } & { " $fragmentName"?: "GqlFileTreeHeaderFragment" };
 
 export type GqlFileTreeComponentFragment = {
-  __typename: "SourceCode";
+  __typename: "SourceCode2";
   fileTree?: Array<
     | ({ __typename: "FileNode"; filePath: string } & {
         " $fragmentRefs"?: {
@@ -5548,7 +5561,7 @@ export const GqlFileTreeHeaderFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5627,7 +5640,7 @@ export const GqlFileTreeComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5695,7 +5708,7 @@ export const GqlFileTreePaneFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5753,7 +5766,7 @@ export const GqlFileTreePaneFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5767,7 +5780,7 @@ export const GqlFileTreePaneFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6032,7 +6045,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6082,7 +6095,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6188,7 +6201,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6389,7 +6402,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6439,7 +6452,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6466,7 +6479,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6816,7 +6829,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6866,7 +6879,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6893,7 +6906,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -7331,7 +7344,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -7381,7 +7394,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -7408,7 +7421,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9124,7 +9137,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9174,7 +9187,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9201,7 +9214,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9697,7 +9710,7 @@ export const AppTestTutorialTutorialPageDocument = {
       name: { kind: "Name", value: "GqlFileTreeHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9747,7 +9760,7 @@ export const AppTestTutorialTutorialPageDocument = {
       name: { kind: "Name", value: "GqlFileTreeComponent" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9774,7 +9787,7 @@ export const AppTestTutorialTutorialPageDocument = {
       name: { kind: "Name", value: "GqlFileTreePane" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
+        name: { kind: "Name", value: "SourceCode2" },
       },
       selectionSet: {
         kind: "SelectionSet",

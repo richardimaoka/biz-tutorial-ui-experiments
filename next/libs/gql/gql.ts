@@ -59,15 +59,15 @@ const documents = {
     types.FileNameTabBar_FragmentFragmentDoc,
   "\n  fragment GqlSourceCodeColumn on SourceCodeColumn2 {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
-  "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
+  "\n  fragment GqlFileTreePane on SourceCode2 {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
     types.GqlFileTreePaneFragmentDoc,
   "\n  fragment GqlFileNodeComponent on FileNode {\n    ...GqlFileNodeIcon\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
     types.GqlFileNodeComponentFragmentDoc,
   "\n  fragment GqlFileNodeIcon on FileNode {\n    nodeType\n  }\n":
     types.GqlFileNodeIconFragmentDoc,
-  "\n  fragment GqlFileTreeHeader on SourceCode {\n    projectDir\n  }\n":
+  "\n  fragment GqlFileTreeHeader on SourceCode2 {\n    projectDir\n  }\n":
     types.GqlFileTreeHeaderFragmentDoc,
-  "\n  fragment GqlFileTreeComponent on SourceCode {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n":
+  "\n  fragment GqlFileTreeComponent on SourceCode2 {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n":
     types.GqlFileTreeComponentFragmentDoc,
   "\n  fragment GqlOpenFilePane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n":
     types.GqlOpenFilePaneFragmentDoc,
@@ -287,8 +287,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n",
-): (typeof documents)["\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n"];
+  source: "\n  fragment GqlFileTreePane on SourceCode2 {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n",
+): (typeof documents)["\n  fragment GqlFileTreePane on SourceCode2 {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -305,14 +305,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlFileTreeHeader on SourceCode {\n    projectDir\n  }\n",
-): (typeof documents)["\n  fragment GqlFileTreeHeader on SourceCode {\n    projectDir\n  }\n"];
+  source: "\n  fragment GqlFileTreeHeader on SourceCode2 {\n    projectDir\n  }\n",
+): (typeof documents)["\n  fragment GqlFileTreeHeader on SourceCode2 {\n    projectDir\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlFileTreeComponent on SourceCode {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlFileTreeComponent on SourceCode {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n"];
+  source: "\n  fragment GqlFileTreeComponent on SourceCode2 {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlFileTreeComponent on SourceCode2 {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

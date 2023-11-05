@@ -180,6 +180,14 @@ type PageState struct {
 	NextAction *NextAction  `json:"nextAction"`
 }
 
+type SourceCode2 struct {
+	Step           *string     `json:"step"`
+	ProjectDir     *string     `json:"projectDir"`
+	FileTree       []*FileNode `json:"fileTree"`
+	IsFoldFileTree *bool       `json:"isFoldFileTree"`
+	OpenFile       *OpenFile   `json:"openFile"`
+}
+
 type SourceCodeColumn struct {
 	Placeholder *string     `json:"_placeholder"`
 	SourceCode  *SourceCode `json:"sourceCode"`
@@ -189,8 +197,8 @@ func (SourceCodeColumn) IsColumn()                    {}
 func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeColumn2 struct {
-	ColumnName string      `json:"columnName"`
-	SourceCode *SourceCode `json:"sourceCode"`
+	ColumnName string       `json:"columnName"`
+	SourceCode *SourceCode2 `json:"sourceCode"`
 }
 
 func (SourceCodeColumn2) IsColumn2()                 {}

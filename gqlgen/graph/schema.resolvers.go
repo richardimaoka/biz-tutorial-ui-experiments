@@ -115,6 +115,11 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 	return &openFile, nil
 }
 
+// OpenFile is the resolver for the openFile field.
+func (r *sourceCode2Resolver) OpenFile(ctx context.Context, obj *model.SourceCode2, filePath *string) (*model.OpenFile, error) {
+	panic(fmt.Errorf("not implemented: OpenFile - openFile"))
+}
+
 // AppTestTerminalPage is the resolver for the appTestTerminalPage field.
 func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error) {
 	var filename string
@@ -174,11 +179,15 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 // SourceCode returns SourceCodeResolver implementation.
 func (r *Resolver) SourceCode() SourceCodeResolver { return &sourceCodeResolver{r} }
 
+// SourceCode2 returns SourceCode2Resolver implementation.
+func (r *Resolver) SourceCode2() SourceCode2Resolver { return &sourceCode2Resolver{r} }
+
 // TestObjs returns TestObjsResolver implementation.
 func (r *Resolver) TestObjs() TestObjsResolver { return &testObjsResolver{r} }
 
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
+type sourceCode2Resolver struct{ *Resolver }
 type testObjsResolver struct{ *Resolver }
 
 // !!! WARNING !!!

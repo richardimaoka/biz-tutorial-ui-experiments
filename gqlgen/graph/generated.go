@@ -38,6 +38,7 @@ type Config struct {
 type ResolverRoot interface {
 	Query() QueryResolver
 	SourceCode() SourceCodeResolver
+	SourceCode2() SourceCode2Resolver
 	TestObjs() TestObjsResolver
 }
 
@@ -201,6 +202,14 @@ type ComplexityRoot struct {
 		Step           func(childComplexity int) int
 	}
 
+	SourceCode2 struct {
+		FileTree       func(childComplexity int) int
+		IsFoldFileTree func(childComplexity int) int
+		OpenFile       func(childComplexity int, filePath *string) int
+		ProjectDir     func(childComplexity int) int
+		Step           func(childComplexity int) int
+	}
+
 	SourceCodeColumn struct {
 		Placeholder func(childComplexity int) int
 		SourceCode  func(childComplexity int) int
@@ -293,6 +302,9 @@ type QueryResolver interface {
 }
 type SourceCodeResolver interface {
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
+}
+type SourceCode2Resolver interface {
+	OpenFile(ctx context.Context, obj *model.SourceCode2, filePath *string) (*model.OpenFile, error)
 }
 type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
@@ -956,6 +968,46 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SourceCode.Step(childComplexity), true
 
+	case "SourceCode2.fileTree":
+		if e.complexity.SourceCode2.FileTree == nil {
+			break
+		}
+
+		return e.complexity.SourceCode2.FileTree(childComplexity), true
+
+	case "SourceCode2.isFoldFileTree":
+		if e.complexity.SourceCode2.IsFoldFileTree == nil {
+			break
+		}
+
+		return e.complexity.SourceCode2.IsFoldFileTree(childComplexity), true
+
+	case "SourceCode2.openFile":
+		if e.complexity.SourceCode2.OpenFile == nil {
+			break
+		}
+
+		args, err := ec.field_SourceCode2_openFile_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.SourceCode2.OpenFile(childComplexity, args["filePath"].(*string)), true
+
+	case "SourceCode2.projectDir":
+		if e.complexity.SourceCode2.ProjectDir == nil {
+			break
+		}
+
+		return e.complexity.SourceCode2.ProjectDir(childComplexity), true
+
+	case "SourceCode2.step":
+		if e.complexity.SourceCode2.Step == nil {
+			break
+		}
+
+		return e.complexity.SourceCode2.Step(childComplexity), true
+
 	case "SourceCodeColumn._placeholder":
 		if e.complexity.SourceCodeColumn.Placeholder == nil {
 			break
@@ -1353,6 +1405,21 @@ func (ec *executionContext) field_Query_page_args(ctx context.Context, rawArgs m
 		}
 	}
 	args["step"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_SourceCode2_openFile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["filePath"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filePath"))
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["filePath"] = arg0
 	return args, nil
 }
 
@@ -5508,6 +5575,258 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _SourceCode2_step(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode2_step(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Step, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode2_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode2_projectDir(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode2_projectDir(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProjectDir, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode2_projectDir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode2_fileTree(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode2_fileTree(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileTree, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.FileNode)
+	fc.Result = res
+	return ec.marshalOFileNode2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode2_fileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "nodeType":
+				return ec.fieldContext_FileNode_nodeType(ctx, field)
+			case "name":
+				return ec.fieldContext_FileNode_name(ctx, field)
+			case "filePath":
+				return ec.fieldContext_FileNode_filePath(ctx, field)
+			case "offset":
+				return ec.fieldContext_FileNode_offset(ctx, field)
+			case "isUpdated":
+				return ec.fieldContext_FileNode_isUpdated(ctx, field)
+			case "isDeleted":
+				return ec.fieldContext_FileNode_isDeleted(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FileNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode2_isFoldFileTree(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode2_isFoldFileTree(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsFoldFileTree, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode2_isFoldFileTree(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode2",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCode2_openFile(ctx context.Context, field graphql.CollectedField, obj *model.SourceCode2) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCode2_openFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.SourceCode2().OpenFile(rctx, obj, fc.Args["filePath"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.OpenFile)
+	fc.Result = res
+	return ec.marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCode2_openFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCode2",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "filePath":
+				return ec.fieldContext_OpenFile_filePath(ctx, field)
+			case "fileName":
+				return ec.fieldContext_OpenFile_fileName(ctx, field)
+			case "content":
+				return ec.fieldContext_OpenFile_content(ctx, field)
+			case "oldContent":
+				return ec.fieldContext_OpenFile_oldContent(ctx, field)
+			case "isFullContent":
+				return ec.fieldContext_OpenFile_isFullContent(ctx, field)
+			case "language":
+				return ec.fieldContext_OpenFile_language(ctx, field)
+			case "size":
+				return ec.fieldContext_OpenFile_size(ctx, field)
+			case "edits":
+				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "tooltip":
+				return ec.fieldContext_OpenFile_tooltip(ctx, field)
+			case "highlight":
+				return ec.fieldContext_OpenFile_highlight(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_SourceCode2_openFile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SourceCodeColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeColumn) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SourceCodeColumn__placeholder(ctx, field)
 	if err != nil {
@@ -5672,9 +5991,9 @@ func (ec *executionContext) _SourceCodeColumn2_sourceCode(ctx context.Context, f
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.SourceCode)
+	res := resTmp.(*model.SourceCode2)
 	fc.Result = res
-	return ec.marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
+	return ec.marshalNSourceCode22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SourceCodeColumn2_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5686,17 +6005,17 @@ func (ec *executionContext) fieldContext_SourceCodeColumn2_sourceCode(ctx contex
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "step":
-				return ec.fieldContext_SourceCode_step(ctx, field)
+				return ec.fieldContext_SourceCode2_step(ctx, field)
 			case "projectDir":
-				return ec.fieldContext_SourceCode_projectDir(ctx, field)
+				return ec.fieldContext_SourceCode2_projectDir(ctx, field)
 			case "fileTree":
-				return ec.fieldContext_SourceCode_fileTree(ctx, field)
+				return ec.fieldContext_SourceCode2_fileTree(ctx, field)
 			case "isFoldFileTree":
-				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
+				return ec.fieldContext_SourceCode2_isFoldFileTree(ctx, field)
 			case "openFile":
-				return ec.fieldContext_SourceCode_openFile(ctx, field)
+				return ec.fieldContext_SourceCode2_openFile(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type SourceCode2", field.Name)
 		},
 	}
 	return fc, nil
@@ -10134,6 +10453,60 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var sourceCode2Implementors = []string{"SourceCode2"}
+
+func (ec *executionContext) _SourceCode2(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCode2) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCode2Implementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SourceCode2")
+		case "step":
+
+			out.Values[i] = ec._SourceCode2_step(ctx, field, obj)
+
+		case "projectDir":
+
+			out.Values[i] = ec._SourceCode2_projectDir(ctx, field, obj)
+
+		case "fileTree":
+
+			out.Values[i] = ec._SourceCode2_fileTree(ctx, field, obj)
+
+		case "isFoldFileTree":
+
+			out.Values[i] = ec._SourceCode2_isFoldFileTree(ctx, field, obj)
+
+		case "openFile":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._SourceCode2_openFile(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var sourceCodeColumnImplementors = []string{"SourceCodeColumn", "Column"}
 
 func (ec *executionContext) _SourceCodeColumn(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCodeColumn) graphql.Marshaler {
@@ -11100,14 +11473,14 @@ func (ec *executionContext) marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardima
 	return ec._MonacoEditRange(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode) graphql.Marshaler {
+func (ec *executionContext) marshalNSourceCode22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode2(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode2) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._SourceCode(ctx, sel, v)
+	return ec._SourceCode2(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
