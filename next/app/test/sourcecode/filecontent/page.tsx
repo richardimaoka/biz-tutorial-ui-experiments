@@ -4,9 +4,9 @@ import { request } from "graphql-request";
 import Link from "next/link";
 
 const queryDefinition = graphql(`
-  query appTestSourcecodeFilecontentPage {
+  query appTestSourcecodeFilecontentPage($step: Int!) {
     _test {
-      appTestSourcecodeFilecontentPage {
+      appTestSourcecodeFilecontentPage(step: $step) {
         ...GqlOpenFile
       }
     }
@@ -24,7 +24,11 @@ export default async function Page({ searchParams }: PageParams) {
   const nextStep = `${stepNum + 1}`;
 
   const variables = { step: stepNum };
-  const data = await request("http://localhost:8080/query", queryDefinition);
+  const data = await request(
+    "http://localhost:8080/query",
+    queryDefinition,
+    variables
+  );
 
   const fragment = data._test?.appTestSourcecodeFilecontentPage;
 
@@ -34,7 +38,7 @@ export default async function Page({ searchParams }: PageParams) {
 
   return (
     <div style={{ height: "95svh" }}>
-      <Link href={`/test/terminal?step=${nextStep}`}>next</Link>
+      <Link href={`/test/sourcecode/filecontent?step=${nextStep}`}>next</Link>
       <GqlOpenFile fragment={fragment} />
     </div>
   );

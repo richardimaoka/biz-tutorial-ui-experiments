@@ -322,6 +322,10 @@ export type TestObjs = {
   appTestTutorialTutorialPage?: Maybe<Page2>;
 };
 
+export type TestObjsAppTestSourcecodeFilecontentPageArgs = {
+  step: Scalars["Int"]["input"];
+};
+
 export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
 };
@@ -885,7 +889,7 @@ export type PageQueryQuery = {
 };
 
 export type AppTestSourcecodeFilecontentPageQueryVariables = Exact<{
-  [key: string]: never;
+  step: Scalars["Int"]["input"];
 }>;
 
 export type AppTestSourcecodeFilecontentPageQuery = {
@@ -7568,6 +7572,16 @@ export const AppTestSourcecodeFilecontentPageDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "appTestSourcecodeFilecontentPage" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -7583,6 +7597,16 @@ export const AppTestSourcecodeFilecontentPageDocument = {
                     kind: "Name",
                     value: "appTestSourcecodeFilecontentPage",
                   },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "step" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "step" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [

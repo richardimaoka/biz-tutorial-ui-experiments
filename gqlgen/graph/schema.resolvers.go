@@ -156,9 +156,11 @@ func (r *testObjsResolver) AppTestTutorialTutorialPage(ctx context.Context, obj 
 }
 
 // AppTestSourcecodeFilecontentPage is the resolver for the appTestSourcecodeFilecontentPage field.
-func (r *testObjsResolver) AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs) (*model.OpenFile, error) {
+func (r *testObjsResolver) AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs, step int) (*model.OpenFile, error) {
+	filename := fmt.Sprintf("data/_test/appTestSourcecodeFilecontentPage/%d.json", step)
+
 	var m model.OpenFile
-	err := internal.JsonRead2("data/_test/appTestSourcecodeFilecontentPage.json", &m)
+	err := internal.JsonRead2(filename, &m)
 	if err != nil {
 		return nil, err
 	}

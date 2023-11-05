@@ -17,7 +17,7 @@ type TestObjs {
   appTestTerminalPage(step: Int): TerminalColumn2
   appTestTutorialColumnsPage: Page2
   appTestTutorialTutorialPage: Page2
-  appTestSourcecodeFilecontentPage: OpenFile
+  appTestSourcecodeFilecontentPage(step: Int!): OpenFile
 }
 
 ###################################################

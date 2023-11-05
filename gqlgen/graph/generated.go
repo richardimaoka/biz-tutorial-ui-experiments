@@ -263,7 +263,7 @@ type ComplexityRoot struct {
 	}
 
 	TestObjs struct {
-		AppTestSourcecodeFilecontentPage func(childComplexity int) int
+		AppTestSourcecodeFilecontentPage func(childComplexity int, step int) int
 		AppTestTerminalPage              func(childComplexity int, step *int) int
 		AppTestTutorialColumnsPage       func(childComplexity int) int
 		AppTestTutorialTutorialPage      func(childComplexity int) int
@@ -292,7 +292,7 @@ type TestObjsResolver interface {
 	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
 	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error)
 	AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error)
-	AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs) (*model.OpenFile, error)
+	AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs, step int) (*model.OpenFile, error)
 }
 
 type executableSchema struct {
@@ -1151,7 +1151,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.TestObjs.AppTestSourcecodeFilecontentPage(childComplexity), true
+		args, err := ec.field_TestObjs_appTestSourcecodeFilecontentPage_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TestObjs.AppTestSourcecodeFilecontentPage(childComplexity, args["step"].(int)), true
 
 	case "TestObjs.appTestTerminalPage":
 		if e.complexity.TestObjs.AppTestTerminalPage == nil {
@@ -1336,6 +1341,21 @@ func (ec *executionContext) field_SourceCode_openFile_args(ctx context.Context, 
 		}
 	}
 	args["filePath"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_TestObjs_appTestSourcecodeFilecontentPage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["step"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("step"))
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["step"] = arg0
 	return args, nil
 }
 
@@ -6861,7 +6881,7 @@ func (ec *executionContext) _TestObjs_appTestSourcecodeFilecontentPage(ctx conte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.TestObjs().AppTestSourcecodeFilecontentPage(rctx, obj)
+		return ec.resolvers.TestObjs().AppTestSourcecodeFilecontentPage(rctx, obj, fc.Args["step"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6906,6 +6926,17 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OpenFile", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_TestObjs_appTestSourcecodeFilecontentPage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
