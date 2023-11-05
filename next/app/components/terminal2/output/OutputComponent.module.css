@@ -3,6 +3,7 @@
   color: var(--color-secondary-text);
 
   padding: 4px;
+  font-size: 12px;
 }
 
 @media (max-width: 768px) {
