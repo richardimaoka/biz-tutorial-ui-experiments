@@ -24,6 +24,7 @@ interface Props {
   tooltip?: {
     lineNumber: number;
     children: ReactNode;
+    timing: "START" | "END";
   };
 }
 
@@ -48,10 +49,16 @@ export default function EditorInnerOnlyDynamicallyImportable(props: Props) {
   /**
    * Tooltip
    */
+
   const canRender =
-    isEditCompleted || // if edits are already completed, then ok to render tooltip
-    !props.editSequence || // if no edits, ok to render tooltip
-    props.editSequence.edits.length === 0; // if no edits, ok to render tooltip
+    // if edits are already completed, then ok to render tooltip
+    isEditCompleted ||
+    // if no edits, ok to render tooltip
+    !props.editSequence ||
+    props.editSequence.edits.length === 0 ||
+    // if tooltip timing is set "START", then immediately render the tooltip
+    props.tooltip?.timing === "START";
+
   const tooltip = props.tooltip
     ? { ...props.tooltip, canRender: canRender }
     : undefined;

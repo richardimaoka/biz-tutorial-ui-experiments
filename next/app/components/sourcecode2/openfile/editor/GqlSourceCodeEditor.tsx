@@ -17,6 +17,7 @@ const fragmentDefinition = graphql(`
     tooltip {
       markdownBody
       lineNumber
+      timing
     }
   }
 `);
@@ -26,6 +27,11 @@ interface Props {
   skipAnimation?: boolean;
 }
 
+/**
+ * GraphQL-based component calling monaco-editor React component.
+ * The purpose of this component is to translate GraphQL fragment
+ * into props of the monaco-editor React component.
+ */
 export function GqlSourceCodeEditor(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
@@ -46,8 +52,8 @@ export function GqlSourceCodeEditor(props: Props) {
   // tooltip props
   const tooltip = fragment.tooltip
     ? {
-        markdownBody: fragment.tooltip.markdownBody,
-        lineNumber: fragment.tooltip.lineNumber,
+        ...fragment.tooltip,
+        timing: fragment.tooltip.timing ? fragment.tooltip.timing : "END", //default timing is end, as there could be edits
       }
     : undefined;
 

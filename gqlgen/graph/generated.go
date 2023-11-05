@@ -209,6 +209,7 @@ type ComplexityRoot struct {
 	SourceCodeTooltip struct {
 		LineNumber   func(childComplexity int) int
 		MarkdownBody func(childComplexity int) int
+		Timing       func(childComplexity int) int
 	}
 
 	Terminal struct {
@@ -977,6 +978,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SourceCodeTooltip.MarkdownBody(childComplexity), true
+
+	case "SourceCodeTooltip.timing":
+		if e.complexity.SourceCodeTooltip.Timing == nil {
+			break
+		}
+
+		return e.complexity.SourceCodeTooltip.Timing(childComplexity), true
 
 	case "Terminal.currentDirectory":
 		if e.complexity.Terminal.CurrentDirectory == nil {
@@ -4127,6 +4135,8 @@ func (ec *executionContext) fieldContext_OpenFile_tooltip(ctx context.Context, f
 				return ec.fieldContext_SourceCodeTooltip_markdownBody(ctx, field)
 			case "lineNumber":
 				return ec.fieldContext_SourceCodeTooltip_lineNumber(ctx, field)
+			case "timing":
+				return ec.fieldContext_SourceCodeTooltip_timing(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SourceCodeTooltip", field.Name)
 		},
@@ -5656,6 +5666,47 @@ func (ec *executionContext) fieldContext_SourceCodeTooltip_lineNumber(ctx contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SourceCodeTooltip_timing(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeTooltip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCodeTooltip_timing(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Timing, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SourceCodeTooltipTiming)
+	fc.Result = res
+	return ec.marshalOSourceCodeTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltipTiming(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SourceCodeTooltip_timing(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SourceCodeTooltip",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type SourceCodeTooltipTiming does not have child fields")
 		},
 	}
 	return fc, nil
@@ -10010,6 +10061,10 @@ func (ec *executionContext) _SourceCodeTooltip(ctx context.Context, sel ast.Sele
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "timing":
+
+			out.Values[i] = ec._SourceCodeTooltip_timing(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11706,6 +11761,22 @@ func (ec *executionContext) marshalOSourceCodeTooltip2ᚖgithubᚗcomᚋrichardi
 		return graphql.Null
 	}
 	return ec._SourceCodeTooltip(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOSourceCodeTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltipTiming(ctx context.Context, v interface{}) (*model.SourceCodeTooltipTiming, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.SourceCodeTooltipTiming)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOSourceCodeTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltipTiming(ctx context.Context, sel ast.SelectionSet, v *model.SourceCodeTooltipTiming) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

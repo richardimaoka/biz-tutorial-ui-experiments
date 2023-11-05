@@ -189,8 +189,9 @@ func (SourceCodeColumn) IsColumn()                    {}
 func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeTooltip struct {
-	MarkdownBody string `json:"markdownBody"`
-	LineNumber   int    `json:"lineNumber"`
+	MarkdownBody string                   `json:"markdownBody"`
+	LineNumber   int                      `json:"lineNumber"`
+	Timing       *SourceCodeTooltipTiming `json:"timing"`
 }
 
 type Terminal struct {
@@ -481,6 +482,47 @@ func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ModalPosition) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type SourceCodeTooltipTiming string
+
+const (
+	SourceCodeTooltipTimingStart SourceCodeTooltipTiming = "START"
+	SourceCodeTooltipTimingEnd   SourceCodeTooltipTiming = "END"
+)
+
+var AllSourceCodeTooltipTiming = []SourceCodeTooltipTiming{
+	SourceCodeTooltipTimingStart,
+	SourceCodeTooltipTimingEnd,
+}
+
+func (e SourceCodeTooltipTiming) IsValid() bool {
+	switch e {
+	case SourceCodeTooltipTimingStart, SourceCodeTooltipTimingEnd:
+		return true
+	}
+	return false
+}
+
+func (e SourceCodeTooltipTiming) String() string {
+	return string(e)
+}
+
+func (e *SourceCodeTooltipTiming) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SourceCodeTooltipTiming(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SourceCodeTooltipTiming", str)
+	}
+	return nil
+}
+
+func (e SourceCodeTooltipTiming) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

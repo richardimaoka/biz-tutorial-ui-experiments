@@ -231,9 +231,15 @@ type Terminal {
 
 # Tooltip types
 
+enum SourceCodeTooltipTiming {
+  START
+  END
+}
+
 type SourceCodeTooltip {
   markdownBody: String!
   lineNumber: Int!
+  timing: SourceCodeTooltipTiming
 }
 
 # FileEdit types

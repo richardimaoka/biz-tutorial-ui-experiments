@@ -246,7 +246,10 @@ export type SourceCodeTooltip = {
   __typename: "SourceCodeTooltip";
   lineNumber: Scalars["Int"]["output"];
   markdownBody: Scalars["String"]["output"];
+  timing?: Maybe<SourceCodeTooltipTiming>;
 };
+
+export type SourceCodeTooltipTiming = "END" | "START";
 
 export type Terminal = {
   __typename: "Terminal";
@@ -664,6 +667,7 @@ export type GqlSourceCodeEditorFragment = {
     __typename: "SourceCodeTooltip";
     markdownBody: string;
     lineNumber: number;
+    timing?: SourceCodeTooltipTiming | null;
   } | null;
 } & { " $fragmentName"?: "GqlSourceCodeEditorFragment" };
 
@@ -5317,6 +5321,7 @@ export const GqlSourceCodeEditorFragmentDoc = {
                   name: { kind: "Name", value: "markdownBody" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
               ],
             },
           },
@@ -5421,6 +5426,7 @@ export const GqlOpenFileFragmentDoc = {
                   name: { kind: "Name", value: "markdownBody" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
               ],
             },
           },
@@ -7695,6 +7701,7 @@ export const AppTestSourcecodeFilecontentPageDocument = {
                   name: { kind: "Name", value: "markdownBody" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
               ],
             },
           },
