@@ -5,5 +5,5 @@ interface Props {
 }
 
 export const FileNameTab = (props: Props): JSX.Element => {
-  return <div className={styles.tab}>{props.fileName}</div>;
+  return <div className={styles.component}>{props.fileName}</div>;
 };

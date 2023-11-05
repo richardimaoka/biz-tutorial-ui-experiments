@@ -15,14 +15,11 @@ interface Props {
 
 export function GqlFileNameTabBar(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-
-  if (!fragment.fileName) {
-    return <></>;
-  }
+  const filename = fragment.fileName ? fragment.fileName : "(new file)";
 
   return (
     <div className={styles.component}>
-      <FileNameTab fileName={fragment.fileName} />
+      <FileNameTab fileName={filename} />
     </div>
   );
 }
