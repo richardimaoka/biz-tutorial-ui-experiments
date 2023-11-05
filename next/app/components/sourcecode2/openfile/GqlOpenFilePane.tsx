@@ -1,10 +1,10 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import styles from "./GqlOpenFile.module.css";
+import styles from "./GqlOpenFilePane.module.css";
 import { GqlSourceCodeEditor } from "./editor/GqlSourceCodeEditor";
 import { GqlFileNameTabBar } from "./tab/GqlFileNameTabBar";
 
 const fragmentDefinition = graphql(`
-  fragment GqlOpenFile on OpenFile {
+  fragment GqlOpenFilePane on OpenFile {
     ...GqlFileNameTabBar
     ...GqlSourceCodeEditor
   }
@@ -14,7 +14,7 @@ interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-export function GqlOpenFile(props: Props) {
+export function GqlOpenFilePane(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   return (

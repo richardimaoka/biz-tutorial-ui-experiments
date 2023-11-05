@@ -85,6 +85,11 @@ type TerminalColumn2 implements Column2 {
 # Source Code types 2
 ###################################################
 
+type SourceCodeColumn2 implements Column2 {
+  columnName: String!
+  sourceCode: SourceCode!
+}
+
 ###################################################
 # Page state related object types
 ###################################################

@@ -1,3 +1,4 @@
+import { GqlSourceCodeColumn } from "../../sourcecode2/GqlSourceCodeColumn";
 import { GqlTerminalColumn } from "../../terminal2/GqlTerminalColumn";
 import styles from "./GqlColumnWrapper.module.css";
 
@@ -14,6 +15,10 @@ const fragmentDefinition = graphql(`
       #
       ... on TerminalColumn2 {
         ...GqlTerminalColumn
+      }
+
+      ... on SourceCodeColumn2 {
+        ...GqlSourceCodeColumn
       }
     }
   }
@@ -38,6 +43,12 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
       return (
         <div className={styles.component}>
           <GqlTerminalColumn fragment={column} selectIndex={0} />
+        </div>
+      );
+    case "SourceCodeColumn2":
+      return (
+        <div className={styles.component}>
+          <GqlSourceCodeColumn fragment={column} />
         </div>
       );
   }

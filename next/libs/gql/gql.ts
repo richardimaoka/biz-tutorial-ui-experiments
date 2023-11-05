@@ -57,6 +57,8 @@ const documents = {
     types.FileNameTab_FragmentFragmentDoc,
   "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n":
     types.FileNameTabBar_FragmentFragmentDoc,
+  "\n  fragment GqlSourceCodeColumn on SourceCodeColumn2 {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
+    types.GqlSourceCodeColumnFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
     types.GqlFileTreePaneFragmentDoc,
   "\n  fragment GqlFileNodeComponent on FileNode {\n    ...GqlFileNodeIcon\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
@@ -67,8 +69,8 @@ const documents = {
     types.GqlFileTreeHeaderFragmentDoc,
   "\n  fragment GqlFileTreeComponent on SourceCode {\n    fileTree {\n      filePath\n      ...GqlFileNodeComponent\n    }\n  }\n":
     types.GqlFileTreeComponentFragmentDoc,
-  "\n  fragment GqlOpenFile on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n":
-    types.GqlOpenFileFragmentDoc,
+  "\n  fragment GqlOpenFilePane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n":
+    types.GqlOpenFilePaneFragmentDoc,
   "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    language\n    edits {\n      text\n      range {\n        startLineNumber\n        startColumn\n        endLineNumber\n        endColumn\n      }\n    }\n    tooltip {\n      markdownBody\n      lineNumber\n      timing\n    }\n  }\n":
     types.GqlSourceCodeEditorFragmentDoc,
   "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n  }\n":
@@ -101,7 +103,7 @@ const documents = {
     types.GqlTerminalTooltipFragmentDoc,
   "\n  fragment GqlTutorialComponent on Page2 {\n    ...GqlTutorialHeader\n    ...GqlColumnWrappers\n  }\n":
     types.GqlTutorialComponentFragmentDoc,
-  "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
+  "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n\n      ... on SourceCodeColumn2 {\n        ...GqlSourceCodeColumn\n      }\n    }\n  }\n":
     types.GqlColumnWrapperFragmentDoc,
   "\n  fragment GqlColumnWrappers on Page2 {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n":
     types.GqlColumnWrappersFragmentDoc,
@@ -119,7 +121,7 @@ const documents = {
     types.YouTube_FragmentFragmentDoc,
   "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n":
     types.PageQueryDocument,
-  "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFile\n      }\n    }\n  }\n":
+  "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.AppTestSourcecodeFilecontentPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
@@ -279,6 +281,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment GqlSourceCodeColumn on SourceCodeColumn2 {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSourceCodeColumn on SourceCodeColumn2 {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n",
 ): (typeof documents)["\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n"];
 /**
@@ -309,8 +317,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlOpenFile on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n",
-): (typeof documents)["\n  fragment GqlOpenFile on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n"];
+  source: "\n  fragment GqlOpenFilePane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n",
+): (typeof documents)["\n  fragment GqlOpenFilePane on OpenFile {\n    ...GqlFileNameTabBar\n    ...GqlSourceCodeEditor\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -411,8 +419,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n"];
+  source: "\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n\n      ... on SourceCodeColumn2 {\n        ...GqlSourceCodeColumn\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlColumnWrapper on ColumnWrapper2 {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn2 {\n        ...GqlTerminalColumn\n      }\n\n      ... on SourceCodeColumn2 {\n        ...GqlSourceCodeColumn\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -465,8 +473,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFile\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFile\n      }\n    }\n  }\n"];
+  source: "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

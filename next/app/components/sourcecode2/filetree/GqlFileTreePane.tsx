@@ -14,13 +14,13 @@ const fragmentDefinition = graphql(`
   }
 `);
 
-export interface FileTreePaneProps {
+export interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
   currentDirectory?: string;
   step: string;
 }
 
-export const FileTreePane = (props: FileTreePaneProps): JSX.Element => {
+export const GqlFileTreePane = (props: Props): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   // TODO: CAUTION: this keeps refreshed upon parent component state change.

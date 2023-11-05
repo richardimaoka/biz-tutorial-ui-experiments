@@ -188,6 +188,14 @@ type SourceCodeColumn struct {
 func (SourceCodeColumn) IsColumn()                    {}
 func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
 
+type SourceCodeColumn2 struct {
+	ColumnName string      `json:"columnName"`
+	SourceCode *SourceCode `json:"sourceCode"`
+}
+
+func (SourceCodeColumn2) IsColumn2()                 {}
+func (this SourceCodeColumn2) GetColumnName() string { return this.ColumnName }
+
 type SourceCodeTooltip struct {
 	MarkdownBody string                   `json:"markdownBody"`
 	LineNumber   int                      `json:"lineNumber"`

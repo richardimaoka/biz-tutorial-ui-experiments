@@ -242,6 +242,12 @@ export type SourceCodeColumn = Column & {
   sourceCode?: Maybe<SourceCode>;
 };
 
+export type SourceCodeColumn2 = Column2 & {
+  __typename: "SourceCodeColumn2";
+  columnName: Scalars["String"]["output"];
+  sourceCode: SourceCode;
+};
+
 export type SourceCodeTooltip = {
   __typename: "SourceCodeTooltip";
   lineNumber: Scalars["Int"]["output"];
@@ -598,6 +604,22 @@ export type FileNameTabBar_FragmentFragment = ({ __typename: "OpenFile" } & {
   };
 }) & { " $fragmentName"?: "FileNameTabBar_FragmentFragment" };
 
+export type GqlSourceCodeColumnFragment = {
+  __typename: "SourceCodeColumn2";
+  sourceCode: {
+    __typename: "SourceCode";
+    openFile?:
+      | ({ __typename: "OpenFile" } & {
+          " $fragmentRefs"?: {
+            GqlOpenFilePaneFragment: GqlOpenFilePaneFragment;
+          };
+        })
+      | null;
+  } & {
+    " $fragmentRefs"?: { GqlFileTreePaneFragment: GqlFileTreePaneFragment };
+  };
+} & { " $fragmentName"?: "GqlSourceCodeColumnFragment" };
+
 export type GqlFileTreePaneFragment = ({
   __typename: "SourceCode";
   isFoldFileTree?: boolean | null;
@@ -641,12 +663,12 @@ export type GqlFileTreeComponentFragment = {
   > | null;
 } & { " $fragmentName"?: "GqlFileTreeComponentFragment" };
 
-export type GqlOpenFileFragment = ({ __typename: "OpenFile" } & {
+export type GqlOpenFilePaneFragment = ({ __typename: "OpenFile" } & {
   " $fragmentRefs"?: {
     GqlFileNameTabBarFragment: GqlFileNameTabBarFragment;
     GqlSourceCodeEditorFragment: GqlSourceCodeEditorFragment;
   };
-}) & { " $fragmentName"?: "GqlOpenFileFragment" };
+}) & { " $fragmentName"?: "GqlOpenFilePaneFragment" };
 
 export type GqlSourceCodeEditorFragment = {
   __typename: "OpenFile";
@@ -809,9 +831,17 @@ export type GqlTutorialComponentFragment = ({ __typename: "Page2" } & {
 export type GqlColumnWrapperFragment = {
   __typename: "ColumnWrapper2";
   columnName: string;
-  column: { __typename: "TerminalColumn2" } & {
-    " $fragmentRefs"?: { GqlTerminalColumnFragment: GqlTerminalColumnFragment };
-  };
+  column:
+    | ({ __typename: "SourceCodeColumn2" } & {
+        " $fragmentRefs"?: {
+          GqlSourceCodeColumnFragment: GqlSourceCodeColumnFragment;
+        };
+      })
+    | ({ __typename: "TerminalColumn2" } & {
+        " $fragmentRefs"?: {
+          GqlTerminalColumnFragment: GqlTerminalColumnFragment;
+        };
+      });
 } & { " $fragmentName"?: "GqlColumnWrapperFragment" };
 
 export type GqlColumnWrappersFragment = {
@@ -839,7 +869,9 @@ export type GqlColumnTabFragment = ({
 
 export type GqlColumnTabIconFragment = {
   __typename: "ColumnWrapper2";
-  column: { __typename: "TerminalColumn2" };
+  column:
+    | { __typename: "SourceCodeColumn2" }
+    | { __typename: "TerminalColumn2" };
 } & { " $fragmentName"?: "GqlColumnTabIconFragment" };
 
 export type GqlColumnTabsFragment = {
@@ -902,7 +934,9 @@ export type AppTestSourcecodeFilecontentPageQuery = {
     __typename: "TestObjs";
     appTestSourcecodeFilecontentPage?:
       | ({ __typename: "OpenFile" } & {
-          " $fragmentRefs"?: { GqlOpenFileFragment: GqlOpenFileFragment };
+          " $fragmentRefs"?: {
+            GqlOpenFilePaneFragment: GqlOpenFilePaneFragment;
+          };
         })
       | null;
   } | null;
@@ -4990,451 +5024,6 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
-export const GqlFileTreeHeaderFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileTreeHeader" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileTreeHeaderFragment, unknown>;
-export const GqlFileNodeIconFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeIcon" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileNodeIconFragment, unknown>;
-export const GqlFileNodeComponentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileNodeIcon" },
-          },
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          { kind: "Field", name: { kind: "Name", value: "filePath" } },
-          { kind: "Field", name: { kind: "Name", value: "offset" } },
-          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeIcon" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileNodeComponentFragment, unknown>;
-export const GqlFileTreeComponentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileTreeComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "fileTree" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "filePath" } },
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "GqlFileNodeComponent" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeIcon" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileNodeIcon" },
-          },
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          { kind: "Field", name: { kind: "Name", value: "filePath" } },
-          { kind: "Field", name: { kind: "Name", value: "offset" } },
-          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileTreeComponentFragment, unknown>;
-export const GqlFileTreePaneFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileTreePane" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileTreeHeader" },
-          },
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileTreeComponent" },
-          },
-          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeIcon" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNodeComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "FileNode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileNodeIcon" },
-          },
-          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          { kind: "Field", name: { kind: "Name", value: "filePath" } },
-          { kind: "Field", name: { kind: "Name", value: "offset" } },
-          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileTreeHeader" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileTreeComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "SourceCode" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "fileTree" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "filePath" } },
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "GqlFileNodeComponent" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileTreePaneFragment, unknown>;
-export const GqlFileNameTabBarFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNameTabBar" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "OpenFile" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "fileName" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlFileNameTabBarFragment, unknown>;
-export const GqlSourceCodeEditorFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlSourceCodeEditor" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "OpenFile" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "content" } },
-          { kind: "Field", name: { kind: "Name", value: "language" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "edits" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "range" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "tooltip" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "markdownBody" },
-                },
-                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
-                { kind: "Field", name: { kind: "Name", value: "timing" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlSourceCodeEditorFragment, unknown>;
-export const GqlOpenFileFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlOpenFile" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "OpenFile" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlFileNameTabBar" },
-          },
-          {
-            kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlSourceCodeEditor" },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlFileNameTabBar" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "OpenFile" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "fileName" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlSourceCodeEditor" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "OpenFile" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "content" } },
-          { kind: "Field", name: { kind: "Name", value: "language" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "edits" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "range" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "tooltip" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "markdownBody" },
-                },
-                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
-                { kind: "Field", name: { kind: "Name", value: "timing" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlOpenFileFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -5951,6 +5540,694 @@ export const GqlTerminalColumnFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlTerminalColumnFragment, unknown>;
+export const GqlFileTreeHeaderFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreeHeaderFragment, unknown>;
+export const GqlFileNodeIconFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNodeIconFragment, unknown>;
+export const GqlFileNodeComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNodeComponentFragment, unknown>;
+export const GqlFileTreeComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreeComponentFragment, unknown>;
+export const GqlFileTreePaneFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileTreePaneFragment, unknown>;
+export const GqlFileNameTabBarFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlFileNameTabBarFragment, unknown>;
+export const GqlSourceCodeEditorFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlSourceCodeEditorFragment, unknown>;
+export const GqlOpenFilePaneFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlOpenFilePaneFragment, unknown>;
+export const GqlSourceCodeColumnFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlSourceCodeColumnFragment, unknown>;
 export const GqlColumnWrapperFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -5984,6 +6261,22 @@ export const GqlColumnWrapperFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlSourceCodeColumn" },
                       },
                     ],
                   },
@@ -6093,6 +6386,205 @@ export const GqlColumnWrapperFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
@@ -6114,6 +6606,45 @@ export const GqlColumnWrapperFragmentDoc = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "GqlTerminalContents" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
                 },
               ],
             },
@@ -6282,6 +6813,244 @@ export const GqlColumnWrappersFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -6310,6 +7079,22 @@ export const GqlColumnWrappersFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlSourceCodeColumn" },
                       },
                     ],
                   },
@@ -6543,6 +7328,244 @@ export const GqlTutorialComponentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -6571,6 +7594,22 @@ export const GqlTutorialComponentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlSourceCodeColumn" },
                       },
                     ],
                   },
@@ -7618,7 +8657,7 @@ export const AppTestSourcecodeFilecontentPageDocument = {
                     selections: [
                       {
                         kind: "FragmentSpread",
-                        name: { kind: "Name", value: "GqlOpenFile" },
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
                       },
                     ],
                   },
@@ -7710,7 +8749,7 @@ export const AppTestSourcecodeFilecontentPageDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlOpenFile" },
+      name: { kind: "Name", value: "GqlOpenFilePane" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "OpenFile" },
@@ -8082,6 +9121,244 @@ export const AppTestTutorialColumnsPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -8110,6 +9387,22 @@ export const AppTestTutorialColumnsPageDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlSourceCodeColumn" },
                       },
                     ],
                   },
@@ -8401,6 +9694,244 @@ export const AppTestTutorialTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeHeader" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "projectDir" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeIcon" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNodeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "FileNode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNodeIcon" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "nodeType" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "filePath" } },
+          { kind: "Field", name: { kind: "Name", value: "offset" } },
+          { kind: "Field", name: { kind: "Name", value: "isUpdated" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreeComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileTree" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "filePath" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileNodeComponent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileTreePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCode" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeHeader" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileTreeComponent" },
+          },
+          { kind: "Field", name: { kind: "Name", value: "isFoldFileTree" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlFileNameTabBar" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeEditor" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edits" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "range" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startColumn" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endLineNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endColumn" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tooltip" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "markdownBody" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "lineNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "timing" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlOpenFilePane" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "OpenFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlFileNameTabBar" },
+          },
+          {
+            kind: "FragmentSpread",
+            name: { kind: "Name", value: "GqlSourceCodeEditor" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSourceCodeColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SourceCodeColumn2" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sourceCode" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlFileTreePane" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "openFile" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlOpenFilePane" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -8429,6 +9960,22 @@ export const AppTestTutorialTutorialPageDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTerminalColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlSourceCodeColumn" },
                       },
                     ],
                   },

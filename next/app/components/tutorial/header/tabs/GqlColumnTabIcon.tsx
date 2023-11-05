@@ -1,3 +1,4 @@
+import { SourceCodeIcon } from "@/app/components/icons/SourceCodeIcon";
 import { TerminalIcon } from "../../../icons/TerminalIcon";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
@@ -20,5 +21,7 @@ export function GqlColumnTabIcon(props: Props): JSX.Element {
   switch (fragment.column.__typename) {
     case "TerminalColumn2":
       return <TerminalIcon />;
+    case "SourceCodeColumn2":
+      return <SourceCodeIcon />;
   }
 }
