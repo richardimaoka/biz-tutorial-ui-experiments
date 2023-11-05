@@ -31,4 +31,11 @@
   /* Place header on top of contents, to allow select tab's bottom *merge* with content's top */
   /* z-index works without `position` property, as this is a flex child*/
   z-index: 1;
+
+  /**
+   * This is needed so that y scroll is enabled within the column 
+   * otherwise, the whole window will scroll in y direction, 
+   * because this .content component will grow to the height of the inner children
+   */
+  overflow-y: hidden;
 }

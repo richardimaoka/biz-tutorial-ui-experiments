@@ -1,4 +1,4 @@
-import { GqlColumnWrappers } from "@/app/components/tutorial/column/GqlColumnWrappers";
+import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialComponent";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 
@@ -6,7 +6,7 @@ const queryDefinition = graphql(`
   query appTestTutorialColumnsPage {
     _test {
       appTestTutorialColumnsPage {
-        ...GqlColumnWrappers
+        ...GqlTutorialComponent
       }
     }
   }
@@ -28,7 +28,9 @@ export default async function Page({ searchParams }: PageParams) {
 
   return (
     <div style={{ height: "100svh" }}>
-      {fragment && <GqlColumnWrappers fragment={fragment} />}
+      {fragment && (
+        <GqlTutorialComponent fragment={fragment} selectTab="Terminal" />
+      )}
     </div>
   );
 }

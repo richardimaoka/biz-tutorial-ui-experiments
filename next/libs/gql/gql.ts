@@ -125,7 +125,7 @@ const documents = {
     types.AppTestSourcecodeFilecontentPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
-  "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n":
+  "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n":
     types.AppTestTutorialColumnsPageDocument,
   "\n  query appTestTutorialTutorialPage {\n    _test {\n      appTestTutorialTutorialPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n":
     types.AppTestTutorialTutorialPageDocument,
@@ -485,8 +485,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlColumnWrappers\n      }\n    }\n  }\n"];
+  source: "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

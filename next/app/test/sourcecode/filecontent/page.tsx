@@ -1,3 +1,4 @@
+import { Carousel } from "@/app/components/carousel/Carousel";
 import { GqlOpenFilePane } from "@/app/components/sourcecode2/openfile/GqlOpenFilePane";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
@@ -39,7 +40,12 @@ export default async function Page({ searchParams }: PageParams) {
   return (
     <div style={{ height: "95svh" }}>
       <Link href={`/test/sourcecode/filecontent?step=${nextStep}`}>next</Link>
-      <GqlOpenFilePane fragment={fragment} />
+      <Carousel currentIndex={0} columnWidth={768}>
+        <div style={{ display: "flex", height: "100%" }}>
+          <GqlOpenFilePane fragment={fragment} />
+          <GqlOpenFilePane fragment={fragment} />
+        </div>
+      </Carousel>
     </div>
   );
 }
