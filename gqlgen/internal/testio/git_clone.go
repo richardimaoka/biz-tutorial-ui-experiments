@@ -1,4 +1,4 @@
-package gitwrap
+package testio
 
 import (
 	"testing"

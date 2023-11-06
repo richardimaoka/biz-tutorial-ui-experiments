@@ -3,14 +3,13 @@ package rough_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
 func TestTerminalSteps(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo := gitwrap.GitOpenOrClone(t, repoUrl)
+	repo := testio.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
 		inputFile  string
@@ -64,7 +63,7 @@ func TestTerminalSteps(t *testing.T) {
 
 func TestRoughStepSequence(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/article-gqlgen-getting-started"
-	repo := gitwrap.GitOpenOrClone(t, repoUrl)
+	repo := testio.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
 		inputFile  string

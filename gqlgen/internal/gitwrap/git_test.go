@@ -9,7 +9,7 @@ import (
 
 func TestGitDiff(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/biz-tutorial-ui-experiments"
-	repo := gitwrap.GitOpenOrClone(t, repoUrl)
+	repo := testio.GitOpenOrClone(t, repoUrl)
 
 	cases := []struct {
 		inputFile  string
