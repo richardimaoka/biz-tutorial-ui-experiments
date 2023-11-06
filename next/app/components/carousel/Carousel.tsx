@@ -3,7 +3,6 @@ import styles from "./Carousel.module.css";
 interface Props {
   children: React.ReactNode;
   currentIndex: number;
-  columnWidth: number;
 }
 
 export function Carousel(props: Props) {

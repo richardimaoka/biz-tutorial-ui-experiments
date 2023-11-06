@@ -10,7 +10,7 @@ export default function Page() {
 
   return (
     <div style={{ width: "600px" }}>
-      <Carousel columnWidth={600} currentIndex={columnIndex}>
+      <Carousel currentIndex={columnIndex}>
         <div
           style={{
             display: "flex",

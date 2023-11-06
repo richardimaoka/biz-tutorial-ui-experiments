@@ -121,8 +121,6 @@ const documents = {
     types.YouTube_FragmentFragmentDoc,
   "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n":
     types.PageQueryDocument,
-  "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
-    types.AppTestSourcecodeFilecontentPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
   "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n":
@@ -467,12 +465,6 @@ export function graphql(
 export function graphql(
   source: "\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n",
 ): (typeof documents)["\n  query PageQuery($tutorial: String!, $step: String, $openFilePath: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...VisibleColumn_Fragment\n      step\n      focusColumn\n      autoNextSeconds\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestSourcecodeFilecontentPage($step: Int!) {\n    _test {\n      appTestSourcecodeFilecontentPage(step: $step) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
