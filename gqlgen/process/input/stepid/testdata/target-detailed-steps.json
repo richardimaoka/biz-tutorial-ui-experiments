@@ -1,6 +1,6 @@
 [
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "terminalCommandStep",
     "step": "73388488-7f44-4617-9d6f-5cacad5bcaf8",
     "focusColumn": "Terminal",
@@ -9,7 +9,7 @@
     "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47"
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "fileTreeStep",
     "step": "96d5c1df-5488-4601-9ed2-5387f3e8d5f8",
     "focusColumn": "Source Code",
@@ -17,7 +17,7 @@
     "defaultOpenFilePath": "go.mod"
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-0",
     "step": "d748e6d7-124a-4889-92eb-6a2226272ea8",
     "focusColumn": "Source Code",
@@ -25,7 +25,7 @@
     "isFoldFileTree": true
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-1",
     "step": "292c33f3-de99-4f87-a25d-06706ef9f10c",
     "focusColumn": "Source Code",
@@ -33,7 +33,7 @@
     "isFoldFileTree": true
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-2",
     "step": "567aaaad-0181-4502-b112-fbf0028633dd",
     "focusColumn": "Source Code",
@@ -41,7 +41,7 @@
     "isFoldFileTree": true
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-3",
     "step": "4f192757-a95e-4062-9d4b-5e7d00d1dc1d",
     "focusColumn": "Source Code",
@@ -49,7 +49,7 @@
     "isFoldFileTree": true
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-4",
     "step": "b3ff849b-86ee-48f5-8703-6b19711490da",
     "focusColumn": "Source Code",
@@ -57,7 +57,7 @@
     "isFoldFileTree": true
   },
   {
-    "isFromRow": true,
+    "fromRoughStep": true,
     "subId": "openFileStep-5",
     "step": "e0d03774-d687-4d2a-aea9-ceb3b06f8592",
     "focusColumn": "Source Code",
