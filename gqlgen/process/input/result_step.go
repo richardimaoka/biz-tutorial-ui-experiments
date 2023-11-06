@@ -1,38 +1,7 @@
 package input
 
-type ColumnType = string
-
-const (
-	// Lower cases since they are from manual entries
-	SourceType   ColumnType = "source"
-	TerminalType ColumnType = "terminal"
-	BrowserType  ColumnType = "browser"
-)
-
-type SubType = string
-
-const (
-	// Lower cases since they are from manual entries
-	CommandSubType SubType = "command"
-	OutputSubType  SubType = "output"
-)
-
-type Row struct {
-	StepId        string `json:"stepId"`
-	Phase         string `json:"phase"`
-	Comment       string `json:"comment"`
-	Column        string `json:"column"` //not Column but string, because it's input from manual entry, not sanitized
-	Type          string `json:"type"`
-	Trivial       string `json:"trivial"`
-	Instruction   string `json:"instruction"`
-	Instruction2  string `json:"instruction2"`
-	Instruction3  string `json:"instruction3"`
-	ModalText     string `json:"modalText"`
-	Tooltip       string `json:"tooltip"`
-	TooltipTiming string `json:"tooltipTiming"`
-	TooltipLine   int    `json:"tooltipLine"`
-	// TooltipPosition string `json:"tooltipPosition"`
-}
+type UsedColumns = [10]string
+type CurrentColumn = string
 
 type ResultStep struct {
 	// Uppercase fields to allow json dump for testing
@@ -52,6 +21,11 @@ type ResultStep struct {
 	Column3     string `json:"column3"`
 	Column4     string `json:"column4"`
 	Column5     string `json:"column5"`
+	Column6     string `json:"column6"`
+	Column7     string `json:"column7"`
+	Column8     string `json:"column8"`
+	Column9     string `json:"column9"`
+	Column10    string `json:"column10"`
 
 	Comment string `json:"comment"`
 
@@ -93,4 +67,17 @@ type ResultStep struct {
 	YouTubeVideoId string `json:"youtubeVideoId"`
 	YouTubeWidth   int    `json:"youtubeWidth"`
 	YouTubeHeight  int    `json:"youtubeHeight"`
+}
+
+func (step *ResultStep) setColumns(cols UsedColumns) {
+	step.Column1 = cols[0]
+	step.Column2 = cols[1]
+	step.Column3 = cols[2]
+	step.Column4 = cols[3]
+	step.Column5 = cols[4]
+	step.Column6 = cols[5]
+	step.Column7 = cols[6]
+	step.Column8 = cols[7]
+	step.Column9 = cols[8]
+	step.Column10 = cols[9]
 }

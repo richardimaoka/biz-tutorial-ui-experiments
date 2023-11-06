@@ -26,6 +26,9 @@ type TerminalOutputRow struct {
 	Tooltip *TerminalTooltipRow `json:"tooltip"`
 }
 
+/**
+ * Functions to convert to specific row
+ */
 func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	errorPrefix := "failed to convert to TerminalCommand"
 
@@ -114,6 +117,93 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 		Output:  fromRow.Instruction,
 		Tooltip: terminalTooltip,
 	}, nil
+}
+
+/**
+ * Functions to generate step from row
+ */
+func moveToTerminalStep(parentStepId string, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "moveToTerminalStep"
+	stepId := finder.StepIdFor(parentStepId, subId)
+	step := ResultStep{
+		// fields to make the step searchable for re-generation
+		IsFromRow:  true,
+		ParentStep: parentStepId,
+		SubID:      subId,
+		// other fields
+		Step:        stepId,
+		FocusColumn: "Terminal",
+		Comment:     "(move to Terminal)",
+	}
+	step.setColumns(usedColumns)
+
+	return step
+}
+
+func terminalOutputStep(r *TerminalOutputRow, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "terminalOutputStep"
+	stepId := finder.StepIdFor(r.StepId, subId)
+	step := ResultStep{
+		// fields to make the step searchable for re-generation
+		IsFromRow:  true,
+		ParentStep: r.StepId,
+		SubID:      subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "output",
+		TerminalText: r.Output,
+		// ModalText:    r.ModalText,
+	}
+	step.setColumns(usedColumns)
+
+	return step
+}
+
+func terminalCommandStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "terminalCommandStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := ResultStep{
+		// fields to make the step searchable for re-generation
+		IsFromRow:  true,
+		ParentStep: r.StepId,
+		SubID:      subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "command",
+		TerminalText: r.Command,
+		// TerminalName: , // Go zero value is ""
+		// ModalText: r.ModalText,
+	}
+	step.setColumns(usedColumns)
+
+	return step
+}
+
+func terminalCdStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	currentDir := strings.TrimPrefix(r.Command, "cd ")
+
+	subId := "terminalCdStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := ResultStep{
+		// fields to make the step searchable for re-generation
+		IsFromRow:  true,
+		ParentStep: r.StepId,
+		SubID:      subId,
+		// other fields
+		Step:         stepId,
+		FocusColumn:  "Terminal",
+		TerminalType: "cd",
+		// TerminalName: r.Instruction3, // Go zero value is ""
+		CurrentDir: currentDir, // Go zero value is ""
+		// ModalText:    r.ModalText,
+	}
+	step.setColumns(usedColumns)
+
+	return step
 }
 
 func toTerminalRow(fromRow *Row) error {
