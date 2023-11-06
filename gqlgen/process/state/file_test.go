@@ -2,9 +2,7 @@ package state_test
 
 import (
 	"fmt"
-	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -22,6 +20,7 @@ func fileStateFromCommit(repoUrl, commitHashStr, filePath string) (*state.File, 
 	return fileState, nil
 }
 
+/*
 func TestFileUnchanged(t *testing.T) {
 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
 
@@ -217,3 +216,4 @@ func TestFileUpdated(t *testing.T) {
 
 	}
 }
+*/

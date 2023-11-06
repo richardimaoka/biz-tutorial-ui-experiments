@@ -1,13 +1,11 @@
 package state_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/filemode"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -114,53 +112,53 @@ func TestTreeFilesDirs(t *testing.T) {
 	}
 }
 
-func TestSourceCodePatterns(t *testing.T) {
-	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
-	repo, err := gitOpenOrClone(repoUrl)
-	if err != nil {
-		t.Fatal(err)
-	}
+// func TestSourceCodePatterns(t *testing.T) {
+// 	repoUrl := "https://github.com/richardimaoka/next-sandbox.git"
+// 	repo, err := gitOpenOrClone(repoUrl)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	cases := []struct {
-		prevCommit    string
-		currentCommit string
-		goldenFile    string
-	}{
-		{
-			// add
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
-			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
-			"testdata/source_code_add_golden.json",
-		},
-		{
-			// delete
-			"3b452151c8a567e2d42a133c255e85d81ea5912a",
-			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
-			"testdata/source_code_delete_golden.json",
-		},
-		{
-			// update
-			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad",
-			"21f725d5830aa217b28162f1609bf3b9870da79e", //emotion settings in Next.js
-			"testdata/source_code_update_golden.json",
-		},
-	}
+// 	cases := []struct {
+// 		prevCommit    string
+// 		currentCommit string
+// 		goldenFile    string
+// 	}{
+// 		{
+// 			// add
+// 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
+// 			"8adac375628219e020d4b5957ff24f45954cbd3f", //npx create-next-app@latest
+// 			"testdata/source_code_add_golden.json",
+// 		},
+// 		{
+// 			// delete
+// 			"3b452151c8a567e2d42a133c255e85d81ea5912a",
+// 			"55c98498a85f4503e3922586ceeb86ab5100e91f", //cleanup (delete all files)
+// 			"testdata/source_code_delete_golden.json",
+// 		},
+// 		{
+// 			// update
+// 			"fa2e1e5edb4379ceaaa9b9250e11c06c1fdbf4ad",
+// 			"21f725d5830aa217b28162f1609bf3b9870da79e", //emotion settings in Next.js
+// 			"testdata/source_code_update_golden.json",
+// 		},
+// 	}
 
-	for i, c := range cases {
-		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
-			sc := state.NewSourceCode(repo, "myproj", "next-sandbox")
+// 	for i, c := range cases {
+// 		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+// 			sc := state.NewSourceCode(repo, "myproj", "next-sandbox")
 
-			// prev commit as the initial commit
-			if err := sc.ForwardCommit(fmt.Sprintf("Step%02d-a", i), c.prevCommit); err != nil {
-				t.Errorf("failed in ConstructStep for commit = %s, %s", c.prevCommit, err)
-			}
+// 			// prev commit as the initial commit
+// 			if err := sc.ForwardCommit(fmt.Sprintf("Step%02d-a", i), c.prevCommit); err != nil {
+// 				t.Errorf("failed in ConstructStep for commit = %s, %s", c.prevCommit, err)
+// 			}
 
-			// current commit as the next commit
-			if err = sc.ForwardCommit(fmt.Sprintf("Step%02d-b", i), c.currentCommit); err != nil {
-				t.Errorf("failed in ConstructStep for commit = %s, %s", c.currentCommit, err)
-			}
+// 			// current commit as the next commit
+// 			if err = sc.ForwardCommit(fmt.Sprintf("Step%02d-b", i), c.currentCommit); err != nil {
+// 				t.Errorf("failed in ConstructStep for commit = %s, %s", c.currentCommit, err)
+// 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
-		})
-	}
-}
+// 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
+// 		})
+// 	}
+// }

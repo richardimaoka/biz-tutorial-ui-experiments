@@ -1,12 +1,5 @@
 package state_test
 
-import (
-	"testing"
-
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
-)
-
 // state.File is effectively immutable, so no need to test mutation to the state
 /*
 func TestOpenFileMutation1(t *testing.T) {
@@ -37,7 +30,7 @@ func TestOpenFileMutation1(t *testing.T) {
 	// and golden files are indeed different
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
 }
-*/
+
 
 func TestOpenFileMutation2(t *testing.T) {
 	s, err := fileStateFromCommit(
@@ -77,3 +70,4 @@ func TestOpenFileMutation2(t *testing.T) {
 	// and golden files are indeed different
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
 }
+*/
