@@ -5,6 +5,6 @@
   "command": "mkdir myproj",
   "tooltip": {
     "contents": "チュートリアル用ディレクトリを作成します",
-    "timing": "END"
+    "timing": "START"
   }
 }

@@ -51,7 +51,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -60,7 +60,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	// Check tooltip fields
 	//
-	tooltip, err := toSourceTooltipRow(fromRow)
+	tooltip, err := toSourceTooltip(fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -108,7 +108,7 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -117,7 +117,7 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	// Check tooltip fields
 	//
-	tooltip, err := toSourceTooltipRow(fromRow)
+	tooltip, err := toSourceTooltip(fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -153,7 +153,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -162,7 +162,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check tooltip fields
 	//
-	tooltip, err := toSourceTooltipRow(fromRow)
+	tooltip, err := toSourceTooltip(fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -184,28 +184,5 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 		Comment:  fromRow.Comment,
 		FilePath: fromRow.Instruction,
 		Tooltip:  tooltip,
-	}, nil
-}
-
-func toSourceTooltipRow(fromRow *Row) (*SourceTooltipRow, error) {
-	if fromRow.Tooltip == "" {
-		return nil, nil
-	}
-
-	contents := fromRow.Tooltip
-
-	tooltipTiming, err := toTooltipTiming(fromRow.TooltipTiming)
-	if err != nil {
-		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
-	}
-
-	if fromRow.TooltipLine == 0 {
-		return nil, fmt.Errorf("'tooltipLine' cannot be 0")
-	}
-
-	return &SourceTooltipRow{
-		Contents:   contents,
-		Timing:     tooltipTiming,
-		LineNumber: fromRow.TooltipLine,
 	}, nil
 }

@@ -5,6 +5,6 @@
   "output": "mkdir myproj",
   "tooltip": {
     "contents": "aaaa",
-    "timing": "END"
+    "timing": "START"
   }
 }

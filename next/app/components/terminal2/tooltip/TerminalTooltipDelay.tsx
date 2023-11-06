@@ -15,7 +15,7 @@ export function TerminalTooltipDelay(props: Props) {
     if (props.delay) {
       setTimeout(() => {
         setShowTooltip(true);
-      }, 200);
+      }, 500);
     } else {
       setShowTooltip(true);
     }

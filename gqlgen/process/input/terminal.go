@@ -40,7 +40,7 @@ func toTerminalCommand(fromRow *Row) (*TerminalCommandRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -85,7 +85,7 @@ func toTerminalOutput(fromRow *Row) (*TerminalOutputRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -113,22 +113,5 @@ func toTerminalOutput(fromRow *Row) (*TerminalOutputRow, error) {
 		Comment: fromRow.Comment,
 		Output:  fromRow.Instruction,
 		Tooltip: terminalTooltip,
-	}, nil
-}
-
-func toTerminalTooltip(fromRow *Row) (*TerminalTooltipRow, error) {
-	if fromRow.Tooltip == "" {
-		return nil, nil
-	}
-	contents := fromRow.Tooltip
-
-	tooltipTiming, err := toTooltipTiming(fromRow.TooltipTiming)
-	if err != nil {
-		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
-	}
-
-	return &TerminalTooltipRow{
-		Contents: contents,
-		Timing:   tooltipTiming,
 	}, nil
 }

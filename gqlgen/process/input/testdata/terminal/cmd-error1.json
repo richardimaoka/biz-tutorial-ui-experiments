@@ -4,6 +4,7 @@
   "comment": "",
   "column": "terminal",
   "type": "command",
+  "____error_reason_____": "instruction is empty",
   "instruction": "",
   "tooltip": "",
   "tooltipTiming": "",

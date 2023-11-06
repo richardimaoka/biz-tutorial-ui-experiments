@@ -46,7 +46,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -94,7 +94,7 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
@@ -149,7 +149,7 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)

@@ -6,6 +6,7 @@
   "type": "command",
   "instruction": "mkdir myproj",
   "tooltip": "チュートリアル用ディレクトリを作成します",
+  "____error_reason_____": "tooltipTiming is invalid",
   "tooltipTiming": "invalid timing string",
   "tooltipPosition": ""
 }
