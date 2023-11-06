@@ -6,7 +6,7 @@ import (
 
 //
 func PredictableFinder(targetFile string) (*StepIdFinder, error) {
-	finder, err := NewStepIdFinder(targetFile)
+	finder, err := NewFinder(targetFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create finder, %s", err)
 	}

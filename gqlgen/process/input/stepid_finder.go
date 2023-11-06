@@ -17,7 +17,7 @@ type StepIdFinder struct {
 // Create a new UUID finder instance, to reconcile step ID against the already-generated target file
 //   targetFile: File name of the target file to find UUIDs from.
 //               If targetFile doesn't exist, then the finder will always generate a brand new UUID.
-func NewStepIdFinder(targetFile string) (*StepIdFinder, error) {
+func NewFinder(targetFile string) (*StepIdFinder, error) {
 	steps, err := readExistingSteps(targetFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read existing steps: %s", err)
