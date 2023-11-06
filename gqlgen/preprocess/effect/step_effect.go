@@ -1,10 +1,9 @@
 package effect
 
 import (
-	"encoding/json"
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 type StepEffect struct {
@@ -20,8 +19,7 @@ func (s StepEffect) IsGitCommitStep() bool {
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	funcName := "ReadStepEffects"
 	var effects []StepEffect
-	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := internal.JsonRead(filePath, unmarshaller)
+	err := jsonwrap.JsonRead(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("%s failed to read file, %s", funcName, err)
 	}

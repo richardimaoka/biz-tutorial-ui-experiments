@@ -1,10 +1,9 @@
 package effect
 
 import (
-	"encoding/json"
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 type GitEffect struct {
@@ -17,8 +16,7 @@ type GitEffects []GitEffect
 
 func ReadGitEffects(filePath string) (GitEffects, error) {
 	var effects GitEffects
-	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &effects) }
-	err := internal.JsonRead(filePath, unmarshaller)
+	err := jsonwrap.JsonRead(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadGitEffects failed to read file, %s", err)
 	}
