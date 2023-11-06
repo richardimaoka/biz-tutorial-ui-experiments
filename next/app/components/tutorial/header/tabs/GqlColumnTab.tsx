@@ -1,5 +1,3 @@
-"use client";
-
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import styles from "./GqlColumnTab.module.css";
 import { GqlColumnTabIcon } from "./GqlColumnTabIcon";
