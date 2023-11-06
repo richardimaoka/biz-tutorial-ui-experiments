@@ -28,7 +28,7 @@ interface Props {
  * of concern - those should be implemented in the caller of this component
  */
 export function EditorBare(props: Props) {
-  console.log("EditorBare component is rendered");
+  // console.log("EditorBare component is rendered");
   const lineHeight = props.lineHeight ? props.lineHeight : 19;
 
   return (

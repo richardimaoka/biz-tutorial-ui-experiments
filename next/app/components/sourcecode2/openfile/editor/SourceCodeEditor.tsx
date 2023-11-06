@@ -42,7 +42,7 @@ export function SourceCodeEditor(props: Props) {
   /**
    * If tooltip is passed and not-hidden, then render tooltip
    * <EditorTooltip>, a server-side component needs to be called
-   * outiside <EditorSimple>
+   * outiside <EditorInner>
    */
   const tooltip =
     props.tooltip && !props.tooltip.hidden
