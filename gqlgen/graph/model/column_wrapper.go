@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
@@ -48,7 +49,7 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 
 func columnFromBytes(bytes []byte) (Column, error) {
 	fromField := "__typename"
-	typename, err := internal.ExtractTypeName(bytes, fromField)
+	typename, err := jsonwrap.ExtractTypeName(bytes, fromField)
 	if err != nil {
 		return nil, err
 	}

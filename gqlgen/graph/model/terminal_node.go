@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func (t *TerminalNode) UnmarshalJSON(b []byte) error {
@@ -41,7 +41,7 @@ func (t *TerminalNode) UnmarshalJSON(b []byte) error {
 
 func terminalElementFromBytes(bytes []byte) (TerminalElement, error) {
 	fromField := "contentType"
-	typename, err := internal.ExtractTypeName(bytes, fromField)
+	typename, err := jsonwrap.ExtractTypeName(bytes, fromField)
 	if err != nil {
 		return nil, err
 	}
