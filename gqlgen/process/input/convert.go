@@ -3,12 +3,14 @@ package input
 import (
 	"fmt"
 	"strings"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input/column"
 )
 
 func convert(fromRow *Row) error {
-	column := strings.ToUpper(fromRow.Column)
-	switch column {
-	case Terminal:
+	colType := strings.ToUpper(fromRow.Column)
+	switch colType {
+	case column.Terminal:
 		toTerminalRow(fromRow)
 		return nil
 	default:

@@ -36,7 +36,7 @@ func TestFinder(t *testing.T) {
 
 			id := finder.StepIdFor(result.Step, c.subId)
 			if id != c.expectedUUID {
-				t.Fatalf("expected %s, but got %s", c.expectedUUID, id)
+				t.Fatalf("expected '%s', but got '%s'", c.expectedUUID, id)
 			}
 		})
 	}

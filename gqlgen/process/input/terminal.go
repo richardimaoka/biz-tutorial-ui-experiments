@@ -3,6 +3,9 @@ package input
 import (
 	"fmt"
 	"strings"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input/column"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input/subtype"
 )
 
 type TerminalTooltipRow struct {
@@ -32,10 +35,10 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != Terminal {
+	if strings.ToLower(fromRow.Column) != column.Terminal {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != Command {
+	if strings.ToLower(fromRow.Type) != subtype.Command {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -77,10 +80,10 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != Terminal {
+	if strings.ToLower(fromRow.Column) != column.Terminal {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != Output {
+	if strings.ToLower(fromRow.Type) != subtype.Output {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -120,10 +123,10 @@ func toTerminalRow(fromRow *Row) error {
 	rowType := strings.ToLower(fromRow.Type)
 
 	switch rowType {
-	case Command:
+	case subtype.Command:
 		_, err := toTerminalCommandRow(fromRow)
 		return err
-	case Output:
+	case subtype.Output:
 		_, err := toTerminalOutputRow(fromRow)
 		return err
 	default:
