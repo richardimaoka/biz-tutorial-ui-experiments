@@ -1,19 +1,13 @@
 package test_util
 
 import (
-	"encoding/json"
-	"os"
 	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func JsonRead(t *testing.T, filePath string, v interface{}) {
-	jsonBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		t.Fatalf("failed to read file %s, %s", filePath, err)
-		return
-	}
-
-	err = json.Unmarshal(jsonBytes, v)
+	err := jsonwrap.JsonRead(filePath, v)
 	if err != nil {
 		t.Fatalf("failed to read file %s, %s", filePath, err)
 		return
