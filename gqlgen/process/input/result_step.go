@@ -6,13 +6,14 @@ type CurrentColumn = string
 type ResultStep struct {
 	// Uppercase fields to allow json dump for testing
 
-	// rough-step related
+	// Fields to make the step searchable for re-generation
 	IsFromRow  bool   `json:"isFromRow"`
 	SubID      string `json:"subId"`
 	ParentStep string `json:"parentStep"`
 
 	// steps
-	Step string `json:"step"`
+	Step    string `json:"step"`
+	Comment string `json:"comment"`
 
 	// columns
 	FocusColumn string `json:"focusColumn"`
@@ -26,8 +27,6 @@ type ResultStep struct {
 	Column8     string `json:"column8"`
 	Column9     string `json:"column9"`
 	Column10    string `json:"column10"`
-
-	Comment string `json:"comment"`
 
 	// animation
 	DurationSeconds int  `json:"durationSeconds"`

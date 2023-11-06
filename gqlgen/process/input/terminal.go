@@ -92,10 +92,10 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
-		// other fields
+		// Other fields
 		Step:          stepId,
-		FocusColumn:   "Terminal",
 		Comment:       r.Comment,
+		FocusColumn:   "Terminal",
 		ModalContents: r.ModalContents,
 		// Terminal fields
 		TerminalType: "command",
@@ -116,14 +116,15 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 	step := ResultStep{
-		// fields to make the step searchable for re-generation
+		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
-		// other fields
+		// Other fields
 		Step:          stepId,
-		FocusColumn:   "Terminal",
+		IsTrivial:     r.IsTrivial,
 		Comment:       r.Comment,
+		FocusColumn:   "Terminal",
 		ModalContents: r.ModalContents,
 		// Terminal fields
 		TerminalType: "output",
@@ -144,19 +145,22 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 	step := ResultStep{
-		// fields to make the step searchable for re-generation
+		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
-		// other fields
-		Step:        stepId,
-		FocusColumn: "Terminal",
-		Comment:     "(move to Terminal)",
-		IsTrivial:   true,
+		// Other fields
+		Step:          stepId,
+		IsTrivial:     true, // always trivial
+		Comment:       "(move to Terminal)",
+		FocusColumn:   "Terminal",
+		ModalContents: r.ModalContents,
 		// Terminal fields
 		TerminalType: "cd",
 		TerminalName: r.TerminalName,
 	}
+	// No tooltip - move step should be trivial and no tooltip to show
+
 	step.setColumns(usedColumns)
 
 	return step
@@ -169,12 +173,14 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := ResultStep{
-		// fields to make the step searchable for re-generation
+		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
 		Step:          stepId,
+		IsTrivial:     true, // always trivial
+		Comment:       "",
 		FocusColumn:   "Terminal",
 		ModalContents: r.ModalContents,
 		// Terminal fields
@@ -182,8 +188,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 		TerminalName: r.TerminalName,
 		CurrentDir:   currentDir,
 	}
-
-	// cd command should be trivial and no tooltip to show
+	// No tooltip - cd command should be trivial and no tooltip to show
 
 	step.setColumns(usedColumns)
 
