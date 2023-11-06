@@ -1,9 +1,7 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { Carousel } from "../carousel/Carousel";
 import styles from "./GqlTutorialComponent.module.css";
-import { columnWidthPx } from "./definitions";
-import { GqlTutorialHeader } from "./header/GqlTutorialHeader";
 import { GqlColumnWrappers } from "./column/GqlColumnWrappers";
+import { GqlTutorialHeader } from "./header/GqlTutorialHeader";
 
 const fragmentDefinition = graphql(`
   fragment GqlTutorialComponent on Page2 {
@@ -28,9 +26,7 @@ export function GqlTutorialComponent(props: Props) {
       </div>
       {/* contents part */}
       <div className={styles.contents}>
-        <Carousel currentIndex={0} columnWidth={columnWidthPx}>
-          <GqlColumnWrappers fragment={fragment} />
-        </Carousel>
+        <GqlColumnWrappers fragment={fragment} />
       </div>
     </div>
   );
