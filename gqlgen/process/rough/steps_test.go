@@ -5,7 +5,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/test_util"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
@@ -48,7 +48,7 @@ func TestTerminalSteps(t *testing.T) {
 		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
 			var roughStep rough.RoughStep
-			test_util.JsonRead(t, c.inputFile, &roughStep)
+			testio.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step and verify
 			converted, err := c.state.Conversion(&roughStep)
