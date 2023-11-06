@@ -5,13 +5,16 @@ const fragmentDefinition = graphql(`
   fragment GqlSourceCodeEditor on OpenFile {
     content
     language
-    edits {
-      text
-      range {
-        startLineNumber
-        startColumn
-        endLineNumber
-        endColumn
+    editSequence {
+      id
+      edits {
+        text
+        range {
+          startLineNumber
+          startColumn
+          endLineNumber
+          endColumn
+        }
       }
     }
     tooltip {
@@ -40,14 +43,13 @@ export function GqlSourceCodeEditor(props: Props) {
   const language = fragment.language ? fragment.language : "";
 
   // edit sequence props
-  const edits = fragment.edits ? fragment.edits : [];
-  const editSequence =
-    edits.length > 0
-      ? {
-          edits: edits,
-          skipAnimation: props.skipAnimation,
-        }
-      : undefined;
+  const editSequence = fragment.editSequence
+    ? {
+        id: fragment.editSequence.id,
+        edits: fragment.editSequence.edits ? fragment.editSequence.edits : [],
+        skipAnimation: props.skipAnimation,
+      }
+    : undefined;
 
   // tooltip props
   const tooltip = fragment.tooltip

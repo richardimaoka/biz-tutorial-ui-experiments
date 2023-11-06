@@ -12,13 +12,14 @@ export function useEditSequence(
 
   // Prop to be passed from the parent component
   editSequence?: {
+    id: string;
     edits: editor.IIdentifiedSingleEditOperation[];
     skipAnimation?: boolean;
   }
 ) {
-  // Save the edit-made flag to clear previous edits, upon editSequence change
+  // Save the ID of the last edit to clear previous edits, upon editSequence change
   // useRef, since monaco editor is separate from React state.
-  const isEditsMade = useRef(false);
+  const lastEditID = useRef("");
 
   // Similar to `isEditMade` flag above, but this is for the caller, to act on edit completion
   const [isEditCompleted, setEditCompleted] = useState(false);
@@ -36,23 +37,24 @@ export function useEditSequence(
         /**
          * If edits are non-empty
          */
+        if (editSequence.id !== lastEditID.current) {
+          // clear previous edits upon props change
+          if (lastEditID.current !== "") {
+            executeEditCallback(editorInstance, () => {
+              editorInstance.trigger("", "undo", null);
+            });
+          }
 
-        // clear previous edits upon props change
-        if (isEditsMade) {
-          executeEditCallback(editorInstance, () => {
-            editorInstance.trigger("", "undo", null);
-          });
+          // execute edits
+          if (editSequence.skipAnimation) {
+            executeEditsStatic(editorInstance, edits, markCompletion);
+          } else {
+            executeEditsAnimation(editorInstance, edits, markCompletion);
+          }
+
+          // save the edit-made flag
+          lastEditID.current = editSequence.id;
         }
-
-        // execute edits
-        if (editSequence.skipAnimation) {
-          executeEditsStatic(editorInstance, edits, markCompletion);
-        } else {
-          executeEditsAnimation(editorInstance, edits, markCompletion);
-        }
-
-        // save the edit-made flag
-        isEditsMade.current = true;
       } else {
         /**
          * Else if edits are empty
@@ -64,14 +66,16 @@ export function useEditSequence(
         });
 
         // clear the edit-made flag
-        isEditsMade.current = false;
+        lastEditID.current = "";
       }
     }
   }, [editorInstance, editSequence]);
 
   useEffect(() => {
     // Whenever edit sequence is updated, set the completed flag as false
-    setEditCompleted(false);
+    if (lastEditID.current !== editSequence?.id) {
+      setEditCompleted(false);
+    }
   }, [editSequence]);
 
   return { isEditCompleted };

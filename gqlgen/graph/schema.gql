@@ -265,6 +265,11 @@ type MonacoEditOperation {
   range: MonacoEditRange!
 }
 
+type EditSequence {
+  id: ID!
+  edits: [MonacoEditOperation!]
+}
+
 type MonacoEditRange {
   startLineNumber: Int!
   startColumn: Int!
@@ -304,7 +309,7 @@ type OpenFile {
   isFullContent: Boolean
   language: String
   size: Float
-  edits: [MonacoEditOperation!]
+  editSequence: EditSequence
   tooltip: SourceCodeTooltip
 
   # To be deprecated as Monaco Diff Editor will be used

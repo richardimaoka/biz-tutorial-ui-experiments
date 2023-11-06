@@ -66,6 +66,11 @@ type DevToolsColumn struct {
 func (DevToolsColumn) IsColumn()                    {}
 func (this DevToolsColumn) GetPlaceholder() *string { return this.Placeholder }
 
+type EditSequence struct {
+	ID    string                 `json:"id"`
+	Edits []*MonacoEditOperation `json:"edits"`
+}
+
 type FileHighlight struct {
 	FromLine *int `json:"fromLine"`
 	ToLine   *int `json:"toLine"`
@@ -142,16 +147,16 @@ type NextAction struct {
 }
 
 type OpenFile struct {
-	FilePath      *string                `json:"filePath"`
-	FileName      *string                `json:"fileName"`
-	Content       *string                `json:"content"`
-	OldContent    *string                `json:"oldContent"`
-	IsFullContent *bool                  `json:"isFullContent"`
-	Language      *string                `json:"language"`
-	Size          *float64               `json:"size"`
-	Edits         []*MonacoEditOperation `json:"edits"`
-	Tooltip       *SourceCodeTooltip     `json:"tooltip"`
-	Highlight     []*FileHighlight       `json:"highlight"`
+	FilePath      *string            `json:"filePath"`
+	FileName      *string            `json:"fileName"`
+	Content       *string            `json:"content"`
+	OldContent    *string            `json:"oldContent"`
+	IsFullContent *bool              `json:"isFullContent"`
+	Language      *string            `json:"language"`
+	Size          *float64           `json:"size"`
+	EditSequence  *EditSequence      `json:"editSequence"`
+	Tooltip       *SourceCodeTooltip `json:"tooltip"`
+	Highlight     []*FileHighlight   `json:"highlight"`
 }
 
 type Page struct {

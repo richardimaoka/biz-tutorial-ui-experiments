@@ -18,6 +18,7 @@ interface Props {
   editorText: string;
   language: string;
   editSequence?: {
+    id: string;
     edits: editor.IIdentifiedSingleEditOperation[];
     skipAnimation?: boolean;
   };

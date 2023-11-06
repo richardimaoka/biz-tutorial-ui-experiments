@@ -79,6 +79,12 @@ export type DevToolsColumn = Column & {
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
+export type EditSequence = {
+  __typename: "EditSequence";
+  edits?: Maybe<Array<MonacoEditOperation>>;
+  id: Scalars["ID"]["output"];
+};
+
 export type FileHighlight = {
   __typename: "FileHighlight";
   fromLine?: Maybe<Scalars["Int"]["output"]>;
@@ -172,7 +178,7 @@ export type NextAction = {
 export type OpenFile = {
   __typename: "OpenFile";
   content?: Maybe<Scalars["String"]["output"]>;
-  edits?: Maybe<Array<MonacoEditOperation>>;
+  editSequence?: Maybe<EditSequence>;
   fileName?: Maybe<Scalars["String"]["output"]>;
   filePath?: Maybe<Scalars["String"]["output"]>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
@@ -688,17 +694,21 @@ export type GqlSourceCodeEditorFragment = {
   __typename: "OpenFile";
   content?: string | null;
   language?: string | null;
-  edits?: Array<{
-    __typename: "MonacoEditOperation";
-    text: string;
-    range: {
-      __typename: "MonacoEditRange";
-      startLineNumber: number;
-      startColumn: number;
-      endLineNumber: number;
-      endColumn: number;
-    };
-  }> | null;
+  editSequence?: {
+    __typename: "EditSequence";
+    id: string;
+    edits?: Array<{
+      __typename: "MonacoEditOperation";
+      text: string;
+      range: {
+        __typename: "MonacoEditRange";
+        startLineNumber: number;
+        startColumn: number;
+        endLineNumber: number;
+        endColumn: number;
+      };
+    }> | null;
+  } | null;
   tooltip?: {
     __typename: "SourceCodeTooltip";
     markdownBody: string;
@@ -5827,32 +5837,42 @@ export const GqlSourceCodeEditorFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -5932,32 +5952,42 @@ export const GqlOpenFilePaneFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -6132,32 +6162,42 @@ export const GqlSourceCodeColumnFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -6511,32 +6551,42 @@ export const GqlColumnWrapperFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -6938,32 +6988,42 @@ export const GqlColumnWrappersFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -7454,32 +7514,42 @@ export const GqlTutorialComponentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -8697,32 +8767,42 @@ export const AppTestSourcecodeFilecontentPageDocument = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -9333,32 +9413,42 @@ export const AppTestTutorialColumnsPageDocument = {
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "edits" },
+            name: { kind: "Name", value: "editSequence" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "range" },
+                  name: { kind: "Name", value: "edits" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "startLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "startColumn" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endLineNumber" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endColumn" },
+                        name: { kind: "Name", value: "range" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startColumn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endLineNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endColumn" },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },

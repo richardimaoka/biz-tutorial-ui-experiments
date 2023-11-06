@@ -80,6 +80,11 @@ type ComplexityRoot struct {
 		Width       func(childComplexity int) int
 	}
 
+	EditSequence struct {
+		Edits func(childComplexity int) int
+		ID    func(childComplexity int) int
+	}
+
 	FileHighlight struct {
 		FromLine func(childComplexity int) int
 		ToLine   func(childComplexity int) int
@@ -151,7 +156,7 @@ type ComplexityRoot struct {
 
 	OpenFile struct {
 		Content       func(childComplexity int) int
-		Edits         func(childComplexity int) int
+		EditSequence  func(childComplexity int) int
 		FileName      func(childComplexity int) int
 		FilePath      func(childComplexity int) int
 		Highlight     func(childComplexity int) int
@@ -465,6 +470,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DevToolsColumn.Width(childComplexity), true
 
+	case "EditSequence.edits":
+		if e.complexity.EditSequence.Edits == nil {
+			break
+		}
+
+		return e.complexity.EditSequence.Edits(childComplexity), true
+
+	case "EditSequence.id":
+		if e.complexity.EditSequence.ID == nil {
+			break
+		}
+
+		return e.complexity.EditSequence.ID(childComplexity), true
+
 	case "FileHighlight.fromLine":
 		if e.complexity.FileHighlight.FromLine == nil {
 			break
@@ -724,12 +743,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OpenFile.Content(childComplexity), true
 
-	case "OpenFile.edits":
-		if e.complexity.OpenFile.Edits == nil {
+	case "OpenFile.editSequence":
+		if e.complexity.OpenFile.EditSequence == nil {
 			break
 		}
 
-		return e.complexity.OpenFile.Edits(childComplexity), true
+		return e.complexity.OpenFile.EditSequence(childComplexity), true
 
 	case "OpenFile.fileName":
 		if e.complexity.OpenFile.FileName == nil {
@@ -2337,6 +2356,97 @@ func (ec *executionContext) fieldContext_DevToolsColumn_path(ctx context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EditSequence_id(ctx context.Context, field graphql.CollectedField, obj *model.EditSequence) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EditSequence_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EditSequence_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EditSequence",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EditSequence_edits(ctx context.Context, field graphql.CollectedField, obj *model.EditSequence) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EditSequence_edits(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edits, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.MonacoEditOperation)
+	fc.Result = res
+	return ec.marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditOperationᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EditSequence_edits(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EditSequence",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "text":
+				return ec.fieldContext_MonacoEditOperation_text(ctx, field)
+			case "range":
+				return ec.fieldContext_MonacoEditOperation_range(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MonacoEditOperation", field.Name)
 		},
 	}
 	return fc, nil
@@ -4179,8 +4289,8 @@ func (ec *executionContext) fieldContext_OpenFile_size(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _OpenFile_edits(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OpenFile_edits(ctx, field)
+func (ec *executionContext) _OpenFile_editSequence(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_editSequence(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4193,7 +4303,7 @@ func (ec *executionContext) _OpenFile_edits(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Edits, nil
+		return obj.EditSequence, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4202,12 +4312,12 @@ func (ec *executionContext) _OpenFile_edits(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.MonacoEditOperation)
+	res := resTmp.(*model.EditSequence)
 	fc.Result = res
-	return ec.marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditOperationᚄ(ctx, field.Selections, res)
+	return ec.marshalOEditSequence2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐEditSequence(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_OpenFile_edits(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_OpenFile_editSequence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OpenFile",
 		Field:      field,
@@ -4215,12 +4325,12 @@ func (ec *executionContext) fieldContext_OpenFile_edits(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "text":
-				return ec.fieldContext_MonacoEditOperation_text(ctx, field)
-			case "range":
-				return ec.fieldContext_MonacoEditOperation_range(ctx, field)
+			case "id":
+				return ec.fieldContext_EditSequence_id(ctx, field)
+			case "edits":
+				return ec.fieldContext_EditSequence_edits(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type MonacoEditOperation", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type EditSequence", field.Name)
 		},
 	}
 	return fc, nil
@@ -5598,8 +5708,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "size":
 				return ec.fieldContext_OpenFile_size(ctx, field)
-			case "edits":
-				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "editSequence":
+				return ec.fieldContext_OpenFile_editSequence(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_OpenFile_tooltip(ctx, field)
 			case "highlight":
@@ -5850,8 +5960,8 @@ func (ec *executionContext) fieldContext_SourceCode2_openFile(ctx context.Contex
 				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "size":
 				return ec.fieldContext_OpenFile_size(ctx, field)
-			case "edits":
-				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "editSequence":
+				return ec.fieldContext_OpenFile_editSequence(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_OpenFile_tooltip(ctx, field)
 			case "highlight":
@@ -7447,8 +7557,8 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 				return ec.fieldContext_OpenFile_language(ctx, field)
 			case "size":
 				return ec.fieldContext_OpenFile_size(ctx, field)
-			case "edits":
-				return ec.fieldContext_OpenFile_edits(ctx, field)
+			case "editSequence":
+				return ec.fieldContext_OpenFile_editSequence(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_OpenFile_tooltip(ctx, field)
 			case "highlight":
@@ -9767,6 +9877,38 @@ func (ec *executionContext) _DevToolsColumn(ctx context.Context, sel ast.Selecti
 	return out
 }
 
+var editSequenceImplementors = []string{"EditSequence"}
+
+func (ec *executionContext) _EditSequence(ctx context.Context, sel ast.SelectionSet, obj *model.EditSequence) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, editSequenceImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EditSequence")
+		case "id":
+
+			out.Values[i] = ec._EditSequence_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "edits":
+
+			out.Values[i] = ec._EditSequence_edits(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var fileHighlightImplementors = []string{"FileHighlight"}
 
 func (ec *executionContext) _FileHighlight(ctx context.Context, sel ast.SelectionSet, obj *model.FileHighlight) graphql.Marshaler {
@@ -10204,9 +10346,9 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._OpenFile_size(ctx, field, obj)
 
-		case "edits":
+		case "editSequence":
 
-			out.Values[i] = ec._OpenFile_edits(ctx, field, obj)
+			out.Values[i] = ec._OpenFile_editSequence(ctx, field, obj)
 
 		case "tooltip":
 
@@ -12038,6 +12180,13 @@ func (ec *executionContext) marshalOColumnWrapper2ᚖgithubᚗcomᚋrichardimaok
 		return graphql.Null
 	}
 	return ec._ColumnWrapper(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOEditSequence2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐEditSequence(ctx context.Context, sel ast.SelectionSet, v *model.EditSequence) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._EditSequence(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOFileHighlight2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileHighlight(ctx context.Context, sel ast.SelectionSet, v []*model.FileHighlight) graphql.Marshaler {
