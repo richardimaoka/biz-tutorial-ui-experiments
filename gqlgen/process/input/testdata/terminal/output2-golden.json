@@ -1,12 +1,13 @@
 {
   "stepId": "66105871-d23c-4e54-98f4-b715b330a0da",
   "isTrivial": false,
-  "modalContents": "",
-  "terminalName": "default",
   "comment": "",
-  "output": "mkdir myproj",
+  "type": "output",
+  "text": "mkdir myproj",
   "tooltip": {
     "contents": "aaaa",
     "timing": "START"
-  }
+  },
+  "modalContents": "",
+  "terminalName": "default"
 }
