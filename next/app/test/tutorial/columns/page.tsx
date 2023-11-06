@@ -28,9 +28,7 @@ export default async function Page({ searchParams }: PageParams) {
 
   return (
     <div style={{ height: "100svh" }}>
-      {fragment && (
-        <GqlTutorialComponent fragment={fragment} selectTab="Terminal" />
-      )}
+      {fragment && <GqlTutorialComponent fragment={fragment} />}
     </div>
   );
 }

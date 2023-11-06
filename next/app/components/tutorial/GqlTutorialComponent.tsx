@@ -12,7 +12,6 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
-  selectTab: string;
 }
 
 export function GqlTutorialComponent(props: Props) {
@@ -22,7 +21,7 @@ export function GqlTutorialComponent(props: Props) {
     <div className={styles.component}>
       {/* header part */}
       <div className={styles.header}>
-        <GqlTutorialHeader fragment={fragment} selectTab={props.selectTab} />
+        <GqlTutorialHeader fragment={fragment} />
       </div>
       {/* contents part */}
       <div className={styles.contents}>
