@@ -226,3 +226,24 @@ func moveTypingPosition(chunk gitwrap.Chunk, pos TypingPosition) TypingPosition 
 		Column:     utf8.RuneCountInString(lastLineChange) + 1,
 	}
 }
+
+func processChunk(chunk gitwrap.Chunk, pos TypingPosition) (TypingPosition, []SingleEditOperation) {
+	currentPos := pos
+
+	var ops []SingleEditOperation = []SingleEditOperation{}
+	switch chunk.Type {
+	case "Add":
+		var chunks []ChunkToAdd
+		currentPos, chunks = toChunksToAdd(chunk, currentPos)
+		newOps := toOpsToAdd(chunks)
+		ops = append(ops, newOps...)
+	case "Equal":
+		currentPos = moveTypingPosition(chunk, pos)
+	case "Delete":
+		chunks := toChunksToDelete(chunk, currentPos)
+		newOps := toOpsToDelete(chunks)
+		ops = append(ops, newOps...)
+	}
+
+	return currentPos, ops
+}

@@ -389,3 +389,45 @@ func TestToChunksToDelete(t *testing.T) {
 		})
 	}
 }
+
+func TestProcessChunk(t *testing.T) {
+	cases := []struct {
+		inputPos    TypingPosition
+		inputChunk  gitwrap.Chunk
+		expected    []SingleEditOperation
+		expectedPos TypingPosition
+	}{
+		{
+			TypingPosition{LineNumber: 1, Column: 1},
+			gitwrap.Chunk{
+				Content: "\"use client\";\n\n",
+				Type:    "Equal",
+			},
+			[]SingleEditOperation{},
+			TypingPosition{LineNumber: 3, Column: 1},
+		},
+		{
+			TypingPosition{LineNumber: 3, Column: 1},
+			gitwrap.Chunk{
+				Content: "import Editor from \"@monaco-editor/react\";\n",
+				Type:    "Delete",
+			},
+			[]SingleEditOperation{
+				{Range: Range{StartLineNumber: 3, StartColumn: 1, EndLineNumber: 4, EndColumn: 0}, Text: ""},
+			},
+			TypingPosition{LineNumber: 3, Column: 1},
+		},
+	}
+
+	for index, c := range cases {
+		t.Run(strconv.Itoa(index), func(t *testing.T) {
+			resultPos, resultOps := processChunk(c.inputChunk, c.inputPos)
+			if !cmp.Equal(c.expected, resultOps) {
+				t.Errorf(cmp.Diff(c.expected, resultOps))
+			}
+			if resultPos != c.expectedPos {
+				t.Errorf(cmp.Diff(c.expectedPos, resultPos))
+			}
+		})
+	}
+}
