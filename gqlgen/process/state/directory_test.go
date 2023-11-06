@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -39,6 +39,6 @@ func TestRootDirectory(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, rootDir.ToGraphQLFileNodeSlice())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, rootDir.ToGraphQLFileNodeSlice())
 	}
 }

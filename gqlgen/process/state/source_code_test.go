@@ -158,7 +158,7 @@ func TestTreeFilesDirs(t *testing.T) {
 // 				t.Errorf("failed in ConstructStep for commit = %s, %s", c.currentCommit, err)
 // 			}
 
-// 			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
+// 			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, sc.ToGraphQLSourceCode())
 // 		})
 // 	}
 // }

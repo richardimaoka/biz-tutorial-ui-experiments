@@ -1,4 +1,4 @@
-package internal
+package testio
 
 import (
 	"encoding/json"
@@ -8,10 +8,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 )
-
-func Address(s string) *string {
-	return &s
-}
 
 func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	var resultMap interface{}
@@ -33,6 +29,17 @@ func compareJsonBytes(expectedBytes, resultBytes []byte) error {
 	return nil
 }
 
+func writeGoldenFile(t *testing.T, filePath string, v any) {
+	jsonBytes, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
+	}
+
+	if err := os.WriteFile(filePath, jsonBytes, 0644); err != nil {
+		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
+	}
+}
+
 func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface{}) {
 	expectedBytes, err := os.ReadFile(expectedJsonFile)
 	if err != nil {
@@ -51,18 +58,7 @@ func CompareAfterMarshal(t *testing.T, expectedJsonFile string, result interface
 	}
 }
 
-func writeGoldenFile(t *testing.T, filePath string, v any) {
-	jsonBytes, err := json.MarshalIndent(v, "", "  ")
-	if err != nil {
-		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
-	}
-
-	if err := os.WriteFile(filePath, jsonBytes, 0644); err != nil {
-		t.Fatalf("error writing golden file = '%s', %v", filePath, err)
-	}
-}
-
-func CompareWitGoldenFile(t *testing.T, updateGoldenFile bool, goldenFileName string, result interface{}) {
+func CompareWithGoldenFile(t *testing.T, updateGoldenFile bool, goldenFileName string, result interface{}) {
 	if updateGoldenFile {
 		writeGoldenFile(t, goldenFileName, result)
 	}

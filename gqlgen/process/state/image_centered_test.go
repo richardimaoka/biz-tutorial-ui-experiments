@@ -3,7 +3,7 @@ package state_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -20,7 +20,7 @@ func TestImageCenteredMutation1(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLImageCentered()
 	goldenFile1 := "testdata/image_centered_golden1-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
 	s.Width = 1240
@@ -31,11 +31,11 @@ func TestImageCenteredMutation1(t *testing.T) {
 	s.URL = "https://yourdomain.com/img2.png"
 
 	// ... has NO effect on the materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, gqlModel)
+	testio.CompareAfterMarshal(t, goldenFile1, gqlModel)
 
 	// ... has effect on a RE-materialized GraphQL model
 	goldenFile2 := "testdata/image_centered_golden1-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLImageCentered())
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLImageCentered())
 }
 
 func TestImageCenteredMutation2(t *testing.T) {
@@ -51,7 +51,7 @@ func TestImageCenteredMutation2(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLImageCentered()
 	goldenFile1 := "testdata/image_centered_golden2-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the materialized model ...
 	*gqlModel.Width = 1240
@@ -62,9 +62,9 @@ func TestImageCenteredMutation2(t *testing.T) {
 	*gqlModel.URL = "https://yourdomain.com/img2.png"
 
 	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLImageCentered())
+	testio.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLImageCentered())
 
 	// ... has effect on the materialized GraphQL model
 	goldenFile2 := "testdata/image_centered_golden2-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 }

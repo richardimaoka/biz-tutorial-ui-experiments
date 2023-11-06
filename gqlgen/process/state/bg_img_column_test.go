@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -23,7 +23,7 @@ func TestBackgroundImageColumnMutation1(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLBgImgCol()
 	goldenFile1 := "testdata/bg_img_column_golden1-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
 	s.Width = 1240
@@ -34,11 +34,11 @@ func TestBackgroundImageColumnMutation1(t *testing.T) {
 	s.Modal.Position = state.ModalPositionCenter
 
 	// ... has NO effect on the materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, gqlModel)
+	testio.CompareAfterMarshal(t, goldenFile1, gqlModel)
 
 	// ... has effect on a RE-materialized GraphQL model
 	goldenFile2 := "testdata/bg_img_column_golden1-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLBgImgCol())
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLBgImgCol())
 }
 
 func TestBackgroundImageColumnMutation2(t *testing.T) {
@@ -56,7 +56,7 @@ func TestBackgroundImageColumnMutation2(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLBgImgCol()
 	goldenFile1 := "testdata/bg_img_column_golden2-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
 	*gqlModel.Width = 1240
@@ -67,9 +67,9 @@ func TestBackgroundImageColumnMutation2(t *testing.T) {
 	*gqlModel.Modal.Position = model.ModalPositionCenter
 
 	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLBgImgCol())
+	testio.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLBgImgCol())
 
 	// ... has effect on the materialized GraphQL model
 	goldenFile2 := "testdata/bg_img_column_golden2-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 }

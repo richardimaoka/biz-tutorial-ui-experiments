@@ -15,17 +15,17 @@ func TestOpenFileMutation1(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLFileNode()
 	goldenFile1 := "testdata/openfile_mutation_golden1-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
   // state.File is effectively immutable, so no need to test mutation to the state
 
 	// ... has NO effect on the materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, gqlModel)
+	testio.CompareAfterMarshal(t, goldenFile1, gqlModel)
 
 	// ... has effect on a RE-materialized GraphQL model
 	goldenFile2 := "testdata/openfile_mutation_golden1-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLOpenFile())
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLOpenFile())
 
 	// and golden files are indeed different
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
@@ -45,7 +45,7 @@ func TestOpenFileMutation2(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLOpenFile()
 	goldenFile1 := "testdata/openfile_mutation_golden2-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the materialized model ...
 	*gqlModel.FilePath = "next/package-mutated.json"
@@ -61,11 +61,11 @@ func TestOpenFileMutation2(t *testing.T) {
 	gqlModel.Highlight = append(gqlModel.Highlight, &highlight)
 
 	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLOpenFile())
+	testio.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLOpenFile())
 
 	// ... has effect on the materialized GraphQL model
 	goldenFile2 := "testdata/openfile_mutation_golden2-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 
 	// and golden files are indeed different
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)

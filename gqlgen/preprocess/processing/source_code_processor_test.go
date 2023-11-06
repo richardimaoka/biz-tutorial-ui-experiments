@@ -42,7 +42,7 @@ func Test_SingleFileOp(t *testing.T) {
 				err := sourceCode.Transition("", scOp)
 				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
-				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
+				testio.CompareWithGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
 			}
 		})
 	}
@@ -221,7 +221,7 @@ func Test_GitOp(t *testing.T) {
 				err := sourceCode.Transition(fmt.Sprintf("%03d", i), processing.SourceCodeGitOperation{CommitHash: c.CommitHash})
 				checkResult(t, i, c.CommitHash, c.ExpectSuccess, err)
 
-				internal.CompareWitGoldenFile(t, *updateFlag, c.GoldenFile, sourceCode.ToGraphQLModel())
+				testio.CompareWithGoldenFile(t, *updateFlag, c.GoldenFile, sourceCode.ToGraphQLModel())
 			}
 		})
 	}
@@ -275,7 +275,7 @@ func Test_FileHighlight(t *testing.T) {
 				err := sourceCode.Transition("", scOp)
 				checkResult(t, i, c.Operation, c.ExpectSuccess, err)
 
-				internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
+				testio.CompareWithGoldenFile(t, *updateFlag, c.ExpectedFile, sourceCode.ToGraphQLModel())
 			}
 		})
 	}
@@ -297,7 +297,7 @@ func TestSourceCode_Mutation1(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-1.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-1.json", materialized)
 
 	// ...mutation to source code...
 	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
@@ -305,10 +305,10 @@ func TestSourceCode_Mutation1(t *testing.T) {
 	applySingleFileOp(t, sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on re-materialized GraphQL model
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/mutation1-2.json", sourceCode.ToGraphQLModel())
 
 	// ...but should have no effect on materialized GraphQL model
-	internal.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)
+	testio.CompareAfterMarshal(t, "testdata/source_code/mutation1-1.json", materialized)
 }
 
 // Test mutation after sourceCode.ToGraphQLModel()
@@ -321,7 +321,7 @@ func TestSourceCode_Mutation2(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	materialized := sourceCode.ToGraphQLModel()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-1.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-1.json", materialized)
 
 	// ...mutation to materialized GraphQL model...
 	ptr1 := materialized.FileTree[0].Name
@@ -330,10 +330,10 @@ func TestSourceCode_Mutation2(t *testing.T) {
 	*ptr2 = "mutation/extra/path"
 
 	// ...should of course have effect on materialized GraphQL model
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-2.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/mutation2-2.json", materialized)
 
 	// ...but should have no effect on source code
-	internal.CompareAfterMarshal(t, "testdata/source_code/mutation2-1.json", sourceCode.ToGraphQLModel())
+	testio.CompareAfterMarshal(t, "testdata/source_code/mutation2-1.json", sourceCode.ToGraphQLModel())
 }
 
 func TestSourceCode_Clone(t *testing.T) {
@@ -344,7 +344,7 @@ func TestSourceCode_Clone(t *testing.T) {
 
 	// once cloned ...
 	sourceCodeCloned := sourceCode.Clone()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
 
 	// ... mutation to source code
 	applySingleFileOp(t, sourceCode, "", processing.FileAdd{FilePath: "aloha/world/germany.txt"})
@@ -352,9 +352,9 @@ func TestSourceCode_Clone(t *testing.T) {
 	applySingleFileOp(t, sourceCode, "", processing.FileDelete{FilePath: "hello/world/japan.txt"})
 
 	// ...should of course have effect on terminal itself
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/source_code/clone1-2.json", sourceCode.ToGraphQLModel())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/source_code/clone1-2.json", sourceCode.ToGraphQLModel())
 
 	// ...but should have no effect on sourceCode
-	internal.CompareAfterMarshal(t, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
+	testio.CompareAfterMarshal(t, "testdata/source_code/clone1-1.json", sourceCodeCloned.ToGraphQLModel())
 }
 */

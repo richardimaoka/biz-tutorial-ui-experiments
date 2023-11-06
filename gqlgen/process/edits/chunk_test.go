@@ -3,9 +3,9 @@ package edits_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
 
@@ -25,7 +25,7 @@ func TestProcessChunks(t *testing.T) {
 				t.Fatal(err)
 			}
 			result := edits.ToOperations(chunks)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }

@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
 
 func Test_NewTerminalProcessor(t *testing.T) {
 	terminal := processing.NewTerminalProcessor("default")
 	result := terminal.ToGraphQLTerminal()
-	internal.CompareAfterMarshal(t, "testdata/terminal/new-terminal.json", result)
+	testio.CompareAfterMarshal(t, "testdata/terminal/new-terminal.json", result)
 }
 
 func Test_TerminalTransition(t *testing.T) {
@@ -27,7 +27,7 @@ func Test_TerminalTransition(t *testing.T) {
 			step := fmt.Sprintf("%03d", i)
 			terminal.Transition(step, c.Operation)
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedFile, terminal.ToGraphQLTerminal())
+			testio.CompareWithGoldenFile(t, *updateFlag, c.ExpectedFile, terminal.ToGraphQLTerminal())
 		}
 	}
 
@@ -72,16 +72,16 @@ func Test_TerminalMutation1(t *testing.T) {
 
 	// once GraphQL model is materialized...
 	materialized := terminal.ToGraphQLTerminal()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-1.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-1.json", materialized)
 
 	// ...mutation to Terminal...
 	terminal.Transition("003", processing.TerminalCommandWithOutputCd{Command: "mutation extra command", Output: "mutation extra output", CurrentDirectory: "mutated/current/dir"})
 
 	// ...should of course have effect on re-materialized GraphQL model
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-2.json", terminal.ToGraphQLTerminal())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/mutation1-2.json", terminal.ToGraphQLTerminal())
 
 	// ...but should have no effect on materialized GraphQL model
-	internal.CompareAfterMarshal(t, "testdata/terminal/mutation1-1.json", materialized)
+	testio.CompareAfterMarshal(t, "testdata/terminal/mutation1-1.json", materialized)
 }
 
 // Test mutation after terminal.ToGraphQLModel()
@@ -94,7 +94,7 @@ func TestTerminal_Mutation2(t *testing.T) {
 	// once GraphQL model is materialized...
 	materialized := terminal.ToGraphQLTerminal()
 
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation2-1.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/mutation2-1.json", materialized)
 
 	// ...mutation to materialized GraphQL model...
 	ptr1 := materialized.Nodes[0].Content.(*model.TerminalCommand).Command
@@ -103,10 +103,10 @@ func TestTerminal_Mutation2(t *testing.T) {
 	*ptr2 = "mutation extra output"
 
 	// ...should of course have effect on materialized GraphQL model
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/mutation2-2.json", materialized)
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/mutation2-2.json", materialized)
 
 	// ...but should have no effect on Terminal
-	internal.CompareAfterMarshal(t, "testdata/terminal/mutation2-1.json", terminal.ToGraphQLTerminal())
+	testio.CompareAfterMarshal(t, "testdata/terminal/mutation2-1.json", terminal.ToGraphQLTerminal())
 }
 
 // Clone() method testing is needed as TerminalProcessor is a state**ful** structure
@@ -116,15 +116,15 @@ func TestTerminal_Clone(t *testing.T) {
 
 	// once cloned...
 	terminalCloned := terminal.Clone()
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/clone1-1.json", terminalCloned.ToGraphQLTerminal())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/clone1-1.json", terminalCloned.ToGraphQLTerminal())
 
 	// ...mutation to terminal...
 	terminal.Transition("002", processing.TerminalCommandWithOutput{Command: "echo def", Output: "def"})
 	terminal.Transition("003", processing.TerminalCommandWithCd{Command: "cd hello/world/thunder", CurrentDirectory: "hello/world/thunder"})
 
 	// ...should of course have effect on terminal itself
-	internal.CompareWitGoldenFile(t, *updateFlag, "testdata/terminal/clone1-2.json", terminal.ToGraphQLTerminal())
+	testio.CompareWithGoldenFile(t, *updateFlag, "testdata/terminal/clone1-2.json", terminal.ToGraphQLTerminal())
 
 	// ...but should have no effect on cloned terminal
-	internal.CompareAfterMarshal(t, "testdata/terminal/clone1-1.json", terminalCloned.ToGraphQLTerminal())
+	testio.CompareAfterMarshal(t, "testdata/terminal/clone1-1.json", terminalCloned.ToGraphQLTerminal())
 }

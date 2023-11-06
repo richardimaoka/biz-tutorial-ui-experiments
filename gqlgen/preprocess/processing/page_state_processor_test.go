@@ -33,12 +33,12 @@ func Test_PageStateProcessor(t *testing.T) {
 			if err := processor.RegisterNext(step, &op); err != nil {
 				t.Fatalf("RegisterNext failed: %v", err)
 			}
-			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedRegisteredFile, processor.ToGraphQLPageState())
+			testio.CompareWithGoldenFile(t, *updateFlag, c.ExpectedRegisteredFile, processor.ToGraphQLPageState())
 
 			if err := processor.TransitionToNext(); err != nil {
 				t.Fatalf("TransitionToNext failed: %v", err)
 			}
-			internal.CompareWitGoldenFile(t, *updateFlag, c.ExpectedTransitionedFile, processor.ToGraphQLPageState())
+			testio.CompareWithGoldenFile(t, *updateFlag, c.ExpectedTransitionedFile, processor.ToGraphQLPageState())
 		})
 	}
 }

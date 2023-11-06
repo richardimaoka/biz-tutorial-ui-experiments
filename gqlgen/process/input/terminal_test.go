@@ -3,8 +3,8 @@ package input
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 )
 
 func TestToTerminalCommand(t *testing.T) {
@@ -29,7 +29,7 @@ func TestToTerminalCommand(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }
@@ -80,7 +80,7 @@ func TestToTerminalOutput(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }

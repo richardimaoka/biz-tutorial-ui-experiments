@@ -3,7 +3,6 @@ package rough_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
@@ -58,7 +57,7 @@ func TestTerminalSteps(t *testing.T) {
 			result := rough.ToOmitEmptyStructs(converted)
 
 			// verify results
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }
@@ -83,7 +82,7 @@ func TestRoughStepSequence(t *testing.T) {
 				t.Fatalf("failed to generate detailed steps: %v", err)
 			}
 			result := rough.ToOmitEmptyStructs(converted)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }

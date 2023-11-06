@@ -3,8 +3,8 @@ package input
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 )
 
 func TestToBrowserSingle(t *testing.T) {
@@ -30,7 +30,7 @@ func TestToBrowserSingle(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }
@@ -80,7 +80,7 @@ func TestToBrowserNumSeq(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }
@@ -131,7 +131,7 @@ func TestToBrowserSequence(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, result)
 		})
 	}
 }

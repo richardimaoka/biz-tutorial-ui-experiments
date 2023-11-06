@@ -71,8 +71,8 @@ func TestFileUnchanged(t *testing.T) {
 			t.Fatalf("failed in TestFileUnchanged to create state.File, %s", err)
 		}
 
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
 }
 
@@ -108,8 +108,8 @@ func TestFileAdded(t *testing.T) {
 
 		s := u.ToFileAdded()
 
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
 }
 
@@ -142,8 +142,8 @@ func TestFileDeleted(t *testing.T) {
 
 	for _, c := range cases {
 		s := state.FileDeleted(c.filePath)
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-		internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+		testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 	}
 }
 
@@ -204,8 +204,8 @@ func TestFileUpdated(t *testing.T) {
 			from, _ := p.Files()
 			if from.Path() == c.filePath {
 				s := u.ToFileUpdated(p)
-				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
-				internal.CompareWitGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
+				testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileOpenFile, s.ToGraphQLOpenFile())
+				testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFileFileNode, s.ToGraphQLFileNode())
 				compared = true
 			}
 		}

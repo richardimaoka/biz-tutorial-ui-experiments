@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 )
 
 // state.File is effectively immutable, so no need to test mutation to the state
@@ -22,17 +22,17 @@ func TestFileNodeMutation1(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLFileNode()
 	goldenFile1 := "testdata/file_node_mutation_golden1-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the state ...
   // state.File is effectively immutable, so no need to test mutation to the state
 
 	// ... has NO effect on the materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, gqlModel)
+	testio.CompareAfterMarshal(t, goldenFile1, gqlModel)
 
 	// ... has effect on a RE-materialized GraphQL model
 	goldenFile2 := "testdata/file_node_mutation_golden1-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLFileNode())
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, s.ToGraphQLFileNode())
 
 	// and golden files are indeed different
 	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
@@ -53,7 +53,7 @@ func TestFileNodeMutation2(t *testing.T) {
 	// once GraphQL model is materialized...
 	gqlModel := s.ToGraphQLFileNode()
 	goldenFile1 := "testdata/file_node_mutation_golden2-1.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile1, gqlModel)
 
 	// ... mutation to the materialized model ...
 	*gqlModel.Name = "package-mudated.json"
@@ -63,12 +63,12 @@ func TestFileNodeMutation2(t *testing.T) {
 	gqlModel.NodeType = model.FileNodeTypeDirectory
 
 	// ... has NO effect on a RE-materialized GraphQL model
-	internal.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLFileNode())
+	testio.CompareAfterMarshal(t, goldenFile1, s.ToGraphQLFileNode())
 
 	// ... has effect on the materialized GraphQL model
 	goldenFile2 := "testdata/file_node_mutation_golden2-2.json"
-	internal.CompareWitGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
+	testio.CompareWithGoldenFile(t, *updateFlag, goldenFile2, gqlModel)
 
 	// and golden files are indeed different
-	internal.FilesMustUnmatch(t, goldenFile1, goldenFile2)
+	testio.FilesMustUnmatch(t, goldenFile1, goldenFile2)
 }

@@ -3,8 +3,8 @@ package gitwrap_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 )
 
 func TestGitDiff(t *testing.T) {
@@ -38,7 +38,7 @@ func TestGitDiff(t *testing.T) {
 				t.Fatal("diffFilePatch is nil")
 			}
 			result := gitwrap.ToFilePatch(diffFilePatch, patchType)
-			internal.CompareWitGoldenFile(t, *updateFlag, c.inputFile, result)
+			testio.CompareWithGoldenFile(t, *updateFlag, c.inputFile, result)
 		})
 	}
 }

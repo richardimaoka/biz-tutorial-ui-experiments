@@ -35,6 +35,6 @@ func TestBoolStringConversion(t *testing.T) {
 		"testdata/detailed-steps/from-csv.json",
 		"testdata/golden/bool-string-conversion.json",
 	)
-	// internal.CompareWitGoldenFile(t, *updateFlag, "testdata/golden/reprocessed-from-csv.json", )
+	// testio.CompareWithGoldenFile(t, *updateFlag, "testdata/golden/reprocessed-from-csv.json", )
 
 }
