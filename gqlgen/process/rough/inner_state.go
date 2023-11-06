@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/storage/memory"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
@@ -60,7 +59,7 @@ func Process(dir, repoUrl string) error {
 		return fmt.Errorf("failed to generate detailed steps, %s", err)
 	}
 
-	err = internal.WriteJsonToFile(detailedSteps, targetFile)
+	err = jsonwrap.WriteJsonToFile(detailedSteps, targetFile)
 	if err != nil {
 		return fmt.Errorf("failed to write detailed steps to file, %s", err)
 	}

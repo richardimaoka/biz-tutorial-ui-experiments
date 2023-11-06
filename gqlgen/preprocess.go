@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/effect"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/preprocess/processing"
 )
@@ -34,7 +34,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	// 3. write initial step to file
 	//--------------------------------------------------------
 	initialStep := state.CurrentStep()
-	if err := internal.WriteJsonValueToFile(initialStep, dirName+"/initial-step.json"); err != nil {
+	if err := jsonwrap.WriteJsonValueToFile(initialStep, dirName+"/initial-step.json"); err != nil {
 		return fmt.Errorf("processingCoreLogic failed: %v", err)
 	}
 	log.Printf("wrote initial step to file")
@@ -57,7 +57,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 
 		// after registering NEXT step, write the CURRENT state to file
 		fileName := fmt.Sprintf(dirName+"/state/%s.json", state.CurrentStep())
-		if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+		if err := jsonwrap.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 			return fmt.Errorf("WriteJsonToFile() failed at step[%d] %s: %v", i, nextStep, err)
 		}
 
@@ -69,7 +69,7 @@ func processingCoreLogic(dirName string, state *processing.PageStateProcessor) e
 	// last state writes to the file
 	lastStep := effects[len(effects)-1].Step
 	fileName := fmt.Sprintf(dirName+"/state/%s.json", lastStep)
-	if err := internal.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
+	if err := jsonwrap.WriteJsonToFile(state.ToGraphQLPageState(), fileName); err != nil {
 		return fmt.Errorf("WriteJsonToFile() in PageStateProcessor failed: %v", err)
 	}
 

@@ -1,4 +1,4 @@
-package internal_test
+package jsonwrap_test
 
 import (
 	"encoding/json"
@@ -8,7 +8,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
@@ -56,14 +55,14 @@ func TestJsonReadArrayWrite(t *testing.T) {
 }
 
 func TestMarshalThenUnmarshal(t *testing.T) {
-	obj := internal.JsonObj{"a": 10, "b": 20}
+	obj := jsonwrap.JsonObj{"a": 10, "b": 20}
 	var result struct {
 		A int `json:"a"`
 		B int `json:"b"`
 	}
 	unmarshaller := func(jsonBytes []byte) error { return json.Unmarshal(jsonBytes, &result) }
 
-	err := internal.MarshalThenUnmarshal(obj, unmarshaller)
+	err := jsonwrap.MarshalThenUnmarshal(obj, unmarshaller)
 	if err != nil {
 		t.Fatalf("MarshalThenUnmarshal failed, %s", err)
 	}

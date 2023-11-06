@@ -7,6 +7,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -299,7 +300,7 @@ func ClearDirectory(dirName string) error {
 func WriteResults(dirName string, pages []model.Page) error {
 	for _, p := range pages {
 		filename := fmt.Sprintf("%s/state/%s.json", dirName, *p.Step)
-		err := internal.WriteJsonToFile(p, filename)
+		err := jsonwrap.WriteJsonToFile(p, filename)
 		if err != nil {
 			return fmt.Errorf("WriteResults failed, %s", err)
 		}

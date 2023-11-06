@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
-	var obj internal.JsonObj
+	var obj jsonwrap.JsonObj
 	err := json.Unmarshal(b, &obj)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while unmarshaling to Go data, %w", err)

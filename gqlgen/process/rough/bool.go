@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
@@ -116,7 +115,7 @@ func ConvertBoolean(inputFile, targetFile string) error {
 		return fmt.Errorf("failed to unmarshal to DetailedStep, %s", err)
 	}
 
-	err = internal.WriteJsonToFile(dst, targetFile)
+	err = jsonwrap.WriteJsonToFile(dst, targetFile)
 
 	return nil
 }
