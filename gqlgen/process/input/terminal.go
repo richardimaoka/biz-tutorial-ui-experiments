@@ -32,10 +32,10 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != Terminal {
+	if strings.ToLower(fromRow.Column) != TerminalType {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != Command {
+	if strings.ToLower(fromRow.Type) != CommandSubType {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -77,10 +77,10 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != Terminal {
+	if strings.ToLower(fromRow.Column) != TerminalType {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != Output {
+	if strings.ToLower(fromRow.Type) != OutputSubType {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -120,10 +120,10 @@ func toTerminalRow(fromRow *Row) error {
 	rowType := strings.ToLower(fromRow.Type)
 
 	switch rowType {
-	case Command:
+	case CommandSubType:
 		_, err := toTerminalCommandRow(fromRow)
 		return err
-	case Output:
+	case OutputSubType:
 		_, err := toTerminalOutputRow(fromRow)
 		return err
 	default:

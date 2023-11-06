@@ -1,20 +1,20 @@
 package input
 
-type Column = string
+type ColumnType = string
 
 const (
 	// Lower cases since they are from manual entries
-	Source   Column = "source"
-	Terminal Column = "terminal"
-	Browser  Column = "browser"
+	SourceType   ColumnType = "source"
+	TerminalType ColumnType = "terminal"
+	BrowserType  ColumnType = "browser"
 )
 
 type SubType = string
 
 const (
 	// Lower cases since they are from manual entries
-	Command SubType = "command"
-	Output  SubType = "output"
+	CommandSubType SubType = "command"
+	OutputSubType  SubType = "output"
 )
 
 type Row struct {

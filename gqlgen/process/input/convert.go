@@ -8,7 +8,7 @@ import (
 func convert(fromRow *Row) error {
 	column := strings.ToUpper(fromRow.Column)
 	switch column {
-	case Terminal:
+	case TerminalType:
 		toTerminalRow(fromRow)
 		return nil
 	default:
