@@ -27,8 +27,8 @@ export function GqlColumnTabs(props: Props) {
 
   return (
     <div className={styles.component}>
-      {columns.map((c) => (
-        <GqlColumnTab key={c.columnName} fragment={c} />
+      {columns.map((c, index) => (
+        <GqlColumnTab key={c.columnName} fragment={c} tabIndex={index} />
       ))}
     </div>
   );
