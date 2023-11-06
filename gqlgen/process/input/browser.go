@@ -9,14 +9,14 @@ import (
 
 var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
-type BrowserSingle struct {
+type BrowserSingleRow struct {
 	StepId        string `json:"stepId"`
 	Trivial       bool   `json:"trivial"`
 	Comment       string `json:"comment"`
 	ImageFileName string `json:"imageFileName"`
 }
 
-type BrowserNumSeq struct {
+type BrowserNumSeqRow struct {
 	StepId          string `json:"stepId"`
 	Trivial         bool   `json:"trivial"`
 	Comment         string `json:"comment"`
@@ -25,39 +25,39 @@ type BrowserNumSeq struct {
 	NumImages       int    `json:"numImages"`
 }
 
-type BrowserSequence struct {
+type BrowserSequenceRow struct {
 	StepId         string   `json:"stepId"`
 	Trivial        bool     `json:"trivial"`
 	Comment        string   `json:"comment"`
 	ImageFileNames []string `json:"imageFileNames"`
 }
 
-func toBrowserSingle(ab *Abstract) (*BrowserSingle, error) {
+func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	errorPrefix := "failed to convert to BrowserNumSeq"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "browser" {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	if strings.ToLower(fromRow.Column) != "browser" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if ab.Type != "" && strings.ToLower(ab.Type) != "single" {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
+	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "single" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
 	// Check instruction fields
 	//
-	if ab.Instruction == "" {
+	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
-	baseName, err := fileBaseName(ab.Instruction)
+	baseName, err := fileBaseName(fromRow.Instruction)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
 	}
 
-	suffix, err := fileSuffix(ab.Instruction, ab)
+	suffix, err := fileSuffix(fromRow.Instruction, fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -67,52 +67,52 @@ func toBrowserSingle(ab *Abstract) (*BrowserSingle, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(ab.Trivial)
+	trivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserSingle{
-		StepId:        ab.StepId,
+	return &BrowserSingleRow{
+		StepId:        fromRow.StepId,
 		Trivial:       trivial,
-		Comment:       ab.Comment,
+		Comment:       fromRow.Comment,
 		ImageFileName: imageFileName,
 	}, nil
 }
 
-func toBrowserNumSeq(ab *Abstract) (*BrowserNumSeq, error) {
+func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 	errorPrefix := "failed to convert to BrowserNumSeq"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "browser" {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	if strings.ToLower(fromRow.Column) != "browser" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(ab.Type) != "numseq" {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
+	if strings.ToLower(fromRow.Type) != "numseq" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
 	// Check instruction fields
 	//
-	if ab.Instruction == "" {
+	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
 	// extract num from (e.g.) filename[30].png
-	num, err := positiveNumInSqBracket(ab.Instruction)
+	num, err := positiveNumInSqBracket(fromRow.Instruction)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
 	}
 
-	baseName, err := fileBaseName(ab.Instruction)
+	baseName, err := fileBaseName(fromRow.Instruction)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
 	}
 	baseName = removeSqBrackets(baseName)
 
-	suffix, err := fileSuffix(ab.Instruction, ab)
+	suffix, err := fileSuffix(fromRow.Instruction, fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -120,49 +120,49 @@ func toBrowserNumSeq(ab *Abstract) (*BrowserNumSeq, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(ab.Trivial)
+	trivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserNumSeq{
-		StepId:          ab.StepId,
+	return &BrowserNumSeqRow{
+		StepId:          fromRow.StepId,
 		Trivial:         trivial,
-		Comment:         ab.Comment,
+		Comment:         fromRow.Comment,
 		ImageBaseName:   baseName,
 		ImageFileSuffix: suffix,
 		NumImages:       num,
 	}, nil
 }
 
-func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
+func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
 	errorPrefix := "failed to convert to BrowserSequence"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "browser" {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	if strings.ToLower(fromRow.Column) != "browser" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(ab.Type) != "sequence" {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
+	if strings.ToLower(fromRow.Type) != "sequence" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
 	// Check instruction fields
 	//
-	if ab.Instruction == "" {
+	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
-	splitByComma := strings.Split(ab.Instruction, ",")
+	splitByComma := strings.Split(fromRow.Instruction, ",")
 	var imgFiles []string
 	for _, v := range splitByComma {
 		baseName, err := fileBaseName(v)
 		if err != nil {
 			return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
 		}
-		suffix, err := fileSuffix(v, ab)
+		suffix, err := fileSuffix(v, fromRow)
 		if err != nil {
 			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}
@@ -172,15 +172,15 @@ func toBrowserSequence(ab *Abstract) (*BrowserSequence, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(ab.Trivial)
+	trivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserSequence{
-		StepId:         ab.StepId,
+	return &BrowserSequenceRow{
+		StepId:         fromRow.StepId,
 		Trivial:        trivial,
-		Comment:        ab.Comment,
+		Comment:        fromRow.Comment,
 		ImageFileNames: imgFiles,
 	}, nil
 }
@@ -206,12 +206,12 @@ func fileBaseName(s string) (string, error) {
 	}
 }
 
-// get file suffix from 1) given file-name candidate, 2) if not there, try finding from Abstract
-func fileSuffix(fileNameCandidate string, ab *Abstract) (string, error) {
+// get file suffix from 1) given file-name candidate, 2) if not there, try finding from Row
+func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
 	splitByDot := strings.Split(fileNameCandidate, ".")
 	if len(splitByDot) == 1 {
 		// if 'instruction' doesn't have a '.', then the suffix must be in 'instruction2'
-		suffix, err := toImageFileSuffix(ab.Instruction2)
+		suffix, err := toImageFileSuffix(fromRow.Instruction2)
 		if err != nil {
 			return "", fmt.Errorf("file name = '%s' has a wrong suffix, %s", fileNameCandidate, err)
 		}

@@ -1,6 +1,6 @@
 package input
 
-type Abstract struct {
+type Row struct {
 	StepId        string `json:"stepId"`
 	Phase         string `json:"phase"`
 	Comment       string `json:"comment"`

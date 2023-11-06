@@ -5,51 +5,51 @@ import (
 	"strings"
 )
 
-type TerminalTooltip struct {
+type TerminalTooltipRow struct {
 	Contents string        `json:"contents"`
 	Timing   TooltipTiming `json:"timing"`
 }
 
-type TerminalCommand struct {
-	StepId  string           `json:"stepId"`
-	Trivial bool             `json:"trivial"`
-	Comment string           `json:"comment"`
-	Command string           `json:"command"`
-	Tooltip *TerminalTooltip `json:"tooltip"`
+type TerminalCommandRow struct {
+	StepId  string              `json:"stepId"`
+	Trivial bool                `json:"trivial"`
+	Comment string              `json:"comment"`
+	Command string              `json:"command"`
+	Tooltip *TerminalTooltipRow `json:"tooltip"`
 }
 
-type TerminalOutput struct {
-	StepId  string           `json:"stepId"`
-	Trivial bool             `json:"trivial"`
-	Comment string           `json:"comment"`
-	Output  string           `json:"output"`
-	Tooltip *TerminalTooltip `json:"tooltip"`
+type TerminalOutputRow struct {
+	StepId  string              `json:"stepId"`
+	Trivial bool                `json:"trivial"`
+	Comment string              `json:"comment"`
+	Output  string              `json:"output"`
+	Tooltip *TerminalTooltipRow `json:"tooltip"`
 }
 
-func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
+func toTerminalCommand(fromRow *Row) (*TerminalCommandRow, error) {
 	errorPrefix := "failed to convert to TerminalCommand"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "terminal" {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	if strings.ToLower(fromRow.Column) != "terminal" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if ab.Type != "" && strings.ToLower(ab.Type) != "command" {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
+	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "command" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
 	// Check instruction fields
 	//
-	if ab.Instruction == "" {
+	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
 	//
 	// Check tooltip fields
 	//
-	terminalTooltip, err := toTerminalTooltip(ab)
+	terminalTooltip, err := toTerminalTooltip(fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -57,44 +57,44 @@ func toTerminalCommand(ab *Abstract) (*TerminalCommand, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(ab.Trivial)
+	trivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &TerminalCommand{
-		StepId:  ab.StepId,
+	return &TerminalCommandRow{
+		StepId:  fromRow.StepId,
 		Trivial: trivial,
-		Comment: ab.Comment,
-		Command: ab.Instruction,
+		Comment: fromRow.Comment,
+		Command: fromRow.Instruction,
 		Tooltip: terminalTooltip,
 	}, nil
 }
 
-func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
+func toTerminalOutput(fromRow *Row) (*TerminalOutputRow, error) {
 	errorPrefix := "failed to convert to TerminalOutput"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(ab.Column) != "terminal" {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, ab.Column)
+	if strings.ToLower(fromRow.Column) != "terminal" {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if ab.Type != "" && strings.ToLower(ab.Type) != "output" {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, ab.Type)
+	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "output" {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
 	// Check instruction fields
 	//
-	if ab.Instruction == "" {
+	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 
 	//
 	// Check tooltip fields
 	//
-	terminalTooltip, err := toTerminalTooltip(ab)
+	terminalTooltip, err := toTerminalTooltip(fromRow)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
@@ -102,32 +102,32 @@ func toTerminalOutput(ab *Abstract) (*TerminalOutput, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(ab.Trivial)
+	trivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &TerminalOutput{
-		StepId:  ab.StepId,
+	return &TerminalOutputRow{
+		StepId:  fromRow.StepId,
 		Trivial: trivial,
-		Comment: ab.Comment,
-		Output:  ab.Instruction,
+		Comment: fromRow.Comment,
+		Output:  fromRow.Instruction,
 		Tooltip: terminalTooltip,
 	}, nil
 }
 
-func toTerminalTooltip(ab *Abstract) (*TerminalTooltip, error) {
-	if ab.Tooltip == "" {
+func toTerminalTooltip(fromRow *Row) (*TerminalTooltipRow, error) {
+	if fromRow.Tooltip == "" {
 		return nil, nil
 	}
-	contents := ab.Tooltip
+	contents := fromRow.Tooltip
 
-	tooltipTiming, err := toTooltipTiming(ab.TooltipTiming)
+	tooltipTiming, err := toTooltipTiming(fromRow.TooltipTiming)
 	if err != nil {
 		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
 	}
 
-	return &TerminalTooltip{
+	return &TerminalTooltipRow{
 		Contents: contents,
 		Timing:   tooltipTiming,
 	}, nil

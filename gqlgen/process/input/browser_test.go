@@ -19,13 +19,13 @@ func TestToBrowserSingle(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			result, err := toBrowserSingle(&abst)
+			result, err := toBrowserSingleRow(&fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -44,13 +44,13 @@ func TestToBrowserSingleError(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			_, err = toBrowserNumSeq(&abst)
+			_, err = toBrowserNumSeqRow(&fromRow)
 			if err == nil {
 				t.Fatal("expected to fail but succeeded")
 			}
@@ -69,13 +69,13 @@ func TestToBrowserNumSeq(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			result, err := toBrowserNumSeq(&abst)
+			result, err := toBrowserNumSeqRow(&fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -94,13 +94,13 @@ func TestToBrowserNumSeqError(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			_, err = toBrowserNumSeq(&abst)
+			_, err = toBrowserNumSeqRow(&fromRow)
 			if err == nil {
 				t.Fatal("expected to fail but succeeded")
 			}
@@ -120,13 +120,13 @@ func TestToBrowserSequence(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			result, err := toBrowserSequence(&abst)
+			result, err := toBrowserSequenceRow(&fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -145,13 +145,13 @@ func TestToBrowserSequenceError(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var abst Abstract
-			err := jsonwrap.Read(c.inputFile, &abst)
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			_, err = toBrowserSequence(&abst)
+			_, err = toBrowserSequenceRow(&fromRow)
 			if err == nil {
 				t.Fatal("expected to fail but succeeded")
 			}
