@@ -12,19 +12,6 @@ const (
 	END   TooltipTiming = "END"
 )
 
-func toTerminalTooltipTiming(s string) (TooltipTiming, error) {
-	switch strings.ToUpper(s) {
-	case START:
-		return START, nil
-	case END:
-		return END, nil
-	case "": // default value is different from source tooltip
-		return START, nil
-	default:
-		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
-	}
-}
-
 func toSourceTooltipTiming(s string) (TooltipTiming, error) {
 	switch strings.ToUpper(s) {
 	case START:

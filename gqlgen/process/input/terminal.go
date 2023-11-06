@@ -7,16 +7,59 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
+/**
+ * TerminalSubType type(s) and functions
+ */
+type TerminalSubType string
+
+const (
+	// Lower cases since they are from manual entries
+	CommandSubType TerminalSubType = "command"
+	OutputSubType  TerminalSubType = "output"
+)
+
+func toTerminalSubType(s string) (TerminalSubType, error) {
+	lower := strings.ToLower(s)
+
+	switch lower {
+	case string(CommandSubType):
+		return CommandSubType, nil
+	case string(OutputSubType):
+		return OutputSubType, nil
+	default:
+		return "", fmt.Errorf("'%s' is an invalid terminal sub type", s)
+	}
+}
+
+/**
+ * TerminalTooltip type(s) and functions
+ */
 type TerminalTooltip struct {
 	Contents string        `json:"contents"`
 	Timing   TooltipTiming `json:"timing"`
 }
 
+func toTerminalTooltipTiming(s string) (TooltipTiming, error) {
+	switch strings.ToUpper(s) {
+	case START:
+		return START, nil
+	case END:
+		return END, nil
+	case "": // default value is different from source tooltip
+		return START, nil
+	default:
+		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
+	}
+}
+
+/**
+ * TerminalRow type(s) and functions
+ */
 type TerminalRow struct {
 	StepId        string           `json:"stepId"`
 	IsTrivial     bool             `json:"isTrivial"`
 	Comment       string           `json:"comment"`
-	Type          SubType          `json:"type"`
+	Type          TerminalSubType  `json:"type"`
 	Text          string           `json:"text"`
 	Tooltip       *TerminalTooltip `json:"tooltip"`
 	ModalContents string           `json:"modalContents"`
@@ -36,7 +79,7 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 	if strings.ToLower(fromRow.Column) != TerminalType {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toCommandSubType(fromRow.Type)
+	subType, err := toTerminalSubType(fromRow.Type)
 	if err != nil {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
@@ -183,7 +226,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 		StepId:        stepId,
 		IsTrivial:     true, // always trivial
 		Comment:       "",
-		FocusColumn:   "Terminal",
+		FocusColumn:   result.TerminalColumn,
 		ModalContents: r.ModalContents,
 		// Terminal fields
 		TerminalType: result.TerminalCd,
@@ -204,7 +247,7 @@ func breakdownTerminalRow(
 	r *TerminalRow,
 	finder *StepIdFinder,
 	prevColumns ColumnInfo,
-) ([]result.Step, ColumnInfo, error) {
+) ([]result.Step, ColumnInfo) {
 
 	// - step creation
 	var steps []result.Step
@@ -234,5 +277,19 @@ func breakdownTerminalRow(
 		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
 		Focus:   result.TerminalColumn,
 	}
-	return steps, currentColumns, nil
+	return steps, currentColumns
+}
+
+func toTerminalSteps(
+	r *Row,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+) ([]result.Step, ColumnInfo, error) {
+	terminalRow, err := toTerminalRow(r)
+	if err != nil {
+		return nil, prevColumns, err
+	}
+
+	breakdowns, currentColumns := breakdownTerminalRow(terminalRow, finder, prevColumns)
+	return breakdowns, currentColumns, nil
 }
