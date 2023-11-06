@@ -1,12 +1,12 @@
-package stepid
+package input
 
 import (
 	"fmt"
 )
 
 //
-func PredictableFinder(targetFile string) (*Finder, error) {
-	finder, err := NewFinder(targetFile)
+func PredictableFinder(targetFile string) (*StepIdFinder, error) {
+	finder, err := NewStepIdFinder(targetFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create finder, %s", err)
 	}

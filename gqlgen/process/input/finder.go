@@ -1,4 +1,4 @@
-package stepid
+package input
 
 import (
 	"encoding/json"
@@ -6,31 +6,30 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
 )
 
-type Finder struct {
+type StepIdFinder struct {
 	// needs to hold the target steps in memory, to avoid error in the signature of all methods
-	targetSteps []input.ResultStep
+	targetSteps []ResultStep
 	idGenerator func() string
 }
 
 // Create a new UUID finder instance, to reconcile step ID against the already-generated target file
 //   targetFile: File name of the target file to find UUIDs from.
 //               If targetFile doesn't exist, then the finder will always generate a brand new UUID.
-func NewFinder(targetFile string) (*Finder, error) {
+func NewStepIdFinder(targetFile string) (*StepIdFinder, error) {
 	steps, err := readExistingSteps(targetFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read existing steps: %s", err)
 	}
 
-	return &Finder{
+	return &StepIdFinder{
 		targetSteps: steps,
 		idGenerator: generateUUID,
 	}, nil
 }
 
-func (g *Finder) StepIdFor(parentStep, subID string) string {
+func (g *StepIdFinder) StepIdFor(parentStep, subID string) string {
 	for _, ds := range g.targetSteps {
 		if ds.IsFromRow && parentStep == ds.ParentStep && subID == ds.SubID {
 			return ds.Step
@@ -42,7 +41,7 @@ func (g *Finder) StepIdFor(parentStep, subID string) string {
 }
 
 // if no existing steps, then return nil = empty slice
-func readExistingSteps(targetFile string) ([]input.ResultStep, error) {
+func readExistingSteps(targetFile string) ([]ResultStep, error) {
 	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -52,7 +51,7 @@ func readExistingSteps(targetFile string) ([]input.ResultStep, error) {
 		}
 	}
 
-	var steps []input.ResultStep
+	var steps []ResultStep
 	err = json.Unmarshal(jsonBytes, &steps)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
