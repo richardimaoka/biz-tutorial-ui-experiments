@@ -2,16 +2,16 @@ package input
 
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 
-type UsedColumns = [10]string
-type CurrentColumn = string
+type UsedColumns [10]result.ColumnType
+type CurrentColumn = result.ColumnType
 
 type ColumnInfo struct {
-	Columns UsedColumns
-	Current CurrentColumn
+	AllUsed UsedColumns
+	Focus   CurrentColumn
 }
 
 // similar to append() for slice
-func appendIfNotExists(columns UsedColumns, colName string) UsedColumns {
+func appendIfNotExists(columns UsedColumns, colName result.ColumnType) UsedColumns {
 	for _, col := range columns {
 		if col == colName {
 			// if already exists, do nothing

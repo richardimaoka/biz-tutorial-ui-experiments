@@ -9,14 +9,6 @@ const (
 	BrowserType  ColumnType = "browser"
 )
 
-type SubType = string
-
-const (
-	// Lower cases since they are from manual entries
-	CommandSubType SubType = "command"
-	OutputSubType  SubType = "output"
-)
-
 type Row struct {
 	StepId        string `json:"stepId"`
 	Phase         string `json:"phase"`

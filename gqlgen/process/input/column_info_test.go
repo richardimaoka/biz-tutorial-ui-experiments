@@ -1,12 +1,23 @@
 package input
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
+)
 
 func TestAppendIfNotExists(t *testing.T) {
-	columns := UsedColumns{"Terminal", "Source Code"}
+	columns := UsedColumns{
+		result.TerminalColumn,
+		result.SourceColumn,
+	}
+	expected := UsedColumns{
+		result.TerminalColumn,
+		result.SourceColumn,
+		result.BrowserColumn,
+	}
 
-	expected := UsedColumns{"Terminal", "Source Code", "Browser"}
-	newColumns := appendIfNotExists(columns, expected[2])
+	newColumns := appendIfNotExists(columns, result.BrowserColumn)
 
 	if columns[2] != "" {
 		t.Errorf("columns in `appendIfNotExists(columns, )` should not be modified, but got colums[2] = '%s'", columns[2])

@@ -16,7 +16,7 @@ type TerminalRow struct {
 	StepId        string           `json:"stepId"`
 	IsTrivial     bool             `json:"isTrivial"`
 	Comment       string           `json:"comment"`
-	Type          string           `json:"type"`
+	Type          SubType          `json:"type"`
 	Text          string           `json:"text"`
 	Tooltip       *TerminalTooltip `json:"tooltip"`
 	ModalContents string           `json:"modalContents"`
@@ -36,7 +36,8 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 	if strings.ToLower(fromRow.Column) != TerminalType {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != CommandSubType && strings.ToLower(fromRow.Type) != OutputSubType {
+	subType, err := toCommandSubType(fromRow.Type)
+	if err != nil {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -74,7 +75,7 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
-		Type:          fromRow.Type,
+		Type:          subType,
 		Text:          fromRow.Instruction,
 		Tooltip:       terminalTooltip,
 		TerminalName:  terminalName,
@@ -96,10 +97,10 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 		// Other fields
 		StepId:        stepId,
 		Comment:       r.Comment,
-		FocusColumn:   "Terminal",
+		FocusColumn:   result.TerminalColumn,
 		ModalContents: r.ModalContents,
 		// Terminal fields
-		TerminalType: "command",
+		TerminalType: result.TerminalCommand,
 		TerminalText: r.Text,
 		TerminalName: r.TerminalName,
 	}
@@ -125,10 +126,10 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 		StepId:        stepId,
 		IsTrivial:     r.IsTrivial,
 		Comment:       r.Comment,
-		FocusColumn:   "Terminal",
+		FocusColumn:   result.TerminalColumn,
 		ModalContents: r.ModalContents,
 		// Terminal fields
-		TerminalType: "output",
+		TerminalType: result.TerminalOutput,
 		TerminalText: r.Text,
 		TerminalName: r.TerminalName,
 	}
@@ -154,10 +155,10 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 		StepId:        stepId,
 		IsTrivial:     true, // always trivial
 		Comment:       "(move to Terminal)",
-		FocusColumn:   "Terminal",
+		FocusColumn:   result.TerminalColumn,
 		ModalContents: r.ModalContents,
 		// Terminal fields
-		TerminalType: "cd",
+		TerminalType: result.TerminalMove,
 		TerminalName: r.TerminalName,
 	}
 	// No tooltip - move step should be trivial and no tooltip to show
@@ -185,7 +186,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 		FocusColumn:   "Terminal",
 		ModalContents: r.ModalContents,
 		// Terminal fields
-		TerminalType: "cd",
+		TerminalType: result.TerminalCd,
 		TerminalName: r.TerminalName,
 		CurrentDir:   currentDir,
 	}
@@ -196,75 +197,42 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 	return step
 }
 
-func toTerminalResultSteps(fromRow *Row) error {
-	_, err := toTerminalRow(fromRow)
-	return err
-	// rowType := strings.ToLower(fromRow.Type)
-	// switch rowType {
-	// case CommandSubType:
-	// case OutputSubType:
-	// 	_, err := toTerminalRow(fromRow)
-	// 	return err
-	// default:
-	// 	return fmt.Errorf("toTerminalRow failed, column = '%s' has wrong type = '%s'", fromRow.Column, fromRow.Type)
-	// }
-}
-
 /**
  * Function(s) to break down a row to steps
  */
-// func toTerminalResultSteps2(
-// 	r *TerminalRow,
-// 	finder *StepIdFinder,
-// 	prevColumns ColumnInfo,
-// ) ([]result.ResultStep, ColumnInfo, error) {
-// 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
+func breakdownTerminalRow(
+	r *TerminalRow,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+) ([]result.Step, ColumnInfo, error) {
 
-// 	// - precondition for RoughStep
+	// - step creation
+	var steps []result.Step
 
-// 	// check if it's a valid terminal step
-// 	if r.Instruction == "" {
-// 		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", r.Step, r.Type)
-// 	}
+	// insert move-to-terminal step if current column != "Terminal"
+	if prevColumns.Focus != result.TerminalColumn && prevColumns.Focus != result.NoColumn {
+		moveToTerminalStep := moveToTerminalStep(r, finder, prevColumns.AllUsed)
+		steps = append(steps, moveToTerminalStep)
+	}
 
-// 	// - step creation
-// 	var steps []DetailedStep
+	if r.Type == CommandSubType {
+		// command step
+		cmdStep := terminalCommandStep(r, finder, prevColumns.AllUsed)
+		steps = append(steps, cmdStep)
 
-// 	// insert move-to-terminal step if current column != "Terminal"
-// 	if prevColumn != "Terminal" && prevColumn != "" {
-// 		moveToTerminalStep := moveToTerminalStep(r, uuidFinder, usedColumns)
-// 		steps = append(steps, moveToTerminalStep)
-// 	}
+		// cd step
+		if strings.HasPrefix(r.Text, "cd ") {
+			cmdStep := terminalCdStep(r, finder, prevColumns.AllUsed)
+			steps = append(steps, cmdStep)
+		}
+	} else if r.Type == OutputSubType {
+		outputStep := terminalOutputStep(r, finder, prevColumns.AllUsed)
+		steps = append(steps, outputStep)
+	}
 
-// 	// command step
-// 	cmdStep := terminalCommandStep(r, uuidFinder, usedColumns)
-// 	steps = append(steps, cmdStep)
-
-// 	// cd step
-// 	if strings.HasPrefix(r.Instruction, "cd ") {
-// 		cmdStep := terminalCdStep(r, uuidFinder, usedColumns)
-// 		steps = append(steps, cmdStep)
-// 	}
-
-// 	return steps, "Terminal", usedColumns, nil
-// }
-
-// func terminalOutputConvert(
-// 	s *RoughStep,
-// 	uuidFinder *UUIDFinder,
-// 	existingColumns UsedColumns,
-// ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
-// 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
-
-// 	// - precondition for RoughStep
-
-// 	// - step creation
-// 	var steps []DetailedStep
-
-// 	// output step
-// 	s.Instruction2 = s.Instruction //TODO: workaround for now
-// 	outputStep := terminalOutputStep(s, uuidFinder, usedColumns)
-// 	steps = append(steps, outputStep)
-
-// 	return steps, "Terminal", usedColumns, nil
-// }
+	currentColumns := ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.TerminalColumn,
+	}
+	return steps, currentColumns, nil
+}

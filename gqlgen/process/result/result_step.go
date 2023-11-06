@@ -1,5 +1,25 @@
 package result
 
+type ColumnType string
+
+const (
+	// Lower cases since they are from manual entries
+	NoColumn       ColumnType = ""
+	SourceColumn   ColumnType = "source"
+	TerminalColumn ColumnType = "terminal"
+	BrowserColumn  ColumnType = "browser"
+)
+
+type TerminalType string
+
+const (
+	// Lower cases since they are from manual entries
+	TerminalCommand TerminalType = "command"
+	TerminalOutput  TerminalType = "output"
+	TerminalCd      TerminalType = "cd"
+	TerminalMove    TerminalType = "move"
+)
+
 type Step struct {
 	// Uppercase fields to allow json dump for testing
 
@@ -13,17 +33,17 @@ type Step struct {
 	Comment string `json:"comment"`
 
 	// columns
-	FocusColumn string `json:"focusColumn"`
-	Column1     string `json:"column1"`
-	Column2     string `json:"column2"`
-	Column3     string `json:"column3"`
-	Column4     string `json:"column4"`
-	Column5     string `json:"column5"`
-	Column6     string `json:"column6"`
-	Column7     string `json:"column7"`
-	Column8     string `json:"column8"`
-	Column9     string `json:"column9"`
-	Column10    string `json:"column10"`
+	FocusColumn ColumnType `json:"focusColumn"`
+	Column1     ColumnType `json:"column1"`
+	Column2     ColumnType `json:"column2"`
+	Column3     ColumnType `json:"column3"`
+	Column4     ColumnType `json:"column4"`
+	Column5     ColumnType `json:"column5"`
+	Column6     ColumnType `json:"column6"`
+	Column7     ColumnType `json:"column7"`
+	Column8     ColumnType `json:"column8"`
+	Column9     ColumnType `json:"column9"`
+	Column10    ColumnType `json:"column10"`
 
 	// animation
 	DurationSeconds int  `json:"durationSeconds"`
@@ -34,12 +54,12 @@ type Step struct {
 	ModalPosition string `json:"modalPosition"`
 
 	// terminal
-	CurrentDir              string `json:"currentDir"`
-	TerminalType            string `json:"terminalType"`
-	TerminalText            string `json:"terminalText"`
-	TerminalName            string `json:"terminalName"`
-	TerminalTooltipContents string `json:"terminalTooltipContents"`
-	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
+	CurrentDir              string       `json:"currentDir"`
+	TerminalType            TerminalType `json:"terminalType"`
+	TerminalText            string       `json:"terminalText"`
+	TerminalName            string       `json:"terminalName"`
+	TerminalTooltipContents string       `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   string       `json:"terminalTooltipTiming"`
 
 	// git
 	Commit              string `json:"commit"`
