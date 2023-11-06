@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func TestToTerminalCommand(t *testing.T) {
@@ -18,7 +19,7 @@ func TestToTerminalCommand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := internal.JsonRead2(c.inputFile, &abst)
+			err := jsonwrap.JsonRead(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -44,7 +45,7 @@ func TestToTerminalCommandError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := internal.JsonRead2(c.inputFile, &abst)
+			err := jsonwrap.JsonRead(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -69,7 +70,7 @@ func TestToTerminalOutput(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := internal.JsonRead2(c.inputFile, &abst)
+			err := jsonwrap.JsonRead(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -95,7 +96,7 @@ func TestToTerminalOutputError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := internal.JsonRead2(c.inputFile, &abst)
+			err := jsonwrap.JsonRead(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}

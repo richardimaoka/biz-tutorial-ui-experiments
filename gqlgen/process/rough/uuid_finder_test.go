@@ -3,7 +3,7 @@ package rough_test
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
 )
 
@@ -28,7 +28,7 @@ func TestUUIDGenerator(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.roughStepFile, func(t *testing.T) {
 			var roughStep rough.RoughStep
-			err := internal.JsonRead2(c.roughStepFile, &roughStep)
+			err := jsonwrap.JsonRead(c.roughStepFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}

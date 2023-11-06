@@ -12,7 +12,7 @@ import (
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 // Page is the resolver for the page field.
@@ -125,7 +125,7 @@ func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.T
 	}
 
 	var m model.TerminalColumn2
-	err := internal.JsonRead2(filename, &m)
+	err := jsonwrap.JsonRead(filename, &m)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.T
 // AppTestTutorialColumnsPage is the resolver for the appTestTutorialColumnsPage field.
 func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error) {
 	var m model.Page2
-	err := internal.JsonRead2("data/_test/appTestTutorialColumnsPage.json", &m)
+	err := jsonwrap.JsonRead("data/_test/appTestTutorialColumnsPage.json", &m)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *
 // AppTestTutorialTutorialPage is the resolver for the appTestTutorialTutorialPage field.
 func (r *testObjsResolver) AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error) {
 	var m model.Page2
-	err := internal.JsonRead2("data/_test/appTestTutorialTutorialPage.json", &m)
+	err := jsonwrap.JsonRead("data/_test/appTestTutorialTutorialPage.json", &m)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func (r *testObjsResolver) AppTestSourcecodeFilecontentPage(ctx context.Context,
 	filename := fmt.Sprintf("data/_test/appTestSourcecodeFilecontentPage/%d.json", step)
 
 	var m model.OpenFile
-	err := internal.JsonRead2(filename, &m)
+	err := jsonwrap.JsonRead(filename, &m)
 	if err != nil {
 		return nil, err
 	}

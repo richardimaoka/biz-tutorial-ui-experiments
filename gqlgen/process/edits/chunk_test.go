@@ -5,6 +5,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
 
@@ -19,7 +20,7 @@ func TestProcessChunks(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var chunks []gitwrap.Chunk
-			err := internal.JsonRead2(c.inputFile, &chunks)
+			err := jsonwrap.JsonRead(c.inputFile, &chunks)
 			if err != nil {
 				t.Fatal(err)
 			}

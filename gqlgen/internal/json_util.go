@@ -28,20 +28,6 @@ func ExtractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	return typeName, nil
 }
 
-func JsonRead2(filePath string, v interface{}) error {
-	jsonBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		return fmt.Errorf("failed to read file = '%s', %s", filePath, err)
-	}
-
-	err = json.Unmarshal(jsonBytes, v)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal file = '%s', %s", filePath, err)
-	}
-
-	return nil
-}
-
 func JsonRead(filePath string, unmarshaller func(jsonBytes []byte) error) error {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {

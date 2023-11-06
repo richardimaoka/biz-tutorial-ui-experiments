@@ -7,6 +7,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 type UsedColumns = [5]string
@@ -69,7 +70,7 @@ func Process(dir, repoUrl string) error {
 
 func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
-	err := internal.JsonRead2(inputFile, &roughSteps)
+	err := jsonwrap.JsonRead(inputFile, &roughSteps)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateTarget error - failed to read from json: %v", err)
 	}
