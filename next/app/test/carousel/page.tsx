@@ -5,7 +5,7 @@ import { Carousel } from "@/app/components/carousel/Carousel";
 import React from "react";
 
 export default function Page() {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [columnIndex, setColumnIndex] = React.useState(0);
 
   return (
@@ -44,7 +44,7 @@ export default function Page() {
       >
         <button
           onClick={() => {
-            if (columnIndex > 1) {
+            if (columnIndex > 0) {
               setColumnIndex(columnIndex - 1);
             }
           }}

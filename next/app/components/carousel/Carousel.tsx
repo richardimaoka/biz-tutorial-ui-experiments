@@ -7,6 +7,10 @@ interface Props {
 }
 
 export function Carousel(props: Props) {
+  // `-0%` makes it a bit awkward, so special handling for 0%
+  const translatePercentage =
+    props.currentIndex === 0 ? 0 : -100 * props.currentIndex;
+
   // TODO: might throw on currentIndex > maxIndex, to render error route
   return (
     <div className={styles.component}>
@@ -15,7 +19,7 @@ export function Carousel(props: Props) {
         style={{
           // simple props can make client-side animations!!
           transition: "transform 0.3s ease-in-out",
-          transform: `translate(-${props.columnWidth * props.currentIndex}px)`,
+          transform: `translate(${translatePercentage}%)`,
         }}
       >
         {/* props.children should be wider-than <Carousel> */}
