@@ -207,6 +207,7 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 				return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, column = %s is not supported", e.Step, colName)
 			}
 
+			// TODO remove stringRef call here
 			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: stringRef(colName)})
 		}
 
