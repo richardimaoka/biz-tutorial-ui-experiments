@@ -1,6 +1,6 @@
 package rough
 
-type ResultStep struct {
+type RoughStep struct {
 	Step         string `json:"step"`
 	Phase        string `json:"phase"`
 	Type         string `json:"type"`
@@ -39,7 +39,7 @@ type BrowserStep struct {
 	Tooltip string
 }
 
-func toTerminalCommandStep(roughStep ResultStep) TerminalCommandStep {
+func toTerminalCommandStep(roughStep RoughStep) TerminalCommandStep {
 	return TerminalCommandStep{
 		Comment: roughStep.Comment,
 		Command: roughStep.Instruction,

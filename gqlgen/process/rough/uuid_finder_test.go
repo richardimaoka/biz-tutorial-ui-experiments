@@ -27,7 +27,7 @@ func TestUUIDGenerator(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.roughStepFile, func(t *testing.T) {
-			var roughStep rough.ResultStep
+			var roughStep rough.RoughStep
 			err := jsonwrap.Read(c.roughStepFile, &roughStep)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
