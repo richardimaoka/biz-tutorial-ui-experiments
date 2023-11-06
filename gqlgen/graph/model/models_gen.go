@@ -15,7 +15,7 @@ type Column interface {
 
 type Column2 interface {
 	IsColumn2()
-	GetColumnName() string
+	GetPlaceholder() *string
 }
 
 type TerminalElement interface {
@@ -51,8 +51,9 @@ type ColumnWrapper struct {
 }
 
 type ColumnWrapper2 struct {
-	Column     Column2 `json:"column"`
-	ColumnName string  `json:"columnName"`
+	Column            Column2 `json:"column"`
+	ColumnName        string  `json:"columnName"`
+	ColumnDisplayName *string `json:"columnDisplayName"`
 }
 
 type DevToolsColumn struct {
@@ -197,12 +198,12 @@ func (SourceCodeColumn) IsColumn()                    {}
 func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeColumn2 struct {
-	ColumnName string       `json:"columnName"`
-	SourceCode *SourceCode2 `json:"sourceCode"`
+	Placeholder *string      `json:"_placeholder"`
+	SourceCode  *SourceCode2 `json:"sourceCode"`
 }
 
-func (SourceCodeColumn2) IsColumn2()                 {}
-func (this SourceCodeColumn2) GetColumnName() string { return this.ColumnName }
+func (SourceCodeColumn2) IsColumn2()                   {}
+func (this SourceCodeColumn2) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeTooltip struct {
 	MarkdownBody string                   `json:"markdownBody"`
@@ -233,12 +234,12 @@ func (TerminalColumn) IsColumn()                    {}
 func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalColumn2 struct {
-	ColumnName string       `json:"columnName"`
-	Terminals  []*Terminal2 `json:"terminals"`
+	Placeholder *string      `json:"_placeholder"`
+	Terminals   []*Terminal2 `json:"terminals"`
 }
 
-func (TerminalColumn2) IsColumn2()                 {}
-func (this TerminalColumn2) GetColumnName() string { return this.ColumnName }
+func (TerminalColumn2) IsColumn2()                   {}
+func (this TerminalColumn2) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalCommand struct {
 	BeforeExecution *bool   `json:"beforeExecution"`

@@ -34,12 +34,13 @@ type Page2 {
 ###################################################
 
 interface Column2 {
-  columnName: String!
+  _placeholder: String
 }
 
 type ColumnWrapper2 {
   column: Column2!
   columnName: String!
+  columnDisplayName: String
 }
 
 ###################################################
@@ -77,7 +78,7 @@ type Terminal2 {
 }
 
 type TerminalColumn2 implements Column2 {
-  columnName: String!
+  _placeholder: String
   terminals: [Terminal2!]!
 }
 
@@ -86,7 +87,7 @@ type TerminalColumn2 implements Column2 {
 ###################################################
 
 type SourceCodeColumn2 implements Column2 {
-  columnName: String!
+  _placeholder: String
   sourceCode: SourceCode2!
 }
 

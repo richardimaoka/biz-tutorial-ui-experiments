@@ -52,7 +52,7 @@ export type Column = {
 };
 
 export type Column2 = {
-  columnName: Scalars["String"]["output"];
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ColumnVerticalPosition = "BOTTOM" | "CENTER" | "TOP";
@@ -67,6 +67,7 @@ export type ColumnWrapper = {
 export type ColumnWrapper2 = {
   __typename: "ColumnWrapper2";
   column: Column2;
+  columnDisplayName?: Maybe<Scalars["String"]["output"]>;
   columnName: Scalars["String"]["output"];
 };
 
@@ -257,7 +258,7 @@ export type SourceCodeColumn = Column & {
 
 export type SourceCodeColumn2 = Column2 & {
   __typename: "SourceCodeColumn2";
-  columnName: Scalars["String"]["output"];
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
   sourceCode: SourceCode2;
 };
 
@@ -294,7 +295,7 @@ export type TerminalColumn = Column & {
 
 export type TerminalColumn2 = Column2 & {
   __typename: "TerminalColumn2";
-  columnName: Scalars["String"]["output"];
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
   terminals: Array<Terminal2>;
 };
 
@@ -876,6 +877,7 @@ export type GqlTutorialHeaderFragment = ({ __typename: "Page2" } & {
 export type GqlColumnTabFragment = ({
   __typename: "ColumnWrapper2";
   columnName: string;
+  columnDisplayName?: string | null;
 } & {
   " $fragmentRefs"?: { GqlColumnTabIconFragment: GqlColumnTabIconFragment };
 }) & { " $fragmentName"?: "GqlColumnTabFragment" };
@@ -5079,6 +5081,7 @@ export const GqlColumnTabFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },
@@ -5175,6 +5178,7 @@ export const GqlColumnTabsFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },
@@ -5238,6 +5242,7 @@ export const GqlTutorialHeaderFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },
@@ -7178,6 +7183,7 @@ export const GqlTutorialComponentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },
@@ -9039,6 +9045,7 @@ export const AppTestTutorialColumnsPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },
@@ -9633,6 +9640,7 @@ export const AppTestTutorialTutorialPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "columnName" } },
+          { kind: "Field", name: { kind: "Name", value: "columnDisplayName" } },
           {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnTabIcon" },

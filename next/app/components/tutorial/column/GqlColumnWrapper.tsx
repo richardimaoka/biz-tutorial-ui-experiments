@@ -16,7 +16,6 @@ const fragmentDefinition = graphql(`
       ... on TerminalColumn2 {
         ...GqlTerminalColumn
       }
-
       ... on SourceCodeColumn2 {
         ...GqlSourceCodeColumn
       }

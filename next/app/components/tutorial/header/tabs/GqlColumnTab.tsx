@@ -1,13 +1,14 @@
 "use client";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { useRouter } from "next/navigation";
 import styles from "./GqlColumnTab.module.css";
 import { GqlColumnTabIcon } from "./GqlColumnTabIcon";
+import { LinkSearchParams } from "@/app/components/link/LinkSearchParams";
 
 const fragmentDefinition = graphql(`
   fragment GqlColumnTab on ColumnWrapper2 {
     columnName
+    columnDisplayName
     ...GqlColumnTabIcon
   }
 `);
@@ -19,25 +20,24 @@ interface Props {
 
 export function GqlColumnTab(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
-  const router = useRouter();
-
-  // TODO: href calculation
-  const href = "/";
-
-  function onClick() {
-    // need to use router.replace instaed of <Link> not to mess up the browser history
-    router.replace(href);
-  }
 
   const selectStyle = props.isSelected ? styles.selected : styles.unselected;
   const outerClassName = `${styles.component} ${selectStyle}`;
 
+  const searchParams = fragment.columnName
+    ? {
+        column: fragment.columnName,
+      }
+    : ({} as Record<string, string>);
+
   return (
-    <button className={outerClassName} onClick={onClick}>
-      <span className={styles.smartphone}>
-        <GqlColumnTabIcon fragment={fragment} />
-      </span>
-      <span className={styles.desktop}>{fragment.columnName}</span>
-    </button>
+    <LinkSearchParams searchParams={searchParams}>
+      <div className={outerClassName}>
+        <span className={styles.smartphone}>
+          <GqlColumnTabIcon fragment={fragment} />
+        </span>
+        <span className={styles.desktop}>{fragment.columnName}</span>
+      </div>
+    </LinkSearchParams>
   );
 }
