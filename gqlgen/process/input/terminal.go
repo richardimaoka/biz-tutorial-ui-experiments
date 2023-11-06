@@ -26,16 +26,16 @@ type TerminalOutputRow struct {
 	Tooltip *TerminalTooltipRow `json:"tooltip"`
 }
 
-func toTerminalCommand(fromRow *Row) (*TerminalCommandRow, error) {
+func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	errorPrefix := "failed to convert to TerminalCommand"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "terminal" {
+	if strings.ToLower(fromRow.Column) != Terminal {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "command" {
+	if strings.ToLower(fromRow.Type) != Command {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -71,16 +71,16 @@ func toTerminalCommand(fromRow *Row) (*TerminalCommandRow, error) {
 	}, nil
 }
 
-func toTerminalOutput(fromRow *Row) (*TerminalOutputRow, error) {
+func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 	errorPrefix := "failed to convert to TerminalOutput"
 
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "terminal" {
+	if strings.ToLower(fromRow.Column) != Terminal {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "output" {
+	if strings.ToLower(fromRow.Type) != Output {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -114,4 +114,19 @@ func toTerminalOutput(fromRow *Row) (*TerminalOutputRow, error) {
 		Output:  fromRow.Instruction,
 		Tooltip: terminalTooltip,
 	}, nil
+}
+
+func toTerminalRow(fromRow *Row) error {
+	rowType := strings.ToLower(fromRow.Type)
+
+	switch rowType {
+	case Command:
+		_, err := toTerminalCommandRow(fromRow)
+		return err
+	case Output:
+		_, err := toTerminalOutputRow(fromRow)
+		return err
+	default:
+		return fmt.Errorf("toTerminalRow failed, column = '%s' has wrong type = '%s'", fromRow.Column, fromRow.Type)
+	}
 }

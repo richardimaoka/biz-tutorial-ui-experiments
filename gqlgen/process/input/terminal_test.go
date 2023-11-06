@@ -24,7 +24,7 @@ func TestToTerminalCommand(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			result, err := toTerminalCommand(&abst)
+			result, err := toTerminalCommandRow(&abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -50,7 +50,7 @@ func TestToTerminalCommandError(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			_, err = toTerminalCommand(&abst)
+			_, err = toTerminalCommandRow(&abst)
 			if err == nil {
 				t.Fatal("expected to fail but succeeded")
 			}
@@ -75,7 +75,7 @@ func TestToTerminalOutput(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			result, err := toTerminalOutput(&abst)
+			result, err := toTerminalOutputRow(&abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -101,7 +101,7 @@ func TestToTerminalOutputError(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			_, err = toTerminalOutput(&abst)
+			_, err = toTerminalOutputRow(&abst)
 			if err == nil {
 				t.Fatal("expected to fail but succeeded")
 			}
