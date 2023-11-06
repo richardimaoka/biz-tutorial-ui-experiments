@@ -22,7 +22,7 @@ type TerminalRow struct {
 }
 
 /**
- * Function(s) to convert to specific row
+ * Function(s) to convert a row to a more specific row
  */
 
 func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
@@ -80,9 +80,8 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 }
 
 /**
- * Functions to generate step from row
+ * Function(s) to convert a row to a step
  */
-
 func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
@@ -208,3 +207,62 @@ func toTerminalResultSteps(fromRow *Row) error {
 	// 	return fmt.Errorf("toTerminalRow failed, column = '%s' has wrong type = '%s'", fromRow.Column, fromRow.Type)
 	// }
 }
+
+/**
+ * Function(s) to break down a row to steps
+ */
+// func toTerminalResultSteps2(
+// 	r *TerminalRow,
+// 	finder *StepIdFinder,
+// 	prevColumns ColumnInfo,
+// ) ([]ResultStep, ColumnInfo, error) {
+// 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
+
+// 	// - precondition for RoughStep
+
+// 	// check if it's a valid terminal step
+// 	if r.Instruction == "" {
+// 		return nil, NoColumn, EmptyColumns, fmt.Errorf("step is missing 'instruction', step = '%s', type = '%s'", r.Step, r.Type)
+// 	}
+
+// 	// - step creation
+// 	var steps []DetailedStep
+
+// 	// insert move-to-terminal step if current column != "Terminal"
+// 	if prevColumn != "Terminal" && prevColumn != "" {
+// 		moveToTerminalStep := moveToTerminalStep(r, uuidFinder, usedColumns)
+// 		steps = append(steps, moveToTerminalStep)
+// 	}
+
+// 	// command step
+// 	cmdStep := terminalCommandStep(r, uuidFinder, usedColumns)
+// 	steps = append(steps, cmdStep)
+
+// 	// cd step
+// 	if strings.HasPrefix(r.Instruction, "cd ") {
+// 		cmdStep := terminalCdStep(r, uuidFinder, usedColumns)
+// 		steps = append(steps, cmdStep)
+// 	}
+
+// 	return steps, "Terminal", usedColumns, nil
+// }
+
+// func terminalOutputConvert(
+// 	s *RoughStep,
+// 	uuidFinder *UUIDFinder,
+// 	existingColumns UsedColumns,
+// ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
+// 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
+
+// 	// - precondition for RoughStep
+
+// 	// - step creation
+// 	var steps []DetailedStep
+
+// 	// output step
+// 	s.Instruction2 = s.Instruction //TODO: workaround for now
+// 	outputStep := terminalOutputStep(s, uuidFinder, usedColumns)
+// 	steps = append(steps, outputStep)
+
+// 	return steps, "Terminal", usedColumns, nil
+// }

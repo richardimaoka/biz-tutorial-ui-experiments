@@ -1,8 +1,5 @@
 package input
 
-type UsedColumns = [10]string
-type CurrentColumn = string
-
 type ResultStep struct {
 	// Uppercase fields to allow json dump for testing
 
