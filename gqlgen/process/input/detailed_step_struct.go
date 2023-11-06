@@ -4,9 +4,9 @@ type ResultStep struct {
 	// Uppercase fields to allow json dump for testing
 
 	// rough-step related
-	FromRoughStep bool   `json:"fromRoughStep"`
-	SubID         string `json:"subId"`
-	ParentStep    string `json:"parentStep"`
+	IsFromRow  bool   `json:"isFromRow"`
+	SubID      string `json:"subId"`
+	ParentStep string `json:"parentStep"`
 
 	// steps
 	Step string `json:"step"`

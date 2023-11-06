@@ -32,7 +32,7 @@ func NewFinder(targetFile string) (*Finder, error) {
 
 func (g *Finder) StepIdFor(parentStep, subID string) string {
 	for _, ds := range g.targetSteps {
-		if ds.FromRoughStep && parentStep == ds.ParentStep && subID == ds.SubID {
+		if ds.IsFromRow && parentStep == ds.ParentStep && subID == ds.SubID {
 			return ds.Step
 		}
 	}
