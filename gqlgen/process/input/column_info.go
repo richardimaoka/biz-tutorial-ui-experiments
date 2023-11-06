@@ -1,5 +1,7 @@
 package input
 
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
+
 type UsedColumns = [10]string
 type CurrentColumn = string
 
@@ -27,4 +29,17 @@ func appendIfNotExists(columns UsedColumns, colName string) UsedColumns {
 	}
 
 	return columns
+}
+
+func setColumns(step *result.Step, cols UsedColumns) {
+	step.Column1 = cols[0]
+	step.Column2 = cols[1]
+	step.Column3 = cols[2]
+	step.Column4 = cols[3]
+	step.Column5 = cols[4]
+	step.Column6 = cols[5]
+	step.Column7 = cols[6]
+	step.Column8 = cols[7]
+	step.Column9 = cols[8]
+	step.Column10 = cols[9]
 }

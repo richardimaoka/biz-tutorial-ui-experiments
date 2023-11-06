@@ -1,6 +1,6 @@
-package input
+package result
 
-type ResultStep struct {
+type Step struct {
 	// Uppercase fields to allow json dump for testing
 
 	// Fields to make the step searchable for re-generation
@@ -9,7 +9,7 @@ type ResultStep struct {
 	ParentStep string `json:"parentStep"`
 
 	// steps
-	Step    string `json:"step"`
+	StepId  string `json:"stepId"`
 	Comment string `json:"comment"`
 
 	// columns
@@ -65,17 +65,4 @@ type ResultStep struct {
 	YouTubeVideoId string `json:"youtubeVideoId"`
 	YouTubeWidth   int    `json:"youtubeWidth"`
 	YouTubeHeight  int    `json:"youtubeHeight"`
-}
-
-func (step *ResultStep) setColumns(cols UsedColumns) {
-	step.Column1 = cols[0]
-	step.Column2 = cols[1]
-	step.Column3 = cols[2]
-	step.Column4 = cols[3]
-	step.Column5 = cols[4]
-	step.Column6 = cols[5]
-	step.Column7 = cols[6]
-	step.Column8 = cols[7]
-	step.Column9 = cols[8]
-	step.Column10 = cols[9]
 }

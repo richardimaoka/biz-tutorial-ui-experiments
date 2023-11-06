@@ -3,6 +3,8 @@ package input
 import (
 	"fmt"
 	"strings"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
 type TerminalTooltip struct {
@@ -82,17 +84,17 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := ResultStep{
+	step := result.Step{
 		// fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		Step:          stepId,
+		StepId:        stepId,
 		Comment:       r.Comment,
 		FocusColumn:   "Terminal",
 		ModalContents: r.ModalContents,
@@ -106,21 +108,21 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 		step.TerminalTooltipTiming = r.Tooltip.Timing
 	}
 
-	step.setColumns(usedColumns)
+	setColumns(&step, usedColumns)
 
 	return step
 }
 
-func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) result.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
-	step := ResultStep{
+	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		Step:          stepId,
+		StepId:        stepId,
 		IsTrivial:     r.IsTrivial,
 		Comment:       r.Comment,
 		FocusColumn:   "Terminal",
@@ -135,21 +137,21 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 		step.TerminalTooltipTiming = r.Tooltip.Timing
 	}
 
-	step.setColumns(usedColumns)
+	setColumns(&step, usedColumns)
 
 	return step
 }
 
-func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) result.Step {
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
-	step := ResultStep{
+	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		Step:          stepId,
+		StepId:        stepId,
 		IsTrivial:     true, // always trivial
 		Comment:       "(move to Terminal)",
 		FocusColumn:   "Terminal",
@@ -160,24 +162,24 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	}
 	// No tooltip - move step should be trivial and no tooltip to show
 
-	step.setColumns(usedColumns)
+	setColumns(&step, usedColumns)
 
 	return step
 }
 
-func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
 	currentDir := strings.TrimPrefix(r.Text, "cd ")
 
 	subId := "terminalCdStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := ResultStep{
+	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		Step:          stepId,
+		StepId:        stepId,
 		IsTrivial:     true, // always trivial
 		Comment:       "",
 		FocusColumn:   "Terminal",
@@ -189,7 +191,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 	}
 	// No tooltip - cd command should be trivial and no tooltip to show
 
-	step.setColumns(usedColumns)
+	setColumns(&step, usedColumns)
 
 	return step
 }
@@ -215,7 +217,7 @@ func toTerminalResultSteps(fromRow *Row) error {
 // 	r *TerminalRow,
 // 	finder *StepIdFinder,
 // 	prevColumns ColumnInfo,
-// ) ([]ResultStep, ColumnInfo, error) {
+// ) ([]result.ResultStep, ColumnInfo, error) {
 // 	usedColumns := appendIfNotExists(existingColumns, "Terminal")
 
 // 	// - precondition for RoughStep

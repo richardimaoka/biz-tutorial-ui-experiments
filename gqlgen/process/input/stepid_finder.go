@@ -6,11 +6,12 @@ import (
 	"os"
 
 	"github.com/google/uuid"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
 type StepIdFinder struct {
 	// needs to hold the target steps in memory, to avoid error in the signature of all methods
-	targetSteps []ResultStep
+	targetSteps []result.Step
 	idGenerator func() string
 }
 
@@ -32,7 +33,7 @@ func NewFinder(targetFile string) (*StepIdFinder, error) {
 func (g *StepIdFinder) StepIdFor(parentStep, subID string) string {
 	for _, ds := range g.targetSteps {
 		if ds.IsFromRow && parentStep == ds.ParentStep && subID == ds.SubID {
-			return ds.Step
+			return ds.StepId
 		}
 	}
 
@@ -41,7 +42,7 @@ func (g *StepIdFinder) StepIdFor(parentStep, subID string) string {
 }
 
 // if no existing steps, then return nil = empty slice
-func readExistingSteps(targetFile string) ([]ResultStep, error) {
+func readExistingSteps(targetFile string) ([]result.Step, error) {
 	jsonBytes, err := os.ReadFile(targetFile)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -51,7 +52,7 @@ func readExistingSteps(targetFile string) ([]ResultStep, error) {
 		}
 	}
 
-	var steps []ResultStep
+	var steps []result.Step
 	err = json.Unmarshal(jsonBytes, &steps)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal %s, %s", targetFile, err)
