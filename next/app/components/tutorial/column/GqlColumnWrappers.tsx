@@ -2,9 +2,8 @@ import { nonNullArray } from "@/libs/nonNullArray";
 import styles from "./GqlColumnWrappers.module.css";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import { ColumnCarousel } from "./ColumnCarousel";
 import { GqlColumnWrapper } from "./GqlColumnWrapper";
-import { Carousel } from "../../carousel/Carousel";
-import { columnWidthPx } from "../definitions";
 
 const fragmentDefinition = graphql(`
   fragment GqlColumnWrappers on Page2 {
@@ -27,9 +26,10 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
   }
 
   const columns = nonNullArray(fragment.columns);
+  const columnNames = columns.map((c) => c.columnName);
 
   return (
-    <Carousel currentIndex={0} columnWidth={columnWidthPx}>
+    <ColumnCarousel columnNames={columnNames}>
       <div className={styles.component}>
         {columns.map((c) => (
           <div key={c.columnName} className={styles.column}>
@@ -37,6 +37,6 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
           </div>
         ))}
       </div>
-    </Carousel>
+    </ColumnCarousel>
   );
 }
