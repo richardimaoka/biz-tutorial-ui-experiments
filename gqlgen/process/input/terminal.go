@@ -155,6 +155,12 @@ func terminalOutputStep(r *TerminalOutputRow, finder *StepIdFinder, usedColumns 
 		TerminalText: r.Output,
 		// ModalText:    r.ModalText,
 	}
+
+	if r.Tooltip != nil {
+		step.TerminalTooltip = r.Tooltip.Contents
+		step.TerminalTooltipTiming = r.Tooltip.Timing
+	}
+
 	step.setColumns(usedColumns)
 
 	return step
@@ -177,6 +183,12 @@ func terminalCommandStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, used
 		// TerminalName: , // Go zero value is ""
 		// ModalText: r.ModalText,
 	}
+
+	if r.Tooltip != nil {
+		step.TerminalTooltip = r.Tooltip.Contents
+		step.TerminalTooltipTiming = r.Tooltip.Timing
+	}
+
 	step.setColumns(usedColumns)
 
 	return step
@@ -201,6 +213,9 @@ func terminalCdStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColum
 		CurrentDir: currentDir, // Go zero value is ""
 		// ModalText:    r.ModalText,
 	}
+
+	// cd command should be trivial and no tooltip to show
+
 	step.setColumns(usedColumns)
 
 	return step

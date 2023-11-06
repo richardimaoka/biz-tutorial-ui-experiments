@@ -38,10 +38,12 @@ type ResultStep struct {
 	ModalPosition string `json:"modalPosition"`
 
 	// terminal
-	TerminalType string `json:"terminalType"`
-	TerminalText string `json:"terminalText"`
-	CurrentDir   string `json:"currentDir"`
-	TerminalName string `json:"terminalName"`
+	TerminalType          string `json:"terminalType"`
+	TerminalText          string `json:"terminalText"`
+	CurrentDir            string `json:"currentDir"`
+	TerminalName          string `json:"terminalName"`
+	TerminalTooltip       string `json:"terminalTooltip"`
+	TerminalTooltipTiming string `json:"terminalTooltipTiming"`
 
 	// git
 	Commit              string `json:"commit"`
