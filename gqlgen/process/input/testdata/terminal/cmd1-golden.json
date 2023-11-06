@@ -1,10 +1,12 @@
 {
   "stepId": "66105871-d23c-4e54-98f4-b715b330a0da",
-  "trivial": false,
   "comment": "some comment",
   "command": "mkdir myproj",
   "tooltip": {
     "contents": "チュートリアル用ディレクトリを作成します",
     "timing": "START"
-  }
+  },
+  "isTrivial": false,
+  "modalContents": "",
+  "terminalName": "default"
 }

@@ -27,7 +27,7 @@ type Row struct {
 	Instruction   string `json:"instruction"`
 	Instruction2  string `json:"instruction2"`
 	Instruction3  string `json:"instruction3"`
-	ModalText     string `json:"modalText"`
+	ModalContents string `json:"modalContents"`
 	Tooltip       string `json:"tooltip"`
 	TooltipTiming string `json:"tooltipTiming"`
 	TooltipLine   int    `json:"tooltipLine"`

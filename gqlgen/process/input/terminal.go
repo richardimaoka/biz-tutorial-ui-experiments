@@ -5,25 +5,29 @@ import (
 	"strings"
 )
 
-type TerminalTooltipRow struct {
+type TerminalTooltip struct {
 	Contents string        `json:"contents"`
 	Timing   TooltipTiming `json:"timing"`
 }
 
 type TerminalCommandRow struct {
-	StepId  string              `json:"stepId"`
-	Trivial bool                `json:"trivial"`
-	Comment string              `json:"comment"`
-	Command string              `json:"command"`
-	Tooltip *TerminalTooltipRow `json:"tooltip"`
+	StepId        string           `json:"stepId"`
+	IsTrivial     bool             `json:"isTrivial"`
+	Comment       string           `json:"comment"`
+	Command       string           `json:"command"`
+	Tooltip       *TerminalTooltip `json:"tooltip"`
+	ModalContents string           `json:"modalContents"`
+	TerminalName  string           `json:"terminalName"`
 }
 
 type TerminalOutputRow struct {
-	StepId  string              `json:"stepId"`
-	Trivial bool                `json:"trivial"`
-	Comment string              `json:"comment"`
-	Output  string              `json:"output"`
-	Tooltip *TerminalTooltipRow `json:"tooltip"`
+	StepId        string           `json:"stepId"`
+	IsTrivial     bool             `json:"isTrivial"`
+	Comment       string           `json:"comment"`
+	Output        string           `json:"output"`
+	Tooltip       *TerminalTooltip `json:"tooltip"`
+	ModalContents string           `json:"modalContents"`
+	TerminalName  string           `json:"terminalName"`
 }
 
 /**
@@ -43,10 +47,16 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	}
 
 	//
-	// Check instruction
+	// Check instruction fields
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+	}
+	var terminalName string
+	if fromRow.Instruction2 == "" {
+		terminalName = "default"
+	} else {
+		terminalName = fromRow.Instruction2
 	}
 
 	//
@@ -66,11 +76,13 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalCommandRow, error) {
 	}
 
 	return &TerminalCommandRow{
-		StepId:  fromRow.StepId,
-		Trivial: trivial,
-		Comment: fromRow.Comment,
-		Command: fromRow.Instruction,
-		Tooltip: terminalTooltip,
+		StepId:        fromRow.StepId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		Command:       fromRow.Instruction,
+		Tooltip:       terminalTooltip,
+		ModalContents: fromRow.ModalContents,
+		TerminalName:  terminalName,
 	}, nil
 }
 
@@ -88,10 +100,16 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 	}
 
 	//
-	// Check instruction
+	// Check instruction fields
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+	}
+	var terminalName string
+	if fromRow.Instruction2 == "" {
+		terminalName = "default"
+	} else {
+		terminalName = fromRow.Instruction2
 	}
 
 	//
@@ -111,30 +129,44 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalOutputRow, error) {
 	}
 
 	return &TerminalOutputRow{
-		StepId:  fromRow.StepId,
-		Trivial: trivial,
-		Comment: fromRow.Comment,
-		Output:  fromRow.Instruction,
-		Tooltip: terminalTooltip,
+		StepId:        fromRow.StepId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		Output:        fromRow.Instruction,
+		Tooltip:       terminalTooltip,
+		ModalContents: fromRow.ModalContents,
+		TerminalName:  terminalName,
 	}, nil
 }
 
 /**
  * Functions to generate step from row
  */
-func moveToTerminalStep(parentStepId string, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
-	subId := "moveToTerminalStep"
-	stepId := finder.StepIdFor(parentStepId, subId)
+
+func terminalCommandStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "terminalCommandStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
 	step := ResultStep{
 		// fields to make the step searchable for re-generation
 		IsFromRow:  true,
-		ParentStep: parentStepId,
+		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		Step:        stepId,
-		FocusColumn: "Terminal",
-		Comment:     "(move to Terminal)",
+		Step:          stepId,
+		FocusColumn:   "Terminal",
+		Comment:       r.Comment,
+		ModalContents: r.ModalContents,
+		// Terminal fields
+		TerminalType: "command",
+		TerminalText: r.Command,
+		TerminalName: r.TerminalName,
 	}
+	if r.Tooltip != nil {
+		step.TerminalTooltipContents = r.Tooltip.Contents
+		step.TerminalTooltipTiming = r.Tooltip.Timing
+	}
+
 	step.setColumns(usedColumns)
 
 	return step
@@ -149,15 +181,17 @@ func terminalOutputStep(r *TerminalOutputRow, finder *StepIdFinder, usedColumns 
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		Step:         stepId,
-		FocusColumn:  "Terminal",
+		Step:          stepId,
+		FocusColumn:   "Terminal",
+		Comment:       r.Comment,
+		ModalContents: r.ModalContents,
+		// Terminal fields
 		TerminalType: "output",
 		TerminalText: r.Output,
-		// ModalText:    r.ModalText,
+		TerminalName: r.TerminalName,
 	}
-
 	if r.Tooltip != nil {
-		step.TerminalTooltip = r.Tooltip.Contents
+		step.TerminalTooltipContents = r.Tooltip.Contents
 		step.TerminalTooltipTiming = r.Tooltip.Timing
 	}
 
@@ -166,29 +200,45 @@ func terminalOutputStep(r *TerminalOutputRow, finder *StepIdFinder, usedColumns 
 	return step
 }
 
-func terminalCommandStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) ResultStep {
-	subId := "terminalCommandStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
-
+func moveToTerminalCommandStep(r *TerminalCommandRow, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "moveToTerminalStep"
+	stepId := finder.StepIdFor(r.StepId, subId)
 	step := ResultStep{
 		// fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		Step:         stepId,
-		FocusColumn:  "Terminal",
-		TerminalType: "command",
-		TerminalText: r.Command,
-		// TerminalName: , // Go zero value is ""
-		// ModalText: r.ModalText,
+		Step:        stepId,
+		FocusColumn: "Terminal",
+		Comment:     "(move to Terminal)",
+		IsTrivial:   true,
+		// Terminal fields
+		TerminalType: "cd",
+		TerminalName: r.TerminalName,
 	}
+	step.setColumns(usedColumns)
 
-	if r.Tooltip != nil {
-		step.TerminalTooltip = r.Tooltip.Contents
-		step.TerminalTooltipTiming = r.Tooltip.Timing
+	return step
+}
+
+func moveToTerminalOutputStep(r *TerminalOutputRow, finder *StepIdFinder, usedColumns UsedColumns) ResultStep {
+	subId := "moveToTerminalStep"
+	stepId := finder.StepIdFor(r.StepId, subId)
+	step := ResultStep{
+		// fields to make the step searchable for re-generation
+		IsFromRow:  true,
+		ParentStep: r.StepId,
+		SubID:      subId,
+		// other fields
+		Step:        stepId,
+		FocusColumn: "Terminal",
+		Comment:     "(move to Terminal)",
+		IsTrivial:   true,
+		// Terminal fields
+		TerminalType: "cd",
+		TerminalName: r.TerminalName,
 	}
-
 	step.setColumns(usedColumns)
 
 	return step
@@ -206,12 +256,13 @@ func terminalCdStep(r *TerminalCommandRow, StepIdFinder *StepIdFinder, usedColum
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		Step:         stepId,
-		FocusColumn:  "Terminal",
+		Step:          stepId,
+		FocusColumn:   "Terminal",
+		ModalContents: r.ModalContents,
+		// Terminal fields
 		TerminalType: "cd",
-		// TerminalName: r.Instruction3, // Go zero value is ""
-		CurrentDir: currentDir, // Go zero value is ""
-		// ModalText:    r.ModalText,
+		TerminalName: r.TerminalName,
+		CurrentDir:   currentDir,
 	}
 
 	// cd command should be trivial and no tooltip to show

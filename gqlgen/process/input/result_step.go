@@ -31,19 +31,19 @@ type ResultStep struct {
 
 	// animation
 	DurationSeconds int  `json:"durationSeconds"`
-	IsTrivialStep   bool `json:"isTrivialStep"`
+	IsTrivial       bool `json:"isTrivial"`
 
 	// modal
-	ModalText     string `json:"modalText"`
+	ModalContents string `json:"modalContents"`
 	ModalPosition string `json:"modalPosition"`
 
 	// terminal
-	TerminalType          string `json:"terminalType"`
-	TerminalText          string `json:"terminalText"`
-	CurrentDir            string `json:"currentDir"`
-	TerminalName          string `json:"terminalName"`
-	TerminalTooltip       string `json:"terminalTooltip"`
-	TerminalTooltipTiming string `json:"terminalTooltipTiming"`
+	CurrentDir              string `json:"currentDir"`
+	TerminalType            string `json:"terminalType"`
+	TerminalText            string `json:"terminalText"`
+	TerminalName            string `json:"terminalName"`
+	TerminalTooltipContents string `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
 
 	// git
 	Commit              string `json:"commit"`

@@ -59,7 +59,7 @@ func toSourceTooltipTiming(s string) (TooltipTiming, error) {
 // 	}
 // }
 
-func toTerminalTooltip(fromRow *Row) (*TerminalTooltipRow, error) {
+func toTerminalTooltip(fromRow *Row) (*TerminalTooltip, error) {
 	// if tooltip is empty, then return no tooltip
 	if fromRow.Tooltip == "" {
 		return nil, nil
@@ -72,7 +72,7 @@ func toTerminalTooltip(fromRow *Row) (*TerminalTooltipRow, error) {
 		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
 	}
 
-	return &TerminalTooltipRow{
+	return &TerminalTooltip{
 		Contents: contents,
 		Timing:   tooltipTiming,
 	}, nil
