@@ -17,7 +17,10 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling to Go data, %w", err)
 	}
 
-	// See if necessary fields exist
+	/**
+	 * Check necessary fields
+	 */
+	// See if the columnName field exists
 	name, ok := obj["columnName"]
 	if !ok {
 		return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "columnName" field does not exist`)
@@ -26,6 +29,7 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 	if !ok {
 		return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "name" field = %v is not string`, name)
 	}
+	t.ColumnName = nameStr
 
 	// See if the column field exists
 	columnObj, ok := obj["column"]
@@ -44,12 +48,20 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling the column object, %w", err)
 	}
+	t.Column = column
 
 	/**
-	 * If all successful, use the column and the name
+	 * Optional fields
 	 */
-	t.Column = column
-	t.ColumnName = nameStr
+	// See if the columnName field exists
+	displayName, ok := obj["columnDisplayName"]
+	if ok {
+		displayNameStr, ok := displayName.(string)
+		if !ok {
+			return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "name" field = %v is not string`, name)
+		}
+		t.ColumnDisplayName = &displayNameStr
+	}
 
 	return nil
 }
