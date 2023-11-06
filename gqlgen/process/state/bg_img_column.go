@@ -2,7 +2,6 @@ package state
 
 import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type BackgroundImageColumn struct {
@@ -36,8 +35,8 @@ func (p *BackgroundImageColumn) ToGraphQLBgImgCol() *model.BackgroundImageColumn
 	// copy to avoid mutation effect afterwards
 	width := p.Width
 	height := p.Height
-	path := internal.StringRef(p.Path)
-	url := internal.StringRef(p.URL)
+	path := stringRef(p.Path)
+	url := stringRef(p.URL)
 	modal := p.Modal.ToGraphQLModal() //ToGraphQLModal() performs copy internally, to avoid mutation effect afterwards
 
 	return &model.BackgroundImageColumn{

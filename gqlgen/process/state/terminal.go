@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type Terminal struct {
@@ -64,8 +63,8 @@ func (t *Terminal) ChangeCurrentDirectory(dirPath string) {
 
 func (t *Terminal) ToGraphQLTerminal() *model.Terminal {
 	// copy to avoid mutation effect afterwards
-	currentDirectory := internal.StringRef(t.currentDirectory)
-	terminalName := internal.StringRef(t.terminalName)
+	currentDirectory := stringRef(t.currentDirectory)
+	terminalName := stringRef(t.terminalName)
 
 	var nodes []*model.TerminalNode
 	for _, e := range t.elements {

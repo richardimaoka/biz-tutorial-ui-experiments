@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 
 	_ "image/jpeg"
 	_ "image/png"
@@ -62,7 +61,7 @@ func (p *BrowserColumn) ToGraphQLBrowserCol() *model.BrowserColumn {
 	// copy to avoid mutation effect afterwards
 	width := p.Width
 	height := p.Height
-	path := internal.StringRef(p.Path)
+	path := stringRef(p.Path)
 
 	return &model.BrowserColumn{
 		Width:  &width,

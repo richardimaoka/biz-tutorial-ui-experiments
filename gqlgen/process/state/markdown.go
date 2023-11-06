@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type MarkdownAlignment string
@@ -42,7 +41,7 @@ type Markdown struct {
 
 func (p *Markdown) ToGraphQLMarkdown() *model.Markdown {
 	// copy to avoid mutation effect afterwards
-	contents := internal.StringRef(p.Contents)
+	contents := stringRef(p.Contents)
 	alignment := p.Alignment.Convert()
 
 	return &model.Markdown{

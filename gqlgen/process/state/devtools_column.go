@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type DevToolsColumn struct {
@@ -43,7 +42,7 @@ func (p *DevToolsColumn) ToGraphQLDevToolsCol() *model.DevToolsColumn {
 	// copy to avoid mutation effect afterwards
 	width := p.Width
 	height := p.Height
-	path := internal.StringRef(p.Path)
+	path := stringRef(p.Path)
 
 	return &model.DevToolsColumn{
 		Width:  &width,

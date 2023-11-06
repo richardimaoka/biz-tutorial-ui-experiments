@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 )
 
 type ModalPosition string
@@ -50,7 +49,7 @@ func (p *Modal) ToGraphQLModal() *model.Modal {
 	}
 
 	// copy to avoid mutation effect afterwards
-	text := internal.StringRef(p.Text)
+	text := stringRef(p.Text)
 	position := convertModalPosition(p.Position) //p.Position is passed-by-copy, to avoid mutation effect afterwards
 
 	return &model.Modal{

@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -199,16 +198,16 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 				// }
 
 				// 		// copy to avoid mutation effects afterwards
-				// 		step := internal.StringRef(e.Step)
-				// 		prevStep := internal.StringRef(e.PrevStep)
-				// 		nextStep := internal.StringRef(e.NextStep)
+				// 		step := stringRef(e.Step)
+				// 		prevStep := stringRef(e.PrevStep)
+				// 		nextStep := stringRef(e.NextStep)
 			}
 
 			if column == nil {
 				return nil, fmt.Errorf("ToGraphQLPages failed at step = %s, column = %s is not supported", e.Step, colName)
 			}
 
-			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: internal.StringRef(colName)})
+			colWrappers = append(colWrappers, &model.ColumnWrapper{Column: column, Name: stringRef(colName)})
 		}
 
 		modalText := e.ModalText
@@ -226,13 +225,13 @@ func (entries StepEntries2) ToGraphQLPages(tutorial, repoUrl string) ([]model.Pa
 		isTrivialStep := e.IsTrivialStep
 
 		page := model.Page{
-			Step:            internal.StringRef(currentStep),
-			PrevStep:        internal.StringRef(prevStep),
-			NextStep:        internal.StringRef(nextStep),
+			Step:            stringRef(currentStep),
+			PrevStep:        stringRef(prevStep),
+			NextStep:        stringRef(nextStep),
 			DurationSeconds: durationSeconds,
 			IsTrivialStep:   &isTrivialStep,
 			Columns:         colWrappers,
-			FocusColumn:     internal.StringRef(e.FocusColumn),
+			FocusColumn:     stringRef(e.FocusColumn),
 			Modal:           modalState.ToGraphQLModal(),
 		}
 
