@@ -18,7 +18,7 @@ type FileEffects []FileEffect
 
 func ReadFileEffects(filePath string) (FileEffects, error) {
 	var effects []FileEffect
-	err := jsonwrap.JsonRead(filePath, &effects)
+	err := jsonwrap.Read(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadFileEffects failed to read file, %s", err)
 	}

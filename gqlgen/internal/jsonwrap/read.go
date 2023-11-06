@@ -28,7 +28,7 @@ func ExtractTypeName(jsonBytes []byte, fromField string) (string, error) {
 	return typeName, nil
 }
 
-func JsonRead(filePath string, v interface{}) error {
+func Read(filePath string, v interface{}) error {
 	jsonBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file = '%s', %s", filePath, err)

@@ -16,7 +16,7 @@ type GitEffects []GitEffect
 
 func ReadGitEffects(filePath string) (GitEffects, error) {
 	var effects GitEffects
-	err := jsonwrap.JsonRead(filePath, &effects)
+	err := jsonwrap.Read(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadGitEffects failed to read file, %s", err)
 	}

@@ -19,7 +19,7 @@ func TestToTerminalCommand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -45,7 +45,7 @@ func TestToTerminalCommandError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -70,7 +70,7 @@ func TestToTerminalOutput(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -96,7 +96,7 @@ func TestToTerminalOutputError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}

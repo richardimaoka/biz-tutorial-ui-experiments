@@ -19,7 +19,7 @@ type TerminalEffects []TerminalEffect
 
 func ReadTerminalEffects(filePath string) (TerminalEffects, error) {
 	var effects []TerminalEffect
-	err := jsonwrap.JsonRead(filePath, &effects)
+	err := jsonwrap.Read(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadFileEffects failed to read file, %s", err)
 	}

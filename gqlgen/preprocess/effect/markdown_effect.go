@@ -16,7 +16,7 @@ type MarkdownEffects []MarkdownEffect
 
 func ReadMarkdownEffects(filePath string) (MarkdownEffects, error) {
 	var effects MarkdownEffects
-	err := jsonwrap.JsonRead(filePath, &effects)
+	err := jsonwrap.Read(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("ReadMarkdownEffects failed to read file, %s", err)
 	}

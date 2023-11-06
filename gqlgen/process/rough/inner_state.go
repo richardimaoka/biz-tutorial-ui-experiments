@@ -70,7 +70,7 @@ func Process(dir, repoUrl string) error {
 
 func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error) {
 	var roughSteps []RoughStep
-	err := jsonwrap.JsonRead(inputFile, &roughSteps)
+	err := jsonwrap.Read(inputFile, &roughSteps)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateTarget error - failed to read from json: %v", err)
 	}

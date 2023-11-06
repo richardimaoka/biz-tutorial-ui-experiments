@@ -20,7 +20,7 @@ func TestProcessChunks(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var chunks []gitwrap.Chunk
-			err := jsonwrap.JsonRead(c.inputFile, &chunks)
+			err := jsonwrap.Read(c.inputFile, &chunks)
 			if err != nil {
 				t.Fatal(err)
 			}

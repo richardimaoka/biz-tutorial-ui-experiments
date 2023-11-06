@@ -19,7 +19,7 @@ func (s StepEffect) IsGitCommitStep() bool {
 func ReadStepEffects(filePath string) ([]StepEffect, error) {
 	funcName := "ReadStepEffects"
 	var effects []StepEffect
-	err := jsonwrap.JsonRead(filePath, &effects)
+	err := jsonwrap.Read(filePath, &effects)
 	if err != nil {
 		return nil, fmt.Errorf("%s failed to read file, %s", funcName, err)
 	}

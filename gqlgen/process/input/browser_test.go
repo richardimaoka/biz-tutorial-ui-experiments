@@ -20,7 +20,7 @@ func TestToBrowserSingle(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -45,7 +45,7 @@ func TestToBrowserSingleError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -70,7 +70,7 @@ func TestToBrowserNumSeq(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -95,7 +95,7 @@ func TestToBrowserNumSeqError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -121,7 +121,7 @@ func TestToBrowserSequence(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -146,7 +146,7 @@ func TestToBrowserSequenceError(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			var abst Abstract
-			err := jsonwrap.JsonRead(c.inputFile, &abst)
+			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
 				t.Fatal(err)
 			}

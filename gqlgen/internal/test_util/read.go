@@ -7,7 +7,7 @@ import (
 )
 
 func JsonRead(t *testing.T, filePath string, v interface{}) {
-	err := jsonwrap.JsonRead(filePath, v)
+	err := jsonwrap.Read(filePath, v)
 	if err != nil {
 		t.Fatalf("failed to read file %s, %s", filePath, err)
 		return
