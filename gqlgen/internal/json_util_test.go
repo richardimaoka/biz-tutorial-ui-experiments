@@ -7,15 +7,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func TestJsonReadArray(t *testing.T) {
-	arr, err := internal.JsonReadArray("testdata/array.json")
+	var arr []jsonwrap.JsonObj
+	err := jsonwrap.Read("testdata/array.json", &arr)
 	if err != nil {
 		t.Fatalf("JsonReadArray failed, %s", err)
 	}
-	expected := []internal.JsonObj{
+	expected := []jsonwrap.JsonObj{
 		{"a": float64(1), "b": float64(2)},
 		{"a": float64(3), "b": float64(4)},
 		{"a": float64(5), "b": float64(6)},
@@ -28,7 +31,8 @@ func TestJsonReadArray(t *testing.T) {
 
 func TestJsonReadArrayWrite(t *testing.T) {
 	//non-floating point numbers are preserved as non-floating-point numbers
-	arr, err := internal.JsonReadArray("testdata/array.json")
+	var arr []jsonwrap.JsonObj
+	err := jsonwrap.Read("testdata/array.json", &arr)
 	if err != nil {
 		t.Fatalf("JsonReadArray failed, %s", err)
 	}

@@ -6,6 +6,7 @@ import (
 	"reflect"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
 func toBool(s string) bool {
@@ -34,7 +35,7 @@ func toInt(s string) int {
 	}
 }
 
-func alterStringToBool(jsonObj internal.JsonObj, field reflect.StructField) error {
+func alterStringToBool(jsonObj jsonwrap.JsonObj, field reflect.StructField) error {
 	// for those struct fields where type = bool, convert string to bool
 	if field.Type.String() == "bool" {
 		// validate st
@@ -60,7 +61,7 @@ func alterStringToBool(jsonObj internal.JsonObj, field reflect.StructField) erro
 	return nil
 }
 
-func alterStringToInt(jsonObj internal.JsonObj, field reflect.StructField) error {
+func alterStringToInt(jsonObj jsonwrap.JsonObj, field reflect.StructField) error {
 	// for those struct fields where type = bool, convert string to bool
 	if field.Type.String() == "int" {
 		// validate st
@@ -87,7 +88,8 @@ func alterStringToInt(jsonObj internal.JsonObj, field reflect.StructField) error
 }
 
 func ConvertBoolean(inputFile, targetFile string) error {
-	jsonObjArray, err := internal.JsonReadArray(inputFile)
+	var jsonObjArray []jsonwrap.JsonObj
+	err := jsonwrap.Read(inputFile, &jsonObjArray)
 	if err != nil {
 		return fmt.Errorf("failed to read json array from %s, %s", inputFile, err)
 	}
