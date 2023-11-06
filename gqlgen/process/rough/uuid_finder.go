@@ -25,7 +25,7 @@ func NewUUIDFinder(targetFile string) (*UUIDFinder, error) {
 	}, nil
 }
 
-func (g *UUIDFinder) FindOrGenerateUUID(rs *RoughStep, subID string) string {
+func (g *UUIDFinder) FindOrGenerateUUID(rs *ResultStep, subID string) string {
 	for _, ds := range g.targetSteps {
 		if ds.FromRoughStep && rs.Step == ds.ParentStep && subID == ds.SubID {
 			return ds.Step

@@ -45,7 +45,7 @@ func TestTerminalSteps(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
 			// read rough step from file
-			var roughStep rough.RoughStep
+			var roughStep rough.ResultStep
 			testio.JsonRead(t, c.inputFile, &roughStep)
 
 			// convert to detailed step and verify

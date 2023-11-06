@@ -68,7 +68,7 @@ func Process(dir, repoUrl string) error {
 }
 
 func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error) {
-	var roughSteps []RoughStep
+	var roughSteps []ResultStep
 	err := jsonwrap.Read(inputFile, &roughSteps)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateTarget error - failed to read from json: %v", err)
@@ -90,7 +90,7 @@ func (state *InnerState) generateTarget(inputFile string) ([]DetailedStep, error
 // RoughStep to DetailedStep conversion methods
 //////////////////////////////////////////////////////
 
-func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
+func (state *InnerState) Conversion(s *ResultStep) ([]DetailedStep, error) {
 	var steps []DetailedStep
 	var usedColumns [5]string
 	var currentColumn string
@@ -139,7 +139,7 @@ func (state *InnerState) Conversion(s *RoughStep) ([]DetailedStep, error) {
 //////////////////////////////////////////////////////
 
 func commitConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 	repo *git.Repository,
@@ -186,7 +186,7 @@ func commitConvert(
 }
 
 func sourceCodeConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 	prevColumn string,
@@ -214,7 +214,7 @@ func sourceCodeConvert(
 }
 
 func terminalConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 	repo *git.Repository,
@@ -273,7 +273,7 @@ func terminalConvert(
 }
 
 func terminalCommandConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 	prevColumn string,
@@ -310,7 +310,7 @@ func terminalCommandConvert(
 }
 
 func terminalOutputConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
@@ -330,7 +330,7 @@ func terminalOutputConvert(
 }
 
 func sourceErrorConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
@@ -340,7 +340,7 @@ func sourceErrorConvert(
 }
 
 func browserConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
@@ -364,7 +364,7 @@ func browserConvert(
 }
 
 func markdownConvert(
-	s *RoughStep,
+	s *ResultStep,
 	uuidFinder *UUIDFinder,
 	existingColumns UsedColumns,
 ) ([]DetailedStep, CurrentColumn, UsedColumns, error) {
@@ -384,7 +384,7 @@ func markdownConvert(
 // DetailedStep generation methods
 //////////////////////////////////////////////////////
 
-func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, file string) DetailedStep {
+func fileTreeStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, file string) DetailedStep {
 	subId := "fileTreeStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -406,7 +406,7 @@ func fileTreeStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns,
 	return step
 }
 
-func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, file string, includeCommit bool) DetailedStep {
+func openFileStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, file string, includeCommit bool) DetailedStep {
 	subId := fmt.Sprintf("openFileStep-%d", index)
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -433,7 +433,7 @@ func openFileStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns,
 	return step
 }
 
-func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func moveToTerminalStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "moveToTerminalStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -451,7 +451,7 @@ func moveToTerminalStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedCo
 	return step
 }
 
-func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func terminalOutputStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "terminalOutputStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -471,7 +471,7 @@ func terminalOutputStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedCo
 	return step
 }
 
-func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func terminalCommandStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "terminalCommandStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
@@ -493,7 +493,7 @@ func terminalCommandStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedC
 	return step
 }
 
-func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func terminalCdStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	currentDir := strings.TrimPrefix(s.Instruction, "cd ")
 
 	subId := "terminalCdStep"
@@ -517,7 +517,7 @@ func terminalCdStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumn
 	return step
 }
 
-func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func sourceErrorStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "sourceErrorStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -537,7 +537,7 @@ func sourceErrorStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColum
 	return step
 }
 
-func browserStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, browserImageName string) DetailedStep {
+func browserStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, index int, browserImageName string) DetailedStep {
 	subId := fmt.Sprintf("browserStep-%d", index)
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 	step := DetailedStep{
@@ -556,7 +556,7 @@ func browserStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns, 
 	return step
 }
 
-func markdownStep(s *RoughStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
+func markdownStep(s *ResultStep, uuidFinder *UUIDFinder, usedColumns UsedColumns) DetailedStep {
 	subId := "markdownStep"
 	stepId := uuidFinder.FindOrGenerateUUID(s, subId)
 
