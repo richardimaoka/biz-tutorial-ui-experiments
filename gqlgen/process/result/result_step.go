@@ -67,6 +67,16 @@ type TerminalFields struct {
 	TerminalTooltip
 }
 
+type SourceCodeFields struct {
+	Commit              string `json:"commit"`
+	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
+	ShowFileTree        bool   `json:"showFileTree"`
+}
+
+type BrowserFields struct {
+	BrowserImagePath string `json:"browserImagePath"`
+}
+
 type Step struct {
 	FromRowFields // Fields to make the step searchable for re-generation
 
@@ -80,15 +90,9 @@ type Step struct {
 
 	TerminalFields
 
-	// git
-	Commit              string `json:"commit"`
-	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
-	IsFoldFileTree      bool   `json:"isFoldFileTree"`
+	SourceCodeFields
 
-	// browser
-	BrowserImageName   string `json:"browserImageName"`
-	BrowserImageWidth  int    `json:"browserImageWidth"`
-	BrowserImageHeight int    `json:"browserImageHeight"`
+	BrowserFields
 
 	// dev tools
 	DevToolsImageName   string `json:"devtoolsImageName"`

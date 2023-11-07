@@ -5,36 +5,77 @@ import (
 	"strings"
 )
 
-type SourceTooltipRow struct {
+/**
+ * SourceTooltip type(s) and functions
+ */
+type SourceTooltip struct {
 	Contents   string        `json:"contents"`
 	LineNumber int           `json:"lineNumber"`
 	Timing     TooltipTiming `json:"timing"`
 }
 
+func toSourceTooltipTiming(s string) (TooltipTiming, error) {
+	switch strings.ToUpper(s) {
+	case START:
+		return START, nil
+	case END:
+		return END, nil
+	case "": // default value is different from termianl tooltip
+		return END, nil
+	default:
+		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
+	}
+}
+
+func toSourceTooltip(fromRow *Row) (*SourceTooltip, error) {
+	if fromRow.Tooltip == "" {
+		return nil, nil
+	}
+
+	contents := fromRow.Tooltip
+
+	tooltipTiming, err := toSourceTooltipTiming(fromRow.TooltipTiming)
+	if err != nil {
+		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
+	}
+
+	if fromRow.TooltipLine == 0 {
+		return nil, fmt.Errorf("'tooltipLine' = %d, cannot be 0 nor empty", fromRow.TooltipLine)
+	} else if fromRow.TooltipLine < 0 {
+		return nil, fmt.Errorf("'tooltipLine' = %d, but cannot be a negative number", fromRow.TooltipLine)
+	}
+
+	return &SourceTooltip{
+		Contents:   contents,
+		Timing:     tooltipTiming,
+		LineNumber: fromRow.TooltipLine,
+	}, nil
+}
+
 type SourceCommitRow struct {
-	StepId          string            `json:"stepId"`
-	Trivial         bool              `json:"trivial"`
-	Comment         string            `json:"comment"`
-	Commit          string            `json:"commit"`
-	Tooltip         *SourceTooltipRow `json:"tooltip"`
-	TypingAnimation bool              `json:"typingAnimation"`
-	ShowDiff        bool              `json:"showDiff"`
+	StepId          string         `json:"stepId"`
+	Trivial         bool           `json:"trivial"`
+	Comment         string         `json:"comment"`
+	Commit          string         `json:"commit"`
+	Tooltip         *SourceTooltip `json:"tooltip"`
+	TypingAnimation bool           `json:"typingAnimation"`
+	ShowDiff        bool           `json:"showDiff"`
 }
 
 type SourceOpenRow struct {
-	StepId   string            `json:"stepId"`
-	Trivial  bool              `json:"trivial"`
-	Comment  string            `json:"comment"`
-	FilePath string            `json:"filePath"`
-	Tooltip  *SourceTooltipRow `json:"tooltip"`
+	StepId   string         `json:"stepId"`
+	Trivial  bool           `json:"trivial"`
+	Comment  string         `json:"comment"`
+	FilePath string         `json:"filePath"`
+	Tooltip  *SourceTooltip `json:"tooltip"`
 }
 
 type SourceErrorRow struct {
-	StepId   string            `json:"stepId"`
-	Trivial  bool              `json:"trivial"`
-	Comment  string            `json:"comment"`
-	FilePath string            `json:"filePath"`
-	Tooltip  *SourceTooltipRow `json:"tooltip"`
+	StepId   string         `json:"stepId"`
+	Trivial  bool           `json:"trivial"`
+	Comment  string         `json:"comment"`
+	FilePath string         `json:"filePath"`
+	Tooltip  *SourceTooltip `json:"tooltip"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {

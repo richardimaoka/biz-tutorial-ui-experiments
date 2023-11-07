@@ -52,6 +52,25 @@ func toTerminalTooltipTiming(s string) (TooltipTiming, error) {
 	}
 }
 
+func toTerminalTooltip(fromRow *Row) (*TerminalTooltip, error) {
+	// if tooltip is empty, then return no tooltip
+	if fromRow.Tooltip == "" {
+		return nil, nil
+	}
+
+	contents := fromRow.Tooltip
+
+	tooltipTiming, err := toTerminalTooltipTiming(fromRow.TooltipTiming)
+	if err != nil {
+		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
+	}
+
+	return &TerminalTooltip{
+		Contents: contents,
+		Timing:   tooltipTiming,
+	}, nil
+}
+
 /**
  * TerminalRow type(s) and functions
  */
