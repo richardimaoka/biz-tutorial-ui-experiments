@@ -20,6 +20,36 @@ const (
 	TerminalMove    TerminalType = "move"
 )
 
+type ColumnFields struct {
+	FocusColumn ColumnType `json:"focusColumn"`
+	Column1     ColumnType `json:"column1"`
+	Column2     ColumnType `json:"column2"`
+	Column3     ColumnType `json:"column3"`
+	Column4     ColumnType `json:"column4"`
+	Column5     ColumnType `json:"column5"`
+	Column6     ColumnType `json:"column6"`
+	Column7     ColumnType `json:"column7"`
+	Column8     ColumnType `json:"column8"`
+	Column9     ColumnType `json:"column9"`
+	Column10    ColumnType `json:"column10"`
+}
+
+func NewColumnFields(focus ColumnType, columns [10]ColumnType) *ColumnFields {
+	return &ColumnFields{
+		FocusColumn: focus,
+		Column1:     columns[0],
+		Column2:     columns[1],
+		Column3:     columns[2],
+		Column4:     columns[3],
+		Column5:     columns[4],
+		Column6:     columns[5],
+		Column7:     columns[6],
+		Column8:     columns[7],
+		Column9:     columns[8],
+		Column10:    columns[9],
+	}
+}
+
 type Step struct {
 	// Uppercase fields to allow json dump for testing
 
@@ -33,17 +63,7 @@ type Step struct {
 	Comment string `json:"comment"`
 
 	// columns
-	FocusColumn ColumnType `json:"focusColumn"`
-	Column1     ColumnType `json:"column1"`
-	Column2     ColumnType `json:"column2"`
-	Column3     ColumnType `json:"column3"`
-	Column4     ColumnType `json:"column4"`
-	Column5     ColumnType `json:"column5"`
-	Column6     ColumnType `json:"column6"`
-	Column7     ColumnType `json:"column7"`
-	Column8     ColumnType `json:"column8"`
-	Column9     ColumnType `json:"column9"`
-	Column10    ColumnType `json:"column10"`
+	ColumnFields
 
 	// animation
 	DurationSeconds int  `json:"durationSeconds"`
