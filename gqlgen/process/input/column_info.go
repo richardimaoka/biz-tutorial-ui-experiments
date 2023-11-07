@@ -31,6 +31,22 @@ func appendIfNotExists(columns UsedColumns, colName result.ColumnType) UsedColum
 	return columns
 }
 
+func resultColumns(current CurrentColumn, columns UsedColumns) result.ColumnFields {
+	return result.ColumnFields{
+		FocusColumn: current,
+		Column1:     columns[0],
+		Column2:     columns[1],
+		Column3:     columns[2],
+		Column4:     columns[3],
+		Column5:     columns[4],
+		Column6:     columns[5],
+		Column7:     columns[6],
+		Column8:     columns[7],
+		Column9:     columns[8],
+		Column10:    columns[9],
+	}
+}
+
 func setColumns(f *result.ColumnFields, cols UsedColumns) {
 	f.Column1 = cols[0]
 	f.Column2 = cols[1]

@@ -10,16 +10,6 @@ const (
 	BrowserColumn  ColumnType = "browser"
 )
 
-type TerminalType string
-
-const (
-	// Lower cases since they are from manual entries
-	TerminalCommand TerminalType = "command"
-	TerminalOutput  TerminalType = "output"
-	TerminalCd      TerminalType = "cd"
-	TerminalMove    TerminalType = "move"
-)
-
 type ColumnFields struct {
 	FocusColumn ColumnType `json:"focusColumn"`
 	Column1     ColumnType `json:"column1"`
@@ -34,20 +24,27 @@ type ColumnFields struct {
 	Column10    ColumnType `json:"column10"`
 }
 
-func NewColumnFields(focus ColumnType, columns [10]ColumnType) *ColumnFields {
-	return &ColumnFields{
-		FocusColumn: focus,
-		Column1:     columns[0],
-		Column2:     columns[1],
-		Column3:     columns[2],
-		Column4:     columns[3],
-		Column5:     columns[4],
-		Column6:     columns[5],
-		Column7:     columns[6],
-		Column8:     columns[7],
-		Column9:     columns[8],
-		Column10:    columns[9],
-	}
+type TerminalType string
+
+const (
+	// Lower cases since they are from manual entries
+	TerminalCommand TerminalType = "command"
+	TerminalOutput  TerminalType = "output"
+	TerminalCd      TerminalType = "cd"
+	TerminalMove    TerminalType = "move"
+)
+
+type TerminalTooltip struct {
+	TerminalTooltipContents string `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
+}
+
+type TerminalFields struct {
+	CurrentDir   string       `json:"currentDir"`
+	TerminalType TerminalType `json:"terminalType"`
+	TerminalText string       `json:"terminalText"`
+	TerminalName string       `json:"terminalName"`
+	TerminalTooltip
 }
 
 type Step struct {
@@ -62,24 +59,18 @@ type Step struct {
 	StepId  string `json:"stepId"`
 	Comment string `json:"comment"`
 
-	// columns
-	ColumnFields
-
 	// animation
 	DurationSeconds int  `json:"durationSeconds"`
 	IsTrivial       bool `json:"isTrivial"`
 
 	// modal
 	ModalContents string `json:"modalContents"`
-	ModalPosition string `json:"modalPosition"`
+
+	// columns
+	ColumnFields
 
 	// terminal
-	CurrentDir              string       `json:"currentDir"`
-	TerminalType            TerminalType `json:"terminalType"`
-	TerminalText            string       `json:"terminalText"`
-	TerminalName            string       `json:"terminalName"`
-	TerminalTooltipContents string       `json:"terminalTooltipContents"`
-	TerminalTooltipTiming   string       `json:"terminalTooltipTiming"`
+	TerminalFields
 
 	// git
 	Commit              string `json:"commit"`

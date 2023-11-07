@@ -132,25 +132,23 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	newUsedColumns := appendIfNotExists(usedColumns, result.TerminalColumn)
-	columnFields := result.NewColumnFields(result.TerminalColumn, newUsedColumns)
-
 	step := result.Step{
 		// fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		StepId:  stepId,
-		Comment: r.Comment,
-		// Columns
-		ColumnFields:  *columnFields,
+		StepId:        stepId,
+		Comment:       r.Comment,
 		ModalContents: r.ModalContents,
-		// Terminal fields
-		TerminalType: result.TerminalCommand,
-		TerminalText: r.Text,
-		TerminalName: r.TerminalName,
+		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		TerminalFields: result.TerminalFields{
+			TerminalType: result.TerminalCommand,
+			TerminalText: r.Text,
+			TerminalName: r.TerminalName,
+		},
 	}
+
 	if r.Tooltip != nil {
 		step.TerminalTooltipContents = r.Tooltip.Contents
 		step.TerminalTooltipTiming = r.Tooltip.Timing
@@ -163,25 +161,22 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
-	newUsedColumns := appendIfNotExists(usedColumns, result.TerminalColumn)
-	columnFields := result.NewColumnFields(result.TerminalColumn, newUsedColumns)
-
 	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		StepId:    stepId,
-		IsTrivial: r.IsTrivial,
-		Comment:   r.Comment,
-		// Columns
-		ColumnFields:  *columnFields,
+		StepId:        stepId,
+		IsTrivial:     r.IsTrivial,
+		Comment:       r.Comment,
 		ModalContents: r.ModalContents,
-		// Terminal fields
-		TerminalType: result.TerminalOutput,
-		TerminalText: r.Text,
-		TerminalName: r.TerminalName,
+		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		TerminalFields: result.TerminalFields{
+			TerminalType: result.TerminalOutput,
+			TerminalText: r.Text,
+			TerminalName: r.TerminalName,
+		},
 	}
 	if r.Tooltip != nil {
 		step.TerminalTooltipContents = r.Tooltip.Contents
@@ -195,24 +190,21 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
-	newUsedColumns := appendIfNotExists(usedColumns, result.TerminalColumn)
-	columnFields := result.NewColumnFields(result.TerminalColumn, newUsedColumns)
-
 	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// Other fields
-		StepId:    stepId,
-		IsTrivial: true, // always trivial
-		Comment:   "(move to Terminal)",
-		// Columns
-		ColumnFields:  *columnFields,
+		StepId:        stepId,
+		IsTrivial:     true, // always trivial
+		Comment:       "(move to Terminal)",
 		ModalContents: r.ModalContents,
-		// Terminal fields
-		TerminalType: result.TerminalMove,
-		TerminalName: r.TerminalName,
+		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		TerminalFields: result.TerminalFields{
+			TerminalType: result.TerminalMove,
+			TerminalName: r.TerminalName,
+		},
 	}
 	// No tooltip - move step should be trivial and no tooltip to show
 
@@ -225,25 +217,24 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 	subId := "terminalCdStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	newUsedColumns := appendIfNotExists(usedColumns, result.TerminalColumn)
-	columnFields := result.NewColumnFields(result.TerminalColumn, newUsedColumns)
-
 	step := result.Step{
 		// Fields to make the step searchable for re-generation
 		IsFromRow:  true,
 		ParentStep: r.StepId,
 		SubID:      subId,
 		// other fields
-		StepId:    stepId,
-		IsTrivial: true, // always trivial
-		Comment:   "",
-		// Columns
-		ColumnFields:  *columnFields,
+		StepId:        stepId,
+		IsTrivial:     true, // always trivial
+		Comment:       "",
 		ModalContents: r.ModalContents,
+		// Columns
+		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
 		// Terminal fields
-		TerminalType: result.TerminalCd,
-		TerminalName: r.TerminalName,
-		CurrentDir:   currentDir,
+		TerminalFields: result.TerminalFields{
+			CurrentDir:   currentDir,
+			TerminalType: result.TerminalCd,
+			TerminalName: r.TerminalName,
+		},
 	}
 
 	// No tooltip - cd command should be trivial and no tooltip to show
