@@ -46,16 +46,3 @@ func resultColumns(current CurrentColumn, columns UsedColumns) result.ColumnFiel
 		Column10:    columns[9],
 	}
 }
-
-func setColumns(f *result.ColumnFields, cols UsedColumns) {
-	f.Column1 = cols[0]
-	f.Column2 = cols[1]
-	f.Column3 = cols[2]
-	f.Column4 = cols[3]
-	f.Column5 = cols[4]
-	f.Column6 = cols[5]
-	f.Column7 = cols[6]
-	f.Column8 = cols[7]
-	f.Column9 = cols[8]
-	f.Column10 = cols[9]
-}
