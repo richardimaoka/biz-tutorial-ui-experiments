@@ -139,11 +139,17 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		// Other fields
-		StepId:        stepId,
-		Comment:       r.Comment,
-		ModalContents: r.ModalContents,
-		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		ModalFields: result.ModalFields{
+			ModalContents: r.ModalContents,
+		},
+		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalCommand,
 			TerminalText: r.Text,
@@ -170,12 +176,17 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		// Other fields
-		StepId:        stepId,
-		IsTrivial:     r.IsTrivial,
-		Comment:       r.Comment,
-		ModalContents: r.ModalContents,
-		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		ModalFields: result.ModalFields{
+			ModalContents: r.ModalContents,
+		},
+		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalOutput,
 			TerminalText: r.Text,
@@ -201,12 +212,15 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		// Other fields
-		StepId:        stepId,
-		IsTrivial:     true, // always trivial
-		Comment:       "(move to Terminal)",
-		ModalContents: r.ModalContents,
-		ColumnFields:  resultColumns(result.TerminalColumn, usedColumns),
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "(move to Terminal)",
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: true, //always true
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalMove,
 			TerminalName: r.TerminalName,
@@ -230,14 +244,15 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		// other fields
-		StepId:        stepId,
-		IsTrivial:     true, // always trivial
-		Comment:       "",
-		ModalContents: r.ModalContents,
-		// Columns
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "",
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: true, //always true
+		},
+		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
-		// Terminal fields
 		TerminalFields: result.TerminalFields{
 			CurrentDir:   currentDir,
 			TerminalType: result.TerminalCd,

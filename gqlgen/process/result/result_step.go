@@ -6,6 +6,20 @@ type FromRowFields struct {
 	ParentStep string `json:"parentStep"`
 }
 
+type IntrinsicFields struct {
+	StepId  string `json:"stepId"`
+	Comment string `json:"comment"`
+}
+
+type AnimationFields struct {
+	DurationSeconds int  `json:"durationSeconds"`
+	IsTrivial       bool `json:"isTrivial"`
+}
+
+type ModalFields struct {
+	ModalContents string `json:"modalContents"`
+}
+
 type ColumnType string
 
 const (
@@ -54,19 +68,13 @@ type TerminalFields struct {
 }
 
 type Step struct {
-	// Fields to make the step searchable for re-generation
-	FromRowFields
+	FromRowFields // Fields to make the step searchable for re-generation
 
-	// steps
-	StepId  string `json:"stepId"`
-	Comment string `json:"comment"`
+	IntrinsicFields
 
-	// animation
-	DurationSeconds int  `json:"durationSeconds"`
-	IsTrivial       bool `json:"isTrivial"`
+	AnimationFields
 
-	// modal
-	ModalContents string `json:"modalContents"`
+	ModalFields
 
 	ColumnFields
 
