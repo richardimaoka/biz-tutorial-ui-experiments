@@ -72,7 +72,7 @@ func toTerminalTooltip(fromRow *Row) (*TerminalTooltip, error) {
 }
 
 /**
- * TerminalRow type(s) and functions
+ * Terminaljrow type(s) and functions
  */
 type TerminalRow struct {
 	StepId        string           `json:"stepId"`

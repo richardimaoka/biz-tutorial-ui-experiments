@@ -9,17 +9,18 @@ import (
 
 func TestToTerminalRow(t *testing.T) {
 	cases := []struct {
+		name       string
 		inputFile  string
 		goldenFile string
 	}{
-		{"testdata/terminal/cmd1.json", "testdata/terminal/cmd1-golden.json"},
-		{"testdata/terminal/cmd2.json", "testdata/terminal/cmd2-golden.json"},
-		{"testdata/terminal/output1.json", "testdata/terminal/output1-golden.json"},
-		{"testdata/terminal/output2.json", "testdata/terminal/output2-golden.json"},
+		{"command with tooltip" /*****/, "testdata/terminal/cmd1.json", "testdata/terminal/cmd1-golden.json"},
+		{"command without tooltip" /**/, "testdata/terminal/cmd2.json", "testdata/terminal/cmd2-golden.json"},
+		{"output without tooltip" /***/, "testdata/terminal/output1.json", "testdata/terminal/output1-golden.json"},
+		{"output with tooltip" /******/, "testdata/terminal/output2.json", "testdata/terminal/output2-golden.json"},
 	}
 
 	for _, c := range cases {
-		t.Run(c.inputFile, func(t *testing.T) {
+		t.Run(c.name, func(t *testing.T) {
 			var abst Row
 			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {
@@ -38,16 +39,17 @@ func TestToTerminalRow(t *testing.T) {
 
 func TestToTerminalRowError(t *testing.T) {
 	cases := []struct {
+		name      string
 		inputFile string
 	}{
-		{"testdata/terminal/cmd-error1.json"},
-		{"testdata/terminal/cmd-error2.json"},
-		{"testdata/terminal/output-error1.json"},
-		{"testdata/terminal/output-error2.json"},
+		{"empty instruction" /********/, "testdata/terminal/cmd-error1.json"},
+		{"tooltip timing is wrong" /**/, "testdata/terminal/cmd-error2.json"},
+		{"empty instruction" /********/, "testdata/terminal/output-error1.json"},
+		{"tooltip timing is wrong" /**/, "testdata/terminal/output-error2.json"},
 	}
 
 	for _, c := range cases {
-		t.Run(c.inputFile, func(t *testing.T) {
+		t.Run(c.name, func(t *testing.T) {
 			var abst Row
 			err := jsonwrap.Read(c.inputFile, &abst)
 			if err != nil {

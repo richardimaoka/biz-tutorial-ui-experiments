@@ -6,12 +6,27 @@ import (
 )
 
 /**
+ * SourceCodeSubType type(s) and functions
+ */
+type SourceCodeSubType string
+
+const (
+	// Lower cases since they are from manual entries
+	SourceCommit SourceCodeSubType = "commit"
+	SourceOpen   SourceCodeSubType = "open"
+	SourceError  SourceCodeSubType = "source error"
+)
+
+/**
  * SourceTooltip type(s) and functions
  */
 type SourceTooltip struct {
 	Contents   string        `json:"contents"`
 	LineNumber int           `json:"lineNumber"`
 	Timing     TooltipTiming `json:"timing"`
+	// TODO: if IsAppend == true, Timing must be START.
+	// So, probably the timing doesn't need to be controlled from outside?
+	IsAppend bool `json:"isAppend"`
 }
 
 func toSourceTooltipTiming(s string) (TooltipTiming, error) {
@@ -45,16 +60,30 @@ func toSourceTooltip(fromRow *Row) (*SourceTooltip, error) {
 		return nil, fmt.Errorf("'tooltipLine' = %d, but cannot be a negative number", fromRow.TooltipLine)
 	}
 
+	var isAppend bool
+	isAppendFromRow := strings.ToUpper(fromRow.TooltipAppend)
+	if isAppendFromRow == "TRUE" {
+		isAppend = true
+	} else if isAppendFromRow == "FALSE" {
+		isAppend = false
+	} else {
+		return nil, fmt.Errorf("'tooltipAppend' = '%s', is an invalid value. It has to be either 'TRUE', 'FALSE' or empty", fromRow.TooltipAppend)
+	}
+
 	return &SourceTooltip{
 		Contents:   contents,
 		Timing:     tooltipTiming,
 		LineNumber: fromRow.TooltipLine,
+		IsAppend:   isAppend,
 	}, nil
 }
 
+/**
+ * Source row type(s) and functions
+ */
 type SourceCommitRow struct {
 	StepId          string         `json:"stepId"`
-	Trivial         bool           `json:"trivial"`
+	IsTrivial       bool           `json:"isTrivial"`
 	Comment         string         `json:"comment"`
 	Commit          string         `json:"commit"`
 	Tooltip         *SourceTooltip `json:"tooltip"`
@@ -63,19 +92,19 @@ type SourceCommitRow struct {
 }
 
 type SourceOpenRow struct {
-	StepId   string         `json:"stepId"`
-	Trivial  bool           `json:"trivial"`
-	Comment  string         `json:"comment"`
-	FilePath string         `json:"filePath"`
-	Tooltip  *SourceTooltip `json:"tooltip"`
+	StepId    string         `json:"stepId"`
+	IsTrivial bool           `json:"isTrivial"`
+	Comment   string         `json:"comment"`
+	FilePath  string         `json:"filePath"`
+	Tooltip   *SourceTooltip `json:"tooltip"`
 }
 
 type SourceErrorRow struct {
-	StepId   string         `json:"stepId"`
-	Trivial  bool           `json:"trivial"`
-	Comment  string         `json:"comment"`
-	FilePath string         `json:"filePath"`
-	Tooltip  *SourceTooltip `json:"tooltip"`
+	StepId    string         `json:"stepId"`
+	IsTrivial bool           `json:"isTrivial"`
+	Comment   string         `json:"comment"`
+	FilePath  string         `json:"filePath"`
+	Tooltip   *SourceTooltip `json:"tooltip"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
@@ -87,24 +116,17 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	if strings.ToLower(fromRow.Column) != "source" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "commit" {
+	if strings.ToLower(fromRow.Type) != string(SourceCommit) {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
 	//
-	// Check instruction
+	// Check instruction fields
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-
-	//
-	// Check tooltip fields
-	//
-	tooltip, err := toSourceTooltip(fromRow)
-	if err != nil {
-		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
-	}
+	commit := fromRow.Instruction
 
 	typingAnimation, err := strToBool(fromRow.Instruction2)
 	if err != nil {
@@ -117,18 +139,26 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	}
 
 	//
-	// Check trivial field
+	// Check tooltip field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
+	tooltip, err := toSourceTooltip(fromRow)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	//
+	// Check isTrivial field
+	//
+	isTrivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
 	return &SourceCommitRow{
 		StepId:          fromRow.StepId,
-		Trivial:         trivial,
+		IsTrivial:       isTrivial,
 		Comment:         fromRow.Comment,
-		Commit:          fromRow.Instruction,
+		Commit:          commit,
 		Tooltip:         tooltip,
 		TypingAnimation: typingAnimation,
 		ShowDiff:        showDiff,
@@ -144,7 +174,7 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	if strings.ToLower(fromRow.Column) != "source" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "commit" {
+	if strings.ToLower(fromRow.Type) != string(SourceOpen) {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -154,6 +184,7 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
+	filePath := fromRow.Instruction
 
 	//
 	// Check tooltip fields
@@ -164,19 +195,19 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	}
 
 	//
-	// Check trivial field
+	// Check isTrivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
+	isTrivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
 	return &SourceOpenRow{
-		StepId:   fromRow.StepId,
-		Trivial:  trivial,
-		Comment:  fromRow.Comment,
-		FilePath: fromRow.Instruction,
-		Tooltip:  tooltip,
+		StepId:    fromRow.StepId,
+		IsTrivial: isTrivial,
+		Comment:   fromRow.Comment,
+		FilePath:  filePath,
+		Tooltip:   tooltip,
 	}, nil
 }
 
@@ -189,7 +220,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	if strings.ToLower(fromRow.Column) != "source" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "commit" {
+	if strings.ToLower(fromRow.Type) != string(SourceError) {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -199,6 +230,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
+	filepath := fromRow.Instruction
 
 	//
 	// Check tooltip fields
@@ -214,16 +246,16 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
+	isTrivial, err := strToBool(fromRow.Trivial)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
 	return &SourceErrorRow{
-		StepId:   fromRow.StepId,
-		Trivial:  trivial,
-		Comment:  fromRow.Comment,
-		FilePath: fromRow.Instruction,
-		Tooltip:  tooltip,
+		StepId:    fromRow.StepId,
+		IsTrivial: isTrivial,
+		Comment:   fromRow.Comment,
+		FilePath:  filepath,
+		Tooltip:   tooltip,
 	}, nil
 }

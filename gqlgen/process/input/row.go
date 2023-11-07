@@ -13,15 +13,23 @@ type Row struct {
 	StepId        string `json:"stepId"`
 	Phase         string `json:"phase"`
 	Comment       string `json:"comment"`
-	Column        string `json:"column"` //not Column but string, because it's input from manual entry, not sanitized
-	Type          string `json:"type"`
 	Trivial       string `json:"trivial"`
-	Instruction   string `json:"instruction"`
-	Instruction2  string `json:"instruction2"`
-	Instruction3  string `json:"instruction3"`
 	ModalContents string `json:"modalContents"`
-	Tooltip       string `json:"tooltip"`
+
+	// Not Column but string, because it's input from manual entry, not sanitized
+	Column string `json:"column"`
+	Type   string `json:"type"`
+
+	// Instruction fileds
+	Instruction  string `json:"instruction"`
+	Instruction2 string `json:"instruction2"`
+	Instruction3 string `json:"instruction3"`
+
+	// Tooltip fileds
+	Tooltip string `json:"tooltip"`
+	// TODO: those tooltip fields are specific to source code, so move them to instruction?
 	TooltipTiming string `json:"tooltipTiming"`
 	TooltipLine   int    `json:"tooltipLine"`
-	// TooltipPosition string `json:"tooltipPosition"`
+	// string (i.e. 'TRUE', 'FALSE', or empty string), not bool, as it is a value from CSV
+	TooltipAppend string `json:"tooltipAppend"`
 }
