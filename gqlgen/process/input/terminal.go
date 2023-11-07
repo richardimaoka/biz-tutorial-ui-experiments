@@ -134,9 +134,11 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 
 	step := result.Step{
 		// fields to make the step searchable for re-generation
-		IsFromRow:  true,
-		ParentStep: r.StepId,
-		SubID:      subId,
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
 		// Other fields
 		StepId:        stepId,
 		Comment:       r.Comment,
@@ -163,9 +165,11 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 
 	step := result.Step{
 		// Fields to make the step searchable for re-generation
-		IsFromRow:  true,
-		ParentStep: r.StepId,
-		SubID:      subId,
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
 		// Other fields
 		StepId:        stepId,
 		IsTrivial:     r.IsTrivial,
@@ -191,10 +195,12 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	stepId := finder.StepIdFor(r.StepId, subId)
 
 	step := result.Step{
-		// Fields to make the step searchable for re-generation
-		IsFromRow:  true,
-		ParentStep: r.StepId,
-		SubID:      subId,
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
 		// Other fields
 		StepId:        stepId,
 		IsTrivial:     true, // always trivial
@@ -218,10 +224,12 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := result.Step{
-		// Fields to make the step searchable for re-generation
-		IsFromRow:  true,
-		ParentStep: r.StepId,
-		SubID:      subId,
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
 		// other fields
 		StepId:        stepId,
 		IsTrivial:     true, // always trivial

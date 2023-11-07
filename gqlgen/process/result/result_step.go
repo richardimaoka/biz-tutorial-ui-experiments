@@ -1,5 +1,11 @@
 package result
 
+type FromRowFields struct {
+	IsFromRow  bool   `json:"isFromRow"`
+	SubID      string `json:"subId"`
+	ParentStep string `json:"parentStep"`
+}
+
 type ColumnType string
 
 const (
@@ -48,12 +54,8 @@ type TerminalFields struct {
 }
 
 type Step struct {
-	// Uppercase fields to allow json dump for testing
-
 	// Fields to make the step searchable for re-generation
-	IsFromRow  bool   `json:"isFromRow"`
-	SubID      string `json:"subId"`
-	ParentStep string `json:"parentStep"`
+	FromRowFields
 
 	// steps
 	StepId  string `json:"stepId"`
@@ -66,10 +68,8 @@ type Step struct {
 	// modal
 	ModalContents string `json:"modalContents"`
 
-	// columns
 	ColumnFields
 
-	// terminal
 	TerminalFields
 
 	// git
