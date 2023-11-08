@@ -21,6 +21,21 @@ const (
 	SourceError  SourceCodeSubType = "source error"
 )
 
+func toSourceCodeSubType(s string) (SourceCodeSubType, error) {
+	lower := strings.ToLower(s)
+
+	switch lower {
+	case string(SourceCommit):
+		return SourceCommit, nil
+	case string(SourceOpen):
+		return SourceOpen, nil
+	case string(SourceError):
+		return SourceError, nil
+	default:
+		return "", fmt.Errorf("'%s' is an invalid source code sub type", s)
+	}
+}
+
 /**
  * SourceTooltip type(s) and functions
  */
@@ -298,8 +313,43 @@ func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 	return step
 }
 
-func openFileStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
-	subId := fmt.Sprintf("openFileStep-%s", filePath)
+func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+	subId := "openFileStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		SourceCodeFields: result.SourceCodeFields{
+			DefaultOpenFilePath: filePath,
+			ShowFileTree:        false,
+		},
+	}
+	if r.Tooltip != nil {
+		step.SourceCodeTooltipContents = r.Tooltip.Contents
+		step.SourceCodeTooltipTiming = r.Tooltip.Timing
+		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+	}
+
+	return step
+}
+
+func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+	subId := fmt.Sprintf("openFileCommitStep-%s", filePath)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := result.Step{
@@ -321,7 +371,8 @@ func openFileStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 		SourceCodeFields: result.SourceCodeFields{
 			Commit:              r.Commit,
 			DefaultOpenFilePath: filePath,
-			ShowFileTree:        true,
+			ShowFileTree:        false,
+			TypingAnimation:     r.TypingAnimation,
 		},
 	}
 	if r.Tooltip != nil {
@@ -334,8 +385,8 @@ func openFileStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 	return step
 }
 
-func moveToSourceCodeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
-	subId := fmt.Sprintf("moveToSourceCodeStep")
+func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+	subId := "openSourceErrorStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := result.Step{
@@ -347,6 +398,41 @@ func moveToSourceCodeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedCo
 		},
 		IntrinsicFields: result.IntrinsicFields{
 			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		SourceCodeFields: result.SourceCodeFields{
+			DefaultOpenFilePath: filePath,
+			ShowFileTree:        false,
+		},
+	}
+	if r.Tooltip != nil {
+		step.SourceCodeTooltipContents = r.Tooltip.Contents
+		step.SourceCodeTooltipTiming = r.Tooltip.Timing
+		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+	}
+
+	return step
+}
+
+func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+	subId := fmt.Sprintf("moveToSourceCodeStep")
+	stepId := StepIdFinder.StepIdFor(parentStepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: parentStepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
 			Comment: ("(move to source code)"),
 		},
 		AnimationFields: result.AnimationFields{
@@ -354,9 +440,6 @@ func moveToSourceCodeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedCo
 		},
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
-		SourceCodeFields: result.SourceCodeFields{
-			Commit: r.Commit,
-		},
 	}
 
 	// No tooltip - trivial step and no tooltip to show
@@ -392,6 +475,9 @@ func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]s
 	}
 }
 
+/**
+ * Function(s) to break down a row to steps
+ */
 func breakdownSourceCommitRow(
 	r *SourceCommitRow,
 	finder *StepIdFinder,
@@ -404,7 +490,7 @@ func breakdownSourceCommitRow(
 
 	// insert move-to-terminal step if current column != "Source Code"
 	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
-		step := moveToSourceCodeStep(r, finder, prevColumns.AllUsed)
+		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
 
@@ -416,7 +502,7 @@ func breakdownSourceCommitRow(
 
 	// open file steps
 	for i, filePath := range filePaths {
-		step := openFileStep(r, finder, prevColumns.AllUsed, filePath)
+		step := openFileCommitStep(r, finder, prevColumns.AllUsed, filePath)
 		steps = append(steps, step)
 		if i == 5 {
 			break
@@ -431,6 +517,112 @@ func breakdownSourceCommitRow(
 	return steps, currentColumns, nil
 }
 
-func breakdownSourceOpenRow()  {}
-func breakdownSourceErrorRow() {}
-func toSourceSteps()           {}
+func breakdownSourceOpenRow(
+	r *SourceOpenRow,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+	repo *git.Repository,
+	prevCommit string,
+) ([]result.Step, ColumnInfo, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Source Code"
+	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		steps = append(steps, step)
+	}
+
+	// open file step
+	step := openFileStep(r, finder, prevColumns.AllUsed, r.FilePath)
+	steps = append(steps, step)
+
+	currentColumns := ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.SourceColumn,
+	}
+
+	return steps, currentColumns, nil
+}
+
+func breakdownSourceErrorRow(
+	r *SourceErrorRow,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+	repo *git.Repository,
+	prevCommit string,
+) ([]result.Step, ColumnInfo, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Source Code"
+	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		steps = append(steps, step)
+	}
+
+	// open file step
+	step := openSourceErrorStep(r, finder, prevColumns.AllUsed, r.FilePath)
+	steps = append(steps, step)
+
+	currentColumns := ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.SourceColumn,
+	}
+
+	return steps, currentColumns, nil
+}
+
+func toSourceSteps(
+	r *Row,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+	repo *git.Repository,
+	prevCommit string,
+) ([]result.Step, ColumnInfo, error) {
+	subType, err := toSourceCodeSubType(r.Type)
+	if err != nil {
+		return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+	}
+
+	switch subType {
+	case SourceCommit:
+		row, err := toSourceCommitRow(r)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+
+		steps, currentColumns, err := breakdownSourceCommitRow(row, finder, prevColumns, repo, prevCommit)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case SourceOpen:
+		row, err := toSourceOpenRow(r)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+
+		steps, currentColumns, err := breakdownSourceOpenRow(row, finder, prevColumns, repo, prevCommit)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case SourceError:
+		row, err := toSourceErrorRow(r)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+
+		steps, currentColumns, err := breakdownSourceErrorRow(row, finder, prevColumns, repo, prevCommit)
+		if err != nil {
+			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	default:
+		return nil, prevColumns, fmt.Errorf("toSourceSteps failed, type = '%s' not implemented", r.Type)
+	}
+}

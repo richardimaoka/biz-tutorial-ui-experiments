@@ -111,6 +111,7 @@ type SourceCodeFields struct {
 	Commit              string `json:"commit"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 	ShowFileTree        bool   `json:"showFileTree"`
+	TypingAnimation     bool   `json:"typingAnimation"`
 	SourceCodeTooltip
 }
 

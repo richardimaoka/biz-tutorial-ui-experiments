@@ -326,7 +326,7 @@ func toTerminalSteps(
 ) ([]result.Step, ColumnInfo, error) {
 	terminalRow, err := toTerminalRow(r)
 	if err != nil {
-		return nil, prevColumns, err
+		return nil, prevColumns, fmt.Errorf("toTerminalSteps failed, %s", err)
 	}
 
 	breakdowns, currentColumns := breakdownTerminalRow(terminalRow, finder, prevColumns)
