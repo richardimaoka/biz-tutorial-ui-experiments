@@ -3,6 +3,10 @@ package input
 import (
 	"fmt"
 	"strings"
+
+	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
 /**
@@ -259,3 +263,174 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 		Tooltip:   tooltip,
 	}, nil
 }
+
+/**
+ * Function(s) to convert a row to a step
+ */
+func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+	subId := "fileTreeStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "(file tree)",
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: true,
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		SourceCodeFields: result.SourceCodeFields{
+			Commit:       r.Commit,
+			ShowFileTree: true,
+		},
+	}
+
+	// No tooltip - trivial step and no tooltip to show
+
+	return step
+}
+
+func openFileStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+	subId := fmt.Sprintf("openFileStep-%s", filePath)
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		SourceCodeFields: result.SourceCodeFields{
+			Commit:              r.Commit,
+			DefaultOpenFilePath: filePath,
+			ShowFileTree:        true,
+		},
+	}
+	if r.Tooltip != nil {
+		step.SourceCodeTooltipContents = r.Tooltip.Contents
+		step.SourceCodeTooltipTiming = r.Tooltip.Timing
+		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+	}
+
+	return step
+}
+
+func moveToSourceCodeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+	subId := fmt.Sprintf("moveToSourceCodeStep")
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: ("(move to source code)"),
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: true,
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		SourceCodeFields: result.SourceCodeFields{
+			Commit: r.Commit,
+		},
+	}
+
+	// No tooltip - trivial step and no tooltip to show
+
+	return step
+}
+
+func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]string, error) {
+	if fromCommit == "" {
+		files, err := gitwrap.GetCommitFiles(repo, toCommit)
+		if err != nil {
+			return nil, err
+		}
+
+		var filePaths []string
+		for _, v := range files {
+			filePaths = append(filePaths, v.Name)
+		}
+
+		return filePaths, nil
+	} else {
+		files, err := gitwrap.GetPatchFiles(repo, fromCommit, toCommit)
+		if err != nil {
+			return nil, err
+		}
+
+		var filePaths []string
+		for _, v := range files {
+			filePaths = append(filePaths, v.Path())
+		}
+
+		return filePaths, nil
+	}
+}
+
+func breakdownSourceCommitRow(
+	r *SourceCommitRow,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+	repo *git.Repository,
+	prevCommit string,
+) ([]result.Step, ColumnInfo, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Source Code"
+	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+		step := moveToSourceCodeStep(r, finder, prevColumns.AllUsed)
+		steps = append(steps, step)
+	}
+
+	// find files from commit
+	filePaths, err := filesBetweenCommits(repo, r.Commit, prevCommit)
+	if err != nil {
+		return nil, ColumnInfo{}, fmt.Errorf("breakdownSourceCommitRow faield %s", err)
+	}
+
+	// open file steps
+	for i, filePath := range filePaths {
+		step := openFileStep(r, finder, prevColumns.AllUsed, filePath)
+		steps = append(steps, step)
+		if i == 5 {
+			break
+		}
+	}
+
+	currentColumns := ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.SourceColumn,
+	}
+
+	return steps, currentColumns, nil
+}
+
+func breakdownSourceOpenRow()  {}
+func breakdownSourceErrorRow() {}
+func toSourceSteps()           {}

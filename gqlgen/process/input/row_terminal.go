@@ -279,7 +279,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 		},
 	}
 
-	// No tooltip - cd command should be trivial and no tooltip to show
+	// No tooltip - trivial step and no tooltip to show
 
 	return step
 }
@@ -287,12 +287,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownTerminalRow(
-	r *TerminalRow,
-	finder *StepIdFinder,
-	prevColumns ColumnInfo,
-) ([]result.Step, ColumnInfo) {
-
+func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns ColumnInfo) ([]result.Step, ColumnInfo) {
 	// - step creation
 	var steps []result.Step
 
