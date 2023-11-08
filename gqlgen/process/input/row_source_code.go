@@ -488,7 +488,7 @@ func breakdownSourceCommitRow(
 	// - step creation
 	var steps []result.Step
 
-	// insert move-to-terminal step if current column != "Source Code"
+	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
@@ -527,7 +527,7 @@ func breakdownSourceOpenRow(
 	// - step creation
 	var steps []result.Step
 
-	// insert move-to-terminal step if current column != "Source Code"
+	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
@@ -555,7 +555,7 @@ func breakdownSourceErrorRow(
 	// - step creation
 	var steps []result.Step
 
-	// insert move-to-terminal step if current column != "Source Code"
+	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
@@ -573,6 +573,9 @@ func breakdownSourceErrorRow(
 	return steps, currentColumns, nil
 }
 
+/**
+ * Function to turn a row into steps
+ */
 func toSourceSteps(
 	r *Row,
 	finder *StepIdFinder,

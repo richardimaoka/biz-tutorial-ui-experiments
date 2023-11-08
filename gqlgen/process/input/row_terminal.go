@@ -291,7 +291,7 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns Colu
 	// - step creation
 	var steps []result.Step
 
-	// insert move-to-terminal step if current column != "Terminal"
+	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
 	if prevColumns.Focus != result.TerminalColumn && prevColumns.Focus != result.NoColumn {
 		moveToTerminalStep := moveToTerminalStep(r, finder, prevColumns.AllUsed)
 		steps = append(steps, moveToTerminalStep)
