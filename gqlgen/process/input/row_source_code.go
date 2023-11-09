@@ -482,10 +482,10 @@ func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]s
 func breakdownSourceCommitRow(
 	r *SourceCommitRow,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
+	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, ColumnInfo, error) {
+) ([]result.Step, error) {
 	// - step creation
 	var steps []result.Step
 
@@ -498,7 +498,7 @@ func breakdownSourceCommitRow(
 	// find files from commit
 	filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
 	if err != nil {
-		return nil, ColumnInfo{}, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
+		return nil, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
 	}
 
 	// open file steps
@@ -510,21 +510,16 @@ func breakdownSourceCommitRow(
 		}
 	}
 
-	currentColumns := ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.SourceColumn,
-	}
-
-	return steps, currentColumns, nil
+	return steps, nil
 }
 
 func breakdownSourceOpenRow(
 	r *SourceOpenRow,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
+	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, ColumnInfo, error) {
+) ([]result.Step, error) {
 	// - step creation
 	var steps []result.Step
 
@@ -538,21 +533,16 @@ func breakdownSourceOpenRow(
 	step := openFileStep(r, finder, prevColumns.AllUsed, r.FilePath)
 	steps = append(steps, step)
 
-	currentColumns := ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.SourceColumn,
-	}
-
-	return steps, currentColumns, nil
+	return steps, nil
 }
 
 func breakdownSourceErrorRow(
 	r *SourceErrorRow,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
+	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, ColumnInfo, error) {
+) ([]result.Step, error) {
 	// - step creation
 	var steps []result.Step
 
@@ -566,12 +556,7 @@ func breakdownSourceErrorRow(
 	step := openSourceErrorStep(r, finder, prevColumns.AllUsed, r.FilePath)
 	steps = append(steps, step)
 
-	currentColumns := ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.SourceColumn,
-	}
-
-	return steps, currentColumns, nil
+	return steps, nil
 }
 
 /**
@@ -580,13 +565,19 @@ func breakdownSourceErrorRow(
 func toSourceSteps(
 	r *Row,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
+	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, ColumnInfo, error) {
+) ([]result.Step, *ColumnInfo, error) {
+
+	currentColumns := &ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.SourceColumn,
+	}
+
 	subType, err := toSourceCodeSubType(r.Type)
 	if err != nil {
-		return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+		return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 	}
 
 	switch subType {
@@ -594,13 +585,13 @@ func toSourceSteps(
 		// row -> specific row
 		row, err := toSourceCommitRow(r)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, currentColumns, err := breakdownSourceCommitRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceCommitRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 		return steps, currentColumns, nil
 
@@ -608,13 +599,13 @@ func toSourceSteps(
 		// row -> specific row
 		row, err := toSourceOpenRow(r)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, currentColumns, err := breakdownSourceOpenRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceOpenRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 		return steps, currentColumns, nil
 
@@ -622,17 +613,17 @@ func toSourceSteps(
 		// row -> specific row
 		row, err := toSourceErrorRow(r)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, currentColumns, err := breakdownSourceErrorRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceErrorRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
-			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 		return steps, currentColumns, nil
 
 	default:
-		return nil, prevColumns, fmt.Errorf("toSourceSteps failed, type = '%s' not implemented", r.Type)
+		return nil, nil, fmt.Errorf("toSourceSteps failed, type = '%s' not implemented", r.Type)
 	}
 }

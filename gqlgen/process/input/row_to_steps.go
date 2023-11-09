@@ -13,7 +13,7 @@ func toSteps(
 	finder *StepIdFinder,
 	repo *git.Repository,
 ) ([]result.Step, error) {
-	currentColumns := ColumnInfo{}
+	currentColumns := &ColumnInfo{}
 	currentCommit := ""
 
 	var allSteps []result.Step

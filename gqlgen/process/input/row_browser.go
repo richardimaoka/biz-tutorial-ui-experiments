@@ -322,7 +322,7 @@ func positiveNumInSqBracket(s string) (int, error) {
 func toBrowserSteps(
 	r *Row,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
-) ([]result.Step, ColumnInfo, error) {
-	return nil, ColumnInfo{}, nil
+	prevColumns *ColumnInfo,
+) ([]result.Step, *ColumnInfo, error) {
+	return nil, &ColumnInfo{}, nil
 }

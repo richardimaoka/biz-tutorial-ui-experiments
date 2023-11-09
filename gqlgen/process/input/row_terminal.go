@@ -287,7 +287,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns r
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns ColumnInfo) []result.Step {
+func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []result.Step {
 	// - step creation
 	var steps []result.Step
 	currentColumns := resultColumns(result.TerminalColumn, prevColumns.AllUsed)
@@ -319,18 +319,18 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns Colu
 func toTerminalSteps(
 	r *Row,
 	finder *StepIdFinder,
-	prevColumns ColumnInfo,
-) ([]result.Step, ColumnInfo, error) {
+	prevColumns *ColumnInfo,
+) ([]result.Step, *ColumnInfo, error) {
 	// row -> specific row
 	terminalRow, err := toTerminalRow(r)
 	if err != nil {
-		return nil, prevColumns, fmt.Errorf("toTerminalSteps failed, %s", err)
+		return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 	}
 
 	// specific row -> step
 	breakdowns := breakdownTerminalRow(terminalRow, finder, prevColumns)
 
-	currentColumns := ColumnInfo{
+	currentColumns := &ColumnInfo{
 		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
 		Focus:   result.TerminalColumn,
 	}
