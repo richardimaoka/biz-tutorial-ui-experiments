@@ -9,7 +9,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
-func process(repo *git.Repository, inputFile, targetFile string) error {
+func Process(repo *git.Repository, inputFile, targetFile string) error {
 	finder, err := NewFinder(targetFile)
 	if err != nil {
 		return fmt.Errorf("process failed, %s", err)
@@ -21,7 +21,7 @@ func process(repo *git.Repository, inputFile, targetFile string) error {
 		return fmt.Errorf("process failed, %v", err)
 	}
 
-	steps, err := mainLoop(rows, finder, repo)
+	steps, err := toSteps(rows, finder, repo)
 	if err != nil {
 		return fmt.Errorf("process failed, %v", err)
 	}
@@ -34,7 +34,7 @@ func process(repo *git.Repository, inputFile, targetFile string) error {
 	return nil
 }
 
-func mainLoop(
+func toSteps(
 	rows []Row,
 	finder *StepIdFinder,
 	repo *git.Repository,
@@ -48,7 +48,7 @@ func mainLoop(
 		var steps []result.Step
 		var err error
 
-		column := strings.ToUpper(fromRow.Column)
+		column := strings.ToLower(fromRow.Column)
 		switch column {
 		case TerminalType:
 			steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
@@ -59,7 +59,7 @@ func mainLoop(
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("mainLoop faield %s ", err)
+			return nil, fmt.Errorf("mainLoop failed, %s ", err)
 		}
 
 		allSteps = append(allSteps, steps...)

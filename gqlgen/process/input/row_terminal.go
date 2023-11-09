@@ -316,6 +316,7 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns Colu
 		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
 		Focus:   result.TerminalColumn,
 	}
+
 	return steps, currentColumns
 }
 

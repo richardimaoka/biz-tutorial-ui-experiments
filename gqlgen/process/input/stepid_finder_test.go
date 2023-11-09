@@ -21,10 +21,7 @@ func TestFinder(t *testing.T) {
 	}
 
 	targetFile := "testdata/finder/target-detailed-steps.json"
-	finder, err := input.PredictableFinder(targetFile)
-	if err != nil {
-		t.Fatalf("failed to create UUIDGenerator: %v", err)
-	}
+	finder := input.PredictableFinder(t, targetFile)
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
