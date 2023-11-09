@@ -577,7 +577,7 @@ func toSourceSteps(
 ) ([]result.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.SourceColumn),
 		Focus:   result.SourceColumn,
 	}
 

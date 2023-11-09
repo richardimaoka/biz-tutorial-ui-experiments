@@ -5,9 +5,9 @@ type ColumnType string
 const (
 	// Lower cases since they are from manual entries
 	NoColumn       ColumnType = ""
-	SourceColumn   ColumnType = "source"
-	TerminalColumn ColumnType = "terminal"
-	BrowserColumn  ColumnType = "browser"
+	SourceColumn   ColumnType = "SourceCode"
+	TerminalColumn ColumnType = "Terminal"
+	BrowserColumn  ColumnType = "Browser"
 )
 
 type TerminalType string
