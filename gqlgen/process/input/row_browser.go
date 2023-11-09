@@ -44,7 +44,7 @@ const (
 	// Lower cases since they are from manual entries
 	BrowserSingle   BrowserSubType = "single"
 	BrowserNumSeq   BrowserSubType = "numseq"
-	BrowserSequence BrowserSubType = "seq"
+	BrowserSequence BrowserSubType = "sequence"
 )
 
 func toBrowserSubType(s string) (BrowserSubType, error) {
@@ -102,7 +102,7 @@ type BrowserSequenceRow struct {
 	ImageFileNames []string `json:"imageFileNames"`
 }
 
-func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
+func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
 	errorPrefix := "failed to convert to BrowserNumSeq"
 
 	//
@@ -144,15 +144,15 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserSingleRow{
-		StepId:        fromRow.StepId,
-		IsTrivial:     trivial,
-		Comment:       fromRow.Comment,
-		ImageFileName: imageFileName,
+	return &BrowserRow{
+		StepId:         fromRow.StepId,
+		IsTrivial:      trivial,
+		Comment:        fromRow.Comment,
+		ImageFileNames: []string{imageFileName},
 	}, nil
 }
 
-func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
+func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
 	errorPrefix := "failed to convert to BrowserNumSeq"
 
 	//
@@ -175,7 +175,7 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 	}
 
 	// extract num from (e.g.) filename[30].png
-	num, err := positiveNumInSqBracket(fromRow.Instruction)
+	numFiles, err := numInSqBracket(fromRow.Instruction)
 	if err != nil {
 		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
 	}
@@ -191,6 +191,11 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	var imageFileNames []string
+	for i := 0; i < numFiles; i++ {
+		imageFileNames = append(imageFileNames, fmt.Sprintf("%s-%03d.%s", baseName, i, suffix))
+	}
+
 	//
 	// Check trivial field
 	//
@@ -199,17 +204,15 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserNumSeqRow{
-		StepId:          fromRow.StepId,
-		IsTrivial:       trivial,
-		Comment:         fromRow.Comment,
-		ImageBaseName:   baseName,
-		ImageFileSuffix: suffix,
-		NumImages:       num,
+	return &BrowserRow{
+		StepId:         fromRow.StepId,
+		IsTrivial:      trivial,
+		Comment:        fromRow.Comment,
+		ImageFileNames: imageFileNames,
 	}, nil
 }
 
-func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
+func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
 	errorPrefix := "failed to convert to BrowserSequence"
 
 	//
@@ -253,7 +256,7 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &BrowserSequenceRow{
+	return &BrowserRow{
 		StepId:         fromRow.StepId,
 		IsTrivial:      trivial,
 		Comment:        fromRow.Comment,
@@ -306,7 +309,7 @@ func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
 
 // extract number from square bracket
 // s to be form of (e.g.) 'filename[42]'
-func positiveNumInSqBracket(s string) (int, error) {
+func numInSqBracket(s string) (int, error) {
 	found := BrowserNumSeqPattern.FindString(s)
 	if found == "" {
 		return 0, fmt.Errorf("the string doesn't have the form '[${num}]'")
@@ -327,9 +330,11 @@ func positiveNumInSqBracket(s string) (int, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
-	subId := "openBrowserStep"
+func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields, nthFile int) result.Step {
+	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	imageFileName := r.ImageFileNames[nthFile]
 
 	step := result.Step{
 		// fields to make the step searchable for re-generation
@@ -351,124 +356,65 @@ func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder, currentCol
 		ColumnFields: currentColumns,
 		BrowserFields: result.BrowserFields{
 			BrowserStepType:  result.BrowserOpen,
-			BrowserImagePath: r.ImageFileName,
+			BrowserImagePath: imageFileName,
 		},
 	}
 
 	return step
 }
 
-// func openBrowserNumSeqStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields, n int) result.Step {
-// 	subId := fmt.Sprintf("openBrowserStep-%d", n)
-// 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
+	subId := "moveToBrowserStep"
+	stepId := finder.StepIdFor(r.StepId, subId)
 
-// 	step := result.Step{
-// 		// fields to make the step searchable for re-generation
-// 		FromRowFields: result.FromRowFields{
-// 			IsFromRow:  true,
-// 			ParentStep: r.StepId,
-// 			SubID:      subId,
-// 		},
-// 		IntrinsicFields: result.IntrinsicFields{
-// 			StepId:  stepId,
-// 			Comment: r.Comment,
-// 		},
-// 		AnimationFields: result.AnimationFields{
-// 			IsTrivial: r.IsTrivial,
-// 		},
-// 		ModalFields: result.ModalFields{
-// 			ModalContents: r.ModalContents,
-// 		},
-// 		ColumnFields: currentColumns,
-// 		BrowserFields: result.BrowserFields{
-// 			BrowserStepType:  result.BrowserOpen,
-// 			BrowserImagePath: r.ImageFileName,
-// 		},
-// 	}
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "(move to Browser)",
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: true, //always true
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: currentColumns,
+		BrowserFields: result.BrowserFields{
+			BrowserStepType: result.BrowserMove,
+		},
+	}
+	// No tooltip - move step should be trivial and no tooltip to show
 
-// 	return step
-// }
-
-// func openBrowserSequenceStep(r *BrowserSequenceRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields, imageBaseName string) result.Step {
-// 	subId := fmt.Sprintf("openBrowserStep-%s", imageBaseName)
-// 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
-
-// 	step := result.Step{
-// 		// fields to make the step searchable for re-generation
-// 		FromRowFields: result.FromRowFields{
-// 			IsFromRow:  true,
-// 			ParentStep: r.StepId,
-// 			SubID:      subId,
-// 		},
-// 		IntrinsicFields: result.IntrinsicFields{
-// 			StepId:  stepId,
-// 			Comment: r.Comment,
-// 		},
-// 		AnimationFields: result.AnimationFields{
-// 			IsTrivial: r.IsTrivial,
-// 		},
-// 		ModalFields: result.ModalFields{
-// 			ModalContents: r.ModalContents,
-// 		},
-// 		ColumnFields: currentColumns,
-// 		BrowserFields: result.BrowserFields{
-// 			BrowserStepType:  result.BrowserOpen,
-// 			BrowserImagePath: r.ImageFileName,
-// 		},
-// 	}
-
-// 	return step
-// }
+	return step
+}
 
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownBrowserSingleRow(
-	r *BrowserSingleRow,
+func breakdownBrowserRow(
+	r *BrowserRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
 ) ([]result.Step, error) {
 	// - step creation
 	var steps []result.Step
 
+	currentColumns := resultColumns(result.TerminalColumn, prevColumns.AllUsed)
+
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
 	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
-		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
-		// steps = append(steps, step)
+		step := moveToBrowserStep(r, finder, currentColumns)
+		steps = append(steps, step)
 	}
 
-	return steps, nil
-}
-
-func breakdownBrowserNumSeqRow(
-	r *BrowserNumSeqRow,
-	finder *StepIdFinder,
-	prevColumns *ColumnInfo,
-) ([]result.Step, error) {
-	// - step creation
-	var steps []result.Step
-
-	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
-	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
-		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
-		// steps = append(steps, step)
-	}
-
-	return steps, nil
-}
-
-func breakdownBrowserSequenceRow(
-	r *BrowserSequenceRow,
-	finder *StepIdFinder,
-	prevColumns *ColumnInfo,
-) ([]result.Step, error) {
-	// - step creation
-	var steps []result.Step
-
-	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
-	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
-		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
-		// steps = append(steps, step)
+	// open browser step
+	for i := range r.ImageFileNames {
+		step := openBrowserStep(r, finder, currentColumns, i)
+		steps = append(steps, step)
 	}
 
 	return steps, nil
@@ -503,7 +449,7 @@ func toBrowserSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserSingleRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
@@ -517,7 +463,7 @@ func toBrowserSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserNumSeqRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
@@ -531,7 +477,7 @@ func toBrowserSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserSequenceRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}

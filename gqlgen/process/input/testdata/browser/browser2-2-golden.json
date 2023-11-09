@@ -3,7 +3,26 @@
   "isTrivial": false,
   "comment": "",
   "modalContents": "",
-  "imageFileBaseName": "httpd",
-  "imageFileSuffix": "png",
-  "numImages": 20
+  "imageFileNames": [
+    "httpd-000.png",
+    "httpd-001.png",
+    "httpd-002.png",
+    "httpd-003.png",
+    "httpd-004.png",
+    "httpd-005.png",
+    "httpd-006.png",
+    "httpd-007.png",
+    "httpd-008.png",
+    "httpd-009.png",
+    "httpd-010.png",
+    "httpd-011.png",
+    "httpd-012.png",
+    "httpd-013.png",
+    "httpd-014.png",
+    "httpd-015.png",
+    "httpd-016.png",
+    "httpd-017.png",
+    "httpd-018.png",
+    "httpd-019.png"
+  ]
 }

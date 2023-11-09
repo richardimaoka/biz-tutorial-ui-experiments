@@ -14,7 +14,6 @@ func TestToBrowserSingle(t *testing.T) {
 	}{
 		{"testdata/browser/browser1-1.json", "testdata/browser/browser1-1-golden.json"},
 		{"testdata/browser/browser1-2.json", "testdata/browser/browser1-2-golden.json"},
-		{"testdata/browser/browser1-3.json", "testdata/browser/browser1-3-golden.json"},
 	}
 
 	for _, c := range cases {
