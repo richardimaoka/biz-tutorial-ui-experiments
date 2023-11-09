@@ -1,6 +1,7 @@
 {
   "stepId": "f52c491d-3d06-4331-af48-d406957e9efd",
-  "trivial": false,
+  "isTrivial": false,
   "comment": "",
+  "modalContents": "",
   "imageFileName": "httpd.png"
 }

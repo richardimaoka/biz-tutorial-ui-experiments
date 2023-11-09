@@ -66,10 +66,19 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
  * Browser row type(s) and functions
  */
 
+type BrowserRow struct {
+	StepId         string   `json:"stepId"`
+	IsTrivial      bool     `json:"isTrivial"`
+	Comment        string   `json:"comment"`
+	ModalContents  string   `json:"modalContents"`
+	ImageFileNames []string `json:"imageFileNames"`
+}
+
 type BrowserSingleRow struct {
 	StepId        string `json:"stepId"`
-	Trivial       bool   `json:"trivial"`
+	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
+	ModalContents string `json:"modalContents"`
 	ImageFileName string `json:"imageFileName"`
 }
 
@@ -77,8 +86,9 @@ var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
 type BrowserNumSeqRow struct {
 	StepId          string `json:"stepId"`
-	Trivial         bool   `json:"trivial"`
+	IsTrivial       bool   `json:"isTrivial"`
 	Comment         string `json:"comment"`
+	ModalContents   string `json:"modalContents"`
 	ImageBaseName   string `json:"imageFileBaseName"`
 	ImageFileSuffix string `json:"imageFileSuffix"`
 	NumImages       int    `json:"numImages"`
@@ -86,8 +96,9 @@ type BrowserNumSeqRow struct {
 
 type BrowserSequenceRow struct {
 	StepId         string   `json:"stepId"`
-	Trivial        bool     `json:"trivial"`
+	IsTrivial      bool     `json:"isTrivial"`
 	Comment        string   `json:"comment"`
+	ModalContents  string   `json:"modalContents"`
 	ImageFileNames []string `json:"imageFileNames"`
 }
 
@@ -135,7 +146,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 
 	return &BrowserSingleRow{
 		StepId:        fromRow.StepId,
-		Trivial:       trivial,
+		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ImageFileName: imageFileName,
 	}, nil
@@ -147,10 +158,12 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "source" {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != string(SourceCommit) {
+	subType, err := toBrowserSubType(fromRow.Type)
+	if err != nil || subType != BrowserNumSeq {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -188,7 +201,7 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 
 	return &BrowserNumSeqRow{
 		StepId:          fromRow.StepId,
-		Trivial:         trivial,
+		IsTrivial:       trivial,
 		Comment:         fromRow.Comment,
 		ImageBaseName:   baseName,
 		ImageFileSuffix: suffix,
@@ -202,10 +215,12 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "browser" {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != "sequence" {
+	subType, err := toBrowserSubType(fromRow.Type)
+	if err != nil || subType != BrowserSequence {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -240,7 +255,7 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserSequenceRow, error) {
 
 	return &BrowserSequenceRow{
 		StepId:         fromRow.StepId,
-		Trivial:        trivial,
+		IsTrivial:      trivial,
 		Comment:        fromRow.Comment,
 		ImageFileNames: imgFiles,
 	}, nil
@@ -308,6 +323,102 @@ func positiveNumInSqBracket(s string) (int, error) {
 
 	return num, nil
 }
+
+/**
+ * Function(s) to convert a row to a step
+ */
+func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
+	subId := "openBrowserStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := result.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: result.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: result.IntrinsicFields{
+			StepId:  stepId,
+			Comment: r.Comment,
+		},
+		AnimationFields: result.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		ModalFields: result.ModalFields{
+			ModalContents: r.ModalContents,
+		},
+		ColumnFields: currentColumns,
+		BrowserFields: result.BrowserFields{
+			BrowserStepType:  result.BrowserOpen,
+			BrowserImagePath: r.ImageFileName,
+		},
+	}
+
+	return step
+}
+
+// func openBrowserNumSeqStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields, n int) result.Step {
+// 	subId := fmt.Sprintf("openBrowserStep-%d", n)
+// 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+// 	step := result.Step{
+// 		// fields to make the step searchable for re-generation
+// 		FromRowFields: result.FromRowFields{
+// 			IsFromRow:  true,
+// 			ParentStep: r.StepId,
+// 			SubID:      subId,
+// 		},
+// 		IntrinsicFields: result.IntrinsicFields{
+// 			StepId:  stepId,
+// 			Comment: r.Comment,
+// 		},
+// 		AnimationFields: result.AnimationFields{
+// 			IsTrivial: r.IsTrivial,
+// 		},
+// 		ModalFields: result.ModalFields{
+// 			ModalContents: r.ModalContents,
+// 		},
+// 		ColumnFields: currentColumns,
+// 		BrowserFields: result.BrowserFields{
+// 			BrowserStepType:  result.BrowserOpen,
+// 			BrowserImagePath: r.ImageFileName,
+// 		},
+// 	}
+
+// 	return step
+// }
+
+// func openBrowserSequenceStep(r *BrowserSequenceRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields, imageBaseName string) result.Step {
+// 	subId := fmt.Sprintf("openBrowserStep-%s", imageBaseName)
+// 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+// 	step := result.Step{
+// 		// fields to make the step searchable for re-generation
+// 		FromRowFields: result.FromRowFields{
+// 			IsFromRow:  true,
+// 			ParentStep: r.StepId,
+// 			SubID:      subId,
+// 		},
+// 		IntrinsicFields: result.IntrinsicFields{
+// 			StepId:  stepId,
+// 			Comment: r.Comment,
+// 		},
+// 		AnimationFields: result.AnimationFields{
+// 			IsTrivial: r.IsTrivial,
+// 		},
+// 		ModalFields: result.ModalFields{
+// 			ModalContents: r.ModalContents,
+// 		},
+// 		ColumnFields: currentColumns,
+// 		BrowserFields: result.BrowserFields{
+// 			BrowserStepType:  result.BrowserOpen,
+// 			BrowserImagePath: r.ImageFileName,
+// 		},
+// 	}
+
+// 	return step
+// }
 
 /**
  * Function(s) to break down a row to steps

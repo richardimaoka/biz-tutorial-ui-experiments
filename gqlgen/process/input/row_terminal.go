@@ -171,9 +171,9 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 		},
 		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
-			TerminalType: result.TerminalCommand,
-			TerminalText: r.Text,
-			TerminalName: r.TerminalName,
+			TerminalStepType: result.TerminalCommand,
+			TerminalText:     r.Text,
+			TerminalName:     r.TerminalName,
 		},
 	}
 
@@ -208,9 +208,9 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns res
 		},
 		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
-			TerminalType: result.TerminalOutput,
-			TerminalText: r.Text,
-			TerminalName: r.TerminalName,
+			TerminalStepType: result.TerminalOutput,
+			TerminalText:     r.Text,
+			TerminalName:     r.TerminalName,
 		},
 	}
 	if r.Tooltip != nil {
@@ -242,8 +242,8 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns res
 		// No ModalFields, as it is a trivial step
 		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
-			TerminalType: result.TerminalMove,
-			TerminalName: r.TerminalName,
+			TerminalStepType: result.TerminalMove,
+			TerminalName:     r.TerminalName,
 		},
 	}
 	// No tooltip - move step should be trivial and no tooltip to show
@@ -274,9 +274,9 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns r
 		// No ModalFields, as it is a trivial step
 		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
-			CurrentDir:   currentDir,
-			TerminalType: result.TerminalCd,
-			TerminalName: r.TerminalName,
+			CurrentDir:       currentDir,
+			TerminalStepType: result.TerminalCd,
+			TerminalName:     r.TerminalName,
 		},
 	}
 

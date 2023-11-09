@@ -20,6 +20,24 @@ const (
 	TerminalMove    TerminalType = "move"
 )
 
+type SourceCodeType string
+
+const (
+	// Lower cases since they are from manual entries
+	FileTree    SourceCodeType = "fileTree"
+	SourceOpen  SourceCodeType = "openFile"
+	SourceError SourceCodeType = "error"
+	SourceMove  SourceCodeType = "move"
+)
+
+type BrowserType string
+
+const (
+	// Lower cases since they are from manual entries
+	BrowserOpen BrowserType = "open"
+	BrowserMove BrowserType = "move"
+)
+
 type Step struct {
 	FromRowFields // Fields to make the step searchable for re-generation
 
@@ -93,10 +111,10 @@ type TerminalTooltip struct {
 }
 
 type TerminalFields struct {
-	CurrentDir   string       `json:"currentDir"`
-	TerminalType TerminalType `json:"terminalType"`
-	TerminalText string       `json:"terminalText"`
-	TerminalName string       `json:"terminalName"`
+	CurrentDir       string       `json:"currentDir"`
+	TerminalStepType TerminalType `json:"terminalType"`
+	TerminalText     string       `json:"terminalText"`
+	TerminalName     string       `json:"terminalName"`
 	TerminalTooltip
 }
 
@@ -116,5 +134,6 @@ type SourceCodeFields struct {
 }
 
 type BrowserFields struct {
+	BrowserStepType  BrowserType
 	BrowserImagePath string `json:"browserImagePath"`
 }
