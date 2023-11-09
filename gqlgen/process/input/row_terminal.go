@@ -14,18 +14,21 @@ type TerminalSubType string
 
 const (
 	// Lower cases since they are from manual entries
-	CommandSubType TerminalSubType = "command"
-	OutputSubType  TerminalSubType = "output"
+	TerminalCommand TerminalSubType = "command"
+	TerminalOutput  TerminalSubType = "output"
+	TerminalOpen    TerminalSubType = "open"
 )
 
 func toTerminalSubType(s string) (TerminalSubType, error) {
 	lower := strings.ToLower(s)
 
 	switch lower {
-	case string(CommandSubType):
-		return CommandSubType, nil
-	case string(OutputSubType):
-		return OutputSubType, nil
+	case string(TerminalCommand):
+		return TerminalCommand, nil
+	case string(TerminalOutput):
+		return TerminalOutput, nil
+	case string(TerminalOpen):
+		return TerminalOpen, nil
 	default:
 		return "", fmt.Errorf("'%s' is an invalid terminal sub type", s)
 	}
@@ -89,8 +92,8 @@ type TerminalRow struct {
  * Function(s) to convert a row to a more specific row
  */
 
-func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
-	errorPrefix := "failed to convert to TerminalOutput"
+func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
+	errorPrefix := "failed in toTerminalCommandRow"
 
 	//
 	// Check column and type
@@ -100,7 +103,7 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
 	subType, err := toTerminalSubType(fromRow.Type)
-	if err != nil {
+	if err != nil || subType != TerminalCommand {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -140,6 +143,114 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 		ModalContents: fromRow.ModalContents,
 		Type:          subType,
 		Text:          fromRow.Instruction,
+		Tooltip:       terminalTooltip,
+		TerminalName:  terminalName,
+	}, nil
+}
+
+func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
+	errorPrefix := "failed in toTerminalOutputRow"
+
+	//
+	// Check column and type
+	//
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != TerminalColumn {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+	}
+	subType, err := toTerminalSubType(fromRow.Type)
+	if err != nil || subType != TerminalOutput {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+	}
+
+	//
+	// Check instruction fields
+	//
+	if fromRow.Instruction == "" {
+		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+	}
+	var terminalName string
+	if fromRow.Instruction2 == "" {
+		terminalName = "default"
+	} else {
+		terminalName = fromRow.Instruction2
+	}
+
+	//
+	// Check tooltip fields
+	//
+	terminalTooltip, err := toTerminalTooltip(fromRow)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(fromRow.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
+	return &TerminalRow{
+		StepId:        fromRow.StepId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		ModalContents: fromRow.ModalContents,
+		Type:          subType,
+		Text:          fromRow.Instruction,
+		Tooltip:       terminalTooltip,
+		TerminalName:  terminalName,
+	}, nil
+}
+
+func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
+	errorPrefix := "failed in toTerminalOpenRow"
+
+	//
+	// Check column and type
+	//
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != TerminalColumn {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+	}
+	subType, err := toTerminalSubType(fromRow.Type)
+	if err != nil {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+	}
+
+	//
+	// Check instruction fields
+	//
+	var terminalName string
+	if fromRow.Instruction2 == "" {
+		terminalName = "default"
+	} else {
+		terminalName = fromRow.Instruction2
+	}
+
+	//
+	// Check tooltip fields
+	//
+	terminalTooltip, err := toTerminalTooltip(fromRow)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	//
+	// Check trivial field
+	//
+	trivial, err := strToBool(fromRow.Trivial)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+	}
+
+	return &TerminalRow{
+		StepId:        fromRow.StepId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		ModalContents: fromRow.ModalContents,
+		Type:          subType,
 		Tooltip:       terminalTooltip,
 		TerminalName:  terminalName,
 	}, nil
@@ -299,7 +410,7 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *Col
 		steps = append(steps, moveToTerminalStep)
 	}
 
-	if r.Type == CommandSubType {
+	if r.Type == TerminalCommand {
 		// command step
 		cmdStep := terminalCommandStep(r, finder, currentColumns)
 		steps = append(steps, cmdStep)
@@ -309,7 +420,7 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *Col
 			cmdStep := terminalCdStep(r, finder, currentColumns)
 			steps = append(steps, cmdStep)
 		}
-	} else if r.Type == OutputSubType {
+	} else if r.Type == TerminalOutput {
 		outputStep := terminalOutputStep(r, finder, currentColumns)
 		steps = append(steps, outputStep)
 	}
@@ -328,14 +439,55 @@ func toTerminalSteps(
 		Focus:   result.TerminalColumn,
 	}
 
-	// row -> specific row
-	terminalRow, err := toTerminalRow(r)
+	subType, err := toTerminalSubType(r.Type)
 	if err != nil {
-		return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		return nil, nil, fmt.Errorf("toTerminalSubType failed, %s", err)
 	}
 
-	// specific row -> step
-	steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+	switch subType {
+	case TerminalCommand:
+		// row -> specific row
+		terminalRow, err := toTerminalCommandRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
 
-	return steps, currentColumns, nil
+		// specific row -> step
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case TerminalOutput:
+		// row -> specific row
+		terminalRow, err := toTerminalOutputRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case TerminalOpen:
+		// row -> specific row
+		terminalRow, err := toTerminalOpenRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	default:
+		return nil, nil, fmt.Errorf("toTerminalSteps failed, type = '%s' not implemented", r.Type)
+	}
 }

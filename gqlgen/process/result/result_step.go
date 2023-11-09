@@ -18,6 +18,7 @@ const (
 	TerminalOutput  TerminalType = "output"
 	TerminalCd      TerminalType = "cd"
 	TerminalMove    TerminalType = "move"
+	TerminalOpen    TerminalType = "open"
 )
 
 type SourceCodeType string

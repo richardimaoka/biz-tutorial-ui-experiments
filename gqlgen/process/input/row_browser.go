@@ -103,7 +103,7 @@ type BrowserSequenceRow struct {
 }
 
 func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
-	errorPrefix := "failed to convert to BrowserNumSeq"
+	errorPrefix := "failed in toBrowserSingleRow"
 
 	//
 	// Check column and type
@@ -153,7 +153,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
 }
 
 func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
-	errorPrefix := "failed to convert to BrowserNumSeq"
+	errorPrefix := "failed in toBrowserNumSeqRow"
 
 	//
 	// Check column and type
@@ -213,7 +213,7 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
 }
 
 func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
-	errorPrefix := "failed to convert to BrowserSequence"
+	errorPrefix := "failed in toBrowserSequenceRow"
 
 	//
 	// Check column and type
