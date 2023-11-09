@@ -591,11 +591,13 @@ func toSourceSteps(
 
 	switch subType {
 	case SourceCommit:
+		// row -> specific row
 		row, err := toSourceCommitRow(r)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
+		// specific row -> step
 		steps, currentColumns, err := breakdownSourceCommitRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
@@ -603,11 +605,13 @@ func toSourceSteps(
 		return steps, currentColumns, nil
 
 	case SourceOpen:
+		// row -> specific row
 		row, err := toSourceOpenRow(r)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
+		// specific row -> step
 		steps, currentColumns, err := breakdownSourceOpenRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
@@ -615,11 +619,13 @@ func toSourceSteps(
 		return steps, currentColumns, nil
 
 	case SourceError:
+		// row -> specific row
 		row, err := toSourceErrorRow(r)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
 
+		// specific row -> step
 		steps, currentColumns, err := breakdownSourceErrorRow(row, finder, prevColumns, repo, prevCommit)
 		if err != nil {
 			return nil, prevColumns, fmt.Errorf("toSourceSteps failed, %s", err)

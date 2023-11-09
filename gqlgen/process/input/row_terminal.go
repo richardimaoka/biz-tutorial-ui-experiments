@@ -147,7 +147,7 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -168,7 +168,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 		ModalFields: result.ModalFields{
 			ModalContents: r.ModalContents,
 		},
-		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
+		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalCommand,
 			TerminalText: r.Text,
@@ -184,7 +184,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns
 	return step
 }
 
-func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
@@ -205,7 +205,7 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 		ModalFields: result.ModalFields{
 			ModalContents: r.ModalContents,
 		},
-		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
+		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalOutput,
 			TerminalText: r.Text,
@@ -220,7 +220,7 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	return step
 }
 
-func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
@@ -239,7 +239,7 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
+		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
 			TerminalType: result.TerminalMove,
 			TerminalName: r.TerminalName,
@@ -250,7 +250,7 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, usedColumns UsedCo
 	return step
 }
 
-func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns result.ColumnFields) result.Step {
 	currentDir := strings.TrimPrefix(r.Text, "cd ")
 
 	subId := "terminalCdStep"
@@ -271,7 +271,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.TerminalColumn, usedColumns),
+		ColumnFields: currentColumns,
 		TerminalFields: result.TerminalFields{
 			CurrentDir:   currentDir,
 			TerminalType: result.TerminalCd,
@@ -287,37 +287,33 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, usedColumns Used
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns ColumnInfo) ([]result.Step, ColumnInfo) {
+func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns ColumnInfo) []result.Step {
 	// - step creation
 	var steps []result.Step
+	currentColumns := resultColumns(result.TerminalColumn, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
 	if prevColumns.Focus != result.TerminalColumn && prevColumns.Focus != result.NoColumn {
-		moveToTerminalStep := moveToTerminalStep(r, finder, prevColumns.AllUsed)
+		moveToTerminalStep := moveToTerminalStep(r, finder, currentColumns)
 		steps = append(steps, moveToTerminalStep)
 	}
 
 	if r.Type == CommandSubType {
 		// command step
-		cmdStep := terminalCommandStep(r, finder, prevColumns.AllUsed)
+		cmdStep := terminalCommandStep(r, finder, currentColumns)
 		steps = append(steps, cmdStep)
 
 		// cd step
 		if strings.HasPrefix(r.Text, "cd ") {
-			cmdStep := terminalCdStep(r, finder, prevColumns.AllUsed)
+			cmdStep := terminalCdStep(r, finder, currentColumns)
 			steps = append(steps, cmdStep)
 		}
 	} else if r.Type == OutputSubType {
-		outputStep := terminalOutputStep(r, finder, prevColumns.AllUsed)
+		outputStep := terminalOutputStep(r, finder, currentColumns)
 		steps = append(steps, outputStep)
 	}
 
-	currentColumns := ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.TerminalColumn,
-	}
-
-	return steps, currentColumns
+	return steps
 }
 
 func toTerminalSteps(
@@ -325,11 +321,19 @@ func toTerminalSteps(
 	finder *StepIdFinder,
 	prevColumns ColumnInfo,
 ) ([]result.Step, ColumnInfo, error) {
+	// row -> specific row
 	terminalRow, err := toTerminalRow(r)
 	if err != nil {
 		return nil, prevColumns, fmt.Errorf("toTerminalSteps failed, %s", err)
 	}
 
-	breakdowns, currentColumns := breakdownTerminalRow(terminalRow, finder, prevColumns)
+	// specific row -> step
+	breakdowns := breakdownTerminalRow(terminalRow, finder, prevColumns)
+
+	currentColumns := ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.TerminalColumn,
+	}
+
 	return breakdowns, currentColumns, nil
 }
