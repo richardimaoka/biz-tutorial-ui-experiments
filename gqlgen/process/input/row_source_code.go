@@ -133,10 +133,12 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "source" {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != string(SourceCommit) {
+	subType, err := toSourceCodeSubType(fromRow.Type)
+	if err != nil || subType != SourceCommit {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -191,10 +193,12 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "source" {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != string(SourceOpen) {
+	subType, err := toSourceCodeSubType(fromRow.Type)
+	if err != nil || subType != SourceOpen {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -237,10 +241,12 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "source" {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != string(SourceError) {
+	subType, err := toSourceCodeSubType(fromRow.Type)
+	if err != nil || subType != SourceError {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -569,7 +575,7 @@ func toSourceSteps(
 	repo *git.Repository,
 	prevCommit string,
 ) ([]result.Step, *ColumnInfo, error) {
-
+	// current columns update
 	currentColumns := &ColumnInfo{
 		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
 		Focus:   result.SourceColumn,

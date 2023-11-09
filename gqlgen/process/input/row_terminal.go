@@ -95,7 +95,8 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != TerminalColumn {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != TerminalColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
 	subType, err := toTerminalSubType(fromRow.Type)
@@ -321,6 +322,12 @@ func toTerminalSteps(
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
 ) ([]result.Step, *ColumnInfo, error) {
+	// current columns update
+	currentColumns := &ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
+		Focus:   result.TerminalColumn,
+	}
+
 	// row -> specific row
 	terminalRow, err := toTerminalRow(r)
 	if err != nil {
@@ -328,12 +335,7 @@ func toTerminalSteps(
 	}
 
 	// specific row -> step
-	breakdowns := breakdownTerminalRow(terminalRow, finder, prevColumns)
+	steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
 
-	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.TerminalColumn,
-	}
-
-	return breakdowns, currentColumns, nil
+	return steps, currentColumns, nil
 }

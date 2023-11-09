@@ -66,13 +66,6 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
  * Browser row type(s) and functions
  */
 
-type BrowserRow struct {
-	StepId         string `json:"stepId"`
-	Trivial        bool   `json:"trivial"`
-	Comment        string `json:"comment"`
-	ImageFileNames string `json:"imageFileNames"`
-}
-
 type BrowserSingleRow struct {
 	StepId        string `json:"stepId"`
 	Trivial       bool   `json:"trivial"`
@@ -104,7 +97,8 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != BrowserColumn {
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
 	subType, err := toBrowserSubType(fromRow.Type)
@@ -153,10 +147,10 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserNumSeqRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "browser" {
+	if strings.ToLower(fromRow.Column) != "source" {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if strings.ToLower(fromRow.Type) != "numseq" {
+	if strings.ToLower(fromRow.Type) != string(SourceCommit) {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -257,7 +251,7 @@ func removeSqBrackets(s string) string {
 	return split[0]
 }
 
-// get file base name from given file-name candidate
+// Get file base name from given file-name candidate
 func fileBaseName(s string) (string, error) {
 	if s == "" {
 		return "", fmt.Errorf("file name is empty")
@@ -273,7 +267,7 @@ func fileBaseName(s string) (string, error) {
 	}
 }
 
-// get file suffix from 1) given file-name candidate, 2) if not there, try finding from Row
+// Get file suffix from 1) given file-name candidate, 2) if not there, try finding from Row
 func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
 	splitByDot := strings.Split(fileNameCandidate, ".")
 	if len(splitByDot) == 1 {
@@ -316,6 +310,60 @@ func positiveNumInSqBracket(s string) (int, error) {
 }
 
 /**
+ * Function(s) to break down a row to steps
+ */
+func breakdownBrowserSingleRow(
+	r *BrowserSingleRow,
+	finder *StepIdFinder,
+	prevColumns *ColumnInfo,
+) ([]result.Step, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
+	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
+		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
+		// steps = append(steps, step)
+	}
+
+	return steps, nil
+}
+
+func breakdownBrowserNumSeqRow(
+	r *BrowserNumSeqRow,
+	finder *StepIdFinder,
+	prevColumns *ColumnInfo,
+) ([]result.Step, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
+	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
+		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
+		// steps = append(steps, step)
+	}
+
+	return steps, nil
+}
+
+func breakdownBrowserSequenceRow(
+	r *BrowserSequenceRow,
+	finder *StepIdFinder,
+	prevColumns *ColumnInfo,
+) ([]result.Step, error) {
+	// - step creation
+	var steps []result.Step
+
+	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
+	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
+		// step := moveToBrowserStep(r.StepId, finder, prevColumns.AllUsed)
+		// steps = append(steps, step)
+	}
+
+	return steps, nil
+}
+
+/**
  * Function to turn a row into steps
  */
 
@@ -324,5 +372,62 @@ func toBrowserSteps(
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
 ) ([]result.Step, *ColumnInfo, error) {
-	return nil, &ColumnInfo{}, nil
+	// current columns update
+	currentColumns := &ColumnInfo{
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.BrowserColumn),
+		Focus:   result.BrowserColumn,
+	}
+
+	subType, err := toBrowserSubType(r.Type)
+	if err != nil {
+		return nil, nil, fmt.Errorf("toBrowserSubType failed, %s", err)
+	}
+
+	switch subType {
+	case BrowserSingle:
+		// row -> specific row
+		row, err := toBrowserSingleRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps, err := breakdownBrowserSingleRow(row, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case BrowserNumSeq:
+		// row -> specific row
+		row, err := toBrowserNumSeqRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps, err := breakdownBrowserNumSeqRow(row, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case BrowserSequence:
+		// row -> specific row
+		row, err := toBrowserSequenceRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps, err := breakdownBrowserSequenceRow(row, finder, prevColumns)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	default:
+		return nil, nil, fmt.Errorf("toBrowserSteps failed, type = '%s' not implemented", r.Type)
+	}
+
 }

@@ -2,7 +2,6 @@ package input
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
@@ -20,9 +19,12 @@ func toSteps(
 
 	for _, fromRow := range rows {
 		var steps []result.Step
-		var err error
 
-		column := strings.ToLower(fromRow.Column)
+		column, err := toColumnType(fromRow.Column)
+		if err != nil {
+			return nil, fmt.Errorf("column = '%s' is invalid", fromRow.Column)
+		}
+
 		switch column {
 		case TerminalColumn:
 			steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
@@ -31,7 +33,7 @@ func toSteps(
 		case BrowserColumn:
 			steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 		default:
-			err = fmt.Errorf("column = '%s' is invalid", fromRow.Column)
+			err = fmt.Errorf("column = '%s' is not implemented", fromRow.Column)
 		}
 
 		if err != nil {

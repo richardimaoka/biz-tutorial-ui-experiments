@@ -1,14 +1,5 @@
 package input
 
-type ColumnType = string
-
-const (
-	// Lower cases since they are from manual entries
-	SourceColumn   ColumnType = "source"
-	TerminalColumn ColumnType = "terminal"
-	BrowserColumn  ColumnType = "browser"
-)
-
 type Row struct {
 	StepId        string `json:"stepId"`
 	Phase         string `json:"phase"`
