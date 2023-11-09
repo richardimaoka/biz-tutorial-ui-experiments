@@ -3,5 +3,7 @@
   "isTrivial": false,
   "comment": "",
   "modalContents": "",
-  "imageFileNames": ["httpd.png"]
+  "imageFileNames": [
+    "httpd.png"
+  ]
 }

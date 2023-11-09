@@ -10,17 +10,21 @@ func TestToSteps(t *testing.T) {
 	cases := []struct {
 		name       string
 		inputFile  string
-		targetFile string
 		goldenFile string
 	}{
-		{"successful", "testdata/rows/docker-tutorial.json", "", ""},
+		{"successful", "testdata/rows/docker-tutorial.json", "testdata/rows/docker-tutorial-golden.json"},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			// Prepare arguments
-			repo := testio.GitOpenOrClone(t, "https://github.com/richardimaoka/article-docker-cmd-entrypoint.git")
-			finder := PredictableFinder(t, c.targetFile)
+			repoUrl := "https://github.com/richardimaoka/article-docker-cmd-entrypoint.git"
+			repo := testio.GitOpenOrClone(t, repoUrl)
+
+			// Generate non-empty step IDs to make sure target file's IDs are indeed picked up
+			// Golden file is the target file
+			finder, _ := NewFinder(c.goldenFile)
+
 			var rows []Row
 			testio.JsonRead(t, c.inputFile, &rows)
 

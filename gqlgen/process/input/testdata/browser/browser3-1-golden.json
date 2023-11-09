@@ -3,5 +3,9 @@
   "isTrivial": false,
   "comment": "",
   "modalContents": "",
-  "imageFileNames": ["aaa.png", "bbb.png", "ccc.png"]
+  "imageFileNames": [
+    "aaa.png",
+    "bbb.png",
+    "ccc.png"
+  ]
 }
