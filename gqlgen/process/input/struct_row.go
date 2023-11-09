@@ -26,10 +26,8 @@ type Row struct {
 	Instruction3 string `json:"instruction3"`
 
 	// Tooltip fileds
-	Tooltip string `json:"tooltip"`
-	// TODO: those tooltip fields are specific to source code, so move them to instruction?
-	TooltipTiming string `json:"tooltipTiming"`
-	TooltipLine   int    `json:"tooltipLine"`
-	// string (i.e. 'TRUE', 'FALSE', or empty string), not bool, as it is a value from CSV
-	TooltipAppend string `json:"tooltipAppend"`
+	Tooltip       string      `json:"tooltip"`
+	TooltipTiming string      `json:"tooltipTiming"`
+	TooltipLine   IntOrString `json:"tooltipLine"`   // IntOrString because an empty cell from CSV becomes empty string = ""
+	TooltipAppend string      `json:"tooltipAppend"` // string (i.e. 'TRUE', 'FALSE', or empty string), not bool, as it is a value from CSV
 }

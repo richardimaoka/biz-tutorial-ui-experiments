@@ -17,7 +17,7 @@ func errorMessage(prefix, leadingMessage string, underlyingError error) error {
 func ValidateCommitHash(hashStr string) (plumbing.Hash, error) {
 	commitHash := plumbing.NewHash(hashStr)
 	if commitHash.String() != hashStr {
-		return plumbing.ZeroHash, fmt.Errorf("commit hash = %s mismatched with re-calculated hash = %s", hashStr, commitHash.String())
+		return plumbing.ZeroHash, fmt.Errorf("commit hash = '%s' mismatched with re-calculated hash = '%s'", hashStr, commitHash.String())
 	}
 
 	return commitHash, nil
@@ -35,7 +35,7 @@ func GetCommit(repo *git.Repository, hashStr string) (*object.Commit, error) {
 
 	commit, err := repo.CommitObject(commitHash)
 	if err != nil {
-		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for %s", hashStr), err)
+		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for '%s'", hashStr), err)
 	}
 
 	return commit, nil
@@ -76,17 +76,17 @@ func GetPatch(repo *git.Repository, fromCommitHash, toCommitHash string) (*objec
 
 	fromCommit, err := GetCommit(repo, fromCommitHash)
 	if err != nil {
-		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for %s", fromCommitHash), err)
+		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for '%s'", fromCommitHash), err)
 	}
 
 	toCommit, err := GetCommit(repo, toCommitHash)
 	if err != nil {
-		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for %s", toCommitHash), err)
+		return nil, errorMessage(funcName, fmt.Sprintf("cannot get commit for '%s'", toCommitHash), err)
 	}
 
 	patch, err := fromCommit.Patch(toCommit)
 	if err != nil {
-		return nil, errorMessage(funcName, fmt.Sprintf("cannot get patch from = %s to = %s", fromCommitHash, toCommitHash), err)
+		return nil, errorMessage(funcName, fmt.Sprintf("cannot get patch from = '%s' to = '%s'", fromCommitHash, toCommitHash), err)
 	}
 
 	return patch, nil

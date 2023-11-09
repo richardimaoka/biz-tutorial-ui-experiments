@@ -59,7 +59,7 @@ func toSteps(
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("mainLoop failed, %s ", err)
+			return nil, fmt.Errorf("mainLoop failed for step = %s, %s ", fromRow.StepId, err)
 		}
 
 		allSteps = append(allSteps, steps...)

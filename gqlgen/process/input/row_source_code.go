@@ -73,10 +73,9 @@ func toSourceTooltip(fromRow *Row) (*SourceTooltip, error) {
 		return nil, fmt.Errorf("'tooltipTiming' field is wrong, %s", err)
 	}
 
-	if fromRow.TooltipLine == 0 {
-		return nil, fmt.Errorf("'tooltipLine' = %d, cannot be 0 nor empty", fromRow.TooltipLine)
-	} else if fromRow.TooltipLine < 0 {
-		return nil, fmt.Errorf("'tooltipLine' = %d, but cannot be a negative number", fromRow.TooltipLine)
+	tooltipLine, err := fromRow.TooltipLine.GetInt()
+	if err != nil {
+		return nil, fmt.Errorf("'tooltipLine' is invalid, %s", err)
 	}
 
 	var isAppend bool
@@ -85,14 +84,16 @@ func toSourceTooltip(fromRow *Row) (*SourceTooltip, error) {
 		isAppend = true
 	} else if isAppendFromRow == "FALSE" {
 		isAppend = false
+	} else if isAppendFromRow == "" {
+		isAppend = false
 	} else {
-		return nil, fmt.Errorf("'tooltipAppend' = '%s', is an invalid value. It has to be either 'TRUE', 'FALSE' or empty", fromRow.TooltipAppend)
+		return nil, fmt.Errorf("'tooltipAppend' = '%s', is an invalid value. It has to be either 'TRUE', 'FALSE' or ''(empty)", fromRow.TooltipAppend)
 	}
 
 	return &SourceTooltip{
 		Contents:   contents,
 		Timing:     tooltipTiming,
-		LineNumber: fromRow.TooltipLine,
+		LineNumber: tooltipLine,
 		IsAppend:   isAppend,
 	}, nil
 }
@@ -495,9 +496,9 @@ func breakdownSourceCommitRow(
 	}
 
 	// find files from commit
-	filePaths, err := filesBetweenCommits(repo, r.Commit, prevCommit)
+	filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
 	if err != nil {
-		return nil, ColumnInfo{}, fmt.Errorf("breakdownSourceCommitRow faield %s", err)
+		return nil, ColumnInfo{}, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
 	}
 
 	// open file steps
