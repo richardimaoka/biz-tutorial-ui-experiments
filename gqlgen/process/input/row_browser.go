@@ -5,9 +5,73 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
 )
 
-var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
+type ImageFileSuffix = string
+
+const (
+	JPG  ImageFileSuffix = "jpg"
+	JPEG ImageFileSuffix = "jpeg"
+	GIF  ImageFileSuffix = "gif"
+	PNG  ImageFileSuffix = "png"
+)
+
+func toImageFileSuffix(s string) (ImageFileSuffix, error) {
+	switch strings.ToLower(s) {
+	case JPG:
+		return JPG, nil
+	case JPEG:
+		return JPEG, nil
+	case GIF:
+		return GIF, nil
+	case PNG:
+		return PNG, nil
+	case "":
+		return PNG, nil
+	default:
+		return "", fmt.Errorf("ImageFileSuffix value = '%s' is invalid", s)
+	}
+}
+
+/**
+ * BrowserSubType type(s) and functions
+ */
+type BrowserSubType string
+
+const (
+	// Lower cases since they are from manual entries
+	BrowserSingle   BrowserSubType = "single"
+	BrowserNumSeq   BrowserSubType = "numseq"
+	BrowserSequence BrowserSubType = "seq"
+)
+
+func toBrowserSubType(s string) (BrowserSubType, error) {
+	lower := strings.ToLower(s)
+
+	switch lower {
+	case string(BrowserSingle):
+		return BrowserSingle, nil
+	case string(BrowserNumSeq):
+		return BrowserNumSeq, nil
+	case string(BrowserSequence):
+		return BrowserSequence, nil
+	default:
+		return "", fmt.Errorf("'%s' is an invalid browser sub type", s)
+	}
+}
+
+/**
+ * Browser row type(s) and functions
+ */
+
+type BrowserRow struct {
+	StepId         string `json:"stepId"`
+	Trivial        bool   `json:"trivial"`
+	Comment        string `json:"comment"`
+	ImageFileNames string `json:"imageFileNames"`
+}
 
 type BrowserSingleRow struct {
 	StepId        string `json:"stepId"`
@@ -15,6 +79,8 @@ type BrowserSingleRow struct {
 	Comment       string `json:"comment"`
 	ImageFileName string `json:"imageFileName"`
 }
+
+var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
 type BrowserNumSeqRow struct {
 	StepId          string `json:"stepId"`
@@ -38,10 +104,11 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != "browser" {
+	if strings.ToLower(fromRow.Column) != BrowserType {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	if fromRow.Type != "" && strings.ToLower(fromRow.Type) != "single" {
+	subType, err := toBrowserSubType(fromRow.Type)
+	if err != nil || subType != BrowserSingle {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
 	}
 
@@ -246,4 +313,16 @@ func positiveNumInSqBracket(s string) (int, error) {
 	}
 
 	return num, nil
+}
+
+/**
+ * Function to turn a row into steps
+ */
+
+func toBrowserSteps(
+	r *Row,
+	finder *StepIdFinder,
+	prevColumns ColumnInfo,
+) ([]result.Step, ColumnInfo, error) {
+	return nil, ColumnInfo{}, nil
 }
