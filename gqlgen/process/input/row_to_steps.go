@@ -24,11 +24,11 @@ func toSteps(
 
 		column := strings.ToLower(fromRow.Column)
 		switch column {
-		case TerminalType:
+		case TerminalColumn:
 			steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
-		case SourceType:
+		case SourceColumn:
 			steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns, repo, currentCommit)
-		case BrowserType:
+		case BrowserColumn:
 			steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 		default:
 			err = fmt.Errorf("column = '%s' is invalid", fromRow.Column)

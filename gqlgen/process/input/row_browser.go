@@ -104,7 +104,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != BrowserType {
+	if strings.ToLower(fromRow.Column) != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
 	subType, err := toBrowserSubType(fromRow.Type)

@@ -4,9 +4,9 @@ type ColumnType = string
 
 const (
 	// Lower cases since they are from manual entries
-	SourceType   ColumnType = "source"
-	TerminalType ColumnType = "terminal"
-	BrowserType  ColumnType = "browser"
+	SourceColumn   ColumnType = "source"
+	TerminalColumn ColumnType = "terminal"
+	BrowserColumn  ColumnType = "browser"
 )
 
 type Row struct {

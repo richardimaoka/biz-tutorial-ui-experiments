@@ -95,7 +95,7 @@ func toTerminalRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check column and type
 	//
-	if strings.ToLower(fromRow.Column) != TerminalType {
+	if strings.ToLower(fromRow.Column) != TerminalColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
 	subType, err := toTerminalSubType(fromRow.Type)
