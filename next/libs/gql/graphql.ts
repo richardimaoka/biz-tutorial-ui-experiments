@@ -319,7 +319,6 @@ export type TerminalEntry = {
   entryType: TerminalEntryType;
   id: Scalars["ID"]["output"];
   text: Scalars["String"]["output"];
-  tooltip?: Maybe<TerminalTooltip2>;
 };
 
 export type TerminalEntryType = "COMMAND" | "OUTPUT";

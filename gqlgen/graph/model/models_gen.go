@@ -258,7 +258,6 @@ type TerminalEntry struct {
 	ID        string            `json:"id"`
 	EntryType TerminalEntryType `json:"entryType"`
 	Text      string            `json:"text"`
-	Tooltip   *TerminalTooltip2 `json:"tooltip"`
 }
 
 type TerminalNode struct {
