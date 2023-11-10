@@ -12,15 +12,15 @@ import (
 type TerminalTooltipTiming string
 
 const (
-	START TerminalTooltipTiming = "START"
-	END   TerminalTooltipTiming = "END"
+	TERMINAL_TOOLTIP_START TerminalTooltipTiming = "START"
+	TERMINAL_TOOLTIP_END   TerminalTooltipTiming = "END"
 )
 
 func (t TerminalTooltipTiming) ToGraphQL() model.TerminalTooltipTiming2 {
 	switch t {
-	case START:
+	case TERMINAL_TOOLTIP_START:
 		return model.TerminalTooltipTiming2Start
-	case END:
+	case TERMINAL_TOOLTIP_END:
 		return model.TerminalTooltipTiming2End
 	default:
 		panic(fmt.Sprintf("TerminalTooltipTiming = '%s' is invalid", t))
@@ -178,7 +178,7 @@ func (c *TerminalColumn) WriteCommand(
 	if tooltipContents == "" {
 		terminal.ClearTooltip()
 	} else {
-		terminal.SetTooltip(tooltipContents, START)
+		terminal.SetTooltip(tooltipContents, TERMINAL_TOOLTIP_START)
 	}
 }
 
@@ -203,7 +203,7 @@ func (c *TerminalColumn) WriteOutput(
 	if tooltipContents == "" {
 		terminal.ClearTooltip()
 	} else {
-		terminal.SetTooltip(tooltipContents, START)
+		terminal.SetTooltip(tooltipContents, TERMINAL_TOOLTIP_START)
 	}
 }
 
