@@ -157,3 +157,27 @@ func FindFilePatch(patch *object.Patch, fileFullPath string) (string, diff.FileP
 
 	return "", nil
 }
+
+func TreeFiles(tree *object.Tree) []object.TreeEntry {
+	var files []object.TreeEntry
+
+	for _, e := range tree.Entries {
+		if e.Mode.IsFile() {
+			files = append(files, e)
+		}
+	}
+
+	return files
+}
+
+func TreeDirs(tree *object.Tree) []object.TreeEntry {
+	var dirs []object.TreeEntry
+
+	for _, e := range tree.Entries {
+		if !e.Mode.IsFile() {
+			dirs = append(dirs, e)
+		}
+	}
+
+	return dirs
+}

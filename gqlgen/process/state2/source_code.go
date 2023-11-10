@@ -1,6 +1,11 @@
 package state2
 
-import "github.com/go-git/go-git/v5"
+import (
+	"fmt"
+
+	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+)
 
 type SourceCodeTooltipTiming string
 
@@ -40,8 +45,26 @@ func NewSourceCode(repo *git.Repository, projectDir, tutorial string) *SourceCod
 	}
 }
 
+func (s *SourceCode) initialCommit(commitHash string) error {
+	files, err := gitwrap.GetCommitFiles(s.repo, commitHash)
+	if err != nil {
+		return fmt.Errorf("initialCommit failed, %s", err)
+	}
+
+	s.rootDir, err = constructDirectory(files)
+	if err != nil {
+		return fmt.Errorf("initialCommit failed, %s", err)
+	}
+
+	return nil
+}
+
 type SourceCodeColumn struct {
 	sourceCode *SourceCode
+}
+
+func (c *SourceCodeColumn) InitialCommit(commit string) error {
+	return nil
 }
 
 func (c *SourceCodeColumn) ForwardCommit(nextCommit string) {

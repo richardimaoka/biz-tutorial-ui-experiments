@@ -5,14 +5,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type Directory struct {
-	repo      *git.Repository
 	dirPath   string
 	offset    int
 	dirName   string
@@ -39,34 +36,19 @@ func filePathInDir(parentDir, name string) string {
 	}
 }
 
-func treeFilesDirs(tree *object.Tree) ([]object.TreeEntry, []object.TreeEntry) {
-	var files []object.TreeEntry
-	var dirs []object.TreeEntry
-
-	for _, e := range tree.Entries {
-		if e.Mode.IsFile() {
-			files = append(files, e)
-		} else {
-			dirs = append(dirs, e)
-		}
-	}
-	return files, dirs
-}
-
 func sortEntries(entries []object.TreeEntry) {
 	sort.Slice(entries, func(i, j int) bool {
 		return strings.ToLower(entries[i].Name) < strings.ToLower(entries[j].Name)
 	})
 }
 
-func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
-	split := strings.Split(dirPath, "/")
+func emptyDirectory(fullPath string) *Directory {
+	split := strings.Split(fullPath, "/")
 	dirName := split[len(split)-1]
 	offset := len(split) - 1
 
 	dir := Directory{
-		repo:    repo,
-		dirPath: dirPath,
+		dirPath: fullPath,
 		dirName: dirName,
 		offset:  offset,
 	}
@@ -74,142 +56,94 @@ func EmptyDirectory(repo *git.Repository, dirPath string) *Directory {
 	return &dir
 }
 
-func ConstructDirectory(repo *git.Repository, dirPath string, tree *object.Tree, isFirstCommit bool) (*Directory, error) {
-	dir := EmptyDirectory(repo, dirPath)
-	if err := dir.recursivelyConstruct(dirPath, tree, isFirstCommit); err != nil {
-		return nil, fmt.Errorf("failed in ConstructDirectory for dirPath = %s, %s", dirPath, err)
+func constructDirectory(files []object.File) (*Directory, error) {
+	rootDir := emptyDirectory("")
+
+	for _, fEntry := range files {
+		contents, err := fEntry.Contents()
+		if err != nil {
+			return nil, fmt.Errorf("constructDirectory failed, %s", err)
+		}
+
+		file := intrinsicFile(contents, fEntry.Name, 100)
+		if err := rootDir.addFile(fEntry.Name, file); err != nil {
+			return nil, fmt.Errorf("constructDirectory failed, %s", err)
+		}
 	}
 
-	return dir, nil
+	return rootDir, nil
 }
 
-func (s *Directory) recursivelyConstruct(dirPath string, tree *object.Tree, isFirstCommit bool) error {
-	if tree == nil {
-		return fmt.Errorf("failed in recurse, tree is nil")
-	}
-
-	// 1. Find subdirs and files directly belonging to dirPath
-	fileEntries, subDirEntries := treeFilesDirs(tree)
-	sortEntries(fileEntries)
-	sortEntries(subDirEntries)
-
-	// 2. Construct subdirs recursively
-	for _, d := range subDirEntries {
-		subDirPath := filePathInDir(dirPath, d.Name)
-		subTree, err := object.GetTree(s.repo.Storer, d.Hash)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot get subtree = %s, %s", subDirPath, err)
-		}
-
-		// Recursive, and depth first construction
-		subDir := EmptyDirectory(s.repo, subDirPath)
-		if err := subDir.recursivelyConstruct(subDirPath, subTree, isFirstCommit); err != nil {
-			return fmt.Errorf("failed in recurse, cannot create directory = %s, %s", subDirPath, err)
-		}
-		s.subDirs = append(s.subDirs, subDir)
-	}
-
-	// 3. Construct files under dirPath
-	for _, f := range fileEntries {
-		fileObj, err := tree.File(f.Name)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot get git file = %s in dir = %s, %s", f.Name, dirPath, err)
-		}
-
-		// Upon construction, all files are considered unchanged, then later marked as added/updated/deleted using git patch info
-		file, err := FileUnChanged(fileObj, dirPath)
-		if err != nil {
-			return fmt.Errorf("failed in recurse, cannot create file = %s in dir = %s, %s", f.Name, dirPath, err)
-		}
-		if isFirstCommit {
-			// Special case where all files are considered added, assuming this is the first commit
-			file = file.ToFileAdded()
-		}
-
-		s.files = append(s.files, file)
-	}
-
-	return nil
-}
-
-func (s *Directory) InsertFileDeleted(dirPath, relativeFilePath string, deletedFile diff.File) error {
+func (s *Directory) addFile(relativeFilePath string, file *File) error {
 	split := strings.Split(relativeFilePath, "/")
-	if len(split) == 1 {
-		file := FileDeleted(deletedFile.Path())
+	isBareFile := len(split) == 1 // bare file (i.e.) this file is not in a directory like `main.tsx`, not `src/main.tsx`
+
+	if isBareFile {
+		// `relativeFilePath` is a bare file, not in a directory.
+		// So try to find it from files in Directory (= receiver of this method)
+		for _, f := range s.files {
+			if f.fileName == relativeFilePath {
+				return fmt.Errorf("addFile failed, in dir = '%s' file = '%s' already exists", s.dirPath, relativeFilePath)
+			}
+		}
+
+		// if not found, add a file and return it
 		s.files = append(s.files, file)
 		s.files.sortSelf()
 		return nil
+
 	} else {
-		subDirName := split[0]
+		// `relativeFilePath` is a file within a directory.
+		// So recursively find a file in sub directories
+		targetSubDir := split[0]
+		// strip the current directory, and get a relative path to call this function recursively.
+		nextRelativeFilePath := strings.Join(split[1:], "/")
+
 		for _, subdir := range s.subDirs {
-			if subdir.dirName == subDirName {
-				subDirPath := filePathInDir(dirPath, subDirName)
-				strippedFilePath := strings.Join(split[1:], "/")
-				return subdir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile)
+			if subdir.dirName == targetSubDir {
+				return subdir.addFile(nextRelativeFilePath, file)
 			}
 		}
 
-		// if no matching subdir found
-		subDirPath := filePathInDir(dirPath, subDirName)
-		subDir := EmptyDirectory(s.repo, subDirPath)
-		strippedFilePath := strings.Join(split[1:], "/")
-		if err := subDir.InsertFileDeleted(subDirPath, strippedFilePath, deletedFile); err != nil {
-			return fmt.Errorf("failed in InsertFileDeleted, cannot mark deletion file = %s, %s", deletedFile.Path(), err)
-		}
+		// if not found, add a directory
+		subDir := emptyDirectory(s.dirPath + "/" + targetSubDir)
 		s.subDirs = append(s.subDirs, subDir)
 		s.subDirs.sortSelf()
-		return nil
+		return subDir.addFile(nextRelativeFilePath, file)
 	}
 }
 
-func (s *Directory) MarkFileUpdated(relativeFilePath string, fromFile diff.File, patch diff.FilePatch) error {
+func (s *Directory) findFile(relativeFilePath string) (*File, error) {
 	split := strings.Split(relativeFilePath, "/")
-	if len(split) == 1 {
-		for i, f := range s.files {
+	isBareFile := len(split) == 1 // bare file (i.e.) this file is not in a directory like `main.tsx`, not `src/main.tsx`
+
+	if isBareFile {
+		// `relativeFilePath` is a bare file, not in a directory.
+		// So try to find it from files in Directory (= receiver of this method)
+		for _, f := range s.files {
 			if f.fileName == relativeFilePath {
-				added := f.ToFileUpdated(patch)
-				s.files[i] = added
-				return nil
+				return f, nil
 			}
 		}
+
+		// if not found, error
+		return nil, fmt.Errorf("findFile failed, in dir = '%s' file = '%s' does not exist", s.dirPath, relativeFilePath)
 	} else {
-		subDirName := split[0]
+		// `relativeFilePath` is a file within a directory.
+		// So recursively find a file in sub directories
+		targetSubDir := split[0]
+		// strip the current directory, and get a relative path to call this function recursively.
+		nextRelativeFilePath := strings.Join(split[1:], "/")
+
 		for _, subdir := range s.subDirs {
-			if subdir.dirName == subDirName {
-				strippedFilePath := strings.Join(split[1:], "/")
-				return subdir.MarkFileUpdated(strippedFilePath, fromFile, patch)
+			if subdir.dirName == targetSubDir {
+				return subdir.findFile(nextRelativeFilePath)
 			}
 		}
+
+		// if not found, error
+		return nil, fmt.Errorf("findFile failed, in dir = '%s' no directory = '%s' exists", s.dirPath, targetSubDir)
 	}
-
-	return fmt.Errorf("failed in MarkFileUpdated, cannot find file = %s", fromFile.Path())
-}
-
-func (s *Directory) MarkFileRenamed(filePath string, previFile *object.File) error {
-	return nil
-}
-
-func (s *Directory) MarkFileAdded(relativeFilePath string) error {
-	split := strings.Split(relativeFilePath, "/")
-	if len(split) == 1 {
-		for i, f := range s.files {
-			if f.fileName == relativeFilePath {
-				added := f.ToFileAdded()
-				s.files[i] = added
-				return nil
-			}
-		}
-	} else {
-		subDirName := split[0]
-		for _, subdir := range s.subDirs {
-			if subdir.dirName == subDirName {
-				strippedFilePath := strings.Join(split[1:], "/")
-				return subdir.MarkFileAdded(strippedFilePath)
-			}
-		}
-	}
-
-	return fmt.Errorf("failed in MarkFileAdded, cannot find file = %s", relativeFilePath)
 }
 
 func (s *Directory) ToGraphQLFileNode() *model.FileNode {
