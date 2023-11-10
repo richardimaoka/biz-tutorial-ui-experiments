@@ -1,4 +1,4 @@
-package state2
+package result
 
 // it is very verbose so separated into a dedicated file
 func fileLanguage(extension string) string {
