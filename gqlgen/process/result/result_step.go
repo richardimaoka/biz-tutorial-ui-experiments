@@ -106,7 +106,7 @@ type ColumnFields struct {
 	Column10    ColumnType `json:"column10"`
 }
 
-type TerminalTooltipFields struct {
+type TerminalTooltip struct {
 	TerminalTooltipContents string `json:"terminalTooltipContents"`
 	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
 }
@@ -116,7 +116,7 @@ type TerminalFields struct {
 	TerminalStepType TerminalType `json:"terminalType"`
 	TerminalText     string       `json:"terminalText"`
 	TerminalName     string       `json:"terminalName"`
-	TerminalTooltipFields
+	TerminalTooltip
 }
 
 type SourceCodeTooltip struct {

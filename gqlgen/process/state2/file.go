@@ -1,4 +1,4 @@
-package result
+package state2
 
 import (
 	"fmt"
