@@ -342,7 +342,6 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
 		SourceCodeFields: result.SourceCodeFields{
 			DefaultOpenFilePath: filePath,
-			ShowFileTree:        false,
 		},
 	}
 	if r.Tooltip != nil {
@@ -378,7 +377,6 @@ func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColu
 		SourceCodeFields: result.SourceCodeFields{
 			Commit:              r.Commit,
 			DefaultOpenFilePath: filePath,
-			ShowFileTree:        false,
 			TypingAnimation:     r.TypingAnimation,
 		},
 	}
@@ -456,6 +454,7 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedC
 
 func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]string, error) {
 	if fromCommit == "" {
+		// initial commit
 		files, err := gitwrap.GetCommitFiles(repo, toCommit)
 		if err != nil {
 			return nil, err
@@ -468,6 +467,7 @@ func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]s
 
 		return filePaths, nil
 	} else {
+		// non-initial commit, get added/updated/renamed files
 		files, err := gitwrap.GetPatchFiles(repo, fromCommit, toCommit)
 		if err != nil {
 			return nil, err

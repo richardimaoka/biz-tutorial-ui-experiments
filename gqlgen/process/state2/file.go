@@ -5,21 +5,23 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
 type File struct {
-	// intrinsic fields
-	filePath string
-	fileName string
-	offset   int
-	language string
-	contents string
-	size     int64
+	// Path related fields
+	fileName    string
+	filePath    string
+	oldFilePath string
+	offset      int
+	// Contents fields
+	language    string
+	contents    string
+	oldContents string
+	size        int64
 
-	// flags
+	// Flags
 	isUpdated bool
 	isAdded   bool
 	isDeleted bool
@@ -63,12 +65,10 @@ func intrinsicFile(contents string, filePath string, size int64) *File {
 	}
 }
 
-func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
+func fileUnChanged(currentFile *object.File, filePath string) (*File, error) {
 	if currentFile == nil {
 		return nil, fmt.Errorf("failed in FileUnChanged, currentFile is nil")
 	}
-
-	filePath := filePathInDir(currentDir, currentFile.Name)
 
 	isBinary, err := currentFile.IsBinary()
 	if err != nil {
@@ -93,32 +93,39 @@ func FileUnChanged(currentFile *object.File, currentDir string) (*File, error) {
 	return file, nil
 }
 
-func FileDeleted(filePath string) *File {
-	file := intrinsicFile("", filePath, 0)
-	// update necessary flags only, as default flags are false
-	file.isDeleted = true
+func (f *File) markDeleted() {
+	f.oldContents = f.contents
+	f.contents = ""
 
-	return file
+	f.isUpdated = false
+	f.isAdded = false
+	f.isDeleted = true
+	f.isRenamed = false
 }
 
-// to keep File immutable, return a new File
-func (f *File) ToFileAdded() *File {
-	// copy to avoid mutation effects afterwards
-	file := *f
-	// update necessary flags only, as default flags are false
-	file.isAdded = true
-	file.isUpdated = true
-	return &file
+func (f *File) markUpdated(oldContents string) {
+	f.oldContents = oldContents
+
+	f.isUpdated = true
+	f.isAdded = false
+	f.isDeleted = false
+	f.isRenamed = false
 }
 
-// to keep File immutable, return a new File
-func (f *File) ToFileUpdated(patch diff.FilePatch) *File {
-	// copy to avoid mutation effects afterwards
-	file := *f
-	// update necessary flags only, as default flags are false
-	file.isUpdated = true
+func (f *File) markAdded() {
+	f.isUpdated = false
+	f.isAdded = true
+	f.isDeleted = false
+	f.isRenamed = false
+}
 
-	return &file
+func (f *File) markRenamed(oldFilePath string) {
+	f.oldFilePath = oldFilePath
+
+	f.isUpdated = false
+	f.isAdded = true
+	f.isDeleted = false
+	f.isRenamed = false
 }
 
 func (s *File) ToGraphQLOpenFile() *model.OpenFile {

@@ -3,7 +3,6 @@ package result
 type ColumnType string
 
 const (
-	// Lower cases since they are from manual entries
 	NoColumn       ColumnType = ""
 	SourceColumn   ColumnType = "SourceCode"
 	TerminalColumn ColumnType = "Terminal"
@@ -13,7 +12,6 @@ const (
 type TerminalType string
 
 const (
-	// Lower cases since they are from manual entries
 	TerminalCommand TerminalType = "command"
 	TerminalOutput  TerminalType = "output"
 	TerminalCd      TerminalType = "cd"
@@ -24,17 +22,16 @@ const (
 type SourceCodeType string
 
 const (
-	// Lower cases since they are from manual entries
-	FileTree    SourceCodeType = "fileTree"
-	SourceOpen  SourceCodeType = "openFile"
-	SourceError SourceCodeType = "error"
-	SourceMove  SourceCodeType = "move"
+	FileTree         SourceCodeType = "fileTree"
+	SourceOpen       SourceCodeType = "openFile"
+	SourceOpenCommit SourceCodeType = "openFileCommit"
+	SourceError      SourceCodeType = "error"
+	SourceMove       SourceCodeType = "move"
 )
 
 type BrowserType string
 
 const (
-	// Lower cases since they are from manual entries
 	BrowserOpen BrowserType = "open"
 	BrowserMove BrowserType = "move"
 )

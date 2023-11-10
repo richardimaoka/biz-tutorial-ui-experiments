@@ -56,17 +56,11 @@ func emptyDirectory(fullPath string) *Directory {
 	return &dir
 }
 
-func constructDirectory(files []object.File) (*Directory, error) {
+func constructDirectory(files Files) (*Directory, error) {
 	rootDir := emptyDirectory("")
 
-	for _, fEntry := range files {
-		contents, err := fEntry.Contents()
-		if err != nil {
-			return nil, fmt.Errorf("constructDirectory failed, %s", err)
-		}
-
-		file := intrinsicFile(contents, fEntry.Name, 100)
-		if err := rootDir.addFile(fEntry.Name, file); err != nil {
+	for _, f := range files {
+		if err := rootDir.addFile(f.filePath, f); err != nil {
 			return nil, fmt.Errorf("constructDirectory failed, %s", err)
 		}
 	}
