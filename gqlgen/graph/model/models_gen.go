@@ -222,10 +222,10 @@ type Terminal struct {
 }
 
 type Terminal2 struct {
-	Name             *string           `json:"name"`
-	CurrentDirectory string            `json:"currentDirectory"`
-	Entries          []*TerminalEntry  `json:"entries"`
-	Tooltip          *TerminalTooltip2 `json:"tooltip"`
+	Name             *string          `json:"name"`
+	CurrentDirectory string           `json:"currentDirectory"`
+	Entries          []*TerminalEntry `json:"entries"`
+	Tooltip          *TerminalTooltip `json:"tooltip"`
 }
 
 type TerminalColumn struct {
@@ -269,9 +269,9 @@ type TerminalOutput struct {
 
 func (TerminalOutput) IsTerminalElement() {}
 
-type TerminalTooltip2 struct {
-	MarkdownBody string                  `json:"markdownBody"`
-	Timing       *TerminalTooltipTiming2 `json:"timing"`
+type TerminalTooltip struct {
+	MarkdownBody string                 `json:"markdownBody"`
+	Timing       *TerminalTooltipTiming `json:"timing"`
 }
 
 type TestObjs struct {
@@ -586,43 +586,43 @@ func (e TerminalEntryType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
-type TerminalTooltipTiming2 string
+type TerminalTooltipTiming string
 
 const (
-	TerminalTooltipTiming2Start TerminalTooltipTiming2 = "START"
-	TerminalTooltipTiming2End   TerminalTooltipTiming2 = "END"
+	TerminalTooltipTimingStart TerminalTooltipTiming = "START"
+	TerminalTooltipTimingEnd   TerminalTooltipTiming = "END"
 )
 
-var AllTerminalTooltipTiming2 = []TerminalTooltipTiming2{
-	TerminalTooltipTiming2Start,
-	TerminalTooltipTiming2End,
+var AllTerminalTooltipTiming = []TerminalTooltipTiming{
+	TerminalTooltipTimingStart,
+	TerminalTooltipTimingEnd,
 }
 
-func (e TerminalTooltipTiming2) IsValid() bool {
+func (e TerminalTooltipTiming) IsValid() bool {
 	switch e {
-	case TerminalTooltipTiming2Start, TerminalTooltipTiming2End:
+	case TerminalTooltipTimingStart, TerminalTooltipTimingEnd:
 		return true
 	}
 	return false
 }
 
-func (e TerminalTooltipTiming2) String() string {
+func (e TerminalTooltipTiming) String() string {
 	return string(e)
 }
 
-func (e *TerminalTooltipTiming2) UnmarshalGQL(v interface{}) error {
+func (e *TerminalTooltipTiming) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = TerminalTooltipTiming2(str)
+	*e = TerminalTooltipTiming(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid TerminalTooltipTiming2", str)
+		return fmt.Errorf("%s is not a valid TerminalTooltipTiming", str)
 	}
 	return nil
 }
 
-func (e TerminalTooltipTiming2) MarshalGQL(w io.Writer) {
+func (e TerminalTooltipTiming) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

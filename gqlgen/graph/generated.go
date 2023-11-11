@@ -271,7 +271,7 @@ type ComplexityRoot struct {
 		Tooltip func(childComplexity int) int
 	}
 
-	TerminalTooltip2 struct {
+	TerminalTooltip struct {
 		MarkdownBody func(childComplexity int) int
 		Timing       func(childComplexity int) int
 	}
@@ -1186,19 +1186,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TerminalOutput.Tooltip(childComplexity), true
 
-	case "TerminalTooltip2.markdownBody":
-		if e.complexity.TerminalTooltip2.MarkdownBody == nil {
+	case "TerminalTooltip.markdownBody":
+		if e.complexity.TerminalTooltip.MarkdownBody == nil {
 			break
 		}
 
-		return e.complexity.TerminalTooltip2.MarkdownBody(childComplexity), true
+		return e.complexity.TerminalTooltip.MarkdownBody(childComplexity), true
 
-	case "TerminalTooltip2.timing":
-		if e.complexity.TerminalTooltip2.Timing == nil {
+	case "TerminalTooltip.timing":
+		if e.complexity.TerminalTooltip.Timing == nil {
 			break
 		}
 
-		return e.complexity.TerminalTooltip2.Timing(childComplexity), true
+		return e.complexity.TerminalTooltip.Timing(childComplexity), true
 
 	case "TestObjs.appTestSourcecodeFilecontentPage":
 		if e.complexity.TestObjs.AppTestSourcecodeFilecontentPage == nil {
@@ -6349,9 +6349,9 @@ func (ec *executionContext) _Terminal2_tooltip(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.TerminalTooltip2)
+	res := resTmp.(*model.TerminalTooltip)
 	fc.Result = res
-	return ec.marshalOTerminalTooltip22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip2(ctx, field.Selections, res)
+	return ec.marshalOTerminalTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Terminal2_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6363,11 +6363,11 @@ func (ec *executionContext) fieldContext_Terminal2_tooltip(ctx context.Context, 
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "markdownBody":
-				return ec.fieldContext_TerminalTooltip2_markdownBody(ctx, field)
+				return ec.fieldContext_TerminalTooltip_markdownBody(ctx, field)
 			case "timing":
-				return ec.fieldContext_TerminalTooltip2_timing(ctx, field)
+				return ec.fieldContext_TerminalTooltip_timing(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TerminalTooltip2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TerminalTooltip", field.Name)
 		},
 	}
 	return fc, nil
@@ -6938,8 +6938,8 @@ func (ec *executionContext) fieldContext_TerminalOutput_tooltip(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalTooltip2_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.TerminalTooltip2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalTooltip2_markdownBody(ctx, field)
+func (ec *executionContext) _TerminalTooltip_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.TerminalTooltip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalTooltip_markdownBody(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6969,9 +6969,9 @@ func (ec *executionContext) _TerminalTooltip2_markdownBody(ctx context.Context, 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalTooltip2_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalTooltip_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalTooltip2",
+		Object:     "TerminalTooltip",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -6982,8 +6982,8 @@ func (ec *executionContext) fieldContext_TerminalTooltip2_markdownBody(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalTooltip2_timing(ctx context.Context, field graphql.CollectedField, obj *model.TerminalTooltip2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalTooltip2_timing(ctx, field)
+func (ec *executionContext) _TerminalTooltip_timing(ctx context.Context, field graphql.CollectedField, obj *model.TerminalTooltip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalTooltip_timing(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7005,19 +7005,19 @@ func (ec *executionContext) _TerminalTooltip2_timing(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.TerminalTooltipTiming2)
+	res := resTmp.(*model.TerminalTooltipTiming)
 	fc.Result = res
-	return ec.marshalOTerminalTooltipTiming22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming2(ctx, field.Selections, res)
+	return ec.marshalOTerminalTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalTooltip2_timing(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalTooltip_timing(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalTooltip2",
+		Object:     "TerminalTooltip",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type TerminalTooltipTiming2 does not have child fields")
+			return nil, errors.New("field of type TerminalTooltipTiming does not have child fields")
 		},
 	}
 	return fc, nil
@@ -10718,26 +10718,26 @@ func (ec *executionContext) _TerminalOutput(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var terminalTooltip2Implementors = []string{"TerminalTooltip2"}
+var terminalTooltipImplementors = []string{"TerminalTooltip"}
 
-func (ec *executionContext) _TerminalTooltip2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalTooltip2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminalTooltip2Implementors)
+func (ec *executionContext) _TerminalTooltip(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalTooltip) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, terminalTooltipImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TerminalTooltip2")
+			out.Values[i] = graphql.MarshalString("TerminalTooltip")
 		case "markdownBody":
 
-			out.Values[i] = ec._TerminalTooltip2_markdownBody(ctx, field, obj)
+			out.Values[i] = ec._TerminalTooltip_markdownBody(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "timing":
 
-			out.Values[i] = ec._TerminalTooltip2_timing(ctx, field, obj)
+			out.Values[i] = ec._TerminalTooltip_timing(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -12252,23 +12252,23 @@ func (ec *executionContext) marshalOTerminalNode2ᚖgithubᚗcomᚋrichardimaoka
 	return ec._TerminalNode(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOTerminalTooltip22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip2(ctx context.Context, sel ast.SelectionSet, v *model.TerminalTooltip2) graphql.Marshaler {
+func (ec *executionContext) marshalOTerminalTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip(ctx context.Context, sel ast.SelectionSet, v *model.TerminalTooltip) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._TerminalTooltip2(ctx, sel, v)
+	return ec._TerminalTooltip(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOTerminalTooltipTiming22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming2(ctx context.Context, v interface{}) (*model.TerminalTooltipTiming2, error) {
+func (ec *executionContext) unmarshalOTerminalTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming(ctx context.Context, v interface{}) (*model.TerminalTooltipTiming, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var res = new(model.TerminalTooltipTiming2)
+	var res = new(model.TerminalTooltipTiming)
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOTerminalTooltipTiming22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming2(ctx context.Context, sel ast.SelectionSet, v *model.TerminalTooltipTiming2) graphql.Marshaler {
+func (ec *executionContext) marshalOTerminalTooltipTiming2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltipTiming(ctx context.Context, sel ast.SelectionSet, v *model.TerminalTooltipTiming) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

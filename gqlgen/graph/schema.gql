@@ -63,14 +63,14 @@ type ColumnWrapper2 {
 # Terminal related object types 2
 ###################################################
 
-enum TerminalTooltipTiming2 {
+enum TerminalTooltipTiming {
   START
   END
 }
 
-type TerminalTooltip2 {
+type TerminalTooltip {
   markdownBody: String!
-  timing: TerminalTooltipTiming2
+  timing: TerminalTooltipTiming
 }
 
 enum TerminalEntryType {
@@ -88,7 +88,7 @@ type Terminal2 {
   name: String
   currentDirectory: String!
   entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
-  tooltip: TerminalTooltip2
+  tooltip: TerminalTooltip
   # terminalTabs
 }
 

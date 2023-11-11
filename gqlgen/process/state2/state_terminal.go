@@ -16,12 +16,12 @@ const (
 	TERMINAL_TOOLTIP_END   TerminalTooltipTiming = "END"
 )
 
-func (t TerminalTooltipTiming) ToGraphQL() model.TerminalTooltipTiming2 {
+func (t TerminalTooltipTiming) ToGraphQL() model.TerminalTooltipTiming {
 	switch t {
 	case TERMINAL_TOOLTIP_START:
-		return model.TerminalTooltipTiming2Start
+		return model.TerminalTooltipTimingStart
 	case TERMINAL_TOOLTIP_END:
-		return model.TerminalTooltipTiming2End
+		return model.TerminalTooltipTimingEnd
 	default:
 		panic(fmt.Sprintf("TerminalTooltipTiming = '%s' is invalid", t))
 	}
@@ -32,9 +32,9 @@ type TerminalTooltip struct {
 	timing       TerminalTooltipTiming
 }
 
-func (t *TerminalTooltip) ToGraphQL() *model.TerminalTooltip2 {
+func (t *TerminalTooltip) ToGraphQL() *model.TerminalTooltip {
 	timing := t.timing.ToGraphQL()
-	return &model.TerminalTooltip2{
+	return &model.TerminalTooltip{
 		Timing:       &timing,
 		MarkdownBody: t.markdownBody,
 	}
