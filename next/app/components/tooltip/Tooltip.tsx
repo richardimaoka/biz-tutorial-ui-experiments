@@ -1,4 +1,4 @@
-import { MarkdownDefaultStyle } from "../markdown2/server-component/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../markdown/server-component/MarkdownDefaultStyle";
 import styles from "./Tooltip.module.css";
 interface Props {
   markdownBody: string; // can be markdown
