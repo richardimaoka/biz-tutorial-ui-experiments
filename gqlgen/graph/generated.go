@@ -56,7 +56,7 @@ type ComplexityRoot struct {
 		Placeholder func(childComplexity int) int
 	}
 
-	ColumnWrapper2 struct {
+	ColumnWrapper struct {
 		Column            func(childComplexity int) int
 		ColumnDisplayName func(childComplexity int) int
 		ColumnName        func(childComplexity int) int
@@ -247,26 +247,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BrowserColumn2.Placeholder(childComplexity), true
 
-	case "ColumnWrapper2.column":
-		if e.complexity.ColumnWrapper2.Column == nil {
+	case "ColumnWrapper.column":
+		if e.complexity.ColumnWrapper.Column == nil {
 			break
 		}
 
-		return e.complexity.ColumnWrapper2.Column(childComplexity), true
+		return e.complexity.ColumnWrapper.Column(childComplexity), true
 
-	case "ColumnWrapper2.columnDisplayName":
-		if e.complexity.ColumnWrapper2.ColumnDisplayName == nil {
+	case "ColumnWrapper.columnDisplayName":
+		if e.complexity.ColumnWrapper.ColumnDisplayName == nil {
 			break
 		}
 
-		return e.complexity.ColumnWrapper2.ColumnDisplayName(childComplexity), true
+		return e.complexity.ColumnWrapper.ColumnDisplayName(childComplexity), true
 
-	case "ColumnWrapper2.columnName":
-		if e.complexity.ColumnWrapper2.ColumnName == nil {
+	case "ColumnWrapper.columnName":
+		if e.complexity.ColumnWrapper.ColumnName == nil {
 			break
 		}
 
-		return e.complexity.ColumnWrapper2.ColumnName(childComplexity), true
+		return e.complexity.ColumnWrapper.ColumnName(childComplexity), true
 
 	case "EditSequence.edits":
 		if e.complexity.EditSequence.Edits == nil {
@@ -1188,8 +1188,8 @@ func (ec *executionContext) fieldContext_BrowserColumn2_browser(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _ColumnWrapper2_column(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ColumnWrapper2_column(ctx, field)
+func (ec *executionContext) _ColumnWrapper_column(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper_column(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1214,14 +1214,14 @@ func (ec *executionContext) _ColumnWrapper2_column(ctx context.Context, field gr
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Column2)
+	res := resTmp.(model.Column)
 	fc.Result = res
-	return ec.marshalNColumn22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn2(ctx, field.Selections, res)
+	return ec.marshalNColumn2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ColumnWrapper2_column(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ColumnWrapper_column(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ColumnWrapper2",
+		Object:     "ColumnWrapper",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1232,8 +1232,8 @@ func (ec *executionContext) fieldContext_ColumnWrapper2_column(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _ColumnWrapper2_columnName(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+func (ec *executionContext) _ColumnWrapper_columnName(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper_columnName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1263,9 +1263,9 @@ func (ec *executionContext) _ColumnWrapper2_columnName(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ColumnWrapper2_columnName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ColumnWrapper_columnName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ColumnWrapper2",
+		Object:     "ColumnWrapper",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1276,8 +1276,8 @@ func (ec *executionContext) fieldContext_ColumnWrapper2_columnName(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _ColumnWrapper2_columnDisplayName(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ColumnWrapper2_columnDisplayName(ctx, field)
+func (ec *executionContext) _ColumnWrapper_columnDisplayName(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper_columnDisplayName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1304,9 +1304,9 @@ func (ec *executionContext) _ColumnWrapper2_columnDisplayName(ctx context.Contex
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ColumnWrapper2_columnDisplayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ColumnWrapper_columnDisplayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ColumnWrapper2",
+		Object:     "ColumnWrapper",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2674,9 +2674,9 @@ func (ec *executionContext) _Page_columns(ctx context.Context, field graphql.Col
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.ColumnWrapper2)
+	res := resTmp.([]*model.ColumnWrapper)
 	fc.Result = res
-	return ec.marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, field.Selections, res)
+	return ec.marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Page_columns(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2688,13 +2688,13 @@ func (ec *executionContext) fieldContext_Page_columns(ctx context.Context, field
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "column":
-				return ec.fieldContext_ColumnWrapper2_column(ctx, field)
+				return ec.fieldContext_ColumnWrapper_column(ctx, field)
 			case "columnName":
-				return ec.fieldContext_ColumnWrapper2_columnName(ctx, field)
+				return ec.fieldContext_ColumnWrapper_columnName(ctx, field)
 			case "columnDisplayName":
-				return ec.fieldContext_ColumnWrapper2_columnDisplayName(ctx, field)
+				return ec.fieldContext_ColumnWrapper_columnDisplayName(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper", field.Name)
 		},
 	}
 	return fc, nil
@@ -6283,7 +6283,7 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
-func (ec *executionContext) _Column2(ctx context.Context, sel ast.SelectionSet, obj model.Column2) graphql.Marshaler {
+func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, obj model.Column) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
@@ -6359,7 +6359,7 @@ func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
-var browserColumn2Implementors = []string{"BrowserColumn2", "Column2"}
+var browserColumn2Implementors = []string{"BrowserColumn2", "Column"}
 
 func (ec *executionContext) _BrowserColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.BrowserColumn2) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, browserColumn2Implementors)
@@ -6391,33 +6391,33 @@ func (ec *executionContext) _BrowserColumn2(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var columnWrapper2Implementors = []string{"ColumnWrapper2"}
+var columnWrapperImplementors = []string{"ColumnWrapper"}
 
-func (ec *executionContext) _ColumnWrapper2(ctx context.Context, sel ast.SelectionSet, obj *model.ColumnWrapper2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, columnWrapper2Implementors)
+func (ec *executionContext) _ColumnWrapper(ctx context.Context, sel ast.SelectionSet, obj *model.ColumnWrapper) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, columnWrapperImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("ColumnWrapper2")
+			out.Values[i] = graphql.MarshalString("ColumnWrapper")
 		case "column":
 
-			out.Values[i] = ec._ColumnWrapper2_column(ctx, field, obj)
+			out.Values[i] = ec._ColumnWrapper_column(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "columnName":
 
-			out.Values[i] = ec._ColumnWrapper2_columnName(ctx, field, obj)
+			out.Values[i] = ec._ColumnWrapper_columnName(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "columnDisplayName":
 
-			out.Values[i] = ec._ColumnWrapper2_columnDisplayName(ctx, field, obj)
+			out.Values[i] = ec._ColumnWrapper_columnDisplayName(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -6938,7 +6938,7 @@ func (ec *executionContext) _SourceCode2(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
-var sourceCodeColumn2Implementors = []string{"SourceCodeColumn2", "Column2"}
+var sourceCodeColumn2Implementors = []string{"SourceCodeColumn2", "Column"}
 
 func (ec *executionContext) _SourceCodeColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCodeColumn2) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCodeColumn2Implementors)
@@ -7052,7 +7052,7 @@ func (ec *executionContext) _Terminal2(ctx context.Context, sel ast.SelectionSet
 	return out
 }
 
-var terminalColumn2Implementors = []string{"TerminalColumn2", "Column2"}
+var terminalColumn2Implementors = []string{"TerminalColumn2", "Column"}
 
 func (ec *executionContext) _TerminalColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalColumn2) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, terminalColumn2Implementors)
@@ -7590,14 +7590,14 @@ func (ec *executionContext) marshalNBrowser2ᚖgithubᚗcomᚋrichardimaokaᚋbi
 	return ec._Browser(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNColumn22githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn2(ctx context.Context, sel ast.SelectionSet, v model.Column2) graphql.Marshaler {
+func (ec *executionContext) marshalNColumn2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumn(ctx context.Context, sel ast.SelectionSet, v model.Column) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._Column2(ctx, sel, v)
+	return ec._Column(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNFileNodeType2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐFileNodeType(ctx context.Context, v interface{}) (model.FileNodeType, error) {
@@ -8082,7 +8082,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper2) graphql.Marshaler {
+func (ec *executionContext) marshalOColumnWrapper2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8109,7 +8109,7 @@ func (ec *executionContext) marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx, sel, v[i])
+			ret[i] = ec.marshalOColumnWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8123,11 +8123,11 @@ func (ec *executionContext) marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardi
 	return ret
 }
 
-func (ec *executionContext) marshalOColumnWrapper22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v *model.ColumnWrapper2) graphql.Marshaler {
+func (ec *executionContext) marshalOColumnWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper(ctx context.Context, sel ast.SelectionSet, v *model.ColumnWrapper) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._ColumnWrapper2(ctx, sel, v)
+	return ec._ColumnWrapper(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOEditSequence2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐEditSequence(ctx context.Context, sel ast.SelectionSet, v *model.EditSequence) graphql.Marshaler {

@@ -5,7 +5,7 @@ import styles from "./GqlColumnWrapper.module.css";
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
-  fragment GqlColumnWrapper on ColumnWrapper2 {
+  fragment GqlColumnWrapper on ColumnWrapper {
     columnName
     column {
       # if you forget this, the resulting fragment will have __typename = undefined

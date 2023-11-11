@@ -99,8 +99,8 @@ func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn2 {
 	}
 }
 
-func (c *TerminalColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
-	return &model.ColumnWrapper2{
+func (c *TerminalColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {
+	return &model.ColumnWrapper{
 		Column:            c.ToGraphQL(),
 		ColumnName:        "Terminal",
 		ColumnDisplayName: stringRef("terminal"),

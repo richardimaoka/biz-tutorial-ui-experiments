@@ -7,7 +7,7 @@ import { LinkSearchParams } from "@/app/components/link/LinkSearchParams";
 import { useSearchParams } from "next/navigation";
 
 const fragmentDefinition = graphql(`
-  fragment GqlColumnTab on ColumnWrapper2 {
+  fragment GqlColumnTab on ColumnWrapper {
     columnName
     columnDisplayName
     ...GqlColumnTabIcon

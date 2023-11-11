@@ -17,8 +17,8 @@ func (c *BrowserColumn) ToGraphQL() *model.BrowserColumn2 {
 	return nil //&model.BrowserColumn2{}
 }
 
-func (c *BrowserColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
-	return &model.ColumnWrapper2{
+func (c *BrowserColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {
+	return &model.ColumnWrapper{
 		Column:            c.ToGraphQL(),
 		ColumnName:        "Browser",
 		ColumnDisplayName: stringRef("BrowserColumn"),

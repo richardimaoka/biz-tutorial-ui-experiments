@@ -8,8 +8,8 @@ import (
 	"strconv"
 )
 
-type Column2 interface {
-	IsColumn2()
+type Column interface {
+	IsColumn()
 	GetPlaceholder() *string
 }
 
@@ -24,11 +24,11 @@ type BrowserColumn2 struct {
 	Browser     *Browser `json:"browser"`
 }
 
-func (BrowserColumn2) IsColumn2()                   {}
+func (BrowserColumn2) IsColumn()                    {}
 func (this BrowserColumn2) GetPlaceholder() *string { return this.Placeholder }
 
-type ColumnWrapper2 struct {
-	Column            Column2 `json:"column"`
+type ColumnWrapper struct {
+	Column            Column  `json:"column"`
 	ColumnName        string  `json:"columnName"`
 	ColumnDisplayName *string `json:"columnDisplayName"`
 }
@@ -82,13 +82,13 @@ type OpenFile struct {
 }
 
 type Page struct {
-	Step        *string           `json:"step"`
-	NextStep    *string           `json:"nextStep"`
-	PrevStep    *string           `json:"prevStep"`
-	IsTrivial   *bool             `json:"isTrivial"`
-	Columns     []*ColumnWrapper2 `json:"columns"`
-	FocusColumn *string           `json:"focusColumn"`
-	Modal       *Modal            `json:"modal"`
+	Step        *string          `json:"step"`
+	NextStep    *string          `json:"nextStep"`
+	PrevStep    *string          `json:"prevStep"`
+	IsTrivial   *bool            `json:"isTrivial"`
+	Columns     []*ColumnWrapper `json:"columns"`
+	FocusColumn *string          `json:"focusColumn"`
+	Modal       *Modal           `json:"modal"`
 }
 
 type SourceCode2 struct {
@@ -104,7 +104,7 @@ type SourceCodeColumn2 struct {
 	SourceCode  *SourceCode2 `json:"sourceCode"`
 }
 
-func (SourceCodeColumn2) IsColumn2()                   {}
+func (SourceCodeColumn2) IsColumn()                    {}
 func (this SourceCodeColumn2) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeTooltip struct {
@@ -125,7 +125,7 @@ type TerminalColumn2 struct {
 	Terminals   []*Terminal2 `json:"terminals"`
 }
 
-func (TerminalColumn2) IsColumn2()                   {}
+func (TerminalColumn2) IsColumn()                    {}
 func (this TerminalColumn2) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalEntry struct {

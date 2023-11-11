@@ -67,7 +67,7 @@ func (p *Page) Update(step *Step) error {
 }
 
 func (p *Page) ToGraphQL() *model.Page {
-	var modelColumns []*model.ColumnWrapper2
+	var modelColumns []*model.ColumnWrapper
 	for _, c := range p.columns {
 		modelColumns = append(modelColumns, c.ToGraphQLColumnWrapper())
 	}

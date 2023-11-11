@@ -7,7 +7,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
-func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
+func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 	/**
 	 * Read JSON into internal struct
 	 */
@@ -19,7 +19,7 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &internals)
 	if err != nil {
-		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling to Go data, %w", err)
+		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while unmarshaling to Go data, %w", err)
 	}
 	t.ColumnName = internals.ColumnName
 	t.ColumnDisplayName = internals.ColumnDisplayName
@@ -29,18 +29,18 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 	 */
 	bytes, err := json.Marshal(internals.Column)
 	if err != nil {
-		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while marshaling the column object, %w", err)
+		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while marshaling the column object, %w", err)
 	}
 	column, err := columnFromBytes(bytes)
 	if err != nil {
-		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling the column object, %w", err)
+		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while unmarshaling the column object, %w", err)
 	}
 	t.Column = column
 
 	return nil
 }
 
-func columnFromBytes(bytes []byte) (Column2, error) {
+func columnFromBytes(bytes []byte) (Column, error) {
 	fromField := "__typename"
 	typename, err := jsonwrap.ExtractTypeName(bytes, fromField)
 	if err != nil {

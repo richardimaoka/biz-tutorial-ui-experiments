@@ -19,7 +19,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			var col model.ColumnWrapper2
+			var col model.ColumnWrapper
 			err := jsonwrap.Read(c.inputFile, &col)
 			if err != nil {
 				t.Fatalf("test %s failed, %s", c.name, err)

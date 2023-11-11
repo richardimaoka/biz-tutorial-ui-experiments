@@ -36,19 +36,19 @@ export type Browser = {
   width: Scalars["Int"]["output"];
 };
 
-export type BrowserColumn2 = Column2 & {
+export type BrowserColumn2 = Column & {
   __typename: "BrowserColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   browser: Browser;
 };
 
-export type Column2 = {
+export type Column = {
   _placeholder?: Maybe<Scalars["String"]["output"]>;
 };
 
-export type ColumnWrapper2 = {
-  __typename: "ColumnWrapper2";
-  column: Column2;
+export type ColumnWrapper = {
+  __typename: "ColumnWrapper";
+  column: Column;
   columnDisplayName?: Maybe<Scalars["String"]["output"]>;
   columnName: Scalars["String"]["output"];
 };
@@ -112,7 +112,7 @@ export type OpenFile = {
 
 export type Page = {
   __typename: "Page";
-  columns?: Maybe<Array<Maybe<ColumnWrapper2>>>;
+  columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   isTrivial?: Maybe<Scalars["Boolean"]["output"]>;
   modal?: Maybe<Modal>;
@@ -158,7 +158,7 @@ export type SourceCode2OpenFileArgs = {
   filePath?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type SourceCodeColumn2 = Column2 & {
+export type SourceCodeColumn2 = Column & {
   __typename: "SourceCodeColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   sourceCode: SourceCode2;
@@ -181,7 +181,7 @@ export type Terminal2 = {
   tooltip?: Maybe<TerminalTooltip>;
 };
 
-export type TerminalColumn2 = Column2 & {
+export type TerminalColumn2 = Column & {
   __typename: "TerminalColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   terminals: Array<Terminal2>;
@@ -378,7 +378,7 @@ export type GqlTutorialComponentFragment = ({ __typename: "Page" } & {
 }) & { " $fragmentName"?: "GqlTutorialComponentFragment" };
 
 export type GqlColumnWrapperFragment = {
-  __typename: "ColumnWrapper2";
+  __typename: "ColumnWrapper";
   columnName: string;
   column:
     | { __typename: "BrowserColumn2" }
@@ -397,7 +397,7 @@ export type GqlColumnWrapperFragment = {
 export type GqlColumnWrappersFragment = {
   __typename: "Page";
   columns?: Array<
-    | ({ __typename: "ColumnWrapper2"; columnName: string } & {
+    | ({ __typename: "ColumnWrapper"; columnName: string } & {
         " $fragmentRefs"?: {
           GqlColumnWrapperFragment: GqlColumnWrapperFragment;
         };
@@ -411,7 +411,7 @@ export type GqlTutorialHeaderFragment = ({ __typename: "Page" } & {
 }) & { " $fragmentName"?: "GqlTutorialHeaderFragment" };
 
 export type GqlColumnTabFragment = ({
-  __typename: "ColumnWrapper2";
+  __typename: "ColumnWrapper";
   columnName: string;
   columnDisplayName?: string | null;
 } & {
@@ -419,7 +419,7 @@ export type GqlColumnTabFragment = ({
 }) & { " $fragmentName"?: "GqlColumnTabFragment" };
 
 export type GqlColumnTabIconFragment = {
-  __typename: "ColumnWrapper2";
+  __typename: "ColumnWrapper";
   column:
     | { __typename: "BrowserColumn2" }
     | { __typename: "SourceCodeColumn2" }
@@ -429,7 +429,7 @@ export type GqlColumnTabIconFragment = {
 export type GqlColumnTabsFragment = {
   __typename: "Page";
   columns?: Array<
-    | ({ __typename: "ColumnWrapper2"; columnName: string } & {
+    | ({ __typename: "ColumnWrapper"; columnName: string } & {
         " $fragmentRefs"?: { GqlColumnTabFragment: GqlColumnTabFragment };
       })
     | null
@@ -480,7 +480,7 @@ export const GqlColumnTabIconFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -508,7 +508,7 @@ export const GqlColumnTabFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTab" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -527,7 +527,7 @@ export const GqlColumnTabFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -582,7 +582,7 @@ export const GqlColumnTabsFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -605,7 +605,7 @@ export const GqlColumnTabsFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTab" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -646,7 +646,7 @@ export const GqlTutorialHeaderFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -669,7 +669,7 @@ export const GqlTutorialHeaderFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTab" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -1717,7 +1717,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2555,7 +2555,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2637,7 +2637,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2660,7 +2660,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnTab" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3081,7 +3081,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3402,7 +3402,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlColumnTabIcon" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3425,7 +3425,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlColumnTab" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3863,7 +3863,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "ColumnWrapper2" },
+        name: { kind: "Name", value: "ColumnWrapper" },
       },
       selectionSet: {
         kind: "SelectionSet",

@@ -42,8 +42,8 @@ func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn2 {
 	}
 }
 
-func (c *SourceColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
-	return &model.ColumnWrapper2{
+func (c *SourceColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {
+	return &model.ColumnWrapper{
 		Column:            c.ToGraphQL(),
 		ColumnName:        "SourceCode",
 		ColumnDisplayName: stringRef("source"),

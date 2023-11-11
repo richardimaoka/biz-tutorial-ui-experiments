@@ -5,7 +5,7 @@ import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ChromeIcon } from "@/app/components/icons/ChromeIcon";
 
 const fragmentDefinition = graphql(`
-  fragment GqlColumnTabIcon on ColumnWrapper2 {
+  fragment GqlColumnTabIcon on ColumnWrapper {
     column {
       __typename
     }

@@ -31,24 +31,24 @@ type Page {
 
   isTrivial: Boolean
 
-  columns: [ColumnWrapper2]
+  columns: [ColumnWrapper]
   focusColumn: String
 
   modal: Modal
 }
 
 ###################################################
-# Column 2
+# Column
 ###################################################
 
-interface Column2 {
-  _placeholder: String
-}
-
-type ColumnWrapper2 {
-  column: Column2!
+type ColumnWrapper {
+  column: Column!
   columnName: String!
   columnDisplayName: String
+}
+
+interface Column {
+  _placeholder: String
 }
 
 ###################################################
@@ -84,7 +84,7 @@ type Terminal2 {
   # terminalTabs
 }
 
-type TerminalColumn2 implements Column2 {
+type TerminalColumn2 implements Column {
   _placeholder: String
   terminals: [Terminal2!]!
 }
@@ -93,7 +93,7 @@ type TerminalColumn2 implements Column2 {
 # Source Code types 2
 ###################################################
 
-type SourceCodeColumn2 implements Column2 {
+type SourceCodeColumn2 implements Column {
   _placeholder: String
   sourceCode: SourceCode2!
 }
@@ -118,7 +118,7 @@ type Browser {
   path: String!
 }
 
-type BrowserColumn2 implements Column2 {
+type BrowserColumn2 implements Column {
   _placeholder: String
   browser: Browser!
 }
