@@ -39,12 +39,25 @@ export type BackgroundImageColumn = Column & {
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
+export type Browser = {
+  __typename: "Browser";
+  height: Scalars["Int"]["output"];
+  path: Scalars["String"]["output"];
+  width: Scalars["Int"]["output"];
+};
+
 export type BrowserColumn = Column & {
   __typename: "BrowserColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   height?: Maybe<Scalars["Int"]["output"]>;
   path?: Maybe<Scalars["String"]["output"]>;
   width?: Maybe<Scalars["Int"]["output"]>;
+};
+
+export type BrowserColumn2 = Column2 & {
+  __typename: "BrowserColumn2";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  browser: Browser;
 };
 
 export type Column = {
@@ -855,6 +868,7 @@ export type GqlColumnWrapperFragment = {
   __typename: "ColumnWrapper2";
   columnName: string;
   column:
+    | { __typename: "BrowserColumn2" }
     | ({ __typename: "SourceCodeColumn2" } & {
         " $fragmentRefs"?: {
           GqlSourceCodeColumnFragment: GqlSourceCodeColumnFragment;
@@ -894,6 +908,7 @@ export type GqlColumnTabFragment = ({
 export type GqlColumnTabIconFragment = {
   __typename: "ColumnWrapper2";
   column:
+    | { __typename: "BrowserColumn2" }
     | { __typename: "SourceCodeColumn2" }
     | { __typename: "TerminalColumn2" };
 } & { " $fragmentName"?: "GqlColumnTabIconFragment" };

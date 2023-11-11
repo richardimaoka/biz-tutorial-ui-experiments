@@ -8,39 +8,27 @@ import (
 )
 
 func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
+
+	internals := struct {
+		Column            interface{} `json:"column"`
+		ColumnName        string      `json:"columnName"`
+		ColumnDisplayName *string     `json:"columnDisplayName"`
+	}{}
+
 	/**
-	 * Read JSON into JsonObj(i.e. map), and validate fields
+	 * Read JSON into internal struct
 	 */
-	var obj jsonwrap.JsonObj
-	err := json.Unmarshal(b, &obj)
+	err := json.Unmarshal(b, &internals)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling to Go data, %w", err)
 	}
-
-	/**
-	 * Check necessary fields
-	 */
-	// See if the columnName field exists
-	name, ok := obj["columnName"]
-	if !ok {
-		return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "columnName" field does not exist`)
-	}
-	nameStr, ok := name.(string)
-	if !ok {
-		return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "name" field = %v is not string`, name)
-	}
-	t.ColumnName = nameStr
-
-	// See if the column field exists
-	columnObj, ok := obj["column"]
-	if !ok {
-		return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "column" field does not exist`)
-	}
+	t.ColumnName = internals.ColumnName
+	t.ColumnDisplayName = internals.ColumnDisplayName
 
 	/**
 	 * Marshal `column` and unmarshal it back
 	 */
-	bytes, err := json.Marshal(columnObj)
+	bytes, err := json.Marshal(internals.Column)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while marshaling the column object, %w", err)
 	}
@@ -49,19 +37,6 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling the column object, %w", err)
 	}
 	t.Column = column
-
-	/**
-	 * Optional fields
-	 */
-	// See if the columnName field exists
-	displayName, ok := obj["columnDisplayName"]
-	if ok {
-		displayNameStr, ok := displayName.(string)
-		if !ok {
-			return fmt.Errorf(`failed in ColumnWrapper2 UnmarshalJSON(), "name" field = %v is not string`, name)
-		}
-		t.ColumnDisplayName = &displayNameStr
-	}
 
 	return nil
 }

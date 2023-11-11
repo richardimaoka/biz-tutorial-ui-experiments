@@ -8,7 +8,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
 )
 
-func Test(t *testing.T) {
+func TestMarshalUnmarshal(t *testing.T) {
 	cases := []struct {
 		name      string
 		inputFile string

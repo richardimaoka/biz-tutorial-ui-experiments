@@ -50,5 +50,11 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
           <GqlSourceCodeColumn fragment={column} />
         </div>
       );
+    case "BrowserColumn2":
+      return (
+        <div className={styles.component}>
+          browser column not implemented yet
+        </div>
+      );
   }
 }

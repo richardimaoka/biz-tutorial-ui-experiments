@@ -2,6 +2,7 @@ import { SourceCodeIcon } from "@/app/components/icons/SourceCodeIcon";
 import { TerminalIcon } from "../../../icons/TerminalIcon";
 
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import { ChromeIcon } from "@/app/components/icons/ChromeIcon";
 
 const fragmentDefinition = graphql(`
   fragment GqlColumnTabIcon on ColumnWrapper2 {
@@ -23,5 +24,7 @@ export function GqlColumnTabIcon(props: Props): JSX.Element {
       return <TerminalIcon />;
     case "SourceCodeColumn2":
       return <SourceCodeIcon />;
+    case "BrowserColumn2":
+      return <ChromeIcon />;
   }
 }

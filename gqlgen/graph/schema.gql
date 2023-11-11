@@ -101,6 +101,21 @@ type SourceCode2 {
 }
 
 ###################################################
+# Source Column 2
+###################################################
+
+type Browser {
+  width: Int!
+  height: Int!
+  path: String!
+}
+
+type BrowserColumn2 implements Column2 {
+  _placeholder: String
+  browser: Browser!
+}
+
+###################################################
 # Page state related object types
 ###################################################
 
