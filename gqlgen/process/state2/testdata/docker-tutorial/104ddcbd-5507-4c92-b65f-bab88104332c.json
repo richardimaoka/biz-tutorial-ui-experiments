@@ -1,1 +1,129 @@
-null
+{
+  "columns": [
+    {
+      "column": {
+        "__typename": "TerminalColumn2",
+        "_placeholder": null,
+        "terminals": [
+          {
+            "name": "default",
+            "currentDirectory": "myproj",
+            "entries": [
+              {
+                "id": "52e563bf-0653-4f9d-8953-dda399bf89e6",
+                "entryType": "COMMAND",
+                "text": "mkdir myproj"
+              },
+              {
+                "id": "6648626e-8564-4f79-baad-a1d0f30acd3e",
+                "entryType": "COMMAND",
+                "text": "cd myproj"
+              },
+              {
+                "id": "8192eb7b-b5f8-4693-b076-19f02849068b",
+                "entryType": "COMMAND",
+                "text": "touch Dockerfile.cmd1"
+              },
+              {
+                "id": "766a5bd3-1a46-4127-a6fa-8ab541d54e58",
+                "entryType": "COMMAND",
+                "text": "docker build -t cmd1 -f Dockerfile.cmd1 ."
+              },
+              {
+                "id": "4bb08610-9a3b-455b-99de-767375cd6ec7",
+                "entryType": "COMMAND",
+                "text": "[+] Building 16.0s (6/6) FINISHED\n =\u003e [internal] load build definition from Dockerfile.cmd1                                                                                                                                                   0.0s\n =\u003e =\u003e transferring dockerfile: 80B                                                                                                                                                                         0.0s\n =\u003e [internal] load .dockerignore                                                                                                                                                                           0.0s\n =\u003e =\u003e transferring context: 2B                                                                                                                                                                             0.0s\n =\u003e [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                                                            3.3s\n =\u003e [auth] library/ubuntu:pull token for registry-1.docker.io                                                                                                                                               0.0s\n =\u003e [1/1] FROM docker.io/library/ubuntu@sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054                                                                                            12.5s\n =\u003e =\u003e resolve docker.io/library/ubuntu@sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054                                                                                             0.0s\n =\u003e =\u003e sha256:445a6a12be2be54b4da18d7c77d4a41bc4746bc422f1f4325a60ff4fc7ea2e5d 29.54MB / 29.54MB                                                                                                           11.2s\n =\u003e =\u003e sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054 1.13kB / 1.13kB                                                                                                              0.0s\n =\u003e =\u003e sha256:b492494d8e0113c4ad3fe4528a4b5ff89faa5331f7d52c5c138196f69ce176a6 424B / 424B                                                                                                                  0.0s\n =\u003e =\u003e sha256:c6b84b685f35f1a5d63661f5d4aa662ad9b7ee4f4b8c394c022f25023c907b65 2.30kB / 2.30kB                                                                                                              0.0s\n =\u003e =\u003e extracting sha256:445a6a12be2be54b4da18d7c77d4a41bc4746bc422f1f4325a60ff4fc7ea2e5d                                                                                                                   0.9s\n =\u003e exporting to image                                                                                                                                                                                      0.0s\n =\u003e =\u003e exporting layers                                                                                                                                                                                     0.0s\n =\u003e =\u003e writing image sha256:710d7aba73162de2e4f1a7759908ddc6164ce9ea2deb0c7eccee358fdc701c16                                                                                                                0.0s\n =\u003e =\u003e naming to docker.io/library/cmd1"
+              },
+              {
+                "id": "fbc25d74-8c06-48ad-9bbd-32249f3370ad",
+                "entryType": "COMMAND",
+                "text": "docker run --rm cmd1"
+              },
+              {
+                "id": "b4bf5537-31e9-45a8-8631-b5804427815d",
+                "entryType": "COMMAND",
+                "text": "abc"
+              },
+              {
+                "id": "985940fe-eb3f-4f9b-8db0-89aa190a6b0b",
+                "entryType": "COMMAND",
+                "text": "cp Dockerfile.cmd1 Dockerfile.cmd2"
+              },
+              {
+                "id": "e4e6375b-af75-4fe5-bd32-b6d072309615",
+                "entryType": "COMMAND",
+                "text": "docker build -t cmd2 -f Dockerfile.cmd2 ."
+              },
+              {
+                "id": "6ce5964c-f96e-4565-b451-613e3cc9fe13",
+                "entryType": "COMMAND",
+                "text": "[+] Building 1.1s (5/5) FINISHED\n =\u003e [internal] load build definition from Dockerfile.cmd2                                                                                                                                                   0.0s\n =\u003e =\u003e transferring dockerfile: 87B                                                                                                                                                                         0.0s\n =\u003e [internal] load .dockerignore                                                                                                                                                                           0.0s\n =\u003e =\u003e transferring context: 2B                                                                                                                                                                             0.0s\n =\u003e [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                                                            0.9s\n =\u003e CACHED [1/1] FROM docker.io/library/ubuntu@sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054                                                                                      0.0s\n =\u003e exporting to image                                                                                                                                                                                      0.0s\n =\u003e =\u003e exporting layers                                                                                                                                                                                     0.0s\n =\u003e =\u003e writing image sha256:14a01cce2db6d56f25f522954ba0aaabc66478f1ecde30336ab1f3e83288a3ac                                                                                                                0.0s\n =\u003e =\u003e naming to docker.io/library/cmd2"
+              },
+              {
+                "id": "8fe6a69e-f75f-4aa1-8b7b-5386e31a3507",
+                "entryType": "COMMAND",
+                "text": "docker run --rm cmd2"
+              },
+              {
+                "id": "1632c856-8d46-428c-84af-62cf36a00fc8",
+                "entryType": "COMMAND",
+                "text": "docker pull httpd"
+              },
+              {
+                "id": "9f7a5830-83e0-4aba-8d28-7dc20e5c3b79",
+                "entryType": "COMMAND",
+                "text": "docker inspect httpd"
+              },
+              {
+                "id": "71177639-e17b-4220-8898-d2a55fc73442",
+                "entryType": "COMMAND",
+                "text": "docker run httpd"
+              },
+              {
+                "id": "cbb9d268-fb2d-425b-8743-27a1f4c85a62",
+                "entryType": "COMMAND",
+                "text": "docker pull python"
+              },
+              {
+                "id": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
+                "entryType": "COMMAND",
+                "text": "docker inspect python"
+              },
+              {
+                "id": "5e1c8118-31d6-4cee-872e-7c1015909125",
+                "entryType": "COMMAND",
+                "text": "docker run python"
+              },
+              {
+                "id": "104ddcbd-5507-4c92-b65f-bab88104332c",
+                "entryType": "COMMAND",
+                "text": "docker run -it python"
+              }
+            ],
+            "tooltip": {
+              "markdownBody": "-itオプションを指定してpythonがインタラクティブに入力を受け付ける状態にしましょう",
+              "timing": "START"
+            }
+          }
+        ]
+      },
+      "columnName": "Terminal",
+      "columnDisplayName": "terminal"
+    },
+    {
+      "column": {
+        "__typename": "SourceCodeColumn2",
+        "_placeholder": null,
+        "sourceCode": null
+      },
+      "columnName": "SourceCode",
+      "columnDisplayName": "source"
+    },
+    {
+      "column": null,
+      "columnName": "Browser",
+      "columnDisplayName": "BrowserColumn"
+    }
+  ],
+  "defaultSelectColumn": null
+}

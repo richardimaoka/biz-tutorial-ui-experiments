@@ -28,13 +28,15 @@ func Test(t *testing.T) {
 			// Function to test
 			page := state2.NewPage(repo, c.tutorialName)
 			for _, step := range steps {
-				err := page.Update(&step)
-				if err != nil {
-					t.Errorf("failed to update page, %s", err)
-				}
-				gqlModel := page.ToGraphQL()
-				goldenFile := "testdata/" + c.tutorialName + "/" + step.StepId + ".json"
-				testio.CompareWithGoldenFile(t, *updateFlag, goldenFile, gqlModel)
+				t.Run(c.tutorialName, func(t *testing.T) {
+					err := page.Update(&step)
+					if err != nil {
+						t.Errorf("failed to update page, %s", err)
+					}
+					gqlModel := page.ToGraphQL()
+					goldenFile := "testdata/" + c.tutorialName + "/" + step.StepId + ".json"
+					testio.CompareWithGoldenFile(t, *updateFlag, goldenFile, gqlModel)
+				})
 			}
 		})
 	}

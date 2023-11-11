@@ -36,6 +36,16 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	return nil
 }
 
+func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn2 {
+	return &model.SourceCodeColumn2{
+		SourceCode: c.sourceCode.ToGraphQL(),
+	}
+}
+
 func (c *SourceColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
-	return nil
+	return &model.ColumnWrapper2{
+		Column:            c.ToGraphQL(),
+		ColumnName:        "SourceCode",
+		ColumnDisplayName: stringRef("source"),
+	}
 }

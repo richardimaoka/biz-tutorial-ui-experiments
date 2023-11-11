@@ -1,1 +1,30 @@
-null
+{
+  "columns": [
+    {
+      "column": {
+        "__typename": "TerminalColumn2",
+        "_placeholder": null,
+        "terminals": [
+          {
+            "name": "default",
+            "currentDirectory": "",
+            "entries": [
+              {
+                "id": "52e563bf-0653-4f9d-8953-dda399bf89e6",
+                "entryType": "COMMAND",
+                "text": "mkdir myproj"
+              }
+            ],
+            "tooltip": {
+              "markdownBody": "チュートリアル用ディレクトリを作成します",
+              "timing": "START"
+            }
+          }
+        ]
+      },
+      "columnName": "Terminal",
+      "columnDisplayName": "terminal"
+    }
+  ],
+  "defaultSelectColumn": null
+}

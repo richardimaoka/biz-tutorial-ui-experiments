@@ -13,6 +13,14 @@ func (c *BrowserColumn) Update(fields *BrowserFields) error {
 	return nil
 }
 
+func (c *BrowserColumn) ToGraphQL() *model.BrowserColumn2 {
+	return nil //&model.BrowserColumn2{}
+}
+
 func (c *BrowserColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
-	return nil
+	return &model.ColumnWrapper2{
+		Column:            c.ToGraphQL(),
+		ColumnName:        "Browser",
+		ColumnDisplayName: stringRef("BrowserColumn"),
+	}
 }

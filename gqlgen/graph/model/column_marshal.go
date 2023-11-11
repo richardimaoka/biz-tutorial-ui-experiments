@@ -22,9 +22,23 @@ func (this SourceCodeColumn2) MarshalJSON() ([]byte, error) {
 		Placeholder *string      `json:"_placeholder"`
 		SourceCode  *SourceCode2 `json:"sourceCode"`
 	}{
-		TypeName:    "TerminalColumn2",
+		TypeName:    "SourceCodeColumn2",
 		Placeholder: this.Placeholder,
 		SourceCode:  this.SourceCode,
+	}
+
+	return json.Marshal(extendedOutput)
+}
+
+func (this BrowserColumn2) MarshalJSON() ([]byte, error) {
+	extendedOutput := struct {
+		TypeName    string   `json:"__typename"`
+		Placeholder *string  `json:"_placeholder"`
+		Browser     *Browser `json:"browser"`
+	}{
+		TypeName:    "BrowserColumn2",
+		Placeholder: this.Placeholder,
+		Browser:     this.Browser,
 	}
 
 	return json.Marshal(extendedOutput)

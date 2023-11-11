@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 )
 
@@ -188,4 +189,8 @@ func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming,
 		timing:       timing,
 		lineNumber:   lineNumber,
 	}
+}
+
+func (s *SourceCode) ToGraphQL() *model.SourceCode2 {
+	return nil
 }

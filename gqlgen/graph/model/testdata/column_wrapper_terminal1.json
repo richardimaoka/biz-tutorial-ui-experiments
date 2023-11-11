@@ -1,9 +1,9 @@
 {
-  "columnName": "Terminal",
-  "columnDisplayName": "terminal",
   "column": {
     "__typename": "TerminalColumn2",
     "_placeholder": "placeholder",
     "terminals": null
-  }
+  },
+  "columnName": "Terminal",
+  "columnDisplayName": "terminal"
 }
