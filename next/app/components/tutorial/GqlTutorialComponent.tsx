@@ -4,7 +4,7 @@ import { GqlColumnWrappers } from "./column/GqlColumnWrappers";
 import { GqlTutorialHeader } from "./header/GqlTutorialHeader";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTutorialComponent on Page2 {
+  fragment GqlTutorialComponent on Page {
     ...GqlTutorialHeader
     ...GqlColumnWrappers
   }

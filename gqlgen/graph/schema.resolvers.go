@@ -12,9 +12,9 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
-// Page2 is the resolver for the page2 field.
-func (r *queryResolver) Page2(ctx context.Context, tutorial string, step *string) (*model.Page2, error) {
-	panic(fmt.Errorf("not implemented: Page2 - page2"))
+// Page is the resolver for the page field.
+func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.Page, error) {
+	panic(fmt.Errorf("not implemented: Page - page"))
 }
 
 // Test is the resolver for the _test field.
@@ -47,8 +47,8 @@ func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.T
 }
 
 // AppTestTutorialColumnsPage is the resolver for the appTestTutorialColumnsPage field.
-func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error) {
-	var m model.Page2
+func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page, error) {
+	var m model.Page
 	err := jsonwrap.Read("data/_test/appTestTutorialColumnsPage.json", &m)
 	if err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func (r *testObjsResolver) AppTestTutorialColumnsPage(ctx context.Context, obj *
 }
 
 // AppTestTutorialTutorialPage is the resolver for the appTestTutorialTutorialPage field.
-func (r *testObjsResolver) AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page2, error) {
-	var m model.Page2
+func (r *testObjsResolver) AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page, error) {
+	var m model.Page
 	err := jsonwrap.Read("data/_test/appTestTutorialTutorialPage.json", &m)
 	if err != nil {
 		return nil, err

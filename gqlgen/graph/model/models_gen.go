@@ -81,7 +81,7 @@ type OpenFile struct {
 	Highlight     []*FileHighlight   `json:"highlight"`
 }
 
-type Page2 struct {
+type Page struct {
 	Step        *string           `json:"step"`
 	NextStep    *string           `json:"nextStep"`
 	PrevStep    *string           `json:"prevStep"`
@@ -141,8 +141,8 @@ type TerminalTooltip struct {
 
 type TestObjs struct {
 	AppTestTerminalPage              *TerminalColumn2 `json:"appTestTerminalPage"`
-	AppTestTutorialColumnsPage       *Page2           `json:"appTestTutorialColumnsPage"`
-	AppTestTutorialTutorialPage      *Page2           `json:"appTestTutorialTutorialPage"`
+	AppTestTutorialColumnsPage       *Page            `json:"appTestTutorialColumnsPage"`
+	AppTestTutorialTutorialPage      *Page            `json:"appTestTutorialTutorialPage"`
 	AppTestSourcecodeFilecontentPage *OpenFile        `json:"appTestSourcecodeFilecontentPage"`
 }
 

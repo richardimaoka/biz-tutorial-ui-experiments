@@ -6,7 +6,7 @@ import { ColumnCarousel } from "./ColumnCarousel";
 import { GqlColumnWrapper } from "./GqlColumnWrapper";
 
 const fragmentDefinition = graphql(`
-  fragment GqlColumnWrappers on Page2 {
+  fragment GqlColumnWrappers on Page {
     columns {
       columnName
       ...GqlColumnWrapper

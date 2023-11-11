@@ -4,7 +4,7 @@ import { GqlColumnTabs } from "./tabs/GqlColumnTabs";
 import styles from "./GqlTutorialHeader.module.css";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTutorialHeader on Page2 {
+  fragment GqlTutorialHeader on Page {
     ...GqlColumnTabs
   }
 `);

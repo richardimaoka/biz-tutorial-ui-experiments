@@ -8,23 +8,23 @@
 
 type Query {
   # without passing step argument, you get the first step page
-  page2(tutorial: String!, step: String): Page2
+  page(tutorial: String!, step: String): Page
 
   _test: TestObjs
 }
 
 type TestObjs {
   appTestTerminalPage(step: Int): TerminalColumn2
-  appTestTutorialColumnsPage: Page2
-  appTestTutorialTutorialPage: Page2
+  appTestTutorialColumnsPage: Page
+  appTestTutorialTutorialPage: Page
   appTestSourcecodeFilecontentPage(step: Int!): OpenFile
 }
 
 ###################################################
-# Page 2
+# Page
 ###################################################
 
-type Page2 {
+type Page {
   step: String
   nextStep: String
   prevStep: String
