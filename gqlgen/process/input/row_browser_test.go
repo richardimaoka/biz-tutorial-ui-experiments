@@ -34,6 +34,36 @@ func TestToBrowserSingle(t *testing.T) {
 	}
 }
 
+func TestToBrowserSingle2(t *testing.T) {
+	cases := []struct {
+		inputFile  string
+		goldenFile string
+	}{
+		{"testdata/browser/browser1-1.json", "testdata/browser/browser1-1-step-golden.json"},
+		{"testdata/browser/browser1-2.json", "testdata/browser/browser1-2-step-golden.json"},
+	}
+
+	for _, c := range cases {
+		t.Run(c.inputFile, func(t *testing.T) {
+			var fromRow Row
+			err := jsonwrap.Read(c.inputFile, &fromRow)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			currentColumns := &ColumnInfo{}
+
+			finder := PredictableFinder(t, "testdata/browser/empty.json")
+			steps, _, err := toBrowserSteps(&fromRow, finder, currentColumns)
+			if err != nil {
+				t.Error(err)
+			}
+
+			testio.CompareWithGoldenFile(t, *updateFlag, c.goldenFile, steps)
+		})
+	}
+}
+
 func TestToBrowserSingleError(t *testing.T) {
 	cases := []struct {
 		inputFile string

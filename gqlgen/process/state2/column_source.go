@@ -1,26 +1,34 @@
 package state2
 
+import "github.com/go-git/go-git/v5"
+
 /**
  * Source Code Column type and methods
  */
 
-type SourceCodeColumn struct {
+type SourceColumn struct {
 	sourceCode *SourceCode
 }
 
-func (c *SourceCodeColumn) InitialCommit(commit string) error {
+func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceColumn {
+	return &SourceColumn{
+		sourceCode: NewSourceCode(repo, projectDir, tutorial),
+	}
+}
+
+func (c *SourceColumn) InitialCommit(commit string) error {
 	return nil
 }
 
-func (c *SourceCodeColumn) ForwardCommit(nextCommit string) {
+func (c *SourceColumn) ForwardCommit(nextCommit string) {
 }
 
-func (c *SourceCodeColumn) ShowFileTree() {
+func (c *SourceColumn) ShowFileTree() {
 }
 
-func (c *SourceCodeColumn) OpenFile(filePath string) {
+func (c *SourceColumn) OpenFile(filePath string) {
 }
 
-func (c *SourceCodeColumn) Update(fields *SourceFields) {
-
+func (c *SourceColumn) Update(fields *SourceFields) error {
+	return nil
 }

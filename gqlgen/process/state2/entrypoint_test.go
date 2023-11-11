@@ -12,7 +12,7 @@ func Test(t *testing.T) {
 		tutorialName string
 		repoUrl      string
 	}{
-		// {"docker-tutorial", "https://github.com/richardimaoka/article-docker-cmd-entrypoint.git"},
+		{"docker-tutorial", "https://github.com/richardimaoka/article-docker-cmd-entrypoint.git"},
 	}
 
 	for _, c := range cases {

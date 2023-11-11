@@ -403,7 +403,7 @@ func breakdownBrowserRow(
 	// - step creation
 	var steps []state2.Step
 
-	currentColumns := resultColumns(state2.TerminalColumnType, prevColumns.AllUsed)
+	currentColumns := resultColumns(state2.BrowserColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
 	if prevColumns.Focus != state2.BrowserColumnType && prevColumns.Focus != state2.NoColumnType {

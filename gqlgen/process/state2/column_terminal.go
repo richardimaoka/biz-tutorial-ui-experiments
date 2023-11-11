@@ -82,7 +82,7 @@ func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
 	case TerminalOpen:
 		// no update is needed
 	default:
-		return fmt.Errorf("toTerminalColumn failed, type = '%s' is not implemented", fields.TerminalStepType)
+		return fmt.Errorf("Update failed, type = '%s' is not implemented", fields.TerminalStepType)
 	}
 
 	return nil
