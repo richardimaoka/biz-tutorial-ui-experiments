@@ -223,9 +223,15 @@ export type Query = {
   __typename: "Query";
   _test?: Maybe<TestObjs>;
   page?: Maybe<Page>;
+  page2?: Maybe<Page2>;
 };
 
 export type QueryPageArgs = {
+  step?: InputMaybe<Scalars["String"]["input"]>;
+  tutorial: Scalars["String"]["input"];
+};
+
+export type QueryPage2Args = {
   step?: InputMaybe<Scalars["String"]["input"]>;
   tutorial: Scalars["String"]["input"];
 };

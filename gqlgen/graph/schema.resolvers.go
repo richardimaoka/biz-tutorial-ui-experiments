@@ -43,6 +43,11 @@ func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string)
 	return &page, nil
 }
 
+// Page2 is the resolver for the page2 field.
+func (r *queryResolver) Page2(ctx context.Context, tutorial string, step *string) (*model.Page2, error) {
+	panic(fmt.Errorf("not implemented: Page2 - page2"))
+}
+
 // Test is the resolver for the _test field.
 func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
 	testObj := model.TestObjs{}
