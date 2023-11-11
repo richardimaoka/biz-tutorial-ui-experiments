@@ -8,7 +8,6 @@
 
 type Query {
   # without passing step argument, you get the first step page
-  page(tutorial: String!, step: String): Page
   page2(tutorial: String!, step: String): Page2
 
   _test: TestObjs
@@ -19,22 +18,6 @@ type TestObjs {
   appTestTutorialColumnsPage: Page2
   appTestTutorialTutorialPage: Page2
   appTestSourcecodeFilecontentPage(step: Int!): OpenFile
-}
-
-###################################################
-# Page state related object types
-###################################################
-
-type Page {
-  step: String
-  nextStep: String
-  prevStep: String
-  autoNextSeconds: Int
-  durationSeconds: Int
-  isTrivialStep: Boolean
-  columns: [ColumnWrapper]
-  focusColumn: String
-  modal: Modal
 }
 
 ###################################################
@@ -52,27 +35,6 @@ type Page2 {
   focusColumn: String
 
   modal: Modal
-}
-
-###################################################
-# Columns
-###################################################
-
-# wrap around Column, which is friendly for frontend pattern-matching
-type ColumnWrapper {
-  index: Int
-  column: Column
-  name: String
-}
-
-interface Column {
-  _placeholder: String
-}
-
-enum ColumnVerticalPosition {
-  TOP
-  CENTER
-  BOTTOM
 }
 
 ###################################################

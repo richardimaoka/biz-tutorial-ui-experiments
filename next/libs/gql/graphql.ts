@@ -42,21 +42,8 @@ export type BrowserColumn2 = Column2 & {
   browser: Browser;
 };
 
-export type Column = {
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-};
-
 export type Column2 = {
   _placeholder?: Maybe<Scalars["String"]["output"]>;
-};
-
-export type ColumnVerticalPosition = "BOTTOM" | "CENTER" | "TOP";
-
-export type ColumnWrapper = {
-  __typename: "ColumnWrapper";
-  column?: Maybe<Column>;
-  index?: Maybe<Scalars["Int"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ColumnWrapper2 = {
@@ -123,19 +110,6 @@ export type OpenFile = {
   tooltip?: Maybe<SourceCodeTooltip>;
 };
 
-export type Page = {
-  __typename: "Page";
-  autoNextSeconds?: Maybe<Scalars["Int"]["output"]>;
-  columns?: Maybe<Array<Maybe<ColumnWrapper>>>;
-  durationSeconds?: Maybe<Scalars["Int"]["output"]>;
-  focusColumn?: Maybe<Scalars["String"]["output"]>;
-  isTrivialStep?: Maybe<Scalars["Boolean"]["output"]>;
-  modal?: Maybe<Modal>;
-  nextStep?: Maybe<Scalars["String"]["output"]>;
-  prevStep?: Maybe<Scalars["String"]["output"]>;
-  step?: Maybe<Scalars["String"]["output"]>;
-};
-
 export type Page2 = {
   __typename: "Page2";
   columns?: Maybe<Array<Maybe<ColumnWrapper2>>>;
@@ -150,13 +124,7 @@ export type Page2 = {
 export type Query = {
   __typename: "Query";
   _test?: Maybe<TestObjs>;
-  page?: Maybe<Page>;
   page2?: Maybe<Page2>;
-};
-
-export type QueryPageArgs = {
-  step?: InputMaybe<Scalars["String"]["input"]>;
-  tutorial: Scalars["String"]["input"];
 };
 
 export type QueryPage2Args = {
@@ -251,15 +219,6 @@ export type TestObjsAppTestSourcecodeFilecontentPageArgs = {
 export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
 };
-
-export type Navigation_FragmentFragment = {
-  __typename: "Page";
-  step?: string | null;
-  nextStep?: string | null;
-  prevStep?: string | null;
-  durationSeconds?: number | null;
-  isTrivialStep?: boolean | null;
-} & { " $fragmentName"?: "Navigation_FragmentFragment" };
 
 export type GqlSourceCodeColumnFragment = {
   __typename: "SourceCodeColumn2";
@@ -513,29 +472,6 @@ export type AppTestTutorialColumnsPageQuery = {
   } | null;
 };
 
-export const Navigation_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "Navigation_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Page" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "step" } },
-          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
-          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
-          { kind: "Field", name: { kind: "Name", value: "durationSeconds" } },
-          { kind: "Field", name: { kind: "Name", value: "isTrivialStep" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<Navigation_FragmentFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [

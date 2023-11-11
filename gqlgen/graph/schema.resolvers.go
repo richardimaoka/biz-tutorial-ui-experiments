@@ -6,42 +6,11 @@ package graph
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
-
-// Page is the resolver for the page field.
-func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.Page, error) {
-	var dirName = fmt.Sprintf("data/%s/state", tutorial)
-	var initialStep = "_initial"
-
-	var filename string
-	if step == nil {
-		filename = fmt.Sprintf(dirName+"/%s.json", initialStep)
-	} else {
-		filename = fmt.Sprintf(dirName+"/%s.json", *step)
-	}
-
-	log.Printf("reading data from %s", filename)
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	var page model.Page
-	err = json.Unmarshal(data, &page)
-	if err != nil {
-		log.Printf("failed to read data from %s, %s", filename, err)
-		return nil, fmt.Errorf("internal server error %s", *step)
-	}
-
-	return &page, nil
-}
 
 // Page2 is the resolver for the page2 field.
 func (r *queryResolver) Page2(ctx context.Context, tutorial string, step *string) (*model.Page2, error) {
@@ -124,3 +93,10 @@ func (r *Resolver) TestObjs() TestObjsResolver { return &testObjsResolver{r} }
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
 type testObjsResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.

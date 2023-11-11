@@ -8,11 +8,6 @@ import (
 	"strconv"
 )
 
-type Column interface {
-	IsColumn()
-	GetPlaceholder() *string
-}
-
 type Column2 interface {
 	IsColumn2()
 	GetPlaceholder() *string
@@ -31,12 +26,6 @@ type BrowserColumn2 struct {
 
 func (BrowserColumn2) IsColumn2()                   {}
 func (this BrowserColumn2) GetPlaceholder() *string { return this.Placeholder }
-
-type ColumnWrapper struct {
-	Index  *int    `json:"index"`
-	Column Column  `json:"column"`
-	Name   *string `json:"name"`
-}
 
 type ColumnWrapper2 struct {
 	Column            Column2 `json:"column"`
@@ -90,18 +79,6 @@ type OpenFile struct {
 	EditSequence  *EditSequence      `json:"editSequence"`
 	Tooltip       *SourceCodeTooltip `json:"tooltip"`
 	Highlight     []*FileHighlight   `json:"highlight"`
-}
-
-type Page struct {
-	Step            *string          `json:"step"`
-	NextStep        *string          `json:"nextStep"`
-	PrevStep        *string          `json:"prevStep"`
-	AutoNextSeconds *int             `json:"autoNextSeconds"`
-	DurationSeconds *int             `json:"durationSeconds"`
-	IsTrivialStep   *bool            `json:"isTrivialStep"`
-	Columns         []*ColumnWrapper `json:"columns"`
-	FocusColumn     *string          `json:"focusColumn"`
-	Modal           *Modal           `json:"modal"`
 }
 
 type Page2 struct {
@@ -167,49 +144,6 @@ type TestObjs struct {
 	AppTestTutorialColumnsPage       *Page2           `json:"appTestTutorialColumnsPage"`
 	AppTestTutorialTutorialPage      *Page2           `json:"appTestTutorialTutorialPage"`
 	AppTestSourcecodeFilecontentPage *OpenFile        `json:"appTestSourcecodeFilecontentPage"`
-}
-
-type ColumnVerticalPosition string
-
-const (
-	ColumnVerticalPositionTop    ColumnVerticalPosition = "TOP"
-	ColumnVerticalPositionCenter ColumnVerticalPosition = "CENTER"
-	ColumnVerticalPositionBottom ColumnVerticalPosition = "BOTTOM"
-)
-
-var AllColumnVerticalPosition = []ColumnVerticalPosition{
-	ColumnVerticalPositionTop,
-	ColumnVerticalPositionCenter,
-	ColumnVerticalPositionBottom,
-}
-
-func (e ColumnVerticalPosition) IsValid() bool {
-	switch e {
-	case ColumnVerticalPositionTop, ColumnVerticalPositionCenter, ColumnVerticalPositionBottom:
-		return true
-	}
-	return false
-}
-
-func (e ColumnVerticalPosition) String() string {
-	return string(e)
-}
-
-func (e *ColumnVerticalPosition) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ColumnVerticalPosition(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ColumnVerticalPosition", str)
-	}
-	return nil
-}
-
-func (e ColumnVerticalPosition) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type FileNodeType string
