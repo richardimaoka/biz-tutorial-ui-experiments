@@ -1,9 +1,0 @@
-{
-  "filePath": "next/pages/api/hello.ts",
-  "fileName": "hello.ts",
-  "content": "// Next.js API route support: https://nextjs.org/docs/api-routes/introduction\nimport type { NextApiRequest, NextApiResponse } from 'next'\n\ntype Data = {\n  name: string\n}\n\nexport default function handler(\n  req: NextApiRequest,\n  res: NextApiResponse\u003cData\u003e\n) {\n  res.status(200).json({ name: 'John Doe' })\n}\n",
-  "isFullContent": true,
-  "language": "typescript",
-  "highlight": null,
-  "size": 307
-}

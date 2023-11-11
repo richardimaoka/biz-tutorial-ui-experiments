@@ -1,8 +1,0 @@
-{
-  "__typename": "MarkdownColumn",
-  "description": {
-    "step": null,
-    "contents": "markdown updated contents",
-    "alignment": "CENTER"
-  }
-}

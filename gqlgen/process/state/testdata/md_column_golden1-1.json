@@ -1,8 +1,0 @@
-{
-  "__typename": "MarkdownColumn",
-  "description": {
-    "step": null,
-    "contents": "markdown default contents",
-    "alignment": "LEFT"
-  }
-}
