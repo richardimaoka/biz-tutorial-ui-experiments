@@ -13,7 +13,8 @@ func Test(t *testing.T) {
 		name      string
 		inputFile string
 	}{
-		{"terminal empty", "testdata/column_wrapper_terminal1.json"},
+		{"terminal fully empty" /*******/, "testdata/column_wrapper_terminal1.json"},
+		{"terminal initial terminal" /**/, "testdata/column_wrapper_terminal2.json"},
 	}
 
 	for _, c := range cases {

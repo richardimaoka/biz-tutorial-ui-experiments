@@ -1,0 +1,16 @@
+{
+  "columnName": "Terminal",
+  "columnDisplayName": "terminal",
+  "column": {
+    "__typename": "TerminalColumn2",
+    "_placeholder": "placeholder",
+    "terminals": [
+      {
+        "name": "default",
+        "currentDirectory": "",
+        "entries": null,
+        "tooltip": null
+      }
+    ]
+  }
+}
