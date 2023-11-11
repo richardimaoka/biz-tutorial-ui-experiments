@@ -1,8 +1,0 @@
-{
-  "step": "66105871-d23c-4e54-98f4-b715b330a0da",
-  "phase": "CMD の動作理解",
-  "comment": "",
-  "type": "terminal command",
-  "instruction": "mkdir myproj",
-  "tooltip": "チュートリアル用ディレクトリを作成します"
-}

@@ -1,8 +1,0 @@
-{
-  "phase": "Installから動かす直前まで",
-  "type": "terminal",
-  "instruction": "go run .",
-  "instruction2": "2023/09/02 23:42:54 connect to http://localhost:8080/ for GraphQL playground",
-  "commit": "",
-  "comment": ""
-}

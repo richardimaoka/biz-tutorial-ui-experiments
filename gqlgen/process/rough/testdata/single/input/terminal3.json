@@ -1,7 +1,0 @@
-{
-  "phase": "Installから動かす直前まで",
-  "type": "terminal",
-  "instruction": "go run github.com/99designs/gqlgen init",
-  "commit": "d906506ccf6d2e2d0c55680811d0f503b7094d47",
-  "comment": ""
-}
