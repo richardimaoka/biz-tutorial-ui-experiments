@@ -15,26 +15,6 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
 const documents = {
   "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n":
     types.Navigation_FragmentFragmentDoc,
-  "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n":
-    types.SourceCodeColumn_FragmentFragmentDoc,
-  "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n":
-    types.FileNodeComponent_FragmentFragmentDoc,
-  "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n":
-    types.FileNodeIcon_FragmentFragmentDoc,
-  "\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n":
-    types.FileTreeComponent_FragmentFragmentDoc,
-  "\n  fragment FileTreeHeader_Fragment on SourceCode {\n    projectDir\n  }\n":
-    types.FileTreeHeader_FragmentFragmentDoc,
-  "\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeHeader_Fragment\n    ...FileTreeComponent_Fragment\n    isFoldFileTree\n  }\n":
-    types.FileTreePane_FragmentFragmentDoc,
-  "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n":
-    types.FileContentPane_FragmentFragmentDoc,
-  "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n":
-    types.FileContentViewer_FragmentFragmentDoc,
-  "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n":
-    types.FileNameTab_FragmentFragmentDoc,
-  "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n":
-    types.FileNameTabBar_FragmentFragmentDoc,
   "\n  fragment GqlSourceCodeColumn on SourceCodeColumn2 {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode2 {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
@@ -103,66 +83,6 @@ export function graphql(source: string): unknown;
 export function graphql(
   source: "\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n",
 ): (typeof documents)["\n  fragment Navigation_Fragment on Page {\n    step\n    nextStep\n    prevStep\n    durationSeconds\n    isTrivialStep\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n",
-): (typeof documents)["\n  fragment SourceCodeColumn_Fragment on SourceCodeColumn {\n    sourceCode {\n      ...FileTreePane_Fragment\n      openFile(filePath: $openFilePath) {\n        ...FileContentPane_Fragment\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n",
-): (typeof documents)["\n  fragment FileNodeComponent_Fragment on FileNode {\n    ...FileNodeIcon_Fragment\n    nodeType\n    name\n    filePath\n    offset\n    isUpdated\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n",
-): (typeof documents)["\n  fragment FileNodeIcon_Fragment on FileNode {\n    nodeType\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n",
-): (typeof documents)["\n  fragment FileTreeComponent_Fragment on SourceCode {\n    fileTree {\n      filePath\n      ...FileNodeComponent_Fragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileTreeHeader_Fragment on SourceCode {\n    projectDir\n  }\n",
-): (typeof documents)["\n  fragment FileTreeHeader_Fragment on SourceCode {\n    projectDir\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeHeader_Fragment\n    ...FileTreeComponent_Fragment\n    isFoldFileTree\n  }\n",
-): (typeof documents)["\n  fragment FileTreePane_Fragment on SourceCode {\n    ...FileTreeHeader_Fragment\n    ...FileTreeComponent_Fragment\n    isFoldFileTree\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n",
-): (typeof documents)["\n  fragment FileContentPane_Fragment on OpenFile {\n    ...FileNameTabBar_Fragment\n    ...FileContentViewer_Fragment\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n",
-): (typeof documents)["\n  fragment FileContentViewer_Fragment on OpenFile {\n    content\n    language\n    highlight {\n      fromLine\n      toLine\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n",
-): (typeof documents)["\n  fragment FileNameTab_Fragment on OpenFile {\n    fileName\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n",
-): (typeof documents)["\n  fragment FileNameTabBar_Fragment on OpenFile {\n    ...FileNameTab_Fragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

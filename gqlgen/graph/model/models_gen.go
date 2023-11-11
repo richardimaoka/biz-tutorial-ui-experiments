@@ -141,14 +141,6 @@ type SourceCode2 struct {
 	OpenFile       *OpenFile   `json:"openFile"`
 }
 
-type SourceCodeColumn struct {
-	Placeholder *string     `json:"_placeholder"`
-	SourceCode  *SourceCode `json:"sourceCode"`
-}
-
-func (SourceCodeColumn) IsColumn()                    {}
-func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
-
 type SourceCodeColumn2 struct {
 	Placeholder *string      `json:"_placeholder"`
 	SourceCode  *SourceCode2 `json:"sourceCode"`

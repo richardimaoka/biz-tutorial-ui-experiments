@@ -1,7 +1,0 @@
-.sourcecode {
-  /*to hold the file tree pain with `position: absolute`*/
-  position: relative;
-
-  /*regardless of contents height, fill the (column height - header) space*/
-  height: 100%;
-}

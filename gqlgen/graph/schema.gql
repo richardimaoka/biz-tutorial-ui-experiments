@@ -162,15 +162,6 @@ type BrowserColumn2 implements Column2 {
 }
 
 ###################################################
-# Column implementations
-###################################################
-
-type SourceCodeColumn implements Column {
-  _placeholder: String
-  sourceCode: SourceCode
-}
-
-###################################################
 # Source code related object types
 ###################################################
 
