@@ -45,15 +45,6 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	BackgroundImageColumn struct {
-		Height      func(childComplexity int) int
-		Modal       func(childComplexity int) int
-		Path        func(childComplexity int) int
-		Placeholder func(childComplexity int) int
-		URL         func(childComplexity int) int
-		Width       func(childComplexity int) int
-	}
-
 	Browser struct {
 		Height func(childComplexity int) int
 		Path   func(childComplexity int) int
@@ -75,13 +66,6 @@ type ComplexityRoot struct {
 		Column            func(childComplexity int) int
 		ColumnDisplayName func(childComplexity int) int
 		ColumnName        func(childComplexity int) int
-	}
-
-	DevToolsColumn struct {
-		Height      func(childComplexity int) int
-		Path        func(childComplexity int) int
-		Placeholder func(childComplexity int) int
-		Width       func(childComplexity int) int
 	}
 
 	EditSequence struct {
@@ -110,24 +94,10 @@ type ComplexityRoot struct {
 		Width  func(childComplexity int) int
 	}
 
-	ImageDescriptionColumn struct {
-		ContentsPosition func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Image            func(childComplexity int) int
-		Order            func(childComplexity int) int
-		Placeholder      func(childComplexity int) int
-	}
-
 	Markdown struct {
 		Alignment func(childComplexity int) int
 		Contents  func(childComplexity int) int
 		Step      func(childComplexity int) int
-	}
-
-	MarkdownColumn struct {
-		ContentsPosition func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Placeholder      func(childComplexity int) int
 	}
 
 	MarkdownOld struct {
@@ -282,11 +252,6 @@ type ComplexityRoot struct {
 		AppTestTutorialTutorialPage      func(childComplexity int) int
 	}
 
-	YouTubeColumn struct {
-		Placeholder func(childComplexity int) int
-		Youtube     func(childComplexity int) int
-	}
-
 	YouTubeEmbed struct {
 		EmbedURL func(childComplexity int) int
 		Height   func(childComplexity int) int
@@ -323,48 +288,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "BackgroundImageColumn.height":
-		if e.complexity.BackgroundImageColumn.Height == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.Height(childComplexity), true
-
-	case "BackgroundImageColumn.modal":
-		if e.complexity.BackgroundImageColumn.Modal == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.Modal(childComplexity), true
-
-	case "BackgroundImageColumn.path":
-		if e.complexity.BackgroundImageColumn.Path == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.Path(childComplexity), true
-
-	case "BackgroundImageColumn._placeholder":
-		if e.complexity.BackgroundImageColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.Placeholder(childComplexity), true
-
-	case "BackgroundImageColumn.url":
-		if e.complexity.BackgroundImageColumn.URL == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.URL(childComplexity), true
-
-	case "BackgroundImageColumn.width":
-		if e.complexity.BackgroundImageColumn.Width == nil {
-			break
-		}
-
-		return e.complexity.BackgroundImageColumn.Width(childComplexity), true
 
 	case "Browser.height":
 		if e.complexity.Browser.Height == nil {
@@ -442,34 +365,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ColumnWrapper2.ColumnName(childComplexity), true
-
-	case "DevToolsColumn.height":
-		if e.complexity.DevToolsColumn.Height == nil {
-			break
-		}
-
-		return e.complexity.DevToolsColumn.Height(childComplexity), true
-
-	case "DevToolsColumn.path":
-		if e.complexity.DevToolsColumn.Path == nil {
-			break
-		}
-
-		return e.complexity.DevToolsColumn.Path(childComplexity), true
-
-	case "DevToolsColumn._placeholder":
-		if e.complexity.DevToolsColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.DevToolsColumn.Placeholder(childComplexity), true
-
-	case "DevToolsColumn.width":
-		if e.complexity.DevToolsColumn.Width == nil {
-			break
-		}
-
-		return e.complexity.DevToolsColumn.Width(childComplexity), true
 
 	case "EditSequence.edits":
 		if e.complexity.EditSequence.Edits == nil {
@@ -569,41 +464,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ImageCentered.Width(childComplexity), true
 
-	case "ImageDescriptionColumn.contentsPosition":
-		if e.complexity.ImageDescriptionColumn.ContentsPosition == nil {
-			break
-		}
-
-		return e.complexity.ImageDescriptionColumn.ContentsPosition(childComplexity), true
-
-	case "ImageDescriptionColumn.description":
-		if e.complexity.ImageDescriptionColumn.Description == nil {
-			break
-		}
-
-		return e.complexity.ImageDescriptionColumn.Description(childComplexity), true
-
-	case "ImageDescriptionColumn.image":
-		if e.complexity.ImageDescriptionColumn.Image == nil {
-			break
-		}
-
-		return e.complexity.ImageDescriptionColumn.Image(childComplexity), true
-
-	case "ImageDescriptionColumn.order":
-		if e.complexity.ImageDescriptionColumn.Order == nil {
-			break
-		}
-
-		return e.complexity.ImageDescriptionColumn.Order(childComplexity), true
-
-	case "ImageDescriptionColumn._placeholder":
-		if e.complexity.ImageDescriptionColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.ImageDescriptionColumn.Placeholder(childComplexity), true
-
 	case "Markdown.alignment":
 		if e.complexity.Markdown.Alignment == nil {
 			break
@@ -624,27 +484,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Markdown.Step(childComplexity), true
-
-	case "MarkdownColumn.contentsPosition":
-		if e.complexity.MarkdownColumn.ContentsPosition == nil {
-			break
-		}
-
-		return e.complexity.MarkdownColumn.ContentsPosition(childComplexity), true
-
-	case "MarkdownColumn.description":
-		if e.complexity.MarkdownColumn.Description == nil {
-			break
-		}
-
-		return e.complexity.MarkdownColumn.Description(childComplexity), true
-
-	case "MarkdownColumn._placeholder":
-		if e.complexity.MarkdownColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.MarkdownColumn.Placeholder(childComplexity), true
 
 	case "MarkdownOld.contents":
 		if e.complexity.MarkdownOld.Contents == nil {
@@ -1257,20 +1096,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TestObjs.AppTestTutorialTutorialPage(childComplexity), true
 
-	case "YouTubeColumn._placeholder":
-		if e.complexity.YouTubeColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.YouTubeColumn.Placeholder(childComplexity), true
-
-	case "YouTubeColumn.youtube":
-		if e.complexity.YouTubeColumn.Youtube == nil {
-			break
-		}
-
-		return e.complexity.YouTubeColumn.Youtube(childComplexity), true
-
 	case "YouTubeEmbed.embedUrl":
 		if e.complexity.YouTubeEmbed.EmbedURL == nil {
 			break
@@ -1523,258 +1348,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _BackgroundImageColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BackgroundImageColumn_width(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn_width(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BackgroundImageColumn_height(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BackgroundImageColumn_path(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn_path(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Path, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BackgroundImageColumn_url(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn_url(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.URL, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BackgroundImageColumn_modal(ctx context.Context, field graphql.CollectedField, obj *model.BackgroundImageColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BackgroundImageColumn_modal(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Modal, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Modal)
-	fc.Result = res
-	return ec.marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModal(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BackgroundImageColumn_modal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BackgroundImageColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "text":
-				return ec.fieldContext_Modal_text(ctx, field)
-			case "position":
-				return ec.fieldContext_Modal_position(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
-		},
-	}
-	return fc, nil
-}
 
 func (ec *executionContext) _Browser_width(ctx context.Context, field graphql.CollectedField, obj *model.Browser) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Browser_width(ctx, field)
@@ -2243,170 +1816,6 @@ func (ec *executionContext) _ColumnWrapper2_columnDisplayName(ctx context.Contex
 func (ec *executionContext) fieldContext_ColumnWrapper2_columnDisplayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ColumnWrapper2",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DevToolsColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DevToolsColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DevToolsColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DevToolsColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DevToolsColumn_width(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DevToolsColumn_width(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DevToolsColumn_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DevToolsColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DevToolsColumn_height(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DevToolsColumn_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DevToolsColumn_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DevToolsColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DevToolsColumn_path(ctx context.Context, field graphql.CollectedField, obj *model.DevToolsColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DevToolsColumn_path(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Path, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DevToolsColumn_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DevToolsColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3006,229 +2415,6 @@ func (ec *executionContext) fieldContext_ImageCentered_url(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _ImageDescriptionColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.ImageDescriptionColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageDescriptionColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageDescriptionColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageDescriptionColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageDescriptionColumn_description(ctx context.Context, field graphql.CollectedField, obj *model.ImageDescriptionColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageDescriptionColumn_description(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Description, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Markdown)
-	fc.Result = res
-	return ec.marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdown(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageDescriptionColumn_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageDescriptionColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_Markdown_step(ctx, field)
-			case "contents":
-				return ec.fieldContext_Markdown_contents(ctx, field)
-			case "alignment":
-				return ec.fieldContext_Markdown_alignment(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Markdown", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageDescriptionColumn_image(ctx context.Context, field graphql.CollectedField, obj *model.ImageDescriptionColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageDescriptionColumn_image(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Image, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.ImageCentered)
-	fc.Result = res
-	return ec.marshalOImageCentered2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageCentered(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageDescriptionColumn_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageDescriptionColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "width":
-				return ec.fieldContext_ImageCentered_width(ctx, field)
-			case "height":
-				return ec.fieldContext_ImageCentered_height(ctx, field)
-			case "path":
-				return ec.fieldContext_ImageCentered_path(ctx, field)
-			case "url":
-				return ec.fieldContext_ImageCentered_url(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ImageCentered", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageDescriptionColumn_order(ctx context.Context, field graphql.CollectedField, obj *model.ImageDescriptionColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageDescriptionColumn_order(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Order, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.ImageDescriptionOrder)
-	fc.Result = res
-	return ec.marshalOImageDescriptionOrder2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionOrder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageDescriptionColumn_order(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageDescriptionColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ImageDescriptionOrder does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageDescriptionColumn_contentsPosition(ctx context.Context, field graphql.CollectedField, obj *model.ImageDescriptionColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageDescriptionColumn_contentsPosition(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ContentsPosition, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.ColumnVerticalPosition)
-	fc.Result = res
-	return ec.marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageDescriptionColumn_contentsPosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageDescriptionColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ColumnVerticalPosition does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Markdown_step(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Markdown_step(ctx, field)
 	if err != nil {
@@ -3347,137 +2533,6 @@ func (ec *executionContext) fieldContext_Markdown_alignment(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type MarkdownAlignment does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MarkdownColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MarkdownColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MarkdownColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MarkdownColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MarkdownColumn_description(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MarkdownColumn_description(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Description, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Markdown)
-	fc.Result = res
-	return ec.marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdown(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MarkdownColumn_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MarkdownColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_Markdown_step(ctx, field)
-			case "contents":
-				return ec.fieldContext_Markdown_contents(ctx, field)
-			case "alignment":
-				return ec.fieldContext_Markdown_alignment(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Markdown", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MarkdownColumn_contentsPosition(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MarkdownColumn_contentsPosition(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ContentsPosition, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.ColumnVerticalPosition)
-	fc.Result = res
-	return ec.marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MarkdownColumn_contentsPosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MarkdownColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ColumnVerticalPosition does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7427,96 +6482,6 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 	return fc, nil
 }
 
-func (ec *executionContext) _YouTubeColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_YouTubeColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "YouTubeColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _YouTubeColumn_youtube(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeColumn_youtube(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Youtube, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.YouTubeEmbed)
-	fc.Result = res
-	return ec.marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_YouTubeColumn_youtube(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "YouTubeColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "width":
-				return ec.fieldContext_YouTubeEmbed_width(ctx, field)
-			case "height":
-				return ec.fieldContext_YouTubeEmbed_height(ctx, field)
-			case "embedUrl":
-				return ec.fieldContext_YouTubeEmbed_embedUrl(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type YouTubeEmbed", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _YouTubeEmbed_width(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_YouTubeEmbed_width(ctx, field)
 	if err != nil {
@@ -9497,51 +8462,6 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 
 // region    **************************** object.gotpl ****************************
 
-var backgroundImageColumnImplementors = []string{"BackgroundImageColumn"}
-
-func (ec *executionContext) _BackgroundImageColumn(ctx context.Context, sel ast.SelectionSet, obj *model.BackgroundImageColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, backgroundImageColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("BackgroundImageColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._BackgroundImageColumn__placeholder(ctx, field, obj)
-
-		case "width":
-
-			out.Values[i] = ec._BackgroundImageColumn_width(ctx, field, obj)
-
-		case "height":
-
-			out.Values[i] = ec._BackgroundImageColumn_height(ctx, field, obj)
-
-		case "path":
-
-			out.Values[i] = ec._BackgroundImageColumn_path(ctx, field, obj)
-
-		case "url":
-
-			out.Values[i] = ec._BackgroundImageColumn_url(ctx, field, obj)
-
-		case "modal":
-
-			out.Values[i] = ec._BackgroundImageColumn_modal(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var browserImplementors = []string{"Browser"}
 
 func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, obj *model.Browser) graphql.Marshaler {
@@ -9676,43 +8596,6 @@ func (ec *executionContext) _ColumnWrapper2(ctx context.Context, sel ast.Selecti
 		case "columnDisplayName":
 
 			out.Values[i] = ec._ColumnWrapper2_columnDisplayName(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var devToolsColumnImplementors = []string{"DevToolsColumn"}
-
-func (ec *executionContext) _DevToolsColumn(ctx context.Context, sel ast.SelectionSet, obj *model.DevToolsColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, devToolsColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DevToolsColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._DevToolsColumn__placeholder(ctx, field, obj)
-
-		case "width":
-
-			out.Values[i] = ec._DevToolsColumn_width(ctx, field, obj)
-
-		case "height":
-
-			out.Values[i] = ec._DevToolsColumn_height(ctx, field, obj)
-
-		case "path":
-
-			out.Values[i] = ec._DevToolsColumn_path(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -9874,47 +8757,6 @@ func (ec *executionContext) _ImageCentered(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var imageDescriptionColumnImplementors = []string{"ImageDescriptionColumn"}
-
-func (ec *executionContext) _ImageDescriptionColumn(ctx context.Context, sel ast.SelectionSet, obj *model.ImageDescriptionColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, imageDescriptionColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ImageDescriptionColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._ImageDescriptionColumn__placeholder(ctx, field, obj)
-
-		case "description":
-
-			out.Values[i] = ec._ImageDescriptionColumn_description(ctx, field, obj)
-
-		case "image":
-
-			out.Values[i] = ec._ImageDescriptionColumn_image(ctx, field, obj)
-
-		case "order":
-
-			out.Values[i] = ec._ImageDescriptionColumn_order(ctx, field, obj)
-
-		case "contentsPosition":
-
-			out.Values[i] = ec._ImageDescriptionColumn_contentsPosition(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var markdownImplementors = []string{"Markdown"}
 
 func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet, obj *model.Markdown) graphql.Marshaler {
@@ -9936,39 +8778,6 @@ func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet,
 		case "alignment":
 
 			out.Values[i] = ec._Markdown_alignment(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var markdownColumnImplementors = []string{"MarkdownColumn"}
-
-func (ec *executionContext) _MarkdownColumn(ctx context.Context, sel ast.SelectionSet, obj *model.MarkdownColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, markdownColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("MarkdownColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._MarkdownColumn__placeholder(ctx, field, obj)
-
-		case "description":
-
-			out.Values[i] = ec._MarkdownColumn_description(ctx, field, obj)
-
-		case "contentsPosition":
-
-			out.Values[i] = ec._MarkdownColumn_contentsPosition(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -10978,35 +9787,6 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var youTubeColumnImplementors = []string{"YouTubeColumn"}
-
-func (ec *executionContext) _YouTubeColumn(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, youTubeColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("YouTubeColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._YouTubeColumn__placeholder(ctx, field, obj)
-
-		case "youtube":
-
-			out.Values[i] = ec._YouTubeColumn_youtube(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var youTubeEmbedImplementors = []string{"YouTubeEmbed"}
 
 func (ec *executionContext) _YouTubeEmbed(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeEmbed) graphql.Marshaler {
@@ -11882,22 +10662,6 @@ func (ec *executionContext) marshalOColumn2githubᚗcomᚋrichardimaokaᚋbizᚑ
 	return ec._Column(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx context.Context, v interface{}) (*model.ColumnVerticalPosition, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.ColumnVerticalPosition)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOColumnVerticalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnVerticalPosition(ctx context.Context, sel ast.SelectionSet, v *model.ColumnVerticalPosition) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) marshalOColumnWrapper22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐColumnWrapper2(ctx context.Context, sel ast.SelectionSet, v []*model.ColumnWrapper2) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -12113,29 +10877,6 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
-func (ec *executionContext) marshalOImageCentered2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageCentered(ctx context.Context, sel ast.SelectionSet, v *model.ImageCentered) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ImageCentered(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOImageDescriptionOrder2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionOrder(ctx context.Context, v interface{}) (*model.ImageDescriptionOrder, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.ImageDescriptionOrder)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOImageDescriptionOrder2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageDescriptionOrder(ctx context.Context, sel ast.SelectionSet, v *model.ImageDescriptionOrder) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -12150,13 +10891,6 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOMarkdown2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdown(ctx context.Context, sel ast.SelectionSet, v *model.Markdown) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Markdown(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, v interface{}) (*model.MarkdownAlignment, error) {
@@ -12419,13 +11153,6 @@ func (ec *executionContext) marshalOTestObjs2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return ec._TestObjs(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOYouTubeEmbed2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐYouTubeEmbed(ctx context.Context, sel ast.SelectionSet, v *model.YouTubeEmbed) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._YouTubeEmbed(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

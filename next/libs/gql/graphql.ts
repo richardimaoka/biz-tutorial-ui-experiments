@@ -29,16 +29,6 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
-export type BackgroundImageColumn = {
-  __typename: "BackgroundImageColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  height?: Maybe<Scalars["Int"]["output"]>;
-  modal?: Maybe<Modal>;
-  path?: Maybe<Scalars["String"]["output"]>;
-  url?: Maybe<Scalars["String"]["output"]>;
-  width?: Maybe<Scalars["Int"]["output"]>;
-};
-
 export type Browser = {
   __typename: "Browser";
   height: Scalars["Int"]["output"];
@@ -76,14 +66,6 @@ export type ColumnWrapper2 = {
   columnName: Scalars["String"]["output"];
 };
 
-export type DevToolsColumn = {
-  __typename: "DevToolsColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  height?: Maybe<Scalars["Int"]["output"]>;
-  path?: Maybe<Scalars["String"]["output"]>;
-  width?: Maybe<Scalars["Int"]["output"]>;
-};
-
 export type EditSequence = {
   __typename: "EditSequence";
   edits?: Maybe<Array<MonacoEditOperation>>;
@@ -116,19 +98,6 @@ export type ImageCentered = {
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
-export type ImageDescriptionColumn = {
-  __typename: "ImageDescriptionColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  contentsPosition?: Maybe<ColumnVerticalPosition>;
-  description?: Maybe<Markdown>;
-  image?: Maybe<ImageCentered>;
-  order?: Maybe<ImageDescriptionOrder>;
-};
-
-export type ImageDescriptionOrder =
-  | "DESCRIPTION_THEN_IMAGE"
-  | "IMAGE_THEN_DESCRIPTION";
-
 export type Markdown = {
   __typename: "Markdown";
   alignment?: Maybe<MarkdownAlignment>;
@@ -137,13 +106,6 @@ export type Markdown = {
 };
 
 export type MarkdownAlignment = "CENTER" | "LEFT";
-
-export type MarkdownColumn = {
-  __typename: "MarkdownColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  contentsPosition?: Maybe<ColumnVerticalPosition>;
-  description?: Maybe<Markdown>;
-};
 
 export type MarkdownOld = {
   __typename: "MarkdownOld";
@@ -354,12 +316,6 @@ export type TestObjsAppTestSourcecodeFilecontentPageArgs = {
 
 export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
-};
-
-export type YouTubeColumn = {
-  __typename: "YouTubeColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  youtube?: Maybe<YouTubeEmbed>;
 };
 
 export type YouTubeEmbed = {
@@ -687,24 +643,6 @@ export type GqlColumnTabsFragment = {
     | null
   > | null;
 } & { " $fragmentName"?: "GqlColumnTabsFragment" };
-
-export type YouTubeColumn_FragmentFragment = {
-  __typename: "YouTubeColumn";
-  youtube?:
-    | ({ __typename: "YouTubeEmbed" } & {
-        " $fragmentRefs"?: {
-          YouTube_FragmentFragment: YouTube_FragmentFragment;
-        };
-      })
-    | null;
-} & { " $fragmentName"?: "YouTubeColumn_FragmentFragment" };
-
-export type YouTube_FragmentFragment = {
-  __typename: "YouTubeEmbed";
-  embedUrl?: string | null;
-  width?: number | null;
-  height?: number | null;
-} & { " $fragmentName"?: "YouTube_FragmentFragment" };
 
 export type AppTestTerminalPageQueryVariables = Exact<{
   step?: InputMaybe<Scalars["Int"]["input"]>;
@@ -4125,74 +4063,6 @@ export const GqlTutorialComponentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlTutorialComponentFragment, unknown>;
-export const YouTube_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "YouTube_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "YouTubeEmbed" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<YouTube_FragmentFragment, unknown>;
-export const YouTubeColumn_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "YouTubeColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "YouTubeColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "youtube" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "YouTube_Fragment" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "YouTube_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "YouTubeEmbed" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "embedUrl" } },
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<YouTubeColumn_FragmentFragment, unknown>;
 export const AppTestTerminalPageDocument = {
   kind: "Document",
   definitions: [

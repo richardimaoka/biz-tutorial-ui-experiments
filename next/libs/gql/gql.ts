@@ -77,10 +77,6 @@ const documents = {
     types.GqlColumnTabIconFragmentDoc,
   "\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n":
     types.GqlColumnTabsFragmentDoc,
-  "\n  fragment YouTubeColumn_Fragment on YouTubeColumn {\n    youtube {\n      ...YouTube_Fragment\n    }\n  }\n":
-    types.YouTubeColumn_FragmentFragmentDoc,
-  "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n":
-    types.YouTube_FragmentFragmentDoc,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
   "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlTutorialComponent\n      }\n    }\n  }\n":
@@ -293,18 +289,6 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n",
 ): (typeof documents)["\n  fragment GqlColumnTabs on Page2 {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment YouTubeColumn_Fragment on YouTubeColumn {\n    youtube {\n      ...YouTube_Fragment\n    }\n  }\n",
-): (typeof documents)["\n  fragment YouTubeColumn_Fragment on YouTubeColumn {\n    youtube {\n      ...YouTube_Fragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n",
-): (typeof documents)["\n  fragment YouTube_Fragment on YouTubeEmbed {\n    embedUrl\n    width\n    height\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -165,41 +165,6 @@ type BrowserColumn2 implements Column2 {
 # Column implementations
 ###################################################
 
-enum ImageDescriptionOrder {
-  IMAGE_THEN_DESCRIPTION
-  DESCRIPTION_THEN_IMAGE
-}
-
-type ImageDescriptionColumn {
-  _placeholder: String
-  description: Markdown
-  image: ImageCentered
-  order: ImageDescriptionOrder
-  contentsPosition: ColumnVerticalPosition
-}
-
-type BackgroundImageColumn {
-  _placeholder: String
-  width: Int
-  height: Int
-  path: String
-  url: String
-  modal: Modal
-}
-
-type DevToolsColumn {
-  _placeholder: String
-  width: Int
-  height: Int
-  path: String
-}
-
-type MarkdownColumn {
-  _placeholder: String
-  description: Markdown
-  contentsPosition: ColumnVerticalPosition
-}
-
 type SourceCodeColumn implements Column {
   _placeholder: String
   sourceCode: SourceCode
@@ -208,11 +173,6 @@ type SourceCodeColumn implements Column {
 type TerminalColumn implements Column {
   _placeholder: String
   terminal: Terminal
-}
-
-type YouTubeColumn {
-  _placeholder: String
-  youtube: YouTubeEmbed
 }
 
 ###################################################
