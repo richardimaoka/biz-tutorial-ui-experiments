@@ -187,6 +187,39 @@ func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming,
 	}
 }
 
+/**
+ * Source Code fields
+ */
+
+type SourceStepType string
+
+const (
+	FileTree         SourceStepType = "fileTree"
+	SourceOpen       SourceStepType = "openFile"
+	SourceOpenCommit SourceStepType = "openFileCommit"
+	SourceError      SourceStepType = "error"
+	SourceMove       SourceStepType = "move"
+)
+
+type SourceTooltipFields struct {
+	SourceTooltipContents   string `json:"sourceTooltipContents"`
+	SourceTooltipTiming     string `json:"sourceTooltipTiming"`
+	SourceTooltipLineNumber int    `json:"sourceTooltipLineNumber"`
+	SourceTooltipIsAppend   bool   `json:"SourceTooltipIsAppend"`
+}
+
+type SourceFields struct {
+	Commit              string `json:"commit"`
+	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
+	ShowFileTree        bool   `json:"showFileTree"`
+	TypingAnimation     bool   `json:"typingAnimation"`
+	SourceTooltipFields
+}
+
+/**
+ * Source Code Column type and methods
+ */
+
 type SourceCodeColumn struct {
 	sourceCode *SourceCode
 }
@@ -204,31 +237,6 @@ func (c *SourceCodeColumn) ShowFileTree() {
 func (c *SourceCodeColumn) OpenFile(filePath string) {
 }
 
-type SourceCodeType string
-
-const (
-	FileTree         SourceCodeType = "fileTree"
-	SourceOpen       SourceCodeType = "openFile"
-	SourceOpenCommit SourceCodeType = "openFileCommit"
-	SourceError      SourceCodeType = "error"
-	SourceMove       SourceCodeType = "move"
-)
-
-type SourceCodeTooltipFields struct {
-	SourceCodeTooltipContents   string `json:"sourceCodeTooltipContents"`
-	SourceCodeTooltipTiming     string `json:"sourceCodeTooltipTiming"`
-	SourceCodeTooltipLineNumber int    `json:"sourceCodeTooltipLineNumber"`
-	SourceCodeTooltipIsAppend   bool   `json:"SourceCodeTooltipIsAppend"`
-}
-
-type SourceCodeFields struct {
-	Commit              string `json:"commit"`
-	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
-	ShowFileTree        bool   `json:"showFileTree"`
-	TypingAnimation     bool   `json:"typingAnimation"`
-	SourceCodeTooltipFields
-}
-
-func (c *SourceCodeColumn) Update(fields *SourceCodeFields) {
+func (c *SourceCodeColumn) Update(fields *SourceFields) {
 
 }

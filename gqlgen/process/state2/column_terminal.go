@@ -173,7 +173,7 @@ type TerminalFields struct {
 	TerminalStepType TerminalStepType `json:"terminalType"`
 	TerminalText     string           `json:"terminalText"`
 	TerminalName     string           `json:"terminalName"`
-	TerminalTooltip
+	TerminalTooltipFields
 }
 
 /**
@@ -239,8 +239,23 @@ func (c *TerminalColumn) ChangeCurrentDirectory(
 	terminal.ChangeCurrentDirectory(dirPath)
 }
 
-func (c *TerminalColumn) Update(fields *TerminalFields) {
+func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
+	switch fields.TerminalStepType {
+	case TerminalCommand:
+		c.WriteOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
+	case TerminalOutput:
+		c.WriteOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
+	case TerminalCd:
+		c.ChangeCurrentDirectory(fields.TerminalName, fields.CurrentDir)
+	case TerminalMove:
+		// no update is needed
+	case TerminalOpen:
+		// no update is needed
+	default:
+		return fmt.Errorf("toTerminalColumn failed, type = '%s' is not implemented", fields.TerminalStepType)
+	}
 
+	return nil
 }
 
 func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn2 {
