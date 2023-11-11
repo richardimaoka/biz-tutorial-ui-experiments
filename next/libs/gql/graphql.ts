@@ -84,7 +84,7 @@ export type ColumnWrapper2 = {
   columnName: Scalars["String"]["output"];
 };
 
-export type DevToolsColumn = Column & {
+export type DevToolsColumn = {
   __typename: "DevToolsColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   height?: Maybe<Scalars["Int"]["output"]>;
@@ -181,13 +181,6 @@ export type MonacoEditRange = {
   startLineNumber: Scalars["Int"]["output"];
 };
 
-export type NextAction = {
-  __typename: "NextAction";
-  markdown?: Maybe<MarkdownOld>;
-  terminalCommand?: Maybe<TerminalCommand>;
-  terminalName?: Maybe<Scalars["String"]["output"]>;
-};
-
 export type OpenFile = {
   __typename: "OpenFile";
   content?: Maybe<Scalars["String"]["output"]>;
@@ -218,18 +211,12 @@ export type Page = {
 export type Page2 = {
   __typename: "Page2";
   columns?: Maybe<Array<Maybe<ColumnWrapper2>>>;
-  defaultSelectColumn?: Maybe<Scalars["String"]["output"]>;
-};
-
-export type PageState = {
-  __typename: "PageState";
-  markdown?: Maybe<MarkdownOld>;
-  nextAction?: Maybe<NextAction>;
+  focusColumn?: Maybe<Scalars["String"]["output"]>;
+  isTrivial?: Maybe<Scalars["Boolean"]["output"]>;
+  modal?: Maybe<Modal>;
   nextStep?: Maybe<Scalars["String"]["output"]>;
   prevStep?: Maybe<Scalars["String"]["output"]>;
-  sourceCode?: Maybe<SourceCode>;
   step?: Maybe<Scalars["String"]["output"]>;
-  terminals?: Maybe<Array<Maybe<Terminal>>>;
 };
 
 export type Query = {
@@ -303,7 +290,7 @@ export type Terminal2 = {
   currentDirectory: Scalars["String"]["output"];
   entries: Array<TerminalEntry>;
   name?: Maybe<Scalars["String"]["output"]>;
-  tooltip?: Maybe<TerminalTooltip2>;
+  tooltip?: Maybe<TerminalTooltip>;
 };
 
 export type TerminalColumn = Column & {
@@ -347,13 +334,13 @@ export type TerminalOutput = {
   tooltip?: Maybe<Scalars["String"]["output"]>;
 };
 
-export type TerminalTooltip2 = {
-  __typename: "TerminalTooltip2";
+export type TerminalTooltip = {
+  __typename: "TerminalTooltip";
   markdownBody: Scalars["String"]["output"];
-  timing?: Maybe<TerminalTooltipTiming2>;
+  timing?: Maybe<TerminalTooltipTiming>;
 };
 
-export type TerminalTooltipTiming2 = "END" | "START";
+export type TerminalTooltipTiming = "END" | "START";
 
 export type TestObjs = {
   __typename: "TestObjs";
@@ -417,7 +404,6 @@ export type ColumnTab_FragmentFragment = {
   column?:
     | { __typename: "BackgroundImageColumn" }
     | { __typename: "BrowserColumn" }
-    | { __typename: "DevToolsColumn" }
     | { __typename: "ImageDescriptionColumn" }
     | { __typename: "MarkdownColumn" }
     | { __typename: "SourceCodeColumn" }
@@ -446,11 +432,6 @@ export type ColumnWrapperComponent_FragmentFragment = {
     | ({ __typename: "BrowserColumn" } & {
         " $fragmentRefs"?: {
           BrowserColumn_FragmentFragment: BrowserColumn_FragmentFragment;
-        };
-      })
-    | ({ __typename: "DevToolsColumn" } & {
-        " $fragmentRefs"?: {
-          DevToolsColumn_FragmentFragment: DevToolsColumn_FragmentFragment;
         };
       })
     | { __typename: "ImageDescriptionColumn" }
@@ -828,7 +809,7 @@ export type GqlTerminalContentsFragment = {
     }
   >;
   tooltip?:
-    | ({ __typename: "TerminalTooltip2" } & {
+    | ({ __typename: "TerminalTooltip" } & {
         " $fragmentRefs"?: {
           GqlTerminalTooltipFragment: GqlTerminalTooltipFragment;
         };
@@ -852,9 +833,9 @@ export type GqlTerminalHeaderFragment = {
 } & { " $fragmentName"?: "GqlTerminalHeaderFragment" };
 
 export type GqlTerminalTooltipFragment = {
-  __typename: "TerminalTooltip2";
+  __typename: "TerminalTooltip";
   markdownBody: string;
-  timing?: TerminalTooltipTiming2 | null;
+  timing?: TerminalTooltipTiming | null;
 } & { " $fragmentName"?: "GqlTerminalTooltipFragment" };
 
 export type GqlTutorialComponentFragment = ({ __typename: "Page2" } & {
@@ -2568,27 +2549,6 @@ export const BrowserColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<BrowserColumn_FragmentFragment, unknown>;
-export const DevToolsColumn_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "DevToolsColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<DevToolsColumn_FragmentFragment, unknown>;
 export const MarkdownFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2795,25 +2755,6 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "BrowserColumn_Fragment" },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "DevToolsColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "DevToolsColumn_Fragment",
-                        },
                       },
                     ],
                   },
@@ -3323,22 +3264,6 @@ export const ColumnWrapperComponent_FragmentFragmentDoc = {
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "BrowserColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "DevToolsColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3884,22 +3809,6 @@ export const Carousel_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "DevToolsColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
       name: { kind: "Name", value: "MarkdownFragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4050,25 +3959,6 @@ export const Carousel_FragmentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "BrowserColumn_Fragment" },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "DevToolsColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "DevToolsColumn_Fragment",
-                        },
                       },
                     ],
                   },
@@ -4713,22 +4603,6 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "DevToolsColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
       name: { kind: "Name", value: "MarkdownFragment" },
       typeCondition: {
         kind: "NamedType",
@@ -4887,25 +4761,6 @@ export const VisibleColumn_FragmentFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "DevToolsColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "DevToolsColumn_Fragment",
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
                     name: { kind: "Name", value: "MarkdownColumn" },
                   },
                   selectionSet: {
@@ -5027,6 +4882,27 @@ export const VisibleColumn_FragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<VisibleColumn_FragmentFragment, unknown>;
+export const DevToolsColumn_FragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "DevToolsColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "width" } },
+          { kind: "Field", name: { kind: "Name", value: "height" } },
+          { kind: "Field", name: { kind: "Name", value: "path" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DevToolsColumn_FragmentFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -5327,7 +5203,7 @@ export const GqlTerminalTooltipFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5402,7 +5278,7 @@ export const GqlTerminalContentsFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -5467,7 +5343,7 @@ export const GqlTerminalColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6370,7 +6246,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -6777,7 +6653,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -7303,7 +7179,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -8325,22 +8201,6 @@ export const PageQueryDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "DevToolsColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "DevToolsColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
       name: { kind: "Name", value: "MarkdownFragment" },
       typeCondition: {
         kind: "NamedType",
@@ -8491,25 +8351,6 @@ export const PageQueryDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "BrowserColumn_Fragment" },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "InlineFragment",
-                  typeCondition: {
-                    kind: "NamedType",
-                    name: { kind: "Name", value: "DevToolsColumn" },
-                  },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "FragmentSpread",
-                        name: {
-                          kind: "Name",
-                          value: "DevToolsColumn_Fragment",
-                        },
                       },
                     ],
                   },
@@ -8776,7 +8617,7 @@ export const AppTestTerminalPageDocument = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -9029,7 +8870,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlTerminalTooltip" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalTooltip2" },
+        name: { kind: "Name", value: "TerminalTooltip" },
       },
       selectionSet: {
         kind: "SelectionSet",

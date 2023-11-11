@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/commits"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/rough"
@@ -22,16 +21,6 @@ func main() {
 	switch subCmd {
 	case "input":
 		input.Run(os.Args[2:])
-	case "process":
-		if len(os.Args) != 3 {
-			panic("process sub command needs extra argument")
-		}
-
-		tutorial := os.Args[2]
-		err := process.Process2(tutorial, fmt.Sprintf("https://github.com/richardimaoka/article-%s.git", tutorial))
-		if err != nil {
-			panic(err)
-		}
 	case "rough":
 		if len(os.Args) != 3 {
 			panic("rough sub command needs extra argument")

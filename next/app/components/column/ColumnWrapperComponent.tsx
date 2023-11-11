@@ -24,10 +24,6 @@ const fragmentDefinition = graphql(`
         ...BrowserColumn_Fragment
       }
 
-      ... on DevToolsColumn {
-        ...DevToolsColumn_Fragment
-      }
-
       ... on MarkdownColumn {
         ...MarkdownColumn_Fragment
       }
@@ -68,8 +64,6 @@ export const ColumnWrapperComponent = (
       );
     case "BrowserColumn":
       return <BrowserColumn fragment={fragment.column} />;
-    case "DevToolsColumn":
-      return <DevToolsColumn fragment={fragment.column} />;
     case "MarkdownColumn":
       return <MarkdownColumn fragment={fragment.column} />;
     case "YouTubeColumn":

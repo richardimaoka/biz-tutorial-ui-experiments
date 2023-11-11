@@ -9535,13 +9535,6 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._BrowserColumn(ctx, sel, obj)
-	case model.DevToolsColumn:
-		return ec._DevToolsColumn(ctx, sel, &obj)
-	case *model.DevToolsColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._DevToolsColumn(ctx, sel, obj)
 	case model.MarkdownColumn:
 		return ec._MarkdownColumn(ctx, sel, &obj)
 	case *model.MarkdownColumn:
@@ -9860,7 +9853,7 @@ func (ec *executionContext) _ColumnWrapper2(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var devToolsColumnImplementors = []string{"DevToolsColumn", "Column"}
+var devToolsColumnImplementors = []string{"DevToolsColumn"}
 
 func (ec *executionContext) _DevToolsColumn(ctx context.Context, sel ast.SelectionSet, obj *model.DevToolsColumn) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, devToolsColumnImplementors)

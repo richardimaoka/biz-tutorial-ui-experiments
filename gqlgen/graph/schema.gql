@@ -54,6 +54,27 @@ type Page2 {
 }
 
 ###################################################
+# Columns
+###################################################
+
+# wrap around Column, which is friendly for frontend pattern-matching
+type ColumnWrapper {
+  index: Int
+  column: Column
+  name: String
+}
+
+interface Column {
+  _placeholder: String
+}
+
+enum ColumnVerticalPosition {
+  TOP
+  CENTER
+  BOTTOM
+}
+
+###################################################
 # Column 2
 ###################################################
 
@@ -125,7 +146,7 @@ type SourceCode2 {
 }
 
 ###################################################
-# Source Column 2
+# Browser Column 2
 ###################################################
 
 type Browser {
@@ -140,25 +161,8 @@ type BrowserColumn2 implements Column2 {
 }
 
 ###################################################
-# Columns
+# Column implementations
 ###################################################
-
-# wrap around Column, which is friendly for frontend pattern-matching
-type ColumnWrapper {
-  index: Int
-  column: Column
-  name: String
-}
-
-interface Column {
-  _placeholder: String
-}
-
-enum ColumnVerticalPosition {
-  TOP
-  CENTER
-  BOTTOM
-}
 
 enum ImageDescriptionOrder {
   IMAGE_THEN_DESCRIPTION
@@ -189,7 +193,7 @@ type BrowserColumn implements Column {
   path: String
 }
 
-type DevToolsColumn implements Column {
+type DevToolsColumn {
   _placeholder: String
   width: Int
   height: Int

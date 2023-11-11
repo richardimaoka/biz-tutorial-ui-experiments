@@ -3,7 +3,7 @@ import { TerminalTooltip } from "./TerminalTooltip";
 import { TerminalTooltipDelay } from "./TerminalTooltipDelay";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTerminalTooltip on TerminalTooltip2 {
+  fragment GqlTerminalTooltip on TerminalTooltip {
     markdownBody
     timing
   }

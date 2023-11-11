@@ -38,8 +38,6 @@ export const ColumnTab = (props: ColumnTabProps): JSX.Element => {
         return <ChromeIcon />;
       case "BrowserColumn":
         return <ChromeIcon />;
-      case "DevToolsColumn":
-        return <ChromeIcon />;
       case "ImageDescriptionColumn":
         return <FileLinesIcon />;
       case "MarkdownColumn":

@@ -96,13 +96,6 @@ func columnFromBytes_Old(bytes []byte) (Column, error) {
 		}
 		return &col, nil
 
-	case "DevToolsColumn":
-		var col DevToolsColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
-
 	case "YouTubeColumn":
 		var col YouTubeColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {

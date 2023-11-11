@@ -77,9 +77,6 @@ type DevToolsColumn struct {
 	Path        *string `json:"path"`
 }
 
-func (DevToolsColumn) IsColumn()                    {}
-func (this DevToolsColumn) GetPlaceholder() *string { return this.Placeholder }
-
 type EditSequence struct {
 	ID    string                 `json:"id"`
 	Edits []*MonacoEditOperation `json:"edits"`
