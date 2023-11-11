@@ -1,4 +1,4 @@
-package state2
+package state
 
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 

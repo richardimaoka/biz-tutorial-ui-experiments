@@ -1,4 +1,4 @@
-package state2
+package state
 
 type Step struct {
 	/**

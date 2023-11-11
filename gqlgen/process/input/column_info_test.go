@@ -3,21 +3,21 @@ package input
 import (
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func TestAppendIfNotExists(t *testing.T) {
 	columns := UsedColumns{
-		state2.TerminalColumnType,
-		state2.SourceColumnType,
+		state.TerminalColumnType,
+		state.SourceColumnType,
 	}
 	expected := UsedColumns{
-		state2.TerminalColumnType,
-		state2.SourceColumnType,
-		state2.BrowserColumnType,
+		state.TerminalColumnType,
+		state.SourceColumnType,
+		state.BrowserColumnType,
 	}
 
-	newColumns := appendIfNotExists(columns, state2.BrowserColumnType)
+	newColumns := appendIfNotExists(columns, state.BrowserColumnType)
 
 	if columns[2] != "" {
 		t.Errorf("columns in `appendIfNotExists(columns, )` should not be modified, but got colums[2] = '%s'", columns[2])

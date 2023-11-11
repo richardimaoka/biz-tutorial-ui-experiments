@@ -1,4 +1,4 @@
-package state2
+package state
 
 func stringRef(s string) *string {
 	if s == "" {

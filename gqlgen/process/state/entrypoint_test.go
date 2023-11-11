@@ -1,10 +1,10 @@
-package state2_test
+package state_test
 
 import (
 	"testing"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func Test(t *testing.T) {
@@ -22,11 +22,11 @@ func Test(t *testing.T) {
 			inputFile := "testdata/" + c.tutorialName + "/steps.json"
 
 			// read data from file
-			var steps []state2.Step
+			var steps []state.Step
 			testio.JsonRead(t, inputFile, &steps)
 
 			// Function to test
-			page := state2.NewPage(repo, c.tutorialName)
+			page := state.NewPage(repo, c.tutorialName)
 			for _, step := range steps {
 				t.Run(c.tutorialName, func(t *testing.T) {
 					err := page.Update(&step)

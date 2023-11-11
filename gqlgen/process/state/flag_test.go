@@ -1,4 +1,4 @@
-package state2_test
+package state_test
 
 import "flag"
 

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 type ImageFileSuffix = string
@@ -330,32 +330,32 @@ func numInSqBracket(s string) (int, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns state2.ColumnFields, nthFile int) state2.Step {
+func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields, nthFile int) state.Step {
 	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	imageFileName := r.ImageFileNames[nthFile]
 
-	step := state2.Step{
+	step := state.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		ModalFields: state2.ModalFields{
+		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
 		ColumnFields: currentColumns,
-		BrowserFields: state2.BrowserFields{
-			BrowserStepType:  state2.BrowserOpen,
+		BrowserFields: state.BrowserFields{
+			BrowserStepType:  state.BrowserOpen,
 			BrowserImagePath: imageFileName,
 		},
 	}
@@ -363,28 +363,28 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns s
 	return step
 }
 
-func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder, currentColumns state2.ColumnFields) state2.Step {
+func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
 	subId := "moveToBrowserStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
-	step := state2.Step{
+	step := state.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(move to Browser)",
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
 		ColumnFields: currentColumns,
-		BrowserFields: state2.BrowserFields{
-			BrowserStepType: state2.BrowserMove,
+		BrowserFields: state.BrowserFields{
+			BrowserStepType: state.BrowserMove,
 		},
 	}
 	// No tooltip - move step should be trivial and no tooltip to show
@@ -399,14 +399,14 @@ func breakdownBrowserRow(
 	r *BrowserRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-) ([]state2.Step, error) {
+) ([]state.Step, error) {
 	// - step creation
-	var steps []state2.Step
+	var steps []state.Step
 
-	currentColumns := resultColumns(state2.BrowserColumnType, prevColumns.AllUsed)
+	currentColumns := resultColumns(state.BrowserColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
-	if prevColumns.Focus != state2.BrowserColumnType && prevColumns.Focus != state2.NoColumnType {
+	if prevColumns.Focus != state.BrowserColumnType && prevColumns.Focus != state.NoColumnType {
 		step := moveToBrowserStep(r, finder, currentColumns)
 		steps = append(steps, step)
 	}
@@ -428,11 +428,11 @@ func toBrowserSteps(
 	r *Row,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-) ([]state2.Step, *ColumnInfo, error) {
+) ([]state.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, state2.BrowserColumnType),
-		Focus:   state2.BrowserColumnType,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, state.BrowserColumnType),
+		Focus:   state.BrowserColumnType,
 	}
 
 	subType, err := toBrowserSubType(r.Type)

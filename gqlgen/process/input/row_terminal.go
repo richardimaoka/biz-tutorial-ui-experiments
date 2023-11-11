@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 /**
@@ -259,30 +259,30 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state2.ColumnFields) state2.Step {
+func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := state2.Step{
+	step := state.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		ModalFields: state2.ModalFields{
+		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
 		ColumnFields: currentColumns,
-		TerminalFields: state2.TerminalFields{
-			TerminalStepType: state2.TerminalCommand,
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalCommand,
 			TerminalText:     r.Text,
 			TerminalName:     r.TerminalName,
 		},
@@ -296,30 +296,30 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 	return step
 }
 
-func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns state2.ColumnFields) state2.Step {
+func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
-	step := state2.Step{
+	step := state.Step{
 		// Fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		ModalFields: state2.ModalFields{
+		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
 		ColumnFields: currentColumns,
-		TerminalFields: state2.TerminalFields{
-			TerminalStepType: state2.TerminalOutput,
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalOutput,
 			TerminalText:     r.Text,
 			TerminalName:     r.TerminalName,
 		},
@@ -332,28 +332,28 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 	return step
 }
 
-func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns state2.ColumnFields) state2.Step {
+func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
-	step := state2.Step{
+	step := state.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(move to Terminal)",
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
 		ColumnFields: currentColumns,
-		TerminalFields: state2.TerminalFields{
-			TerminalStepType: state2.TerminalMove,
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalMove,
 			TerminalName:     r.TerminalName,
 		},
 	}
@@ -362,31 +362,31 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 	return step
 }
 
-func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state2.ColumnFields) state2.Step {
+func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
 	currentDir := strings.TrimPrefix(r.Text, "cd ")
 
 	subId := "terminalCdStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := state2.Step{
+	step := state.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: state2.FromRowFields{
+		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: state2.IntrinsicFields{
+		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "",
 		},
-		AnimationFields: state2.AnimationFields{
+		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
 		ColumnFields: currentColumns,
-		TerminalFields: state2.TerminalFields{
+		TerminalFields: state.TerminalFields{
 			CurrentDir:       currentDir,
-			TerminalStepType: state2.TerminalCd,
+			TerminalStepType: state.TerminalCd,
 			TerminalName:     r.TerminalName,
 		},
 	}
@@ -399,13 +399,13 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns s
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []state2.Step {
+func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []state.Step {
 	// - step creation
-	var steps []state2.Step
-	currentColumns := resultColumns(state2.TerminalColumnType, prevColumns.AllUsed)
+	var steps []state.Step
+	currentColumns := resultColumns(state.TerminalColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
-	if prevColumns.Focus != state2.TerminalColumnType && prevColumns.Focus != state2.NoColumnType {
+	if prevColumns.Focus != state.TerminalColumnType && prevColumns.Focus != state.NoColumnType {
 		moveToTerminalStep := moveToTerminalStep(r, finder, currentColumns)
 		steps = append(steps, moveToTerminalStep)
 	}
@@ -432,11 +432,11 @@ func toTerminalSteps(
 	r *Row,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-) ([]state2.Step, *ColumnInfo, error) {
+) ([]state.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, state2.TerminalColumnType),
-		Focus:   state2.TerminalColumnType,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, state.TerminalColumnType),
+		Focus:   state.TerminalColumnType,
 	}
 
 	subType, err := toTerminalSubType(r.Type)

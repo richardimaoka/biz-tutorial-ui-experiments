@@ -5,7 +5,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func TestFinder(t *testing.T) {
@@ -25,7 +25,7 @@ func TestFinder(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var step state2.Step
+			var step state.Step
 			err := jsonwrap.Read(c.inputFile, &step)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
