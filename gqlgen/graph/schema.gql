@@ -249,57 +249,9 @@ type SourceCode {
 }
 
 ###################################################
-# Markdown related object types
-###################################################
-
-enum MarkdownAlignment {
-  LEFT
-  CENTER
-}
-
-type MarkdownOld {
-  step: String
-  contents: String
-}
-
-type Markdown {
-  step: String
-  contents: String
-  alignment: MarkdownAlignment
-}
-
-###################################################
 # Modal related object types
 ###################################################
 
-enum ModalPosition {
-  TOP
-  CENTER
-  BOTTOM
-}
-
 type Modal {
-  text: String
-  position: ModalPosition
-}
-
-###################################################
-# Image-centered related object types
-###################################################
-
-type ImageCentered {
-  width: Int
-  height: Int
-  path: String
-  url: String
-}
-
-###################################################
-# Video related object types
-###################################################
-
-type YouTubeEmbed {
-  width: Int
-  height: Int
-  embedUrl: String
+  markdownBody: String
 }

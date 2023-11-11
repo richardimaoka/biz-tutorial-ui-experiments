@@ -90,36 +90,10 @@ export type FileNode = {
 
 export type FileNodeType = "DIRECTORY" | "FILE";
 
-export type ImageCentered = {
-  __typename: "ImageCentered";
-  height?: Maybe<Scalars["Int"]["output"]>;
-  path?: Maybe<Scalars["String"]["output"]>;
-  url?: Maybe<Scalars["String"]["output"]>;
-  width?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type Markdown = {
-  __typename: "Markdown";
-  alignment?: Maybe<MarkdownAlignment>;
-  contents?: Maybe<Scalars["String"]["output"]>;
-  step?: Maybe<Scalars["String"]["output"]>;
-};
-
-export type MarkdownAlignment = "CENTER" | "LEFT";
-
-export type MarkdownOld = {
-  __typename: "MarkdownOld";
-  contents?: Maybe<Scalars["String"]["output"]>;
-  step?: Maybe<Scalars["String"]["output"]>;
-};
-
 export type Modal = {
   __typename: "Modal";
-  position?: Maybe<ModalPosition>;
-  text?: Maybe<Scalars["String"]["output"]>;
+  markdownBody?: Maybe<Scalars["String"]["output"]>;
 };
-
-export type ModalPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type MonacoEditOperation = {
   __typename: "MonacoEditOperation";
@@ -276,13 +250,6 @@ export type TestObjsAppTestSourcecodeFilecontentPageArgs = {
 
 export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
-};
-
-export type YouTubeEmbed = {
-  __typename: "YouTubeEmbed";
-  embedUrl?: Maybe<Scalars["String"]["output"]>;
-  height?: Maybe<Scalars["Int"]["output"]>;
-  width?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type Navigation_FragmentFragment = {

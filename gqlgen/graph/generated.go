@@ -87,27 +87,8 @@ type ComplexityRoot struct {
 		Offset    func(childComplexity int) int
 	}
 
-	ImageCentered struct {
-		Height func(childComplexity int) int
-		Path   func(childComplexity int) int
-		URL    func(childComplexity int) int
-		Width  func(childComplexity int) int
-	}
-
-	Markdown struct {
-		Alignment func(childComplexity int) int
-		Contents  func(childComplexity int) int
-		Step      func(childComplexity int) int
-	}
-
-	MarkdownOld struct {
-		Contents func(childComplexity int) int
-		Step     func(childComplexity int) int
-	}
-
 	Modal struct {
-		Position func(childComplexity int) int
-		Text     func(childComplexity int) int
+		MarkdownBody func(childComplexity int) int
 	}
 
 	MonacoEditOperation struct {
@@ -218,12 +199,6 @@ type ComplexityRoot struct {
 		AppTestTerminalPage              func(childComplexity int, step *int) int
 		AppTestTutorialColumnsPage       func(childComplexity int) int
 		AppTestTutorialTutorialPage      func(childComplexity int) int
-	}
-
-	YouTubeEmbed struct {
-		EmbedURL func(childComplexity int) int
-		Height   func(childComplexity int) int
-		Width    func(childComplexity int) int
 	}
 }
 
@@ -404,82 +379,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.FileNode.Offset(childComplexity), true
 
-	case "ImageCentered.height":
-		if e.complexity.ImageCentered.Height == nil {
+	case "Modal.markdownBody":
+		if e.complexity.Modal.MarkdownBody == nil {
 			break
 		}
 
-		return e.complexity.ImageCentered.Height(childComplexity), true
-
-	case "ImageCentered.path":
-		if e.complexity.ImageCentered.Path == nil {
-			break
-		}
-
-		return e.complexity.ImageCentered.Path(childComplexity), true
-
-	case "ImageCentered.url":
-		if e.complexity.ImageCentered.URL == nil {
-			break
-		}
-
-		return e.complexity.ImageCentered.URL(childComplexity), true
-
-	case "ImageCentered.width":
-		if e.complexity.ImageCentered.Width == nil {
-			break
-		}
-
-		return e.complexity.ImageCentered.Width(childComplexity), true
-
-	case "Markdown.alignment":
-		if e.complexity.Markdown.Alignment == nil {
-			break
-		}
-
-		return e.complexity.Markdown.Alignment(childComplexity), true
-
-	case "Markdown.contents":
-		if e.complexity.Markdown.Contents == nil {
-			break
-		}
-
-		return e.complexity.Markdown.Contents(childComplexity), true
-
-	case "Markdown.step":
-		if e.complexity.Markdown.Step == nil {
-			break
-		}
-
-		return e.complexity.Markdown.Step(childComplexity), true
-
-	case "MarkdownOld.contents":
-		if e.complexity.MarkdownOld.Contents == nil {
-			break
-		}
-
-		return e.complexity.MarkdownOld.Contents(childComplexity), true
-
-	case "MarkdownOld.step":
-		if e.complexity.MarkdownOld.Step == nil {
-			break
-		}
-
-		return e.complexity.MarkdownOld.Step(childComplexity), true
-
-	case "Modal.position":
-		if e.complexity.Modal.Position == nil {
-			break
-		}
-
-		return e.complexity.Modal.Position(childComplexity), true
-
-	case "Modal.text":
-		if e.complexity.Modal.Text == nil {
-			break
-		}
-
-		return e.complexity.Modal.Text(childComplexity), true
+		return e.complexity.Modal.MarkdownBody(childComplexity), true
 
 	case "MonacoEditOperation.range":
 		if e.complexity.MonacoEditOperation.Range == nil {
@@ -965,27 +870,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TestObjs.AppTestTutorialTutorialPage(childComplexity), true
-
-	case "YouTubeEmbed.embedUrl":
-		if e.complexity.YouTubeEmbed.EmbedURL == nil {
-			break
-		}
-
-		return e.complexity.YouTubeEmbed.EmbedURL(childComplexity), true
-
-	case "YouTubeEmbed.height":
-		if e.complexity.YouTubeEmbed.Height == nil {
-			break
-		}
-
-		return e.complexity.YouTubeEmbed.Height(childComplexity), true
-
-	case "YouTubeEmbed.width":
-		if e.complexity.YouTubeEmbed.Width == nil {
-			break
-		}
-
-		return e.complexity.YouTubeEmbed.Width(childComplexity), true
 
 	}
 	return 0, false
@@ -2121,8 +2005,8 @@ func (ec *executionContext) fieldContext_FileNode_isDeleted(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _ImageCentered_width(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageCentered_width(ctx, field)
+func (ec *executionContext) _Modal_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.Modal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Modal_markdownBody(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2135,89 +2019,7 @@ func (ec *executionContext) _ImageCentered_width(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageCentered_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageCentered",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageCentered_height(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageCentered_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageCentered_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageCentered",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageCentered_path(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageCentered_path(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Path, nil
+		return obj.MarkdownBody, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2231,294 +2033,7 @@ func (ec *executionContext) _ImageCentered_path(ctx context.Context, field graph
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ImageCentered_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageCentered",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ImageCentered_url(ctx context.Context, field graphql.CollectedField, obj *model.ImageCentered) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImageCentered_url(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.URL, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ImageCentered_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ImageCentered",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Markdown_step(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Markdown_step(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Step, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Markdown_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Markdown",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Markdown_contents(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Markdown_contents(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contents, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Markdown_contents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Markdown",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Markdown_alignment(ctx context.Context, field graphql.CollectedField, obj *model.Markdown) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Markdown_alignment(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Alignment, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.MarkdownAlignment)
-	fc.Result = res
-	return ec.marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Markdown_alignment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Markdown",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type MarkdownAlignment does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MarkdownOld_step(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownOld) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MarkdownOld_step(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Step, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MarkdownOld_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MarkdownOld",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MarkdownOld_contents(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownOld) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MarkdownOld_contents(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contents, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MarkdownOld_contents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MarkdownOld",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Modal_text(ctx context.Context, field graphql.CollectedField, obj *model.Modal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Modal_text(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Text, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Modal_text(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Modal_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Modal",
 		Field:      field,
@@ -2526,47 +2041,6 @@ func (ec *executionContext) fieldContext_Modal_text(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Modal_position(ctx context.Context, field graphql.CollectedField, obj *model.Modal) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Modal_position(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Position, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.ModalPosition)
-	fc.Result = res
-	return ec.marshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Modal_position(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Modal",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ModalPosition does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3648,10 +3122,8 @@ func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "text":
-				return ec.fieldContext_Modal_text(ctx, field)
-			case "position":
-				return ec.fieldContext_Modal_position(ctx, field)
+			case "markdownBody":
+				return ec.fieldContext_Modal_markdownBody(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
 		},
@@ -3949,10 +3421,8 @@ func (ec *executionContext) fieldContext_Page2_modal(ctx context.Context, field 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "text":
-				return ec.fieldContext_Modal_text(ctx, field)
-			case "position":
-				return ec.fieldContext_Modal_position(ctx, field)
+			case "markdownBody":
+				return ec.fieldContext_Modal_markdownBody(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
 		},
@@ -5748,129 +5218,6 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 	if fc.Args, err = ec.field_TestObjs_appTestSourcecodeFilecontentPage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _YouTubeEmbed_width(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeEmbed_width(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_YouTubeEmbed_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "YouTubeEmbed",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _YouTubeEmbed_height(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeEmbed_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_YouTubeEmbed_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "YouTubeEmbed",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _YouTubeEmbed_embedUrl(ctx context.Context, field graphql.CollectedField, obj *model.YouTubeEmbed) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_YouTubeEmbed_embedUrl(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EmbedURL, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_YouTubeEmbed_embedUrl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "YouTubeEmbed",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
 	}
 	return fc, nil
 }
@@ -7953,105 +7300,6 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var imageCenteredImplementors = []string{"ImageCentered"}
-
-func (ec *executionContext) _ImageCentered(ctx context.Context, sel ast.SelectionSet, obj *model.ImageCentered) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, imageCenteredImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ImageCentered")
-		case "width":
-
-			out.Values[i] = ec._ImageCentered_width(ctx, field, obj)
-
-		case "height":
-
-			out.Values[i] = ec._ImageCentered_height(ctx, field, obj)
-
-		case "path":
-
-			out.Values[i] = ec._ImageCentered_path(ctx, field, obj)
-
-		case "url":
-
-			out.Values[i] = ec._ImageCentered_url(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var markdownImplementors = []string{"Markdown"}
-
-func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet, obj *model.Markdown) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, markdownImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Markdown")
-		case "step":
-
-			out.Values[i] = ec._Markdown_step(ctx, field, obj)
-
-		case "contents":
-
-			out.Values[i] = ec._Markdown_contents(ctx, field, obj)
-
-		case "alignment":
-
-			out.Values[i] = ec._Markdown_alignment(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var markdownOldImplementors = []string{"MarkdownOld"}
-
-func (ec *executionContext) _MarkdownOld(ctx context.Context, sel ast.SelectionSet, obj *model.MarkdownOld) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, markdownOldImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("MarkdownOld")
-		case "step":
-
-			out.Values[i] = ec._MarkdownOld_step(ctx, field, obj)
-
-		case "contents":
-
-			out.Values[i] = ec._MarkdownOld_contents(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var modalImplementors = []string{"Modal"}
 
 func (ec *executionContext) _Modal(ctx context.Context, sel ast.SelectionSet, obj *model.Modal) graphql.Marshaler {
@@ -8062,13 +7310,9 @@ func (ec *executionContext) _Modal(ctx context.Context, sel ast.SelectionSet, ob
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Modal")
-		case "text":
+		case "markdownBody":
 
-			out.Values[i] = ec._Modal_text(ctx, field, obj)
-
-		case "position":
-
-			out.Values[i] = ec._Modal_position(ctx, field, obj)
+			out.Values[i] = ec._Modal_markdownBody(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8827,39 +8071,6 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 				return innerFunc(ctx)
 
 			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var youTubeEmbedImplementors = []string{"YouTubeEmbed"}
-
-func (ec *executionContext) _YouTubeEmbed(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeEmbed) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, youTubeEmbedImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("YouTubeEmbed")
-		case "width":
-
-			out.Values[i] = ec._YouTubeEmbed_width(ctx, field, obj)
-
-		case "height":
-
-			out.Values[i] = ec._YouTubeEmbed_height(ctx, field, obj)
-
-		case "embedUrl":
-
-			out.Values[i] = ec._YouTubeEmbed_embedUrl(ctx, field, obj)
-
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9944,43 +9155,11 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) unmarshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, v interface{}) (*model.MarkdownAlignment, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.MarkdownAlignment)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownAlignment(ctx context.Context, sel ast.SelectionSet, v *model.MarkdownAlignment) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModal(ctx context.Context, sel ast.SelectionSet, v *model.Modal) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Modal(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx context.Context, v interface{}) (*model.ModalPosition, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.ModalPosition)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx context.Context, sel ast.SelectionSet, v *model.ModalPosition) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditOperationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MonacoEditOperation) graphql.Marshaler {

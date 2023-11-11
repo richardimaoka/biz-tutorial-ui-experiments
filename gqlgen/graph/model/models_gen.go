@@ -63,27 +63,8 @@ type FileNode struct {
 	IsDeleted *bool        `json:"isDeleted"`
 }
 
-type ImageCentered struct {
-	Width  *int    `json:"width"`
-	Height *int    `json:"height"`
-	Path   *string `json:"path"`
-	URL    *string `json:"url"`
-}
-
-type Markdown struct {
-	Step      *string            `json:"step"`
-	Contents  *string            `json:"contents"`
-	Alignment *MarkdownAlignment `json:"alignment"`
-}
-
-type MarkdownOld struct {
-	Step     *string `json:"step"`
-	Contents *string `json:"contents"`
-}
-
 type Modal struct {
-	Text     *string        `json:"text"`
-	Position *ModalPosition `json:"position"`
+	MarkdownBody *string `json:"markdownBody"`
 }
 
 type MonacoEditOperation struct {
@@ -188,12 +169,6 @@ type TestObjs struct {
 	AppTestSourcecodeFilecontentPage *OpenFile        `json:"appTestSourcecodeFilecontentPage"`
 }
 
-type YouTubeEmbed struct {
-	Width    *int    `json:"width"`
-	Height   *int    `json:"height"`
-	EmbedURL *string `json:"embedUrl"`
-}
-
 type ColumnVerticalPosition string
 
 const (
@@ -275,90 +250,6 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type MarkdownAlignment string
-
-const (
-	MarkdownAlignmentLeft   MarkdownAlignment = "LEFT"
-	MarkdownAlignmentCenter MarkdownAlignment = "CENTER"
-)
-
-var AllMarkdownAlignment = []MarkdownAlignment{
-	MarkdownAlignmentLeft,
-	MarkdownAlignmentCenter,
-}
-
-func (e MarkdownAlignment) IsValid() bool {
-	switch e {
-	case MarkdownAlignmentLeft, MarkdownAlignmentCenter:
-		return true
-	}
-	return false
-}
-
-func (e MarkdownAlignment) String() string {
-	return string(e)
-}
-
-func (e *MarkdownAlignment) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = MarkdownAlignment(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid MarkdownAlignment", str)
-	}
-	return nil
-}
-
-func (e MarkdownAlignment) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type ModalPosition string
-
-const (
-	ModalPositionTop    ModalPosition = "TOP"
-	ModalPositionCenter ModalPosition = "CENTER"
-	ModalPositionBottom ModalPosition = "BOTTOM"
-)
-
-var AllModalPosition = []ModalPosition{
-	ModalPositionTop,
-	ModalPositionCenter,
-	ModalPositionBottom,
-}
-
-func (e ModalPosition) IsValid() bool {
-	switch e {
-	case ModalPositionTop, ModalPositionCenter, ModalPositionBottom:
-		return true
-	}
-	return false
-}
-
-func (e ModalPosition) String() string {
-	return string(e)
-}
-
-func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ModalPosition(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ModalPosition", str)
-	}
-	return nil
-}
-
-func (e ModalPosition) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
