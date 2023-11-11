@@ -68,13 +68,6 @@ func columnFromBytes_Old(bytes []byte) (Column, error) {
 		}
 		return &col, nil
 
-	case "MarkdownColumn":
-		var col MarkdownColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
-
 	case "TerminalColumn":
 		var col TerminalColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {

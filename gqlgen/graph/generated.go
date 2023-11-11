@@ -9641,13 +9641,6 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._BrowserColumn(ctx, sel, obj)
-	case model.MarkdownColumn:
-		return ec._MarkdownColumn(ctx, sel, &obj)
-	case *model.MarkdownColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._MarkdownColumn(ctx, sel, obj)
 	case model.SourceCodeColumn:
 		return ec._SourceCodeColumn(ctx, sel, &obj)
 	case *model.SourceCodeColumn:
@@ -10219,7 +10212,7 @@ func (ec *executionContext) _Markdown(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var markdownColumnImplementors = []string{"MarkdownColumn", "Column"}
+var markdownColumnImplementors = []string{"MarkdownColumn"}
 
 func (ec *executionContext) _MarkdownColumn(ctx context.Context, sel ast.SelectionSet, obj *model.MarkdownColumn) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, markdownColumnImplementors)

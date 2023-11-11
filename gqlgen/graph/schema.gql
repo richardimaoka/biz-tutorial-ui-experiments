@@ -201,7 +201,7 @@ type DevToolsColumn {
   path: String
 }
 
-type MarkdownColumn implements Column {
+type MarkdownColumn {
   _placeholder: String
   description: Markdown
   contentsPosition: ColumnVerticalPosition

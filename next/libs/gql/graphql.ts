@@ -146,7 +146,7 @@ export type Markdown = {
 
 export type MarkdownAlignment = "CENTER" | "LEFT";
 
-export type MarkdownColumn = Column & {
+export type MarkdownColumn = {
   __typename: "MarkdownColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   contentsPosition?: Maybe<ColumnVerticalPosition>;

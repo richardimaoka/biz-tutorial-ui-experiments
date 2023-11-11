@@ -126,9 +126,6 @@ type MarkdownColumn struct {
 	ContentsPosition *ColumnVerticalPosition `json:"contentsPosition"`
 }
 
-func (MarkdownColumn) IsColumn()                    {}
-func (this MarkdownColumn) GetPlaceholder() *string { return this.Placeholder }
-
 type MarkdownOld struct {
 	Step     *string `json:"step"`
 	Contents *string `json:"contents"`
