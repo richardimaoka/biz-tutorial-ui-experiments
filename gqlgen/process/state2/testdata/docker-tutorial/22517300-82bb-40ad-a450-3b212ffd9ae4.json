@@ -1,4 +1,8 @@
 {
+  "step": null,
+  "nextStep": null,
+  "prevStep": null,
+  "isTrivial": null,
   "columns": [
     {
       "column": {
@@ -105,5 +109,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "defaultSelectColumn": null
+  "focusColumn": null,
+  "modal": null
 }

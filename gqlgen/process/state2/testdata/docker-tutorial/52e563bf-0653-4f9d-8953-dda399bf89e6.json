@@ -1,4 +1,8 @@
 {
+  "step": null,
+  "nextStep": null,
+  "prevStep": null,
+  "isTrivial": null,
   "columns": [
     {
       "column": {
@@ -26,5 +30,6 @@
       "columnDisplayName": "terminal"
     }
   ],
-  "defaultSelectColumn": null
+  "focusColumn": null,
+  "modal": null
 }

@@ -41,8 +41,16 @@ type Page {
 ###################################################
 
 type Page2 {
+  step: String
+  nextStep: String
+  prevStep: String
+
+  isTrivial: Boolean
+
   columns: [ColumnWrapper2]
-  defaultSelectColumn: String
+  focusColumn: String
+
+  modal: Modal
 }
 
 ###################################################

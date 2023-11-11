@@ -1,4 +1,8 @@
 {
+  "step": null,
+  "nextStep": null,
+  "prevStep": null,
+  "isTrivial": null,
   "columns": [
     {
       "column": {
@@ -45,5 +49,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "defaultSelectColumn": null
+  "focusColumn": null,
+  "modal": null
 }

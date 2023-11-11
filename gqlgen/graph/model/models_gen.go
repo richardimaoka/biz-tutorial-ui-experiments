@@ -180,8 +180,13 @@ type Page struct {
 }
 
 type Page2 struct {
-	Columns             []*ColumnWrapper2 `json:"columns"`
-	DefaultSelectColumn *string           `json:"defaultSelectColumn"`
+	Step        *string           `json:"step"`
+	NextStep    *string           `json:"nextStep"`
+	PrevStep    *string           `json:"prevStep"`
+	IsTrivial   *bool             `json:"isTrivial"`
+	Columns     []*ColumnWrapper2 `json:"columns"`
+	FocusColumn *string           `json:"focusColumn"`
+	Modal       *Modal            `json:"modal"`
 }
 
 type SourceCode2 struct {
