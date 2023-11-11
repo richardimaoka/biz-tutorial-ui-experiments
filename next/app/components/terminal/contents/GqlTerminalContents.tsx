@@ -6,7 +6,7 @@ import { GqlTerminalTooltip } from "../tooltip/GqlTerminalTooltip";
 import { GqlTerminalEntryComponent } from "../entry/GqlTerminalEntryComponent";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTerminalContents on Terminal2 {
+  fragment GqlTerminalContents on Terminal {
     entries {
       id
       ...GqlTerminalEntryComponent

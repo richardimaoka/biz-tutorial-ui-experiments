@@ -5,7 +5,7 @@ import styles from "./GqlTerminalColumn.module.css";
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTerminalColumn on TerminalColumn2 {
+  fragment GqlTerminalColumn on TerminalColumn {
     ...GqlTerminalHeader
     terminals {
       ...GqlTerminalContents

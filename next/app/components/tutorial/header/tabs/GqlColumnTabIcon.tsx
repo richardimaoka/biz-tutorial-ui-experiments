@@ -20,7 +20,7 @@ export function GqlColumnTabIcon(props: Props): JSX.Element {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   switch (fragment.column.__typename) {
-    case "TerminalColumn2":
+    case "TerminalColumn":
       return <TerminalIcon />;
     case "SourceCodeColumn2":
       return <SourceCodeIcon />;

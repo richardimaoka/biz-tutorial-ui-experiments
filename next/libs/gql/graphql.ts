@@ -173,18 +173,18 @@ export type SourceCodeTooltip = {
 
 export type SourceCodeTooltipTiming = "END" | "START";
 
-export type Terminal2 = {
-  __typename: "Terminal2";
+export type Terminal = {
+  __typename: "Terminal";
   currentDirectory: Scalars["String"]["output"];
   entries: Array<TerminalEntry>;
   name?: Maybe<Scalars["String"]["output"]>;
   tooltip?: Maybe<TerminalTooltip>;
 };
 
-export type TerminalColumn2 = Column & {
-  __typename: "TerminalColumn2";
+export type TerminalColumn = Column & {
+  __typename: "TerminalColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
-  terminals: Array<Terminal2>;
+  terminals: Array<Terminal>;
 };
 
 export type TerminalEntry = {
@@ -207,7 +207,7 @@ export type TerminalTooltipTiming = "END" | "START";
 export type TestObjs = {
   __typename: "TestObjs";
   appTestSourcecodeFilecontentPage?: Maybe<OpenFile>;
-  appTestTerminalPage?: Maybe<TerminalColumn2>;
+  appTestTerminalPage?: Maybe<TerminalColumn>;
   appTestTutorialColumnsPage?: Maybe<Page>;
   appTestTutorialTutorialPage?: Maybe<Page>;
 };
@@ -319,9 +319,9 @@ export type GqlFileNameTabBarFragment = {
 } & { " $fragmentName"?: "GqlFileNameTabBarFragment" };
 
 export type GqlTerminalColumnFragment = ({
-  __typename: "TerminalColumn2";
+  __typename: "TerminalColumn";
   terminals: Array<
-    { __typename: "Terminal2" } & {
+    { __typename: "Terminal" } & {
       " $fragmentRefs"?: {
         GqlTerminalContentsFragment: GqlTerminalContentsFragment;
       };
@@ -332,7 +332,7 @@ export type GqlTerminalColumnFragment = ({
 }) & { " $fragmentName"?: "GqlTerminalColumnFragment" };
 
 export type GqlTerminalContentsFragment = {
-  __typename: "Terminal2";
+  __typename: "Terminal";
   entries: Array<
     { __typename: "TerminalEntry"; id: string } & {
       " $fragmentRefs"?: {
@@ -356,9 +356,9 @@ export type GqlTerminalEntryComponentFragment = {
 } & { " $fragmentName"?: "GqlTerminalEntryComponentFragment" };
 
 export type GqlTerminalHeaderFragment = {
-  __typename: "TerminalColumn2";
+  __typename: "TerminalColumn";
   terminals: Array<{
-    __typename: "Terminal2";
+    __typename: "Terminal";
     name?: string | null;
     currentDirectory: string;
   }>;
@@ -387,7 +387,7 @@ export type GqlColumnWrapperFragment = {
           GqlSourceCodeColumnFragment: GqlSourceCodeColumnFragment;
         };
       })
-    | ({ __typename: "TerminalColumn2" } & {
+    | ({ __typename: "TerminalColumn" } & {
         " $fragmentRefs"?: {
           GqlTerminalColumnFragment: GqlTerminalColumnFragment;
         };
@@ -423,7 +423,7 @@ export type GqlColumnTabIconFragment = {
   column:
     | { __typename: "BrowserColumn2" }
     | { __typename: "SourceCodeColumn2" }
-    | { __typename: "TerminalColumn2" };
+    | { __typename: "TerminalColumn" };
 } & { " $fragmentName"?: "GqlColumnTabIconFragment" };
 
 export type GqlColumnTabsFragment = {
@@ -445,7 +445,7 @@ export type AppTestTerminalPageQuery = {
   _test?: {
     __typename: "TestObjs";
     appTestTerminalPage?:
-      | ({ __typename: "TerminalColumn2" } & {
+      | ({ __typename: "TerminalColumn" } & {
           " $fragmentRefs"?: {
             GqlTerminalColumnFragment: GqlTerminalColumnFragment;
           };
@@ -720,7 +720,7 @@ export const GqlTerminalHeaderFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -792,7 +792,7 @@ export const GqlTerminalContentsFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -867,7 +867,7 @@ export const GqlTerminalColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -927,7 +927,7 @@ export const GqlTerminalColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -954,7 +954,7 @@ export const GqlTerminalColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -1734,7 +1734,7 @@ export const GqlColumnWrapperFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalColumn2" },
+                    name: { kind: "Name", value: "TerminalColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -1773,7 +1773,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -1830,7 +1830,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2079,7 +2079,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2180,7 +2180,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2237,7 +2237,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2277,7 +2277,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2572,7 +2572,7 @@ export const GqlColumnWrappersFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalColumn2" },
+                    name: { kind: "Name", value: "TerminalColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -2706,7 +2706,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2763,7 +2763,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2803,7 +2803,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3098,7 +3098,7 @@ export const GqlTutorialComponentFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalColumn2" },
+                    name: { kind: "Name", value: "TerminalColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -3235,7 +3235,7 @@ export const AppTestTerminalPageDocument = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3292,7 +3292,7 @@ export const AppTestTerminalPageDocument = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3332,7 +3332,7 @@ export const AppTestTerminalPageDocument = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3488,7 +3488,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlTerminalHeader" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3545,7 +3545,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlTerminalContents" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "Terminal2" },
+        name: { kind: "Name", value: "Terminal" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3585,7 +3585,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "TerminalColumn2" },
+        name: { kind: "Name", value: "TerminalColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3880,7 +3880,7 @@ export const AppTestTutorialColumnsPageDocument = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "TerminalColumn2" },
+                    name: { kind: "Name", value: "TerminalColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",

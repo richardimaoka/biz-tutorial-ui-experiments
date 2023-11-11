@@ -152,14 +152,14 @@ type ComplexityRoot struct {
 		Timing       func(childComplexity int) int
 	}
 
-	Terminal2 struct {
+	Terminal struct {
 		CurrentDirectory func(childComplexity int) int
 		Entries          func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Tooltip          func(childComplexity int) int
 	}
 
-	TerminalColumn2 struct {
+	TerminalColumn struct {
 		Placeholder func(childComplexity int) int
 		Terminals   func(childComplexity int) int
 	}
@@ -191,7 +191,7 @@ type SourceCodeResolver interface {
 	OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error)
 }
 type TestObjsResolver interface {
-	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error)
+	AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn, error)
 	AppTestTutorialColumnsPage(ctx context.Context, obj *model.TestObjs) (*model.Page, error)
 	AppTestTutorialTutorialPage(ctx context.Context, obj *model.TestObjs) (*model.Page, error)
 	AppTestSourcecodeFilecontentPage(ctx context.Context, obj *model.TestObjs, step int) (*model.OpenFile, error)
@@ -640,47 +640,47 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SourceCodeTooltip.Timing(childComplexity), true
 
-	case "Terminal2.currentDirectory":
-		if e.complexity.Terminal2.CurrentDirectory == nil {
+	case "Terminal.currentDirectory":
+		if e.complexity.Terminal.CurrentDirectory == nil {
 			break
 		}
 
-		return e.complexity.Terminal2.CurrentDirectory(childComplexity), true
+		return e.complexity.Terminal.CurrentDirectory(childComplexity), true
 
-	case "Terminal2.entries":
-		if e.complexity.Terminal2.Entries == nil {
+	case "Terminal.entries":
+		if e.complexity.Terminal.Entries == nil {
 			break
 		}
 
-		return e.complexity.Terminal2.Entries(childComplexity), true
+		return e.complexity.Terminal.Entries(childComplexity), true
 
-	case "Terminal2.name":
-		if e.complexity.Terminal2.Name == nil {
+	case "Terminal.name":
+		if e.complexity.Terminal.Name == nil {
 			break
 		}
 
-		return e.complexity.Terminal2.Name(childComplexity), true
+		return e.complexity.Terminal.Name(childComplexity), true
 
-	case "Terminal2.tooltip":
-		if e.complexity.Terminal2.Tooltip == nil {
+	case "Terminal.tooltip":
+		if e.complexity.Terminal.Tooltip == nil {
 			break
 		}
 
-		return e.complexity.Terminal2.Tooltip(childComplexity), true
+		return e.complexity.Terminal.Tooltip(childComplexity), true
 
-	case "TerminalColumn2._placeholder":
-		if e.complexity.TerminalColumn2.Placeholder == nil {
+	case "TerminalColumn._placeholder":
+		if e.complexity.TerminalColumn.Placeholder == nil {
 			break
 		}
 
-		return e.complexity.TerminalColumn2.Placeholder(childComplexity), true
+		return e.complexity.TerminalColumn.Placeholder(childComplexity), true
 
-	case "TerminalColumn2.terminals":
-		if e.complexity.TerminalColumn2.Terminals == nil {
+	case "TerminalColumn.terminals":
+		if e.complexity.TerminalColumn.Terminals == nil {
 			break
 		}
 
-		return e.complexity.TerminalColumn2.Terminals(childComplexity), true
+		return e.complexity.TerminalColumn.Terminals(childComplexity), true
 
 	case "TerminalEntry.entryType":
 		if e.complexity.TerminalEntry.EntryType == nil {
@@ -3764,8 +3764,8 @@ func (ec *executionContext) fieldContext_SourceCodeTooltip_timing(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Terminal2_name(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_name(ctx, field)
+func (ec *executionContext) _Terminal_name(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3792,9 +3792,9 @@ func (ec *executionContext) _Terminal2_name(ctx context.Context, field graphql.C
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Terminal2_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3805,8 +3805,8 @@ func (ec *executionContext) fieldContext_Terminal2_name(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Terminal2_currentDirectory(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_currentDirectory(ctx, field)
+func (ec *executionContext) _Terminal_currentDirectory(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_currentDirectory(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3836,9 +3836,9 @@ func (ec *executionContext) _Terminal2_currentDirectory(ctx context.Context, fie
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Terminal2_currentDirectory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_currentDirectory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3849,8 +3849,8 @@ func (ec *executionContext) fieldContext_Terminal2_currentDirectory(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Terminal2_entries(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_entries(ctx, field)
+func (ec *executionContext) _Terminal_entries(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_entries(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3880,9 +3880,9 @@ func (ec *executionContext) _Terminal2_entries(ctx context.Context, field graphq
 	return ec.marshalNTerminalEntry2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Terminal2_entries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_entries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3901,8 +3901,8 @@ func (ec *executionContext) fieldContext_Terminal2_entries(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Terminal2_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.Terminal2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Terminal2_tooltip(ctx, field)
+func (ec *executionContext) _Terminal_tooltip(ctx context.Context, field graphql.CollectedField, obj *model.Terminal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Terminal_tooltip(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3929,9 +3929,9 @@ func (ec *executionContext) _Terminal2_tooltip(ctx context.Context, field graphq
 	return ec.marshalOTerminalTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Terminal2_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Terminal_tooltip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Terminal2",
+		Object:     "Terminal",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3948,8 +3948,8 @@ func (ec *executionContext) fieldContext_Terminal2_tooltip(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalColumn2__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalColumn2__placeholder(ctx, field)
+func (ec *executionContext) _TerminalColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalColumn__placeholder(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3976,9 +3976,9 @@ func (ec *executionContext) _TerminalColumn2__placeholder(ctx context.Context, f
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalColumn2__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalColumn2",
+		Object:     "TerminalColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3989,8 +3989,8 @@ func (ec *executionContext) fieldContext_TerminalColumn2__placeholder(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _TerminalColumn2_terminals(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TerminalColumn2_terminals(ctx, field)
+func (ec *executionContext) _TerminalColumn_terminals(ctx context.Context, field graphql.CollectedField, obj *model.TerminalColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalColumn_terminals(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4015,29 +4015,29 @@ func (ec *executionContext) _TerminalColumn2_terminals(ctx context.Context, fiel
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Terminal2)
+	res := resTmp.([]*model.Terminal)
 	fc.Result = res
-	return ec.marshalNTerminal22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2ᚄ(ctx, field.Selections, res)
+	return ec.marshalNTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TerminalColumn2_terminals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TerminalColumn_terminals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TerminalColumn2",
+		Object:     "TerminalColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "name":
-				return ec.fieldContext_Terminal2_name(ctx, field)
+				return ec.fieldContext_Terminal_name(ctx, field)
 			case "currentDirectory":
-				return ec.fieldContext_Terminal2_currentDirectory(ctx, field)
+				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
 			case "entries":
-				return ec.fieldContext_Terminal2_entries(ctx, field)
+				return ec.fieldContext_Terminal_entries(ctx, field)
 			case "tooltip":
-				return ec.fieldContext_Terminal2_tooltip(ctx, field)
+				return ec.fieldContext_Terminal_tooltip(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Terminal2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
 		},
 	}
 	return fc, nil
@@ -4283,9 +4283,9 @@ func (ec *executionContext) _TestObjs_appTestTerminalPage(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.TerminalColumn2)
+	res := resTmp.(*model.TerminalColumn)
 	fc.Result = res
-	return ec.marshalOTerminalColumn22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalColumn2(ctx, field.Selections, res)
+	return ec.marshalOTerminalColumn2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalColumn(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_TestObjs_appTestTerminalPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4297,11 +4297,11 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTerminalPage(ctx contex
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "_placeholder":
-				return ec.fieldContext_TerminalColumn2__placeholder(ctx, field)
+				return ec.fieldContext_TerminalColumn__placeholder(ctx, field)
 			case "terminals":
-				return ec.fieldContext_TerminalColumn2_terminals(ctx, field)
+				return ec.fieldContext_TerminalColumn_terminals(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TerminalColumn2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TerminalColumn", field.Name)
 		},
 	}
 	defer func() {
@@ -6287,13 +6287,13 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case model.TerminalColumn2:
-		return ec._TerminalColumn2(ctx, sel, &obj)
-	case *model.TerminalColumn2:
+	case model.TerminalColumn:
+		return ec._TerminalColumn(ctx, sel, &obj)
+	case *model.TerminalColumn:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._TerminalColumn2(ctx, sel, obj)
+		return ec._TerminalColumn(ctx, sel, obj)
 	case model.SourceCodeColumn2:
 		return ec._SourceCodeColumn2(ctx, sel, &obj)
 	case *model.SourceCodeColumn2:
@@ -7009,37 +7009,37 @@ func (ec *executionContext) _SourceCodeTooltip(ctx context.Context, sel ast.Sele
 	return out
 }
 
-var terminal2Implementors = []string{"Terminal2"}
+var terminalImplementors = []string{"Terminal"}
 
-func (ec *executionContext) _Terminal2(ctx context.Context, sel ast.SelectionSet, obj *model.Terminal2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminal2Implementors)
+func (ec *executionContext) _Terminal(ctx context.Context, sel ast.SelectionSet, obj *model.Terminal) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, terminalImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("Terminal2")
+			out.Values[i] = graphql.MarshalString("Terminal")
 		case "name":
 
-			out.Values[i] = ec._Terminal2_name(ctx, field, obj)
+			out.Values[i] = ec._Terminal_name(ctx, field, obj)
 
 		case "currentDirectory":
 
-			out.Values[i] = ec._Terminal2_currentDirectory(ctx, field, obj)
+			out.Values[i] = ec._Terminal_currentDirectory(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "entries":
 
-			out.Values[i] = ec._Terminal2_entries(ctx, field, obj)
+			out.Values[i] = ec._Terminal_entries(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "tooltip":
 
-			out.Values[i] = ec._Terminal2_tooltip(ctx, field, obj)
+			out.Values[i] = ec._Terminal_tooltip(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -7052,23 +7052,23 @@ func (ec *executionContext) _Terminal2(ctx context.Context, sel ast.SelectionSet
 	return out
 }
 
-var terminalColumn2Implementors = []string{"TerminalColumn2", "Column"}
+var terminalColumnImplementors = []string{"TerminalColumn", "Column"}
 
-func (ec *executionContext) _TerminalColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalColumn2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, terminalColumn2Implementors)
+func (ec *executionContext) _TerminalColumn(ctx context.Context, sel ast.SelectionSet, obj *model.TerminalColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, terminalColumnImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TerminalColumn2")
+			out.Values[i] = graphql.MarshalString("TerminalColumn")
 		case "_placeholder":
 
-			out.Values[i] = ec._TerminalColumn2__placeholder(ctx, field, obj)
+			out.Values[i] = ec._TerminalColumn__placeholder(ctx, field, obj)
 
 		case "terminals":
 
-			out.Values[i] = ec._TerminalColumn2_terminals(ctx, field, obj)
+			out.Values[i] = ec._TerminalColumn_terminals(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -7685,7 +7685,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTerminal22ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2ᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal2) graphql.Marshaler {
+func (ec *executionContext) marshalNTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -7709,7 +7709,7 @@ func (ec *executionContext) marshalNTerminal22ᚕᚖgithubᚗcomᚋrichardimaoka
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx, sel, v[i])
+			ret[i] = ec.marshalNTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7729,14 +7729,14 @@ func (ec *executionContext) marshalNTerminal22ᚕᚖgithubᚗcomᚋrichardimaoka
 	return ret
 }
 
-func (ec *executionContext) marshalNTerminal22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal2(ctx context.Context, sel ast.SelectionSet, v *model.Terminal2) graphql.Marshaler {
+func (ec *executionContext) marshalNTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v *model.Terminal) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._Terminal2(ctx, sel, v)
+	return ec._Terminal(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTerminalEntry2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TerminalEntry) graphql.Marshaler {
@@ -8382,11 +8382,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOTerminalColumn22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalColumn2(ctx context.Context, sel ast.SelectionSet, v *model.TerminalColumn2) graphql.Marshaler {
+func (ec *executionContext) marshalOTerminalColumn2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalColumn(ctx context.Context, sel ast.SelectionSet, v *model.TerminalColumn) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._TerminalColumn2(ctx, sel, v)
+	return ec._TerminalColumn(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTerminalTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalTooltip(ctx context.Context, sel ast.SelectionSet, v *model.TerminalTooltip) graphql.Marshaler {

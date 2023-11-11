@@ -14,7 +14,7 @@ type Query {
 }
 
 type TestObjs {
-  appTestTerminalPage(step: Int): TerminalColumn2
+  appTestTerminalPage(step: Int): TerminalColumn
   appTestTutorialColumnsPage: Page
   appTestTutorialTutorialPage: Page
   appTestSourcecodeFilecontentPage(step: Int!): OpenFile
@@ -51,6 +51,11 @@ interface Column {
   _placeholder: String
 }
 
+type TerminalColumn implements Column {
+  _placeholder: String
+  terminals: [Terminal!]!
+}
+
 ###################################################
 # Terminal related object types 2
 ###################################################
@@ -76,17 +81,12 @@ type TerminalEntry {
   text: String! # command or output
 }
 
-type Terminal2 {
+type Terminal {
   name: String
   currentDirectory: String!
   entries: [TerminalEntry!]! # not null, no null eleement, but empty array is possible
   tooltip: TerminalTooltip
   # terminalTabs
-}
-
-type TerminalColumn2 implements Column {
-  _placeholder: String
-  terminals: [Terminal2!]!
 }
 
 ###################################################

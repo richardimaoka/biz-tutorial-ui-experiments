@@ -2,13 +2,13 @@ package model
 
 import "encoding/json"
 
-func (this TerminalColumn2) MarshalJSON() ([]byte, error) {
+func (this TerminalColumn) MarshalJSON() ([]byte, error) {
 	extendedOutput := struct {
-		TypeName    string       `json:"__typename"`
-		Placeholder *string      `json:"_placeholder"`
-		Terminals   []*Terminal2 `json:"terminals"`
+		TypeName    string      `json:"__typename"`
+		Placeholder *string     `json:"_placeholder"`
+		Terminals   []*Terminal `json:"terminals"`
 	}{
-		TypeName:    "TerminalColumn2",
+		TypeName:    "TerminalColumn",
 		Placeholder: this.Placeholder,
 		Terminals:   this.Terminals,
 	}

@@ -113,20 +113,20 @@ type SourceCodeTooltip struct {
 	Timing       *SourceCodeTooltipTiming `json:"timing"`
 }
 
-type Terminal2 struct {
+type Terminal struct {
 	Name             *string          `json:"name"`
 	CurrentDirectory string           `json:"currentDirectory"`
 	Entries          []*TerminalEntry `json:"entries"`
 	Tooltip          *TerminalTooltip `json:"tooltip"`
 }
 
-type TerminalColumn2 struct {
-	Placeholder *string      `json:"_placeholder"`
-	Terminals   []*Terminal2 `json:"terminals"`
+type TerminalColumn struct {
+	Placeholder *string     `json:"_placeholder"`
+	Terminals   []*Terminal `json:"terminals"`
 }
 
-func (TerminalColumn2) IsColumn()                    {}
-func (this TerminalColumn2) GetPlaceholder() *string { return this.Placeholder }
+func (TerminalColumn) IsColumn()                    {}
+func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalEntry struct {
 	ID        string            `json:"id"`
@@ -140,10 +140,10 @@ type TerminalTooltip struct {
 }
 
 type TestObjs struct {
-	AppTestTerminalPage              *TerminalColumn2 `json:"appTestTerminalPage"`
-	AppTestTutorialColumnsPage       *Page            `json:"appTestTutorialColumnsPage"`
-	AppTestTutorialTutorialPage      *Page            `json:"appTestTutorialTutorialPage"`
-	AppTestSourcecodeFilecontentPage *OpenFile        `json:"appTestSourcecodeFilecontentPage"`
+	AppTestTerminalPage              *TerminalColumn `json:"appTestTerminalPage"`
+	AppTestTutorialColumnsPage       *Page           `json:"appTestTutorialColumnsPage"`
+	AppTestTutorialTutorialPage      *Page           `json:"appTestTutorialTutorialPage"`
+	AppTestSourcecodeFilecontentPage *OpenFile       `json:"appTestSourcecodeFilecontentPage"`
 }
 
 type FileNodeType string

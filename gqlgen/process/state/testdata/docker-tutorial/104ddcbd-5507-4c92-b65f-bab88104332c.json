@@ -6,7 +6,7 @@
   "columns": [
     {
       "column": {
-        "__typename": "TerminalColumn2",
+        "__typename": "TerminalColumn",
         "_placeholder": null,
         "terminals": [
           {

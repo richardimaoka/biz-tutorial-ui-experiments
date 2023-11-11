@@ -29,7 +29,7 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 }
 
 // AppTestTerminalPage is the resolver for the appTestTerminalPage field.
-func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn2, error) {
+func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.TestObjs, step *int) (*model.TerminalColumn, error) {
 	var filename string
 	if step == nil {
 		filename = "data/_test/appTestTerminalPage/1.json"

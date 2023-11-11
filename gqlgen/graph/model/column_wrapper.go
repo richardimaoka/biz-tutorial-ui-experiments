@@ -48,8 +48,8 @@ func columnFromBytes(bytes []byte) (Column, error) {
 	}
 
 	switch typename {
-	case "TerminalColumn2":
-		var col TerminalColumn2
+	case "TerminalColumn":
+		var col TerminalColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}

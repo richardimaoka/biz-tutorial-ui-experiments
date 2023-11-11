@@ -88,13 +88,13 @@ func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
 	return nil
 }
 
-func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn2 {
-	var terminals []*model.Terminal2
+func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn {
+	var terminals []*model.Terminal
 	for _, t := range c.terminals {
 		terminals = append(terminals, t.ToGraphQL())
 	}
 
-	return &model.TerminalColumn2{
+	return &model.TerminalColumn{
 		Terminals: terminals,
 	}
 }

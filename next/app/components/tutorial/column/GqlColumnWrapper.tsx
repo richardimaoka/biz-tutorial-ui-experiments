@@ -13,7 +13,7 @@ const fragmentDefinition = graphql(`
       #
       # for each column type
       #
-      ... on TerminalColumn2 {
+      ... on TerminalColumn {
         ...GqlTerminalColumn
       }
       ... on SourceCodeColumn2 {
@@ -38,7 +38,7 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
   }
 
   switch (column.__typename) {
-    case "TerminalColumn2":
+    case "TerminalColumn":
       return (
         <div className={styles.component}>
           <GqlTerminalColumn fragment={column} selectIndex={0} />

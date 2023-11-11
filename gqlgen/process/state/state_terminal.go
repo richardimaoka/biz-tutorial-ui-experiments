@@ -124,7 +124,7 @@ func (t *Terminal) ClearTooltip() {
 	t.tooltip = nil
 }
 
-func (t *Terminal) ToGraphQL() *model.Terminal2 {
+func (t *Terminal) ToGraphQL() *model.Terminal {
 	// copy to avoid mutation effect afterwards
 	terminalName := stringRef(t.terminalName)
 
@@ -137,7 +137,7 @@ func (t *Terminal) ToGraphQL() *model.Terminal2 {
 		})
 	}
 
-	m := model.Terminal2{
+	m := model.Terminal{
 		Name:             terminalName,
 		CurrentDirectory: t.currentDirectory,
 		Entries:          modelEntries,
