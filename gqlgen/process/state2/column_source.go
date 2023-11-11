@@ -1,6 +1,9 @@
 package state2
 
-import "github.com/go-git/go-git/v5"
+import (
+	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+)
 
 /**
  * Source Code Column type and methods
@@ -30,5 +33,9 @@ func (c *SourceColumn) OpenFile(filePath string) {
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
+	return nil
+}
+
+func (c *SourceColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
 	return nil
 }

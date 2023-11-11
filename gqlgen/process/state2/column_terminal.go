@@ -98,3 +98,7 @@ func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn2 {
 		Terminals: terminals,
 	}
 }
+
+func (c *TerminalColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper2 {
+	return nil
+}
