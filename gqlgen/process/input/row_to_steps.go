@@ -4,21 +4,21 @@ import (
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
 )
 
 func toSteps(
 	rows []Row,
 	finder *StepIdFinder,
 	repo *git.Repository,
-) ([]result.Step, error) {
+) ([]state2.Step, error) {
 	currentColumns := &ColumnInfo{}
 	currentCommit := ""
 
-	var allSteps []result.Step
+	var allSteps []state2.Step
 
 	for _, fromRow := range rows {
-		var steps []result.Step
+		var steps []state2.Step
 
 		column, err := toColumnType(fromRow.Column)
 		if err != nil {

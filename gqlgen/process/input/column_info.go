@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
 )
 
 type ColumnType string
@@ -31,8 +31,8 @@ func toColumnType(s string) (ColumnType, error) {
 	}
 }
 
-type UsedColumns [10]result.ColumnType
-type CurrentColumn = result.ColumnType
+type UsedColumns [10]state2.ColumnType
+type CurrentColumn = state2.ColumnType
 
 type ColumnInfo struct {
 	AllUsed UsedColumns
@@ -40,7 +40,7 @@ type ColumnInfo struct {
 }
 
 // similar to append() for slice
-func appendIfNotExists(columns UsedColumns, colName result.ColumnType) UsedColumns {
+func appendIfNotExists(columns UsedColumns, colName state2.ColumnType) UsedColumns {
 	for _, col := range columns {
 		if col == colName {
 			// if already exists, do nothing
@@ -60,8 +60,8 @@ func appendIfNotExists(columns UsedColumns, colName result.ColumnType) UsedColum
 	return columns
 }
 
-func resultColumns(current CurrentColumn, columns UsedColumns) result.ColumnFields {
-	return result.ColumnFields{
+func resultColumns(current CurrentColumn, columns UsedColumns) state2.ColumnFields {
+	return state2.ColumnFields{
 		FocusColumn: current,
 		Column1:     columns[0],
 		Column2:     columns[1],

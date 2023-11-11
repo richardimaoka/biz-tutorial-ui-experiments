@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/result"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state2"
 )
 
 /**
@@ -289,27 +289,27 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state2.Step {
 	subId := "fileTreeStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := result.Step{
+	step := state2.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: result.FromRowFields{
+		FromRowFields: state2.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: result.IntrinsicFields{
+		IntrinsicFields: state2.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(file tree)",
 		},
-		AnimationFields: result.AnimationFields{
+		AnimationFields: state2.AnimationFields{
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
-		SourceFields: result.SourceFields{
+		ColumnFields: resultColumns(state2.SourceColumnType, usedColumns),
+		SourceFields: state2.SourceFields{
 			Commit:       r.Commit,
 			ShowFileTree: true,
 		},
@@ -320,27 +320,27 @@ func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 	return step
 }
 
-func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state2.Step {
 	subId := "openFileStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := result.Step{
+	step := state2.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: result.FromRowFields{
+		FromRowFields: state2.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: result.IntrinsicFields{
+		IntrinsicFields: state2.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: result.AnimationFields{
+		AnimationFields: state2.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
-		SourceFields: result.SourceFields{
+		ColumnFields: resultColumns(state2.SourceColumnType, usedColumns),
+		SourceFields: state2.SourceFields{
 			DefaultOpenFilePath: filePath,
 		},
 	}
@@ -354,27 +354,27 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 	return step
 }
 
-func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state2.Step {
 	subId := fmt.Sprintf("openFileCommitStep-%s", filePath)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := result.Step{
+	step := state2.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: result.FromRowFields{
+		FromRowFields: state2.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: result.IntrinsicFields{
+		IntrinsicFields: state2.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: result.AnimationFields{
+		AnimationFields: state2.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
-		SourceFields: result.SourceFields{
+		ColumnFields: resultColumns(state2.SourceColumnType, usedColumns),
+		SourceFields: state2.SourceFields{
 			Commit:              r.Commit,
 			DefaultOpenFilePath: filePath,
 			TypingAnimation:     r.TypingAnimation,
@@ -390,27 +390,27 @@ func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColu
 	return step
 }
 
-func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) result.Step {
+func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state2.Step {
 	subId := "openSourceErrorStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
-	step := result.Step{
+	step := state2.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: result.FromRowFields{
+		FromRowFields: state2.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: r.StepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: result.IntrinsicFields{
+		IntrinsicFields: state2.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		AnimationFields: result.AnimationFields{
+		AnimationFields: state2.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
-		SourceFields: result.SourceFields{
+		ColumnFields: resultColumns(state2.SourceColumnType, usedColumns),
+		SourceFields: state2.SourceFields{
 			DefaultOpenFilePath: filePath,
 			ShowFileTree:        false,
 		},
@@ -425,26 +425,26 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 	return step
 }
 
-func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedColumns UsedColumns) result.Step {
+func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state2.Step {
 	subId := fmt.Sprintf("moveToSourceCodeStep")
 	stepId := StepIdFinder.StepIdFor(parentStepId, subId)
 
-	step := result.Step{
+	step := state2.Step{
 		// fields to make the step searchable for re-generation
-		FromRowFields: result.FromRowFields{
+		FromRowFields: state2.FromRowFields{
 			IsFromRow:  true,
 			ParentStep: parentStepId,
 			SubID:      subId,
 		},
-		IntrinsicFields: result.IntrinsicFields{
+		IntrinsicFields: state2.IntrinsicFields{
 			StepId:  stepId,
 			Comment: ("(move to source code)"),
 		},
-		AnimationFields: result.AnimationFields{
+		AnimationFields: state2.AnimationFields{
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
+		ColumnFields: resultColumns(state2.SourceColumnType, usedColumns),
 	}
 
 	// No tooltip - trivial step and no tooltip to show
@@ -491,12 +491,12 @@ func breakdownSourceCommitRow(
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, error) {
+) ([]state2.Step, error) {
 	// - step creation
-	var steps []result.Step
+	var steps []state2.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
+	if prevColumns.Focus != state2.SourceColumnType && prevColumns.Focus != state2.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -525,12 +525,12 @@ func breakdownSourceOpenRow(
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, error) {
+) ([]state2.Step, error) {
 	// - step creation
-	var steps []result.Step
+	var steps []state2.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
+	if prevColumns.Focus != state2.SourceColumnType && prevColumns.Focus != state2.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -548,12 +548,12 @@ func breakdownSourceErrorRow(
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, error) {
+) ([]state2.Step, error) {
 	// - step creation
-	var steps []result.Step
+	var steps []state2.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
+	if prevColumns.Focus != state2.SourceColumnType && prevColumns.Focus != state2.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -574,11 +574,11 @@ func toSourceSteps(
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
 	prevCommit string,
-) ([]result.Step, *ColumnInfo, error) {
+) ([]state2.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.SourceColumnType),
-		Focus:   result.SourceColumnType,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, state2.SourceColumnType),
+		Focus:   state2.SourceColumnType,
 	}
 
 	subType, err := toSourceCodeSubType(r.Type)

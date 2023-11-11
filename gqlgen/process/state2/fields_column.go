@@ -102,9 +102,26 @@ type BrowserFields struct {
 /**
  * Browser DevTools column fields
  */
-
 type BrowserDevToolsFields struct {
 	DevToolsImageName   string `json:"devtoolsImageName"`
 	DevToolsImageWidth  int    `json:"devtoolsImageWidth"`
 	DevToolsImageHeight int    `json:"devtoolsImageHeight"`
+}
+
+/**
+ * Markdown column fields
+ */
+type MarkdownFields struct {
+	MarkdownContents            string `json:"markdownContents"`
+	MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment"`
+	MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment"`
+}
+
+/**
+ * YouTube column fields
+ */
+type YoutubeFields struct {
+	YouTubeVideoId string `json:"youtubeVideoId"`
+	YouTubeWidth   int    `json:"youtubeWidth"`
+	YouTubeHeight  int    `json:"youtubeHeight"`
 }
