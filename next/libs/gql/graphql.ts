@@ -237,14 +237,6 @@ export type SourceCodeTooltip = {
 
 export type SourceCodeTooltipTiming = "END" | "START";
 
-export type Terminal = {
-  __typename: "Terminal";
-  currentDirectory?: Maybe<Scalars["String"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  nodes?: Maybe<Array<Maybe<TerminalNode>>>;
-  step?: Maybe<Scalars["String"]["output"]>;
-};
-
 export type Terminal2 = {
   __typename: "Terminal2";
   currentDirectory: Scalars["String"]["output"];
@@ -253,26 +245,11 @@ export type Terminal2 = {
   tooltip?: Maybe<TerminalTooltip>;
 };
 
-export type TerminalColumn = Column & {
-  __typename: "TerminalColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  terminal?: Maybe<Terminal>;
-};
-
 export type TerminalColumn2 = Column2 & {
   __typename: "TerminalColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   terminals: Array<Terminal2>;
 };
-
-export type TerminalCommand = {
-  __typename: "TerminalCommand";
-  beforeExecution?: Maybe<Scalars["Boolean"]["output"]>;
-  command?: Maybe<Scalars["String"]["output"]>;
-  tooltip?: Maybe<Scalars["String"]["output"]>;
-};
-
-export type TerminalElement = TerminalCommand | TerminalOutput;
 
 export type TerminalEntry = {
   __typename: "TerminalEntry";
@@ -282,17 +259,6 @@ export type TerminalEntry = {
 };
 
 export type TerminalEntryType = "COMMAND" | "OUTPUT";
-
-export type TerminalNode = {
-  __typename: "TerminalNode";
-  content?: Maybe<TerminalElement>;
-};
-
-export type TerminalOutput = {
-  __typename: "TerminalOutput";
-  output?: Maybe<Scalars["String"]["output"]>;
-  tooltip?: Maybe<Scalars["String"]["output"]>;
-};
 
 export type TerminalTooltip = {
   __typename: "TerminalTooltip";

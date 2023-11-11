@@ -170,41 +170,6 @@ type SourceCodeColumn implements Column {
   sourceCode: SourceCode
 }
 
-type TerminalColumn implements Column {
-  _placeholder: String
-  terminal: Terminal
-}
-
-###################################################
-# Terminal related object types
-###################################################
-
-# TerminalElement
-union TerminalElement = TerminalCommand | TerminalOutput
-
-type TerminalCommand {
-  beforeExecution: Boolean
-  command: String
-  tooltip: String
-}
-
-type TerminalOutput {
-  output: String
-  tooltip: String
-}
-
-# TerminalNode wraps around TerminalElement, which is friendly for frontend pattern-matching
-type TerminalNode {
-  content: TerminalElement
-}
-
-type Terminal {
-  step: String
-  name: String
-  currentDirectory: String
-  nodes: [TerminalNode] # To make frontend pattern-matching easier, we return a list of concrete object types, instead of list of unions
-}
-
 ###################################################
 # Source code related object types
 ###################################################

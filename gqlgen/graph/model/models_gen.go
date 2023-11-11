@@ -18,10 +18,6 @@ type Column2 interface {
 	GetPlaceholder() *string
 }
 
-type TerminalElement interface {
-	IsTerminalElement()
-}
-
 type Browser struct {
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
@@ -167,27 +163,12 @@ type SourceCodeTooltip struct {
 	Timing       *SourceCodeTooltipTiming `json:"timing"`
 }
 
-type Terminal struct {
-	Step             *string         `json:"step"`
-	Name             *string         `json:"name"`
-	CurrentDirectory *string         `json:"currentDirectory"`
-	Nodes            []*TerminalNode `json:"nodes"`
-}
-
 type Terminal2 struct {
 	Name             *string          `json:"name"`
 	CurrentDirectory string           `json:"currentDirectory"`
 	Entries          []*TerminalEntry `json:"entries"`
 	Tooltip          *TerminalTooltip `json:"tooltip"`
 }
-
-type TerminalColumn struct {
-	Placeholder *string   `json:"_placeholder"`
-	Terminal    *Terminal `json:"terminal"`
-}
-
-func (TerminalColumn) IsColumn()                    {}
-func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalColumn2 struct {
 	Placeholder *string      `json:"_placeholder"`
@@ -197,30 +178,11 @@ type TerminalColumn2 struct {
 func (TerminalColumn2) IsColumn2()                   {}
 func (this TerminalColumn2) GetPlaceholder() *string { return this.Placeholder }
 
-type TerminalCommand struct {
-	BeforeExecution *bool   `json:"beforeExecution"`
-	Command         *string `json:"command"`
-	Tooltip         *string `json:"tooltip"`
-}
-
-func (TerminalCommand) IsTerminalElement() {}
-
 type TerminalEntry struct {
 	ID        string            `json:"id"`
 	EntryType TerminalEntryType `json:"entryType"`
 	Text      string            `json:"text"`
 }
-
-type TerminalNode struct {
-	Content TerminalElement `json:"content"`
-}
-
-type TerminalOutput struct {
-	Output  *string `json:"output"`
-	Tooltip *string `json:"tooltip"`
-}
-
-func (TerminalOutput) IsTerminalElement() {}
 
 type TerminalTooltip struct {
 	MarkdownBody string                 `json:"markdownBody"`

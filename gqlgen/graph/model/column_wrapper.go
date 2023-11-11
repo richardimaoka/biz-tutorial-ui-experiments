@@ -54,12 +54,6 @@ func columnFromBytes_Old(bytes []byte) (Column, error) {
 	}
 
 	switch typename {
-	case "TerminalColumn":
-		var col TerminalColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
 
 	case "SourceCodeColumn":
 		var col SourceCodeColumn
