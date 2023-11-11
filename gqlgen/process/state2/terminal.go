@@ -150,11 +150,55 @@ func (t *Terminal) ToGraphQL() *model.Terminal2 {
 }
 
 /**
+ * Terminal fields
+ */
+
+type TerminalStepType string
+
+const (
+	TerminalCommand TerminalStepType = "command"
+	TerminalOutput  TerminalStepType = "output"
+	TerminalCd      TerminalStepType = "cd"
+	TerminalMove    TerminalStepType = "move"
+	TerminalOpen    TerminalStepType = "open"
+)
+
+type TerminalTooltipFields struct {
+	TerminalTooltipContents string `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
+}
+
+type TerminalFields struct {
+	CurrentDir       string           `json:"currentDir"`
+	TerminalStepType TerminalStepType `json:"terminalType"`
+	TerminalText     string           `json:"terminalText"`
+	TerminalName     string           `json:"terminalName"`
+	TerminalTooltip
+}
+
+/**
  * Terminal Column type and methods
  */
 
 type TerminalColumn struct {
 	terminals []*Terminal
+}
+
+func NewTerminalColumn() *TerminalColumn {
+	return &TerminalColumn{}
+}
+
+func (c *TerminalColumn) getOrCreateTerminal(name string) *Terminal {
+	for _, t := range c.terminals {
+		if t.terminalName == name {
+			return t
+		}
+	}
+
+	terminal := NewTerminal(name)
+	c.terminals = append(c.terminals, terminal)
+
+	return terminal
 }
 
 func (c *TerminalColumn) WriteCommand(
@@ -163,17 +207,7 @@ func (c *TerminalColumn) WriteCommand(
 	command string,
 	tooltipContents string,
 ) {
-	var terminal *Terminal
-	for _, t := range c.terminals {
-		if t.terminalName == name {
-			terminal = t
-		}
-	}
-	if terminal == nil {
-		terminal = NewTerminal(name)
-		c.terminals = append(c.terminals, terminal)
-	}
-
+	terminal := c.getOrCreateTerminal(name)
 	terminal.WriteCommand(stepId, command)
 	if tooltipContents == "" {
 		terminal.ClearTooltip()
@@ -188,17 +222,7 @@ func (c *TerminalColumn) WriteOutput(
 	output string,
 	tooltipContents string,
 ) {
-	var terminal *Terminal
-	for _, t := range c.terminals {
-		if t.terminalName == name {
-			terminal = t
-		}
-	}
-	if terminal == nil {
-		terminal = NewTerminal(name)
-		c.terminals = append(c.terminals, terminal)
-	}
-
+	terminal := c.getOrCreateTerminal(name)
 	terminal.WriteOutput(stepId, output)
 	if tooltipContents == "" {
 		terminal.ClearTooltip()
@@ -211,18 +235,12 @@ func (c *TerminalColumn) ChangeCurrentDirectory(
 	name string,
 	dirPath string,
 ) {
-	var terminal *Terminal
-	for _, t := range c.terminals {
-		if t.terminalName == name {
-			terminal = t
-		}
-	}
-	if terminal == nil {
-		terminal = NewTerminal(name)
-		c.terminals = append(c.terminals, terminal)
-	}
-
+	terminal := c.getOrCreateTerminal(name)
 	terminal.ChangeCurrentDirectory(dirPath)
+}
+
+func (c *TerminalColumn) Update(fields *TerminalFields) {
+
 }
 
 func (c *TerminalColumn) ToGraphQL() *model.TerminalColumn2 {

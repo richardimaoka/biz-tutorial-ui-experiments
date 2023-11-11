@@ -203,3 +203,32 @@ func (c *SourceCodeColumn) ShowFileTree() {
 
 func (c *SourceCodeColumn) OpenFile(filePath string) {
 }
+
+type SourceCodeType string
+
+const (
+	FileTree         SourceCodeType = "fileTree"
+	SourceOpen       SourceCodeType = "openFile"
+	SourceOpenCommit SourceCodeType = "openFileCommit"
+	SourceError      SourceCodeType = "error"
+	SourceMove       SourceCodeType = "move"
+)
+
+type SourceCodeTooltipFields struct {
+	SourceCodeTooltipContents   string `json:"sourceCodeTooltipContents"`
+	SourceCodeTooltipTiming     string `json:"sourceCodeTooltipTiming"`
+	SourceCodeTooltipLineNumber int    `json:"sourceCodeTooltipLineNumber"`
+	SourceCodeTooltipIsAppend   bool   `json:"SourceCodeTooltipIsAppend"`
+}
+
+type SourceCodeFields struct {
+	Commit              string `json:"commit"`
+	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
+	ShowFileTree        bool   `json:"showFileTree"`
+	TypingAnimation     bool   `json:"typingAnimation"`
+	SourceCodeTooltipFields
+}
+
+func (c *SourceCodeColumn) Update(fields *SourceCodeFields) {
+
+}
