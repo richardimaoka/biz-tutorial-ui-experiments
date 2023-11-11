@@ -308,8 +308,8 @@ func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
-		SourceCodeFields: result.SourceCodeFields{
+		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
+		SourceFields: result.SourceFields{
 			Commit:       r.Commit,
 			ShowFileTree: true,
 		},
@@ -339,16 +339,16 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
-		SourceCodeFields: result.SourceCodeFields{
+		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
+		SourceFields: result.SourceFields{
 			DefaultOpenFilePath: filePath,
 		},
 	}
 	if r.Tooltip != nil {
-		step.SourceCodeTooltipContents = r.Tooltip.Contents
-		step.SourceCodeTooltipTiming = r.Tooltip.Timing
-		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
-		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+		step.SourceTooltipContents = r.Tooltip.Contents
+		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
 
 	return step
@@ -373,18 +373,18 @@ func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColu
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
-		SourceCodeFields: result.SourceCodeFields{
+		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
+		SourceFields: result.SourceFields{
 			Commit:              r.Commit,
 			DefaultOpenFilePath: filePath,
 			TypingAnimation:     r.TypingAnimation,
 		},
 	}
 	if r.Tooltip != nil {
-		step.SourceCodeTooltipContents = r.Tooltip.Contents
-		step.SourceCodeTooltipTiming = r.Tooltip.Timing
-		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
-		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+		step.SourceTooltipContents = r.Tooltip.Contents
+		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
 
 	return step
@@ -409,17 +409,17 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
-		SourceCodeFields: result.SourceCodeFields{
+		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
+		SourceFields: result.SourceFields{
 			DefaultOpenFilePath: filePath,
 			ShowFileTree:        false,
 		},
 	}
 	if r.Tooltip != nil {
-		step.SourceCodeTooltipContents = r.Tooltip.Contents
-		step.SourceCodeTooltipTiming = r.Tooltip.Timing
-		step.SourceCodeTooltipLineNumber = r.Tooltip.LineNumber
-		step.SourceCodeTooltipIsAppend = r.Tooltip.IsAppend
+		step.SourceTooltipContents = r.Tooltip.Contents
+		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
+		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
 
 	return step
@@ -444,7 +444,7 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedC
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(result.SourceColumn, usedColumns),
+		ColumnFields: resultColumns(result.SourceColumnType, usedColumns),
 	}
 
 	// No tooltip - trivial step and no tooltip to show
@@ -496,7 +496,7 @@ func breakdownSourceCommitRow(
 	var steps []result.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -530,7 +530,7 @@ func breakdownSourceOpenRow(
 	var steps []result.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -553,7 +553,7 @@ func breakdownSourceErrorRow(
 	var steps []result.Step
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
-	if prevColumns.Focus != result.SourceColumn && prevColumns.Focus != result.NoColumn {
+	if prevColumns.Focus != result.SourceColumnType && prevColumns.Focus != result.NoColumnType {
 		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 		steps = append(steps, step)
 	}
@@ -577,8 +577,8 @@ func toSourceSteps(
 ) ([]result.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.SourceColumn),
-		Focus:   result.SourceColumn,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.SourceColumnType),
+		Focus:   result.SourceColumnType,
 	}
 
 	subType, err := toSourceCodeSubType(r.Type)

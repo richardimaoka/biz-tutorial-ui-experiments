@@ -402,10 +402,10 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns r
 func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []result.Step {
 	// - step creation
 	var steps []result.Step
-	currentColumns := resultColumns(result.TerminalColumn, prevColumns.AllUsed)
+	currentColumns := resultColumns(result.TerminalColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
-	if prevColumns.Focus != result.TerminalColumn && prevColumns.Focus != result.NoColumn {
+	if prevColumns.Focus != result.TerminalColumnType && prevColumns.Focus != result.NoColumnType {
 		moveToTerminalStep := moveToTerminalStep(r, finder, currentColumns)
 		steps = append(steps, moveToTerminalStep)
 	}
@@ -435,8 +435,8 @@ func toTerminalSteps(
 ) ([]result.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumn),
-		Focus:   result.TerminalColumn,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.TerminalColumnType),
+		Focus:   result.TerminalColumnType,
 	}
 
 	subType, err := toTerminalSubType(r.Type)

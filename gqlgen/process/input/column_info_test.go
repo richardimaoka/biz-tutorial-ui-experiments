@@ -8,16 +8,16 @@ import (
 
 func TestAppendIfNotExists(t *testing.T) {
 	columns := UsedColumns{
-		result.TerminalColumn,
-		result.SourceColumn,
+		result.TerminalColumnType,
+		result.SourceColumnType,
 	}
 	expected := UsedColumns{
-		result.TerminalColumn,
-		result.SourceColumn,
-		result.BrowserColumn,
+		result.TerminalColumnType,
+		result.SourceColumnType,
+		result.BrowserColumnType,
 	}
 
-	newColumns := appendIfNotExists(columns, result.BrowserColumn)
+	newColumns := appendIfNotExists(columns, result.BrowserColumnType)
 
 	if columns[2] != "" {
 		t.Errorf("columns in `appendIfNotExists(columns, )` should not be modified, but got colums[2] = '%s'", columns[2])

@@ -403,10 +403,10 @@ func breakdownBrowserRow(
 	// - step creation
 	var steps []result.Step
 
-	currentColumns := resultColumns(result.TerminalColumn, prevColumns.AllUsed)
+	currentColumns := resultColumns(result.TerminalColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
-	if prevColumns.Focus != result.BrowserColumn && prevColumns.Focus != result.NoColumn {
+	if prevColumns.Focus != result.BrowserColumnType && prevColumns.Focus != result.NoColumnType {
 		step := moveToBrowserStep(r, finder, currentColumns)
 		steps = append(steps, step)
 	}
@@ -431,8 +431,8 @@ func toBrowserSteps(
 ) ([]result.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.BrowserColumn),
-		Focus:   result.BrowserColumn,
+		AllUsed: appendIfNotExists(prevColumns.AllUsed, result.BrowserColumnType),
+		Focus:   result.BrowserColumnType,
 	}
 
 	subType, err := toBrowserSubType(r.Type)

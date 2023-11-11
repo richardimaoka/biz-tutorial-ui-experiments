@@ -3,30 +3,30 @@ package result
 type ColumnType string
 
 const (
-	NoColumn       ColumnType = ""
-	SourceColumn   ColumnType = "SourceCode"
-	TerminalColumn ColumnType = "Terminal"
-	BrowserColumn  ColumnType = "Browser"
+	NoColumnType       ColumnType = ""
+	SourceColumnType   ColumnType = "SourceCode"
+	TerminalColumnType ColumnType = "Terminal"
+	BrowserColumnType  ColumnType = "Browser"
 )
 
-type TerminalType string
+type TerminalStepType string
 
 const (
-	TerminalCommand TerminalType = "command"
-	TerminalOutput  TerminalType = "output"
-	TerminalCd      TerminalType = "cd"
-	TerminalMove    TerminalType = "move"
-	TerminalOpen    TerminalType = "open"
+	TerminalCommand TerminalStepType = "command"
+	TerminalOutput  TerminalStepType = "output"
+	TerminalCd      TerminalStepType = "cd"
+	TerminalMove    TerminalStepType = "move"
+	TerminalOpen    TerminalStepType = "open"
 )
 
-type SourceCodeType string
+type SourceStepType string
 
 const (
-	FileTree         SourceCodeType = "fileTree"
-	SourceOpen       SourceCodeType = "openFile"
-	SourceOpenCommit SourceCodeType = "openFileCommit"
-	SourceError      SourceCodeType = "error"
-	SourceMove       SourceCodeType = "move"
+	FileTree         SourceStepType = "fileTree"
+	SourceOpen       SourceStepType = "openFile"
+	SourceOpenCommit SourceStepType = "openFileCommit"
+	SourceError      SourceStepType = "error"
+	SourceMove       SourceStepType = "move"
 )
 
 type BrowserType string
@@ -49,7 +49,7 @@ type Step struct {
 
 	TerminalFields
 
-	SourceCodeFields
+	SourceFields
 
 	BrowserFields
 
@@ -109,26 +109,26 @@ type TerminalTooltip struct {
 }
 
 type TerminalFields struct {
-	CurrentDir       string       `json:"currentDir"`
-	TerminalStepType TerminalType `json:"terminalType"`
-	TerminalText     string       `json:"terminalText"`
-	TerminalName     string       `json:"terminalName"`
+	CurrentDir       string           `json:"currentDir"`
+	TerminalStepType TerminalStepType `json:"terminalType"`
+	TerminalText     string           `json:"terminalText"`
+	TerminalName     string           `json:"terminalName"`
 	TerminalTooltip
 }
 
-type SourceCodeTooltip struct {
-	SourceCodeTooltipContents   string `json:"sourceCodeTooltipContents"`
-	SourceCodeTooltipTiming     string `json:"sourceCodeTooltipTiming"`
-	SourceCodeTooltipLineNumber int    `json:"sourceCodeTooltipLineNumber"`
-	SourceCodeTooltipIsAppend   bool   `json:"SourceCodeTooltipIsAppend"`
+type SourceTooltip struct {
+	SourceTooltipContents   string `json:"sourceTooltipContents"`
+	SourceTooltipTiming     string `json:"sourceTooltipTiming"`
+	SourceTooltipLineNumber int    `json:"sourceTooltipLineNumber"`
+	SourceTooltipIsAppend   bool   `json:"SourceTooltipIsAppend"`
 }
 
-type SourceCodeFields struct {
+type SourceFields struct {
 	Commit              string `json:"commit"`
 	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
 	ShowFileTree        bool   `json:"showFileTree"`
 	TypingAnimation     bool   `json:"typingAnimation"`
-	SourceCodeTooltip
+	SourceTooltip
 }
 
 type BrowserFields struct {
