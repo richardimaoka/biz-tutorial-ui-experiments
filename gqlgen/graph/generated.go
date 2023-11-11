@@ -9620,20 +9620,6 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case model.ImageDescriptionColumn:
-		return ec._ImageDescriptionColumn(ctx, sel, &obj)
-	case *model.ImageDescriptionColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ImageDescriptionColumn(ctx, sel, obj)
-	case model.BackgroundImageColumn:
-		return ec._BackgroundImageColumn(ctx, sel, &obj)
-	case *model.BackgroundImageColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._BackgroundImageColumn(ctx, sel, obj)
 	case model.BrowserColumn:
 		return ec._BrowserColumn(ctx, sel, &obj)
 	case *model.BrowserColumn:
@@ -9655,13 +9641,6 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._TerminalColumn(ctx, sel, obj)
-	case model.YouTubeColumn:
-		return ec._YouTubeColumn(ctx, sel, &obj)
-	case *model.YouTubeColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._YouTubeColumn(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
@@ -9724,7 +9703,7 @@ func (ec *executionContext) _TerminalElement(ctx context.Context, sel ast.Select
 
 // region    **************************** object.gotpl ****************************
 
-var backgroundImageColumnImplementors = []string{"BackgroundImageColumn", "Column"}
+var backgroundImageColumnImplementors = []string{"BackgroundImageColumn"}
 
 func (ec *executionContext) _BackgroundImageColumn(ctx context.Context, sel ast.SelectionSet, obj *model.BackgroundImageColumn) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, backgroundImageColumnImplementors)
@@ -10138,7 +10117,7 @@ func (ec *executionContext) _ImageCentered(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var imageDescriptionColumnImplementors = []string{"ImageDescriptionColumn", "Column"}
+var imageDescriptionColumnImplementors = []string{"ImageDescriptionColumn"}
 
 func (ec *executionContext) _ImageDescriptionColumn(ctx context.Context, sel ast.SelectionSet, obj *model.ImageDescriptionColumn) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, imageDescriptionColumnImplementors)
@@ -11242,7 +11221,7 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var youTubeColumnImplementors = []string{"YouTubeColumn", "Column"}
+var youTubeColumnImplementors = []string{"YouTubeColumn"}
 
 func (ec *executionContext) _YouTubeColumn(ctx context.Context, sel ast.SelectionSet, obj *model.YouTubeColumn) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, youTubeColumnImplementors)

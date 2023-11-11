@@ -29,7 +29,7 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
-export type BackgroundImageColumn = Column & {
+export type BackgroundImageColumn = {
   __typename: "BackgroundImageColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   height?: Maybe<Scalars["Int"]["output"]>;
@@ -124,7 +124,7 @@ export type ImageCentered = {
   width?: Maybe<Scalars["Int"]["output"]>;
 };
 
-export type ImageDescriptionColumn = Column & {
+export type ImageDescriptionColumn = {
   __typename: "ImageDescriptionColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   contentsPosition?: Maybe<ColumnVerticalPosition>;
@@ -364,7 +364,7 @@ export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-export type YouTubeColumn = Column & {
+export type YouTubeColumn = {
   __typename: "YouTubeColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   youtube?: Maybe<YouTubeEmbed>;

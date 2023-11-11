@@ -31,9 +31,6 @@ type BackgroundImageColumn struct {
 	Modal       *Modal  `json:"modal"`
 }
 
-func (BackgroundImageColumn) IsColumn()                    {}
-func (this BackgroundImageColumn) GetPlaceholder() *string { return this.Placeholder }
-
 type Browser struct {
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
@@ -110,9 +107,6 @@ type ImageDescriptionColumn struct {
 	Order            *ImageDescriptionOrder  `json:"order"`
 	ContentsPosition *ColumnVerticalPosition `json:"contentsPosition"`
 }
-
-func (ImageDescriptionColumn) IsColumn()                    {}
-func (this ImageDescriptionColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type Markdown struct {
 	Step      *string            `json:"step"`
@@ -284,9 +278,6 @@ type YouTubeColumn struct {
 	Placeholder *string       `json:"_placeholder"`
 	Youtube     *YouTubeEmbed `json:"youtube"`
 }
-
-func (YouTubeColumn) IsColumn()                    {}
-func (this YouTubeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type YouTubeEmbed struct {
 	Width    *int    `json:"width"`

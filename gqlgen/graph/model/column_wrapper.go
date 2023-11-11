@@ -54,20 +54,6 @@ func columnFromBytes_Old(bytes []byte) (Column, error) {
 	}
 
 	switch typename {
-	case "BackgroundImageColumn":
-		var col BackgroundImageColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
-
-	case "ImageDescriptionColumn":
-		var col ImageDescriptionColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
-
 	case "TerminalColumn":
 		var col TerminalColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
@@ -84,13 +70,6 @@ func columnFromBytes_Old(bytes []byte) (Column, error) {
 
 	case "BrowserColumn":
 		var col BrowserColumn
-		if err := json.Unmarshal(bytes, &col); err != nil {
-			return nil, err
-		}
-		return &col, nil
-
-	case "YouTubeColumn":
-		var col YouTubeColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}

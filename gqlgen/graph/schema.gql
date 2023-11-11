@@ -170,7 +170,7 @@ enum ImageDescriptionOrder {
   DESCRIPTION_THEN_IMAGE
 }
 
-type ImageDescriptionColumn implements Column {
+type ImageDescriptionColumn {
   _placeholder: String
   description: Markdown
   image: ImageCentered
@@ -178,7 +178,7 @@ type ImageDescriptionColumn implements Column {
   contentsPosition: ColumnVerticalPosition
 }
 
-type BackgroundImageColumn implements Column {
+type BackgroundImageColumn {
   _placeholder: String
   width: Int
   height: Int
@@ -217,7 +217,7 @@ type TerminalColumn implements Column {
   terminal: Terminal
 }
 
-type YouTubeColumn implements Column {
+type YouTubeColumn {
   _placeholder: String
   youtube: YouTubeEmbed
 }
