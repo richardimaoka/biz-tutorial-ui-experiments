@@ -159,12 +159,6 @@ type ComplexityRoot struct {
 		StartLineNumber func(childComplexity int) int
 	}
 
-	NextAction struct {
-		Markdown        func(childComplexity int) int
-		TerminalCommand func(childComplexity int) int
-		TerminalName    func(childComplexity int) int
-	}
-
 	OpenFile struct {
 		Content       func(childComplexity int) int
 		EditSequence  func(childComplexity int) int
@@ -193,16 +187,6 @@ type ComplexityRoot struct {
 	Page2 struct {
 		Columns             func(childComplexity int) int
 		DefaultSelectColumn func(childComplexity int) int
-	}
-
-	PageState struct {
-		Markdown   func(childComplexity int) int
-		NextAction func(childComplexity int) int
-		NextStep   func(childComplexity int) int
-		PrevStep   func(childComplexity int) int
-		SourceCode func(childComplexity int) int
-		Step       func(childComplexity int) int
-		Terminals  func(childComplexity int) int
 	}
 
 	Query struct {
@@ -760,27 +744,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MonacoEditRange.StartLineNumber(childComplexity), true
 
-	case "NextAction.markdown":
-		if e.complexity.NextAction.Markdown == nil {
-			break
-		}
-
-		return e.complexity.NextAction.Markdown(childComplexity), true
-
-	case "NextAction.terminalCommand":
-		if e.complexity.NextAction.TerminalCommand == nil {
-			break
-		}
-
-		return e.complexity.NextAction.TerminalCommand(childComplexity), true
-
-	case "NextAction.terminalName":
-		if e.complexity.NextAction.TerminalName == nil {
-			break
-		}
-
-		return e.complexity.NextAction.TerminalName(childComplexity), true
-
 	case "OpenFile.content":
 		if e.complexity.OpenFile.Content == nil {
 			break
@@ -927,55 +890,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Page2.DefaultSelectColumn(childComplexity), true
-
-	case "PageState.markdown":
-		if e.complexity.PageState.Markdown == nil {
-			break
-		}
-
-		return e.complexity.PageState.Markdown(childComplexity), true
-
-	case "PageState.nextAction":
-		if e.complexity.PageState.NextAction == nil {
-			break
-		}
-
-		return e.complexity.PageState.NextAction(childComplexity), true
-
-	case "PageState.nextStep":
-		if e.complexity.PageState.NextStep == nil {
-			break
-		}
-
-		return e.complexity.PageState.NextStep(childComplexity), true
-
-	case "PageState.prevStep":
-		if e.complexity.PageState.PrevStep == nil {
-			break
-		}
-
-		return e.complexity.PageState.PrevStep(childComplexity), true
-
-	case "PageState.sourceCode":
-		if e.complexity.PageState.SourceCode == nil {
-			break
-		}
-
-		return e.complexity.PageState.SourceCode(childComplexity), true
-
-	case "PageState.step":
-		if e.complexity.PageState.Step == nil {
-			break
-		}
-
-		return e.complexity.PageState.Step(childComplexity), true
-
-	case "PageState.terminals":
-		if e.complexity.PageState.Terminals == nil {
-			break
-		}
-
-		return e.complexity.PageState.Terminals(childComplexity), true
 
 	case "Query.page":
 		if e.complexity.Query.Page == nil {
@@ -4128,143 +4042,6 @@ func (ec *executionContext) fieldContext_MonacoEditRange_endColumn(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _NextAction_terminalName(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NextAction_terminalName(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TerminalName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_NextAction_terminalName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NextAction",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _NextAction_terminalCommand(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NextAction_terminalCommand(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TerminalCommand, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TerminalCommand)
-	fc.Result = res
-	return ec.marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_NextAction_terminalCommand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NextAction",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "beforeExecution":
-				return ec.fieldContext_TerminalCommand_beforeExecution(ctx, field)
-			case "command":
-				return ec.fieldContext_TerminalCommand_command(ctx, field)
-			case "tooltip":
-				return ec.fieldContext_TerminalCommand_tooltip(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TerminalCommand", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _NextAction_markdown(ctx context.Context, field graphql.CollectedField, obj *model.NextAction) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NextAction_markdown(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Markdown, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.MarkdownOld)
-	fc.Result = res
-	return ec.marshalOMarkdownOld2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownOld(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_NextAction_markdown(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NextAction",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_MarkdownOld_step(ctx, field)
-			case "contents":
-				return ec.fieldContext_MarkdownOld_contents(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MarkdownOld", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _OpenFile_filePath(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_filePath(ctx, field)
 	if err != nil {
@@ -5163,329 +4940,6 @@ func (ec *executionContext) fieldContext_Page2_defaultSelectColumn(ctx context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_step(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_step(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Step, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_step(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_nextStep(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_nextStep(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NextStep, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_nextStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_prevStep(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_prevStep(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PrevStep, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_prevStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_sourceCode(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_sourceCode(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.SourceCode, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.SourceCode)
-	fc.Result = res
-	return ec.marshalOSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_SourceCode_step(ctx, field)
-			case "projectDir":
-				return ec.fieldContext_SourceCode_projectDir(ctx, field)
-			case "fileTree":
-				return ec.fieldContext_SourceCode_fileTree(ctx, field)
-			case "isFoldFileTree":
-				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
-			case "openFile":
-				return ec.fieldContext_SourceCode_openFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_terminals(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_terminals(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Terminals, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Terminal)
-	fc.Result = res
-	return ec.marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_terminals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_Terminal_step(ctx, field)
-			case "name":
-				return ec.fieldContext_Terminal_name(ctx, field)
-			case "currentDirectory":
-				return ec.fieldContext_Terminal_currentDirectory(ctx, field)
-			case "nodes":
-				return ec.fieldContext_Terminal_nodes(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Terminal", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_markdown(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_markdown(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Markdown, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.MarkdownOld)
-	fc.Result = res
-	return ec.marshalOMarkdownOld2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownOld(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_markdown(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "step":
-				return ec.fieldContext_MarkdownOld_step(ctx, field)
-			case "contents":
-				return ec.fieldContext_MarkdownOld_contents(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MarkdownOld", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _PageState_nextAction(ctx context.Context, field graphql.CollectedField, obj *model.PageState) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PageState_nextAction(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NextAction, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.NextAction)
-	fc.Result = res
-	return ec.marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PageState_nextAction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PageState",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "terminalName":
-				return ec.fieldContext_NextAction_terminalName(ctx, field)
-			case "terminalCommand":
-				return ec.fieldContext_NextAction_terminalCommand(ctx, field)
-			case "markdown":
-				return ec.fieldContext_NextAction_markdown(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NextAction", field.Name)
 		},
 	}
 	return fc, nil
@@ -10570,39 +10024,6 @@ func (ec *executionContext) _MonacoEditRange(ctx context.Context, sel ast.Select
 	return out
 }
 
-var nextActionImplementors = []string{"NextAction"}
-
-func (ec *executionContext) _NextAction(ctx context.Context, sel ast.SelectionSet, obj *model.NextAction) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, nextActionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("NextAction")
-		case "terminalName":
-
-			out.Values[i] = ec._NextAction_terminalName(ctx, field, obj)
-
-		case "terminalCommand":
-
-			out.Values[i] = ec._NextAction_terminalCommand(ctx, field, obj)
-
-		case "markdown":
-
-			out.Values[i] = ec._NextAction_markdown(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var openFileImplementors = []string{"OpenFile"}
 
 func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet, obj *model.OpenFile) graphql.Marshaler {
@@ -10738,55 +10159,6 @@ func (ec *executionContext) _Page2(ctx context.Context, sel ast.SelectionSet, ob
 		case "defaultSelectColumn":
 
 			out.Values[i] = ec._Page2_defaultSelectColumn(ctx, field, obj)
-
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var pageStateImplementors = []string{"PageState"}
-
-func (ec *executionContext) _PageState(ctx context.Context, sel ast.SelectionSet, obj *model.PageState) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, pageStateImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("PageState")
-		case "step":
-
-			out.Values[i] = ec._PageState_step(ctx, field, obj)
-
-		case "nextStep":
-
-			out.Values[i] = ec._PageState_nextStep(ctx, field, obj)
-
-		case "prevStep":
-
-			out.Values[i] = ec._PageState_prevStep(ctx, field, obj)
-
-		case "sourceCode":
-
-			out.Values[i] = ec._PageState_sourceCode(ctx, field, obj)
-
-		case "terminals":
-
-			out.Values[i] = ec._PageState_terminals(ctx, field, obj)
-
-		case "markdown":
-
-			out.Values[i] = ec._PageState_markdown(ctx, field, obj)
-
-		case "nextAction":
-
-			out.Values[i] = ec._PageState_nextAction(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -12664,13 +12036,6 @@ func (ec *executionContext) marshalOMarkdownAlignment2ᚖgithubᚗcomᚋrichardi
 	return v
 }
 
-func (ec *executionContext) marshalOMarkdownOld2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMarkdownOld(ctx context.Context, sel ast.SelectionSet, v *model.MarkdownOld) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._MarkdownOld(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModal(ctx context.Context, sel ast.SelectionSet, v *model.Modal) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -12739,13 +12104,6 @@ func (ec *executionContext) marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋric
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalONextAction2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐNextAction(ctx context.Context, sel ast.SelectionSet, v *model.NextAction) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._NextAction(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOOpenFile2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐOpenFile(ctx context.Context, sel ast.SelectionSet, v *model.OpenFile) graphql.Marshaler {
@@ -12825,47 +12183,6 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOTerminal2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v []*model.Terminal) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
 func (ec *executionContext) marshalOTerminal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminal(ctx context.Context, sel ast.SelectionSet, v *model.Terminal) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -12878,13 +12195,6 @@ func (ec *executionContext) marshalOTerminalColumn22ᚖgithubᚗcomᚋrichardima
 		return graphql.Null
 	}
 	return ec._TerminalColumn2(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOTerminalCommand2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalCommand(ctx context.Context, sel ast.SelectionSet, v *model.TerminalCommand) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TerminalCommand(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTerminalElement2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐTerminalElement(ctx context.Context, sel ast.SelectionSet, v model.TerminalElement) graphql.Marshaler {

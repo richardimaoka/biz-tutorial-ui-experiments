@@ -21,6 +21,22 @@ type TestObjs {
 }
 
 ###################################################
+# Page state related object types
+###################################################
+
+type Page {
+  step: String
+  nextStep: String
+  prevStep: String
+  autoNextSeconds: Int
+  durationSeconds: Int
+  isTrivialStep: Boolean
+  columns: [ColumnWrapper]
+  focusColumn: String
+  modal: Modal
+}
+
+###################################################
 # Page 2
 ###################################################
 
@@ -113,38 +129,6 @@ type Browser {
 type BrowserColumn2 implements Column2 {
   _placeholder: String
   browser: Browser!
-}
-
-###################################################
-# Page state related object types
-###################################################
-
-type NextAction {
-  terminalName: String
-  terminalCommand: TerminalCommand
-  markdown: MarkdownOld
-}
-
-type PageState {
-  step: String
-  nextStep: String
-  prevStep: String
-  sourceCode: SourceCode
-  terminals: [Terminal]
-  markdown: MarkdownOld
-  nextAction: NextAction
-}
-
-type Page {
-  step: String
-  nextStep: String
-  prevStep: String
-  autoNextSeconds: Int
-  durationSeconds: Int
-  isTrivialStep: Boolean
-  columns: [ColumnWrapper]
-  focusColumn: String
-  modal: Modal
 }
 
 ###################################################

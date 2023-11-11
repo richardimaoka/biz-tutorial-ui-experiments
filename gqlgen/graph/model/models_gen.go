@@ -154,12 +154,6 @@ type MonacoEditRange struct {
 	EndColumn       int `json:"endColumn"`
 }
 
-type NextAction struct {
-	TerminalName    *string          `json:"terminalName"`
-	TerminalCommand *TerminalCommand `json:"terminalCommand"`
-	Markdown        *MarkdownOld     `json:"markdown"`
-}
-
 type OpenFile struct {
 	FilePath      *string            `json:"filePath"`
 	FileName      *string            `json:"fileName"`
@@ -188,16 +182,6 @@ type Page struct {
 type Page2 struct {
 	Columns             []*ColumnWrapper2 `json:"columns"`
 	DefaultSelectColumn *string           `json:"defaultSelectColumn"`
-}
-
-type PageState struct {
-	Step       *string      `json:"step"`
-	NextStep   *string      `json:"nextStep"`
-	PrevStep   *string      `json:"prevStep"`
-	SourceCode *SourceCode  `json:"sourceCode"`
-	Terminals  []*Terminal  `json:"terminals"`
-	Markdown   *MarkdownOld `json:"markdown"`
-	NextAction *NextAction  `json:"nextAction"`
 }
 
 type SourceCode2 struct {
