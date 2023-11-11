@@ -35,7 +35,7 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while marshaling the column object, %w", err)
 	}
 
-	column, err := columnFromBytes(bytes)
+	column, err := columnFromBytes_Old(bytes)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper UnmarshalJSON() while unmarshaling the column object, %w", err)
 	}
@@ -46,7 +46,7 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func columnFromBytes(bytes []byte) (Column, error) {
+func columnFromBytes_Old(bytes []byte) (Column, error) {
 	fromField := "__typename"
 	typename, err := jsonwrap.ExtractTypeName(bytes, fromField)
 	if err != nil {

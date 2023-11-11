@@ -8,16 +8,15 @@ import (
 )
 
 func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
-
+	/**
+	 * Read JSON into internal struct
+	 */
 	internals := struct {
 		Column            interface{} `json:"column"`
 		ColumnName        string      `json:"columnName"`
 		ColumnDisplayName *string     `json:"columnDisplayName"`
 	}{}
 
-	/**
-	 * Read JSON into internal struct
-	 */
 	err := json.Unmarshal(b, &internals)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling to Go data, %w", err)
@@ -32,7 +31,7 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while marshaling the column object, %w", err)
 	}
-	column, err := columnFromBytes2(bytes)
+	column, err := columnFromBytes(bytes)
 	if err != nil {
 		return fmt.Errorf("failed in ColumnWrapper2 UnmarshalJSON() while unmarshaling the column object, %w", err)
 	}
@@ -41,7 +40,7 @@ func (t *ColumnWrapper2) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func columnFromBytes2(bytes []byte) (Column2, error) {
+func columnFromBytes(bytes []byte) (Column2, error) {
 	fromField := "__typename"
 	typename, err := jsonwrap.ExtractTypeName(bytes, fromField)
 	if err != nil {
@@ -55,12 +54,21 @@ func columnFromBytes2(bytes []byte) (Column2, error) {
 			return nil, err
 		}
 		return &col, nil
+
 	case "SourceCodeColumn2":
 		var col SourceCodeColumn2
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}
 		return &col, nil
+
+	case "BrowserColumn2":
+		var col BrowserColumn2
+		if err := json.Unmarshal(bytes, &col); err != nil {
+			return nil, err
+		}
+		return &col, nil
+
 	default:
 		return nil, fmt.Errorf("\"%s\" = %s is not a valid Column type. If it should be valid, define it in column_wrapper.go", fromField, typename)
 	}
