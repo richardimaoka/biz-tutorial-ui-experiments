@@ -37,16 +37,6 @@ type Browser struct {
 	Path   string `json:"path"`
 }
 
-type BrowserColumn struct {
-	Placeholder *string `json:"_placeholder"`
-	Width       *int    `json:"width"`
-	Height      *int    `json:"height"`
-	Path        *string `json:"path"`
-}
-
-func (BrowserColumn) IsColumn()                    {}
-func (this BrowserColumn) GetPlaceholder() *string { return this.Placeholder }
-
 type BrowserColumn2 struct {
 	Placeholder *string  `json:"_placeholder"`
 	Browser     *Browser `json:"browser"`

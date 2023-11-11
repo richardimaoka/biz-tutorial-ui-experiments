@@ -46,14 +46,6 @@ export type Browser = {
   width: Scalars["Int"]["output"];
 };
 
-export type BrowserColumn = Column & {
-  __typename: "BrowserColumn";
-  _placeholder?: Maybe<Scalars["String"]["output"]>;
-  height?: Maybe<Scalars["Int"]["output"]>;
-  path?: Maybe<Scalars["String"]["output"]>;
-  width?: Maybe<Scalars["Int"]["output"]>;
-};
-
 export type BrowserColumn2 = Column2 & {
   __typename: "BrowserColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
@@ -376,13 +368,6 @@ export type YouTubeEmbed = {
   height?: Maybe<Scalars["Int"]["output"]>;
   width?: Maybe<Scalars["Int"]["output"]>;
 };
-
-export type BrowserColumn_FragmentFragment = {
-  __typename: "BrowserColumn";
-  width?: number | null;
-  height?: number | null;
-  path?: string | null;
-} & { " $fragmentName"?: "BrowserColumn_FragmentFragment" };
 
 export type Navigation_FragmentFragment = {
   __typename: "Page";
@@ -757,27 +742,6 @@ export type AppTestTutorialColumnsPageQuery = {
   } | null;
 };
 
-export const BrowserColumn_FragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "BrowserColumn_Fragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "BrowserColumn" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "width" } },
-          { kind: "Field", name: { kind: "Name", value: "height" } },
-          { kind: "Field", name: { kind: "Name", value: "path" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<BrowserColumn_FragmentFragment, unknown>;
 export const Navigation_FragmentFragmentDoc = {
   kind: "Document",
   definitions: [

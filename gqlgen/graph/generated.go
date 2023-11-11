@@ -60,13 +60,6 @@ type ComplexityRoot struct {
 		Width  func(childComplexity int) int
 	}
 
-	BrowserColumn struct {
-		Height      func(childComplexity int) int
-		Path        func(childComplexity int) int
-		Placeholder func(childComplexity int) int
-		Width       func(childComplexity int) int
-	}
-
 	BrowserColumn2 struct {
 		Browser     func(childComplexity int) int
 		Placeholder func(childComplexity int) int
@@ -393,34 +386,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Browser.Width(childComplexity), true
-
-	case "BrowserColumn.height":
-		if e.complexity.BrowserColumn.Height == nil {
-			break
-		}
-
-		return e.complexity.BrowserColumn.Height(childComplexity), true
-
-	case "BrowserColumn.path":
-		if e.complexity.BrowserColumn.Path == nil {
-			break
-		}
-
-		return e.complexity.BrowserColumn.Path(childComplexity), true
-
-	case "BrowserColumn._placeholder":
-		if e.complexity.BrowserColumn.Placeholder == nil {
-			break
-		}
-
-		return e.complexity.BrowserColumn.Placeholder(childComplexity), true
-
-	case "BrowserColumn.width":
-		if e.complexity.BrowserColumn.Width == nil {
-			break
-		}
-
-		return e.complexity.BrowserColumn.Width(childComplexity), true
 
 	case "BrowserColumn2.browser":
 		if e.complexity.BrowserColumn2.Browser == nil {
@@ -1933,170 +1898,6 @@ func (ec *executionContext) _Browser_path(ctx context.Context, field graphql.Col
 func (ec *executionContext) fieldContext_Browser_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Browser",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BrowserColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn__placeholder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Placeholder, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BrowserColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BrowserColumn_width(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn_width(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BrowserColumn_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BrowserColumn_height(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BrowserColumn_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BrowserColumn_path(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn_path(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Path, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BrowserColumn_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9620,13 +9421,6 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case model.BrowserColumn:
-		return ec._BrowserColumn(ctx, sel, &obj)
-	case *model.BrowserColumn:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._BrowserColumn(ctx, sel, obj)
 	case model.SourceCodeColumn:
 		return ec._SourceCodeColumn(ctx, sel, &obj)
 	case *model.SourceCodeColumn:
@@ -9779,43 +9573,6 @@ func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var browserColumnImplementors = []string{"BrowserColumn", "Column"}
-
-func (ec *executionContext) _BrowserColumn(ctx context.Context, sel ast.SelectionSet, obj *model.BrowserColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, browserColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("BrowserColumn")
-		case "_placeholder":
-
-			out.Values[i] = ec._BrowserColumn__placeholder(ctx, field, obj)
-
-		case "width":
-
-			out.Values[i] = ec._BrowserColumn_width(ctx, field, obj)
-
-		case "height":
-
-			out.Values[i] = ec._BrowserColumn_height(ctx, field, obj)
-
-		case "path":
-
-			out.Values[i] = ec._BrowserColumn_path(ctx, field, obj)
-
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -187,13 +187,6 @@ type BackgroundImageColumn {
   modal: Modal
 }
 
-type BrowserColumn implements Column {
-  _placeholder: String
-  width: Int
-  height: Int
-  path: String
-}
-
 type DevToolsColumn {
   _placeholder: String
   width: Int
