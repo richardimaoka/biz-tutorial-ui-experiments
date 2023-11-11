@@ -1,5 +1,9 @@
 package state2
 
+/**
+ * Column fields
+ */
+
 type ColumnType string
 
 const (
@@ -21,4 +25,86 @@ type ColumnFields struct {
 	Column8     ColumnType `json:"column8"`
 	Column9     ColumnType `json:"column9"`
 	Column10    ColumnType `json:"column10"`
+}
+
+/**
+ * Source column fields
+ */
+
+type SourceStepType string
+
+const (
+	FileTree         SourceStepType = "fileTree"
+	SourceOpen       SourceStepType = "openFile"
+	SourceOpenCommit SourceStepType = "openFileCommit"
+	SourceError      SourceStepType = "error"
+	SourceMove       SourceStepType = "move"
+)
+
+type SourceTooltipFields struct {
+	SourceTooltipContents   string `json:"sourceTooltipContents"`
+	SourceTooltipTiming     string `json:"sourceTooltipTiming"`
+	SourceTooltipLineNumber int    `json:"sourceTooltipLineNumber"`
+	SourceTooltipIsAppend   bool   `json:"SourceTooltipIsAppend"`
+}
+
+type SourceFields struct {
+	Commit              string `json:"commit"`
+	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
+	ShowFileTree        bool   `json:"showFileTree"`
+	TypingAnimation     bool   `json:"typingAnimation"`
+	// embed tooltip
+	SourceTooltipFields
+}
+
+/**
+ * Termianl column fields
+ */
+type TerminalStepType string
+
+const (
+	TerminalCommand TerminalStepType = "command"
+	TerminalOutput  TerminalStepType = "output"
+	TerminalCd      TerminalStepType = "cd"
+	TerminalMove    TerminalStepType = "move"
+	TerminalOpen    TerminalStepType = "open"
+)
+
+type TerminalTooltipFields struct {
+	TerminalTooltipContents string `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
+}
+
+type TerminalFields struct {
+	CurrentDir       string           `json:"currentDir"`
+	TerminalStepType TerminalStepType `json:"terminalType"`
+	TerminalText     string           `json:"terminalText"`
+	TerminalName     string           `json:"terminalName"`
+	// embed tooltip
+	TerminalTooltipFields
+}
+
+/**
+ * Browser column fields
+ */
+type BrowserStepType string
+
+const (
+	BrowserOpen BrowserStepType = "open"
+	BrowserMove BrowserStepType = "move"
+)
+
+type BrowserFields struct {
+	BrowserStepType  BrowserStepType
+	BrowserImagePath string `json:"browserImagePath"`
+}
+
+/**
+ * Browser DevTools column fields
+ */
+
+type BrowserDevToolsFields struct {
+	DevToolsImageName   string `json:"devtoolsImageName"`
+	DevToolsImageWidth  int    `json:"devtoolsImageWidth"`
+	DevToolsImageHeight int    `json:"devtoolsImageHeight"`
 }

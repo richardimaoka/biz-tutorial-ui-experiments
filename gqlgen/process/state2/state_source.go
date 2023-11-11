@@ -121,6 +121,9 @@ func (s *SourceCode) forwardCommit(nextCommitHash string) error {
 			file.markRenamed(from.Path())
 		} else {
 			// updated
+			// filePatch := gitwrap.ToFilePatch(p, "")
+			// ops := edits.ToOperations(filePatch.Chunks)
+
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
 				return fmt.Errorf("forwardCommit failed, %s", err)

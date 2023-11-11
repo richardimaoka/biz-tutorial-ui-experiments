@@ -1,10 +1,5 @@
 package state2
 
-type IntrinsicFields struct {
-	StepId  string `json:"stepId"`
-	Comment string `json:"comment"`
-}
-
 type Step struct {
 	/**
 	 * Step meta fields
@@ -20,4 +15,6 @@ type Step struct {
 	 */
 	SourceFields
 	TerminalFields
+	BrowserFields
+	BrowserDevToolsFields
 }

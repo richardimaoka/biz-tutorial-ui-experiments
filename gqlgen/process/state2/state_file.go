@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
 
 type File struct {
@@ -15,11 +16,13 @@ type File struct {
 	filePath    string
 	oldFilePath string
 	offset      int
+
 	// Contents fields
 	language    string
 	contents    string
 	oldContents string
 	size        int64
+	edits       []edits.SingleEditOperation
 
 	// Flags
 	isUpdated bool
