@@ -1,4 +1,4 @@
-import { GqlTerminalColumn } from "@/app/components/terminal2/GqlTerminalColumn";
+import { GqlTerminalColumn } from "@/app/components/terminal/GqlTerminalColumn";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 import Link from "next/link";
