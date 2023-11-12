@@ -91,14 +91,6 @@ type Page struct {
 	Modal       *Modal           `json:"modal"`
 }
 
-type SourceCode2 struct {
-	Step           *string     `json:"step"`
-	ProjectDir     *string     `json:"projectDir"`
-	FileTree       []*FileNode `json:"fileTree"`
-	IsFoldFileTree *bool       `json:"isFoldFileTree"`
-	OpenFile       *OpenFile   `json:"openFile"`
-}
-
 type SourceCodeColumn2 struct {
 	Placeholder *string     `json:"_placeholder"`
 	SourceCode  *SourceCode `json:"sourceCode"`

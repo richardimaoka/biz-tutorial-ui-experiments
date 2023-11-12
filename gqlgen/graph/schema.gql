@@ -197,20 +197,6 @@ type SourceCode {
 }
 
 ###################################################
-# Source Code types 2
-###################################################
-
-type SourceCode2 {
-  # step is necessary for the resolver to return step-specific OpenFile data
-  step: String
-  projectDir: String
-  fileTree: [FileNode]
-  isFoldFileTree: Boolean
-  # If you don't pass `filePath` argument, you get the default OpenFile for the step
-  openFile(filePath: String): OpenFile
-}
-
-###################################################
 # Modal related object types
 ###################################################
 

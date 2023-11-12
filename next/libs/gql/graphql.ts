@@ -145,19 +145,6 @@ export type SourceCodeOpenFileArgs = {
   filePath?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type SourceCode2 = {
-  __typename: "SourceCode2";
-  fileTree?: Maybe<Array<Maybe<FileNode>>>;
-  isFoldFileTree?: Maybe<Scalars["Boolean"]["output"]>;
-  openFile?: Maybe<OpenFile>;
-  projectDir?: Maybe<Scalars["String"]["output"]>;
-  step?: Maybe<Scalars["String"]["output"]>;
-};
-
-export type SourceCode2OpenFileArgs = {
-  filePath?: InputMaybe<Scalars["String"]["input"]>;
-};
-
 export type SourceCodeColumn2 = Column & {
   __typename: "SourceCodeColumn2";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
