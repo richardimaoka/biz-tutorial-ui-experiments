@@ -56,9 +56,14 @@ type TerminalColumn implements Column {
   terminals: [Terminal!]!
 }
 
-type SourceCodeColumn2 implements Column {
+type SourceCodeColumn implements Column {
   _placeholder: String
   sourceCode: SourceCode!
+}
+
+type BrowserColumn implements Column {
+  _placeholder: String
+  browser: Browser!
 }
 
 ###################################################
@@ -95,18 +100,13 @@ type Terminal {
 }
 
 ###################################################
-# Browser Column 2
+# Browser Column
 ###################################################
 
 type Browser {
   width: Int!
   height: Int!
   path: String!
-}
-
-type BrowserColumn2 implements Column {
-  _placeholder: String
-  browser: Browser!
 }
 
 ###################################################

@@ -22,9 +22,9 @@ export function GqlColumnTabIcon(props: Props): JSX.Element {
   switch (fragment.column.__typename) {
     case "TerminalColumn":
       return <TerminalIcon />;
-    case "SourceCodeColumn2":
+    case "SourceCodeColumn":
       return <SourceCodeIcon />;
-    case "BrowserColumn2":
+    case "BrowserColumn":
       return <ChromeIcon />;
   }
 }

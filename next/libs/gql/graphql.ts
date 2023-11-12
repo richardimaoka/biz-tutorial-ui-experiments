@@ -36,8 +36,8 @@ export type Browser = {
   width: Scalars["Int"]["output"];
 };
 
-export type BrowserColumn2 = Column & {
-  __typename: "BrowserColumn2";
+export type BrowserColumn = Column & {
+  __typename: "BrowserColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   browser: Browser;
 };
@@ -145,8 +145,8 @@ export type SourceCodeOpenFileArgs = {
   filePath?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type SourceCodeColumn2 = Column & {
-  __typename: "SourceCodeColumn2";
+export type SourceCodeColumn = Column & {
+  __typename: "SourceCodeColumn";
   _placeholder?: Maybe<Scalars["String"]["output"]>;
   sourceCode: SourceCode;
 };
@@ -208,7 +208,7 @@ export type TestObjsAppTestTerminalPageArgs = {
 };
 
 export type GqlSourceCodeColumnFragment = {
-  __typename: "SourceCodeColumn2";
+  __typename: "SourceCodeColumn";
   sourceCode: {
     __typename: "SourceCode";
     openFile?:
@@ -368,8 +368,8 @@ export type GqlColumnWrapperFragment = {
   __typename: "ColumnWrapper";
   columnName: string;
   column:
-    | { __typename: "BrowserColumn2" }
-    | ({ __typename: "SourceCodeColumn2" } & {
+    | { __typename: "BrowserColumn" }
+    | ({ __typename: "SourceCodeColumn" } & {
         " $fragmentRefs"?: {
           GqlSourceCodeColumnFragment: GqlSourceCodeColumnFragment;
         };
@@ -408,8 +408,8 @@ export type GqlColumnTabFragment = ({
 export type GqlColumnTabIconFragment = {
   __typename: "ColumnWrapper";
   column:
-    | { __typename: "BrowserColumn2" }
-    | { __typename: "SourceCodeColumn2" }
+    | { __typename: "BrowserColumn" }
+    | { __typename: "SourceCodeColumn" }
     | { __typename: "TerminalColumn" };
 } & { " $fragmentName"?: "GqlColumnTabIconFragment" };
 
@@ -1451,7 +1451,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
       name: { kind: "Name", value: "GqlSourceCodeColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCodeColumn2" },
+        name: { kind: "Name", value: "SourceCodeColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -1737,7 +1737,7 @@ export const GqlColumnWrapperFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                    name: { kind: "Name", value: "SourceCodeColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -2096,7 +2096,7 @@ export const GqlColumnWrapperFragmentDoc = {
       name: { kind: "Name", value: "GqlSourceCodeColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCodeColumn2" },
+        name: { kind: "Name", value: "SourceCodeColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2503,7 +2503,7 @@ export const GqlColumnWrappersFragmentDoc = {
       name: { kind: "Name", value: "GqlSourceCodeColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCodeColumn2" },
+        name: { kind: "Name", value: "SourceCodeColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -2575,7 +2575,7 @@ export const GqlColumnWrappersFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                    name: { kind: "Name", value: "SourceCodeColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -3029,7 +3029,7 @@ export const GqlTutorialComponentFragmentDoc = {
       name: { kind: "Name", value: "GqlSourceCodeColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCodeColumn2" },
+        name: { kind: "Name", value: "SourceCodeColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3101,7 +3101,7 @@ export const GqlTutorialComponentFragmentDoc = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                    name: { kind: "Name", value: "SourceCodeColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -3811,7 +3811,7 @@ export const AppTestTutorialColumnsPageDocument = {
       name: { kind: "Name", value: "GqlSourceCodeColumn" },
       typeCondition: {
         kind: "NamedType",
-        name: { kind: "Name", value: "SourceCodeColumn2" },
+        name: { kind: "Name", value: "SourceCodeColumn" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -3883,7 +3883,7 @@ export const AppTestTutorialColumnsPageDocument = {
                   kind: "InlineFragment",
                   typeCondition: {
                     kind: "NamedType",
-                    name: { kind: "Name", value: "SourceCodeColumn2" },
+                    name: { kind: "Name", value: "SourceCodeColumn" },
                   },
                   selectionSet: {
                     kind: "SelectionSet",

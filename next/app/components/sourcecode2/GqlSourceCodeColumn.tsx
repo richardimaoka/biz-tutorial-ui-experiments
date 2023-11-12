@@ -4,7 +4,7 @@ import { GqlOpenFilePane } from "./openfile/GqlOpenFilePane";
 import { GqlFileTreePane } from "./filetree/GqlFileTreePane";
 
 const fragmentDefinition = graphql(`
-  fragment GqlSourceCodeColumn on SourceCodeColumn2 {
+  fragment GqlSourceCodeColumn on SourceCodeColumn {
     sourceCode {
       ...GqlFileTreePane
 

@@ -19,13 +19,13 @@ type Browser struct {
 	Path   string `json:"path"`
 }
 
-type BrowserColumn2 struct {
+type BrowserColumn struct {
 	Placeholder *string  `json:"_placeholder"`
 	Browser     *Browser `json:"browser"`
 }
 
-func (BrowserColumn2) IsColumn()                    {}
-func (this BrowserColumn2) GetPlaceholder() *string { return this.Placeholder }
+func (BrowserColumn) IsColumn()                    {}
+func (this BrowserColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type ColumnWrapper struct {
 	Column            Column  `json:"column"`
@@ -91,13 +91,13 @@ type Page struct {
 	Modal       *Modal           `json:"modal"`
 }
 
-type SourceCodeColumn2 struct {
+type SourceCodeColumn struct {
 	Placeholder *string     `json:"_placeholder"`
 	SourceCode  *SourceCode `json:"sourceCode"`
 }
 
-func (SourceCodeColumn2) IsColumn()                    {}
-func (this SourceCodeColumn2) GetPlaceholder() *string { return this.Placeholder }
+func (SourceCodeColumn) IsColumn()                    {}
+func (this SourceCodeColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type SourceCodeTooltip struct {
 	MarkdownBody string                   `json:"markdownBody"`

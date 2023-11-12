@@ -36,8 +36,8 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	return nil
 }
 
-func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn2 {
-	return &model.SourceCodeColumn2{
+func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn {
+	return &model.SourceCodeColumn{
 		SourceCode: c.sourceCode.ToGraphQL(),
 	}
 }

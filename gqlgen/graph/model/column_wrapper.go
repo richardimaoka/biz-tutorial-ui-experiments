@@ -55,15 +55,15 @@ func columnFromBytes(bytes []byte) (Column, error) {
 		}
 		return &col, nil
 
-	case "SourceCodeColumn2":
-		var col SourceCodeColumn2
+	case "SourceCodeColumn":
+		var col SourceCodeColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}
 		return &col, nil
 
-	case "BrowserColumn2":
-		var col BrowserColumn2
+	case "BrowserColumn":
+		var col BrowserColumn
 		if err := json.Unmarshal(bytes, &col); err != nil {
 			return nil, err
 		}

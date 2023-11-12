@@ -51,7 +51,7 @@ type ComplexityRoot struct {
 		Width  func(childComplexity int) int
 	}
 
-	BrowserColumn2 struct {
+	BrowserColumn struct {
 		Browser     func(childComplexity int) int
 		Placeholder func(childComplexity int) int
 	}
@@ -133,7 +133,7 @@ type ComplexityRoot struct {
 		Step           func(childComplexity int) int
 	}
 
-	SourceCodeColumn2 struct {
+	SourceCodeColumn struct {
 		Placeholder func(childComplexity int) int
 		SourceCode  func(childComplexity int) int
 	}
@@ -225,19 +225,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Browser.Width(childComplexity), true
 
-	case "BrowserColumn2.browser":
-		if e.complexity.BrowserColumn2.Browser == nil {
+	case "BrowserColumn.browser":
+		if e.complexity.BrowserColumn.Browser == nil {
 			break
 		}
 
-		return e.complexity.BrowserColumn2.Browser(childComplexity), true
+		return e.complexity.BrowserColumn.Browser(childComplexity), true
 
-	case "BrowserColumn2._placeholder":
-		if e.complexity.BrowserColumn2.Placeholder == nil {
+	case "BrowserColumn._placeholder":
+		if e.complexity.BrowserColumn.Placeholder == nil {
 			break
 		}
 
-		return e.complexity.BrowserColumn2.Placeholder(childComplexity), true
+		return e.complexity.BrowserColumn.Placeholder(childComplexity), true
 
 	case "ColumnWrapper.column":
 		if e.complexity.ColumnWrapper.Column == nil {
@@ -557,19 +557,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SourceCode.Step(childComplexity), true
 
-	case "SourceCodeColumn2._placeholder":
-		if e.complexity.SourceCodeColumn2.Placeholder == nil {
+	case "SourceCodeColumn._placeholder":
+		if e.complexity.SourceCodeColumn.Placeholder == nil {
 			break
 		}
 
-		return e.complexity.SourceCodeColumn2.Placeholder(childComplexity), true
+		return e.complexity.SourceCodeColumn.Placeholder(childComplexity), true
 
-	case "SourceCodeColumn2.sourceCode":
-		if e.complexity.SourceCodeColumn2.SourceCode == nil {
+	case "SourceCodeColumn.sourceCode":
+		if e.complexity.SourceCodeColumn.SourceCode == nil {
 			break
 		}
 
-		return e.complexity.SourceCodeColumn2.SourceCode(childComplexity), true
+		return e.complexity.SourceCodeColumn.SourceCode(childComplexity), true
 
 	case "SourceCodeTooltip.lineNumber":
 		if e.complexity.SourceCodeTooltip.LineNumber == nil {
@@ -1032,8 +1032,8 @@ func (ec *executionContext) fieldContext_Browser_path(ctx context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _BrowserColumn2__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn2__placeholder(ctx, field)
+func (ec *executionContext) _BrowserColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BrowserColumn__placeholder(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1060,9 +1060,9 @@ func (ec *executionContext) _BrowserColumn2__placeholder(ctx context.Context, fi
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_BrowserColumn2__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_BrowserColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn2",
+		Object:     "BrowserColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1073,8 +1073,8 @@ func (ec *executionContext) fieldContext_BrowserColumn2__placeholder(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _BrowserColumn2_browser(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BrowserColumn2_browser(ctx, field)
+func (ec *executionContext) _BrowserColumn_browser(ctx context.Context, field graphql.CollectedField, obj *model.BrowserColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BrowserColumn_browser(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1104,9 +1104,9 @@ func (ec *executionContext) _BrowserColumn2_browser(ctx context.Context, field g
 	return ec.marshalNBrowser2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐBrowser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_BrowserColumn2_browser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_BrowserColumn_browser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "BrowserColumn2",
+		Object:     "BrowserColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3223,8 +3223,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _SourceCodeColumn2__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SourceCodeColumn2__placeholder(ctx, field)
+func (ec *executionContext) _SourceCodeColumn__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCodeColumn__placeholder(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3251,9 +3251,9 @@ func (ec *executionContext) _SourceCodeColumn2__placeholder(ctx context.Context,
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SourceCodeColumn2__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SourceCodeColumn__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SourceCodeColumn2",
+		Object:     "SourceCodeColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3264,8 +3264,8 @@ func (ec *executionContext) fieldContext_SourceCodeColumn2__placeholder(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _SourceCodeColumn2_sourceCode(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeColumn2) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SourceCodeColumn2_sourceCode(ctx, field)
+func (ec *executionContext) _SourceCodeColumn_sourceCode(ctx context.Context, field graphql.CollectedField, obj *model.SourceCodeColumn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SourceCodeColumn_sourceCode(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3295,9 +3295,9 @@ func (ec *executionContext) _SourceCodeColumn2_sourceCode(ctx context.Context, f
 	return ec.marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SourceCodeColumn2_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SourceCodeColumn_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SourceCodeColumn2",
+		Object:     "SourceCodeColumn",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -5979,20 +5979,20 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 			return graphql.Null
 		}
 		return ec._TerminalColumn(ctx, sel, obj)
-	case model.SourceCodeColumn2:
-		return ec._SourceCodeColumn2(ctx, sel, &obj)
-	case *model.SourceCodeColumn2:
+	case model.SourceCodeColumn:
+		return ec._SourceCodeColumn(ctx, sel, &obj)
+	case *model.SourceCodeColumn:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._SourceCodeColumn2(ctx, sel, obj)
-	case model.BrowserColumn2:
-		return ec._BrowserColumn2(ctx, sel, &obj)
-	case *model.BrowserColumn2:
+		return ec._SourceCodeColumn(ctx, sel, obj)
+	case model.BrowserColumn:
+		return ec._BrowserColumn(ctx, sel, &obj)
+	case *model.BrowserColumn:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._BrowserColumn2(ctx, sel, obj)
+		return ec._BrowserColumn(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
@@ -6044,23 +6044,23 @@ func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
-var browserColumn2Implementors = []string{"BrowserColumn2", "Column"}
+var browserColumnImplementors = []string{"BrowserColumn", "Column"}
 
-func (ec *executionContext) _BrowserColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.BrowserColumn2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, browserColumn2Implementors)
+func (ec *executionContext) _BrowserColumn(ctx context.Context, sel ast.SelectionSet, obj *model.BrowserColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, browserColumnImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("BrowserColumn2")
+			out.Values[i] = graphql.MarshalString("BrowserColumn")
 		case "_placeholder":
 
-			out.Values[i] = ec._BrowserColumn2__placeholder(ctx, field, obj)
+			out.Values[i] = ec._BrowserColumn__placeholder(ctx, field, obj)
 
 		case "browser":
 
-			out.Values[i] = ec._BrowserColumn2_browser(ctx, field, obj)
+			out.Values[i] = ec._BrowserColumn_browser(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -6582,23 +6582,23 @@ func (ec *executionContext) _SourceCode(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
-var sourceCodeColumn2Implementors = []string{"SourceCodeColumn2", "Column"}
+var sourceCodeColumnImplementors = []string{"SourceCodeColumn", "Column"}
 
-func (ec *executionContext) _SourceCodeColumn2(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCodeColumn2) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCodeColumn2Implementors)
+func (ec *executionContext) _SourceCodeColumn(ctx context.Context, sel ast.SelectionSet, obj *model.SourceCodeColumn) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sourceCodeColumnImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("SourceCodeColumn2")
+			out.Values[i] = graphql.MarshalString("SourceCodeColumn")
 		case "_placeholder":
 
-			out.Values[i] = ec._SourceCodeColumn2__placeholder(ctx, field, obj)
+			out.Values[i] = ec._SourceCodeColumn__placeholder(ctx, field, obj)
 
 		case "sourceCode":
 
-			out.Values[i] = ec._SourceCodeColumn2_sourceCode(ctx, field, obj)
+			out.Values[i] = ec._SourceCodeColumn_sourceCode(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

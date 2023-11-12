@@ -16,7 +16,7 @@ const fragmentDefinition = graphql(`
       ... on TerminalColumn {
         ...GqlTerminalColumn
       }
-      ... on SourceCodeColumn2 {
+      ... on SourceCodeColumn {
         ...GqlSourceCodeColumn
       }
     }
@@ -44,13 +44,13 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
           <GqlTerminalColumn fragment={column} selectIndex={0} />
         </div>
       );
-    case "SourceCodeColumn2":
+    case "SourceCodeColumn":
       return (
         <div className={styles.component}>
           <GqlSourceCodeColumn fragment={column} />
         </div>
       );
-    case "BrowserColumn2":
+    case "BrowserColumn":
       return (
         <div className={styles.component}>
           browser column not implemented yet
