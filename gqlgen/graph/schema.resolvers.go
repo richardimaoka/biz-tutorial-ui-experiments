@@ -37,7 +37,7 @@ func (r *testObjsResolver) AppTestTerminalPage(ctx context.Context, obj *model.T
 		filename = fmt.Sprintf("data/_test/appTestTerminalPage/%d.json", *step)
 	}
 
-	var m model.TerminalColumn2
+	var m model.TerminalColumn
 	err := jsonwrap.Read(filename, &m)
 	if err != nil {
 		return nil, err
