@@ -5,7 +5,7 @@ import styles from "./GqlFileTreeComponent.module.css";
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 
 const fragmentDefinition = graphql(`
-  fragment GqlFileTreeComponent on SourceCode2 {
+  fragment GqlFileTreeComponent on SourceCode {
     fileTree {
       filePath
       ...GqlFileNodeComponent

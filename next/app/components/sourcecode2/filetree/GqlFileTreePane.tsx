@@ -7,7 +7,7 @@ import styles from "./GqlFileTreePane.module.css";
 import { GqlFileTreeComponent } from "./tree/GqlFileTreeComponent";
 
 const fragmentDefinition = graphql(`
-  fragment GqlFileTreePane on SourceCode2 {
+  fragment GqlFileTreePane on SourceCode {
     ...GqlFileTreeHeader
     ...GqlFileTreeComponent
     isFoldFileTree

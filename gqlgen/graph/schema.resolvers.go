@@ -25,7 +25,18 @@ func (r *queryResolver) Test(ctx context.Context) (*model.TestObjs, error) {
 
 // OpenFile is the resolver for the openFile field.
 func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode, filePath *string) (*model.OpenFile, error) {
-	return nil, nil
+	var openFilePath string
+	if filePath != nil {
+		openFilePath = *filePath
+	} else {
+		openFilePath = obj.DefaultOpenFilePath
+	}
+
+	openFile, ok := obj.FileContents[openFilePath]
+	if !ok {
+		return nil, fmt.Errorf("%s not found", openFilePath)
+	}
+	return &openFile, nil
 }
 
 // AppTestTerminalPage is the resolver for the appTestTerminalPage field.

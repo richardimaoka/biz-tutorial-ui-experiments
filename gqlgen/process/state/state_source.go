@@ -191,6 +191,6 @@ func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming,
 	}
 }
 
-func (s *SourceCode) ToGraphQL() *model.SourceCode2 {
+func (s *SourceCode) ToGraphQL() *model.SourceCode {
 	return nil
 }

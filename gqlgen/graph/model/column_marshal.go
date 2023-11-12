@@ -18,9 +18,9 @@ func (this TerminalColumn) MarshalJSON() ([]byte, error) {
 
 func (this SourceCodeColumn2) MarshalJSON() ([]byte, error) {
 	extendedOutput := struct {
-		TypeName    string       `json:"__typename"`
-		Placeholder *string      `json:"_placeholder"`
-		SourceCode  *SourceCode2 `json:"sourceCode"`
+		TypeName    string      `json:"__typename"`
+		Placeholder *string     `json:"_placeholder"`
+		SourceCode  *SourceCode `json:"sourceCode"`
 	}{
 		TypeName:    "SourceCodeColumn2",
 		Placeholder: this.Placeholder,

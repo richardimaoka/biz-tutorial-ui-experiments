@@ -3605,9 +3605,9 @@ func (ec *executionContext) _SourceCodeColumn2_sourceCode(ctx context.Context, f
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.SourceCode2)
+	res := resTmp.(*model.SourceCode)
 	fc.Result = res
-	return ec.marshalNSourceCode22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode2(ctx, field.Selections, res)
+	return ec.marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SourceCodeColumn2_sourceCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3619,17 +3619,17 @@ func (ec *executionContext) fieldContext_SourceCodeColumn2_sourceCode(ctx contex
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "step":
-				return ec.fieldContext_SourceCode2_step(ctx, field)
+				return ec.fieldContext_SourceCode_step(ctx, field)
 			case "projectDir":
-				return ec.fieldContext_SourceCode2_projectDir(ctx, field)
+				return ec.fieldContext_SourceCode_projectDir(ctx, field)
 			case "fileTree":
-				return ec.fieldContext_SourceCode2_fileTree(ctx, field)
+				return ec.fieldContext_SourceCode_fileTree(ctx, field)
 			case "isFoldFileTree":
-				return ec.fieldContext_SourceCode2_isFoldFileTree(ctx, field)
+				return ec.fieldContext_SourceCode_isFoldFileTree(ctx, field)
 			case "openFile":
-				return ec.fieldContext_SourceCode2_openFile(ctx, field)
+				return ec.fieldContext_SourceCode_openFile(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type SourceCode2", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type SourceCode", field.Name)
 		},
 	}
 	return fc, nil
@@ -7660,14 +7660,14 @@ func (ec *executionContext) marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardima
 	return ec._MonacoEditRange(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSourceCode22ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode2(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode2) graphql.Marshaler {
+func (ec *executionContext) marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._SourceCode2(ctx, sel, v)
+	return ec._SourceCode(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

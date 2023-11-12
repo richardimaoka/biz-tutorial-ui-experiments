@@ -100,8 +100,8 @@ type SourceCode2 struct {
 }
 
 type SourceCodeColumn2 struct {
-	Placeholder *string      `json:"_placeholder"`
-	SourceCode  *SourceCode2 `json:"sourceCode"`
+	Placeholder *string     `json:"_placeholder"`
+	SourceCode  *SourceCode `json:"sourceCode"`
 }
 
 func (SourceCodeColumn2) IsColumn()                    {}
