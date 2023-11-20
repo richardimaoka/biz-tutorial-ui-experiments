@@ -17,7 +17,10 @@ func main() {
 
 	switch subCmd {
 	case "input":
-		input.Run(os.Args[2:])
+		err := input.Run(os.Args[2:])
+		if err != nil {
+			log.Print(err)
+		}
 	case "server":
 		Server()
 	default:
