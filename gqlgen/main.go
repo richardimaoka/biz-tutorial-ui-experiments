@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func main() {
@@ -18,6 +19,11 @@ func main() {
 	switch subCmd {
 	case "input":
 		err := input.Run(os.Args[2:])
+		if err != nil {
+			log.Print(err)
+		}
+	case "state":
+		err := state.Run(os.Args[2:])
 		if err != nil {
 			log.Print(err)
 		}
