@@ -12,18 +12,31 @@ import (
 )
 
 func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
+	// Read step file
 	var steps []Step
 	err := jsonwrap.Read(stepFile, &steps)
 	if err != nil {
 		return fmt.Errorf("result.Process failed, %v", err)
 	}
 
+	// Initialize the page state
 	page := NewPage(repo, tutorial, steps)
+
+	// Initial step
+	gqlModel := page.ToGraphQL()
+	fmt.Println(*gqlModel.Step)
+	targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
+	if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
+		return err
+	}
+
+	// From the 2nd step
 	for page.HasNext() {
 		if err := page.ToNextStep(); err != nil {
 			return err
 		}
 		gqlModel := page.ToGraphQL()
+		fmt.Println(*gqlModel.Step)
 
 		targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {

@@ -92,13 +92,39 @@ func (p *Page) ToNextStep() error {
 	return nil
 }
 
+func (p *Page) hasPrev() bool {
+	return 1 < p.currentStepIndex
+}
+
 func (p *Page) ToGraphQL() *model.Page {
 	var modelColumns []*model.ColumnWrapper
 	for _, c := range p.columns {
 		modelColumns = append(modelColumns, c.ToGraphQLColumnWrapper())
 	}
 
+	// Handle step IDs
+	currentStep := p.steps[p.currentStepIndex]
+	var currentStepId, nextStepId, prevStepId *string
+	currentStepId = stringRef(currentStep.StepId)
+	if p.HasNext() {
+		nextStepId = stringRef(p.steps[p.currentStepIndex+1].StepId)
+	}
+	if p.hasPrev() {
+		prevStepId = stringRef(p.steps[p.currentStepIndex-1].StepId)
+	}
+
+	// Handle isTrivial
+	var isTrivial *bool
+	if p.steps[p.currentStepIndex].IsTrivial {
+		trueValue := true
+		isTrivial = &trueValue
+	}
+
 	return &model.Page{
-		Columns: modelColumns,
+		Columns:   modelColumns,
+		Step:      currentStepId,
+		NextStep:  nextStepId,
+		PrevStep:  prevStepId,
+		IsTrivial: isTrivial,
 	}
 }
