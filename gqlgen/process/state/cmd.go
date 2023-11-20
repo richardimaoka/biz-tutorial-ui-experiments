@@ -18,14 +18,14 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		return fmt.Errorf("result.Process failed, %v", err)
 	}
 
-	page := NewPage(repo, tutorial)
-	for _, s := range steps {
-		if err := page.Update(&s); err != nil {
+	page := NewPage(repo, tutorial, steps)
+	for page.HasNext() {
+		if err := page.ToNextStep(); err != nil {
 			return err
 		}
 		gqlModel := page.ToGraphQL()
 
-		targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, s.StepId)
+		targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 			return err
 		}

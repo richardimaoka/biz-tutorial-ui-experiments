@@ -7,6 +7,13 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
 
+// Step        *string          `json:"step"`
+// NextStep    *string          `json:"nextStep"`
+// PrevStep    *string          `json:"prevStep"`
+// IsTrivial   *bool            `json:"isTrivial"`
+// Columns     []*ColumnWrapper `json:"columns"`
+// FocusColumn *string          `json:"focusColumn"`
+// Modal       *Modal           `json:"modal"`}
 type Page struct {
 	repo       *git.Repository
 	tutorial   string
@@ -17,53 +24,72 @@ type Page struct {
 	browserColumn    *BrowserColumn
 
 	columns []Column
+
+	steps            []Step
+	currentStepIndex int
 }
 
-func NewPage(repo *git.Repository, tutorial string) *Page {
+func NewPage(repo *git.Repository, tutorial string, steps []Step) *Page {
 	return &Page{
-		repo:     repo,
-		tutorial: tutorial,
+		repo:             repo,
+		tutorial:         tutorial,
+		steps:            steps,
+		currentStepIndex: 0,
 	}
 }
 
-func (p *Page) Update(step *Step) error {
-	switch step.FocusColumn {
+func (p *Page) CurrentStepId() string {
+	currentStep := p.steps[p.currentStepIndex]
+	return currentStep.StepId
+}
+
+func (p *Page) HasNext() bool {
+	return p.currentStepIndex < len(p.steps)-1
+}
+
+func (p *Page) ToNextStep() error {
+	// Check if next step exists
+	if !p.HasNext() {
+		return fmt.Errorf("No next step after step = '%s'", p.CurrentStepId())
+	}
+
+	// Process next step
+	var err error
+	nextStep := p.steps[p.currentStepIndex]
+	switch nextStep.FocusColumn {
 	case SourceColumnType:
 		if p.sourceCodeColumn == nil {
 			p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
 			p.columns = append(p.columns, p.sourceCodeColumn)
 		}
-		err := p.sourceCodeColumn.Update(&step.SourceFields)
-		if err != nil {
-			return fmt.Errorf("Update failed to process step = '%s', %s", step.StepId, err)
-		}
-		return nil
+		err = p.sourceCodeColumn.Update(&nextStep.SourceFields)
 
 	case TerminalColumnType:
 		if p.terminalColumn == nil {
 			p.terminalColumn = NewTerminalColumn()
 			p.columns = append(p.columns, p.terminalColumn)
 		}
-		err := p.terminalColumn.Update(step.StepId, &step.TerminalFields)
-		if err != nil {
-			return fmt.Errorf("Update failed to process step = '%s', %s", step.StepId, err)
-		}
-		return nil
+		err = p.terminalColumn.Update(nextStep.StepId, &nextStep.TerminalFields)
 
 	case BrowserColumnType:
 		if p.browserColumn == nil {
 			p.browserColumn = NewBrowserColumn()
 			p.columns = append(p.columns, p.browserColumn)
 		}
-		err := p.browserColumn.Update(&step.BrowserFields)
-		if err != nil {
-			return fmt.Errorf("Update failed to process step = '%s', %s", step.StepId, err)
-		}
-		return nil
+		err = p.browserColumn.Update(&nextStep.BrowserFields)
 
 	default:
-		return fmt.Errorf("Update failed to process step = '%s', column type = '%s' is not implemented", step.StepId, step.FocusColumn)
+		err = fmt.Errorf("Update failed to process step = '%s', column type = '%s' is not implemented", nextStep.StepId, nextStep.FocusColumn)
 	}
+
+	// checi if error happend
+	if err != nil {
+		return fmt.Errorf("Update failed to process step = '%s', %s", nextStep.StepId, err)
+	}
+
+	// if everything is ok, then exit
+	p.currentStepIndex++
+	return nil
 }
 
 func (p *Page) ToGraphQL() *model.Page {

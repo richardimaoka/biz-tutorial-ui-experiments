@@ -26,15 +26,15 @@ func Test(t *testing.T) {
 			testio.JsonRead(t, inputFile, &steps)
 
 			// Function to test
-			page := state.NewPage(repo, c.tutorialName)
-			for _, step := range steps {
+			page := state.NewPage(repo, c.tutorialName, steps)
+			for page.HasNext() {
 				t.Run(c.tutorialName, func(t *testing.T) {
-					err := page.Update(&step)
+					err := page.ToNextStep()
 					if err != nil {
 						t.Errorf("failed to update page, %s", err)
 					}
 					gqlModel := page.ToGraphQL()
-					goldenFile := "testdata/" + c.tutorialName + "/" + step.StepId + ".json"
+					goldenFile := "testdata/" + c.tutorialName + "/" + page.CurrentStepId() + ".json"
 					testio.CompareWithGoldenFile(t, *updateFlag, goldenFile, gqlModel)
 				})
 			}
