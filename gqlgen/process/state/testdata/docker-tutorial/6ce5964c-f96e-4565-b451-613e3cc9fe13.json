@@ -73,7 +73,7 @@
     },
     {
       "column": {
-        "__typename": "SourceCodeColumn2",
+        "__typename": "SourceCodeColumn",
         "_placeholder": null,
         "sourceCode": null
       },
