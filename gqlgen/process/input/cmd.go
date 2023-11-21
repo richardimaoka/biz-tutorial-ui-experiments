@@ -3,6 +3,7 @@ package input
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/go-git/go-git/v5"
@@ -60,5 +61,11 @@ func Run(subArgs []string) error {
 	}
 
 	// Process the input file and write to target
-	return process(repo, inputFile, targetFile)
+	err = process(repo, inputFile, targetFile)
+	if err != nil {
+		return fmt.Errorf("state.Run() failed, %s", err)
+	}
+
+	log.Printf("input.Run() successfully written file = '%s'", targetFile)
+	return nil
 }

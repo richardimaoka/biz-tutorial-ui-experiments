@@ -3,6 +3,7 @@ package state
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -28,13 +29,13 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	//
 	page := NewPage(repo, tutorial, steps)
 	// Initial step file
-	initStepFile := fmt.Sprintf("%s/state/_initial_step.json", targetDir)
+	initStepFile := fmt.Sprintf("%s/_initial_step.json", targetDir)
 	if err := jsonwrap.WriteJsonToFile(initStep{page.CurrentStepId()}, initStepFile); err != nil {
 		return err
 	}
 	// Initial step page
 	gqlModel := page.ToGraphQL()
-	targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
+	targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
 	if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 		return err
 	}
@@ -48,7 +49,7 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		}
 		gqlModel := page.ToGraphQL()
 
-		targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
+		targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 			return err
 		}
@@ -75,13 +76,20 @@ func Run(subArgs []string) error {
 	// Prepare variables based on parsed arguments
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: *repoUrl})
 	if err != nil {
-		return fmt.Errorf("input.Process() failed, %s", err)
+		return fmt.Errorf("state.Run() failed, %s", err)
 	}
 
 	split := strings.Split(*dirName, "/")
 	tutorial := split[len(split)-1]
 	stepFile := fmt.Sprintf("%s/steps.json", *dirName)
+	targetDir := fmt.Sprintf("%s/state", *dirName)
 
 	// Process the steps file and write to target
-	return process(repo, tutorial, stepFile, *dirName)
+	err = process(repo, tutorial, stepFile, targetDir)
+	if err != nil {
+		return fmt.Errorf("state.Run() failed, %s", err)
+	}
+
+	log.Printf("state.Run() successfully written files = '%s/{step-id}.json'", targetDir)
+	return nil
 }
