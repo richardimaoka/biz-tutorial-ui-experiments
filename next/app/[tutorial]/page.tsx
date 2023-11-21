@@ -17,9 +17,14 @@ interface PageParams {
 }
 
 export default async function Page({ searchParams }: PageParams) {
+  const gqlEndPoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
+  if (typeof gqlEndPoint != "string") {
+    throw new Error("Next.js server gave wrong GraphQL endpoint URL.");
+  }
+
   // const variables = { step: stepNum };
   const data = await request(
-    "http://localhost:8080/query",
+    gqlEndPoint,
     queryDefinition
     // variables
   );
