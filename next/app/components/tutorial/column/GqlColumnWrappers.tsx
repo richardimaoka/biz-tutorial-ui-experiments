@@ -22,7 +22,7 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   if (!fragment.columns) {
-    return <></>;
+    return <div className={styles.empty}></div>;
   }
 
   const columns = nonNullArray(fragment.columns);

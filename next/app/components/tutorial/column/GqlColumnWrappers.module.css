@@ -8,3 +8,8 @@
 .column {
   height: 100%;
 }
+
+.empty {
+  height: 100%;
+  background-color: var(--color-surface);
+}
