@@ -7,14 +7,63 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
+type initStep struct {
+	InitialStep string `json:"initialStep"`
+}
+
+func tutorialExists(tutorial string) bool {
+	dirName := "data/" + tutorial
+	if _, err := os.Stat(dirName); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
+func stepFile(tutorial string, step *string) (string, error) {
+	dirName := fmt.Sprintf("data/%s/state", tutorial)
+
+	if step == nil {
+		initStepFile := fmt.Sprintf("%s/_initial_step.json", dirName)
+
+		var init initStep
+		err := jsonwrap.Read(initStepFile, &init)
+		if err != nil {
+			return "", err
+		}
+
+		return fmt.Sprintf("%s/%s.json", dirName, init.InitialStep), nil
+	}
+
+	return fmt.Sprintf("%s/%s.json", dirName, *step), nil
+}
+
 // Page is the resolver for the page field.
 func (r *queryResolver) Page(ctx context.Context, tutorial string, step *string) (*model.Page, error) {
-	panic(fmt.Errorf("not implemented: Page - page"))
+	if !tutorialExists(tutorial) {
+		return nil, fmt.Errorf("Page() error, '%s' is an invalid tutorial name", tutorial)
+	}
+
+	filename, err := stepFile(tutorial, step)
+	if err != nil {
+		log.Printf("Page() error, %s", err)
+		return nil, fmt.Errorf("Internal Server Error")
+	}
+
+	var model model.Page
+	err = jsonwrap.Read(filename, &model)
+	if err != nil {
+		log.Printf("Page() error, failed to read file = '%s', %s", filename, err)
+		return nil, fmt.Errorf("Internal Server Error")
+	}
+
+	return &model, nil
 }
 
 // Test is the resolver for the _test field.

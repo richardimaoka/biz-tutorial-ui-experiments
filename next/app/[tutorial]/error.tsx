@@ -1,5 +1,8 @@
 "use client"; // Error components must be Client Components
 
+import { ClientError } from "graphql-request";
+import { GraphQLError } from "graphql/error/GraphQLError";
+// import { GraphQLError } from "graphql/error/GraphQLError";
 /**
  * Error Handling
  * https://nextjs.org/docs/app/building-your-application/routing/error-handling
@@ -35,6 +38,9 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
+    // on the client side, the type of `error` is general `Error`
+    // although graphql-request throws `ClientError`, due to SSR.
+
     // Log the error to an error reporting service
     console.error(error);
   }, [error]);

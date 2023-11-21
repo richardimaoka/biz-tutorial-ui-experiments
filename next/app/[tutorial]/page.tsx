@@ -32,10 +32,8 @@ export default async function Page(props: PageParams) {
     throw new Error("Next.js server gave wrong GraphQL endpoint URL.");
   }
 
-  // const variables = { step: stepNum };
-  const data = await request(gqlEndPoint, queryDefinition, {
-    tutorial: props.params.tutorial,
-  });
+  const variables = { tutorial: props.params.tutorial /*step: stepNum*/ };
+  const data = await request(gqlEndPoint, queryDefinition, variables);
 
   const fragment = data.page;
 
