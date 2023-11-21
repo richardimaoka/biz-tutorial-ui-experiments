@@ -97,6 +97,7 @@ func (p *Page) hasPrev() bool {
 }
 
 func (p *Page) ToGraphQL() *model.Page {
+	// Handle columns
 	var modelColumns []*model.ColumnWrapper
 	for _, c := range p.columns {
 		modelColumns = append(modelColumns, c.ToGraphQLColumnWrapper())
@@ -120,11 +121,15 @@ func (p *Page) ToGraphQL() *model.Page {
 		isTrivial = &trueValue
 	}
 
+	// Handle FocusColumn
+	focusColumn := stringRef(string(currentStep.FocusColumn))
+
 	return &model.Page{
-		Columns:   modelColumns,
-		Step:      currentStepId,
-		NextStep:  nextStepId,
-		PrevStep:  prevStepId,
-		IsTrivial: isTrivial,
+		Columns:     modelColumns,
+		FocusColumn: focusColumn,
+		Step:        currentStepId,
+		NextStep:    nextStepId,
+		PrevStep:    prevStepId,
+		IsTrivial:   isTrivial,
 	}
 }

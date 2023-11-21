@@ -11,6 +11,10 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
+type initStep struct {
+	InitialStep string `json:"initialStep"`
+}
+
 func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	// Read step file
 	var steps []Step
@@ -19,24 +23,30 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		return fmt.Errorf("result.Process failed, %v", err)
 	}
 
+	//
 	// Initialize the page state
+	//
 	page := NewPage(repo, tutorial, steps)
-
-	// Initial step
+	// Initial step file
+	initStepFile := fmt.Sprintf("%s/state/_initial_step.json", targetDir)
+	if err := jsonwrap.WriteJsonToFile(initStep{page.CurrentStepId()}, initStepFile); err != nil {
+		return err
+	}
+	// Initial step page
 	gqlModel := page.ToGraphQL()
-	fmt.Println(*gqlModel.Step)
 	targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
 	if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 		return err
 	}
 
+	//
 	// From the 2nd step
+	//
 	for page.HasNext() {
 		if err := page.ToNextStep(); err != nil {
 			return err
 		}
 		gqlModel := page.ToGraphQL()
-		fmt.Println(*gqlModel.Step)
 
 		targetFile := fmt.Sprintf("%s/state/%s.json", targetDir, page.CurrentStepId())
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
