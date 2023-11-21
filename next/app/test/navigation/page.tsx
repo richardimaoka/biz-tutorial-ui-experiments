@@ -1,8 +1,8 @@
 "use client";
-import { PrevButton } from "@/app/components/navigation2/PrevButton";
-import { NextButton } from "@/app/components/navigation2/NextButton";
-import { PlayButton } from "@/app/components/navigation2/PlayButton";
-import { PauseButton } from "@/app/components/navigation2/PauseButton";
+import { PrevButton } from "@/app/components/navigation/PrevButton";
+import { NextButton } from "@/app/components/navigation/NextButton";
+import { PlayButton } from "@/app/components/navigation/PlayButton";
+import { PauseButton } from "@/app/components/navigation/PauseButton";
 
 let i = 1;
 

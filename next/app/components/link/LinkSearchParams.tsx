@@ -28,7 +28,6 @@ function replaceSearchParams(
 
 // https://nextjs.org/docs/app/api-reference/functions/use-search-params#examples
 export function LinkSearchParams(props: Props) {
-  // need to use router.replace instaed of <Link> not to mess up the browser history
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
