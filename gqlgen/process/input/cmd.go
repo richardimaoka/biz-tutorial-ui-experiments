@@ -39,7 +39,7 @@ func process(repo *git.Repository, inputFile, targetFile string) error {
 func Run(subArgs []string) error {
 	// Read command line arguments
 	inputCmd := flag.NewFlagSet("input", flag.ExitOnError)
-	dirName := inputCmd.String("dir", "", "directory name where input.json is located and steps.json will be written")
+	tutorialName := inputCmd.String("tutorial", "", "tutorial name")
 	repoUrl := inputCmd.String("repo", "", "GitHub Repository URL of the tutorial")
 
 	if len(subArgs) < 1 {
@@ -52,8 +52,9 @@ func Run(subArgs []string) error {
 	inputCmd.Parse(subArgs)
 
 	// Prepare variables based on parsed arguments
-	inputFile := fmt.Sprintf("%s/input.json", *dirName)
-	targetFile := fmt.Sprintf("%s/steps.json", *dirName)
+	dirName := fmt.Sprintf("data/%s", *tutorialName)
+	inputFile := fmt.Sprintf("%s/input.json", dirName)
+	targetFile := fmt.Sprintf("%s/steps.json", dirName)
 
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: *repoUrl})
 	if err != nil {

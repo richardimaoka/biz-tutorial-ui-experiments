@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/storage/memory"
@@ -50,6 +49,7 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		gqlModel := page.ToGraphQL()
 
 		targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
+
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 			return err
 		}
@@ -61,7 +61,7 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 func Run(subArgs []string) error {
 	// Read command line arguments
 	stateCmd := flag.NewFlagSet("state", flag.ExitOnError)
-	dirName := stateCmd.String("dir", "", "directory name where steps.json is located and state/{stepId}.json files will be written")
+	tutorialName := stateCmd.String("tutorial", "", "tutorial name ")
 	repoUrl := stateCmd.String("repo", "", "GitHub Repository URL of the tutorial")
 
 	if len(subArgs) < 1 {
@@ -79,13 +79,12 @@ func Run(subArgs []string) error {
 		return fmt.Errorf("state.Run() failed, %s", err)
 	}
 
-	split := strings.Split(*dirName, "/")
-	tutorial := split[len(split)-1]
-	stepFile := fmt.Sprintf("%s/steps.json", *dirName)
-	targetDir := fmt.Sprintf("%s/state", *dirName)
+	dirName := fmt.Sprintf("data/%s", *tutorialName)
+	stepFile := fmt.Sprintf("%s/steps.json", dirName)
+	targetDir := fmt.Sprintf("%s/state", dirName)
 
 	// Process the steps file and write to target
-	err = process(repo, tutorial, stepFile, targetDir)
+	err = process(repo, *tutorialName, stepFile, targetDir)
 	if err != nil {
 		return fmt.Errorf("state.Run() failed, %s", err)
 	}
