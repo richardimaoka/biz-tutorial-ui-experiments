@@ -63,7 +63,7 @@ func Run(subArgs []string) error {
 	tutorialName := stateCmd.String("tutorial", "", "tutorial name ")
 	repoUrl := stateCmd.String("repo", "", "GitHub Repository URL of the tutorial")
 
-	if len(subArgs) < 1 {
+	if len(subArgs) < 3 /* 3 = state, tutorial, repo */ {
 		writer := stateCmd.Output()
 		fmt.Fprintln(writer, "Error - insufficient options. Pass the following options:")
 		stateCmd.PrintDefaults()

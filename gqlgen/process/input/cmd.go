@@ -42,7 +42,8 @@ func Run(subArgs []string) error {
 	tutorialName := inputCmd.String("tutorial", "", "tutorial name")
 	repoUrl := inputCmd.String("repo", "", "GitHub Repository URL of the tutorial")
 
-	if len(subArgs) < 1 {
+	log.Printf("subArgs length = %d\n", len(subArgs))
+	if len(subArgs) < 3 /* 3 = input, tutorial, repo*/ {
 		writer := inputCmd.Output()
 		fmt.Fprintln(writer, "Error - insufficient options. Pass the following options:")
 		inputCmd.PrintDefaults()
