@@ -1,11 +1,14 @@
 import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialComponent";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
+import { HandleKeyEvents } from "../components/navigation/HandleKeyEvents";
 
 const queryDefinition = graphql(`
-  query appTutorialPage($tutorial: String!) {
-    page(tutorial: $tutorial) {
+  query appTutorialPage($tutorial: String!, $step: String) {
+    page(tutorial: $tutorial, step: $step) {
       __typename
+      nextStep
+      prevStep
       ...GqlTutorialComponent
     }
   }
@@ -32,7 +35,10 @@ export default async function Page(props: PageParams) {
     throw new Error("Next.js server gave wrong GraphQL endpoint URL.");
   }
 
-  const variables = { tutorial: props.params.tutorial /*step: stepNum*/ };
+  const variables = {
+    tutorial: props.params.tutorial,
+    step: props.searchParams.step,
+  };
   const data = await request(gqlEndPoint, queryDefinition, variables);
 
   const fragment = data.page;
@@ -40,6 +46,11 @@ export default async function Page(props: PageParams) {
   return (
     <div style={{ height: "100svh" }}>
       {fragment && <GqlTutorialComponent fragment={fragment} />}
+      <HandleKeyEvents
+        tutorial={props.params.tutorial}
+        prevStep={fragment?.prevStep}
+        nextStep={fragment?.nextStep}
+      />
     </div>
   );
 }

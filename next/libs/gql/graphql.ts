@@ -209,12 +209,17 @@ export type TestObjsAppTestTerminalPageArgs = {
 
 export type AppTutorialPageQueryVariables = Exact<{
   tutorial: Scalars["String"]["input"];
+  step?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type AppTutorialPageQuery = {
   __typename: "Query";
   page?:
-    | ({ __typename: "Page" } & {
+    | ({
+        __typename: "Page";
+        nextStep?: string | null;
+        prevStep?: string | null;
+      } & {
         " $fragmentRefs"?: {
           GqlTutorialComponentFragment: GqlTutorialComponentFragment;
         };
@@ -3202,6 +3207,11 @@ export const AppTutorialPageDocument = {
             },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -3218,11 +3228,21 @@ export const AppTutorialPageDocument = {
                   name: { kind: "Name", value: "tutorial" },
                 },
               },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "step" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "step" },
+                },
+              },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "GqlTutorialComponent" },

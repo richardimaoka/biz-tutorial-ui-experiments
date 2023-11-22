@@ -5,8 +5,8 @@ import { useEffect } from "react";
 
 interface Props {
   tutorial: string;
-  prevStep?: string;
-  nextStep?: string;
+  prevStep?: string | null;
+  nextStep?: string | null;
 }
 
 export function HandleKeyEvents(props: Props) {
@@ -38,5 +38,5 @@ export function HandleKeyEvents(props: Props) {
     };
   }, [pathname, props.nextStep, props.prevStep, router]);
 
-  return <div></div>;
+  return <></>;
 }
