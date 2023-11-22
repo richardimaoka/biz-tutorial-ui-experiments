@@ -1,7 +1,7 @@
 {
-  "step": null,
+  "step": "d970484d-1c4c-4fe0-acd8-01ae3feb83fb",
   "nextStep": null,
-  "prevStep": null,
+  "prevStep": "6b83c0ee-173d-47ae-a011-a89146f054da",
   "isTrivial": null,
   "columns": [
     {
@@ -132,17 +132,9 @@
                 "id": "6b83c0ee-173d-47ae-a011-a89146f054da",
                 "entryType": "COMMAND",
                 "text": "docker inspect nginx"
-              },
-              {
-                "id": "d970484d-1c4c-4fe0-acd8-01ae3feb83fb",
-                "entryType": "COMMAND",
-                "text": "docker run nginx"
               }
             ],
-            "tooltip": {
-              "markdownBody": "これを実行するとどうなるでしょう？",
-              "timing": "START"
-            }
+            "tooltip": null
           }
         ]
       },
@@ -164,6 +156,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

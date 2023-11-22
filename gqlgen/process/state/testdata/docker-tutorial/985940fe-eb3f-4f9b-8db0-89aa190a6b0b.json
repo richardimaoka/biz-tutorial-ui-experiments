@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "985940fe-eb3f-4f9b-8db0-89aa190a6b0b",
+  "nextStep": "57f355b9-edea-4411-9b2a-e11bd25c7d5d",
+  "prevStep": "b4bf5537-31e9-45a8-8631-b5804427815d",
   "isTrivial": null,
   "columns": [
     {
@@ -47,17 +47,9 @@
                 "id": "b4bf5537-31e9-45a8-8631-b5804427815d",
                 "entryType": "COMMAND",
                 "text": "abc"
-              },
-              {
-                "id": "985940fe-eb3f-4f9b-8db0-89aa190a6b0b",
-                "entryType": "COMMAND",
-                "text": "cp Dockerfile.cmd1 Dockerfile.cmd2"
               }
             ],
-            "tooltip": {
-              "markdownBody": "Dockerfile.cmd1をコピーしてDockerfile.cmdを作成します",
-              "timing": "START"
-            }
+            "tooltip": null
           }
         ]
       },
@@ -74,6 +66,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

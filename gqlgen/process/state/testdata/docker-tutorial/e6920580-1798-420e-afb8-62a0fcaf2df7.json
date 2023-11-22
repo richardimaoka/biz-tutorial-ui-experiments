@@ -1,8 +1,8 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
-  "isTrivial": null,
+  "step": "e6920580-1798-420e-afb8-62a0fcaf2df7",
+  "nextStep": "7ce65735-ea9a-4f8a-a44c-e417c754e51c",
+  "prevStep": "8192eb7b-b5f8-4693-b076-19f02849068b",
+  "isTrivial": true,
   "columns": [
     {
       "column": {
@@ -38,17 +38,8 @@
       },
       "columnName": "Terminal",
       "columnDisplayName": "terminal"
-    },
-    {
-      "column": {
-        "__typename": "SourceCodeColumn",
-        "_placeholder": null,
-        "sourceCode": null
-      },
-      "columnName": "SourceCode",
-      "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "SourceCode",
   "modal": null
 }

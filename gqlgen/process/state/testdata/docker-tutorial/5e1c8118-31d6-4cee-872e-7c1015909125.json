@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "5e1c8118-31d6-4cee-872e-7c1015909125",
+  "nextStep": "104ddcbd-5507-4c92-b65f-bab88104332c",
+  "prevStep": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
   "isTrivial": null,
   "columns": [
     {
@@ -92,17 +92,9 @@
                 "id": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
                 "entryType": "COMMAND",
                 "text": "docker inspect python"
-              },
-              {
-                "id": "5e1c8118-31d6-4cee-872e-7c1015909125",
-                "entryType": "COMMAND",
-                "text": "docker run python"
               }
             ],
-            "tooltip": {
-              "markdownBody": "pythonを実行してみましょう",
-              "timing": "START"
-            }
+            "tooltip": null
           }
         ]
       },
@@ -124,6 +116,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

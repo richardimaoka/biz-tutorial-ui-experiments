@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "8fe6a69e-f75f-4aa1-8b7b-5386e31a3507",
+  "nextStep": "1632c856-8d46-428c-84af-62cf36a00fc8",
+  "prevStep": "6ce5964c-f96e-4565-b451-613e3cc9fe13",
   "isTrivial": null,
   "columns": [
     {
@@ -62,17 +62,9 @@
                 "id": "6ce5964c-f96e-4565-b451-613e3cc9fe13",
                 "entryType": "COMMAND",
                 "text": "[+] Building 1.1s (5/5) FINISHED\n =\u003e [internal] load build definition from Dockerfile.cmd2                                                                                                                                                   0.0s\n =\u003e =\u003e transferring dockerfile: 87B                                                                                                                                                                         0.0s\n =\u003e [internal] load .dockerignore                                                                                                                                                                           0.0s\n =\u003e =\u003e transferring context: 2B                                                                                                                                                                             0.0s\n =\u003e [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                                                            0.9s\n =\u003e CACHED [1/1] FROM docker.io/library/ubuntu@sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054                                                                                      0.0s\n =\u003e exporting to image                                                                                                                                                                                      0.0s\n =\u003e =\u003e exporting layers                                                                                                                                                                                     0.0s\n =\u003e =\u003e writing image sha256:14a01cce2db6d56f25f522954ba0aaabc66478f1ecde30336ab1f3e83288a3ac                                                                                                                0.0s\n =\u003e =\u003e naming to docker.io/library/cmd2"
-              },
-              {
-                "id": "8fe6a69e-f75f-4aa1-8b7b-5386e31a3507",
-                "entryType": "COMMAND",
-                "text": "docker run --rm cmd2"
               }
             ],
-            "tooltip": {
-              "markdownBody": "ビルドしたDocker imageを実行します",
-              "timing": "START"
-            }
+            "tooltip": null
           }
         ]
       },
@@ -89,6 +81,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

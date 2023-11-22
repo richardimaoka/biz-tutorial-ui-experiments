@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "8192eb7b-b5f8-4693-b076-19f02849068b",
+  "nextStep": "e6920580-1798-420e-afb8-62a0fcaf2df7",
+  "prevStep": "3fae2401-a511-4dc7-9d13-85f6f9d46294",
   "isTrivial": null,
   "columns": [
     {
@@ -22,15 +22,10 @@
                 "id": "6648626e-8564-4f79-baad-a1d0f30acd3e",
                 "entryType": "COMMAND",
                 "text": "cd myproj"
-              },
-              {
-                "id": "8192eb7b-b5f8-4693-b076-19f02849068b",
-                "entryType": "COMMAND",
-                "text": "touch Dockerfile.cmd1"
               }
             ],
             "tooltip": {
-              "markdownBody": "空のDockerfileを作成します",
+              "markdownBody": "チュートリアル用ディレクトリに移動します",
               "timing": "START"
             }
           }
@@ -40,6 +35,6 @@
       "columnDisplayName": "terminal"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

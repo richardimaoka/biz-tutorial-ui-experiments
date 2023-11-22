@@ -1,8 +1,8 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
-  "isTrivial": null,
+  "step": "4f7fdc87-8717-471e-9c7d-df7c47b00245",
+  "nextStep": "e4e6375b-af75-4fe5-bd32-b6d072309615",
+  "prevStep": "fba89d6f-4cb1-42f3-a4bc-035e1c91d699",
+  "isTrivial": true,
   "columns": [
     {
       "column": {
@@ -74,6 +74,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

@@ -1,8 +1,8 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
-  "isTrivial": null,
+  "step": "3fae2401-a511-4dc7-9d13-85f6f9d46294",
+  "nextStep": "8192eb7b-b5f8-4693-b076-19f02849068b",
+  "prevStep": "6648626e-8564-4f79-baad-a1d0f30acd3e",
+  "isTrivial": true,
   "columns": [
     {
       "column": {
@@ -11,7 +11,7 @@
         "terminals": [
           {
             "name": "default",
-            "currentDirectory": "myproj",
+            "currentDirectory": "",
             "entries": [
               {
                 "id": "52e563bf-0653-4f9d-8953-dda399bf89e6",
@@ -35,6 +35,6 @@
       "columnDisplayName": "terminal"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

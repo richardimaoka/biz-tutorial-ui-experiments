@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "1632c856-8d46-428c-84af-62cf36a00fc8",
+  "nextStep": "9f7a5830-83e0-4aba-8d28-7dc20e5c3b79",
+  "prevStep": "8fe6a69e-f75f-4aa1-8b7b-5386e31a3507",
   "isTrivial": null,
   "columns": [
     {
@@ -67,15 +67,10 @@
                 "id": "8fe6a69e-f75f-4aa1-8b7b-5386e31a3507",
                 "entryType": "COMMAND",
                 "text": "docker run --rm cmd2"
-              },
-              {
-                "id": "1632c856-8d46-428c-84af-62cf36a00fc8",
-                "entryType": "COMMAND",
-                "text": "docker pull httpd"
               }
             ],
             "tooltip": {
-              "markdownBody": "それでは、実際のCMD命令の使われ方を学ぶためいくつかの公式Docker imageを見てみましょう。まずはApache HTTP Server公式イメージであるhttpdです",
+              "markdownBody": "ビルドしたDocker imageを実行します",
               "timing": "START"
             }
           }
@@ -94,6 +89,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

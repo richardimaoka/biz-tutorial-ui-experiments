@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "71177639-e17b-4220-8898-d2a55fc73442",
+  "nextStep": "22517300-82bb-40ad-a450-3b212ffd9ae4",
+  "prevStep": "9f7a5830-83e0-4aba-8d28-7dc20e5c3b79",
   "isTrivial": null,
   "columns": [
     {
@@ -77,15 +77,10 @@
                 "id": "9f7a5830-83e0-4aba-8d28-7dc20e5c3b79",
                 "entryType": "COMMAND",
                 "text": "docker inspect httpd"
-              },
-              {
-                "id": "71177639-e17b-4220-8898-d2a55fc73442",
-                "entryType": "COMMAND",
-                "text": "docker run httpd"
               }
             ],
             "tooltip": {
-              "markdownBody": "httpdを実行してみましょう",
+              "markdownBody": "inspectでimageの中身を確かめられます",
               "timing": "START"
             }
           }
@@ -104,6 +99,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

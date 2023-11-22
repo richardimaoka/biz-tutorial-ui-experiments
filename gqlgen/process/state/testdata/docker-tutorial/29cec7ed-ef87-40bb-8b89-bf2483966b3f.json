@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
+  "nextStep": "5e1c8118-31d6-4cee-872e-7c1015909125",
+  "prevStep": "cbb9d268-fb2d-425b-8743-27a1f4c85a62",
   "isTrivial": null,
   "columns": [
     {
@@ -87,11 +87,6 @@
                 "id": "cbb9d268-fb2d-425b-8743-27a1f4c85a62",
                 "entryType": "COMMAND",
                 "text": "docker pull python"
-              },
-              {
-                "id": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
-                "entryType": "COMMAND",
-                "text": "docker inspect python"
               }
             ],
             "tooltip": null
@@ -116,6 +111,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

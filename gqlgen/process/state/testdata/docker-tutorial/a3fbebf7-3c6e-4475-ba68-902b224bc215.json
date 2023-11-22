@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "a3fbebf7-3c6e-4475-ba68-902b224bc215",
+  "nextStep": "98efd20e-f244-41e1-89c9-46258ea0d3dc",
+  "prevStep": "fe5dda7c-227d-476d-ab13-cd0eee28dcc6",
   "isTrivial": null,
   "columns": [
     {
@@ -112,11 +112,6 @@
                 "id": "fe5dda7c-227d-476d-ab13-cd0eee28dcc6",
                 "entryType": "COMMAND",
                 "text": "\u003e\u003e\u003e print(\"hello python\")"
-              },
-              {
-                "id": "a3fbebf7-3c6e-4475-ba68-902b224bc215",
-                "entryType": "COMMAND",
-                "text": "hello python\n\u003e\u003e\u003e"
               }
             ],
             "tooltip": null
@@ -141,6 +136,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

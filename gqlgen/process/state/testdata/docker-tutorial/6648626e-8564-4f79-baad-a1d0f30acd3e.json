@@ -1,6 +1,6 @@
 {
-  "step": null,
-  "nextStep": null,
+  "step": "6648626e-8564-4f79-baad-a1d0f30acd3e",
+  "nextStep": "3fae2401-a511-4dc7-9d13-85f6f9d46294",
   "prevStep": null,
   "isTrivial": null,
   "columns": [
@@ -17,15 +17,10 @@
                 "id": "52e563bf-0653-4f9d-8953-dda399bf89e6",
                 "entryType": "COMMAND",
                 "text": "mkdir myproj"
-              },
-              {
-                "id": "6648626e-8564-4f79-baad-a1d0f30acd3e",
-                "entryType": "COMMAND",
-                "text": "cd myproj"
               }
             ],
             "tooltip": {
-              "markdownBody": "チュートリアル用ディレクトリに移動します",
+              "markdownBody": "チュートリアル用ディレクトリを作成します",
               "timing": "START"
             }
           }
@@ -35,6 +30,6 @@
       "columnDisplayName": "terminal"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

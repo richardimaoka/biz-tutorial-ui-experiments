@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "6b83c0ee-173d-47ae-a011-a89146f054da",
+  "nextStep": "d970484d-1c4c-4fe0-acd8-01ae3feb83fb",
+  "prevStep": "d4bfa9a9-c06b-4b98-ab5c-13757b17a273",
   "isTrivial": null,
   "columns": [
     {
@@ -127,14 +127,12 @@
                 "id": "d4bfa9a9-c06b-4b98-ab5c-13757b17a273",
                 "entryType": "COMMAND",
                 "text": "docker pull nginx"
-              },
-              {
-                "id": "6b83c0ee-173d-47ae-a011-a89146f054da",
-                "entryType": "COMMAND",
-                "text": "docker inspect nginx"
               }
             ],
-            "tooltip": null
+            "tooltip": {
+              "markdownBody": "次に、nginx公式イメージを見てみましょう",
+              "timing": "START"
+            }
           }
         ]
       },
@@ -156,6 +154,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

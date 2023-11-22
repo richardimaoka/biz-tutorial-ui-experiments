@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "fe5dda7c-227d-476d-ab13-cd0eee28dcc6",
+  "nextStep": "a3fbebf7-3c6e-4475-ba68-902b224bc215",
+  "prevStep": "1726f4b0-6773-4d10-b128-dc9b3f6962d3",
   "isTrivial": null,
   "columns": [
     {
@@ -107,11 +107,6 @@
                 "id": "1726f4b0-6773-4d10-b128-dc9b3f6962d3",
                 "entryType": "COMMAND",
                 "text": "Python 3.12.0 (main, Oct  3 2023, 01:48:15) [GCC 12.2.0] on linux\nType \"help\", \"copyright\", \"credits\" or \"license\" for more information"
-              },
-              {
-                "id": "fe5dda7c-227d-476d-ab13-cd0eee28dcc6",
-                "entryType": "COMMAND",
-                "text": "\u003e\u003e\u003e print(\"hello python\")"
               }
             ],
             "tooltip": null
@@ -136,6 +131,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

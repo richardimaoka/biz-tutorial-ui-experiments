@@ -1,8 +1,8 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
-  "isTrivial": null,
+  "step": "22517300-82bb-40ad-a450-3b212ffd9ae4",
+  "nextStep": "d69dca94-c3fa-44c4-b346-9f8bf7d0482e",
+  "prevStep": "71177639-e17b-4220-8898-d2a55fc73442",
+  "isTrivial": true,
   "columns": [
     {
       "column": {
@@ -102,13 +102,8 @@
       },
       "columnName": "SourceCode",
       "columnDisplayName": "source"
-    },
-    {
-      "column": null,
-      "columnName": "Browser",
-      "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Browser",
   "modal": null
 }

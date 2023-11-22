@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "fba89d6f-4cb1-42f3-a4bc-035e1c91d699",
+  "nextStep": "4f7fdc87-8717-471e-9c7d-df7c47b00245",
+  "prevStep": "3eabd8bb-32eb-4de9-bead-3e5ad9f936f0",
   "isTrivial": null,
   "columns": [
     {
@@ -74,6 +74,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "SourceCode",
   "modal": null
 }

@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "98efd20e-f244-41e1-89c9-46258ea0d3dc",
+  "nextStep": "d4bfa9a9-c06b-4b98-ab5c-13757b17a273",
+  "prevStep": "a3fbebf7-3c6e-4475-ba68-902b224bc215",
   "isTrivial": null,
   "columns": [
     {
@@ -117,17 +117,9 @@
                 "id": "a3fbebf7-3c6e-4475-ba68-902b224bc215",
                 "entryType": "COMMAND",
                 "text": "hello python\n\u003e\u003e\u003e"
-              },
-              {
-                "id": "98efd20e-f244-41e1-89c9-46258ea0d3dc",
-                "entryType": "COMMAND",
-                "text": "(Ctrl + D)"
               }
             ],
-            "tooltip": {
-              "markdownBody": "Ctrl + Dでインタラクティブなpythonシェルを終了できます",
-              "timing": "START"
-            }
+            "tooltip": null
           }
         ]
       },
@@ -149,6 +141,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

@@ -60,7 +60,8 @@ func appendIfNotExists(columns UsedColumns, colName state.ColumnType) UsedColumn
 	return columns
 }
 
-func resultColumns(current CurrentColumn, columns UsedColumns) state.ColumnFields {
+func resultColumns(current CurrentColumn, prevColumns UsedColumns) state.ColumnFields {
+	columns := appendIfNotExists(prevColumns, current)
 	return state.ColumnFields{
 		FocusColumn: current,
 		Column1:     columns[0],

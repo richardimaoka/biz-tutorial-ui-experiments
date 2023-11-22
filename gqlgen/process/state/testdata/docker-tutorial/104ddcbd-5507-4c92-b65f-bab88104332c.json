@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "104ddcbd-5507-4c92-b65f-bab88104332c",
+  "nextStep": "1726f4b0-6773-4d10-b128-dc9b3f6962d3",
+  "prevStep": "5e1c8118-31d6-4cee-872e-7c1015909125",
   "isTrivial": null,
   "columns": [
     {
@@ -97,15 +97,10 @@
                 "id": "5e1c8118-31d6-4cee-872e-7c1015909125",
                 "entryType": "COMMAND",
                 "text": "docker run python"
-              },
-              {
-                "id": "104ddcbd-5507-4c92-b65f-bab88104332c",
-                "entryType": "COMMAND",
-                "text": "docker run -it python"
               }
             ],
             "tooltip": {
-              "markdownBody": "-itオプションを指定してpythonがインタラクティブに入力を受け付ける状態にしましょう",
+              "markdownBody": "pythonを実行してみましょう",
               "timing": "START"
             }
           }
@@ -129,6 +124,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

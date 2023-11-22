@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "b4bf5537-31e9-45a8-8631-b5804427815d",
+  "nextStep": "985940fe-eb3f-4f9b-8db0-89aa190a6b0b",
+  "prevStep": "fbc25d74-8c06-48ad-9bbd-32249f3370ad",
   "isTrivial": null,
   "columns": [
     {
@@ -42,14 +42,12 @@
                 "id": "fbc25d74-8c06-48ad-9bbd-32249f3370ad",
                 "entryType": "COMMAND",
                 "text": "docker run --rm cmd1"
-              },
-              {
-                "id": "b4bf5537-31e9-45a8-8631-b5804427815d",
-                "entryType": "COMMAND",
-                "text": "abc"
               }
             ],
-            "tooltip": null
+            "tooltip": {
+              "markdownBody": "ビルドしたDocker imageを実行します",
+              "timing": "START"
+            }
           }
         ]
       },
@@ -66,6 +64,6 @@
       "columnDisplayName": "source"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

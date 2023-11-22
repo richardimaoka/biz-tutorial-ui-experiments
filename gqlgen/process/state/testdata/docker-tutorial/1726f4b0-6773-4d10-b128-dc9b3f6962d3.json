@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "1726f4b0-6773-4d10-b128-dc9b3f6962d3",
+  "nextStep": "fe5dda7c-227d-476d-ab13-cd0eee28dcc6",
+  "prevStep": "104ddcbd-5507-4c92-b65f-bab88104332c",
   "isTrivial": null,
   "columns": [
     {
@@ -102,14 +102,12 @@
                 "id": "104ddcbd-5507-4c92-b65f-bab88104332c",
                 "entryType": "COMMAND",
                 "text": "docker run -it python"
-              },
-              {
-                "id": "1726f4b0-6773-4d10-b128-dc9b3f6962d3",
-                "entryType": "COMMAND",
-                "text": "Python 3.12.0 (main, Oct  3 2023, 01:48:15) [GCC 12.2.0] on linux\nType \"help\", \"copyright\", \"credits\" or \"license\" for more information"
               }
             ],
-            "tooltip": null
+            "tooltip": {
+              "markdownBody": "-itオプションを指定してpythonがインタラクティブに入力を受け付ける状態にしましょう",
+              "timing": "START"
+            }
           }
         ]
       },
@@ -131,6 +129,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }

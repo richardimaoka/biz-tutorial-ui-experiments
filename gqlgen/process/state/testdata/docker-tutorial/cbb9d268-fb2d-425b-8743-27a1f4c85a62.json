@@ -1,7 +1,7 @@
 {
-  "step": null,
-  "nextStep": null,
-  "prevStep": null,
+  "step": "cbb9d268-fb2d-425b-8743-27a1f4c85a62",
+  "nextStep": "29cec7ed-ef87-40bb-8b89-bf2483966b3f",
+  "prevStep": "246a738b-6cba-4837-97ae-a6ca8ec1b2f3",
   "isTrivial": null,
   "columns": [
     {
@@ -82,14 +82,12 @@
                 "id": "71177639-e17b-4220-8898-d2a55fc73442",
                 "entryType": "COMMAND",
                 "text": "docker run httpd"
-              },
-              {
-                "id": "cbb9d268-fb2d-425b-8743-27a1f4c85a62",
-                "entryType": "COMMAND",
-                "text": "docker pull python"
               }
             ],
-            "tooltip": null
+            "tooltip": {
+              "markdownBody": "httpdを実行してみましょう",
+              "timing": "START"
+            }
           }
         ]
       },
@@ -111,6 +109,6 @@
       "columnDisplayName": "BrowserColumn"
     }
   ],
-  "focusColumn": null,
+  "focusColumn": "Terminal",
   "modal": null
 }
