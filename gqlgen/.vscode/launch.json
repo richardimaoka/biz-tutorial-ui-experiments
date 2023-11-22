@@ -14,21 +14,32 @@
       "args": ["server"]
     },
     {
-      "name": "Launch test function",
-      "type": "go",
-      "request": "launch",
-      "mode": "test",
-      "trace": "verbose",
-      "program": "${workspaceFolder}/preprocess/processing",
-      "args": ["-test.run", "TestFile"]
-    },
-    {
-      "name": "Launch file",
+      "name": "input",
       "type": "go",
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["rough", "docker-cmd-entrypoint"]
+      "args": [
+        "input",
+        "-tutorial",
+        "docker-cmd-entrypoint",
+        "-repo",
+        "https://github.com/richardimaoka/article-docker-cmd-entrypoint"
+      ]
+    },
+    {
+      "name": "state",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}",
+      "args": [
+        "state",
+        "-tutorial",
+        "docker-cmd-entrypoint",
+        "-repo",
+        "https://github.com/richardimaoka/article-docker-cmd-entrypoint"
+      ]
     }
   ]
 }
