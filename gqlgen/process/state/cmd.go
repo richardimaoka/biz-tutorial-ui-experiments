@@ -49,7 +49,6 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		gqlModel := page.ToGraphQL()
 
 		targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
-
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 			return err
 		}
