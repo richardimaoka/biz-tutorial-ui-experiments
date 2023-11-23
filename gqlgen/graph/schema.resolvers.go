@@ -51,6 +51,10 @@ func (r *sourceCodeResolver) OpenFile(ctx context.Context, obj *model.SourceCode
 		openFilePath = obj.DefaultOpenFilePath
 	}
 
+	if openFilePath == "" {
+		return nil, nil
+	}
+
 	openFile, ok := obj.FileContents[openFilePath]
 	if !ok {
 		return nil, fmt.Errorf("%s not found", openFilePath)
@@ -123,10 +127,3 @@ func (r *Resolver) TestObjs() TestObjsResolver { return &testObjsResolver{r} }
 type queryResolver struct{ *Resolver }
 type sourceCodeResolver struct{ *Resolver }
 type testObjsResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
