@@ -31,7 +31,7 @@ func (c *TerminalColumn) getOrCreateTerminal(name string) *Terminal {
 	return terminal
 }
 
-func (c *TerminalColumn) WriteCommand(
+func (c *TerminalColumn) TerminalCommand(
 	stepId string,
 	name string,
 	command string,
@@ -46,7 +46,7 @@ func (c *TerminalColumn) WriteCommand(
 	}
 }
 
-func (c *TerminalColumn) WriteOutput(
+func (c *TerminalColumn) TerminalOutput(
 	stepId string,
 	name string,
 	output string,
@@ -61,7 +61,7 @@ func (c *TerminalColumn) WriteOutput(
 	}
 }
 
-func (c *TerminalColumn) ChangeCurrentDirectory(
+func (c *TerminalColumn) TerminalCd(
 	name string,
 	dirPath string,
 ) {
@@ -72,15 +72,15 @@ func (c *TerminalColumn) ChangeCurrentDirectory(
 func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
 	switch fields.TerminalStepType {
 	case TerminalCommand:
-		c.WriteOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
+		c.TerminalCommand(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
 	case TerminalOutput:
-		c.WriteOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
+		c.TerminalOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
 	case TerminalCd:
-		c.ChangeCurrentDirectory(fields.TerminalName, fields.CurrentDir)
+		c.TerminalCd(fields.TerminalName, fields.CurrentDir)
 	case TerminalMove:
-		// no update is needed
+		// no update is needed, just changing FocusColumn is fine
 	case TerminalOpen:
-		// no update is needed
+		// no update is needed, just changing FocusColumn is fine
 	default:
 		return fmt.Errorf("Update failed, type = '%s' is not implemented", fields.TerminalStepType)
 	}
