@@ -9,19 +9,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 )
 
-type SourceCodeTooltipTiming string
-
-const (
-	SOURCE_TOOLTIP_START SourceCodeTooltipTiming = "START"
-	SOURCE_TOOLTIP_END   SourceCodeTooltipTiming = "END"
-)
-
-type SourceCodeTooltip struct {
-	markdownBody string
-	timing       SourceCodeTooltipTiming
-	lineNumber   int
-}
-
 type SourceCode struct {
 	// metadata, can be set only at initialization
 	tutorial   string
@@ -66,6 +53,19 @@ func commitFiles(repo *git.Repository, commitHash string) (Files, error) {
 	return files, nil
 }
 
+func (s *SourceCode) forwardCommit(commitHash string) error {
+	if s.commitHash == commitHash {
+		// if same commit, do nothing
+		return nil
+	} else if s.commitHash == "" {
+		// if initial commit
+		return s.initialCommit(commitHash)
+	} else {
+		// if non-initial commit
+		return s.nonInitialCommit(commitHash)
+	}
+}
+
 func (s *SourceCode) initialCommit(commitHash string) error {
 	files, err := commitFiles(s.repo, commitHash)
 	if err != nil {
@@ -80,7 +80,7 @@ func (s *SourceCode) initialCommit(commitHash string) error {
 	return nil
 }
 
-func (s *SourceCode) forwardCommit(nextCommitHash string) error {
+func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 	files, err := commitFiles(s.repo, nextCommitHash)
 	if err != nil {
 		return fmt.Errorf("forwardCommit failed, %s", err)
@@ -147,40 +147,8 @@ func (s *SourceCode) forwardCommit(nextCommitHash string) error {
 	return nil
 }
 
-func (s *SourceCode) openFileCommit(filePath, commitHash string) error {
-	if s.commitHash == "" {
-		err := s.initialCommit(commitHash)
-		if err != nil {
-			return fmt.Errorf("openFileCommit failed, %s", err)
-		}
-	} else if s.commitHash != commitHash {
-		err := s.forwardCommit(commitHash)
-		if err != nil {
-			return fmt.Errorf("openFileCommit failed, %s", err)
-		}
-	}
-
+func (s *SourceCode) openFile(filePath string) {
 	s.DefaultOpenFilePath = filePath
-	return nil
-}
-
-func (s *SourceCode) openFile(filePath, commitHash string) {
-	s.DefaultOpenFilePath = filePath
-}
-
-func (s *SourceCode) openError(filePath, commitHash string) {
-	s.DefaultOpenFilePath = filePath
-}
-
-func (s *SourceCode) appendTooltip(contents string) error {
-	if s.tooltip == nil {
-		return fmt.Errorf("setTooltip failed, cannot append tooltip since the prev tooltip is empty")
-	}
-
-	s.tooltip.markdownBody += "\n" + contents
-	s.tooltip.timing = SOURCE_TOOLTIP_START
-
-	return nil
 }
 
 func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming, lineNumber int) {
@@ -191,6 +159,25 @@ func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming,
 	}
 }
 
-func (s *SourceCode) ToGraphQL() *model.SourceCode {
+func (s *SourceCode) appendTooltipContents(additionalContents string) error {
+	if s.tooltip == nil {
+		return fmt.Errorf("appendTooltipContents failed, cannot append tooltip since the prev tooltip is empty")
+	}
+
+	s.tooltip.markdownBody += "\n" + additionalContents
+	s.tooltip.timing = SOURCE_TOOLTIP_START
+
 	return nil
+}
+
+func (s *SourceCode) ToGraphQL() *model.SourceCode {
+	return &model.SourceCode{
+		FileTree:            s.rootDir.ToGraphQLFileNodeSlice(),
+		FileContents:        s.rootDir.ToGraphQLOpenFileMap(),
+		Tutorial:            s.tutorial,
+		Step:                s.step,
+		DefaultOpenFilePath: s.DefaultOpenFilePath,
+		IsFoldFileTree:      !s.showFileTree,
+		ProjectDir:          s.projectDir,
+	}
 }
