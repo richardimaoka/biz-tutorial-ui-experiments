@@ -310,8 +310,7 @@ func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns Us
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
 		SourceFields: state.SourceFields{
-			Commit:       r.Commit,
-			ShowFileTree: true,
+			SourceStepType: state.FileTree,
 		},
 	}
 
@@ -341,6 +340,7 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
 		SourceFields: state.SourceFields{
+			SourceStepType:      state.SourceOpen,
 			DefaultOpenFilePath: filePath,
 		},
 	}
@@ -354,8 +354,8 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 	return step
 }
 
-func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state.Step {
-	subId := fmt.Sprintf("openFileCommitStep-%s", filePath)
+func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state.Step {
+	subId := fmt.Sprintf("sourceCommitStep-%s", filePath)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := state.Step{
@@ -375,9 +375,10 @@ func openFileCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColu
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
 		SourceFields: state.SourceFields{
+			SourceStepType:      state.SourceCommit,
 			Commit:              r.Commit,
 			DefaultOpenFilePath: filePath,
-			TypingAnimation:     r.TypingAnimation,
+			TypingAnimation:     true,
 		},
 	}
 	if r.Tooltip != nil {
@@ -411,8 +412,8 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
 		SourceFields: state.SourceFields{
+			SourceStepType:      state.SourceMove,
 			DefaultOpenFilePath: filePath,
-			ShowFileTree:        false,
 		},
 	}
 	if r.Tooltip != nil {
@@ -445,41 +446,14 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedC
 		},
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		SourceFields: state.SourceFields{
+			SourceStepType: state.SourceMove,
+		},
 	}
 
 	// No tooltip - trivial step and no tooltip to show
 
 	return step
-}
-
-func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]string, error) {
-	if fromCommit == "" {
-		// initial commit
-		files, err := gitwrap.GetCommitFiles(repo, toCommit)
-		if err != nil {
-			return nil, err
-		}
-
-		var filePaths []string
-		for _, v := range files {
-			filePaths = append(filePaths, v.Name)
-		}
-
-		return filePaths, nil
-	} else {
-		// non-initial commit, get added/updated/renamed files
-		files, err := gitwrap.GetPatchFiles(repo, fromCommit, toCommit)
-		if err != nil {
-			return nil, err
-		}
-
-		var filePaths []string
-		for _, v := range files {
-			filePaths = append(filePaths, v.Path())
-		}
-
-		return filePaths, nil
-	}
 }
 
 /**
@@ -509,7 +483,7 @@ func breakdownSourceCommitRow(
 
 	// open file steps
 	for i, filePath := range filePaths {
-		step := openFileCommitStep(r, finder, prevColumns.AllUsed, filePath)
+		step := sourceCommitStep(r, finder, prevColumns.AllUsed, filePath)
 		steps = append(steps, step)
 		if i == 5 {
 			break
@@ -524,7 +498,6 @@ func breakdownSourceOpenRow(
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
-	prevCommit string,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -547,7 +520,6 @@ func breakdownSourceErrorRow(
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
 	repo *git.Repository,
-	prevCommit string,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -563,6 +535,39 @@ func breakdownSourceErrorRow(
 	steps = append(steps, step)
 
 	return steps, nil
+}
+
+/**
+ * Helper function
+ */
+func filesBetweenCommits(repo *git.Repository, fromCommit, toCommit string) ([]string, error) {
+	if fromCommit == "" {
+		// initial commit
+		files, err := gitwrap.GetCommitFiles(repo, toCommit)
+		if err != nil {
+			return nil, err
+		}
+
+		var filePaths []string
+		for _, v := range files {
+			filePaths = append(filePaths, v.Name)
+		}
+
+		return filePaths, nil
+	} else {
+		// non-initial commit, get added/updated/renamed files
+		files, err := gitwrap.GetPatchFiles(repo, fromCommit, toCommit)
+		if err != nil {
+			return nil, err
+		}
+
+		var filePaths []string
+		for _, v := range files {
+			filePaths = append(filePaths, v.Path())
+		}
+
+		return filePaths, nil
+	}
 }
 
 /**
@@ -609,7 +614,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceOpenRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceOpenRow(row, finder, prevColumns, repo)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
@@ -623,7 +628,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceErrorRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceErrorRow(row, finder, prevColumns, repo)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
