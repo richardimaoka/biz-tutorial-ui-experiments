@@ -47,7 +47,7 @@ const documents = {
     types.GqlTutorialComponentFragmentDoc,
   "\n  fragment GqlColumnWrapper on ColumnWrapper {\n    columnName\n    column {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each column type\n      #\n      ... on TerminalColumn {\n        ...GqlTerminalColumn\n      }\n      ... on SourceCodeColumn {\n        ...GqlSourceCodeColumn\n      }\n    }\n  }\n":
     types.GqlColumnWrapperFragmentDoc,
-  "\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n":
+  "\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n    focusColumn\n  }\n":
     types.GqlColumnWrappersFragmentDoc,
   "\n  fragment GqlTutorialHeader on Page {\n    ...GqlColumnTabs\n  }\n":
     types.GqlTutorialHeaderFragmentDoc,
@@ -55,7 +55,7 @@ const documents = {
     types.GqlColumnTabFragmentDoc,
   "\n  fragment GqlColumnTabIcon on ColumnWrapper {\n    column {\n      __typename\n    }\n  }\n":
     types.GqlColumnTabIconFragmentDoc,
-  "\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n":
+  "\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n    focusColumn\n  }\n":
     types.GqlColumnTabsFragmentDoc,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
@@ -183,8 +183,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n  }\n"];
+  source: "\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n    focusColumn\n  }\n",
+): (typeof documents)["\n  fragment GqlColumnWrappers on Page {\n    columns {\n      columnName\n      ...GqlColumnWrapper\n    }\n    focusColumn\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -207,8 +207,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n  }\n"];
+  source: "\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n    focusColumn\n  }\n",
+): (typeof documents)["\n  fragment GqlColumnTabs on Page {\n    columns {\n      columnName\n      ...GqlColumnTab\n    }\n    focusColumn\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

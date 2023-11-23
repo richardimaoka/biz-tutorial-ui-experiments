@@ -17,6 +17,7 @@ const fragmentDefinition = graphql(`
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
   tabIndex: number;
+  defaultFocusColumn: string;
 }
 
 export function GqlColumnTab(props: Props) {
@@ -25,9 +26,13 @@ export function GqlColumnTab(props: Props) {
 
   // CSS style for the outer component
   const columnParam = searchParams.get("column");
-  const isSelected = columnParam
-    ? columnParam === fragment.columnName
+  const currentColumn = columnParam ? columnParam : props.defaultFocusColumn;
+  const isSelected = currentColumn
+    ? currentColumn === fragment.columnName
     : props.tabIndex === 0;
+  console.log("-------------------", props);
+  console.log("currentColumn", currentColumn);
+  console.log("isSelected", isSelected);
   const selectStyle = isSelected ? styles.selected : styles.unselected;
   const outerClassName = `${styles.component} ${selectStyle}`;
 

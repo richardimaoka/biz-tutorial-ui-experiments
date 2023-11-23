@@ -7,12 +7,14 @@ import { Carousel } from "../../carousel/Carousel";
 interface Props {
   columnNames: string[];
   children: ReactNode;
+  defaultFocusColumn: string;
 }
 
 export function ColumnCarousel(props: Props) {
   const searchParams = useSearchParams();
 
-  const currentColumn = searchParams.get("column");
+  const columnParam = searchParams.get("column");
+  const currentColumn = columnParam ? columnParam : props.defaultFocusColumn;
   const foundIndex = props.columnNames.findIndex((c) => c === currentColumn);
   const currentIndex = foundIndex > -1 ? foundIndex : 0;
 

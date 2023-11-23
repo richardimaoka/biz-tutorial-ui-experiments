@@ -9,6 +9,7 @@ const fragmentDefinition = graphql(`
       columnName
       ...GqlColumnTab
     }
+    focusColumn
   }
 `);
 
@@ -24,11 +25,17 @@ export function GqlColumnTabs(props: Props) {
   }
 
   const columns = nonNullArray(fragment.columns);
+  const focusColumn = fragment.focusColumn ? fragment.focusColumn : "";
 
   return (
     <div className={styles.component}>
       {columns.map((c, index) => (
-        <GqlColumnTab key={c.columnName} fragment={c} tabIndex={index} />
+        <GqlColumnTab
+          key={c.columnName}
+          fragment={c}
+          tabIndex={index}
+          defaultFocusColumn={focusColumn}
+        />
       ))}
     </div>
   );

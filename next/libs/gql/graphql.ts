@@ -403,6 +403,7 @@ export type GqlColumnWrapperFragment = {
 
 export type GqlColumnWrappersFragment = {
   __typename: "Page";
+  focusColumn?: string | null;
   columns?: Array<
     | ({ __typename: "ColumnWrapper"; columnName: string } & {
         " $fragmentRefs"?: {
@@ -435,6 +436,7 @@ export type GqlColumnTabIconFragment = {
 
 export type GqlColumnTabsFragment = {
   __typename: "Page";
+  focusColumn?: string | null;
   columns?: Array<
     | ({ __typename: "ColumnWrapper"; columnName: string } & {
         " $fragmentRefs"?: { GqlColumnTabFragment: GqlColumnTabFragment };
@@ -581,6 +583,7 @@ export const GqlColumnTabsFragmentDoc = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -714,6 +717,7 @@ export const GqlTutorialHeaderFragmentDoc = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -2179,6 +2183,7 @@ export const GqlColumnWrappersFragmentDoc = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -2705,6 +2710,7 @@ export const GqlTutorialComponentFragmentDoc = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -3180,6 +3186,7 @@ export const GqlTutorialComponentFragmentDoc = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -3319,6 +3326,7 @@ export const AppTutorialPageDocument = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -3794,6 +3802,7 @@ export const AppTutorialPageDocument = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -4108,6 +4117,7 @@ export const AppTestTutorialColumnsPageDocument = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -4583,6 +4593,7 @@ export const AppTestTutorialColumnsPageDocument = {
               ],
             },
           },
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
