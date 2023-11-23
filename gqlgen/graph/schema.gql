@@ -29,12 +29,13 @@ type Page {
   nextStep: String
   prevStep: String
 
-  isTrivial: Boolean
-
-  columns: [ColumnWrapper]
   focusColumn: String
 
+  isTrivial: Boolean
+
   modal: Modal
+
+  columns: [ColumnWrapper]
 }
 
 ###################################################

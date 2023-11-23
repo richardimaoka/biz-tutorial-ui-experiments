@@ -2,6 +2,7 @@ import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialCompo
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 import { HandleKeyEvents } from "../components/navigation/HandleKeyEvents";
+import { print } from "graphql";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
@@ -30,6 +31,9 @@ interface PageParams {
 }
 
 export default async function Page(props: PageParams) {
+  // console.log("----------------------------------------");
+  // console.log(print(queryDefinition));
+
   const gqlEndPoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
   if (typeof gqlEndPoint != "string") {
     throw new Error("Next.js server gave wrong GraphQL endpoint URL.");

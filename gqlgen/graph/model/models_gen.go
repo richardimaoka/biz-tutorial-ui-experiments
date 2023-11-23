@@ -85,10 +85,10 @@ type Page struct {
 	Step        *string          `json:"step"`
 	NextStep    *string          `json:"nextStep"`
 	PrevStep    *string          `json:"prevStep"`
-	IsTrivial   *bool            `json:"isTrivial"`
-	Columns     []*ColumnWrapper `json:"columns"`
 	FocusColumn *string          `json:"focusColumn"`
+	IsTrivial   *bool            `json:"isTrivial"`
 	Modal       *Modal           `json:"modal"`
+	Columns     []*ColumnWrapper `json:"columns"`
 }
 
 type SourceCodeColumn struct {
