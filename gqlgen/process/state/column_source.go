@@ -1,6 +1,8 @@
 package state
 
 import (
+	"fmt"
+
 	"github.com/go-git/go-git/v5"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 )
@@ -19,20 +21,42 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 	}
 }
 
-func (c *SourceColumn) InitialCommit(commit string) error {
-	return nil
-}
-
-func (c *SourceColumn) ForwardCommit(nextCommit string) {
+func (c *SourceColumn) Commit(commitHash string) error {
+	return c.sourceCode.forwardCommit(commitHash)
 }
 
 func (c *SourceColumn) ShowFileTree() {
 }
 
-func (c *SourceColumn) OpenFile(filePath string) {
+func (c *SourceColumn) SourceOpen(filePath string) {
+	c.sourceCode.openFile(filePath)
+}
+
+func (c *SourceColumn) SourceError(filePath string, tooltip SourceTooltipFields) {
+	c.sourceCode.openFile(filePath)
+	c.sourceCode.newTooltip(tooltip.SourceTooltipContents, SourceCodeTooltipTiming(tooltip.SourceTooltipTiming), tooltip.SourceTooltipLineNumber)
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
+	var err error
+	switch fields.SourceStepType {
+	case FileTree:
+		// no update is needed, just changing FocusColumn is fine
+	case SourceMove:
+		// no update is needed, just changing FocusColumn is fine
+	case SourceOpen:
+		c.SourceOpen(fields.DefaultOpenFilePath)
+	case SourceError:
+		c.SourceError(fields.DefaultOpenFilePath, fields.SourceTooltipFields)
+	case SourceCommit:
+		err = c.Commit(fields.Commit)
+	}
+
+	// checi if error happend
+	if err != nil {
+		return fmt.Errorf("SourceCode Update() failed, %s", err)
+	}
+
 	return nil
 }
 

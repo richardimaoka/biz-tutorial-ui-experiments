@@ -34,11 +34,11 @@ type ColumnFields struct {
 type SourceStepType string
 
 const (
-	FileTree         SourceStepType = "fileTree"
-	SourceOpen       SourceStepType = "openFile"
-	SourceOpenCommit SourceStepType = "openFileCommit"
-	SourceError      SourceStepType = "error"
-	SourceMove       SourceStepType = "move"
+	FileTree     SourceStepType = "fileTree"
+	SourceOpen   SourceStepType = "openFile"
+	SourceCommit SourceStepType = "sourceCommit"
+	SourceError  SourceStepType = "error"
+	SourceMove   SourceStepType = "move"
 )
 
 type SourceTooltipFields struct {
@@ -49,10 +49,10 @@ type SourceTooltipFields struct {
 }
 
 type SourceFields struct {
-	Commit              string `json:"commit"`
-	DefaultOpenFilePath string `json:"defaultOpenFilePath"`
-	ShowFileTree        bool   `json:"showFileTree"`
-	TypingAnimation     bool   `json:"typingAnimation"`
+	SourceStepType      SourceStepType `json:"sourceStepType"`
+	DefaultOpenFilePath string         `json:"defaultOpenFilePath"`
+	Commit              string         `json:"commit"`
+	TypingAnimation     bool           `json:"typingAnimation"`
 	// embed tooltip
 	SourceTooltipFields
 }
@@ -77,7 +77,7 @@ type TerminalTooltipFields struct {
 
 type TerminalFields struct {
 	CurrentDir       string           `json:"currentDir"`
-	TerminalStepType TerminalStepType `json:"terminalType"`
+	TerminalStepType TerminalStepType `json:"terminalStepType"`
 	TerminalText     string           `json:"terminalText"`
 	TerminalName     string           `json:"terminalName"`
 	// embed tooltip

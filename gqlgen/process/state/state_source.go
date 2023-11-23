@@ -31,6 +31,7 @@ func NewSourceCode(repo *git.Repository, projectDir, tutorial string) *SourceCod
 		repo:       repo,
 		projectDir: projectDir,
 		tutorial:   tutorial,
+		rootDir:    emptyDirectory(""),
 	}
 }
 
