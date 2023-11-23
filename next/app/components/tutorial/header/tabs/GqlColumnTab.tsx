@@ -30,9 +30,7 @@ export function GqlColumnTab(props: Props) {
   const isSelected = currentColumn
     ? currentColumn === fragment.columnName
     : props.tabIndex === 0;
-  console.log("-------------------", props);
-  console.log("currentColumn", currentColumn);
-  console.log("isSelected", isSelected);
+
   const selectStyle = isSelected ? styles.selected : styles.unselected;
   const outerClassName = `${styles.component} ${selectStyle}`;
 

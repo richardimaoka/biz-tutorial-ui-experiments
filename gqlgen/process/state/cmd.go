@@ -24,6 +24,18 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	}
 
 	//
+	// Clean up previous files
+	//
+	if _, err := os.Stat(targetDir); !os.IsNotExist(err) {
+		if err := os.RemoveAll(targetDir); err != nil {
+			return err
+		}
+	}
+	if err := os.Mkdir(targetDir, os.ModePerm); err != nil {
+		return err
+	}
+
+	//
 	// Initialize the page state
 	//
 	page := NewPage(repo, tutorial, steps)
