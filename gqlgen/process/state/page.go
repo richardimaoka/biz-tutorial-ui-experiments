@@ -96,7 +96,7 @@ func (p *Page) ProcessCurrentStep() error {
 }
 
 func (p *Page) hasPrev() bool {
-	return 1 < p.currentStepIndex
+	return 0 < p.currentStepIndex
 }
 
 func (p *Page) ToGraphQL() *model.Page {
