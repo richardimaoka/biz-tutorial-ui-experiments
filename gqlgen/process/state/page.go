@@ -47,48 +47,51 @@ func (p *Page) HasNext() bool {
 	return p.currentStepIndex < len(p.steps)-1
 }
 
-func (p *Page) ToNextStep() error {
-	// Check if next step exists
-	if !p.HasNext() {
-		return fmt.Errorf("No next step after step = '%s'", p.CurrentStepId())
+func (p *Page) IncrementStep() error {
+	if p.HasNext() {
+		p.currentStepIndex++
+		return nil
+	} else {
+		return fmt.Errorf("Cannot increment step since there is no next step")
 	}
+}
 
-	// Process next step
+func (p *Page) ProcessCurrentStep() error {
+	currentStep := p.steps[p.currentStepIndex]
+
 	var err error
-	nextStep := p.steps[p.currentStepIndex]
-	switch nextStep.FocusColumn {
+	switch currentStep.FocusColumn {
 	case SourceColumnType:
 		if p.sourceCodeColumn == nil {
 			p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
 			p.columns = append(p.columns, p.sourceCodeColumn)
 		}
-		err = p.sourceCodeColumn.Update(&nextStep.SourceFields)
+		err = p.sourceCodeColumn.Update(&currentStep.SourceFields)
 
 	case TerminalColumnType:
 		if p.terminalColumn == nil {
 			p.terminalColumn = NewTerminalColumn()
 			p.columns = append(p.columns, p.terminalColumn)
 		}
-		err = p.terminalColumn.Update(nextStep.StepId, &nextStep.TerminalFields)
+		err = p.terminalColumn.Update(currentStep.StepId, &currentStep.TerminalFields)
 
 	case BrowserColumnType:
 		if p.browserColumn == nil {
 			p.browserColumn = NewBrowserColumn()
 			p.columns = append(p.columns, p.browserColumn)
 		}
-		err = p.browserColumn.Update(&nextStep.BrowserFields)
+		err = p.browserColumn.Update(&currentStep.BrowserFields)
 
 	default:
-		err = fmt.Errorf("Update failed to process step = '%s', column type = '%s' is not implemented", nextStep.StepId, nextStep.FocusColumn)
+		err = fmt.Errorf("Failed to process step = '%s', column type = '%s' is not implemented", currentStep.StepId, currentStep.FocusColumn)
 	}
 
 	// checi if error happend
 	if err != nil {
-		return fmt.Errorf("Update failed to process step = '%s', %s", nextStep.StepId, err)
+		return fmt.Errorf("Failed to process step = '%s', %s", currentStep.StepId, err)
 	}
 
 	// if everything is ok, then exit
-	p.currentStepIndex++
 	return nil
 }
 

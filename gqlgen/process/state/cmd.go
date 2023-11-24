@@ -44,7 +44,11 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	if err := jsonwrap.WriteJsonToFile(initStep{page.CurrentStepId()}, initStepFile); err != nil {
 		return err
 	}
+
 	// Initial step page
+	if err := page.ProcessCurrentStep(); err != nil {
+		return err
+	}
 	gqlModel := page.ToGraphQL()
 	targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
 	if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
@@ -55,7 +59,10 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	// From the 2nd step
 	//
 	for page.HasNext() {
-		if err := page.ToNextStep(); err != nil {
+		if err := page.IncrementStep(); err != nil {
+			return err
+		}
+		if err := page.ProcessCurrentStep(); err != nil {
 			return err
 		}
 		gqlModel := page.ToGraphQL()

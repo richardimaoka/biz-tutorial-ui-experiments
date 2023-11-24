@@ -29,7 +29,7 @@ func Test(t *testing.T) {
 			page := state.NewPage(repo, c.tutorialName, steps)
 			for page.HasNext() {
 				t.Run(c.tutorialName, func(t *testing.T) {
-					err := page.ToNextStep()
+					err := page.ProcessCurrentStep()
 					if err != nil {
 						t.Errorf("failed to update page, %s", err)
 					}
