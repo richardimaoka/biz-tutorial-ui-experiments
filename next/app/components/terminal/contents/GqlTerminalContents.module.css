@@ -1,6 +1,23 @@
 .component {
   height: 100%; /* `height: 100%` is necessary to put the overflow-x scroll bar at the bottom*/
-  overflow-x: scroll;
 
   background-color: var(--color-terminal-surface);
+
+  overflow-x: scroll;
+}
+
+/**
+ * scroll bar style 
+ */
+.component::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #636363; /* or add it to the track */
+}
+.component::-webkit-scrollbar-thumb {
+  background: #37373d;
+  border-radius: 8px;
+}
+.component::-webkit-scrollbar-corner {
+  background-color: #535353;
 }
