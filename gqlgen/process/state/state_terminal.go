@@ -104,7 +104,7 @@ func (t *Terminal) WriteCommand(id, command string) {
 func (t *Terminal) WriteOutput(id, output string) {
 	t.entries = append(t.entries, TerminalEntry{
 		id:        id,
-		entryType: Command,
+		entryType: Output,
 		text:      output,
 	})
 }
