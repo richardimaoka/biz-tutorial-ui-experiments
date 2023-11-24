@@ -31,8 +31,8 @@ interface PageParams {
 }
 
 export default async function Page(props: PageParams) {
-  // console.log("----------------------------------------");
-  // console.log(print(queryDefinition));
+  console.log("----------------------------------------");
+  console.log(print(queryDefinition));
 
   const gqlEndPoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
   if (typeof gqlEndPoint != "string") {

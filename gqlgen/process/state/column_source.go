@@ -21,8 +21,12 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 	}
 }
 
-func (c *SourceColumn) Commit(commitHash string) error {
-	return c.sourceCode.forwardCommit(commitHash)
+func (c *SourceColumn) Commit(commitHash, defaultOpenFilePath string) error {
+	if err := c.sourceCode.forwardCommit(commitHash); err != nil {
+		return err
+	}
+	c.sourceCode.openFile(defaultOpenFilePath)
+	return nil
 }
 
 func (c *SourceColumn) ShowFileTree() {
@@ -49,7 +53,7 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceError:
 		c.SourceError(fields.DefaultOpenFilePath, fields.SourceTooltipFields)
 	case SourceCommit:
-		err = c.Commit(fields.Commit)
+		err = c.Commit(fields.Commit, fields.DefaultOpenFilePath)
 	}
 
 	// checi if error happend
