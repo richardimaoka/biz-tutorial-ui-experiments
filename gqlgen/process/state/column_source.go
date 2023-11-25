@@ -96,12 +96,16 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 		err = c.Commit(fields)
 	}
 
-	// checi if error happend
+	// check if error happend
 	if err != nil {
 		return fmt.Errorf("SourceCode Update() failed, %s", err)
 	}
 
 	return nil
+}
+
+func (c *SourceColumn) CleanUp() error {
+	return c.sourceCode.ClearTooltip()
 }
 
 func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn {

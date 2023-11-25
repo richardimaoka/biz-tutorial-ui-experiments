@@ -203,6 +203,8 @@ func (s *SourceCode) ClearTooltip() error {
 		file.tooltip = nil
 	}
 
+	s.tooltipFilePath = ""
+
 	return nil
 }
 
