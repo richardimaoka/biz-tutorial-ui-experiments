@@ -78,6 +78,8 @@ func (s *SourceCode) initialCommit(commitHash string) error {
 		return fmt.Errorf("initialCommit failed, %s", err)
 	}
 
+	// Increment the commit
+	s.commitHash = commitHash
 	return nil
 }
 
@@ -145,6 +147,9 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 			file.markUpdated(oldContents)
 		}
 	}
+
+	// Increment the commit
+	s.commitHash = nextCommitHash
 	return nil
 }
 

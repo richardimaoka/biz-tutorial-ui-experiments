@@ -112,7 +112,7 @@ func (s *Directory) findFile(relativeFilePath string) (*File, error) {
 	isBareFile := len(split) == 1 // bare file (i.e.) this file is not in a directory like `main.tsx`, not `src/main.tsx`
 
 	if isBareFile {
-		// `relativeFilePath` is a bare file, not in a directory.
+		// Here, `relativeFilePath` is a bare file, NOT in a directory.
 		// So try to find it from files in Directory (= receiver of this method)
 		for _, f := range s.files {
 			if f.fileName == relativeFilePath {
@@ -123,10 +123,10 @@ func (s *Directory) findFile(relativeFilePath string) (*File, error) {
 		// if not found, error
 		return nil, fmt.Errorf("findFile failed, in dir = '%s' file = '%s' does not exist", s.dirPath, relativeFilePath)
 	} else {
-		// `relativeFilePath` is a file within a directory.
+		// Here,`relativeFilePath` is a file within a directory.
 		// So recursively find a file in sub directories
 		targetSubDir := split[0]
-		// strip the current directory, and get a relative path to call this function recursively.
+		// strip the current directory, and get the next relative path to call this function recursively.
 		nextRelativeFilePath := strings.Join(split[1:], "/")
 
 		for _, subdir := range s.subDirs {
