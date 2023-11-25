@@ -219,6 +219,7 @@ export type AppTutorialPageQuery = {
         __typename: "Page";
         nextStep?: string | null;
         prevStep?: string | null;
+        isTrivial?: boolean | null;
       } & {
         " $fragmentRefs"?: {
           GqlTutorialComponentFragment: GqlTutorialComponentFragment;
@@ -3250,6 +3251,7 @@ export const AppTutorialPageDocument = {
                 { kind: "Field", name: { kind: "Name", value: "__typename" } },
                 { kind: "Field", name: { kind: "Name", value: "nextStep" } },
                 { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+                { kind: "Field", name: { kind: "Name", value: "isTrivial" } },
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "GqlTutorialComponent" },

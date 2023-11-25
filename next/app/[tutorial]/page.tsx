@@ -3,6 +3,7 @@ import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 import { HandleKeyEvents } from "../components/navigation/HandleKeyEvents";
 import { print } from "graphql";
+import { HandleTrivial } from "../components/navigation/HandleTrivial";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
@@ -10,6 +11,7 @@ const queryDefinition = graphql(`
       __typename
       nextStep
       prevStep
+      isTrivial
       ...GqlTutorialComponent
     }
   }
@@ -53,6 +55,10 @@ export default async function Page(props: PageParams) {
       <HandleKeyEvents
         tutorial={props.params.tutorial}
         prevStep={fragment?.prevStep}
+        nextStep={fragment?.nextStep}
+      />
+      <HandleTrivial
+        isTrivial={fragment?.isTrivial}
         nextStep={fragment?.nextStep}
       />
     </div>
