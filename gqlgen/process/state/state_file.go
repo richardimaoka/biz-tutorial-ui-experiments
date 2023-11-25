@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/google/uuid"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
@@ -106,8 +107,9 @@ func (f *File) markDeleted() {
 	f.isRenamed = false
 }
 
-func (f *File) markUpdated(oldContents string) {
+func (f *File) markUpdated(oldContents string, editOps []edits.SingleEditOperation) {
 	f.oldContents = oldContents
+	f.edits = editOps
 
 	f.isUpdated = true
 	f.isAdded = false
@@ -131,6 +133,29 @@ func (f *File) markRenamed(oldFilePath string) {
 	f.isRenamed = false
 }
 
+func toEditSequence(edits []edits.SingleEditOperation) *model.EditSequence {
+	id := uuid.NewString()
+
+	var monacoEdits []*model.MonacoEditOperation
+	for _, e := range edits {
+		editRange := model.MonacoEditRange{
+			StartLineNumber: e.Range.StartLineNumber,
+			StartColumn:     e.Range.StartColumn,
+			EndLineNumber:   e.Range.EndLineNumber,
+			EndColumn:       e.Range.EndColumn,
+		}
+		monacoEdits = append(monacoEdits, &model.MonacoEditOperation{
+			Text:  e.Text,
+			Range: &editRange,
+		})
+	}
+
+	return &model.EditSequence{
+		ID:    id,
+		Edits: monacoEdits,
+	}
+}
+
 func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	// copy to avoid mutation effects afterwards
 	filePath := s.filePath
@@ -140,6 +165,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	oldContents := s.oldContents
 	trueValue := true
 	size := float64(s.size)
+	editSequence := toEditSequence(s.edits)
 
 	return &model.OpenFile{
 		FilePath:      &filePath,
@@ -149,6 +175,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		OldContent:    &oldContents,
 		Language:      &language,
 		Size:          &size,
+		EditSequence:  editSequence,
 	}
 }
 

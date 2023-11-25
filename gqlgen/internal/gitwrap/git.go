@@ -125,39 +125,62 @@ func GetPatchFiles(repo *git.Repository, fromCommitHash, toCommitHash string) ([
 
 // From object.Patch which consists of many files,
 // find a single-file diff.FilePatch by a file full path
-func FindFilePatch(patch *object.Patch, fileFullPath string) (string, diff.FilePatch) {
+func FindFilePatch(patch *object.Patch, fileFullPath string) diff.FilePatch {
 	for _, filePatch := range patch.FilePatches() {
 		// Files returns the from and to Files, with all the necessary metadata
 		// about them. If the patch creates a new file, "from" will be nil.
 		// If the patch deletes a file, "to" will be nil.
 		from, to := filePatch.Files()
 
-		if from == nil /* (i.e.) to != nil */ {
+		switch GetFilePatchType(filePatch) {
+		case PatchAdd:
 			if to.Path() == fileFullPath {
-				return "Add", filePatch
+				return filePatch
 			}
-		} else if to == nil /* (i.e.) from != nil */ {
+		case PatchDelete:
 			if from.Path() == fileFullPath {
-				return "Add", filePatch
+				return filePatch
 			}
-		} else if from != nil && to != nil {
+		case PatchUpdate:
+			if to.Path() == fileFullPath {
+				return filePatch
+			}
+		case PatchRename:
 			if from.Path() == fileFullPath {
-				if to.Path() == fileFullPath {
-					return "Update", filePatch
-				} else {
-					return "Rename-From", filePatch
-				}
+				// rename from
+				return filePatch
 			} else if to.Path() == fileFullPath {
-				if from.Path() == fileFullPath {
-					return "Update", filePatch
-				} else {
-					return "Rename-To", filePatch
-				}
+				// rename to
+				return filePatch
 			}
 		}
 	}
 
-	return "", nil
+	return nil
+}
+
+func GetFilePatchType(filePatch diff.FilePatch) FilePatchType {
+	// Files returns the from and to Files, with all the necessary metadata
+	// about them. If the patch creates a new file, "from" will be nil.
+	// If the patch deletes a file, "to" will be nil.
+	from, to := filePatch.Files()
+
+	if from == nil /* (i.e.) to != nil */ {
+		// If the patch creates a new file, "from" will be nil.
+		return PatchAdd
+	} else if to == nil /* (i.e.) from != nil */ {
+		// If the patch deletes a file, "to" will be nil.
+		return PatchDelete
+	} else if from != nil && to != nil {
+		// Else, file update.
+		if from.Path() == to.Path() {
+			return PatchRename
+		} else {
+			return PatchUpdate
+		}
+	} else {
+		panic("this cannot happen - go-git diff.FilePatch's Files() method gave `from` and `to` both `nil`")
+	}
 }
 
 func TreeFiles(tree *object.Tree) []object.TreeEntry {

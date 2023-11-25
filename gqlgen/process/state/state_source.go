@@ -126,9 +126,6 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 			file.markRenamed(from.Path())
 		} else {
 			// updated
-			filePatch := gitwrap.ToFilePatch(p)
-			editOps := edits.ToOperations(filePatch.Chunks)
-
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
 				return fmt.Errorf("nonInitialCommit failed, %s", err)
@@ -145,7 +142,10 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 
-			file.markUpdated(oldContents)
+			filePatch := gitwrap.ToFilePatch(p)
+			editOps := edits.ToOperations(filePatch.Chunks)
+
+			file.markUpdated(oldContents, editOps)
 		}
 	}
 

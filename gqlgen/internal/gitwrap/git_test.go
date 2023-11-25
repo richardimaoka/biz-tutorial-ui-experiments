@@ -33,11 +33,11 @@ func TestGitDiff(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			patchType, diffFilePatch := gitwrap.FindFilePatch(patch, c.filePath)
+			diffFilePatch := gitwrap.FindFilePatch(patch, c.filePath)
 			if diffFilePatch == nil {
 				t.Fatal("diffFilePatch is nil")
 			}
-			result := gitwrap.ToFilePatch(diffFilePatch, patchType)
+			result := gitwrap.ToFilePatch(diffFilePatch)
 			testio.CompareWithGoldenFile(t, *updateFlag, c.inputFile, result)
 		})
 	}

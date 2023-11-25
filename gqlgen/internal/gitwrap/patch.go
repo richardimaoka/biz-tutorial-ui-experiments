@@ -16,6 +16,15 @@ const (
 	Delete
 )
 
+type FilePatchType string
+
+const (
+	PatchAdd    FilePatchType = "PatchAdd"
+	PatchDelete FilePatchType = "PatchDelete"
+	PatchUpdate FilePatchType = "PatchUpdate"
+	PatchRename FilePatchType = "PatchRename"
+)
+
 // Chunk represents a portion of a file transformation into another.
 type Chunk struct {
 	// Content contains the portion of the file.
@@ -45,7 +54,7 @@ type FilePatch struct {
 	FromFile *FileWithinPatch
 	ToFile   *FileWithinPatch
 
-	Type string
+	Type FilePatchType
 
 	// Chunks represent a slice of ordered changes to transform "from" File into
 	// "to" File. If the file is a binary one, Chunks will be empty.
@@ -99,13 +108,15 @@ func toFileWithinPatch(file diff.File) *FileWithinPatch {
 	}
 }
 
-func ToFilePatch(diffFilePatch diff.FilePatch, patchType string) FilePatch {
+func ToFilePatch(diffFilePatch diff.FilePatch) FilePatch {
 	var chunks []Chunk
 	for _, c := range diffFilePatch.Chunks() {
 		chunks = append(chunks, toChunk(c))
 	}
 
 	from, to := diffFilePatch.Files()
+	patchType := GetFilePatchType(diffFilePatch)
+
 	return FilePatch{
 		Type:     patchType,
 		IsBinary: diffFilePatch.IsBinary(),
