@@ -25,7 +25,6 @@ func (t SourceCodeTooltipTiming) toGraphQL() model.SourceCodeTooltipTiming {
 }
 
 type SourceCodeTooltip struct {
-	filePath     string
 	markdownBody string
 	timing       SourceCodeTooltipTiming
 	lineNumber   int

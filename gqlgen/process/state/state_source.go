@@ -17,10 +17,10 @@ type SourceCode struct {
 	repo       *git.Repository
 
 	// inner state updated at each step
-	commitHash string
-	rootDir    *Directory
-	step       string
-	tooltip    *SourceCodeTooltip
+	commitHash      string
+	rootDir         *Directory
+	step            string
+	tooltipFilePath string
 
 	// metadata, can be set from caller anytime
 	DefaultOpenFilePath string
@@ -158,25 +158,50 @@ func (s *SourceCode) openFile(filePath string) {
 	s.DefaultOpenFilePath = filePath
 }
 
-func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTooltipTiming, lineNumber int) {
+func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTooltipTiming, lineNumber int) error {
+	file, err := s.rootDir.findFile(filePath)
+	if err != nil {
+		return fmt.Errorf("newTooltip() failed, filePath = '%s' not found, %s", filePath, err)
+	}
 
-	// file, _ := s.rootDir.findFile(s.DefaultOpenFilePath)
-
-	s.tooltip = &SourceCodeTooltip{
-		filePath:     filePath,
+	file.tooltip = &SourceCodeTooltip{
 		markdownBody: contents,
 		timing:       timing,
 		lineNumber:   lineNumber,
 	}
+
+	return nil
 }
 
 func (s *SourceCode) appendTooltipContents(additionalContents string) error {
-	if s.tooltip == nil {
-		return fmt.Errorf("appendTooltipContents failed, cannot append tooltip since the prev tooltip is empty")
+	file, err := s.rootDir.findFile(s.tooltipFilePath)
+	if err != nil {
+		return fmt.Errorf("appendTooltipContents() failed, filePath = '%s' not found, %s", s.tooltipFilePath, err)
 	}
 
-	s.tooltip.markdownBody += "\n" + additionalContents
-	s.tooltip.timing = SOURCE_TOOLTIP_START
+	if file.tooltip == nil {
+		return fmt.Errorf("appendTooltipContents() failed, filePath = '%s' has no tooltip", s.tooltipFilePath)
+	}
+
+	file.tooltip.markdownBody += "\n" + additionalContents
+	file.tooltip.timing = SOURCE_TOOLTIP_START
+
+	return nil
+}
+
+func (s *SourceCode) ClearTooltip() error {
+	if s.tooltipFilePath != "" {
+		file, err := s.rootDir.findFile(s.tooltipFilePath)
+		if err != nil {
+			return fmt.Errorf("ClearTooltip() failed, filePath = '%s' not found, %s", s.tooltipFilePath, err)
+		}
+
+		if file.tooltip == nil {
+			return fmt.Errorf("ClearTooltip() failed, filePath = '%s' is supposed to have a tooltip, but not", s.tooltipFilePath)
+		}
+
+		file.tooltip = nil
+	}
 
 	return nil
 }

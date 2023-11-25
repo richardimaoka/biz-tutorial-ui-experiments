@@ -22,7 +22,10 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 }
 
 func (c *SourceColumn) Commit(fields *SourceFields) error {
-	if err := c.sourceCode.forwardCommit(fields.Commit); err != nil {
+	var err error
+
+	err = c.sourceCode.forwardCommit(fields.Commit)
+	if err != nil {
 		return err
 	}
 
@@ -30,9 +33,9 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 
 	if fields.SourceTooltipContents != "" {
 		if fields.SourceTooltipIsAppend {
-			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+			err = c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
 		} else {
-			c.sourceCode.newTooltip(
+			err = c.sourceCode.newTooltip(
 				fields.DefaultOpenFilePath,
 				fields.SourceTooltipContents,
 				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
@@ -40,20 +43,22 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 			)
 		}
 	}
-	return nil
+
+	return err
 }
 
 func (c *SourceColumn) ShowFileTree() {
 }
 
-func (c *SourceColumn) SourceOpen(fields *SourceFields) {
+func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
+	var err error
 	if fields.SourceTooltipContents != "" {
 		if fields.SourceTooltipIsAppend {
-			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+			err = c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
 		} else {
-			c.sourceCode.newTooltip(
+			err = c.sourceCode.newTooltip(
 				fields.DefaultOpenFilePath,
 				fields.SourceTooltipContents,
 				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
@@ -61,11 +66,14 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) {
 			)
 		}
 	}
+
+	return err
 }
 
-func (c *SourceColumn) SourceError(fields *SourceFields) {
+func (c *SourceColumn) SourceError(fields *SourceFields) error {
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
-	c.sourceCode.newTooltip(
+
+	return c.sourceCode.newTooltip(
 		fields.DefaultOpenFilePath,
 		fields.SourceTooltipContents,
 		SourceCodeTooltipTiming(fields.SourceTooltipTiming),
@@ -83,7 +91,7 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceOpen:
 		c.SourceOpen(fields)
 	case SourceError:
-		c.SourceError(fields)
+		err = c.SourceError(fields)
 	case SourceCommit:
 		err = c.Commit(fields)
 	}
