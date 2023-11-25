@@ -21,19 +21,44 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 	}
 }
 
-func (c *SourceColumn) Commit(commitHash, defaultOpenFilePath string) error {
-	if err := c.sourceCode.forwardCommit(commitHash); err != nil {
+func (c *SourceColumn) Commit(fields *SourceFields) error {
+	if err := c.sourceCode.forwardCommit(fields.Commit); err != nil {
 		return err
 	}
-	c.sourceCode.openFile(defaultOpenFilePath)
+
+	c.sourceCode.openFile(fields.DefaultOpenFilePath)
+
+	if fields.SourceTooltipContents != "" {
+		if fields.SourceTooltipIsAppend {
+			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+		} else {
+			c.sourceCode.newTooltip(
+				fields.SourceTooltipContents,
+				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
+				fields.SourceTooltipLineNumber,
+			)
+		}
+	}
 	return nil
 }
 
 func (c *SourceColumn) ShowFileTree() {
 }
 
-func (c *SourceColumn) SourceOpen(filePath string) {
-	c.sourceCode.openFile(filePath)
+func (c *SourceColumn) SourceOpen(fields *SourceFields) {
+	c.sourceCode.openFile(fields.DefaultOpenFilePath)
+
+	if fields.SourceTooltipContents != "" {
+		if fields.SourceTooltipIsAppend {
+			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+		} else {
+			c.sourceCode.newTooltip(
+				fields.SourceTooltipContents,
+				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
+				fields.SourceTooltipLineNumber,
+			)
+		}
+	}
 }
 
 func (c *SourceColumn) SourceError(filePath string, tooltip SourceTooltipFields) {
@@ -49,11 +74,11 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceMove:
 		// no update is needed, just changing FocusColumn is fine
 	case SourceOpen:
-		c.SourceOpen(fields.DefaultOpenFilePath)
+		c.SourceOpen(fields)
 	case SourceError:
 		c.SourceError(fields.DefaultOpenFilePath, fields.SourceTooltipFields)
 	case SourceCommit:
-		err = c.Commit(fields.Commit, fields.DefaultOpenFilePath)
+		err = c.Commit(fields)
 	}
 
 	// checi if error happend

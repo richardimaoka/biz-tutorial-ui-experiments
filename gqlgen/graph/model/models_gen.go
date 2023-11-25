@@ -28,9 +28,9 @@ func (BrowserColumn) IsColumn()                    {}
 func (this BrowserColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type ColumnWrapper struct {
-	Column            Column  `json:"column"`
 	ColumnName        string  `json:"columnName"`
 	ColumnDisplayName *string `json:"columnDisplayName"`
+	Column            Column  `json:"column"`
 }
 
 type EditSequence struct {

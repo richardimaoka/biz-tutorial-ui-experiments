@@ -43,9 +43,9 @@ type Page {
 ###################################################
 
 type ColumnWrapper {
-  column: Column!
   columnName: String!
   columnDisplayName: String
+  column: Column!
 }
 
 interface Column {
