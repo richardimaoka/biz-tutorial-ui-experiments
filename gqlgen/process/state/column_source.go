@@ -33,6 +33,7 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
 		} else {
 			c.sourceCode.newTooltip(
+				fields.DefaultOpenFilePath,
 				fields.SourceTooltipContents,
 				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
 				fields.SourceTooltipLineNumber,
@@ -53,6 +54,7 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) {
 			c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
 		} else {
 			c.sourceCode.newTooltip(
+				fields.DefaultOpenFilePath,
 				fields.SourceTooltipContents,
 				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
 				fields.SourceTooltipLineNumber,
@@ -61,9 +63,14 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) {
 	}
 }
 
-func (c *SourceColumn) SourceError(filePath string, tooltip SourceTooltipFields) {
-	c.sourceCode.openFile(filePath)
-	c.sourceCode.newTooltip(tooltip.SourceTooltipContents, SourceCodeTooltipTiming(tooltip.SourceTooltipTiming), tooltip.SourceTooltipLineNumber)
+func (c *SourceColumn) SourceError(fields *SourceFields) {
+	c.sourceCode.openFile(fields.DefaultOpenFilePath)
+	c.sourceCode.newTooltip(
+		fields.DefaultOpenFilePath,
+		fields.SourceTooltipContents,
+		SourceCodeTooltipTiming(fields.SourceTooltipTiming),
+		fields.SourceTooltipLineNumber,
+	)
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
@@ -76,7 +83,7 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceOpen:
 		c.SourceOpen(fields)
 	case SourceError:
-		c.SourceError(fields.DefaultOpenFilePath, fields.SourceTooltipFields)
+		c.SourceError(fields)
 	case SourceCommit:
 		err = c.Commit(fields)
 	}

@@ -158,8 +158,9 @@ func (s *SourceCode) openFile(filePath string) {
 	s.DefaultOpenFilePath = filePath
 }
 
-func (s *SourceCode) newTooltip(contents string, timing SourceCodeTooltipTiming, lineNumber int) {
+func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTooltipTiming, lineNumber int) {
 	s.tooltip = &SourceCodeTooltip{
+		filePath:     filePath,
 		markdownBody: contents,
 		timing:       timing,
 		lineNumber:   lineNumber,
