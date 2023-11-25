@@ -69,7 +69,7 @@ func toChunk(chunk diff.Chunk) Chunk {
 	}
 }
 
-func toFileInPatch(file diff.File) *FileWithinPatch {
+func toFileWithinPatch(file diff.File) *FileWithinPatch {
 	if file == nil {
 		return nil
 	}
@@ -109,8 +109,8 @@ func ToFilePatch(diffFilePatch diff.FilePatch, patchType string) FilePatch {
 	return FilePatch{
 		Type:     patchType,
 		IsBinary: diffFilePatch.IsBinary(),
-		FromFile: toFileInPatch(from),
-		ToFile:   toFileInPatch(to),
+		FromFile: toFileWithinPatch(from),
+		ToFile:   toFileWithinPatch(to),
 		Chunks:   chunks,
 	}
 }

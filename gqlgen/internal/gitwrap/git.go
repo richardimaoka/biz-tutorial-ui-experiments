@@ -123,6 +123,8 @@ func GetPatchFiles(repo *git.Repository, fromCommitHash, toCommitHash string) ([
 	return files, nil
 }
 
+// From object.Patch which consists of many files,
+// find a single-file diff.FilePatch by a file full path
 func FindFilePatch(patch *object.Patch, fileFullPath string) (string, diff.FilePatch) {
 	for _, filePatch := range patch.FilePatches() {
 		// Files returns the from and to Files, with all the necessary metadata

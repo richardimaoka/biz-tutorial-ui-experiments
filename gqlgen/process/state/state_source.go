@@ -7,6 +7,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
 )
 
 type SourceCode struct {
@@ -86,17 +87,17 @@ func (s *SourceCode) initialCommit(commitHash string) error {
 func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 	files, err := commitFiles(s.repo, nextCommitHash)
 	if err != nil {
-		return fmt.Errorf("forwardCommit failed, %s", err)
+		return fmt.Errorf("nonInitialCommit failed, %s", err)
 	}
 
 	patch, err := gitwrap.GetPatch(s.repo, s.commitHash, nextCommitHash)
 	if err != nil {
-		return fmt.Errorf("forwardCommit failed, %s", err)
+		return fmt.Errorf("nonInitialCommit failed, %s", err)
 	}
 
 	s.rootDir, err = constructDirectory(files)
 	if err != nil {
-		return fmt.Errorf("forwardCommit failed, %s", err)
+		return fmt.Errorf("nonInitialCommit failed, %s", err)
 	}
 
 	// this calculates backword - from current to prev, but it makes the logic so much simpler than forward calculation
@@ -106,42 +107,42 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 			//added
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 			file.markAdded()
 		} else if to == nil {
 			// deleted
 			file, err := s.rootDir.findFile(from.Path())
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 			file.markDeleted()
 		} else if from.Path() != to.Path() {
 			// renamed
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 			file.markRenamed(from.Path())
 		} else {
 			// updated
-			// filePatch := gitwrap.ToFilePatch(p, "")
-			// ops := edits.ToOperations(filePatch.Chunks)
+			filePatch := gitwrap.ToFilePatch(p)
+			editOps := edits.ToOperations(filePatch.Chunks)
 
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 
 			fileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 
 			fileObj := object.NewFile(from.Path(), from.Mode(), fileBlob)
 			oldContents, err := fileObj.Contents()
 			if err != nil {
-				return fmt.Errorf("forwardCommit failed, %s", err)
+				return fmt.Errorf("nonInitialCommit failed, %s", err)
 			}
 
 			file.markUpdated(oldContents)
