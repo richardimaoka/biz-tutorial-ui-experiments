@@ -10,7 +10,7 @@
     "Mode": "Regular",
     "Path": "next/app/components/sourcecode2/editor/internal/EditorBare.tsx"
   },
-  "Type": "Update",
+  "Type": "PatchRename",
   "Chunks": [
     {
       "Content": "\"use client\";\n\n",
