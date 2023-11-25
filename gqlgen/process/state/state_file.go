@@ -136,7 +136,8 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	filePath := s.filePath
 	fileName := s.fileName
 	language := s.language
-	contents := s.contents // TODO: should we not copy this as contents can be huge?
+	contents := s.contents
+	oldContents := s.oldContents
 	trueValue := true
 	size := float64(s.size)
 
@@ -145,6 +146,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		FileName:      &fileName,
 		IsFullContent: &trueValue,
 		Content:       &contents,
+		OldContent:    &oldContents,
 		Language:      &language,
 		Size:          &size,
 	}
