@@ -42,10 +42,10 @@ const (
 )
 
 type SourceTooltipFields struct {
-	SourceTooltipContents   string `json:"sourceTooltipContents"`
-	SourceTooltipTiming     string `json:"sourceTooltipTiming"`
-	SourceTooltipLineNumber int    `json:"sourceTooltipLineNumber"`
-	SourceTooltipIsAppend   bool   `json:"SourceTooltipIsAppend"`
+	SourceTooltipContents   string                  `json:"sourceTooltipContents"`
+	SourceTooltipTiming     SourceCodeTooltipTiming `json:"sourceTooltipTiming"`
+	SourceTooltipLineNumber int                     `json:"sourceTooltipLineNumber"`
+	SourceTooltipIsAppend   bool                    `json:"SourceTooltipIsAppend"`
 }
 
 type SourceFields struct {
@@ -71,8 +71,8 @@ const (
 )
 
 type TerminalTooltipFields struct {
-	TerminalTooltipContents string `json:"terminalTooltipContents"`
-	TerminalTooltipTiming   string `json:"terminalTooltipTiming"`
+	TerminalTooltipContents string                `json:"terminalTooltipContents"`
+	TerminalTooltipTiming   TerminalTooltipTiming `json:"terminalTooltipTiming"`
 }
 
 type TerminalFields struct {

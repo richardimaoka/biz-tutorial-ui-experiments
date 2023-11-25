@@ -37,21 +37,40 @@ func toTerminalSubType(s string) (TerminalSubType, error) {
 /**
  * TerminalTooltip type(s) and functions
  */
+
+type TerminalTooltipTiming string
+
+const (
+	TERMINAL_TOOLTIP_START TerminalTooltipTiming = "START"
+	TERMINAL_TOOLTIP_END   TerminalTooltipTiming = "END"
+)
+
 type TerminalTooltip struct {
-	Contents string        `json:"contents"`
-	Timing   TooltipTiming `json:"timing"`
+	Contents string                `json:"contents"`
+	Timing   TerminalTooltipTiming `json:"timing"`
 }
 
-func toTerminalTooltipTiming(s string) (TooltipTiming, error) {
+func toTerminalTooltipTiming(s string) (TerminalTooltipTiming, error) {
 	switch strings.ToUpper(s) {
-	case START:
-		return START, nil
-	case END:
-		return END, nil
+	case string(TERMINAL_TOOLTIP_START):
+		return TERMINAL_TOOLTIP_START, nil
+	case string(TERMINAL_TOOLTIP_END):
+		return TERMINAL_TOOLTIP_END, nil
 	case "": // default value is different from source tooltip
-		return START, nil
+		return TERMINAL_TOOLTIP_START, nil
 	default:
-		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
+		return "", fmt.Errorf("TerminalTooltipTiming value = '%s' is invalid", s)
+	}
+}
+
+func (t TerminalTooltipTiming) toState() state.TerminalTooltipTiming {
+	switch t {
+	case TERMINAL_TOOLTIP_START:
+		return state.TERMINAL_TOOLTIP_START
+	case TERMINAL_TOOLTIP_END:
+		return state.TERMINAL_TOOLTIP_END
+	default:
+		panic(fmt.Sprintf("TerminalTooltipTiming has an invalid value = '%s'", t))
 	}
 }
 
@@ -290,7 +309,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 
 	if r.Tooltip != nil {
 		step.TerminalTooltipContents = r.Tooltip.Contents
-		step.TerminalTooltipTiming = r.Tooltip.Timing
+		step.TerminalTooltipTiming = r.Tooltip.Timing.toState()
 	}
 
 	return step
@@ -326,7 +345,7 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 	}
 	if r.Tooltip != nil {
 		step.TerminalTooltipContents = r.Tooltip.Contents
-		step.TerminalTooltipTiming = r.Tooltip.Timing
+		step.TerminalTooltipTiming = r.Tooltip.Timing.toState()
 	}
 
 	return step

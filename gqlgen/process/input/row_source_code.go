@@ -39,25 +39,44 @@ func toSourceCodeSubType(s string) (SourceCodeSubType, error) {
 /**
  * SourceTooltip type(s) and functions
  */
+
+type SourceTooltipTiming string
+
+const (
+	SOURCE_TOOLTIP_START SourceTooltipTiming = "START"
+	SOURCE_TOOLTIP_END   SourceTooltipTiming = "END"
+)
+
 type SourceTooltip struct {
-	Contents   string        `json:"contents"`
-	LineNumber int           `json:"lineNumber"`
-	Timing     TooltipTiming `json:"timing"`
+	Contents   string              `json:"contents"`
+	LineNumber int                 `json:"lineNumber"`
+	Timing     SourceTooltipTiming `json:"timing"`
 	// TODO: if IsAppend == true, Timing must be START.
 	// So, probably the timing doesn't need to be controlled from outside?
 	IsAppend bool `json:"isAppend"`
 }
 
-func toSourceTooltipTiming(s string) (TooltipTiming, error) {
+func toSourceTooltipTiming(s string) (SourceTooltipTiming, error) {
 	switch strings.ToUpper(s) {
-	case START:
-		return START, nil
-	case END:
-		return END, nil
+	case string(SOURCE_TOOLTIP_START):
+		return SOURCE_TOOLTIP_START, nil
+	case string(SOURCE_TOOLTIP_END):
+		return SOURCE_TOOLTIP_END, nil
 	case "": // default value is different from termianl tooltip
-		return END, nil
+		return SOURCE_TOOLTIP_END, nil
 	default:
-		return "", fmt.Errorf("TooltipTiming value = '%s' is invalid", s)
+		return "", fmt.Errorf("SourceTooltipTiming value = '%s' is invalid", s)
+	}
+}
+
+func (t SourceTooltipTiming) toState() state.SourceCodeTooltipTiming {
+	switch t {
+	case SOURCE_TOOLTIP_START:
+		return state.SOURCE_TOOLTIP_START
+	case SOURCE_TOOLTIP_END:
+		return state.SOURCE_TOOLTIP_END
+	default:
+		panic(fmt.Sprintf("SourceToolTipTiming has an invalid value = '%s'", t))
 	}
 }
 
@@ -346,7 +365,7 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 	}
 	if r.Tooltip != nil {
 		step.SourceTooltipContents = r.Tooltip.Contents
-		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipTiming = r.Tooltip.Timing.toState()
 		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
 		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
@@ -383,7 +402,7 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumn
 	}
 	if r.Tooltip != nil {
 		step.SourceTooltipContents = r.Tooltip.Contents
-		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipTiming = r.Tooltip.Timing.toState()
 		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
 		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
@@ -418,7 +437,7 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 	}
 	if r.Tooltip != nil {
 		step.SourceTooltipContents = r.Tooltip.Contents
-		step.SourceTooltipTiming = r.Tooltip.Timing
+		step.SourceTooltipTiming = r.Tooltip.Timing.toState()
 		step.SourceTooltipLineNumber = r.Tooltip.LineNumber
 		step.SourceTooltipIsAppend = r.Tooltip.IsAppend
 	}
