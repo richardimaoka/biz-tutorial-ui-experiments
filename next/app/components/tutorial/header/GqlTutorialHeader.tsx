@@ -19,7 +19,7 @@ export function GqlTutorialHeader(props: Props) {
   return (
     <div className={styles.component}>
       <GqlColumnTabs fragment={fragment} />
-      <ButtonToInitialStep href="" />
+      <ButtonToInitialStep />
     </div>
   );
 }
