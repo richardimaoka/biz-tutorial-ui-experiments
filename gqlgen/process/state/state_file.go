@@ -25,6 +25,9 @@ type File struct {
 	size        int64
 	edits       []edits.SingleEditOperation
 
+	// Tooltip fields
+	tooltip *SourceCodeTooltip
+
 	// Flags
 	isUpdated bool
 	isAdded   bool
@@ -167,6 +170,11 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	size := float64(s.size)
 	editSequence := toEditSequence(s.edits)
 
+	var tooltip *model.SourceCodeTooltip
+	if s.tooltip != nil {
+		tooltip = s.tooltip.ToGraphQL()
+	}
+
 	return &model.OpenFile{
 		FilePath:      &filePath,
 		FileName:      &fileName,
@@ -176,6 +184,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		Language:      &language,
 		Size:          &size,
 		EditSequence:  editSequence,
+		Tooltip:       tooltip,
 	}
 }
 

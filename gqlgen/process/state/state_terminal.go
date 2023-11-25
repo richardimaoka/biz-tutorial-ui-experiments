@@ -32,6 +32,17 @@ type TerminalTooltip struct {
 	timing       TerminalTooltipTiming
 }
 
+func (t TerminalTooltipTiming) toGraphQL() model.TerminalTooltipTiming {
+	switch t {
+	case TERMINAL_TOOLTIP_START:
+		return model.TerminalTooltipTimingStart
+	case TERMINAL_TOOLTIP_END:
+		return model.TerminalTooltipTimingEnd
+	default:
+		panic(fmt.Sprintf("TerminalTooltipTiming has an invalid value = '%s'", t))
+	}
+}
+
 func (t *TerminalTooltip) ToGraphQL() *model.TerminalTooltip {
 	timing := t.timing.ToGraphQL()
 	return &model.TerminalTooltip{
@@ -142,6 +153,7 @@ func (t *Terminal) ToGraphQL() *model.Terminal {
 		CurrentDirectory: t.currentDirectory,
 		Entries:          modelEntries,
 	}
+
 	if t.tooltip != nil {
 		m.Tooltip = t.tooltip.ToGraphQL()
 	}

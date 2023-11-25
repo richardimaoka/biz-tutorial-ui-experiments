@@ -159,6 +159,9 @@ func (s *SourceCode) openFile(filePath string) {
 }
 
 func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTooltipTiming, lineNumber int) {
+
+	// file, _ := s.rootDir.findFile(s.DefaultOpenFilePath)
+
 	s.tooltip = &SourceCodeTooltip{
 		filePath:     filePath,
 		markdownBody: contents,
