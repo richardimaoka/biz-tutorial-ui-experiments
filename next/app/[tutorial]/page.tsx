@@ -4,6 +4,7 @@ import { request } from "graphql-request";
 import { HandleKeyEvents } from "../components/navigation/HandleKeyEvents";
 import { print } from "graphql";
 import { HandleTrivial } from "../components/navigation/HandleTrivial";
+import styles from "./page.module.css";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
@@ -50,7 +51,7 @@ export default async function Page(props: PageParams) {
   const fragment = data.page;
 
   return (
-    <div style={{ height: "100svh" }}>
+    <div className={styles.component}>
       {fragment && <GqlTutorialComponent fragment={fragment} />}
       <HandleKeyEvents
         tutorial={props.params.tutorial}
