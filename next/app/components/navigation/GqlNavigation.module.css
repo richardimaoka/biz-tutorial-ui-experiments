@@ -1,0 +1,6 @@
+.button {
+  position: absolute;
+  top: 50%;
+  color: white;
+  z-index: 1;
+}

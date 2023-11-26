@@ -1,3 +1,6 @@
 .component {
   height: "100svh";
+
+  /* To hold children with `position: absolute` */
+  position: relative;
 }

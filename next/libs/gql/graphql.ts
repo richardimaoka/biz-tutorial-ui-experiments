@@ -215,18 +215,21 @@ export type AppTutorialPageQueryVariables = Exact<{
 export type AppTutorialPageQuery = {
   __typename: "Query";
   page?:
-    | ({
-        __typename: "Page";
-        nextStep?: string | null;
-        prevStep?: string | null;
-        isTrivial?: boolean | null;
-      } & {
+    | ({ __typename: "Page" } & {
         " $fragmentRefs"?: {
           GqlTutorialComponentFragment: GqlTutorialComponentFragment;
+          GqlNavigationFragment: GqlNavigationFragment;
         };
       })
     | null;
 };
+
+export type GqlNavigationFragment = {
+  __typename: "Page";
+  prevStep?: string | null;
+  nextStep?: string | null;
+  isTrivial?: boolean | null;
+} & { " $fragmentName"?: "GqlNavigationFragment" };
 
 export type GqlSourceCodeColumnFragment = {
   __typename: "SourceCodeColumn";
@@ -482,6 +485,27 @@ export type AppTestTutorialColumnsPageQuery = {
   } | null;
 };
 
+export const GqlNavigationFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlNavigation" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+          { kind: "Field", name: { kind: "Name", value: "isTrivial" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlNavigationFragment, unknown>;
 export const GqlColumnTabIconFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -3248,13 +3272,13 @@ export const AppTutorialPageDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "__typename" } },
-                { kind: "Field", name: { kind: "Name", value: "nextStep" } },
-                { kind: "Field", name: { kind: "Name", value: "prevStep" } },
-                { kind: "Field", name: { kind: "Name", value: "isTrivial" } },
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "GqlTutorialComponent" },
+                },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlNavigation" },
                 },
               ],
             },
@@ -3826,6 +3850,22 @@ export const AppTutorialPageDocument = {
             kind: "FragmentSpread",
             name: { kind: "Name", value: "GqlColumnWrappers" },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlNavigation" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "prevStep" } },
+          { kind: "Field", name: { kind: "Name", value: "nextStep" } },
+          { kind: "Field", name: { kind: "Name", value: "isTrivial" } },
         ],
       },
     },

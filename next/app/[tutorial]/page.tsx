@@ -1,19 +1,14 @@
 import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialComponent";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
-import { HandleKeyEvents } from "../components/navigation/HandleKeyEvents";
-import { print } from "graphql";
-import { HandleTrivial } from "../components/navigation/HandleTrivial";
+import { GqlNavigation } from "../components/navigation/GqlNavigation";
 import styles from "./page.module.css";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
     page(tutorial: $tutorial, step: $step) {
-      __typename
-      nextStep
-      prevStep
-      isTrivial
       ...GqlTutorialComponent
+      ...GqlNavigation
     }
   }
 `);
@@ -53,15 +48,9 @@ export default async function Page(props: PageParams) {
   return (
     <div className={styles.component}>
       {fragment && <GqlTutorialComponent fragment={fragment} />}
-      <HandleKeyEvents
-        tutorial={props.params.tutorial}
-        prevStep={fragment?.prevStep}
-        nextStep={fragment?.nextStep}
-      />
-      <HandleTrivial
-        isTrivial={fragment?.isTrivial}
-        nextStep={fragment?.nextStep}
-      />
+      {fragment && (
+        <GqlNavigation tutorial={props.params.tutorial} fragment={fragment} />
+      )}
     </div>
   );
 }
