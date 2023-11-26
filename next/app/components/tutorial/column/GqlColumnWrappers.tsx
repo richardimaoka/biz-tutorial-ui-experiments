@@ -7,11 +7,11 @@ import { GqlColumnWrapper } from "./GqlColumnWrapper";
 
 const fragmentDefinition = graphql(`
   fragment GqlColumnWrappers on Page {
+    focusColumn
     columns {
       columnName
       ...GqlColumnWrapper
     }
-    focusColumn
   }
 `);
 

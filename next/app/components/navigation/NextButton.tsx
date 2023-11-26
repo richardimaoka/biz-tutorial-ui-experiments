@@ -1,30 +1,29 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDownIcon } from "../icons/ChevronDownIcon";
 import styles from "./NextButton.module.css";
+import Link from "next/link";
 
 interface Props {
-  href: string;
+  nextStep: string;
 }
 
 export function NextButton(props: Props) {
-  const router = useRouter();
-
-  function onClick() {
-    // need to use router.replace instaed of <Link> not to mess up the browser history
-    router.replace(props.href);
-  }
+  const pathname = usePathname();
+  console.log("NextButton");
 
   return (
-    <button className={styles.component} onClick={onClick}>
-      <div className={styles.smartphone}>
-        <div>next</div>
-        <ChevronDownIcon />
-      </div>
-      <div className={styles.desktop}>
-        <div>NEXT</div>
-        <ChevronDownIcon />
-      </div>
-    </button>
+    <Link href={pathname + "?step=" + props.nextStep}>
+      <button className={styles.component}>
+        <div className={styles.smartphone}>
+          <div>next</div>
+          <ChevronDownIcon />
+        </div>
+        <div className={styles.desktop}>
+          <div>NEXT</div>
+          <ChevronDownIcon />
+        </div>
+      </button>
+    </Link>
   );
 }

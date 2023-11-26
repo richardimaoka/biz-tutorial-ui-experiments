@@ -2194,6 +2194,7 @@ export const GqlColumnWrappersFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "columns" },
@@ -2208,7 +2209,6 @@ export const GqlColumnWrappersFragmentDoc = {
               ],
             },
           },
-          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -3197,6 +3197,7 @@ export const GqlTutorialComponentFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "columns" },
@@ -3211,7 +3212,6 @@ export const GqlTutorialComponentFragmentDoc = {
               ],
             },
           },
-          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -3814,6 +3814,7 @@ export const AppTutorialPageDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "columns" },
@@ -3828,7 +3829,6 @@ export const AppTutorialPageDocument = {
               ],
             },
           },
-          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },
@@ -4621,6 +4621,7 @@ export const AppTestTutorialColumnsPageDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "columns" },
@@ -4635,7 +4636,6 @@ export const AppTestTutorialColumnsPageDocument = {
               ],
             },
           },
-          { kind: "Field", name: { kind: "Name", value: "focusColumn" } },
         ],
       },
     },

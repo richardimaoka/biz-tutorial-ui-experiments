@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <div>
       <div>
-        <NextButton href={`/test/navigation?param=${i}`} />
+        {/* <NextButton href={`/test/navigation?param=${i}`} /> */}
         <PrevButton href={`/test/navigation?param=${i}`} />
       </div>
       <div>
