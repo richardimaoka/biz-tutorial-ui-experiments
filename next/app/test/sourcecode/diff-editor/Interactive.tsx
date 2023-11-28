@@ -1,8 +1,8 @@
 "use client";
 
-import { DiffEditorBare } from "@/app/components/sourcecode2/diff-editor/DiffEditorBare";
+import { DiffEditorBare } from "@/app/components/sourcecode/diff-editor/DiffEditorBare";
 import { useState } from "react";
-import { SourceCodeEditor } from "@/app/components/sourcecode2/openfile/editor/SourceCodeEditor";
+import { SourceCodeEditor } from "@/app/components/sourcecode/openfile/editor/SourceCodeEditor";
 
 interface Props {
   original: string;

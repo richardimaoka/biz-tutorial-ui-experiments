@@ -1,4 +1,4 @@
-import { GqlSourceCodeColumn } from "../../sourcecode2/GqlSourceCodeColumn";
+import { GqlSourceCodeColumn } from "../../sourcecode/GqlSourceCodeColumn";
 import { GqlTerminalColumn } from "../../terminal/GqlTerminalColumn";
 import styles from "./GqlColumnWrapper.module.css";
 
