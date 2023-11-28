@@ -3,6 +3,7 @@ import styles from "./GqlNavigation.module.css";
 import { HandleKeyEvents } from "./HandleKeyEvents";
 import { HandleTrivial } from "./HandleTrivial";
 import { NextButton } from "./NextButton";
+import { PrevButton } from "./PrevButton";
 
 const fragmentDefinition = graphql(`
   fragment GqlNavigation on Page {
@@ -31,6 +32,7 @@ export function GqlNavigation(props: Props) {
     //   top: "0%",
     // }}
     >
+      {fragment.prevStep && <PrevButton prevStep={fragment.prevStep} />}
       {fragment.nextStep && <NextButton nextStep={fragment.nextStep} />}
       <HandleKeyEvents
         tutorial={props.tutorial}

@@ -6,6 +6,11 @@
   background-color: var(--color-theme-transparent-white);
   color: var(--color-primary-text);
   border-style: none;
+
+  /* TODO: remove - experimental positioning */
+  position: absolute;
+  top: 40%;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {

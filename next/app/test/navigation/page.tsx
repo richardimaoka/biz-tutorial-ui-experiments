@@ -12,7 +12,7 @@ export default function Page() {
     <div>
       <div>
         {/* <NextButton href={`/test/navigation?param=${i}`} /> */}
-        <PrevButton href={`/test/navigation?param=${i}`} />
+        {/* <PrevButton href={`/test/navigation?param=${i}`} /> */}
       </div>
       <div>
         <PlayButton onClick={() => {}} />
