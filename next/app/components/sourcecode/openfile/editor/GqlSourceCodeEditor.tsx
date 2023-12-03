@@ -28,7 +28,6 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
-  skipAnimation?: boolean;
 }
 
 /**
@@ -44,7 +43,6 @@ export function GqlSourceCodeEditor(props: Props) {
     ? {
         id: fragment.editSequence.id,
         edits: fragment.editSequence.edits ? fragment.editSequence.edits : [],
-        skipAnimation: props.skipAnimation,
       }
     : undefined;
 
@@ -52,7 +50,7 @@ export function GqlSourceCodeEditor(props: Props) {
   const oldContent = fragment.oldContent ? fragment.oldContent : "";
   const currentContent = fragment.content ? fragment.content : "";
 
-  const doAnimate = editSequence && !props.skipAnimation; // editSequence exists, and not skipping animation
+  const doAnimate = editSequence; // editSequence exists
   const editorText = doAnimate ? currentContent : oldContent;
 
   // editor language
