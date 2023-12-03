@@ -1,4 +1,6 @@
 {
+  "columnName": "Terminal",
+  "columnDisplayName": "terminal",
   "column": {
     "__typename": "TerminalColumn",
     "_placeholder": "placeholder",
@@ -10,7 +12,5 @@
         "tooltip": null
       }
     ]
-  },
-  "columnName": "Terminal",
-  "columnDisplayName": "terminal"
+  }
 }

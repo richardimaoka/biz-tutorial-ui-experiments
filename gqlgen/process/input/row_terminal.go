@@ -415,6 +415,36 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns s
 	return step
 }
 
+func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+	subId := "terminalCleanupStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := state.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: state.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: state.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "",
+		},
+		AnimationFields: state.AnimationFields{
+			IsTrivial: true, //always true
+		},
+		// No ModalFields, as it is a trivial step
+		ColumnFields: currentColumns,
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalCd,
+		},
+	}
+
+	// No tooltip - trivial step and no tooltip to show
+
+	return step
+}
+
 /**
  * Function(s) to break down a row to steps
  */
@@ -443,6 +473,10 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *Col
 		outputStep := terminalOutputStep(r, finder, currentColumns)
 		steps = append(steps, outputStep)
 	}
+
+	// cleanup step
+	step := terminalCleanUpStep(r, finder, currentColumns)
+	steps = append(steps, step)
 
 	return steps
 }
