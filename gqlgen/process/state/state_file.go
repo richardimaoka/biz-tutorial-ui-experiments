@@ -136,6 +136,10 @@ func (f *File) markRenamed(oldFilePath string) {
 	f.isRenamed = false
 }
 
+func (f *File) clearEdits() {
+	f.edits = nil
+}
+
 func toEditSequence(edits []edits.SingleEditOperation) *model.EditSequence {
 	if edits == nil || len(edits) == 0 {
 		return nil

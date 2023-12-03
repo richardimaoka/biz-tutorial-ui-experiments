@@ -22,12 +22,14 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 }
 
 func (c *SourceColumn) Commit(fields *SourceFields) error {
+	funcName := "Commit()"
+
 	var err error
 
 	// process commit
 	err = c.sourceCode.forwardCommit(fields.Commit)
 	if err != nil {
-		return fmt.Errorf("Commit() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	// open file
@@ -47,7 +49,7 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 		}
 	}
 	if err != nil {
-		return fmt.Errorf("Commit() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil
@@ -57,6 +59,8 @@ func (c *SourceColumn) ShowFileTree() {
 }
 
 func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
+	funcName := "SourceOpen()"
+
 	// open file
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
@@ -75,13 +79,15 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
 		}
 	}
 	if err != nil {
-		return fmt.Errorf("SourceOpen() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil
 }
 
 func (c *SourceColumn) SourceError(fields *SourceFields) error {
+	funcName := "SourceError()"
+
 	// open file
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
@@ -93,7 +99,7 @@ func (c *SourceColumn) SourceError(fields *SourceFields) error {
 		fields.SourceTooltipLineNumber,
 	)
 	if err != nil {
-		return fmt.Errorf("SourceError() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil
@@ -101,15 +107,24 @@ func (c *SourceColumn) SourceError(fields *SourceFields) error {
 }
 
 func (c *SourceColumn) CleanUp(fields *SourceFields) error {
-	err := c.sourceCode.ClearTooltip()
+	funcName := "CleanUp()"
+
+	err := c.sourceCode.clearTooltip()
 	if err != nil {
-		return fmt.Errorf("CleanUp() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
+	}
+
+	err = c.sourceCode.clearEdits()
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
+	funcName := "Update()"
+
 	var err error
 	switch fields.SourceStepType {
 	case FileTree:
@@ -128,7 +143,7 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 
 	// check if error happend
 	if err != nil {
-		return fmt.Errorf("SourceColumn Update() failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil

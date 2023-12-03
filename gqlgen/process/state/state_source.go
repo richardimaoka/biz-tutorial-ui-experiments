@@ -21,6 +21,7 @@ type SourceCode struct {
 	rootDir         *Directory
 	step            string
 	tooltipFilePath string
+	editedFiles     []string
 
 	// metadata, can be set from caller anytime
 	DefaultOpenFilePath string
@@ -72,6 +73,7 @@ func (s *SourceCode) forwardCommit(commitHash string) error {
 
 func (s *SourceCode) initialCommit(commitHash string) error {
 	funcName := "initialCommit()"
+
 	files, err := commitFiles(s.repo, commitHash)
 	if err != nil {
 		return fmt.Errorf("%s failed, %s", funcName, err)
@@ -123,6 +125,10 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 func (s *SourceCode) processPatch(patch *object.Patch) error {
 	funcName := "processPatch()"
 
+	if s.editedFiles != nil {
+		return fmt.Errorf("%s failed, `editedFiles` in source code is non-nil, before processing", funcName)
+	}
+
 	for _, p := range patch.FilePatches() {
 		from, to := p.Files() // See Files() method's comment about when 'from' and 'to' become nil
 		if from == nil {
@@ -148,26 +154,28 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 			file.markRenamed(from.Path())
 		} else {
 			// Updated
-			file, err := s.rootDir.findFile(to.Path())
+			toFilePath := to.Path()
+			toFile, err := s.rootDir.findFile(toFilePath)
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
-			fileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
+			fromFileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
-			fileObj := object.NewFile(from.Path(), from.Mode(), fileBlob)
-			oldContents, err := fileObj.Contents()
+			fromFileObj := object.NewFile(from.Path(), from.Mode(), fromFileBlob)
+			oldContents, err := fromFileObj.Contents()
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
 			filePatch := gitwrap.ToFilePatch(p)
 			editOps := edits.ToOperations(filePatch.Chunks)
+			toFile.markUpdated(oldContents, editOps)
 
-			file.markUpdated(oldContents, editOps)
+			s.editedFiles = append(s.editedFiles, toFilePath)
 		}
 	}
 
@@ -215,8 +223,8 @@ func (s *SourceCode) appendTooltipContents(additionalContents string) error {
 	return nil
 }
 
-func (s *SourceCode) ClearTooltip() error {
-	funcName := "ClearTooltip()"
+func (s *SourceCode) clearTooltip() error {
+	funcName := "clearTooltip()"
 
 	if s.tooltipFilePath != "" {
 		file, err := s.rootDir.findFile(s.tooltipFilePath)
@@ -231,6 +239,23 @@ func (s *SourceCode) ClearTooltip() error {
 		file.tooltip = nil
 		s.tooltipFilePath = ""
 	}
+
+	return nil
+}
+
+func (s *SourceCode) clearEdits() error {
+	funcName := "clearEdits()"
+
+	for _, filePath := range s.editedFiles {
+		file, err := s.rootDir.findFile(filePath)
+		if err != nil {
+			return fmt.Errorf("%s failed, filePath = '%s' not found", funcName, filePath)
+		}
+
+		file.clearEdits()
+	}
+
+	s.editedFiles = nil
 
 	return nil
 }
