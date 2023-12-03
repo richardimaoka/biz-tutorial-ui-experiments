@@ -24,13 +24,16 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 func (c *SourceColumn) Commit(fields *SourceFields) error {
 	var err error
 
+	// process commit
 	err = c.sourceCode.forwardCommit(fields.Commit)
 	if err != nil {
-		return err
+		return fmt.Errorf("Commit() failed, %s", err)
 	}
 
+	// open file
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
+	// tooltip
 	if fields.SourceTooltipContents != "" {
 		if fields.SourceTooltipIsAppend {
 			err = c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
@@ -43,16 +46,21 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 			)
 		}
 	}
+	if err != nil {
+		return fmt.Errorf("Commit() failed, %s", err)
+	}
 
-	return err
+	return nil
 }
 
 func (c *SourceColumn) ShowFileTree() {
 }
 
 func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
+	// open file
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
+	// tooltip
 	var err error
 	if fields.SourceTooltipContents != "" {
 		if fields.SourceTooltipIsAppend {
@@ -66,19 +74,39 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
 			)
 		}
 	}
+	if err != nil {
+		return fmt.Errorf("SourceOpen() failed, %s", err)
+	}
 
-	return err
+	return nil
 }
 
 func (c *SourceColumn) SourceError(fields *SourceFields) error {
+	// open file
 	c.sourceCode.openFile(fields.DefaultOpenFilePath)
 
-	return c.sourceCode.newTooltip(
+	// tooltip
+	err := c.sourceCode.newTooltip(
 		fields.DefaultOpenFilePath,
 		fields.SourceTooltipContents,
 		SourceCodeTooltipTiming(fields.SourceTooltipTiming),
 		fields.SourceTooltipLineNumber,
 	)
+	if err != nil {
+		return fmt.Errorf("SourceError() failed, %s", err)
+	}
+
+	return nil
+
+}
+
+func (c *SourceColumn) CleanUp(fields *SourceFields) error {
+	err := c.sourceCode.ClearTooltip()
+	if err != nil {
+		return fmt.Errorf("CleanUp() failed, %s", err)
+	}
+
+	return nil
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
@@ -94,18 +122,16 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 		err = c.SourceError(fields)
 	case SourceCommit:
 		err = c.Commit(fields)
+	case SourceCleanUp:
+		err = c.CleanUp(fields)
 	}
 
 	// check if error happend
 	if err != nil {
-		return fmt.Errorf("SourceCode Update() failed, %s", err)
+		return fmt.Errorf("SourceColumn Update() failed, %s", err)
 	}
 
 	return nil
-}
-
-func (c *SourceColumn) CleanUp() error {
-	return c.sourceCode.ClearTooltip()
 }
 
 func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn {
