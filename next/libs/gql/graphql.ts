@@ -300,6 +300,7 @@ export type GqlOpenFilePaneFragment = ({ __typename: "OpenFile" } & {
 export type GqlSourceCodeEditorFragment = {
   __typename: "OpenFile";
   content?: string | null;
+  oldContent?: string | null;
   language?: string | null;
   editSequence?: {
     __typename: "EditSequence";
@@ -1311,6 +1312,7 @@ export const GqlSourceCodeEditorFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -1426,6 +1428,7 @@ export const GqlOpenFilePaneFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -1636,6 +1639,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -2025,6 +2029,7 @@ export const GqlColumnWrapperFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -2463,6 +2468,7 @@ export const GqlColumnWrappersFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -2990,6 +2996,7 @@ export const GqlTutorialComponentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -3624,6 +3631,7 @@ export const AppTutorialPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",
@@ -4431,6 +4439,7 @@ export const AppTestTutorialColumnsPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "oldContent" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
           {
             kind: "Field",

@@ -20,7 +20,6 @@ interface Props {
   editSequence?: {
     id: string;
     edits: EditOperation[];
-    skipAnimation?: boolean;
   };
   tooltip?: {
     lineNumber: number;

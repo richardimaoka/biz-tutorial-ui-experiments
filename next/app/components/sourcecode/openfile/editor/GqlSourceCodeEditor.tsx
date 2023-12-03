@@ -4,6 +4,7 @@ import { SourceCodeEditor } from "./SourceCodeEditor";
 const fragmentDefinition = graphql(`
   fragment GqlSourceCodeEditor on OpenFile {
     content
+    oldContent
     language
     editSequence {
       id
@@ -38,10 +39,6 @@ interface Props {
 export function GqlSourceCodeEditor(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  // basic editor props
-  const editorText = fragment.content ? fragment.content : "";
-  const language = fragment.language ? fragment.language : "";
-
   // edit sequence props
   const editSequence = fragment.editSequence
     ? {
@@ -50,6 +47,16 @@ export function GqlSourceCodeEditor(props: Props) {
         skipAnimation: props.skipAnimation,
       }
     : undefined;
+
+  // editor text
+  const oldContent = fragment.oldContent ? fragment.oldContent : "";
+  const currentContent = fragment.content ? fragment.content : "";
+
+  const doAnimate = editSequence && !props.skipAnimation; // editSequence exists, and not skipping animation
+  const editorText = doAnimate ? currentContent : oldContent;
+
+  // editor language
+  const language = fragment.language ? fragment.language : "";
 
   // tooltip props
   const tooltip = fragment.tooltip

@@ -1,5 +1,5 @@
 import { editor } from "monaco-editor";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Custm hook to handle @param `editSequence` props update
@@ -14,7 +14,6 @@ export function useEditSequence(
   editSequence?: {
     id: string;
     edits: editor.IIdentifiedSingleEditOperation[];
-    skipAnimation?: boolean;
   }
 ) {
   // Save the ID of the last edit to clear previous edits, upon editSequence change
@@ -46,11 +45,7 @@ export function useEditSequence(
           }
 
           // execute edits
-          if (editSequence.skipAnimation) {
-            executeEditsStatic(editorInstance, edits, markCompletion);
-          } else {
-            executeEditsAnimation(editorInstance, edits, markCompletion);
-          }
+          executeEdits(editorInstance, edits, markCompletion);
 
           // save the edit-made flag
           lastEditID.current = editSequence.id;
@@ -93,32 +88,12 @@ function executeEditCallback(
   }
 }
 
-function executeEditsStatic(
+function executeEdits(
   editorInstance: editor.IStandaloneCodeEditor,
   edits: editor.IIdentifiedSingleEditOperation[],
   markCompletion: () => void
 ) {
-  for (const e of edits) {
-    // for-loop is necessary - cannnot pass-in the whole `edits` to executeEdits()
-    // in one-shot, because that could cause the below error:
-    //   Error: Overlapping ranges are not allowed!
-    executeEditCallback(editorInstance, () => {
-      const result = editorInstance.executeEdits("", [e]);
-      if (!result) {
-        // TODO: throw error to trigger error.tsx
-        console.log("executeEdits for monaco editor failed!");
-      }
-    });
-  }
-  markCompletion();
-}
-
-function executeEditsAnimation(
-  editorInstance: editor.IStandaloneCodeEditor,
-  edits: editor.IIdentifiedSingleEditOperation[],
-  markCompletion: () => void
-) {
-  const setTimeoutInterval = 20; // milliseconds
+  const setTimeoutInterval = 200; // milliseconds
 
   function executeAtomicEdit(at: number) {
     executeEditCallback(editorInstance, () => {
