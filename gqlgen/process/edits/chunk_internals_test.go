@@ -334,13 +334,15 @@ func TestToChunksToDelete(t *testing.T) {
 		{
 			TypingPosition{LineNumber: 1, Column: 1},
 			gitwrap.Chunk{
+				//                 1         2         3          4         5          6
+				//        123456789012345678901234567890123 456789012345678901234 567890
 				Content: "import Editor, { OnChange } from \"@monaco-editor/react\";",
 				Type:    "Delete",
 			},
 			[]ChunkToDelete{
 				{
 					Content:       "import Editor, { OnChange } from \"@monaco-editor/react\";",
-					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 56},
+					RangeToDelete: RangeToDelete{StartLineNumber: 1, EndLineNumber: 1, StartColumn: 1, EndColumn: 57 /* for Delete, EndColumn = last char + 1, the `+` is important */},
 				},
 			},
 		},

@@ -167,7 +167,8 @@ func lineToChunksToDelete(lineToDelete SingleLineChange, pos TypingPosition) (Ty
 				StartLineNumber: pos.LineNumber,
 				EndLineNumber:   pos.LineNumber,
 				StartColumn:     pos.Column,
-				EndColumn:       pos.Column + nChars - 1,
+				// Character at EndColumn is NOT deleted, so it is `+ nChars`, not `+ nChars - 1`
+				EndColumn: pos.Column + nChars,
 			},
 		}
 		chunks = append(chunks, c)
