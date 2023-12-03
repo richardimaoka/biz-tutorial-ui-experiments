@@ -14,7 +14,9 @@ export function ColumnCarousel(props: Props) {
   const searchParams = useSearchParams();
 
   const columnParam = searchParams.get("column");
+  // prefer the query parameter, if no query parameter, then default focus from GraphQL
   const currentColumn = columnParam ? columnParam : props.defaultFocusColumn;
+
   const foundIndex = props.columnNames.findIndex((c) => c === currentColumn);
   const currentIndex = foundIndex > -1 ? foundIndex : 0;
 

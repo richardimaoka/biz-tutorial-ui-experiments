@@ -25,7 +25,6 @@ export function GqlColumnTabs(props: Props) {
   }
 
   const columns = nonNullArray(fragment.columns);
-  console.log(columns);
   const focusColumn = fragment.focusColumn ? fragment.focusColumn : "";
 
   return (
