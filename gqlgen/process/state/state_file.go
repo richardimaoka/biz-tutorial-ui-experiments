@@ -137,7 +137,9 @@ func (f *File) markRenamed(oldFilePath string) {
 }
 
 func toEditSequence(edits []edits.SingleEditOperation) *model.EditSequence {
-	id := uuid.NewString()
+	if edits == nil || len(edits) == 0 {
+		return nil
+	}
 
 	var monacoEdits []*model.MonacoEditOperation
 	for _, e := range edits {
@@ -152,6 +154,8 @@ func toEditSequence(edits []edits.SingleEditOperation) *model.EditSequence {
 			Range: &editRange,
 		})
 	}
+
+	id := uuid.NewString()
 
 	return &model.EditSequence{
 		ID:    id,

@@ -62,12 +62,15 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		if err := page.IncrementStep(); err != nil {
 			return err
 		}
+		stepId := page.CurrentStepId()
+
+		// PUT a debug breakpoint `stepId == "xxxx-xxxx-xxxxxxx"` here for a particular step id
 		if err := page.ProcessCurrentStep(); err != nil {
 			return err
 		}
 		gqlModel := page.ToGraphQL()
 
-		targetFile := fmt.Sprintf("%s/%s.json", targetDir, page.CurrentStepId())
+		targetFile := fmt.Sprintf("%s/%s.json", targetDir, stepId)
 		if err := jsonwrap.WriteJsonToFile(gqlModel, targetFile); err != nil {
 			return err
 		}
