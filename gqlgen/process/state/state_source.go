@@ -37,16 +37,18 @@ func NewSourceCode(repo *git.Repository, projectDir, tutorial string) *SourceCod
 }
 
 func commitFiles(repo *git.Repository, commitHash string) (Files, error) {
+	funcName := "commitFiles()"
+
 	fileObjs, err := gitwrap.GetCommitFiles(repo, commitHash)
 	if err != nil {
-		return nil, fmt.Errorf("commitFiles failed, %s", err)
+		return nil, fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	var files Files
 	for _, fileObj := range fileObjs {
 		file, err := fileUnChanged(&fileObj, fileObj.Name)
 		if err != nil {
-			return nil, fmt.Errorf("commitFiles failed, %s", err)
+			return nil, fmt.Errorf("%s failed, %s", funcName, err)
 		}
 
 		files = append(files, file)
@@ -69,14 +71,15 @@ func (s *SourceCode) forwardCommit(commitHash string) error {
 }
 
 func (s *SourceCode) initialCommit(commitHash string) error {
+	funcName := "initialCommit()"
 	files, err := commitFiles(s.repo, commitHash)
 	if err != nil {
-		return fmt.Errorf("initialCommit failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	s.rootDir, err = constructDirectory(files)
 	if err != nil {
-		return fmt.Errorf("initialCommit failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	// Increment the commit
@@ -85,61 +88,80 @@ func (s *SourceCode) initialCommit(commitHash string) error {
 }
 
 func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
+	funcName := "nonInitialCommit()"
+
 	files, err := commitFiles(s.repo, nextCommitHash)
 	if err != nil {
-		return fmt.Errorf("nonInitialCommit failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	patch, err := gitwrap.GetPatch(s.repo, s.commitHash, nextCommitHash)
 	if err != nil {
-		return fmt.Errorf("nonInitialCommit failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
+	// Construct the root directory from the next commit...
 	s.rootDir, err = constructDirectory(files)
 	if err != nil {
-		return fmt.Errorf("nonInitialCommit failed, %s", err)
+		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
-	// this calculates backword - from current to prev, but it makes the logic so much simpler than forward calculation
+	// ...then update files with the patch between current and next
+	err = s.processPatch(patch)
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", funcName, err)
+	}
+
+	// Increment the commit
+	s.commitHash = nextCommitHash
+	return nil
+}
+
+// This calculates backword - (i.e.) from current commit to prev commit,
+// which might feel counter intuitive, but it makes the logic so much
+// simpler than forward calculation
+func (s *SourceCode) processPatch(patch *object.Patch) error {
+	funcName := "processPatch()"
+
 	for _, p := range patch.FilePatches() {
 		from, to := p.Files() // See Files() method's comment about when 'from' and 'to' become nil
 		if from == nil {
-			//added
+			// Added
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 			file.markAdded()
 		} else if to == nil {
-			// deleted
+			// Deleted
 			file, err := s.rootDir.findFile(from.Path())
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 			file.markDeleted()
 		} else if from.Path() != to.Path() {
-			// renamed
+			// Renamed
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 			file.markRenamed(from.Path())
 		} else {
-			// updated
+			// Updated
 			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
 			fileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
 			fileObj := object.NewFile(from.Path(), from.Mode(), fileBlob)
 			oldContents, err := fileObj.Contents()
 			if err != nil {
-				return fmt.Errorf("nonInitialCommit failed, %s", err)
+				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
 			filePatch := gitwrap.ToFilePatch(p)
@@ -149,8 +171,6 @@ func (s *SourceCode) nonInitialCommit(nextCommitHash string) error {
 		}
 	}
 
-	// Increment the commit
-	s.commitHash = nextCommitHash
 	return nil
 }
 
@@ -159,9 +179,11 @@ func (s *SourceCode) openFile(filePath string) {
 }
 
 func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTooltipTiming, lineNumber int) error {
+	funcName := "newTooltip()"
+
 	file, err := s.rootDir.findFile(filePath)
 	if err != nil {
-		return fmt.Errorf("newTooltip() failed, filePath = '%s' not found, %s", filePath, err)
+		return fmt.Errorf("%s failed, filePath = '%s' not found, %s", funcName, filePath, err)
 	}
 
 	file.tooltip = &SourceCodeTooltip{
@@ -174,13 +196,15 @@ func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTool
 }
 
 func (s *SourceCode) appendTooltipContents(additionalContents string) error {
+	funcName := "appendTooltipContents()"
+
 	file, err := s.rootDir.findFile(s.tooltipFilePath)
 	if err != nil {
-		return fmt.Errorf("appendTooltipContents() failed, filePath = '%s' not found, %s", s.tooltipFilePath, err)
+		return fmt.Errorf("%s failed, filePath = '%s' not found, %s", funcName, s.tooltipFilePath, err)
 	}
 
 	if file.tooltip == nil {
-		return fmt.Errorf("appendTooltipContents() failed, filePath = '%s' has no tooltip", s.tooltipFilePath)
+		return fmt.Errorf("%s failed, filePath = '%s' not found", funcName, s.tooltipFilePath)
 	}
 
 	file.tooltip.markdownBody += "\n" + additionalContents
@@ -190,14 +214,16 @@ func (s *SourceCode) appendTooltipContents(additionalContents string) error {
 }
 
 func (s *SourceCode) ClearTooltip() error {
+	funcName := "ClearTooltip()"
+
 	if s.tooltipFilePath != "" {
 		file, err := s.rootDir.findFile(s.tooltipFilePath)
 		if err != nil {
-			return fmt.Errorf("ClearTooltip() failed, filePath = '%s' not found, %s", s.tooltipFilePath, err)
+			return fmt.Errorf("%s failed, filePath = '%s' not found, %s", funcName, s.tooltipFilePath, err)
 		}
 
 		if file.tooltip == nil {
-			return fmt.Errorf("ClearTooltip() failed, filePath = '%s' is supposed to have a tooltip, but not", s.tooltipFilePath)
+			return fmt.Errorf("%s failed, filePath = '%s' not found", funcName, s.tooltipFilePath)
 		}
 
 		file.tooltip = nil
