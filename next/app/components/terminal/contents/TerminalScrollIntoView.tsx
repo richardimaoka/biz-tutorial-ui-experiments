@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 
 function ExtraPadding() {
-  return <div style={{ height: "50px" }} />;
+  return <div style={{ height: "150px" }} />;
 }
 
 interface Props {
