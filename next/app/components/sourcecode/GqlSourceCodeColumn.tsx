@@ -17,6 +17,7 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
+  defaultFocusColumn?: string;
 }
 
 export function GqlSourceCodeColumn(props: Props) {
@@ -27,7 +28,10 @@ export function GqlSourceCodeColumn(props: Props) {
       <GqlFileTreePane step="" fragment={fragment.sourceCode} />
       {/* TODO: display an empty open file pane instead of <></> if there is no open */}
       {fragment.sourceCode.openFile && (
-        <GqlOpenFilePane fragment={fragment.sourceCode.openFile} />
+        <GqlOpenFilePane
+          fragment={fragment.sourceCode.openFile}
+          defaultFocusColumn={props.defaultFocusColumn}
+        />
       )}
     </div>
   );

@@ -25,7 +25,7 @@ export function GqlColumnTabs(props: Props) {
   }
 
   const columns = nonNullArray(fragment.columns);
-  const focusColumn = fragment.focusColumn ? fragment.focusColumn : "";
+  const defaultFocusColumn = fragment.focusColumn ? fragment.focusColumn : "";
 
   return (
     <div className={styles.component}>
@@ -34,7 +34,7 @@ export function GqlColumnTabs(props: Props) {
           key={c.columnName}
           fragment={c}
           tabIndex={index}
-          defaultFocusColumn={focusColumn}
+          defaultFocusColumn={defaultFocusColumn}
         />
       ))}
     </div>

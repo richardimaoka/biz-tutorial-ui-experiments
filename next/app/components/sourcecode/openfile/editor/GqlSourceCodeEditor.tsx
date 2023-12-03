@@ -1,5 +1,9 @@
+// The component of this file needs to be a SERVER component,
+// See the comment below, at the function signature of the component function
+
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { SourceCodeEditor } from "./SourceCodeEditor";
+import { EditorTooltip } from "../tooltip/EditorTooltip";
+import { SourceCodeAnimationHandler } from "./SourceCodeAnimationHandler";
 
 const fragmentDefinition = graphql(`
   fragment GqlSourceCodeEditor on OpenFile {
@@ -28,12 +32,18 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
+  defaultFocusColumn?: string;
 }
 
 /**
  * GraphQL-based component calling monaco-editor React component.
  * The purpose of this component is to translate GraphQL fragment
  * into props of the monaco-editor React component.
+ *
+ * *** CAUTION ***
+ * The component of this file needs to be a SERVER component,
+ * since the below calls <EditorTooltip>, a SERVER component which calls async/await internally
+ * for makrdown processing
  */
 export function GqlSourceCodeEditor(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
@@ -46,12 +56,9 @@ export function GqlSourceCodeEditor(props: Props) {
       }
     : undefined;
 
-  // editor text
-  const oldContent = fragment.oldContent ? fragment.oldContent : "";
-  const currentContent = fragment.content ? fragment.content : "";
-
-  const doAnimate = editSequence; // editSequence exists
-  const editorText = doAnimate ? currentContent : oldContent;
+  const oldContents = fragment.oldContent ? fragment.oldContent : "";
+  console.log("oldContents", oldContents);
+  const currentContents = fragment.content ? fragment.content : "";
 
   // editor language
   const language = fragment.language ? fragment.language : "";
@@ -59,17 +66,24 @@ export function GqlSourceCodeEditor(props: Props) {
   // tooltip props
   const tooltip = fragment.tooltip
     ? {
-        ...fragment.tooltip,
-        timing: fragment.tooltip.timing ? fragment.tooltip.timing : "END", //default timing is end, as there could be edits
+        lineNumber: fragment.tooltip.lineNumber,
+        //default timing is "END", as there could be edits
+        timing: fragment.tooltip.timing ? fragment.tooltip.timing : "END",
+        children: (
+          // Convert the markdownBody string into a React component
+          <EditorTooltip markdownBody={fragment.tooltip.markdownBody} />
+        ),
       }
     : undefined;
 
   return (
-    <SourceCodeEditor
-      editorText={editorText}
+    <SourceCodeAnimationHandler
+      currentContents={currentContents}
+      oldContents={oldContents}
       language={language}
       editSequence={editSequence}
       tooltip={tooltip}
+      defaultFocusColumn={props.defaultFocusColumn}
     />
   );
 }

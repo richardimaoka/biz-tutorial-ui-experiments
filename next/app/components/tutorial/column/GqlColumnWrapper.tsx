@@ -25,6 +25,7 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
+  defaultFocusColumn?: string;
 }
 
 export function GqlColumnWrapper(props: Props): JSX.Element {
@@ -47,7 +48,10 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
     case "SourceCodeColumn":
       return (
         <div className={styles.component}>
-          <GqlSourceCodeColumn fragment={column} />
+          <GqlSourceCodeColumn
+            fragment={column}
+            defaultFocusColumn={props.defaultFocusColumn}
+          />
         </div>
       );
     case "BrowserColumn":

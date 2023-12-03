@@ -28,7 +28,9 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
 
   const columns = nonNullArray(fragment.columns);
   const columnNames = columns.map((c) => c.columnName);
-  const defaultFocusColumn = fragment.focusColumn ? fragment.focusColumn : "";
+  const defaultFocusColumn = fragment.focusColumn
+    ? fragment.focusColumn
+    : undefined;
 
   return (
     <ColumnCarousel
@@ -38,7 +40,10 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
       <div className={styles.component}>
         {columns.map((c) => (
           <div key={c.columnName} className={styles.column}>
-            <GqlColumnWrapper fragment={c} />
+            <GqlColumnWrapper
+              fragment={c}
+              defaultFocusColumn={defaultFocusColumn}
+            />
           </div>
         ))}
       </div>

@@ -11,6 +11,7 @@ const EditorInner = dynamic(
   }
 );
 import { editor } from "monaco-editor";
+import { ReactNode } from "react";
 
 export type EditOperation = editor.IIdentifiedSingleEditOperation;
 
@@ -23,10 +24,11 @@ interface Props {
   };
   tooltip?: {
     lineNumber: number;
-    markdownBody: string;
+    children: ReactNode;
     timing: "START" | "END";
-    hidden?: boolean;
-    offsetContent?: boolean;
+
+    // markdownBody: string;
+    // offsetContent?: boolean;
   };
 }
 
@@ -39,30 +41,13 @@ interface Props {
  *       async component (tooltip uses async/await for remark) cannot be called from client component
  */
 export function SourceCodeEditor(props: Props) {
-  /**
-   * If tooltip is passed and not-hidden, then render tooltip
-   * <EditorTooltip>, a server-side component needs to be called
-   * outiside <EditorInner>
-   */
-  const tooltip =
-    props.tooltip && !props.tooltip.hidden
-      ? {
-          lineNumber: props.tooltip.lineNumber,
-          children: (
-            // Convert the markdownBody string into a React component
-            <EditorTooltip markdownBody={props.tooltip?.markdownBody} />
-          ),
-          timing: props.tooltip.timing,
-        }
-      : undefined;
-
   return (
     <div className={styles.component}>
       <EditorInner
         editorText={props.editorText}
         language={props.language}
         editSequence={props.editSequence}
-        tooltip={tooltip}
+        tooltip={props.tooltip}
       />
     </div>
   );

@@ -7,7 +7,7 @@ import { Carousel } from "../../carousel/Carousel";
 interface Props {
   columnNames: string[];
   children: ReactNode;
-  defaultFocusColumn: string;
+  defaultFocusColumn?: string;
 }
 
 export function ColumnCarousel(props: Props) {
