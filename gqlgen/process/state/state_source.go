@@ -192,6 +192,8 @@ func (s *SourceCode) newTooltip(filePath, contents string, timing SourceCodeTool
 		lineNumber:   lineNumber,
 	}
 
+	s.tooltipFilePath = filePath
+
 	return nil
 }
 
@@ -227,9 +229,8 @@ func (s *SourceCode) ClearTooltip() error {
 		}
 
 		file.tooltip = nil
+		s.tooltipFilePath = ""
 	}
-
-	s.tooltipFilePath = ""
 
 	return nil
 }

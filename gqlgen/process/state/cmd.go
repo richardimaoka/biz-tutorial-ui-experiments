@@ -64,7 +64,8 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 		}
 		stepId := page.CurrentStepId()
 
-		// PUT a debug breakpoint `stepId == "xxxx-xxxx-xxxxxxx"` here for a particular step id
+		// PUT a debug breakpoint here for a particular step id
+		// stepId == xxxxxxx
 		if err := page.ProcessCurrentStep(); err != nil {
 			return err
 		}
