@@ -8,6 +8,7 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 type SourceCode struct {
@@ -160,7 +161,18 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
+			toFileBlob, err := object.GetBlob(s.repo.Storer, to.Hash())
+			if err != nil {
+				return fmt.Errorf("%s failed, %s", funcName, err)
+			}
+
 			fromFileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
+			if err != nil {
+				return fmt.Errorf("%s failed, %s", funcName, err)
+			}
+
+			toFileObj := object.NewFile(from.Path(), from.Mode(), toFileBlob)
+			currentContents, err := toFileObj.Contents()
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
@@ -171,8 +183,28 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
-			filePatch := gitwrap.ToFilePatch(p)
-			editOps := edits.ToOperations(filePatch.Chunks)
+			dmp := diffmatchpatch.New()
+			diffs := dmp.DiffMain(oldContents, currentContents, true)
+
+			var chunks []gitwrap.Chunk
+			for _, d := range diffs {
+				var chunkType string
+				switch d.Type {
+				case diffmatchpatch.DiffEqual:
+					chunkType = "Equal"
+				case diffmatchpatch.DiffInsert:
+					chunkType = "Add"
+				case diffmatchpatch.DiffDelete:
+					chunkType = "Delete"
+				default:
+					return fmt.Errorf("%s failed, chunkType = '%s' is invalid for file = %s", funcName, d.Type, toFilePath)
+				}
+
+				chunks = append(chunks, gitwrap.Chunk{Type: chunkType, Content: d.Text})
+			}
+
+			// filePatch := gitwrap.ToFilePatch(p)
+			editOps := edits.ToOperations(chunks)
 			toFile.markUpdated(oldContents, editOps)
 
 			s.editedFiles = append(s.editedFiles, toFilePath)

@@ -224,7 +224,7 @@ func moveTypingPosition(chunk gitwrap.Chunk, pos TypingPosition) TypingPosition 
 
 	return TypingPosition{
 		LineNumber: pos.LineNumber + len(split) - 1,
-		Column:     utf8.RuneCountInString(lastLineChange) + 1,
+		Column:     pos.Column + utf8.RuneCountInString(lastLineChange),
 	}
 }
 

@@ -380,6 +380,19 @@ func TestToChunksToDelete(t *testing.T) {
 				},
 			},
 		},
+		{
+			TypingPosition{LineNumber: 2, Column: 15},
+			gitwrap.Chunk{
+				Content: "xe",
+				Type:    "Delete",
+			},
+			[]ChunkToDelete{
+				{
+					Content:       "xe",
+					RangeToDelete: RangeToDelete{StartLineNumber: 2, EndLineNumber: 2, StartColumn: 15, EndColumn: 17},
+				},
+			},
+		},
 	}
 
 	for index, c := range cases {
