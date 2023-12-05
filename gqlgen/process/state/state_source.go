@@ -8,7 +8,6 @@ import (
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
-	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 type SourceCode struct {
@@ -155,59 +154,41 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 			file.markRenamed(from.Path())
 		} else {
 			// Updated
-			toFilePath := to.Path()
-			toFile, err := s.rootDir.findFile(toFilePath)
-			if err != nil {
-				return fmt.Errorf("%s failed, %s", funcName, err)
-			}
 
+			// toFile - current contents
 			toFileBlob, err := object.GetBlob(s.repo.Storer, to.Hash())
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
-
-			fromFileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
-			if err != nil {
-				return fmt.Errorf("%s failed, %s", funcName, err)
-			}
-
 			toFileObj := object.NewFile(from.Path(), from.Mode(), toFileBlob)
 			currentContents, err := toFileObj.Contents()
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
+			// fromFile - old contents
+			fromFileBlob, err := object.GetBlob(s.repo.Storer, from.Hash())
+			if err != nil {
+				return fmt.Errorf("%s failed, %s", funcName, err)
+			}
 			fromFileObj := object.NewFile(from.Path(), from.Mode(), fromFileBlob)
 			oldContents, err := fromFileObj.Contents()
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
 
-			dmp := diffmatchpatch.New()
-			diffs := dmp.DiffMain(oldContents, currentContents, true)
-
-			var chunks []gitwrap.Chunk
-			for _, d := range diffs {
-				var chunkType string
-				switch d.Type {
-				case diffmatchpatch.DiffEqual:
-					chunkType = "Equal"
-				case diffmatchpatch.DiffInsert:
-					chunkType = "Add"
-				case diffmatchpatch.DiffDelete:
-					chunkType = "Delete"
-				default:
-					return fmt.Errorf("%s failed, chunkType = '%s' is invalid for file = %s", funcName, d.Type, toFilePath)
-				}
-
-				chunks = append(chunks, gitwrap.Chunk{Type: chunkType, Content: d.Text})
-			}
-
-			// filePatch := gitwrap.ToFilePatch(p)
+			// edit ops
+			chunks := edits.ToChunks(oldContents, currentContents)
 			editOps := edits.ToOperations(chunks)
+
+			// mark toFile update
+			toFile, err := s.rootDir.findFile(to.Path())
+			if err != nil {
+				return fmt.Errorf("%s failed, %s", funcName, err)
+			}
 			toFile.markUpdated(oldContents, editOps)
 
-			s.editedFiles = append(s.editedFiles, toFilePath)
+			s.editedFiles = append(s.editedFiles, to.Path())
 		}
 	}
 

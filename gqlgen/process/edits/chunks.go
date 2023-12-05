@@ -5,6 +5,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 type ChunkToAdd struct {
@@ -247,4 +248,42 @@ func processChunk(chunk gitwrap.Chunk, pos TypingPosition) (TypingPosition, []Si
 	}
 
 	return currentPos, ops
+}
+
+//
+// Externally exposed functions
+//
+func ToChunks(beforeText, afterText string) []gitwrap.Chunk {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(beforeText, afterText, true)
+
+	var chunks []gitwrap.Chunk
+	for _, d := range diffs {
+		var chunkType string
+		switch d.Type {
+		case diffmatchpatch.DiffEqual:
+			chunkType = "Equal"
+		case diffmatchpatch.DiffInsert:
+			chunkType = "Add"
+		case diffmatchpatch.DiffDelete:
+			chunkType = "Delete"
+		}
+
+		chunks = append(chunks, gitwrap.Chunk{Type: chunkType, Content: d.Text})
+	}
+
+	return chunks
+}
+
+func ToOperations(chunks []gitwrap.Chunk) []SingleEditOperation {
+	currentPos := TypingPosition{LineNumber: 1, Column: 1}
+
+	var ops []SingleEditOperation
+	for _, c := range chunks {
+		var newOps []SingleEditOperation
+		currentPos, newOps = processChunk(c, currentPos)
+		ops = append(ops, newOps...)
+	}
+
+	return ops
 }

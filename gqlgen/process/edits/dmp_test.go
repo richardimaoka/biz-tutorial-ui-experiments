@@ -6,30 +6,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/edits"
-	"github.com/sergi/go-diff/diffmatchpatch"
 )
-
-func A(beforeText, afterText string) []gitwrap.Chunk {
-	dmp := diffmatchpatch.New()
-	diffs := dmp.DiffMain(beforeText, afterText, true)
-
-	var chunks []gitwrap.Chunk
-	for _, d := range diffs {
-		var chunkType string
-		switch d.Type {
-		case diffmatchpatch.DiffEqual:
-			chunkType = "Equal"
-		case diffmatchpatch.DiffInsert:
-			chunkType = "Add"
-		case diffmatchpatch.DiffDelete:
-			chunkType = "Delete"
-		}
-
-		chunks = append(chunks, gitwrap.Chunk{Type: chunkType, Content: d.Text})
-	}
-
-	return chunks
-}
 
 func TestDmp(t *testing.T) {
 	cases := []struct {
@@ -55,7 +32,7 @@ func TestDmp(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			resultChunks := A(c.beforeText, c.afterText)
+			resultChunks := edits.ToChunks(c.beforeText, c.afterText)
 			if diff := cmp.Diff(c.expectedChunks, resultChunks); diff != "" {
 				t.Fatalf("mismatch (-expected +result):\n%s", diff)
 			}
@@ -97,7 +74,7 @@ func TestDmp2(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			chunks := A(c.beforeText, c.afterText)
+			chunks := edits.ToChunks(c.beforeText, c.afterText)
 			result := edits.ToOperations(chunks)
 			if diff := cmp.Diff(c.expected, result); diff != "" {
 				t.Fatalf("mismatch (-expected +result):\n%s", diff)
