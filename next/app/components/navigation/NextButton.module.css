@@ -35,3 +35,7 @@
     font-size: 16px;
   }
 }
+
+.disabled {
+  color: var(--color-theme-transparent-white);
+}

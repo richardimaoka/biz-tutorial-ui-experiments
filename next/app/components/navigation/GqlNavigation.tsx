@@ -22,7 +22,7 @@ export function GqlNavigation(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   // If isTrivial, user cannnot control prev/next navigatio
-  const allowUserNavigation = !fragment.isTrivial;
+  const disableUserNavigation = fragment.isTrivial === true;
 
   return (
     <nav
@@ -35,13 +35,19 @@ export function GqlNavigation(props: Props) {
     //   top: "0%",
     // }}
     >
-      {allowUserNavigation && fragment.prevStep && (
-        <PrevButton prevStep={fragment.prevStep} />
+      {fragment.prevStep && (
+        <PrevButton
+          prevStep={fragment.prevStep}
+          disabled={disableUserNavigation}
+        />
       )}
-      {allowUserNavigation && fragment.nextStep && (
-        <NextButton nextStep={fragment.nextStep} />
+      {fragment.nextStep && (
+        <NextButton
+          nextStep={fragment.nextStep}
+          disabled={disableUserNavigation}
+        />
       )}
-      {allowUserNavigation && (
+      {!disableUserNavigation && (
         <HandleKeyEvents
           tutorial={props.tutorial}
           prevStep={fragment.prevStep}
