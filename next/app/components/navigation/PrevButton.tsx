@@ -14,7 +14,7 @@ export function PrevButton(props: Props) {
     <Link href={pathname + "?step=" + props.prevStep}>
       <button className={styles.component}>
         <div className={styles.smartphone}>
-          <div>next</div>
+          <div>prev</div>
           <ChevronUpIcon />
         </div>
         <div className={styles.desktop}>
