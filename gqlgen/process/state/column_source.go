@@ -114,18 +114,17 @@ func (c *SourceColumn) CleanUp() error {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
-	err = c.sourceCode.clearEdits()
-	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
-	}
-
 	return nil
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
 	funcName := "Update()"
 
-	var err error
+	err := c.sourceCode.clearEdits()
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", funcName, err)
+	}
+
 	switch fields.SourceStepType {
 	case FileTree:
 		// no update is needed, just changing FocusColumn is fine
@@ -137,8 +136,6 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 		err = c.SourceError(fields)
 	case SourceCommit:
 		err = c.Commit(fields)
-	case SourceCleanUp:
-		err = c.CleanUp()
 	}
 
 	// check if error happend

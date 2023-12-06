@@ -34,12 +34,11 @@ type ColumnFields struct {
 type SourceStepType string
 
 const (
-	FileTree      SourceStepType = "fileTree"
-	SourceOpen    SourceStepType = "openFile"
-	SourceCommit  SourceStepType = "sourceCommit"
-	SourceError   SourceStepType = "error"
-	SourceMove    SourceStepType = "move"
-	SourceCleanUp SourceStepType = "cleanup"
+	FileTree     SourceStepType = "fileTree"
+	SourceOpen   SourceStepType = "openFile"
+	SourceCommit SourceStepType = "sourceCommit"
+	SourceError  SourceStepType = "error"
+	SourceMove   SourceStepType = "move"
 )
 
 type SourceTooltipFields struct {
@@ -69,7 +68,6 @@ const (
 	TerminalCd      TerminalStepType = "cd"
 	TerminalMove    TerminalStepType = "move"
 	TerminalOpen    TerminalStepType = "open"
-	TerminalCleanUp TerminalStepType = "cleanup"
 )
 
 type TerminalTooltipFields struct {

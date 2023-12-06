@@ -475,36 +475,6 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedC
 	return step
 }
 
-func cleanUpSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state.Step {
-	subId := fmt.Sprintf("cleanUpSourceCodeStep")
-	stepId := StepIdFinder.StepIdFor(parentStepId, subId)
-
-	step := state.Step{
-		// fields to make the step searchable for re-generation
-		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: parentStepId,
-			SubID:      subId,
-		},
-		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "",
-		},
-		AnimationFields: state.AnimationFields{
-			IsTrivial: true,
-		},
-		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
-		SourceFields: state.SourceFields{
-			SourceStepType: state.SourceCleanUp,
-		},
-	}
-
-	// No tooltip - trivial step and no tooltip to show
-
-	return step
-}
-
 /**
  * Function(s) to break down a row to steps
  */
@@ -539,10 +509,6 @@ func breakdownSourceCommitRow(
 		}
 	}
 
-	// cleanup step
-	step := cleanUpSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
-	steps = append(steps, step)
-
 	return steps, nil
 }
 
@@ -565,10 +531,6 @@ func breakdownSourceOpenRow(
 	step := openFileStep(r, finder, prevColumns.AllUsed, r.FilePath)
 	steps = append(steps, step)
 
-	// cleanup step
-	step = cleanUpSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
-	steps = append(steps, step)
-
 	return steps, nil
 }
 
@@ -589,10 +551,6 @@ func breakdownSourceErrorRow(
 
 	// open file step
 	step := openSourceErrorStep(r, finder, prevColumns.AllUsed, r.FilePath)
-	steps = append(steps, step)
-
-	// cleanup step
-	step = cleanUpSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
 	steps = append(steps, step)
 
 	return steps, nil
