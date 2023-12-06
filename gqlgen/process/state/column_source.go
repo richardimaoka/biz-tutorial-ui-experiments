@@ -106,7 +106,7 @@ func (c *SourceColumn) SourceError(fields *SourceFields) error {
 
 }
 
-func (c *SourceColumn) CleanUp(fields *SourceFields) error {
+func (c *SourceColumn) CleanUp() error {
 	funcName := "CleanUp()"
 
 	err := c.sourceCode.clearTooltip()
@@ -138,7 +138,7 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceCommit:
 		err = c.Commit(fields)
 	case SourceCleanUp:
-		err = c.CleanUp(fields)
+		err = c.CleanUp()
 	}
 
 	// check if error happend

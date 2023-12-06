@@ -181,12 +181,12 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 			chunks := edits.ToChunks(oldContents, currentContents)
 			editOps := edits.ToOperations(chunks)
 
-			// mark toFile update
-			toFile, err := s.rootDir.findFile(to.Path())
+			// mark file update
+			file, err := s.rootDir.findFile(to.Path())
 			if err != nil {
 				return fmt.Errorf("%s failed, %s", funcName, err)
 			}
-			toFile.markUpdated(oldContents, editOps)
+			file.markUpdated(oldContents, editOps)
 
 			s.editedFiles = append(s.editedFiles, to.Path())
 		}

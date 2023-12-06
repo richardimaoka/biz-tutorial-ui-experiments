@@ -56,37 +56,79 @@ func (p *Page) IncrementStep() error {
 	}
 }
 
-func (p *Page) ProcessCurrentStep() error {
+func (p *Page) cleanUp() error {
+	// If this is the very first step, no need to clean up
+	if !p.hasPrev() {
+		return nil
+	}
+
+	prevStep := p.steps[p.currentStepIndex-1]
 	currentStep := p.steps[p.currentStepIndex]
 
-	var err error
-	switch currentStep.FocusColumn {
+	// If prev step column is same as current step column, no need to clean up
+	if prevStep.FocusColumn == currentStep.FocusColumn {
+		return nil
+	}
+
+	// Here, prev step column != current step column, so clean up the prev column
+	switch prevStep.FocusColumn {
+	case SourceColumnType:
+		if p.sourceCodeColumn == nil {
+			return fmt.Errorf("failed to clean up as prev source column = nil")
+		}
+		return p.sourceCodeColumn.CleanUp()
+	case TerminalColumnType:
+		// if p.terminalColumn == nil {
+		// 	return fmt.Errorf("failed to clean up as prev source column = nil")
+		// }
+		// return p.terminalColumn.CleanUp()
+		return nil
+	case BrowserColumnType:
+		// if p.browserColumn == nil {
+		// 	return fmt.Errorf("failed to clean up as prev source column = nil")
+		// }
+		// return p.browserColumn.CleanUp()
+		return nil
+	default:
+		return nil
+	}
+}
+
+func (p *Page) processStep(step *Step) error {
+	switch step.FocusColumn {
 	case SourceColumnType:
 		if p.sourceCodeColumn == nil {
 			p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
 			p.columns = append(p.columns, p.sourceCodeColumn)
 		}
-		err = p.sourceCodeColumn.Update(&currentStep.SourceFields)
+		return p.sourceCodeColumn.Update(&step.SourceFields)
 
 	case TerminalColumnType:
 		if p.terminalColumn == nil {
 			p.terminalColumn = NewTerminalColumn()
 			p.columns = append(p.columns, p.terminalColumn)
 		}
-		err = p.terminalColumn.Update(currentStep.StepId, &currentStep.TerminalFields)
+		return p.terminalColumn.Update(step.StepId, &step.TerminalFields)
 
 	case BrowserColumnType:
 		if p.browserColumn == nil {
 			p.browserColumn = NewBrowserColumn()
 			p.columns = append(p.columns, p.browserColumn)
 		}
-		err = p.browserColumn.Update(&currentStep.BrowserFields)
+		return p.browserColumn.Update(&step.BrowserFields)
 
 	default:
-		err = fmt.Errorf("Failed to process step = '%s', column type = '%s' is not implemented", currentStep.StepId, currentStep.FocusColumn)
+		return fmt.Errorf("Failed to process step = '%s', column type = '%s' is not implemented", step.StepId, step.FocusColumn)
 	}
+}
 
-	// checi if error happend
+func (p *Page) ProcessCurrentStep() error {
+	// Clean up prev step if necessary
+	p.cleanUp()
+
+	// Process current step
+	currentStep := p.steps[p.currentStepIndex]
+	err := p.processStep(&currentStep)
 	if err != nil {
 		return fmt.Errorf("Failed to process step = '%s', %s", currentStep.StepId, err)
 	}
