@@ -57,7 +57,6 @@ export function GqlSourceCodeEditor(props: Props) {
     : undefined;
 
   const oldContents = fragment.oldContent ? fragment.oldContent : "";
-  console.log("oldContents", oldContents);
   const currentContents = fragment.content ? fragment.content : "";
 
   // editor language

@@ -32,14 +32,10 @@ export function SourceCodeAnimationHandler(props: Props) {
   const isSelected = currentColumn === "SourceCode";
   const doAnimate = props.editSequence && isSelected;
 
-  console.log("doAnimate source", doAnimate, currentColumn);
-
   // To animate, start from `editorText = oldContents`
   // then make animation with editSequence
   const editorText = doAnimate ? props.oldContents : props.currentContents;
   const editSequence = doAnimate ? props.editSequence : undefined;
-
-  console.log("editorText", editorText);
 
   return (
     <SourceCodeEditor
