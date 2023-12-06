@@ -19,7 +19,6 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
-  isAnimate: boolean;
 }
 
 export function GqlTerminalContents(props: Props) {
@@ -32,14 +31,8 @@ export function GqlTerminalContents(props: Props) {
   return (
     <div className={styles.component}>
       {fragment.entries.map((n, i) => (
-        <TerminalScrollIntoView
-          key={n.id}
-          doScroll={props.isAnimate && isLastEntry(i)}
-        >
-          <GqlTerminalEntryComponent
-            fragment={n}
-            animate={props.isAnimate && isLastEntry(i)}
-          />
+        <TerminalScrollIntoView key={n.id} doScroll={isLastEntry(i)}>
+          <GqlTerminalEntryComponent fragment={n} animate={isLastEntry(i)} />
           {
             // Terminal tooltip can be shown only at the bottom
             fragment.tooltip && isLastEntry(i) && (

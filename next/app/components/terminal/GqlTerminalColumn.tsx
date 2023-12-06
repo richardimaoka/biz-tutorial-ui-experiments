@@ -31,7 +31,7 @@ export function GqlTerminalColumn(props: Props) {
         />
       </div>
       <div className={styles.contents}>
-        <GqlTerminalContents fragment={selectTerminal} isAnimate={true} />
+        <GqlTerminalContents fragment={selectTerminal} />
       </div>
     </div>
   );
