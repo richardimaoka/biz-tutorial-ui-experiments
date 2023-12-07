@@ -4,6 +4,7 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { EditorTooltip } from "../tooltip/EditorTooltip";
 import { SourceCodeAnimationHandler } from "./SourceCodeAnimationHandler";
+import styles from "./GqlSourceCodeEditor.module.css";
 
 const fragmentDefinition = graphql(`
   fragment GqlSourceCodeEditor on OpenFile {
@@ -76,13 +77,16 @@ export function GqlSourceCodeEditor(props: Props) {
     : undefined;
 
   return (
-    <SourceCodeAnimationHandler
-      currentContents={currentContents}
-      oldContents={oldContents}
-      language={language}
-      editSequence={editSequence}
-      tooltip={tooltip}
-      defaultFocusColumn={props.defaultFocusColumn}
-    />
+    <div className={styles.component}>
+      <div className={styles.floating}>diff</div>
+      <SourceCodeAnimationHandler
+        currentContents={currentContents}
+        oldContents={oldContents}
+        language={language}
+        editSequence={editSequence}
+        tooltip={tooltip}
+        defaultFocusColumn={props.defaultFocusColumn}
+      />
+    </div>
   );
 }

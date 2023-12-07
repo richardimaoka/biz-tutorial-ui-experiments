@@ -1,0 +1,11 @@
+.component {
+  height: 100%;
+  position: relative;
+}
+
+.floating {
+  position: absolute;
+  z-index: 1;
+  right: 20px;
+  color: --var(--color-primary-text);
+}
