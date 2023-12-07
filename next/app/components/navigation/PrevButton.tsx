@@ -21,7 +21,7 @@ export function PrevButton(props: Props) {
     : styles.desktop;
 
   return (
-    <Link href={pathname + "?step=" + props.prevStep}>
+    <Link href={pathname + "?step=" + props.prevStep + "&skipAnimation=true"}>
       <button className={styles.component}>
         <div className={smartPhoneStyle}>
           <div>prev</div>
