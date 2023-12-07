@@ -123,13 +123,15 @@ func (p *Page) processStep(step *Step) error {
 }
 
 func (p *Page) ProcessCurrentStep() error {
+	currentStep := p.steps[p.currentStepIndex]
+
 	// Clean up prev step if necessary
-	p.cleanUp()
+	if err := p.cleanUp(); err != nil {
+		return fmt.Errorf("Failed to clean up before step = '%s', %s", currentStep.StepId, err)
+	}
 
 	// Process current step
-	currentStep := p.steps[p.currentStepIndex]
-	err := p.processStep(&currentStep)
-	if err != nil {
+	if err := p.processStep(&currentStep); err != nil {
 		return fmt.Errorf("Failed to process step = '%s', %s", currentStep.StepId, err)
 	}
 
