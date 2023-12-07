@@ -30,7 +30,9 @@ export function SourceCodeAnimationHandler(props: Props) {
   const columnParam = searchParams.get("column");
   const currentColumn = columnParam ? columnParam : props.defaultFocusColumn;
   const isSelected = currentColumn === "SourceCode";
-  const doAnimate = props.editSequence && isSelected;
+  const skipAnimationParam = searchParams.get("skipAnimation");
+  const doAnimate =
+    props.editSequence && isSelected && skipAnimationParam !== "true";
 
   // To animate, start from `editorText = oldContents`
   // then make animation with editSequence
