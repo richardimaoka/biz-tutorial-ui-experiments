@@ -19,6 +19,7 @@ const (
 	SourceCommit SourceCodeSubType = "commit"
 	SourceOpen   SourceCodeSubType = "open"
 	SourceError  SourceCodeSubType = "source error"
+	FileTree     SourceCodeSubType = "filetree"
 )
 
 func toSourceCodeSubType(s string) (SourceCodeSubType, error) {
@@ -31,6 +32,8 @@ func toSourceCodeSubType(s string) (SourceCodeSubType, error) {
 		return SourceOpen, nil
 	case string(SourceError):
 		return SourceError, nil
+	case string(FileTree):
+		return FileTree, nil
 	default:
 		return "", fmt.Errorf("'%s' is an invalid source code sub type", s)
 	}
@@ -144,6 +147,11 @@ type SourceErrorRow struct {
 	Comment   string         `json:"comment"`
 	FilePath  string         `json:"filePath"`
 	Tooltip   *SourceTooltip `json:"tooltip"`
+}
+
+type FileTreeRow struct {
+	StepId  string `json:"stepId"`
+	Comment string `json:"comment"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
@@ -305,10 +313,31 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	}, nil
 }
 
+func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
+	errorPrefix := "failed to convert to FileTreeRow"
+
+	//
+	// Check column and type
+	//
+	column, err := toColumnType(fromRow.Column)
+	if err != nil || column != SourceColumn {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+	}
+	subType, err := toSourceCodeSubType(fromRow.Type)
+	if err != nil || subType != FileTree {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+	}
+
+	return &FileTreeRow{
+		StepId:  fromRow.StepId,
+		Comment: fromRow.Comment,
+	}, nil
+}
+
 /**
  * Function(s) to convert a row to a step
  */
-func fileTreeStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state.Step {
+func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state.Step {
 	subId := "fileTreeStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -556,6 +585,28 @@ func breakdownSourceErrorRow(
 	return steps, nil
 }
 
+func breakdownFileTreeRow(
+	r *FileTreeRow,
+	finder *StepIdFinder,
+	prevColumns *ColumnInfo,
+	repo *git.Repository,
+) ([]state.Step, error) {
+	// - step creation
+	var steps []state.Step
+
+	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
+	if prevColumns.Focus != state.SourceColumnType && prevColumns.Focus != state.NoColumnType {
+		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		steps = append(steps, step)
+	}
+
+	// open file step
+	step := fileTreeStep(r, finder, prevColumns.AllUsed)
+	steps = append(steps, step)
+
+	return steps, nil
+}
+
 /**
  * Helper function
  */
@@ -648,6 +699,20 @@ func toSourceSteps(
 
 		// specific row -> step
 		steps, err := breakdownSourceErrorRow(row, finder, prevColumns, repo)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+		return steps, currentColumns, nil
+
+	case FileTree:
+		// row -> specific row
+		row, err := toFileTreeRow(r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps, err := breakdownFileTreeRow(row, finder, prevColumns, repo)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
