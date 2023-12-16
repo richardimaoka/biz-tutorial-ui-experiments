@@ -402,8 +402,8 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 	return step
 }
 
-func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state.Step {
-	subId := fmt.Sprintf("sourceCommitStep-%s", filePath)
+func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns /*, filePath string*/) state.Step {
+	subId := fmt.Sprintf("sourceCommitStep") //-%s", filePath)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := state.Step{
@@ -423,10 +423,10 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumn
 		// No ModalFields, as it is a trivial step
 		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
 		SourceFields: state.SourceFields{
-			SourceStepType:      state.SourceCommit,
-			Commit:              r.Commit,
-			DefaultOpenFilePath: filePath,
-			TypingAnimation:     true,
+			SourceStepType: state.SourceCommit,
+			Commit:         r.Commit,
+			// DefaultOpenFilePath: filePath,
+			TypingAnimation: true,
 		},
 	}
 	if r.Tooltip != nil {
@@ -523,20 +523,23 @@ func breakdownSourceCommitRow(
 		steps = append(steps, step)
 	}
 
-	// find files from commit
-	filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
-	if err != nil {
-		return nil, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
-	}
+	step := sourceCommitStep(r, finder, prevColumns.AllUsed)
+	steps = append(steps, step)
 
-	// open file steps
-	for i, filePath := range filePaths {
-		step := sourceCommitStep(r, finder, prevColumns.AllUsed, filePath)
-		steps = append(steps, step)
-		if i == 5 {
-			break
-		}
-	}
+	// // find files from commit
+	// filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
+	// }
+
+	// // open file steps
+	// for i, filePath := range filePaths {
+	// 	step := sourceCommitStep(r, finder, prevColumns.AllUsed, filePath)
+	// 	steps = append(steps, step)
+	// 	if i == 5 {
+	// 		break
+	// 	}
+	// }
 
 	return steps, nil
 }
