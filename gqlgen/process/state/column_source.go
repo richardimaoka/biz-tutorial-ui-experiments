@@ -55,7 +55,9 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 	return nil
 }
 
-func (c *SourceColumn) ShowFileTree() {
+func (c *SourceColumn) FileTree(fields *SourceFields) error {
+	c.sourceCode.showFileTree = true
+	return nil
 }
 
 func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
@@ -106,11 +108,10 @@ func (c *SourceColumn) SourceError(fields *SourceFields) error {
 
 }
 
-func (c *SourceColumn) CleanUp() error {
-	funcName := "CleanUp()"
+func (c *SourceColumn) CleanUpPrevStep() error {
+	funcName := "CleanUpPrevStep()"
 
-	err := c.sourceCode.clearTooltip()
-	if err != nil {
+	if err := c.sourceCode.clearTooltip(); err != nil {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
@@ -125,9 +126,14 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
+	err = c.sourceCode.closeFileTree()
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", funcName, err)
+	}
+
 	switch fields.SourceStepType {
 	case FileTree:
-		// no update is needed, just changing FocusColumn is fine
+		err = c.FileTree(fields)
 	case SourceMove:
 		// no update is needed, just changing FocusColumn is fine
 	case SourceOpen:

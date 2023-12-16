@@ -77,7 +77,7 @@ func (p *Page) IncrementStep() error {
 	}
 }
 
-func (p *Page) cleanUp() error {
+func (p *Page) cleanUpPrevStep() error {
 	// If this is the very first step, no need to clean up
 	if !p.hasPrev() {
 		return nil
@@ -97,7 +97,7 @@ func (p *Page) cleanUp() error {
 		if p.sourceCodeColumn == nil {
 			return fmt.Errorf("failed to clean up as prev source column = nil")
 		}
-		return p.sourceCodeColumn.CleanUp()
+		return p.sourceCodeColumn.CleanUpPrevStep()
 	case TerminalColumnType:
 		// if p.terminalColumn == nil {
 		// 	return fmt.Errorf("failed to clean up as prev source column = nil")
@@ -147,7 +147,7 @@ func (p *Page) ProcessCurrentStep() error {
 	currentStep := p.steps[p.currentStepIndex]
 
 	// Clean up prev step if necessary
-	if err := p.cleanUp(); err != nil {
+	if err := p.cleanUpPrevStep(); err != nil {
 		return fmt.Errorf("Failed to clean up before step = '%s', %s", currentStep.StepId, err)
 	}
 

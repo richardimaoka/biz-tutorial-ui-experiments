@@ -273,6 +273,11 @@ func (s *SourceCode) clearEdits() error {
 	return nil
 }
 
+func (s *SourceCode) closeFileTree() error {
+	s.showFileTree = false
+	return nil
+}
+
 func (s *SourceCode) ToGraphQL() *model.SourceCode {
 	return &model.SourceCode{
 		FileTree:            s.rootDir.ToGraphQLFileNodeSlice(),
