@@ -43,6 +43,27 @@ func (p *Page) CurrentStepId() string {
 	return currentStep.StepId
 }
 
+func (p *Page) recursivelyFindPrevStep(currentStepIndex int) *Step {
+	prevStepIndex := currentStepIndex - 1
+
+	if prevStepIndex < 0 {
+		return nil
+	} else {
+		prevStep := p.steps[prevStepIndex]
+
+		if prevStep.IsTrivial {
+			return p.recursivelyFindPrevStep(prevStepIndex)
+		}
+
+		return &prevStep
+	}
+}
+
+// The previous non-trivial step ID
+func (p *Page) EffectivePrevStep() *Step {
+	return p.recursivelyFindPrevStep(p.currentStepIndex)
+}
+
 func (p *Page) HasNext() bool {
 	return p.currentStepIndex < len(p.steps)-1
 }
@@ -157,8 +178,9 @@ func (p *Page) ToGraphQL() *model.Page {
 	if p.HasNext() {
 		nextStepId = stringRef(p.steps[p.currentStepIndex+1].StepId)
 	}
-	if p.hasPrev() {
-		prevStepId = stringRef(p.steps[p.currentStepIndex-1].StepId)
+
+	if effectivePrevStep := p.EffectivePrevStep(); effectivePrevStep != nil {
+		prevStepId = stringRef(effectivePrevStep.StepId)
 	}
 
 	// Handle isTrivial
