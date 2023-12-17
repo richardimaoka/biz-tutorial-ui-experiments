@@ -1,4 +1,4 @@
-import { Title } from "@/app/components/title/Title";
+import { Title } from "@/app/components/sectiontitle/SectionTitle";
 
 export default async function Page() {
   return (
