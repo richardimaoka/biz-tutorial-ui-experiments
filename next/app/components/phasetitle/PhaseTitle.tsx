@@ -1,11 +1,11 @@
-import styles from "./Title.module.css";
+import styles from "./PhaseTitle.module.css";
 
 interface Props {
   phaseNum: number;
   title: string;
 }
 
-export function Title(props: Props) {
+export function PhaseTitle(props: Props) {
   return (
     <div className={styles.component}>
       <h1 className={styles.title}>
