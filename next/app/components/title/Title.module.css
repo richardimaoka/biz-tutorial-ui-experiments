@@ -1,0 +1,16 @@
+.component {
+  height: 100%;
+
+  /* center the title */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  /* coloring */
+  background-color: var(--color-background);
+  color: var(--color-primary-text);
+}
+
+.title {
+  text-align: center;
+}
