@@ -23,7 +23,7 @@ export default async function Page() {
   ];
 
   return (
-    <div style={{}}>
+    <div style={{ height: "100svh" }}>
       <TutorialTitle
         title="Next.jsをCloud Runにデプロイし、CI/CDにGitHub Actionsを利用するチュートリアル"
         images={images}
