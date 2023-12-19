@@ -226,7 +226,7 @@ export type AppTutorialPageQuery = {
 
 export type GqlHandsonComponentFragment = ({ __typename: "Page" } & {
   " $fragmentRefs"?: {
-    GqlTutorialHeaderFragment: GqlTutorialHeaderFragment;
+    GqlHandsonHeaderFragment: GqlHandsonHeaderFragment;
     GqlColumnWrappersFragment: GqlColumnWrappersFragment;
   };
 }) & { " $fragmentName"?: "GqlHandsonComponentFragment" };
@@ -261,9 +261,9 @@ export type GqlColumnWrappersFragment = {
   > | null;
 } & { " $fragmentName"?: "GqlColumnWrappersFragment" };
 
-export type GqlTutorialHeaderFragment = ({ __typename: "Page" } & {
+export type GqlHandsonHeaderFragment = ({ __typename: "Page" } & {
   " $fragmentRefs"?: { GqlColumnTabsFragment: GqlColumnTabsFragment };
-}) & { " $fragmentName"?: "GqlTutorialHeaderFragment" };
+}) & { " $fragmentName"?: "GqlHandsonHeaderFragment" };
 
 export type GqlColumnTabFragment = ({
   __typename: "ColumnWrapper";
@@ -636,12 +636,12 @@ export const GqlColumnTabsFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlColumnTabsFragment, unknown>;
-export const GqlTutorialHeaderFragmentDoc = {
+export const GqlHandsonHeaderFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTutorialHeader" },
+      name: { kind: "Name", value: "GqlHandsonHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Page" },
@@ -727,7 +727,7 @@ export const GqlTutorialHeaderFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<GqlTutorialHeaderFragment, unknown>;
+} as unknown as DocumentNode<GqlHandsonHeaderFragment, unknown>;
 export const GqlTerminalHeaderFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2645,7 +2645,7 @@ export const GqlHandsonComponentFragmentDoc = {
         selections: [
           {
             kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlTutorialHeader" },
+            name: { kind: "Name", value: "GqlHandsonHeader" },
           },
           {
             kind: "FragmentSpread",
@@ -3158,7 +3158,7 @@ export const GqlHandsonComponentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTutorialHeader" },
+      name: { kind: "Name", value: "GqlHandsonHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Page" },
@@ -3365,7 +3365,7 @@ export const AppTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTutorialHeader" },
+      name: { kind: "Name", value: "GqlHandsonHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Page" },
@@ -3852,7 +3852,7 @@ export const AppTutorialPageDocument = {
         selections: [
           {
             kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlTutorialHeader" },
+            name: { kind: "Name", value: "GqlHandsonHeader" },
           },
           {
             kind: "FragmentSpread",
@@ -3989,7 +3989,7 @@ export const AppTestTutorialColumnsPageDocument = {
     },
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTutorialHeader" },
+      name: { kind: "Name", value: "GqlHandsonHeader" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Page" },
@@ -4476,7 +4476,7 @@ export const AppTestTutorialColumnsPageDocument = {
         selections: [
           {
             kind: "FragmentSpread",
-            name: { kind: "Name", value: "GqlTutorialHeader" },
+            name: { kind: "Name", value: "GqlHandsonHeader" },
           },
           {
             kind: "FragmentSpread",

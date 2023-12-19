@@ -1,11 +1,11 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import styles from "./GqlHandsonComponent.module.css";
 import { GqlColumnWrappers } from "./column/GqlColumnWrappers";
-import { GqlTutorialHeader } from "./header/GqlTutorialHeader";
+import { GqlHandsonHeader } from "./header/GqlHandsonHeader";
 
 const fragmentDefinition = graphql(`
   fragment GqlHandsonComponent on Page {
-    ...GqlTutorialHeader
+    ...GqlHandsonHeader
     ...GqlColumnWrappers
   }
 `);
@@ -21,7 +21,7 @@ export function GqlHandsonComponent(props: Props) {
     <div className={styles.component}>
       {/* header part */}
       <div className={styles.header}>
-        <GqlTutorialHeader fragment={fragment} />
+        <GqlHandsonHeader fragment={fragment} />
       </div>
       {/* contents part */}
       <div className={styles.contents}>

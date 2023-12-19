@@ -28,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/[tutorial]",
-    "app/components/handson/header/tabs/GqlColumnTabIcon.tsx"
+    "app/[tutorial]"
   ],
   "exclude": ["node_modules"]
 }

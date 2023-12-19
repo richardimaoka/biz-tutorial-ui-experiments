@@ -1,10 +1,10 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { ButtonToInitialStep } from "./buttons/ButtonToInitialStep";
 import { GqlColumnTabs } from "./tabs/GqlColumnTabs";
-import styles from "./GqlTutorialHeader.module.css";
+import styles from "./GqlHandsonHeader.module.css";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTutorialHeader on Page {
+  fragment GqlHandsonHeader on Page {
     ...GqlColumnTabs
   }
 `);
@@ -13,7 +13,7 @@ interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-export function GqlTutorialHeader(props: Props) {
+export function GqlHandsonHeader(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
   return (
