@@ -85,9 +85,9 @@ type Page struct {
 	Step        *string          `json:"step"`
 	NextStep    *string          `json:"nextStep"`
 	PrevStep    *string          `json:"prevStep"`
-	FocusColumn *string          `json:"focusColumn"`
 	IsTrivial   *bool            `json:"isTrivial"`
 	Modal       *Modal           `json:"modal"`
+	FocusColumn *string          `json:"focusColumn"`
 	Columns     []*ColumnWrapper `json:"columns"`
 }
 

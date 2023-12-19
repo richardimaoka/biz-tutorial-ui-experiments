@@ -2547,47 +2547,6 @@ func (ec *executionContext) fieldContext_Page_prevStep(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Page_focusColumn(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Page_focusColumn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.FocusColumn, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Page_focusColumn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Page",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Page_isTrivial(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Page_isTrivial(ctx, field)
 	if err != nil {
@@ -2669,6 +2628,47 @@ func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field g
 				return ec.fieldContext_Modal_markdownBody(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_focusColumn(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_focusColumn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FocusColumn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_focusColumn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2765,12 +2765,12 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_nextStep(ctx, field)
 			case "prevStep":
 				return ec.fieldContext_Page_prevStep(ctx, field)
-			case "focusColumn":
-				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "isTrivial":
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "focusColumn":
+				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			}
@@ -4045,12 +4045,12 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx
 				return ec.fieldContext_Page_nextStep(ctx, field)
 			case "prevStep":
 				return ec.fieldContext_Page_prevStep(ctx, field)
-			case "focusColumn":
-				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "isTrivial":
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "focusColumn":
+				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			}
@@ -4102,12 +4102,12 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTutorialTutorialPage(ct
 				return ec.fieldContext_Page_nextStep(ctx, field)
 			case "prevStep":
 				return ec.fieldContext_Page_prevStep(ctx, field)
-			case "focusColumn":
-				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "isTrivial":
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "focusColumn":
+				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
 				return ec.fieldContext_Page_columns(ctx, field)
 			}
@@ -6419,10 +6419,6 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Page_prevStep(ctx, field, obj)
 
-		case "focusColumn":
-
-			out.Values[i] = ec._Page_focusColumn(ctx, field, obj)
-
 		case "isTrivial":
 
 			out.Values[i] = ec._Page_isTrivial(ctx, field, obj)
@@ -6430,6 +6426,10 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 		case "modal":
 
 			out.Values[i] = ec._Page_modal(ctx, field, obj)
+
+		case "focusColumn":
+
+			out.Values[i] = ec._Page_focusColumn(ctx, field, obj)
 
 		case "columns":
 

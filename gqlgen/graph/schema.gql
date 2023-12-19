@@ -25,16 +25,17 @@ type TestObjs {
 ###################################################
 
 type Page {
+  # step related fields
   step: String
   nextStep: String
   prevStep: String
-
-  focusColumn: String
-
   isTrivial: Boolean
 
+  # modal field(s)
   modal: Modal
 
+  # handson fields
+  focusColumn: String
   columns: [ColumnWrapper]
 }
 
