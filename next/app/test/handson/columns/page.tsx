@@ -1,4 +1,4 @@
-import { GqlTutorialComponent } from "@/app/components/tutorial/GqlTutorialComponent";
+import { GqlHandsonComponent } from "@/app/components/handson/GqlHandsonComponent";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 
@@ -6,7 +6,7 @@ const queryDefinition = graphql(`
   query appTestTutorialColumnsPage {
     _test {
       appTestTutorialColumnsPage {
-        ...GqlTutorialComponent
+        ...GqlHandsonComponent
       }
     }
   }
@@ -28,7 +28,7 @@ export default async function Page({ searchParams }: PageParams) {
 
   return (
     <div style={{ height: "100svh" }}>
-      {fragment && <GqlTutorialComponent fragment={fragment} />}
+      {fragment && <GqlHandsonComponent fragment={fragment} />}
     </div>
   );
 }
