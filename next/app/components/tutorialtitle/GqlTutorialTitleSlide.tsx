@@ -1,28 +1,34 @@
+import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import Image from "next/image";
-import styles from "./TutorialTitle.module.css";
+import styles from "./GqlTutorialTitleSlide.module.css";
 
-interface ImageProps {
-  src: string;
-  width: number;
-  height: number;
-  caption?: string;
-}
+const fragmentDefinition = graphql(`
+  fragment GqlTutorialTitle on TutorialTitleSlide {
+    title
+    images {
+      src
+      width
+      height
+      caption
+    }
+  }
+`);
 
 interface Props {
-  title: string;
-  images?: ImageProps[];
+  fragment: FragmentType<typeof fragmentDefinition>;
 }
 
-export function TutorialTitle(props: Props) {
+export function GqlTutorialTitle(props: Props) {
+  const fragment = useFragment(fragmentDefinition, props.fragment);
   return (
     <div className={styles.component}>
       {/* text title */}
-      <h1 className={styles.title}>{props.title}</h1>
+      <h1 className={styles.title}>{fragment.title}</h1>
 
       {/* optional images */}
-      {props.images && (
+      {fragment.images && (
         <div className={styles.imageContainer}>
-          {props.images.map((i) => (
+          {fragment.images.map((i) => (
             <div className={styles.image} key={i.src}>
               <Image
                 style={{ display: "block" }}

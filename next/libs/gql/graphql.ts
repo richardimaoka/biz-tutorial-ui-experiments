@@ -497,6 +497,18 @@ export type GqlTerminalTooltipFragment = {
   timing?: TerminalTooltipTiming | null;
 } & { " $fragmentName"?: "GqlTerminalTooltipFragment" };
 
+export type GqlTutorialTitleFragment = {
+  __typename: "TutorialTitleSlide";
+  title: string;
+  images?: Array<{
+    __typename: "Image";
+    src: string;
+    width: number;
+    height: number;
+    caption?: string | null;
+  }> | null;
+} & { " $fragmentName"?: "GqlTutorialTitleFragment" };
+
 export type AppTestTutorialColumnsPageQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -3271,6 +3283,38 @@ export const GqlNavigationFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlNavigationFragment, unknown>;
+export const GqlTutorialTitleFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTutorialTitle" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TutorialTitleSlide" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "images" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlTutorialTitleFragment, unknown>;
 export const AppTutorialPageDocument = {
   kind: "Document",
   definitions: [

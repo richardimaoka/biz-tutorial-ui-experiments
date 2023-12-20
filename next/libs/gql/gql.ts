@@ -59,6 +59,8 @@ const documents = {
     types.GqlTerminalHeaderFragmentDoc,
   "\n  fragment GqlTerminalTooltip on TerminalTooltip {\n    markdownBody\n    timing\n  }\n":
     types.GqlTerminalTooltipFragmentDoc,
+  "\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n":
+    types.GqlTutorialTitleFragmentDoc,
   "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n":
     types.AppTestTutorialColumnsPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
@@ -217,6 +219,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GqlTerminalTooltip on TerminalTooltip {\n    markdownBody\n    timing\n  }\n",
 ): (typeof documents)["\n  fragment GqlTerminalTooltip on TerminalTooltip {\n    markdownBody\n    timing\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
