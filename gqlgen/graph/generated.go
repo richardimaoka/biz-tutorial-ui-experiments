@@ -81,6 +81,23 @@ type ComplexityRoot struct {
 		Offset    func(childComplexity int) int
 	}
 
+	Image struct {
+		Caption func(childComplexity int) int
+		Height  func(childComplexity int) int
+		Src     func(childComplexity int) int
+		Width   func(childComplexity int) int
+	}
+
+	ImagesSlide struct {
+		Image       func(childComplexity int) int
+		Placeholder func(childComplexity int) int
+	}
+
+	MarkdownSlide struct {
+		MarkdownBody func(childComplexity int) int
+		Placeholder  func(childComplexity int) int
+	}
+
 	Modal struct {
 		MarkdownBody func(childComplexity int) int
 	}
@@ -115,14 +132,26 @@ type ComplexityRoot struct {
 		FocusColumn func(childComplexity int) int
 		IsTrivial   func(childComplexity int) int
 		Modal       func(childComplexity int) int
+		Mode        func(childComplexity int) int
 		NextStep    func(childComplexity int) int
 		PrevStep    func(childComplexity int) int
+		Slide       func(childComplexity int) int
 		Step        func(childComplexity int) int
 	}
 
 	Query struct {
 		Page func(childComplexity int, tutorial string, step *string) int
 		Test func(childComplexity int) int
+	}
+
+	SectionTitleSlide struct {
+		Placeholder func(childComplexity int) int
+		SectionNum  func(childComplexity int) int
+		Title       func(childComplexity int) int
+	}
+
+	SlideWrapper struct {
+		Slide func(childComplexity int) int
 	}
 
 	SourceCode struct {
@@ -172,6 +201,12 @@ type ComplexityRoot struct {
 		AppTestTerminalPage              func(childComplexity int, step *int) int
 		AppTestTutorialColumnsPage       func(childComplexity int) int
 		AppTestTutorialTutorialPage      func(childComplexity int) int
+	}
+
+	TutorialTitleSlide struct {
+		Images      func(childComplexity int) int
+		Placeholder func(childComplexity int) int
+		Title       func(childComplexity int) int
 	}
 }
 
@@ -330,6 +365,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.FileNode.Offset(childComplexity), true
 
+	case "Image.caption":
+		if e.complexity.Image.Caption == nil {
+			break
+		}
+
+		return e.complexity.Image.Caption(childComplexity), true
+
+	case "Image.height":
+		if e.complexity.Image.Height == nil {
+			break
+		}
+
+		return e.complexity.Image.Height(childComplexity), true
+
+	case "Image.src":
+		if e.complexity.Image.Src == nil {
+			break
+		}
+
+		return e.complexity.Image.Src(childComplexity), true
+
+	case "Image.width":
+		if e.complexity.Image.Width == nil {
+			break
+		}
+
+		return e.complexity.Image.Width(childComplexity), true
+
+	case "ImagesSlide.image":
+		if e.complexity.ImagesSlide.Image == nil {
+			break
+		}
+
+		return e.complexity.ImagesSlide.Image(childComplexity), true
+
+	case "ImagesSlide._placeholder":
+		if e.complexity.ImagesSlide.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.ImagesSlide.Placeholder(childComplexity), true
+
+	case "MarkdownSlide.markdownBody":
+		if e.complexity.MarkdownSlide.MarkdownBody == nil {
+			break
+		}
+
+		return e.complexity.MarkdownSlide.MarkdownBody(childComplexity), true
+
+	case "MarkdownSlide._placeholder":
+		if e.complexity.MarkdownSlide.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.MarkdownSlide.Placeholder(childComplexity), true
+
 	case "Modal.markdownBody":
 		if e.complexity.Modal.MarkdownBody == nil {
 			break
@@ -477,6 +568,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Page.Modal(childComplexity), true
 
+	case "Page.mode":
+		if e.complexity.Page.Mode == nil {
+			break
+		}
+
+		return e.complexity.Page.Mode(childComplexity), true
+
 	case "Page.nextStep":
 		if e.complexity.Page.NextStep == nil {
 			break
@@ -490,6 +588,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Page.PrevStep(childComplexity), true
+
+	case "Page.slide":
+		if e.complexity.Page.Slide == nil {
+			break
+		}
+
+		return e.complexity.Page.Slide(childComplexity), true
 
 	case "Page.step":
 		if e.complexity.Page.Step == nil {
@@ -516,6 +621,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Test(childComplexity), true
+
+	case "SectionTitleSlide._placeholder":
+		if e.complexity.SectionTitleSlide.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.SectionTitleSlide.Placeholder(childComplexity), true
+
+	case "SectionTitleSlide.sectionNum":
+		if e.complexity.SectionTitleSlide.SectionNum == nil {
+			break
+		}
+
+		return e.complexity.SectionTitleSlide.SectionNum(childComplexity), true
+
+	case "SectionTitleSlide.title":
+		if e.complexity.SectionTitleSlide.Title == nil {
+			break
+		}
+
+		return e.complexity.SectionTitleSlide.Title(childComplexity), true
+
+	case "SlideWrapper.slide":
+		if e.complexity.SlideWrapper.Slide == nil {
+			break
+		}
+
+		return e.complexity.SlideWrapper.Slide(childComplexity), true
 
 	case "SourceCode.fileTree":
 		if e.complexity.SourceCode.FileTree == nil {
@@ -706,6 +839,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TestObjs.AppTestTutorialTutorialPage(childComplexity), true
+
+	case "TutorialTitleSlide.images":
+		if e.complexity.TutorialTitleSlide.Images == nil {
+			break
+		}
+
+		return e.complexity.TutorialTitleSlide.Images(childComplexity), true
+
+	case "TutorialTitleSlide._placeholder":
+		if e.complexity.TutorialTitleSlide.Placeholder == nil {
+			break
+		}
+
+		return e.complexity.TutorialTitleSlide.Placeholder(childComplexity), true
+
+	case "TutorialTitleSlide.title":
+		if e.complexity.TutorialTitleSlide.Title == nil {
+			break
+		}
+
+		return e.complexity.TutorialTitleSlide.Title(childComplexity), true
 
 	}
 	return 0, false
@@ -1679,6 +1833,359 @@ func (ec *executionContext) fieldContext_FileNode_isDeleted(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Image_src(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Image_src(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Src, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Image_src(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Image",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Image_width(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Image_width(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Width, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Image_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Image",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Image_height(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Image_height(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Height, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Image_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Image",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Image_caption(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Image_caption(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Caption, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Image_caption(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Image",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImagesSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.ImagesSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImagesSlide__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImagesSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImagesSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ImagesSlide_image(ctx context.Context, field graphql.CollectedField, obj *model.ImagesSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImagesSlide_image(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Image, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Image)
+	fc.Result = res
+	return ec.marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ImagesSlide_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ImagesSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "src":
+				return ec.fieldContext_Image_src(ctx, field)
+			case "width":
+				return ec.fieldContext_Image_width(ctx, field)
+			case "height":
+				return ec.fieldContext_Image_height(ctx, field)
+			case "caption":
+				return ec.fieldContext_Image_caption(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MarkdownSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MarkdownSlide__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MarkdownSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MarkdownSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MarkdownSlide_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.MarkdownSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MarkdownSlide_markdownBody(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MarkdownBody, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MarkdownSlide_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MarkdownSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Modal_markdownBody(ctx context.Context, field graphql.CollectedField, obj *model.Modal) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Modal_markdownBody(ctx, field)
 	if err != nil {
@@ -2633,6 +3140,92 @@ func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field g
 	return fc, nil
 }
 
+func (ec *executionContext) _Page_mode(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_mode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Mode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageMode)
+	fc.Result = res
+	return ec.marshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_mode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type PageMode does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Page_slide(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Page_slide(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Slide, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SlideWrapper)
+	fc.Result = res
+	return ec.marshalOSlideWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlideWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Page_slide(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Page",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "slide":
+				return ec.fieldContext_SlideWrapper_slide(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SlideWrapper", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Page_focusColumn(ctx context.Context, field graphql.CollectedField, obj *model.Page) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Page_focusColumn(ctx, field)
 	if err != nil {
@@ -2769,6 +3362,10 @@ func (ec *executionContext) fieldContext_Query_page(ctx context.Context, field g
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "mode":
+				return ec.fieldContext_Page_mode(ctx, field)
+			case "slide":
+				return ec.fieldContext_Page_slide(ctx, field)
 			case "focusColumn":
 				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
@@ -2966,6 +3563,176 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SectionTitleSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.SectionTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SectionTitleSlide__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SectionTitleSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SectionTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SectionTitleSlide_sectionNum(ctx context.Context, field graphql.CollectedField, obj *model.SectionTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SectionTitleSlide_sectionNum(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SectionNum, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SectionTitleSlide_sectionNum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SectionTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SectionTitleSlide_title(ctx context.Context, field graphql.CollectedField, obj *model.SectionTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SectionTitleSlide_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SectionTitleSlide_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SectionTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SlideWrapper_slide(ctx context.Context, field graphql.CollectedField, obj *model.SlideWrapper) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SlideWrapper_slide(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Slide, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.Slide)
+	fc.Result = res
+	return ec.marshalOSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SlideWrapper_slide(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SlideWrapper",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
 		},
 	}
 	return fc, nil
@@ -4049,6 +4816,10 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTutorialColumnsPage(ctx
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "mode":
+				return ec.fieldContext_Page_mode(ctx, field)
+			case "slide":
+				return ec.fieldContext_Page_slide(ctx, field)
 			case "focusColumn":
 				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
@@ -4106,6 +4877,10 @@ func (ec *executionContext) fieldContext_TestObjs_appTestTutorialTutorialPage(ct
 				return ec.fieldContext_Page_isTrivial(ctx, field)
 			case "modal":
 				return ec.fieldContext_Page_modal(ctx, field)
+			case "mode":
+				return ec.fieldContext_Page_mode(ctx, field)
+			case "slide":
+				return ec.fieldContext_Page_slide(ctx, field)
 			case "focusColumn":
 				return ec.fieldContext_Page_focusColumn(ctx, field)
 			case "columns":
@@ -4187,6 +4962,142 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 	if fc.Args, err = ec.field_TestObjs_appTestSourcecodeFilecontentPage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TutorialTitleSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.TutorialTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TutorialTitleSlide__placeholder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Placeholder, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TutorialTitleSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TutorialTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TutorialTitleSlide_title(ctx context.Context, field graphql.CollectedField, obj *model.TutorialTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TutorialTitleSlide_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TutorialTitleSlide_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TutorialTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TutorialTitleSlide_images(ctx context.Context, field graphql.CollectedField, obj *model.TutorialTitleSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TutorialTitleSlide_images(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Images, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Image)
+	fc.Result = res
+	return ec.marshalOImage2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TutorialTitleSlide_images(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TutorialTitleSlide",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "src":
+				return ec.fieldContext_Image_src(ctx, field)
+			case "width":
+				return ec.fieldContext_Image_width(ctx, field)
+			case "height":
+				return ec.fieldContext_Image_height(ctx, field)
+			case "caption":
+				return ec.fieldContext_Image_caption(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -5998,6 +6909,43 @@ func (ec *executionContext) _Column(ctx context.Context, sel ast.SelectionSet, o
 	}
 }
 
+func (ec *executionContext) _Slide(ctx context.Context, sel ast.SelectionSet, obj model.Slide) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.TutorialTitleSlide:
+		return ec._TutorialTitleSlide(ctx, sel, &obj)
+	case *model.TutorialTitleSlide:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TutorialTitleSlide(ctx, sel, obj)
+	case model.MarkdownSlide:
+		return ec._MarkdownSlide(ctx, sel, &obj)
+	case *model.MarkdownSlide:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._MarkdownSlide(ctx, sel, obj)
+	case model.SectionTitleSlide:
+		return ec._SectionTitleSlide(ctx, sel, &obj)
+	case *model.SectionTitleSlide:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._SectionTitleSlide(ctx, sel, obj)
+	case model.ImagesSlide:
+		return ec._ImagesSlide(ctx, sel, &obj)
+	case *model.ImagesSlide:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ImagesSlide(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
@@ -6227,6 +7175,116 @@ func (ec *executionContext) _FileNode(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
+var imageImplementors = []string{"Image"}
+
+func (ec *executionContext) _Image(ctx context.Context, sel ast.SelectionSet, obj *model.Image) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, imageImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Image")
+		case "src":
+
+			out.Values[i] = ec._Image_src(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "width":
+
+			out.Values[i] = ec._Image_width(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "height":
+
+			out.Values[i] = ec._Image_height(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "caption":
+
+			out.Values[i] = ec._Image_caption(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var imagesSlideImplementors = []string{"ImagesSlide", "Slide"}
+
+func (ec *executionContext) _ImagesSlide(ctx context.Context, sel ast.SelectionSet, obj *model.ImagesSlide) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, imagesSlideImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ImagesSlide")
+		case "_placeholder":
+
+			out.Values[i] = ec._ImagesSlide__placeholder(ctx, field, obj)
+
+		case "image":
+
+			out.Values[i] = ec._ImagesSlide_image(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var markdownSlideImplementors = []string{"MarkdownSlide", "Slide"}
+
+func (ec *executionContext) _MarkdownSlide(ctx context.Context, sel ast.SelectionSet, obj *model.MarkdownSlide) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, markdownSlideImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MarkdownSlide")
+		case "_placeholder":
+
+			out.Values[i] = ec._MarkdownSlide__placeholder(ctx, field, obj)
+
+		case "markdownBody":
+
+			out.Values[i] = ec._MarkdownSlide_markdownBody(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var modalImplementors = []string{"Modal"}
 
 func (ec *executionContext) _Modal(ctx context.Context, sel ast.SelectionSet, obj *model.Modal) graphql.Marshaler {
@@ -6427,6 +7485,14 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Page_modal(ctx, field, obj)
 
+		case "mode":
+
+			out.Values[i] = ec._Page_mode(ctx, field, obj)
+
+		case "slide":
+
+			out.Values[i] = ec._Page_slide(ctx, field, obj)
+
 		case "focusColumn":
 
 			out.Values[i] = ec._Page_focusColumn(ctx, field, obj)
@@ -6516,6 +7582,70 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var sectionTitleSlideImplementors = []string{"SectionTitleSlide", "Slide"}
+
+func (ec *executionContext) _SectionTitleSlide(ctx context.Context, sel ast.SelectionSet, obj *model.SectionTitleSlide) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sectionTitleSlideImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SectionTitleSlide")
+		case "_placeholder":
+
+			out.Values[i] = ec._SectionTitleSlide__placeholder(ctx, field, obj)
+
+		case "sectionNum":
+
+			out.Values[i] = ec._SectionTitleSlide_sectionNum(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "title":
+
+			out.Values[i] = ec._SectionTitleSlide_title(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var slideWrapperImplementors = []string{"SlideWrapper"}
+
+func (ec *executionContext) _SlideWrapper(ctx context.Context, sel ast.SelectionSet, obj *model.SlideWrapper) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, slideWrapperImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SlideWrapper")
+		case "slide":
+
+			out.Values[i] = ec._SlideWrapper_slide(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -6880,6 +8010,42 @@ func (ec *executionContext) _TestObjs(ctx context.Context, sel ast.SelectionSet,
 				return innerFunc(ctx)
 
 			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var tutorialTitleSlideImplementors = []string{"TutorialTitleSlide", "Slide"}
+
+func (ec *executionContext) _TutorialTitleSlide(ctx context.Context, sel ast.SelectionSet, obj *model.TutorialTitleSlide) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, tutorialTitleSlideImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TutorialTitleSlide")
+		case "_placeholder":
+
+			out.Values[i] = ec._TutorialTitleSlide__placeholder(ctx, field, obj)
+
+		case "title":
+
+			out.Values[i] = ec._TutorialTitleSlide_title(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "images":
+
+			out.Values[i] = ec._TutorialTitleSlide_images(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7267,6 +8433,16 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx context.Context, sel ast.SelectionSet, v *model.Image) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Image(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
@@ -7893,6 +9069,53 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) marshalOImage2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Image) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -7975,6 +9198,36 @@ func (ec *executionContext) marshalOPage2ᚖgithubᚗcomᚋrichardimaokaᚋbiz�
 		return graphql.Null
 	}
 	return ec._Page(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, v interface{}) (*model.PageMode, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.PageMode)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, sel ast.SelectionSet, v *model.PageMode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) marshalOSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx context.Context, sel ast.SelectionSet, v model.Slide) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Slide(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOSlideWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlideWrapper(ctx context.Context, sel ast.SelectionSet, v *model.SlideWrapper) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SlideWrapper(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSourceCodeTooltip2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCodeTooltip(ctx context.Context, sel ast.SelectionSet, v *model.SourceCodeTooltip) graphql.Marshaler {

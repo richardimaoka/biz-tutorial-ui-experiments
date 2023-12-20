@@ -13,6 +13,11 @@ type Column interface {
 	GetPlaceholder() *string
 }
 
+type Slide interface {
+	IsSlide()
+	GetPlaceholder() *string
+}
+
 type Browser struct {
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
@@ -52,6 +57,29 @@ type FileNode struct {
 	IsDeleted *bool        `json:"isDeleted"`
 }
 
+type Image struct {
+	Src     string  `json:"src"`
+	Width   int     `json:"width"`
+	Height  int     `json:"height"`
+	Caption *string `json:"caption"`
+}
+
+type ImagesSlide struct {
+	Placeholder *string `json:"_placeholder"`
+	Image       *Image  `json:"image"`
+}
+
+func (ImagesSlide) IsSlide()                     {}
+func (this ImagesSlide) GetPlaceholder() *string { return this.Placeholder }
+
+type MarkdownSlide struct {
+	Placeholder  *string `json:"_placeholder"`
+	MarkdownBody string  `json:"markdownBody"`
+}
+
+func (MarkdownSlide) IsSlide()                     {}
+func (this MarkdownSlide) GetPlaceholder() *string { return this.Placeholder }
+
 type Modal struct {
 	MarkdownBody *string `json:"markdownBody"`
 }
@@ -87,8 +115,23 @@ type Page struct {
 	PrevStep    *string          `json:"prevStep"`
 	IsTrivial   *bool            `json:"isTrivial"`
 	Modal       *Modal           `json:"modal"`
+	Mode        *PageMode        `json:"mode"`
+	Slide       *SlideWrapper    `json:"slide"`
 	FocusColumn *string          `json:"focusColumn"`
 	Columns     []*ColumnWrapper `json:"columns"`
+}
+
+type SectionTitleSlide struct {
+	Placeholder *string `json:"_placeholder"`
+	SectionNum  int     `json:"sectionNum"`
+	Title       string  `json:"title"`
+}
+
+func (SectionTitleSlide) IsSlide()                     {}
+func (this SectionTitleSlide) GetPlaceholder() *string { return this.Placeholder }
+
+type SlideWrapper struct {
+	Slide Slide `json:"slide"`
 }
 
 type SourceCodeColumn struct {
@@ -138,6 +181,15 @@ type TestObjs struct {
 	AppTestSourcecodeFilecontentPage *OpenFile       `json:"appTestSourcecodeFilecontentPage"`
 }
 
+type TutorialTitleSlide struct {
+	Placeholder *string  `json:"_placeholder"`
+	Title       string   `json:"title"`
+	Images      []*Image `json:"images"`
+}
+
+func (TutorialTitleSlide) IsSlide()                     {}
+func (this TutorialTitleSlide) GetPlaceholder() *string { return this.Placeholder }
+
 type FileNodeType string
 
 const (
@@ -176,6 +228,47 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type PageMode string
+
+const (
+	PageModeSlideshow PageMode = "SLIDESHOW"
+	PageModeHandson   PageMode = "HANDSON"
+)
+
+var AllPageMode = []PageMode{
+	PageModeSlideshow,
+	PageModeHandson,
+}
+
+func (e PageMode) IsValid() bool {
+	switch e {
+	case PageModeSlideshow, PageModeHandson:
+		return true
+	}
+	return false
+}
+
+func (e PageMode) String() string {
+	return string(e)
+}
+
+func (e *PageMode) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PageMode(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid PageMode", str)
+	}
+	return nil
+}
+
+func (e PageMode) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

@@ -24,6 +24,11 @@ type TestObjs {
 # Page
 ###################################################
 
+enum PageMode {
+  SLIDESHOW
+  HANDSON
+}
+
 type Page {
   # step related fields
   step: String
@@ -34,9 +39,49 @@ type Page {
   # modal field(s)
   modal: Modal
 
+  # mode
+  mode: PageMode
+
+  # slideshow fields
+  slide: SlideWrapper
+
   # handson fields
   focusColumn: String
   columns: [ColumnWrapper]
+}
+
+###################################################
+# Slideshow
+###################################################
+
+type SlideWrapper {
+  slide: Slide
+}
+
+interface Slide {
+  _placeholder: String
+}
+
+type TutorialTitleSlide implements Slide {
+  _placeholder: String
+  title: String!
+  images: [Image!]
+}
+
+type MarkdownSlide implements Slide {
+  _placeholder: String
+  markdownBody: String!
+}
+
+type SectionTitleSlide implements Slide {
+  _placeholder: String
+  sectionNum: Int!
+  title: String!
+}
+
+type ImagesSlide implements Slide {
+  _placeholder: String
+  image: Image!
 }
 
 ###################################################
@@ -69,7 +114,7 @@ type BrowserColumn implements Column {
 }
 
 ###################################################
-# Terminal related object types 2
+# Terminal related object types
 ###################################################
 
 enum TerminalTooltipTiming {
@@ -102,7 +147,7 @@ type Terminal {
 }
 
 ###################################################
-# Browser Column
+# Browser
 ###################################################
 
 type Browser {
@@ -196,6 +241,17 @@ type SourceCode {
   isFoldFileTree: Boolean
   # If you don't pass `filePath` argument, you get the default OpenFile for the step
   openFile(filePath: String): OpenFile
+}
+
+###################################################
+# Image related object types
+###################################################
+
+type Image {
+  src: String!
+  width: Int!
+  height: Int!
+  caption: String
 }
 
 ###################################################

@@ -77,6 +77,26 @@ export type FileNode = {
 
 export type FileNodeType = "DIRECTORY" | "FILE";
 
+export type Image = {
+  __typename: "Image";
+  caption?: Maybe<Scalars["String"]["output"]>;
+  height: Scalars["Int"]["output"];
+  src: Scalars["String"]["output"];
+  width: Scalars["Int"]["output"];
+};
+
+export type ImagesSlide = Slide & {
+  __typename: "ImagesSlide";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  image: Image;
+};
+
+export type MarkdownSlide = Slide & {
+  __typename: "MarkdownSlide";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  markdownBody: Scalars["String"]["output"];
+};
+
 export type Modal = {
   __typename: "Modal";
   markdownBody?: Maybe<Scalars["String"]["output"]>;
@@ -116,10 +136,14 @@ export type Page = {
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   isTrivial?: Maybe<Scalars["Boolean"]["output"]>;
   modal?: Maybe<Modal>;
+  mode?: Maybe<PageMode>;
   nextStep?: Maybe<Scalars["String"]["output"]>;
   prevStep?: Maybe<Scalars["String"]["output"]>;
+  slide?: Maybe<SlideWrapper>;
   step?: Maybe<Scalars["String"]["output"]>;
 };
+
+export type PageMode = "HANDSON" | "SLIDESHOW";
 
 export type Query = {
   __typename: "Query";
@@ -130,6 +154,22 @@ export type Query = {
 export type QueryPageArgs = {
   step?: InputMaybe<Scalars["String"]["input"]>;
   tutorial: Scalars["String"]["input"];
+};
+
+export type SectionTitleSlide = Slide & {
+  __typename: "SectionTitleSlide";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  sectionNum: Scalars["Int"]["output"];
+  title: Scalars["String"]["output"];
+};
+
+export type Slide = {
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type SlideWrapper = {
+  __typename: "SlideWrapper";
+  slide?: Maybe<Slide>;
 };
 
 export type SourceCode = {
@@ -205,6 +245,13 @@ export type TestObjsAppTestSourcecodeFilecontentPageArgs = {
 
 export type TestObjsAppTestTerminalPageArgs = {
   step?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type TutorialTitleSlide = Slide & {
+  __typename: "TutorialTitleSlide";
+  _placeholder?: Maybe<Scalars["String"]["output"]>;
+  images?: Maybe<Array<Image>>;
+  title: Scalars["String"]["output"];
 };
 
 export type AppTutorialPageQueryVariables = Exact<{
