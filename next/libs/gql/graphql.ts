@@ -354,6 +354,12 @@ export type GqlImageSlideFragment = {
   };
 } & { " $fragmentName"?: "GqlImageSlideFragment" };
 
+export type GqlModalComponentFragment = {
+  __typename: "Modal";
+  markdownBody: string;
+  position?: ModalPosition | null;
+} & { " $fragmentName"?: "GqlModalComponentFragment" };
+
 export type GqlNavigationFragment = {
   __typename: "Page";
   prevStep?: string | null;
@@ -366,12 +372,6 @@ export type GqlSectionTitleSlideFragment = {
   title: string;
   sectionNum: number;
 } & { " $fragmentName"?: "GqlSectionTitleSlideFragment" };
-
-export type GqlModalComponentFragment = {
-  __typename: "Modal";
-  markdownBody: string;
-  position?: ModalPosition | null;
-} & { " $fragmentName"?: "GqlModalComponentFragment" };
 
 export type GqlSlideWrapperFragment = {
   __typename: "SlideWrapper";
