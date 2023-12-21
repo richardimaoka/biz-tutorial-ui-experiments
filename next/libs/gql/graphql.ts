@@ -351,7 +351,7 @@ export type GqlSlideWrapperFragment = {
   __typename: "SlideWrapper";
   slide:
     | { __typename: "ImagesSlide" }
-    | { __typename: "MarkdownSlide" }
+    | { __typename: "MarkdownSlide"; markdownBody: string }
     | { __typename: "SectionTitleSlide" }
     | ({ __typename: "TutorialTitleSlide" } & {
         " $fragmentRefs"?: {
@@ -3374,6 +3374,22 @@ export const GqlSlideWrapperFragmentDoc = {
                     ],
                   },
                 },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "MarkdownSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "markdownBody" },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -3494,6 +3510,22 @@ export const GqlSlideshowComponentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "MarkdownSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "markdownBody" },
                       },
                     ],
                   },
@@ -4183,6 +4215,22 @@ export const AppTutorialPageDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "MarkdownSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "markdownBody" },
                       },
                     ],
                   },
