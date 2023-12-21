@@ -169,7 +169,7 @@ export type Slide = {
 
 export type SlideWrapper = {
   __typename: "SlideWrapper";
-  slide?: Maybe<Slide>;
+  slide: Slide;
 };
 
 export type SourceCode = {
@@ -346,6 +346,19 @@ export type GqlNavigationFragment = {
   isTrivial?: boolean | null;
 } & { " $fragmentName"?: "GqlNavigationFragment" };
 
+export type GqlSlideWrapperFragment = {
+  __typename: "SlideWrapper";
+  slide:
+    | { __typename: "ImagesSlide" }
+    | { __typename: "MarkdownSlide" }
+    | { __typename: "SectionTitleSlide" }
+    | ({ __typename: "TutorialTitleSlide" } & {
+        " $fragmentRefs"?: {
+          GqlTutorialTitleSlideFragment: GqlTutorialTitleSlideFragment;
+        };
+      });
+} & { " $fragmentName"?: "GqlSlideWrapperFragment" };
+
 export type GqlSourceCodeColumnFragment = {
   __typename: "SourceCodeColumn";
   sourceCode: {
@@ -497,7 +510,7 @@ export type GqlTerminalTooltipFragment = {
   timing?: TerminalTooltipTiming | null;
 } & { " $fragmentName"?: "GqlTerminalTooltipFragment" };
 
-export type GqlTutorialTitleFragment = {
+export type GqlTutorialTitleSlideFragment = {
   __typename: "TutorialTitleSlide";
   title: string;
   images?: Array<{
@@ -507,7 +520,7 @@ export type GqlTutorialTitleFragment = {
     height: number;
     caption?: string | null;
   }> | null;
-} & { " $fragmentName"?: "GqlTutorialTitleFragment" };
+} & { " $fragmentName"?: "GqlTutorialTitleSlideFragment" };
 
 export type AppTestTutorialColumnsPageQueryVariables = Exact<{
   [key: string]: never;
@@ -3283,12 +3296,12 @@ export const GqlNavigationFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlNavigationFragment, unknown>;
-export const GqlTutorialTitleFragmentDoc = {
+export const GqlTutorialTitleSlideFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlTutorialTitle" },
+      name: { kind: "Name", value: "GqlTutorialTitleSlide" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "TutorialTitleSlide" },
@@ -3314,7 +3327,78 @@ export const GqlTutorialTitleFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<GqlTutorialTitleFragment, unknown>;
+} as unknown as DocumentNode<GqlTutorialTitleSlideFragment, unknown>;
+export const GqlSlideWrapperFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSlideWrapper" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SlideWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "slide" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TutorialTitleSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TutorialTitleSlide" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "images" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlSlideWrapperFragment, unknown>;
 export const AppTutorialPageDocument = {
   kind: "Document",
   definitions: [

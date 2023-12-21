@@ -3718,11 +3718,14 @@ func (ec *executionContext) _SlideWrapper_slide(ctx context.Context, field graph
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(model.Slide)
 	fc.Result = res
-	return ec.marshalOSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx, field.Selections, res)
+	return ec.marshalNSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SlideWrapper_slide(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7647,6 +7650,9 @@ func (ec *executionContext) _SlideWrapper(ctx context.Context, sel ast.Selection
 
 			out.Values[i] = ec._SlideWrapper_slide(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8480,6 +8486,16 @@ func (ec *executionContext) marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardima
 	return ec._MonacoEditRange(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx context.Context, sel ast.SelectionSet, v model.Slide) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Slide(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNSourceCode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSourceCode(ctx context.Context, sel ast.SelectionSet, v *model.SourceCode) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9214,13 +9230,6 @@ func (ec *executionContext) marshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋb
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalOSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx context.Context, sel ast.SelectionSet, v model.Slide) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Slide(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSlideWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlideWrapper(ctx context.Context, sel ast.SelectionSet, v *model.SlideWrapper) graphql.Marshaler {

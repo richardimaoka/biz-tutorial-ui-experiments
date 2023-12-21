@@ -55,7 +55,7 @@ type Page {
 ###################################################
 
 type SlideWrapper {
-  slide: Slide
+  slide: Slide!
 }
 
 interface Slide {

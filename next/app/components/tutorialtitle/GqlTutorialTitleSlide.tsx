@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./GqlTutorialTitleSlide.module.css";
 
 const fragmentDefinition = graphql(`
-  fragment GqlTutorialTitle on TutorialTitleSlide {
+  fragment GqlTutorialTitleSlide on TutorialTitleSlide {
     title
     images {
       src

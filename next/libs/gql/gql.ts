@@ -31,6 +31,8 @@ const documents = {
     types.GqlColumnTabsFragmentDoc,
   "\n  fragment GqlNavigation on Page {\n    prevStep\n    nextStep\n    isTrivial\n  }\n":
     types.GqlNavigationFragmentDoc,
+  "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n":
+    types.GqlSlideWrapperFragmentDoc,
   "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
@@ -59,8 +61,8 @@ const documents = {
     types.GqlTerminalHeaderFragmentDoc,
   "\n  fragment GqlTerminalTooltip on TerminalTooltip {\n    markdownBody\n    timing\n  }\n":
     types.GqlTerminalTooltipFragmentDoc,
-  "\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n":
-    types.GqlTutorialTitleFragmentDoc,
+  "\n  fragment GqlTutorialTitleSlide on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n":
+    types.GqlTutorialTitleSlideFragmentDoc,
   "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n":
     types.AppTestTutorialColumnsPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
@@ -135,6 +137,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GqlNavigation on Page {\n    prevStep\n    nextStep\n    isTrivial\n  }\n",
 ): (typeof documents)["\n  fragment GqlNavigation on Page {\n    prevStep\n    nextStep\n    isTrivial\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -223,8 +231,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlTutorialTitle on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n"];
+  source: "\n  fragment GqlTutorialTitleSlide on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlTutorialTitleSlide on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
