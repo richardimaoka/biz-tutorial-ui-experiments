@@ -64,13 +64,13 @@ type Image struct {
 	Caption *string `json:"caption"`
 }
 
-type ImagesSlide struct {
+type ImageSlide struct {
 	Placeholder *string `json:"_placeholder"`
 	Image       *Image  `json:"image"`
 }
 
-func (ImagesSlide) IsSlide()                     {}
-func (this ImagesSlide) GetPlaceholder() *string { return this.Placeholder }
+func (ImageSlide) IsSlide()                     {}
+func (this ImageSlide) GetPlaceholder() *string { return this.Placeholder }
 
 type MarkdownSlide struct {
 	Placeholder  *string `json:"_placeholder"`

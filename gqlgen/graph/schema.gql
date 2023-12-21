@@ -79,7 +79,7 @@ type SectionTitleSlide implements Slide {
   title: String!
 }
 
-type ImagesSlide implements Slide {
+type ImageSlide implements Slide {
   _placeholder: String
   image: Image!
 }

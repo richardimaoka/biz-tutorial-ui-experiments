@@ -88,7 +88,7 @@ type ComplexityRoot struct {
 		Width   func(childComplexity int) int
 	}
 
-	ImagesSlide struct {
+	ImageSlide struct {
 		Image       func(childComplexity int) int
 		Placeholder func(childComplexity int) int
 	}
@@ -393,19 +393,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Image.Width(childComplexity), true
 
-	case "ImagesSlide.image":
-		if e.complexity.ImagesSlide.Image == nil {
+	case "ImageSlide.image":
+		if e.complexity.ImageSlide.Image == nil {
 			break
 		}
 
-		return e.complexity.ImagesSlide.Image(childComplexity), true
+		return e.complexity.ImageSlide.Image(childComplexity), true
 
-	case "ImagesSlide._placeholder":
-		if e.complexity.ImagesSlide.Placeholder == nil {
+	case "ImageSlide._placeholder":
+		if e.complexity.ImageSlide.Placeholder == nil {
 			break
 		}
 
-		return e.complexity.ImagesSlide.Placeholder(childComplexity), true
+		return e.complexity.ImageSlide.Placeholder(childComplexity), true
 
 	case "MarkdownSlide.markdownBody":
 		if e.complexity.MarkdownSlide.MarkdownBody == nil {
@@ -2006,8 +2006,8 @@ func (ec *executionContext) fieldContext_Image_caption(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _ImagesSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.ImagesSlide) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImagesSlide__placeholder(ctx, field)
+func (ec *executionContext) _ImageSlide__placeholder(ctx context.Context, field graphql.CollectedField, obj *model.ImageSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageSlide__placeholder(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2034,9 +2034,9 @@ func (ec *executionContext) _ImagesSlide__placeholder(ctx context.Context, field
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ImagesSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ImageSlide__placeholder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ImagesSlide",
+		Object:     "ImageSlide",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2047,8 +2047,8 @@ func (ec *executionContext) fieldContext_ImagesSlide__placeholder(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _ImagesSlide_image(ctx context.Context, field graphql.CollectedField, obj *model.ImagesSlide) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ImagesSlide_image(ctx, field)
+func (ec *executionContext) _ImageSlide_image(ctx context.Context, field graphql.CollectedField, obj *model.ImageSlide) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ImageSlide_image(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2078,9 +2078,9 @@ func (ec *executionContext) _ImagesSlide_image(ctx context.Context, field graphq
 	return ec.marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ImagesSlide_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ImageSlide_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ImagesSlide",
+		Object:     "ImageSlide",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -6937,13 +6937,13 @@ func (ec *executionContext) _Slide(ctx context.Context, sel ast.SelectionSet, ob
 			return graphql.Null
 		}
 		return ec._SectionTitleSlide(ctx, sel, obj)
-	case model.ImagesSlide:
-		return ec._ImagesSlide(ctx, sel, &obj)
-	case *model.ImagesSlide:
+	case model.ImageSlide:
+		return ec._ImageSlide(ctx, sel, &obj)
+	case *model.ImageSlide:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._ImagesSlide(ctx, sel, obj)
+		return ec._ImageSlide(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
@@ -7224,23 +7224,23 @@ func (ec *executionContext) _Image(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
-var imagesSlideImplementors = []string{"ImagesSlide", "Slide"}
+var imageSlideImplementors = []string{"ImageSlide", "Slide"}
 
-func (ec *executionContext) _ImagesSlide(ctx context.Context, sel ast.SelectionSet, obj *model.ImagesSlide) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, imagesSlideImplementors)
+func (ec *executionContext) _ImageSlide(ctx context.Context, sel ast.SelectionSet, obj *model.ImageSlide) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, imageSlideImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("ImagesSlide")
+			out.Values[i] = graphql.MarshalString("ImageSlide")
 		case "_placeholder":
 
-			out.Values[i] = ec._ImagesSlide__placeholder(ctx, field, obj)
+			out.Values[i] = ec._ImageSlide__placeholder(ctx, field, obj)
 
 		case "image":
 
-			out.Values[i] = ec._ImagesSlide_image(ctx, field, obj)
+			out.Values[i] = ec._ImageSlide_image(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

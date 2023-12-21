@@ -65,6 +65,13 @@ func slideFromBytes(bytes []byte) (Slide, error) {
 		}
 		return &slide, nil
 
+	case "ImageSlide":
+		var slide ImageSlide
+		if err := json.Unmarshal(bytes, &slide); err != nil {
+			return nil, err
+		}
+		return &slide, nil
+
 	default:
 		return nil, fmt.Errorf("\"%s\" = %s is not a valid Slide type. If it should be valid, define it in slide_wrapper.go", fromField, typename)
 	}

@@ -1,0 +1,13 @@
+.component {
+  height: 100%;
+
+  /* center the image */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* coloring */
+  background-color: var(--color-background);
+  color: var(--color-primary-text);
+}
