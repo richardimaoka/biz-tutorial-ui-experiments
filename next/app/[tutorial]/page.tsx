@@ -59,6 +59,7 @@ export default async function Page(props: PageParams) {
             <GqlNavigation
               tutorial={props.params.tutorial}
               fragment={fragment}
+              toInitial
             />
           )}
         </div>
