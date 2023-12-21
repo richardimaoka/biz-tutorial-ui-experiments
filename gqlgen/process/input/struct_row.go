@@ -1,11 +1,14 @@
 package input
 
 type Row struct {
-	StepId        string `json:"stepId"`
-	Phase         string `json:"phase"`
-	Comment       string `json:"comment"`
-	Trivial       string `json:"trivial"`
+	StepId  string `json:"stepId"`
+	Phase   string `json:"phase"`
+	Comment string `json:"comment"`
+	Trivial string `json:"trivial"`
+
 	ModalContents string `json:"modalContents"`
+
+	Mode string `json:"mode"`
 
 	// Not Column but string, because it's input from manual entry, not sanitized
 	Column string `json:"column"`
