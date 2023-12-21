@@ -13,7 +13,6 @@ func toSteps(
 	repo *git.Repository,
 ) ([]state.Step, error) {
 	currentColumns := &ColumnInfo{}
-	currentCommit := ""
 
 	var allSteps []state.Step
 
@@ -59,7 +58,7 @@ func toSteps(
 			case TerminalColumn:
 				steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
 			case SourceColumn:
-				steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns, repo, currentCommit)
+				steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns)
 			case BrowserColumn:
 				steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 			default:

@@ -511,8 +511,6 @@ func breakdownSourceCommitRow(
 	r *SourceCommitRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-	repo *git.Repository,
-	prevCommit string,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -548,7 +546,6 @@ func breakdownSourceOpenRow(
 	r *SourceOpenRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-	repo *git.Repository,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -570,7 +567,6 @@ func breakdownSourceErrorRow(
 	r *SourceErrorRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-	repo *git.Repository,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -592,7 +588,6 @@ func breakdownFileTreeRow(
 	r *FileTreeRow,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-	repo *git.Repository,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -650,8 +645,6 @@ func toSourceSteps(
 	r *Row,
 	finder *StepIdFinder,
 	prevColumns *ColumnInfo,
-	repo *git.Repository,
-	prevCommit string,
 ) ([]state.Step, *ColumnInfo, error) {
 	// current columns update
 	currentColumns := &ColumnInfo{
@@ -673,7 +666,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceCommitRow(row, finder, prevColumns, repo, prevCommit)
+		steps, err := breakdownSourceCommitRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
@@ -687,7 +680,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceOpenRow(row, finder, prevColumns, repo)
+		steps, err := breakdownSourceOpenRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
@@ -701,7 +694,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceErrorRow(row, finder, prevColumns, repo)
+		steps, err := breakdownSourceErrorRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
@@ -715,7 +708,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownFileTreeRow(row, finder, prevColumns, repo)
+		steps, err := breakdownFileTreeRow(row, finder, prevColumns)
 		if err != nil {
 			return nil, nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
