@@ -55,13 +55,19 @@ export default async function Page(props: PageParams) {
       return (
         <div className={styles.component}>
           {fragment && <GqlSlideshowComponent fragment={fragment} />}
+          {fragment && (
+            <GqlNavigation
+              tutorial={props.params.tutorial}
+              fragment={fragment}
+            />
+          )}
         </div>
       );
     case "HANDSON":
       return (
         <div className={styles.component}>
           {fragment && <GqlHandsonComponent fragment={fragment} />}
-          {fragment && mode === "HANDSON" && (
+          {fragment && (
             <GqlNavigation
               tutorial={props.params.tutorial}
               fragment={fragment}
