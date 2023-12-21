@@ -35,9 +35,11 @@ const documents = {
     types.GqlNavigationFragmentDoc,
   "\n  fragment GqlSectionTitleSlide on SectionTitleSlide {\n    title\n    sectionNum\n  }\n":
     types.GqlSectionTitleSlideFragmentDoc,
+  "\n  fragment GqlModalComponent on Modal {\n    markdownBody\n    position\n  }\n":
+    types.GqlModalComponentFragmentDoc,
   "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n      ... on MarkdownSlide {\n        markdownBody\n      }\n      ... on SectionTitleSlide {\n        ...GqlSectionTitleSlide\n      }\n      ... on ImageSlide {\n        ...GqlImageSlide\n      }\n    }\n  }\n":
     types.GqlSlideWrapperFragmentDoc,
-  "\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n":
+  "\n  fragment GqlSlideshowComponent on Page {\n    modal {\n      ...GqlModalComponent\n    }\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n":
     types.GqlSlideshowComponentFragmentDoc,
   "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
@@ -159,14 +161,20 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment GqlModalComponent on Modal {\n    markdownBody\n    position\n  }\n",
+): (typeof documents)["\n  fragment GqlModalComponent on Modal {\n    markdownBody\n    position\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n      ... on MarkdownSlide {\n        markdownBody\n      }\n      ... on SectionTitleSlide {\n        ...GqlSectionTitleSlide\n      }\n      ... on ImageSlide {\n        ...GqlImageSlide\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n      ... on MarkdownSlide {\n        markdownBody\n      }\n      ... on SectionTitleSlide {\n        ...GqlSectionTitleSlide\n      }\n      ... on ImageSlide {\n        ...GqlImageSlide\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n"];
+  source: "\n  fragment GqlSlideshowComponent on Page {\n    modal {\n      ...GqlModalComponent\n    }\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSlideshowComponent on Page {\n    modal {\n      ...GqlModalComponent\n    }\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

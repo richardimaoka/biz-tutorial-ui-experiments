@@ -99,8 +99,11 @@ export type MarkdownSlide = Slide & {
 
 export type Modal = {
   __typename: "Modal";
-  markdownBody?: Maybe<Scalars["String"]["output"]>;
+  markdownBody: Scalars["String"]["output"];
+  position?: Maybe<ModalPosition>;
 };
+
+export type ModalPosition = "BOTTOM" | "CENTER" | "TOP";
 
 export type MonacoEditOperation = {
   __typename: "MonacoEditOperation";
@@ -364,6 +367,12 @@ export type GqlSectionTitleSlideFragment = {
   sectionNum: number;
 } & { " $fragmentName"?: "GqlSectionTitleSlideFragment" };
 
+export type GqlModalComponentFragment = {
+  __typename: "Modal";
+  markdownBody: string;
+  position?: ModalPosition | null;
+} & { " $fragmentName"?: "GqlModalComponentFragment" };
+
 export type GqlSlideWrapperFragment = {
   __typename: "SlideWrapper";
   slide:
@@ -385,6 +394,13 @@ export type GqlSlideWrapperFragment = {
 
 export type GqlSlideshowComponentFragment = {
   __typename: "Page";
+  modal?:
+    | ({ __typename: "Modal" } & {
+        " $fragmentRefs"?: {
+          GqlModalComponentFragment: GqlModalComponentFragment;
+        };
+      })
+    | null;
   slide?:
     | ({ __typename: "SlideWrapper" } & {
         " $fragmentRefs"?: { GqlSlideWrapperFragment: GqlSlideWrapperFragment };
@@ -3329,6 +3345,26 @@ export const GqlNavigationFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlNavigationFragment, unknown>;
+export const GqlModalComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlModalComponentFragment, unknown>;
 export const GqlTutorialTitleSlideFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -3587,6 +3623,19 @@ export const GqlSlideshowComponentFragmentDoc = {
         selections: [
           {
             kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "slide" },
             selectionSet: {
               kind: "SelectionSet",
@@ -3666,6 +3715,21 @@ export const GqlSlideshowComponentFragmentDoc = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
         ],
       },
     },
@@ -4381,6 +4445,21 @@ export const AppTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlTutorialTitleSlide" },
       typeCondition: {
         kind: "NamedType",
@@ -4581,6 +4660,19 @@ export const AppTutorialPageDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
+                },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "slide" },

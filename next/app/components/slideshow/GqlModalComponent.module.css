@@ -1,0 +1,23 @@
+.component {
+  position: absolute;
+  width: 100%;
+}
+
+.inner {
+  background-color: rgb(255, 255, 255, 0.9);
+  color: black;
+
+  margin: 0px 10px;
+}
+
+.top {
+  top: 10px;
+}
+
+.center {
+  top: 50%;
+}
+
+.bottom {
+  bottom: 10px;
+}

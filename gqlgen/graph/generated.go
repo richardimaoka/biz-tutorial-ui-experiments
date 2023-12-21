@@ -100,6 +100,7 @@ type ComplexityRoot struct {
 
 	Modal struct {
 		MarkdownBody func(childComplexity int) int
+		Position     func(childComplexity int) int
 	}
 
 	MonacoEditOperation struct {
@@ -427,6 +428,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Modal.MarkdownBody(childComplexity), true
+
+	case "Modal.position":
+		if e.complexity.Modal.Position == nil {
+			break
+		}
+
+		return e.complexity.Modal.Position(childComplexity), true
 
 	case "MonacoEditOperation.range":
 		if e.complexity.MonacoEditOperation.Range == nil {
@@ -2207,11 +2215,14 @@ func (ec *executionContext) _Modal_markdownBody(ctx context.Context, field graph
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Modal_markdownBody(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2222,6 +2233,47 @@ func (ec *executionContext) fieldContext_Modal_markdownBody(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Modal_position(ctx context.Context, field graphql.CollectedField, obj *model.Modal) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Modal_position(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Position, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ModalPosition)
+	fc.Result = res
+	return ec.marshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Modal_position(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Modal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ModalPosition does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3133,6 +3185,8 @@ func (ec *executionContext) fieldContext_Page_modal(ctx context.Context, field g
 			switch field.Name {
 			case "markdownBody":
 				return ec.fieldContext_Modal_markdownBody(ctx, field)
+			case "position":
+				return ec.fieldContext_Modal_position(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
 		},
@@ -7302,6 +7356,13 @@ func (ec *executionContext) _Modal(ctx context.Context, sel ast.SelectionSet, ob
 
 			out.Values[i] = ec._Modal_markdownBody(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "position":
+
+			out.Values[i] = ec._Modal_position(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9153,6 +9214,22 @@ func (ec *executionContext) marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbiz�
 		return graphql.Null
 	}
 	return ec._Modal(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx context.Context, v interface{}) (*model.ModalPosition, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.ModalPosition)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOModalPosition2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModalPosition(ctx context.Context, sel ast.SelectionSet, v *model.ModalPosition) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOMonacoEditOperation2ᚕᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐMonacoEditOperationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MonacoEditOperation) graphql.Marshaler {

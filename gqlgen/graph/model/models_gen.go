@@ -81,7 +81,8 @@ func (MarkdownSlide) IsSlide()                     {}
 func (this MarkdownSlide) GetPlaceholder() *string { return this.Placeholder }
 
 type Modal struct {
-	MarkdownBody *string `json:"markdownBody"`
+	MarkdownBody string         `json:"markdownBody"`
+	Position     *ModalPosition `json:"position"`
 }
 
 type MonacoEditOperation struct {
@@ -228,6 +229,49 @@ func (e *FileNodeType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e FileNodeType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ModalPosition string
+
+const (
+	ModalPositionTop    ModalPosition = "TOP"
+	ModalPositionCenter ModalPosition = "CENTER"
+	ModalPositionBottom ModalPosition = "BOTTOM"
+)
+
+var AllModalPosition = []ModalPosition{
+	ModalPositionTop,
+	ModalPositionCenter,
+	ModalPositionBottom,
+}
+
+func (e ModalPosition) IsValid() bool {
+	switch e {
+	case ModalPositionTop, ModalPositionCenter, ModalPositionBottom:
+		return true
+	}
+	return false
+}
+
+func (e ModalPosition) String() string {
+	return string(e)
+}
+
+func (e *ModalPosition) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ModalPosition(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ModalPosition", str)
+	}
+	return nil
+}
+
+func (e ModalPosition) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

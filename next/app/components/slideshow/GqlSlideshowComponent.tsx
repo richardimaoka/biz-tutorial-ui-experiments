@@ -1,9 +1,13 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import styles from "./GqlSlideshowComponent.module.css";
 import { GqlSlideWrapper } from "./GqlSlideWrapper";
+import { GqlModalComponent } from "./GqlModalComponent";
 
 const fragmentDefinition = graphql(`
   fragment GqlSlideshowComponent on Page {
+    modal {
+      ...GqlModalComponent
+    }
     slide {
       ...GqlSlideWrapper
     }
@@ -20,6 +24,7 @@ export function GqlSlideshowComponent(props: Props) {
   return (
     <div className={styles.component}>
       {fragment.slide && <GqlSlideWrapper fragment={fragment.slide} />}
+      {fragment.modal && <GqlModalComponent fragment={fragment.modal} />}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 .component {
   height: 100svh;
 
-  display: flex;
-  flex-direction: column;
+  /* to hold modal */
+  position: relative;
 }
 
 @media (max-width: 768px) {

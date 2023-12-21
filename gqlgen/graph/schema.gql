@@ -258,6 +258,13 @@ type Image {
 # Modal related object types
 ###################################################
 
+enum ModalPosition {
+  TOP
+  CENTER
+  BOTTOM
+}
+
 type Modal {
-  markdownBody: String
+  markdownBody: String!
+  position: ModalPosition
 }
