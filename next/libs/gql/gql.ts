@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n    }\n  }\n":
+  "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n":
     types.AppTutorialPageDocument,
   "\n  fragment GqlHandsonComponent on Page {\n    ...GqlHandsonHeader\n    ...GqlColumnWrappers\n  }\n":
     types.GqlHandsonComponentFragmentDoc,
@@ -33,6 +33,8 @@ const documents = {
     types.GqlNavigationFragmentDoc,
   "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n":
     types.GqlSlideWrapperFragmentDoc,
+  "\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n":
+    types.GqlSlideshowComponentFragmentDoc,
   "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
@@ -87,8 +89,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n    }\n  }\n",
-): (typeof documents)["\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n    }\n  }\n"];
+  source: "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n",
+): (typeof documents)["\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlNavigation\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -143,6 +145,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  fragment GqlSlideWrapper on SlideWrapper {\n    slide {\n      # if you forget this, the resulting fragment will have __typename = undefined\n      __typename\n      #\n      # for each slide type\n      #\n      ... on TutorialTitleSlide {\n        ...GqlTutorialTitleSlide\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSlideshowComponent on Page {\n    slide {\n      ...GqlSlideWrapper\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

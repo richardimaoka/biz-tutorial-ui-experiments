@@ -262,10 +262,11 @@ export type AppTutorialPageQueryVariables = Exact<{
 export type AppTutorialPageQuery = {
   __typename: "Query";
   page?:
-    | ({ __typename: "Page" } & {
+    | ({ __typename: "Page"; mode?: PageMode | null } & {
         " $fragmentRefs"?: {
           GqlHandsonComponentFragment: GqlHandsonComponentFragment;
           GqlNavigationFragment: GqlNavigationFragment;
+          GqlSlideshowComponentFragment: GqlSlideshowComponentFragment;
         };
       })
     | null;
@@ -358,6 +359,15 @@ export type GqlSlideWrapperFragment = {
         };
       });
 } & { " $fragmentName"?: "GqlSlideWrapperFragment" };
+
+export type GqlSlideshowComponentFragment = {
+  __typename: "Page";
+  slide?:
+    | ({ __typename: "SlideWrapper" } & {
+        " $fragmentRefs"?: { GqlSlideWrapperFragment: GqlSlideWrapperFragment };
+      })
+    | null;
+} & { " $fragmentName"?: "GqlSlideshowComponentFragment" };
 
 export type GqlSourceCodeColumnFragment = {
   __typename: "SourceCodeColumn";
@@ -3399,6 +3409,103 @@ export const GqlSlideWrapperFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlSlideWrapperFragment, unknown>;
+export const GqlSlideshowComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSlideshowComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "slide" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlSlideWrapper" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TutorialTitleSlide" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "images" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSlideWrapper" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SlideWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "slide" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TutorialTitleSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlSlideshowComponentFragment, unknown>;
 export const AppTutorialPageDocument = {
   kind: "Document",
   definitions: [
@@ -3462,6 +3569,11 @@ export const AppTutorialPageDocument = {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "GqlNavigation" },
                 },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlSlideshowComponent" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "mode" } },
               ],
             },
           },
@@ -4017,6 +4129,72 @@ export const AppTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "TutorialTitleSlide" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "images" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSlideWrapper" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SlideWrapper" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "slide" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "TutorialTitleSlide" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlTutorialTitleSlide" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlHandsonComponent" },
       typeCondition: {
         kind: "NamedType",
@@ -4049,6 +4227,32 @@ export const AppTutorialPageDocument = {
           { kind: "Field", name: { kind: "Name", value: "prevStep" } },
           { kind: "Field", name: { kind: "Name", value: "nextStep" } },
           { kind: "Field", name: { kind: "Name", value: "isTrivial" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlSlideshowComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Page" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "slide" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlSlideWrapper" },
+                },
+              ],
+            },
+          },
         ],
       },
     },

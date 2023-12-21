@@ -3,12 +3,16 @@ import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 import { GqlNavigation } from "../components/navigation/GqlNavigation";
 import styles from "./page.module.css";
+import { GqlSlideshowComponent } from "../components/slideshow/GqlSlideshowComponent";
+import { print } from "graphql";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
     page(tutorial: $tutorial, step: $step) {
       ...GqlHandsonComponent
       ...GqlNavigation
+      ...GqlSlideshowComponent
+      mode
     }
   }
 `);
@@ -29,8 +33,8 @@ interface PageParams {
 }
 
 export default async function Page(props: PageParams) {
-  // console.log("----------------------------------------");
-  // console.log(print(queryDefinition));
+  console.log("----------------------------------------");
+  console.log(print(queryDefinition));
 
   const gqlEndPoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
   if (typeof gqlEndPoint != "string") {
@@ -44,13 +48,26 @@ export default async function Page(props: PageParams) {
   const data = await request(gqlEndPoint, queryDefinition, variables);
 
   const fragment = data.page;
+  const mode = fragment?.mode === "SLIDESHOW" ? "SLIDESHOW" : "HANDSON";
 
-  return (
-    <div className={styles.component}>
-      {fragment && <GqlHandsonComponent fragment={fragment} />}
-      {fragment && (
-        <GqlNavigation tutorial={props.params.tutorial} fragment={fragment} />
-      )}
-    </div>
-  );
+  switch (mode) {
+    case "SLIDESHOW":
+      return (
+        <div className={styles.component}>
+          {fragment && <GqlSlideshowComponent fragment={fragment} />}
+        </div>
+      );
+    case "HANDSON":
+      return (
+        <div className={styles.component}>
+          {fragment && <GqlHandsonComponent fragment={fragment} />}
+          {fragment && mode === "HANDSON" && (
+            <GqlNavigation
+              tutorial={props.params.tutorial}
+              fragment={fragment}
+            />
+          )}
+        </div>
+      );
+  }
 }
