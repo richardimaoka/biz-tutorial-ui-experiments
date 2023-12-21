@@ -19,10 +19,7 @@ export function GqlSlideshowComponent(props: Props) {
 
   return (
     <div className={styles.component}>
-      {/* contents part */}
-      <div className={styles.contents}>
-        {fragment.slide && <GqlSlideWrapper fragment={fragment.slide} />}
-      </div>
+      {fragment.slide && <GqlSlideWrapper fragment={fragment.slide} />}
     </div>
   );
 }

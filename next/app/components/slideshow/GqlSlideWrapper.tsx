@@ -1,7 +1,8 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
+import { MarkdownDefaultStyle } from "../markdown/server-component/MarkdownDefaultStyle";
+import { GqlSectionTitleSlide } from "../sectiontitle/GqlSectionTitleSlide";
 import { GqlTutorialTitle } from "../tutorialtitle/GqlTutorialTitleSlide";
 import styles from "./GqlSlideWrapper.module.css";
-import { MarkdownDefaultStyle } from "../markdown/server-component/MarkdownDefaultStyle";
 
 const fragmentDefinition = graphql(`
   fragment GqlSlideWrapper on SlideWrapper {
@@ -16,6 +17,9 @@ const fragmentDefinition = graphql(`
       }
       ... on MarkdownSlide {
         markdownBody
+      }
+      ... on SectionTitleSlide {
+        ...GqlSectionTitleSlide
       }
     }
   }
@@ -46,6 +50,12 @@ export function GqlSlideWrapper(props: Props) {
       return (
         <div className={styles.component}>
           <MarkdownDefaultStyle markdownBody={slide.markdownBody} />
+        </div>
+      );
+    case "SectionTitleSlide":
+      return (
+        <div className={styles.component}>
+          <GqlSectionTitleSlide fragment={slide} />
         </div>
       );
     default:
