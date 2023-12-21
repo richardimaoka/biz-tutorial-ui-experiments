@@ -1,10 +1,10 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { BackwardFastIcon } from "../icons/BackwardFast";
-import styles from "./ButtonToInitialStep.module.css";
+import styles from "./InitPageButton.module.css";
 import Link from "next/link";
 
-export function ButtonToInitialStep() {
+export function InitPageButton() {
   const pathname = usePathname();
 
   const smartPhoneStyle = styles.smartphone;
@@ -14,11 +14,11 @@ export function ButtonToInitialStep() {
     <Link href={pathname}>
       <button className={styles.component}>
         <div className={smartPhoneStyle}>
-          <div>1st page</div>
+          <div>p. 1</div>
           <BackwardFastIcon />
         </div>
         <div className={desktopStyle}>
-          <div>1st page</div>
+          <div>p. 1</div>
           <BackwardFastIcon />
         </div>
       </button>

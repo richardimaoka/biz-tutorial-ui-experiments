@@ -4,7 +4,7 @@ import { HandleKeyEvents } from "./HandleKeyEvents";
 import { HandleTrivial } from "./HandleTrivial";
 import { NextButton } from "./NextButton";
 import { PrevButton } from "./PrevButton";
-import { ButtonToInitialStep } from "./ButtonToInitialStep";
+import { InitPageButton } from "./InitPageButton";
 
 const fragmentDefinition = graphql(`
   fragment GqlNavigation on Page {
@@ -16,7 +16,6 @@ const fragmentDefinition = graphql(`
 
 interface Props {
   fragment: FragmentType<typeof fragmentDefinition>;
-  tutorial: string;
   toInitial?: boolean;
 }
 
@@ -37,7 +36,7 @@ export function GqlNavigation(props: Props) {
     //   top: "0%",
     // }}
     >
-      {props.toInitial && <ButtonToInitialStep />}
+      {props.toInitial && <InitPageButton />}
       {fragment.prevStep && (
         <PrevButton
           prevStep={fragment.prevStep}
@@ -52,7 +51,6 @@ export function GqlNavigation(props: Props) {
       )}
       {!disableUserNavigation && (
         <HandleKeyEvents
-          tutorial={props.tutorial}
           prevStep={fragment.prevStep}
           nextStep={fragment.nextStep}
         />

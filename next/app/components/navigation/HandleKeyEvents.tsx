@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 interface Props {
-  tutorial: string;
   prevStep?: string | null;
   nextStep?: string | null;
 }
