@@ -365,7 +365,7 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) sta
 	return step
 }
 
-func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder) state.Step {
 	subId := "moveToBrowserStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
@@ -407,11 +407,9 @@ func breakdownBrowserRow(
 	// - step creation
 	var steps []state.Step
 
-	currentColumns := resultColumns(state.BrowserColumnType)
-
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
 	if prevColumns.Focus != state.BrowserColumnType && prevColumns.Focus != state.NoColumnType {
-		step := moveToBrowserStep(r, finder, currentColumns)
+		step := moveToBrowserStep(r, finder)
 		steps = append(steps, step)
 	}
 
