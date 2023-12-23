@@ -108,9 +108,9 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != BrowserColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserSingle {
@@ -158,9 +158,9 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != BrowserColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserNumSeq {
@@ -218,9 +218,9 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != BrowserColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserSequence {

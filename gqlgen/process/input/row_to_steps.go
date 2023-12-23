@@ -26,9 +26,9 @@ func toSteps(
 
 		switch mode {
 		case "slideshow":
-			slideType, err := toSlideType(fromRow.Column)
+			slideType, err := toSlideType(fromRow.RowType)
 			if err != nil {
-				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.Column)
+				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.RowType)
 			}
 
 			switch slideType {
@@ -41,7 +41,7 @@ func toSteps(
 			// case Image:
 			// 	steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 			default:
-				err = fmt.Errorf("slide = '%s' is not implemented", fromRow.Column)
+				err = fmt.Errorf("slide = '%s' is not implemented", fromRow.RowType)
 			}
 
 			if err != nil {
@@ -49,9 +49,9 @@ func toSteps(
 			}
 
 		case "handson":
-			column, err := toColumnType(fromRow.Column)
+			column, err := toColumnType(fromRow.RowType)
 			if err != nil {
-				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.Column)
+				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.RowType)
 			}
 
 			switch column {
@@ -65,7 +65,7 @@ func toSteps(
 				steps, err = toBrowserSteps(&fromRow, finder, currentColumn)
 				currentColumn = state.BrowserColumnType
 			default:
-				err = fmt.Errorf("column = '%s' is not implemented", fromRow.Column)
+				err = fmt.Errorf("column = '%s' is not implemented", fromRow.RowType)
 			}
 
 			if err != nil {

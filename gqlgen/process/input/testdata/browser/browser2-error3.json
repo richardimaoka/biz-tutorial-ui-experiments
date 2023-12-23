@@ -2,7 +2,7 @@
   "stepId": "f52c491d-3d06-4331-af48-d406957e9efd",
   "phase": "CMD の動作理解",
   "comment": "",
-  "column": "browser",
+  "rowType": "browser",
   "subtype": "numseq",
   "instruction": "httpd[-1].png",
   "instruction2": "",

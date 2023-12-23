@@ -160,9 +160,9 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != SourceColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceCommit {
@@ -220,9 +220,9 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != SourceColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceOpen {
@@ -268,9 +268,9 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != SourceColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceError {
@@ -319,9 +319,9 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != SourceColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != FileTree {

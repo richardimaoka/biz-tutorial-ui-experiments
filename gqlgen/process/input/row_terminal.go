@@ -117,9 +117,9 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != TerminalColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil || subType != TerminalCommand {
@@ -173,9 +173,9 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != TerminalColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil || subType != TerminalOutput {
@@ -229,9 +229,9 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check column and type
 	//
-	column, err := toColumnType(fromRow.Column)
+	column, err := toColumnType(fromRow.RowType)
 	if err != nil || column != TerminalColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
 	}
 	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil {
