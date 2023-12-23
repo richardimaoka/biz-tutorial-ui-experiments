@@ -278,7 +278,7 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "terminalCommandStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -299,7 +299,9 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.TerminalColumnType,
+		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCommand,
 			TerminalText:     r.Text,
@@ -315,7 +317,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 	return step
 }
 
-func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
@@ -336,7 +338,9 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.TerminalColumnType,
+		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalOutput,
 			TerminalText:     r.Text,
@@ -351,7 +355,7 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 	return step
 }
 
-func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.StepId, subId)
 
@@ -370,7 +374,9 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.TerminalColumnType,
+		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalMove,
 			TerminalName:     r.TerminalName,
@@ -381,7 +387,7 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder, currentColumns sta
 	return step
 }
 
-func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	currentDir := strings.TrimPrefix(r.Text, "cd ")
 
 	subId := "terminalCdStep"
@@ -402,7 +408,9 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns s
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.TerminalColumnType,
+		},
 		TerminalFields: state.TerminalFields{
 			CurrentDir:       currentDir,
 			TerminalStepType: state.TerminalCd,
@@ -415,7 +423,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns s
 	return step
 }
 
-func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields) state.Step {
+func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "terminalCleanupStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -434,7 +442,9 @@ func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.TerminalColumnType,
+		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCd,
 		},
@@ -451,31 +461,30 @@ func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder, currentColu
 func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []state.Step {
 	// - step creation
 	var steps []state.Step
-	currentColumns := resultColumns(state.TerminalColumnType, prevColumns.AllUsed)
 
 	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
 	if prevColumns.Focus != state.TerminalColumnType && prevColumns.Focus != state.NoColumnType {
-		moveToTerminalStep := moveToTerminalStep(r, finder, currentColumns)
+		moveToTerminalStep := moveToTerminalStep(r, finder)
 		steps = append(steps, moveToTerminalStep)
 	}
 
 	if r.Type == TerminalCommand {
 		// command step
-		cmdStep := terminalCommandStep(r, finder, currentColumns)
+		cmdStep := terminalCommandStep(r, finder)
 		steps = append(steps, cmdStep)
 
 		// cd step
 		if strings.HasPrefix(r.Text, "cd ") {
-			cmdStep := terminalCdStep(r, finder, currentColumns)
+			cmdStep := terminalCdStep(r, finder)
 			steps = append(steps, cmdStep)
 		}
 	} else if r.Type == TerminalOutput {
-		outputStep := terminalOutputStep(r, finder, currentColumns)
+		outputStep := terminalOutputStep(r, finder)
 		steps = append(steps, outputStep)
 	}
 
 	// cleanup step
-	step := terminalCleanUpStep(r, finder, currentColumns)
+	step := terminalCleanUpStep(r, finder)
 	steps = append(steps, step)
 
 	return steps

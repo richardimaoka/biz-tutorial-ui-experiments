@@ -330,7 +330,7 @@ func numInSqBracket(s string) (int, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns state.ColumnFields, nthFile int) state.Step {
+func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) state.Step {
 	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -353,7 +353,9 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, currentColumns s
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
 		},
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.BrowserColumnType,
+		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType:  state.BrowserOpen,
 			BrowserImagePath: imageFileName,
@@ -382,7 +384,9 @@ func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder, currentColumns state
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: currentColumns,
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.BrowserColumnType,
+		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType: state.BrowserMove,
 		},
@@ -403,7 +407,7 @@ func breakdownBrowserRow(
 	// - step creation
 	var steps []state.Step
 
-	currentColumns := resultColumns(state.BrowserColumnType, prevColumns.AllUsed)
+	currentColumns := resultColumns(state.BrowserColumnType)
 
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
 	if prevColumns.Focus != state.BrowserColumnType && prevColumns.Focus != state.NoColumnType {
@@ -413,7 +417,7 @@ func breakdownBrowserRow(
 
 	// open browser step
 	for i := range r.ImageFileNames {
-		step := openBrowserStep(r, finder, currentColumns, i)
+		step := openBrowserStep(r, finder, i)
 		steps = append(steps, step)
 	}
 

@@ -337,7 +337,7 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 /**
  * Function(s) to convert a row to a step
  */
-func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state.Step {
+func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "fileTreeStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -356,7 +356,9 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder, usedColumns UsedCo
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.SourceColumnType,
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.FileTree,
 		},
@@ -367,7 +369,7 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder, usedColumns UsedCo
 	return step
 }
 
-func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state.Step {
+func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string) state.Step {
 	subId := "openFileStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -386,7 +388,9 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.SourceColumnType,
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceOpen,
 			DefaultOpenFilePath: filePath,
@@ -402,8 +406,8 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, usedColumns Used
 	return step
 }
 
-func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns /*, filePath string*/) state.Step {
-	subId := fmt.Sprintf("sourceCommitStep") //-%s", filePath)
+func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step {
+	subId := "sourceCommitStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := state.Step{
@@ -421,7 +425,9 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumn
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.SourceColumnType,
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.SourceCommit,
 			Commit:         r.Commit,
@@ -439,7 +445,7 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, usedColumn
 	return step
 }
 
-func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColumns UsedColumns, filePath string) state.Step {
+func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath string) state.Step {
 	subId := "openSourceErrorStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -458,7 +464,9 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.SourceColumnType,
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceMove,
 			DefaultOpenFilePath: filePath,
@@ -474,7 +482,7 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, usedColu
 	return step
 }
 
-func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedColumns UsedColumns) state.Step {
+func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder) state.Step {
 	subId := fmt.Sprintf("moveToSourceCodeStep")
 	stepId := StepIdFinder.StepIdFor(parentStepId, subId)
 
@@ -493,7 +501,9 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder, usedC
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: resultColumns(state.SourceColumnType, usedColumns),
+		ColumnFields: state.ColumnFields{
+			FocusColumn: state.SourceColumnType,
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.SourceMove,
 		},
@@ -517,11 +527,11 @@ func breakdownSourceCommitRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != state.SourceColumnType && prevColumns.Focus != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		step := moveToSourceCodeStep(r.StepId, finder)
 		steps = append(steps, step)
 	}
 
-	step := sourceCommitStep(r, finder, prevColumns.AllUsed)
+	step := sourceCommitStep(r, finder)
 	steps = append(steps, step)
 
 	// // find files from commit
@@ -552,12 +562,12 @@ func breakdownSourceOpenRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != state.SourceColumnType && prevColumns.Focus != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		step := moveToSourceCodeStep(r.StepId, finder)
 		steps = append(steps, step)
 	}
 
 	// open file step
-	step := openFileStep(r, finder, prevColumns.AllUsed, r.FilePath)
+	step := openFileStep(r, finder, r.FilePath)
 	steps = append(steps, step)
 
 	return steps, nil
@@ -573,12 +583,12 @@ func breakdownSourceErrorRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != state.SourceColumnType && prevColumns.Focus != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		step := moveToSourceCodeStep(r.StepId, finder)
 		steps = append(steps, step)
 	}
 
 	// open file step
-	step := openSourceErrorStep(r, finder, prevColumns.AllUsed, r.FilePath)
+	step := openSourceErrorStep(r, finder, r.FilePath)
 	steps = append(steps, step)
 
 	return steps, nil
@@ -594,12 +604,12 @@ func breakdownFileTreeRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumns.Focus != state.SourceColumnType && prevColumns.Focus != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder, prevColumns.AllUsed)
+		step := moveToSourceCodeStep(r.StepId, finder)
 		steps = append(steps, step)
 	}
 
 	// open file step
-	step := fileTreeStep(r, finder, prevColumns.AllUsed)
+	step := fileTreeStep(r, finder)
 	steps = append(steps, step)
 
 	return steps, nil
