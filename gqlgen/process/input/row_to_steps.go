@@ -41,7 +41,7 @@ func toSteps(
 			// case Image:
 			// 	steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 			default:
-				err = fmt.Errorf("column = '%s' is not implemented", fromRow.Column)
+				err = fmt.Errorf("slide = '%s' is not implemented", fromRow.Column)
 			}
 
 			if err != nil {

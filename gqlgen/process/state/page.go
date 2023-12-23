@@ -116,6 +116,9 @@ func (p *Page) cleanUpPrevStep() error {
 }
 
 func (p *Page) processStep(step *Step) error {
+	// Using switch, instead of interface, because stat changes pile up in the member fields
+	// of the Page struct. So it is awkward to switch the implementation of the page itself
+	// or the members of the page upon every step
 	switch step.FocusColumn {
 	case SourceColumnType:
 		if p.sourceCodeColumn == nil {
