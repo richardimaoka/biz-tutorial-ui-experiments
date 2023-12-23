@@ -12,6 +12,7 @@ func toSteps(
 	finder *StepIdFinder,
 	repo *git.Repository,
 ) ([]state.Step, error) {
+	var currentCommit string
 	currentColumn := state.NoColumnType
 
 	var allSteps []state.Step
@@ -59,7 +60,7 @@ func toSteps(
 				steps, err = toTerminalSteps(&fromRow, finder, currentColumn)
 				currentColumn = state.TerminalColumnType
 			case SourceColumn:
-				steps, err = toSourceSteps(&fromRow, finder, currentColumn)
+				steps, err = toSourceSteps(&fromRow, finder, currentColumn, repo, currentCommit)
 				currentColumn = state.SourceColumnType
 			case BrowserColumn:
 				steps, err = toBrowserSteps(&fromRow, finder, currentColumn)

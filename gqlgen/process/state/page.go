@@ -23,6 +23,8 @@ type Page struct {
 	sourceCodeColumn *SourceColumn
 	browserColumn    *BrowserColumn
 
+	//TODO: currentColumn Column
+
 	columns []Column
 
 	steps            []Step
@@ -117,8 +119,10 @@ func (p *Page) cleanUpPrevStep() error {
 
 func (p *Page) processStep(step *Step) error {
 	// Using switch, instead of interface, because stat changes pile up in the member fields
-	// of the Page struct. So it is awkward to switch the implementation of the page itself
-	// or the members of the page upon every step
+	// of the Page struct. So upon every step, it is awkward to switch the implementation
+	// of the page itself or the members of the page
+	// (... well, I thought that but probably I can still add Update() method to the Column interface - column.go -
+	//  and that just works ... ?)
 	switch step.FocusColumn {
 	case SourceColumnType:
 		if p.sourceCodeColumn == nil {

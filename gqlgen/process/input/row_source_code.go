@@ -406,7 +406,7 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 	return step
 }
 
-func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step {
+func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder, filePath string) state.Step {
 	subId := "sourceCommitStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -429,10 +429,10 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 			FocusColumn: state.SourceColumnType,
 		},
 		SourceFields: state.SourceFields{
-			SourceStepType: state.SourceCommit,
-			Commit:         r.Commit,
-			// DefaultOpenFilePath: filePath,
-			TypingAnimation: true,
+			SourceStepType:      state.SourceCommit,
+			Commit:              r.Commit,
+			DefaultOpenFilePath: filePath,
+			TypingAnimation:     true,
 		},
 	}
 	if r.Tooltip != nil {
@@ -521,6 +521,8 @@ func breakdownSourceCommitRow(
 	r *SourceCommitRow,
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
+	repo *git.Repository,
+	prevCommit string,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
@@ -531,23 +533,19 @@ func breakdownSourceCommitRow(
 		steps = append(steps, step)
 	}
 
-	step := sourceCommitStep(r, finder)
+	// find files from commit
+	filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
+	if err != nil {
+		return nil, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
+	}
+	var filePath string
+	if len(filePaths) == 1 {
+		filePath = filePaths[0]
+	}
+
+	// source commit step
+	step := sourceCommitStep(r, finder, filePath)
 	steps = append(steps, step)
-
-	// // find files from commit
-	// filePaths, err := filesBetweenCommits(repo, prevCommit, r.Commit)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("breakdownSourceCommitRow failed, %s", err)
-	// }
-
-	// // open file steps
-	// for i, filePath := range filePaths {
-	// 	step := sourceCommitStep(r, finder, prevColumns.AllUsed, filePath)
-	// 	steps = append(steps, step)
-	// 	if i == 5 {
-	// 		break
-	// 	}
-	// }
 
 	return steps, nil
 }
@@ -655,6 +653,8 @@ func toSourceSteps(
 	r *Row,
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
+	repo *git.Repository,
+	prevCommit string,
 ) ([]state.Step, error) {
 	subType, err := toSourceCodeSubType(r.SubType)
 	if err != nil {
@@ -670,7 +670,7 @@ func toSourceSteps(
 		}
 
 		// specific row -> step
-		steps, err := breakdownSourceCommitRow(row, finder, prevColumn)
+		steps, err := breakdownSourceCommitRow(row, finder, prevColumn, repo, prevCommit)
 		if err != nil {
 			return nil, fmt.Errorf("toSourceSteps failed, %s", err)
 		}
