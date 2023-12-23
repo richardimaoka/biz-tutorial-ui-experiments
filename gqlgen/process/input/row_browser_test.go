@@ -5,6 +5,7 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/testio"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func TestToBrowserSingle(t *testing.T) {
@@ -51,10 +52,10 @@ func TestToBrowserSingle2(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			currentColumns := &ColumnInfo{}
-
+			currentColumn := state.NoColumnType
 			finder := PredictableFinder(t, "testdata/browser/empty.json")
-			steps, _, err := toBrowserSteps(&fromRow, finder, currentColumns)
+
+			steps, err := toBrowserSteps(&fromRow, finder, currentColumn)
 			if err != nil {
 				t.Error(err)
 			}

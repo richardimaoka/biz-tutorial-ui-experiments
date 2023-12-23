@@ -12,7 +12,7 @@ func toSteps(
 	finder *StepIdFinder,
 	repo *git.Repository,
 ) ([]state.Step, error) {
-	currentColumns := &ColumnInfo{}
+	currentColumn := state.NoColumnType
 
 	var allSteps []state.Step
 
@@ -56,11 +56,14 @@ func toSteps(
 
 			switch column {
 			case TerminalColumn:
-				steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
+				steps, err = toTerminalSteps(&fromRow, finder, currentColumn)
+				currentColumn = state.TerminalColumnType
 			case SourceColumn:
-				steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns)
+				steps, err = toSourceSteps(&fromRow, finder, currentColumn)
+				currentColumn = state.SourceColumnType
 			case BrowserColumn:
-				steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
+				steps, err = toBrowserSteps(&fromRow, finder, currentColumn)
+				currentColumn = state.BrowserColumnType
 			default:
 				err = fmt.Errorf("column = '%s' is not implemented", fromRow.Column)
 			}

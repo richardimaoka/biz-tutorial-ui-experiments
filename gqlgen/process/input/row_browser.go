@@ -402,13 +402,13 @@ func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder) state.Step {
 func breakdownBrowserRow(
 	r *BrowserRow,
 	finder *StepIdFinder,
-	prevColumns *ColumnInfo,
+	prevColumn state.ColumnType,
 ) ([]state.Step, error) {
 	// - step creation
 	var steps []state.Step
 
 	// insert move-to-terminal step if current column != "Browser", and this is not the very first step
-	if prevColumns.Focus != state.BrowserColumnType && prevColumns.Focus != state.NoColumnType {
+	if prevColumn != state.BrowserColumnType && prevColumn != state.NoColumnType {
 		step := moveToBrowserStep(r, finder)
 		steps = append(steps, step)
 	}
@@ -429,17 +429,11 @@ func breakdownBrowserRow(
 func toBrowserSteps(
 	r *Row,
 	finder *StepIdFinder,
-	prevColumns *ColumnInfo,
-) ([]state.Step, *ColumnInfo, error) {
-	// current columns update
-	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, state.BrowserColumnType),
-		Focus:   state.BrowserColumnType,
-	}
-
+	prevColumn state.ColumnType,
+) ([]state.Step, error) {
 	subType, err := toBrowserSubType(r.Type)
 	if err != nil {
-		return nil, nil, fmt.Errorf("toBrowserSubType failed, %s", err)
+		return nil, fmt.Errorf("toBrowserSubType failed, %s", err)
 	}
 
 	switch subType {
@@ -447,46 +441,46 @@ func toBrowserSteps(
 		// row -> specific row
 		row, err := toBrowserSingleRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	case BrowserNumSeq:
 		// row -> specific row
 		row, err := toBrowserNumSeqRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	case BrowserSequence:
 		// row -> specific row
 		row, err := toBrowserSequenceRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps, err := breakdownBrowserRow(row, finder, prevColumns)
+		steps, err := breakdownBrowserRow(row, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toBrowserSteps failed, %s", err)
+			return nil, fmt.Errorf("toBrowserSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	default:
-		return nil, nil, fmt.Errorf("toBrowserSteps failed, type = '%s' not implemented", r.Type)
+		return nil, fmt.Errorf("toBrowserSteps failed, type = '%s' not implemented", r.Type)
 	}
 
 }

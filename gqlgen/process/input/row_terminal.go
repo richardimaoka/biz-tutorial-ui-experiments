@@ -458,12 +458,12 @@ func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *ColumnInfo) []state.Step {
+func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumn state.ColumnType) []state.Step {
 	// - step creation
 	var steps []state.Step
 
 	// insert move-to-terminal step if current column != "Terminal", and this is not the very first step
-	if prevColumns.Focus != state.TerminalColumnType && prevColumns.Focus != state.NoColumnType {
+	if prevColumn != state.TerminalColumnType && prevColumn != state.NoColumnType {
 		moveToTerminalStep := moveToTerminalStep(r, finder)
 		steps = append(steps, moveToTerminalStep)
 	}
@@ -493,17 +493,11 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumns *Col
 func toTerminalSteps(
 	r *Row,
 	finder *StepIdFinder,
-	prevColumns *ColumnInfo,
-) ([]state.Step, *ColumnInfo, error) {
-	// current columns update
-	currentColumns := &ColumnInfo{
-		AllUsed: appendIfNotExists(prevColumns.AllUsed, state.TerminalColumnType),
-		Focus:   state.TerminalColumnType,
-	}
-
+	prevColumn state.ColumnType,
+) ([]state.Step, error) {
 	subType, err := toTerminalSubType(r.Type)
 	if err != nil {
-		return nil, nil, fmt.Errorf("toTerminalSubType failed, %s", err)
+		return nil, fmt.Errorf("toTerminalSubType failed, %s", err)
 	}
 
 	switch subType {
@@ -511,45 +505,45 @@ func toTerminalSteps(
 		// row -> specific row
 		terminalRow, err := toTerminalCommandRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	case TerminalOutput:
 		// row -> specific row
 		terminalRow, err := toTerminalOutputRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	case TerminalOpen:
 		// row -> specific row
 		terminalRow, err := toTerminalOpenRow(r)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
 
 		// specific row -> step
-		steps := breakdownTerminalRow(terminalRow, finder, prevColumns)
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}
-		return steps, currentColumns, nil
+		return steps, nil
 
 	default:
-		return nil, nil, fmt.Errorf("toTerminalSteps failed, type = '%s' not implemented", r.Type)
+		return nil, fmt.Errorf("toTerminalSteps failed, type = '%s' not implemented", r.Type)
 	}
 }
