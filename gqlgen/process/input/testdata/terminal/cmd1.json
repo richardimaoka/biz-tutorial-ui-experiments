@@ -3,7 +3,7 @@
   "phase": "CMD の動作理解",
   "comment": "some comment",
   "column": "terminal",
-  "type": "command",
+  "subtype": "command",
   "instruction": "mkdir myproj",
   "tooltip": "チュートリアル用ディレクトリを作成します",
   "tooltipTiming": "",

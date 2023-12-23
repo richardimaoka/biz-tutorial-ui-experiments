@@ -121,9 +121,9 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 	if err != nil || column != TerminalColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toTerminalSubType(fromRow.Type)
+	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil || subType != TerminalCommand {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -177,9 +177,9 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	if err != nil || column != TerminalColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toTerminalSubType(fromRow.Type)
+	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil || subType != TerminalOutput {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -233,9 +233,9 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 	if err != nil || column != TerminalColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toTerminalSubType(fromRow.Type)
+	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -495,7 +495,7 @@ func toTerminalSteps(
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
 ) ([]state.Step, error) {
-	subType, err := toTerminalSubType(r.Type)
+	subType, err := toTerminalSubType(r.SubType)
 	if err != nil {
 		return nil, fmt.Errorf("toTerminalSubType failed, %s", err)
 	}
@@ -544,6 +544,6 @@ func toTerminalSteps(
 		return steps, nil
 
 	default:
-		return nil, fmt.Errorf("toTerminalSteps failed, type = '%s' not implemented", r.Type)
+		return nil, fmt.Errorf("toTerminalSteps failed, type = '%s' not implemented", r.SubType)
 	}
 }

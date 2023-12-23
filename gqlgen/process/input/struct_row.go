@@ -11,8 +11,8 @@ type Row struct {
 	Mode string `json:"mode"`
 
 	// Not Column but string, because it's input from manual entry, not sanitized
-	Column string `json:"column"`
-	Type   string `json:"type"`
+	Column  string `json:"column"`
+	SubType string `json:"subtype"`
 
 	// Instruction fileds
 	Instruction  string `json:"instruction"`

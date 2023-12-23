@@ -3,7 +3,7 @@
   "phase": "CMD の動作理解",
   "comment": "",
   "column": "browser",
-  "type": "sequence",
+  "subtype": "sequence",
   "instruction": "aaa,bbb,ccc.jpg",
   "instruction2": "jpg",
   "instruction3": "",

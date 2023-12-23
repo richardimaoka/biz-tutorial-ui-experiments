@@ -164,9 +164,9 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toSourceCodeSubType(fromRow.Type)
+	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceCommit {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -224,9 +224,9 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toSourceCodeSubType(fromRow.Type)
+	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceOpen {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -272,9 +272,9 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toSourceCodeSubType(fromRow.Type)
+	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != SourceError {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -323,9 +323,9 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 	if err != nil || column != SourceColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toSourceCodeSubType(fromRow.Type)
+	subType, err := toSourceCodeSubType(fromRow.SubType)
 	if err != nil || subType != FileTree {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	return &FileTreeRow{
@@ -656,7 +656,7 @@ func toSourceSteps(
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
 ) ([]state.Step, error) {
-	subType, err := toSourceCodeSubType(r.Type)
+	subType, err := toSourceCodeSubType(r.SubType)
 	if err != nil {
 		return nil, fmt.Errorf("toSourceSteps failed, %s", err)
 	}
@@ -719,6 +719,6 @@ func toSourceSteps(
 		return steps, nil
 
 	default:
-		return nil, fmt.Errorf("toSourceSteps failed, type = '%s' not implemented", r.Type)
+		return nil, fmt.Errorf("toSourceSteps failed, type = '%s' not implemented", r.SubType)
 	}
 }

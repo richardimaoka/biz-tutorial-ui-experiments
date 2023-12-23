@@ -112,9 +112,9 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
 	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toBrowserSubType(fromRow.Type)
+	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserSingle {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -162,9 +162,9 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
 	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toBrowserSubType(fromRow.Type)
+	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserNumSeq {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -222,9 +222,9 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
 	if err != nil || column != BrowserColumn {
 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.Column)
 	}
-	subType, err := toBrowserSubType(fromRow.Type)
+	subType, err := toBrowserSubType(fromRow.SubType)
 	if err != nil || subType != BrowserSequence {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.Type)
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
 	//
@@ -431,7 +431,7 @@ func toBrowserSteps(
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
 ) ([]state.Step, error) {
-	subType, err := toBrowserSubType(r.Type)
+	subType, err := toBrowserSubType(r.SubType)
 	if err != nil {
 		return nil, fmt.Errorf("toBrowserSubType failed, %s", err)
 	}
@@ -480,7 +480,7 @@ func toBrowserSteps(
 		return steps, nil
 
 	default:
-		return nil, fmt.Errorf("toBrowserSteps failed, type = '%s' not implemented", r.Type)
+		return nil, fmt.Errorf("toBrowserSteps failed, type = '%s' not implemented", r.SubType)
 	}
 
 }

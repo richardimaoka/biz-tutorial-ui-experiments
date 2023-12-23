@@ -3,7 +3,7 @@
   "phase": "CMD の動作理解",
   "comment": "",
   "column": "browser",
-  "type": "numseq",
+  "subtype": "numseq",
   "instruction": "httpd[5]",
   "instruction2": "png",
   "tooltip": "Apache HTTP Serverが立ち上がりました",
