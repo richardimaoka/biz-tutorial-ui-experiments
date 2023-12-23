@@ -60,7 +60,7 @@ func toSteps(
 				steps, err = toTerminalSteps(&fromRow, finder, currentColumn)
 				currentColumn = state.TerminalColumnType
 			case SourceColumn:
-				steps, err = toSourceSteps(&fromRow, finder, currentColumn, repo, currentCommit)
+				steps, err = toSourceSteps(&fromRow, finder, currentColumn)
 				currentColumn = state.SourceColumnType
 			case BrowserColumn:
 				steps, err = toBrowserSteps(&fromRow, finder, currentColumn)
