@@ -12,7 +12,6 @@ func toSteps(
 	finder *StepIdFinder,
 	repo *git.Repository,
 ) ([]state.Step, error) {
-	var currentCommit string
 	currentColumn := state.NoColumnType
 
 	var allSteps []state.Step

@@ -176,15 +176,11 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	var commit, defaultOpenFilePath string
-	splitInstruction := strings.Split(fromRow.Instruction, "\n")
-	if len(splitInstruction) == 1 {
-		commit = fromRow.Instruction
-	} else if len(splitInstruction) == 2 {
-		commit = splitInstruction[0]
-		defaultOpenFilePath = splitInstruction[1]
-	} else {
-		return nil, fmt.Errorf("%s, 'instruction' has more than 2 lines", errorPrefix, fromRow.SubType)
+	commit := fromRow.Instruction
+
+	var defaultOpenFilePath string
+	if fromRow.Instruction2 != "" {
+		defaultOpenFilePath = fromRow.Instruction2
 	}
 
 	typingAnimation, err := strToBool(fromRow.Instruction2)
