@@ -6,13 +6,14 @@ type Row struct {
 	Comment string `json:"comment"`
 	Trivial string `json:"trivial"`
 
-	ModalContents string `json:"modalContents"`
-
-	Mode string `json:"mode"`
-
-	// Not RowType but string, because it's input from manual entry, not sanitized
+	// Mode and type fileds
+	Mode    string `json:"mode"`
 	RowType string `json:"rowType"`
 	SubType string `json:"subtype"`
+
+	// Modal fileds
+	ModalContents string `json:"modalContents"`
+	ModalPosition string `json:"modalPosition"`
 
 	// Instruction fileds
 	Instruction  string `json:"instruction"`
