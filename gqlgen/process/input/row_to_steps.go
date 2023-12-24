@@ -32,8 +32,8 @@ func toSteps(
 			}
 
 			switch slideType {
-			// case TutorialTitle:
-			// 	steps, currentColumns, err = toTerminalSteps(&fromRow, finder, currentColumns)
+			case TutorialTitleSlide:
+				steps, err = toTutorialTitleSteps(&fromRow, finder, currentColumn)
 			// case SectionTitle:
 			// 	steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns, repo, currentCommit)
 			// case Markdown:
