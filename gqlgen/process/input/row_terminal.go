@@ -133,10 +133,10 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 	var terminalName string
-	if fromRow.Instruction2 == "" {
+	if instruction2 := fromRow.Instruction2; instruction2 == "" {
 		terminalName = "default"
 	} else {
-		terminalName = fromRow.Instruction2
+		terminalName = instruction2
 	}
 
 	//
@@ -189,10 +189,10 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 	var terminalName string
-	if fromRow.Instruction2 == "" {
+	if instruction2 := fromRow.Instruction2; instruction2 == "" {
 		terminalName = "default"
 	} else {
-		terminalName = fromRow.Instruction2
+		terminalName = instruction2
 	}
 
 	//
@@ -242,10 +242,10 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 	// Check instruction fields
 	//
 	var terminalName string
-	if fromRow.Instruction2 == "" {
+	if instruction2 := fromRow.Instruction2; instruction2 == "" {
 		terminalName = "default"
 	} else {
-		terminalName = fromRow.Instruction2
+		terminalName = instruction2
 	}
 
 	//

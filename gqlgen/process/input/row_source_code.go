@@ -179,18 +179,18 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	commit := fromRow.Instruction
 
 	var defaultOpenFilePath string
-	if fromRow.Instruction2 != "" {
-		defaultOpenFilePath = fromRow.Instruction2
+	if instruction2 := fromRow.Instruction2; instruction2 != "" {
+		defaultOpenFilePath = instruction2
 	}
 
-	typingAnimation, err := strToBool(fromRow.Instruction2)
+	typingAnimation, err := strToBool(fromRow.Instruction3)
 	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction2' is invalid, %s", errorPrefix, err)
+		return nil, fmt.Errorf("%s, 'instruction3' is invalid, %s", errorPrefix, err)
 	}
 
 	showDiff, err := strToBool(fromRow.Instruction3)
 	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction3' is invalid, %s", errorPrefix, err)
+		return nil, fmt.Errorf("%s, 'instruction4' is invalid, %s", errorPrefix, err)
 	}
 
 	//

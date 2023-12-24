@@ -71,6 +71,7 @@ func toSteps(
 			if err != nil {
 				return nil, fmt.Errorf("toSteps failed for step = %s, %s ", fromRow.StepId, err)
 			}
+
 		default:
 			return nil, fmt.Errorf("toSteps failed for step = %s, mode = '%s' is invalid", fromRow.StepId, fromRow.Mode)
 		}

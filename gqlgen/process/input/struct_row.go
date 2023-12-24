@@ -19,6 +19,7 @@ type Row struct {
 	Instruction  string `json:"instruction"`
 	Instruction2 string `json:"instruction2"`
 	Instruction3 string `json:"instruction3"`
+	Instruction4 string `json:"instruction4"`
 
 	// Tooltip fileds
 	Tooltip       string      `json:"tooltip"`
