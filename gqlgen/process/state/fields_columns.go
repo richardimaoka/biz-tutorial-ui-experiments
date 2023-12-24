@@ -7,6 +7,7 @@ package state
 type ColumnType string
 
 const (
+	// `Type` suffix is needed to avoid conflict with structs
 	NoColumnType       ColumnType = ""
 	SourceColumnType   ColumnType = "SourceCode"
 	TerminalColumnType ColumnType = "Terminal"

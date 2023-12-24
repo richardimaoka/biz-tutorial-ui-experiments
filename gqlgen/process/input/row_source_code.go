@@ -131,7 +131,6 @@ type SourceCommitRow struct {
 	DefaultOpenFilePath string         `json:"defaultOpenFilePath"`
 	Tooltip             *SourceTooltip `json:"tooltip"`
 	TypingAnimation     bool           `json:"typingAnimation"`
-	ShowDiff            bool           `json:"showDiff"`
 }
 
 type SourceOpenRow struct {
@@ -188,11 +187,6 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 		return nil, fmt.Errorf("%s, 'instruction3' is invalid, %s", errorPrefix, err)
 	}
 
-	showDiff, err := strToBool(fromRow.Instruction3)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction4' is invalid, %s", errorPrefix, err)
-	}
-
 	//
 	// Check tooltip field
 	//
@@ -217,7 +211,6 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 		DefaultOpenFilePath: defaultOpenFilePath,
 		Tooltip:             tooltip,
 		TypingAnimation:     typingAnimation,
-		ShowDiff:            showDiff,
 	}, nil
 }
 

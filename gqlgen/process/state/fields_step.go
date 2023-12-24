@@ -15,6 +15,11 @@ type Step struct {
 	AnimationFields
 
 	/**
+	 * Fields for each slide type
+	 */
+	TutorialTitleFields
+
+	/**
 	 * Fields for each column type
 	 */
 	SourceFields

@@ -2,6 +2,7 @@ package input
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -14,6 +15,9 @@ type TutorialTitleRow struct {
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	Title         string `json:"title"`
+	ImageFiles    string `json:" imageFiles"`
+	ImageSizes    string `json:"imageSizes"`
+	ImageCaptions string `json:"imageCaptions"`
 	ModalContents string `json:"modalContents"`
 }
 
@@ -33,12 +37,30 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check instruction field
 	//
 	if fromRow.Instruction == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 	tutorialTitle := fromRow.Instruction
+
+	//
+	// Check file and image fields
+	//
+	if fromRow.FilePath != "" {
+		files := strings.Split(fromRow.FilePath, "\n")
+		imageSize := strings.Split(fromRow.FilePath, "\n")
+		imageCaptions := strings.Split(fromRow.FilePath, "\n")
+
+		sameLength := len(files) == len(imageSize) && len(imageSize) == len(imageCaptions)
+		if !sameLength {
+			return nil, fmt.Errorf("%s, len(filePath) = %d, len(imageSize) = %d, len(imageCaptions) = %d should be same but got different", errorPrefix, len(files), len(imageSize), len(imageCaptions))
+		}
+
+		for i := 0; i < len(files); i++ {
+
+		}
+	}
 
 	//
 	// Check trivial field
@@ -64,32 +86,45 @@ func breakdownTutotirlaTitleRow(r *TutorialTitleRow, finder *StepIdFinder, prevC
 	// - step creation
 	var steps []state.Step
 
-	// // insert move-to-terminal step if current column != "Terminal", and this is not the very first step
-	// if prevColumn != state.TerminalColumnType && prevColumn != state.NoColumnType {
-	// 	moveToTerminalStep := moveToTerminalStep(r, finder)
-	// 	steps = append(steps, moveToTerminalStep)
-	// }
-
-	// if r.Type == TerminalCommand {
-	// 	// command step
-	// 	cmdStep := terminalCommandStep(r, finder)
-	// 	steps = append(steps, cmdStep)
-
-	// 	// cd step
-	// 	if strings.HasPrefix(r.Text, "cd ") {
-	// 		cmdStep := terminalCdStep(r, finder)
-	// 		steps = append(steps, cmdStep)
-	// 	}
-	// } else if r.Type == TerminalOutput {
-	// 	outputStep := terminalOutputStep(r, finder)
-	// 	steps = append(steps, outputStep)
-	// }
-
-	// // cleanup step
-	// step := terminalCleanUpStep(r, finder)
-	// steps = append(steps, step)
+	// cleanup step
+	step := tutorialTitleStep(r, finder)
+	steps = append(steps, step)
 
 	return steps
+}
+
+/**
+ * Function(s) to convert a row to a step
+ */
+func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.Step {
+	subId := "tutorialTitleStep"
+	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+
+	step := state.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: state.FromRowFields{
+			IsFromRow:  true,
+			ParentStep: r.StepId,
+			SubID:      subId,
+		},
+		IntrinsicFields: state.IntrinsicFields{
+			StepId:  stepId,
+			Comment: "",
+		},
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+		},
+		TutorialTitleFields: state.TutorialTitleFields{
+			TutorialTitle:              r.Title,
+			TutorialTitleImageFiles:    r.ImageFiles,
+			TutorialTitleImageSizes:    r.ImageSizes,
+			TutorialTitleImageCaptions: r.ImageCaptions,
+		},
+	}
+
+	// No tooltip - trivial step and no tooltip to show
+
+	return step
 }
 
 func toTutorialTitleSteps(

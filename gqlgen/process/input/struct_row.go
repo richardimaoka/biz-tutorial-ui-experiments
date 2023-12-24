@@ -21,6 +21,15 @@ type Row struct {
 	Instruction3 string `json:"instruction3"`
 	Instruction4 string `json:"instruction4"`
 
+	// Contents fields
+	Contents     string `json:"contents"`
+	TerminalName string `json:"terminalName"`
+
+	// FilePath fileds
+	FilePath     string `json:"filePath"`
+	ImageSize    string `json:"imageSize"`
+	ImageCaption string `json:"imageCaption"`
+
 	// Tooltip fileds
 	Tooltip       string      `json:"tooltip"`
 	TooltipTiming string      `json:"tooltipTiming"`
