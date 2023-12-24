@@ -15,7 +15,7 @@ type TutorialTitleRow struct {
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	Title         string `json:"title"`
-	ImageFiles    string `json:" imageFiles"`
+	ImageFiles    string `json:"imageFiles"`
 	ImageSizes    string `json:"imageSizes"`
 	ImageCaptions string `json:"imageCaptions"`
 	ModalContents string `json:"modalContents"`
@@ -49,16 +49,12 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	//
 	if fromRow.FilePath != "" {
 		files := strings.Split(fromRow.FilePath, "\n")
-		imageSize := strings.Split(fromRow.FilePath, "\n")
-		imageCaptions := strings.Split(fromRow.FilePath, "\n")
+		imageSize := strings.Split(fromRow.ImageSize, "\n")
+		imageCaptions := strings.Split(fromRow.ImageCaption, "\n")
 
 		sameLength := len(files) == len(imageSize) && len(imageSize) == len(imageCaptions)
 		if !sameLength {
 			return nil, fmt.Errorf("%s, len(filePath) = %d, len(imageSize) = %d, len(imageCaptions) = %d should be same but got different", errorPrefix, len(files), len(imageSize), len(imageCaptions))
-		}
-
-		for i := 0; i < len(files); i++ {
-
 		}
 	}
 
@@ -76,6 +72,9 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
 		Title:         tutorialTitle,
+		ImageFiles:    fromRow.FilePath,
+		ImageSizes:    fromRow.ImageSize,
+		ImageCaptions: fromRow.ImageCaption,
 	}, nil
 }
 
@@ -109,7 +108,7 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
-			Comment: "",
+			Comment: r.Comment,
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
