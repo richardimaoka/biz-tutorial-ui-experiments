@@ -69,9 +69,9 @@ func TocStep(r *TocRow, StepIdFinder *StepIdFinder) state.Step {
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: r.RowId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:    stepId,

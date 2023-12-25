@@ -344,9 +344,9 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: r.RowId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:      stepId,
@@ -375,9 +375,9 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: r.RowId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:      stepId,
@@ -411,9 +411,9 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: r.RowId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:      stepId,
@@ -449,9 +449,9 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: r.RowId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:      stepId,
@@ -478,16 +478,16 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath
 	return step
 }
 
-func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder) state.Step {
+func moveToSourceCodeStep(parentRowId string, StepIdFinder *StepIdFinder) state.Step {
 	subId := fmt.Sprintf("moveToSourceCodeStep")
-	stepId := StepIdFinder.StepIdFor(parentStepId, subId)
+	stepId := StepIdFinder.StepIdFor(parentRowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
-			IsFromRow:  true,
-			ParentStep: parentStepId,
-			SubID:      subId,
+			IsFromRow:   true,
+			ParentRowId: parentRowId,
+			SubID:       subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:      stepId,

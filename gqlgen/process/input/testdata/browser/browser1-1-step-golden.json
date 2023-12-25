@@ -2,7 +2,7 @@
   {
     "isFromRow": true,
     "subId": "openBrowserStep-000",
-    "parentStep": "f52c491d-3d06-4331-af48-d406957e9efd",
+    "parentRowId": "f52c491d-3d06-4331-af48-d406957e9efd",
     "stepId": "",
     "comment": "",
     "mode": "Handson",

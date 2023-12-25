@@ -28,9 +28,9 @@ type IntrinsicFields struct {
  * From row fields.  to make the step searchable for re-generation
  */
 type FromRowFields struct {
-	IsFromRow  bool   `json:"isFromRow"`
-	SubID      string `json:"subId"`
-	ParentStep string `json:"parentStep"`
+	IsFromRow   bool   `json:"isFromRow"`
+	SubID       string `json:"subId"`
+	ParentRowId string `json:"parentRowId"`
 }
 
 /**

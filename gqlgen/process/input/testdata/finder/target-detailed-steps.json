@@ -1,7 +1,7 @@
 [
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "terminalCommandStep",
     "stepId": "73388488-7f44-4617-9d6f-5cacad5bcaf8",
     "focusColumn": "Terminal",
@@ -11,7 +11,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "fileTreeStep",
     "stepId": "96d5c1df-5488-4601-9ed2-5387f3e8d5f8",
     "focusColumn": "Source Code",
@@ -20,7 +20,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-0",
     "stepId": "d748e6d7-124a-4889-92eb-6a2226272ea8",
     "focusColumn": "Source Code",
@@ -29,7 +29,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-1",
     "stepId": "292c33f3-de99-4f87-a25d-06706ef9f10c",
     "focusColumn": "Source Code",
@@ -38,7 +38,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-2",
     "stepId": "567aaaad-0181-4502-b112-fbf0028633dd",
     "focusColumn": "Source Code",
@@ -47,7 +47,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-3",
     "stepId": "4f192757-a95e-4062-9d4b-5e7d00d1dc1d",
     "focusColumn": "Source Code",
@@ -56,7 +56,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-4",
     "stepId": "b3ff849b-86ee-48f5-8703-6b19711490da",
     "focusColumn": "Source Code",
@@ -65,7 +65,7 @@
   },
   {
     "isFromRow": true,
-    "parentStep": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+    "parentRowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
     "subId": "openFileStep-5",
     "stepId": "e0d03774-d687-4d2a-aea9-ceb3b06f8592",
     "focusColumn": "Source Code",
