@@ -17,19 +17,13 @@ func TestToSteps(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			// Prepare arguments
-			repoUrl := "https://github.com/richardimaoka/article-docker-cmd-entrypoint.git"
-			repo := testio.GitOpenOrClone(t, repoUrl)
-
-			// Generate non-empty step IDs to make sure target file's IDs are indeed picked up
-			// Golden file is the target file
 			finder, _ := NewFinder(c.goldenFile)
 
 			var rows []Row
 			testio.JsonRead(t, c.inputFile, &rows)
 
 			// Function to test
-			_, err := toSteps(rows, finder, repo)
+			_, err := toSteps(rows, finder)
 			if err != nil {
 				t.Errorf("TestToSteps failed, %s", err)
 			}

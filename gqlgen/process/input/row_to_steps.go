@@ -3,14 +3,12 @@ package input
 import (
 	"fmt"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func toSteps(
 	rows []Row,
 	finder *StepIdFinder,
-	repo *git.Repository,
 ) ([]state.Step, error) {
 	currentColumn := state.NoColumnType
 

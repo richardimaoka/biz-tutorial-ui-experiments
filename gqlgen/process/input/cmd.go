@@ -6,12 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 )
 
-func process(repo *git.Repository, inputFile, targetFile string) error {
+func process(inputFile, targetFile string) error {
 	finder, err := NewFinder(targetFile)
 	if err != nil {
 		return fmt.Errorf("process failed, %s", err)
@@ -23,7 +21,7 @@ func process(repo *git.Repository, inputFile, targetFile string) error {
 		return fmt.Errorf("process failed, %v", err)
 	}
 
-	steps, err := toSteps(rows, finder, repo)
+	steps, err := toSteps(rows, finder)
 	if err != nil {
 		return fmt.Errorf("process failed, %v", err)
 	}
@@ -40,9 +38,9 @@ func Run(subArgs []string) error {
 	// Read command line arguments
 	inputCmd := flag.NewFlagSet("input", flag.ExitOnError)
 	tutorialName := inputCmd.String("tutorial", "", "tutorial name")
-	repoUrl := inputCmd.String("repo", "", "GitHub Repository URL of the tutorial")
+	// repoUrl := inputCmd.String("repo", "", "GitHub Repository URL of the tutorial")
 
-	if len(subArgs) < 3 /* 3 = input, tutorial, repo*/ {
+	if len(subArgs) < 2 /* 2 = input, tutorial */ {
 		writer := inputCmd.Output()
 		fmt.Fprintln(writer, "Error - insufficient options. Pass the following options:")
 		inputCmd.PrintDefaults()
@@ -56,14 +54,8 @@ func Run(subArgs []string) error {
 	inputFile := fmt.Sprintf("%s/input.json", dirName)
 	targetFile := fmt.Sprintf("%s/steps.json", dirName)
 
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: *repoUrl})
-	if err != nil {
-		return fmt.Errorf("input.Process() failed, %s", err)
-	}
-
 	// Process the input file and write to target
-	err = process(repo, inputFile, targetFile)
-	if err != nil {
+	if err := process(inputFile, targetFile); err != nil {
 		return fmt.Errorf("state.Run() failed, %s", err)
 	}
 
