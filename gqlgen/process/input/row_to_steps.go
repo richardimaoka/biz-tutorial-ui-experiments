@@ -36,12 +36,14 @@ func toSteps(
 			switch slideType {
 			case TutorialTitleSlide:
 				steps, err = toTutorialTitleSteps(&fromRow, finder, currentColumn)
-			// case SectionTitle:
-			// 	steps, currentColumns, err = toSourceSteps(&fromRow, finder, currentColumns, repo, currentCommit)
-			// case Markdown:
-			// 	steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
-			// case Image:
-			// 	steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
+			case SectionTitleSlide:
+				steps, err = toSectionTitleSteps(&fromRow, finder, currentColumn)
+			case MarkdownSlide:
+				steps, err = toMarkdownSteps(&fromRow, finder, currentColumn)
+			case ImageSlide:
+				steps, err = toImageSteps(&fromRow, finder, currentColumn)
+			case TocSlide:
+				steps, err = toTocSteps(&fromRow, finder, currentColumn)
 			default:
 				err = fmt.Errorf("%s, slide = '%s' is not implemented", errorPrefix, fromRow.RowType)
 			}
