@@ -145,8 +145,12 @@ func (p *Page) processStep(step *Step) error {
 			p.sectionTitleSlide.Update(step.SectionTitleFields)
 			p.slide = p.sectionTitleSlide
 			return nil
-			// case TocSlideType:
-			// case MarkdownSlideType:
+		// case TocSlideType:
+
+		case MarkdownSlideType:
+			p.slide = NewMarkdownSlide(step.MarkdownFields)
+			return nil
+
 		case ImageSlideType:
 			p.slide = NewImageSlide(step.ImageFields)
 			return nil
