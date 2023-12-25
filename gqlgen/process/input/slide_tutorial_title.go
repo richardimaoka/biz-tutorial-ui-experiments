@@ -26,7 +26,7 @@ type TutorialTitleRow struct {
  */
 
 func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
-	errorPrefix := "failed in toTerminalCommandRow"
+	errorPrefix := "failed in toTutorialTitleRow"
 
 	//
 	// Check slide type
