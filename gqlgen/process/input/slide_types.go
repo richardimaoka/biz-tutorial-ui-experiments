@@ -13,6 +13,7 @@ const (
 	SectionTitleSlide  SlideType = "section title"
 	MarkdownSlide      SlideType = "markdown"
 	ImageSlide         SlideType = "image"
+	TocSlide           SlideType = "toc"
 )
 
 func toSlideType(s string) (SlideType, error) {
@@ -27,6 +28,8 @@ func toSlideType(s string) (SlideType, error) {
 		return MarkdownSlide, nil
 	case string(ImageSlide):
 		return ImageSlide, nil
+	case string(TocSlide):
+		return TocSlide, nil
 	default:
 		return "", fmt.Errorf("'%s' is an invalid slide type", s)
 	}
