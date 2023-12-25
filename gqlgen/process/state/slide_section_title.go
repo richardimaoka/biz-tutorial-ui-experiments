@@ -10,14 +10,23 @@ type Image struct {
 }
 
 type SectionTitleSlide struct {
-	SectionNum int
-	Title      string
+	sectionNum int
+	title      string
+}
+
+func NewSectionTitleSlide() *SectionTitleSlide {
+	return &SectionTitleSlide{sectionNum: 1, title: ""}
+}
+
+func (s *SectionTitleSlide) Update(fields SectionTitleFields) {
+	s.title = fields.SectionTitle
+	s.sectionNum++
 }
 
 func (s *SectionTitleSlide) ToGraphQLSlideWrapper() *model.SlideWrapper {
 	slide := model.SectionTitleSlide{
-		SectionNum: s.SectionNum,
-		Title:      s.Title,
+		SectionNum: s.sectionNum,
+		Title:      s.title,
 	}
 
 	return &model.SlideWrapper{

@@ -26,6 +26,8 @@ type Page struct {
 	currentStepIndex int
 
 	// slide fields
+	sectionTitleSlide *SectionTitleSlide
+	slide             Slide
 
 	// column fields
 	terminalColumn   *TerminalColumn
@@ -137,7 +139,10 @@ func (p *Page) processStep(step *Step) error {
 			return nil
 
 		case SectionTitleSlideType:
-			// return p.terminalColumn.Update(step.StepId, &step.TerminalFields)
+			if p.sectionTitleSlide == nil {
+				p.sectionTitleSlide = NewSectionTitleSlide()
+			}
+			p.sectionTitleSlide.Update(step.SectionTitleFields)
 			return nil
 
 		case TocSlideType:
