@@ -349,17 +349,15 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "(file tree)",
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     "(file tree)",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.SourceColumnType,
-		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.FileTree,
 		},
@@ -382,17 +380,15 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.SourceColumnType,
-		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceOpen,
 			DefaultOpenFilePath: filePath,
@@ -420,17 +416,15 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.SourceColumnType,
-		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceCommit,
 			Commit:              r.Commit,
@@ -460,17 +454,15 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.SourceColumnType,
-		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceMove,
 			DefaultOpenFilePath: filePath,
@@ -498,17 +490,15 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder) state
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: ("(move to source code)"),
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     ("(move to source code)"),
+			Mode:        state.HandsonMode,
+			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true,
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.SourceColumnType,
-		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.SourceMove,
 		},

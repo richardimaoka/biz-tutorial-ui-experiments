@@ -84,11 +84,9 @@ func sectionTitleStep(r *SectionTitleRow, StepIdFinder *StepIdFinder) state.Step
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.SlideshowMode,
-		},
-		SlideFields: state.SlideFields{
+			StepId:    stepId,
+			Comment:   r.Comment,
+			Mode:      state.SlideshowMode,
 			SlideType: state.SectionTitleSlideType,
 		},
 		SectionTitleFields: state.SectionTitleFields{

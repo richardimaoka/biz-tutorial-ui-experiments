@@ -8,10 +8,6 @@ type Step struct {
 
 	IntrinsicFields
 
-	ColumnFields
-
-	SlideFields
-
 	ModalFields
 
 	AnimationFields

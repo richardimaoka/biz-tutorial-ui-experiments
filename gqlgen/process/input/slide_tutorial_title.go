@@ -107,11 +107,9 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.SlideshowMode,
-		},
-		SlideFields: state.SlideFields{
+			StepId:    stepId,
+			Comment:   r.Comment,
+			Mode:      state.SlideshowMode,
 			SlideType: state.TutorialTitleSlideType,
 		},
 		TutorialTitleFields: state.TutorialTitleFields{

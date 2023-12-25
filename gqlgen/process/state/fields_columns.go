@@ -14,10 +14,6 @@ const (
 	BrowserColumnType  ColumnType = "Browser"
 )
 
-type ColumnFields struct {
-	FocusColumn ColumnType `json:"focusColumn"`
-}
-
 /**
  * Source column fields
  */

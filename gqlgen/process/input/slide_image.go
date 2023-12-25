@@ -82,11 +82,9 @@ func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.SlideshowMode,
-		},
-		SlideFields: state.SlideFields{
+			StepId:    stepId,
+			Comment:   r.Comment,
+			Mode:      state.SlideshowMode,
 			SlideType: state.ImageSlideType,
 		},
 		ImageFields: state.ImageFields{

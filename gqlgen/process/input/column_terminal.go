@@ -290,18 +290,16 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
-		},
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.TerminalColumnType,
 		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCommand,
@@ -330,18 +328,16 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
-		},
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.TerminalColumnType,
 		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalOutput,
@@ -369,17 +365,15 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "(move to Terminal)",
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     "(move to Terminal)",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.TerminalColumnType,
-		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalMove,
 			TerminalName:     r.TerminalName,
@@ -404,17 +398,15 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "",
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     "",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.TerminalColumnType,
-		},
 		TerminalFields: state.TerminalFields{
 			CurrentDir:       currentDir,
 			TerminalStepType: state.TerminalCd,
@@ -439,17 +431,15 @@ func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "",
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     "",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.TerminalColumnType,
-		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCd,
 		},

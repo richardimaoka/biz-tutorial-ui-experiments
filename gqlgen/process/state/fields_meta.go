@@ -17,9 +17,11 @@ const (
  */
 
 type IntrinsicFields struct {
-	StepId  string `json:"stepId"`
-	Comment string `json:"comment"`
-	Mode    Mode   `json:"mode"`
+	StepId      string     `json:"stepId"`
+	Comment     string     `json:"comment"`
+	Mode        Mode       `json:"mode"`
+	FocusColumn ColumnType `json:"focusColumn"`
+	SlideType   SlideType  `json:"slideType"`
 }
 
 /**

@@ -344,18 +344,16 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) sta
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: r.Comment,
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.BrowserColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
-		},
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.BrowserColumnType,
 		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType:  state.BrowserOpen,
@@ -378,17 +376,15 @@ func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder) state.Step {
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
-			StepId:  stepId,
-			Comment: "(move to Browser)",
-			Mode:    state.HandsonMode,
+			StepId:      stepId,
+			Comment:     "(move to Browser)",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.BrowserColumnType,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
 		},
 		// No ModalFields, as it is a trivial step
-		ColumnFields: state.ColumnFields{
-			FocusColumn: state.BrowserColumnType,
-		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType: state.BrowserMove,
 		},

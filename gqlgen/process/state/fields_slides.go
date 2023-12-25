@@ -16,10 +16,6 @@ const (
 	ImageSlideType         SlideType = "Image"
 )
 
-type SlideFields struct {
-	SlideType SlideType `json:"slideType"`
-}
-
 /**
  * TutorialTitle slide fields
  */
