@@ -19,6 +19,10 @@ type Step struct {
 	 */
 	TutorialTitleFields
 
+	SectionTitleFields
+
+	MarkdownFields
+
 	/**
 	 * Fields for each column type
 	 */
@@ -29,8 +33,6 @@ type Step struct {
 	BrowserFields
 
 	BrowserDevToolsFields
-
-	MarkdownFields
 
 	YoutubeFields
 }

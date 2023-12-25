@@ -21,3 +21,19 @@ type TutorialTitleFields struct {
 	TutorialTitleImageSizes    string `json:"tutorialTitleImageSizes"`
 	TutorialTitleImageCaptions string `json:"tutorialTitleImageCaptions"`
 }
+
+/**
+ * SectionTitle slide fields
+ */
+type SectionTitleFields struct {
+	SectionTitle string `json:"sectionTitle"`
+}
+
+/**
+ * Markdown slide fields
+ */
+type MarkdownFields struct {
+	MarkdownContents string `json:"markdownContents"`
+	// MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment"`
+	// MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment"`
+}

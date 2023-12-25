@@ -100,15 +100,6 @@ type BrowserDevToolsFields struct {
 }
 
 /**
- * Markdown column fields
- */
-type MarkdownFields struct {
-	MarkdownContents            string `json:"markdownContents"`
-	MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment"`
-	MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment"`
-}
-
-/**
  * YouTube column fields
  */
 type YoutubeFields struct {

@@ -71,7 +71,6 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 		StepId:        fromRow.StepId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
-		ModalContents: fromRow.ModalContents,
 		Title:         tutorialTitle,
 		ImageFiles:    fromRow.FilePath,
 		ImageSizes:    fromRow.ImageSize,
@@ -110,9 +109,6 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
-		},
-		ModalFields: state.ModalFields{
-			ModalContents: r.ModalContents,
 		},
 		TutorialTitleFields: state.TutorialTitleFields{
 			TutorialTitle:              r.Title,
