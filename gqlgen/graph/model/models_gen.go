@@ -116,7 +116,7 @@ type Page struct {
 	PrevStep    *string          `json:"prevStep"`
 	IsTrivial   *bool            `json:"isTrivial"`
 	Modal       *Modal           `json:"modal"`
-	Mode        *PageMode        `json:"mode"`
+	Mode        PageMode         `json:"mode"`
 	Slide       *SlideWrapper    `json:"slide"`
 	FocusColumn *string          `json:"focusColumn"`
 	Columns     []*ColumnWrapper `json:"columns"`

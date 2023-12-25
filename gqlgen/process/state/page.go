@@ -15,20 +15,24 @@ import (
 // FocusColumn *string          `json:"focusColumn"`
 // Modal       *Modal           `json:"modal"`}
 type Page struct {
+	// global fields
 	repo       *git.Repository
 	tutorial   string
 	projectDir string
+	steps      []Step
 
+	// meta fields which are updated upon every step
+	mode             Mode
+	currentStepIndex int
+
+	// slide fields
+
+	// column fields
 	terminalColumn   *TerminalColumn
 	sourceCodeColumn *SourceColumn
 	browserColumn    *BrowserColumn
-
+	columns          []Column
 	//TODO: currentColumn Column
-
-	columns []Column
-
-	steps            []Step
-	currentStepIndex int
 }
 
 func NewPage(repo *git.Repository, tutorial string, steps []Step) *Page {
@@ -118,35 +122,69 @@ func (p *Page) cleanUpPrevStep() error {
 }
 
 func (p *Page) processStep(step *Step) error {
+	errorPrefix := fmt.Errorf("Failed to process step = '%s'", step.StepId)
+
 	// Using switch, instead of interface, because stat changes pile up in the member fields
 	// of the Page struct. So upon every step, it is awkward to switch the implementation
 	// of the page itself or the members of the page
 	// (... well, I thought that but probably I can still add Update() method to the Column interface - column.go -
 	//  and that just works ... ?)
-	switch step.FocusColumn {
-	case SourceColumnType:
-		if p.sourceCodeColumn == nil {
-			p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
-			p.columns = append(p.columns, p.sourceCodeColumn)
-		}
-		return p.sourceCodeColumn.Update(&step.SourceFields)
+	switch step.Mode {
+	case SlideshowMode:
+		switch step.SlideType {
+		case TutorialTitleSlideType:
+			// return p.sourceCodeColumn.Update(&step.SourceFields)
+			return nil
 
-	case TerminalColumnType:
-		if p.terminalColumn == nil {
-			p.terminalColumn = NewTerminalColumn()
-			p.columns = append(p.columns, p.terminalColumn)
-		}
-		return p.terminalColumn.Update(step.StepId, &step.TerminalFields)
+		case SectionTitleSlideType:
+			// return p.terminalColumn.Update(step.StepId, &step.TerminalFields)
+			return nil
 
-	case BrowserColumnType:
-		if p.browserColumn == nil {
-			p.browserColumn = NewBrowserColumn()
-			p.columns = append(p.columns, p.browserColumn)
+		case TocSlideType:
+			// return p.browserColumn.Update(&step.BrowserFields)
+			return nil
+
+		case MarkdownSlideType:
+			// return p.browserColumn.Update(&step.BrowserFields)
+			return nil
+
+		case ImageSlideType:
+			// return p.browserColumn.Update(&step.BrowserFields)
+			return nil
+
+		default:
+			return fmt.Errorf("%s, slide type = '%s' is not implemented", errorPrefix, step.SlideType)
 		}
-		return p.browserColumn.Update(&step.BrowserFields)
+
+	case HandsonMode:
+		switch step.FocusColumn {
+		case SourceColumnType:
+			if p.sourceCodeColumn == nil {
+				p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
+				p.columns = append(p.columns, p.sourceCodeColumn)
+			}
+			return p.sourceCodeColumn.Update(&step.SourceFields)
+
+		case TerminalColumnType:
+			if p.terminalColumn == nil {
+				p.terminalColumn = NewTerminalColumn()
+				p.columns = append(p.columns, p.terminalColumn)
+			}
+			return p.terminalColumn.Update(step.StepId, &step.TerminalFields)
+
+		case BrowserColumnType:
+			if p.browserColumn == nil {
+				p.browserColumn = NewBrowserColumn()
+				p.columns = append(p.columns, p.browserColumn)
+			}
+			return p.browserColumn.Update(&step.BrowserFields)
+
+		default:
+			return fmt.Errorf("%s, column type = '%s' is not implemented", errorPrefix, step.FocusColumn)
+		}
 
 	default:
-		return fmt.Errorf("Failed to process step = '%s', column type = '%s' is not implemented", step.StepId, step.FocusColumn)
+		return fmt.Errorf("%s, mode = '%s' is invalid", errorPrefix, step.Mode)
 	}
 }
 
@@ -172,6 +210,11 @@ func (p *Page) hasPrev() bool {
 }
 
 func (p *Page) ToGraphQL() *model.Page {
+	mode := p.mode.ToGraphQL()
+
+	// Handle slide
+	var slide *model.SlideWrapper
+
 	// Handle columns
 	var modelColumns []*model.ColumnWrapper
 	for _, c := range p.columns {
@@ -201,11 +244,16 @@ func (p *Page) ToGraphQL() *model.Page {
 	focusColumn := stringRef(string(currentStep.FocusColumn))
 
 	return &model.Page{
+		Step:      currentStepId,
+		NextStep:  nextStepId,
+		PrevStep:  prevStepId,
+		IsTrivial: isTrivial,
+
+		Mode: mode,
+
+		Slide: slide,
+
 		Columns:     modelColumns,
 		FocusColumn: focusColumn,
-		Step:        currentStepId,
-		NextStep:    nextStepId,
-		PrevStep:    prevStepId,
-		IsTrivial:   isTrivial,
 	}
 }

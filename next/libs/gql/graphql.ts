@@ -139,7 +139,7 @@ export type Page = {
   focusColumn?: Maybe<Scalars["String"]["output"]>;
   isTrivial?: Maybe<Scalars["Boolean"]["output"]>;
   modal?: Maybe<Modal>;
-  mode?: Maybe<PageMode>;
+  mode: PageMode;
   nextStep?: Maybe<Scalars["String"]["output"]>;
   prevStep?: Maybe<Scalars["String"]["output"]>;
   slide?: Maybe<SlideWrapper>;
@@ -265,7 +265,7 @@ export type AppTutorialPageQueryVariables = Exact<{
 export type AppTutorialPageQuery = {
   __typename: "Query";
   page?:
-    | ({ __typename: "Page"; mode?: PageMode | null } & {
+    | ({ __typename: "Page"; mode: PageMode } & {
         " $fragmentRefs"?: {
           GqlHandsonComponentFragment: GqlHandsonComponentFragment;
           GqlNavigationFragment: GqlNavigationFragment;

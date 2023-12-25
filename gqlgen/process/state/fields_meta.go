@@ -1,5 +1,11 @@
 package state
 
+import (
+	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+)
+
 /**
  * Slide fields
  */
@@ -11,6 +17,17 @@ const (
 	SlideshowMode Mode = "Slideshow"
 	HandsonMode   Mode = "Handson"
 )
+
+func (m Mode) ToGraphQL() model.PageMode {
+	switch m {
+	case SlideshowMode:
+		return model.PageModeSlideshow
+	case HandsonMode:
+		return model.PageModeHandson
+	default:
+		panic(fmt.Sprintf("mode = '%s' is invalid", m))
+	}
+}
 
 /**
  * Intrinsic step fields

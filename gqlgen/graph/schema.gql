@@ -40,7 +40,7 @@ type Page {
   modal: Modal
 
   # mode
-  mode: PageMode
+  mode: PageMode!
 
   # slideshow fields
   slide: SlideWrapper

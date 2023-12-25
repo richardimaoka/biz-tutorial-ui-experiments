@@ -3215,11 +3215,14 @@ func (ec *executionContext) _Page_mode(ctx context.Context, field graphql.Collec
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.PageMode)
+	res := resTmp.(model.PageMode)
 	fc.Result = res
-	return ec.marshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx, field.Selections, res)
+	return ec.marshalNPageMode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Page_mode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7553,6 +7556,9 @@ func (ec *executionContext) _Page(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Page_mode(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "slide":
 
 			out.Values[i] = ec._Page_slide(ctx, field, obj)
@@ -8547,6 +8553,16 @@ func (ec *executionContext) marshalNMonacoEditRange2ᚖgithubᚗcomᚋrichardima
 	return ec._MonacoEditRange(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNPageMode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, v interface{}) (model.PageMode, error) {
+	var res model.PageMode
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPageMode2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, sel ast.SelectionSet, v model.PageMode) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNSlide2githubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlide(ctx context.Context, sel ast.SelectionSet, v model.Slide) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9291,22 +9307,6 @@ func (ec *executionContext) marshalOPage2ᚖgithubᚗcomᚋrichardimaokaᚋbiz�
 		return graphql.Null
 	}
 	return ec._Page(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, v interface{}) (*model.PageMode, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.PageMode)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOPageMode2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐPageMode(ctx context.Context, sel ast.SelectionSet, v *model.PageMode) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) marshalOSlideWrapper2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐSlideWrapper(ctx context.Context, sel ast.SelectionSet, v *model.SlideWrapper) graphql.Marshaler {
