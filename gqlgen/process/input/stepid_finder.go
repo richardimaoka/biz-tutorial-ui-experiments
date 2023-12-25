@@ -30,9 +30,9 @@ func NewFinder(targetFile string) (*StepIdFinder, error) {
 	}, nil
 }
 
-func (g *StepIdFinder) StepIdFor(parentStep, subID string) string {
+func (g *StepIdFinder) StepIdFor(rowId, subID string) string {
 	for _, ds := range g.targetSteps {
-		if ds.IsFromRow && parentStep == ds.ParentStep && subID == ds.SubID {
+		if ds.IsFromRow && rowId == ds.ParentStep && subID == ds.SubID {
 			return ds.StepId
 		}
 	}

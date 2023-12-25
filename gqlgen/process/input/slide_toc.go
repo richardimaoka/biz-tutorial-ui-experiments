@@ -10,7 +10,7 @@ import (
  * TocRow type(s) and functions
  */
 type TocRow struct {
-	StepId    string `json:"stepId"`
+	RowId     string `json:"rowId"`
 	IsTrivial bool   `json:"isTrivial"`
 	Comment   string `json:"comment"`
 }
@@ -39,7 +39,7 @@ func toTocRow(fromRow *Row) (*TocRow, error) {
 	}
 
 	return &TocRow{
-		StepId:    fromRow.StepId,
+		RowId:     fromRow.RowId,
 		IsTrivial: trivial,
 		Comment:   fromRow.Comment,
 	}, nil
@@ -64,13 +64,13 @@ func breakdownTocRow(r *TocRow, finder *StepIdFinder, prevColumn state.ColumnTyp
  */
 func TocStep(r *TocRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "TocStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

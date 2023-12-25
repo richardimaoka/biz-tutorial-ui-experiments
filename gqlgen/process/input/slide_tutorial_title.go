@@ -11,7 +11,7 @@ import (
  * TutorialTitleRow type(s) and functions
  */
 type TutorialTitleRow struct {
-	StepId        string `json:"stepId"`
+	RowId         string `json:"rowId"`
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	Title         string `json:"title"`
@@ -68,7 +68,7 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	}
 
 	return &TutorialTitleRow{
-		StepId:        fromRow.StepId,
+		RowId:         fromRow.RowId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		Title:         tutorialTitle,
@@ -97,13 +97,13 @@ func breakdownTutotirlaTitleRow(r *TutorialTitleRow, finder *StepIdFinder, prevC
  */
 func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "tutorialTitleStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

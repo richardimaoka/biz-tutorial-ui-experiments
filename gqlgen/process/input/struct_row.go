@@ -1,7 +1,7 @@
 package input
 
 type Row struct {
-	StepId  string `json:"stepId"`
+	RowId   string `json:"rowId"`
 	Phase   string `json:"phase"`
 	Comment string `json:"comment"`
 	Trivial string `json:"trivial"`

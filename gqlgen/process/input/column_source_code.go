@@ -124,7 +124,7 @@ func toSourceTooltip(fromRow *Row) (*SourceTooltip, error) {
  * Source row type(s) and functions
  */
 type SourceCommitRow struct {
-	StepId              string         `json:"stepId"`
+	RowId               string         `json:"rowId"`
 	IsTrivial           bool           `json:"isTrivial"`
 	Comment             string         `json:"comment"`
 	Commit              string         `json:"commit"`
@@ -134,7 +134,7 @@ type SourceCommitRow struct {
 }
 
 type SourceOpenRow struct {
-	StepId    string         `json:"stepId"`
+	RowId     string         `json:"rowId"`
 	IsTrivial bool           `json:"isTrivial"`
 	Comment   string         `json:"comment"`
 	FilePath  string         `json:"filePath"`
@@ -142,7 +142,7 @@ type SourceOpenRow struct {
 }
 
 type SourceErrorRow struct {
-	StepId    string         `json:"stepId"`
+	RowId     string         `json:"rowId"`
 	IsTrivial bool           `json:"isTrivial"`
 	Comment   string         `json:"comment"`
 	FilePath  string         `json:"filePath"`
@@ -150,7 +150,7 @@ type SourceErrorRow struct {
 }
 
 type FileTreeRow struct {
-	StepId  string `json:"stepId"`
+	RowId   string `json:"rowId"`
 	Comment string `json:"comment"`
 }
 
@@ -204,7 +204,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	}
 
 	return &SourceCommitRow{
-		StepId:              fromRow.StepId,
+		RowId:               fromRow.RowId,
 		IsTrivial:           isTrivial,
 		Comment:             fromRow.Comment,
 		Commit:              commit,
@@ -254,7 +254,7 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	}
 
 	return &SourceOpenRow{
-		StepId:    fromRow.StepId,
+		RowId:     fromRow.RowId,
 		IsTrivial: isTrivial,
 		Comment:   fromRow.Comment,
 		FilePath:  filePath,
@@ -305,7 +305,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	}
 
 	return &SourceErrorRow{
-		StepId:    fromRow.StepId,
+		RowId:     fromRow.RowId,
 		IsTrivial: isTrivial,
 		Comment:   fromRow.Comment,
 		FilePath:  filepath,
@@ -329,7 +329,7 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 	}
 
 	return &FileTreeRow{
-		StepId:  fromRow.StepId,
+		RowId:   fromRow.RowId,
 		Comment: fromRow.Comment,
 	}, nil
 }
@@ -339,13 +339,13 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
  */
 func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "fileTreeStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -370,13 +370,13 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 
 func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string) state.Step {
 	subId := "openFileStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -406,13 +406,13 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 
 func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "sourceCommitStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -444,13 +444,13 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 
 func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath string) state.Step {
 	subId := "openSourceErrorStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -522,7 +522,7 @@ func breakdownSourceCommitRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumn != state.SourceColumnType && prevColumn != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder)
+		step := moveToSourceCodeStep(r.RowId, finder)
 		steps = append(steps, step)
 	}
 
@@ -557,7 +557,7 @@ func breakdownSourceOpenRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumn != state.SourceColumnType && prevColumn != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder)
+		step := moveToSourceCodeStep(r.RowId, finder)
 		steps = append(steps, step)
 	}
 
@@ -578,7 +578,7 @@ func breakdownSourceErrorRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumn != state.SourceColumnType && prevColumn != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder)
+		step := moveToSourceCodeStep(r.RowId, finder)
 		steps = append(steps, step)
 	}
 
@@ -599,7 +599,7 @@ func breakdownFileTreeRow(
 
 	// insert move-to-terminal step if current column != "Source Code", and this is not the very first step
 	if prevColumn != state.SourceColumnType && prevColumn != state.NoColumnType {
-		step := moveToSourceCodeStep(r.StepId, finder)
+		step := moveToSourceCodeStep(r.RowId, finder)
 		steps = append(steps, step)
 	}
 

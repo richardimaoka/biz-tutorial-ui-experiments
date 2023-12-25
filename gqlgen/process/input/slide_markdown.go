@@ -10,7 +10,7 @@ import (
  * MarkdownRow type(s) and functions
  */
 type MarkdownRow struct {
-	StepId           string `json:"stepId"`
+	RowId            string `json:"rowId"`
 	IsTrivial        bool   `json:"isTrivial"`
 	Comment          string `json:"comment"`
 	MarkdownContents string `json:"markdownContents"`
@@ -48,7 +48,7 @@ func toMarkdownRow(fromRow *Row) (*MarkdownRow, error) {
 	}
 
 	return &MarkdownRow{
-		StepId:           fromRow.StepId,
+		RowId:            fromRow.RowId,
 		IsTrivial:        trivial,
 		Comment:          fromRow.Comment,
 		MarkdownContents: markdownContents,
@@ -74,13 +74,13 @@ func breakdownMarkdownRow(r *MarkdownRow, finder *StepIdFinder, prevColumn state
  */
 func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "markdownStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

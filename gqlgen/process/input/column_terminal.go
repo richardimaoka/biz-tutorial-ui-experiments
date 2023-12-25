@@ -97,7 +97,7 @@ func toTerminalTooltip(fromRow *Row) (*TerminalTooltip, error) {
  * TerminalRow type(s) and functions
  */
 type TerminalRow struct {
-	StepId        string           `json:"stepId"`
+	RowId         string           `json:"rowId"`
 	IsTrivial     bool             `json:"isTrivial"`
 	Comment       string           `json:"comment"`
 	Type          TerminalSubType  `json:"type"`
@@ -156,7 +156,7 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	return &TerminalRow{
-		StepId:        fromRow.StepId,
+		RowId:         fromRow.RowId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
@@ -212,7 +212,7 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	return &TerminalRow{
-		StepId:        fromRow.StepId,
+		RowId:         fromRow.RowId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
@@ -265,7 +265,7 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	return &TerminalRow{
-		StepId:        fromRow.StepId,
+		RowId:         fromRow.RowId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
@@ -280,13 +280,13 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
  */
 func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "terminalCommandStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -318,13 +318,13 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 
 func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "terminalOutputStep"
-	stepId := finder.StepIdFor(r.StepId, subId)
+	stepId := finder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// Fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -355,13 +355,13 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 
 func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "moveToTerminalStep"
-	stepId := finder.StepIdFor(r.StepId, subId)
+	stepId := finder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -388,13 +388,13 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	currentDir := strings.TrimPrefix(r.Text, "cd ")
 
 	subId := "terminalCdStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -421,13 +421,13 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 
 func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "terminalCleanupStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

@@ -5,7 +5,6 @@ import (
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
 func TestFinder(t *testing.T) {
@@ -14,10 +13,10 @@ func TestFinder(t *testing.T) {
 		inputFile    string
 		subId        string
 	}{
-		{"73388488-7f44-4617-9d6f-5cacad5bcaf8", "testdata/finder/terminal1.json", "terminalCommandStep"},
-		{"96d5c1df-5488-4601-9ed2-5387f3e8d5f8", "testdata/finder/terminal1.json", "fileTreeStep"},
-		{"d748e6d7-124a-4889-92eb-6a2226272ea8", "testdata/finder/terminal1.json", "openFileStep-0"},
-		{"", "testdata/finder/terminal1.json", "non-existeint-subid"},
+		{"73388488-7f44-4617-9d6f-5cacad5bcaf8", "testdata/finder/input-row.json", "terminalCommandStep"},
+		{"96d5c1df-5488-4601-9ed2-5387f3e8d5f8", "testdata/finder/input-row.json", "fileTreeStep"},
+		{"d748e6d7-124a-4889-92eb-6a2226272ea8", "testdata/finder/input-row.json", "openFileStep-0"},
+		{"", "testdata/finder/input-row.json", "non-existeint-subid"},
 	}
 
 	targetFile := "testdata/finder/target-detailed-steps.json"
@@ -25,15 +24,15 @@ func TestFinder(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.inputFile, func(t *testing.T) {
-			var step state.Step
-			err := jsonwrap.Read(c.inputFile, &step)
+			var row input.Row
+			err := jsonwrap.Read(c.inputFile, &row)
 			if err != nil {
 				t.Fatalf("failed to unmarshal json: %v", err)
 			}
 
-			id := finder.StepIdFor(step.StepId, c.subId)
+			id := finder.StepIdFor(row.RowId, c.subId)
 			if id != c.expectedUUID {
-				t.Fatalf("expected %s, but got %s", c.expectedUUID, id)
+				t.Fatalf("expected %s, but got '%s'", c.expectedUUID, id)
 			}
 		})
 	}

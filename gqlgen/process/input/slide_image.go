@@ -10,7 +10,7 @@ import (
  * ImageRow type(s) and functions
  */
 type ImageRow struct {
-	StepId        string `json:"stepId"`
+	RowId         string `json:"rowId"`
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	ModalContents string `json:"modalContents"`
@@ -43,7 +43,7 @@ func toImageRow(fromRow *Row) (*ImageRow, error) {
 	}
 
 	return &ImageRow{
-		StepId:        fromRow.StepId,
+		RowId:         fromRow.RowId,
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
@@ -72,13 +72,13 @@ func breakdownImageRow(r *ImageRow, finder *StepIdFinder, prevColumn state.Colum
  */
 func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "ImageStep"
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

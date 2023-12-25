@@ -67,7 +67,7 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
  */
 
 type BrowserRow struct {
-	StepId         string   `json:"stepId"`
+	RowId          string   `json:"rowId"`
 	IsTrivial      bool     `json:"isTrivial"`
 	Comment        string   `json:"comment"`
 	ModalContents  string   `json:"modalContents"`
@@ -75,7 +75,7 @@ type BrowserRow struct {
 }
 
 type BrowserSingleRow struct {
-	StepId        string `json:"stepId"`
+	StepId        string `json:"rowId"`
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	ModalContents string `json:"modalContents"`
@@ -85,7 +85,7 @@ type BrowserSingleRow struct {
 var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
 type BrowserNumSeqRow struct {
-	StepId          string `json:"stepId"`
+	StepId          string `json:"rowId"`
 	IsTrivial       bool   `json:"isTrivial"`
 	Comment         string `json:"comment"`
 	ModalContents   string `json:"modalContents"`
@@ -95,7 +95,7 @@ type BrowserNumSeqRow struct {
 }
 
 type BrowserSequenceRow struct {
-	StepId         string   `json:"stepId"`
+	StepId         string   `json:"rowId"`
 	IsTrivial      bool     `json:"isTrivial"`
 	Comment        string   `json:"comment"`
 	ModalContents  string   `json:"modalContents"`
@@ -145,7 +145,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserRow, error) {
 	}
 
 	return &BrowserRow{
-		StepId:         fromRow.StepId,
+		RowId:          fromRow.RowId,
 		IsTrivial:      trivial,
 		Comment:        fromRow.Comment,
 		ImageFileNames: []string{imageFileName},
@@ -205,7 +205,7 @@ func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
 	}
 
 	return &BrowserRow{
-		StepId:         fromRow.StepId,
+		RowId:          fromRow.RowId,
 		IsTrivial:      trivial,
 		Comment:        fromRow.Comment,
 		ImageFileNames: imageFileNames,
@@ -257,7 +257,7 @@ func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
 	}
 
 	return &BrowserRow{
-		StepId:         fromRow.StepId,
+		RowId:          fromRow.RowId,
 		IsTrivial:      trivial,
 		Comment:        fromRow.Comment,
 		ImageFileNames: imgFiles,
@@ -332,7 +332,7 @@ func numInSqBracket(s string) (int, error) {
  */
 func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) state.Step {
 	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
-	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
 	imageFileName := r.ImageFileNames[nthFile]
 
@@ -340,7 +340,7 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) sta
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{
@@ -366,13 +366,13 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) sta
 
 func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder) state.Step {
 	subId := "moveToBrowserStep"
-	stepId := finder.StepIdFor(r.StepId, subId)
+	stepId := finder.StepIdFor(r.RowId, subId)
 
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
 			IsFromRow:  true,
-			ParentStep: r.StepId,
+			ParentStep: r.RowId,
 			SubID:      subId,
 		},
 		IntrinsicFields: state.IntrinsicFields{

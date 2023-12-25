@@ -1,0 +1,20 @@
+{
+  "rowId": "35b4fe2c-4612-4e51-af5e-fdf34a018cee",
+  "phase": "Next.js install",
+  "mode": "handson",
+  "rowType": "terminal",
+  "subType": "command",
+  "comment": "",
+  "trivial": "",
+  "instruction": "npm run dev",
+  "contents": "npm run dev",
+  "terminalName": "",
+  "filePath": "",
+  "imageSize": "",
+  "imageCaption": "",
+  "tooltip": "",
+  "tooltipTiming": "",
+  "tooltipLine": "",
+  "modalContents": "",
+  "modalPosition": ""
+}
