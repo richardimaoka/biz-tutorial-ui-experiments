@@ -2,13 +2,6 @@ package state
 
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
-type Image struct {
-	Src    string
-	Width  int
-	Height int
-	Captin string
-}
-
 type SectionTitleSlide struct {
 	sectionNum int
 	title      string

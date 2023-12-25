@@ -134,27 +134,20 @@ func (p *Page) processStep(step *Step) error {
 	switch step.Mode {
 	case SlideshowMode:
 		switch step.SlideType {
-		case TutorialTitleSlideType:
-			// return p.sourceCodeColumn.Update(&step.SourceFields)
-			return nil
+		// case TutorialTitleSlideType:
 
 		case SectionTitleSlideType:
 			if p.sectionTitleSlide == nil {
 				p.sectionTitleSlide = NewSectionTitleSlide()
 			}
 			p.sectionTitleSlide.Update(step.SectionTitleFields)
+			p.slide = p.sectionTitleSlide
 			return nil
 
-		case TocSlideType:
-			// return p.browserColumn.Update(&step.BrowserFields)
-			return nil
-
-		case MarkdownSlideType:
-			// return p.browserColumn.Update(&step.BrowserFields)
-			return nil
-
+			// case TocSlideType:
+			// case MarkdownSlideType:
 		case ImageSlideType:
-			// return p.browserColumn.Update(&step.BrowserFields)
+			p.slide = NewImageSlide(step.ImageFields)
 			return nil
 
 		default:
