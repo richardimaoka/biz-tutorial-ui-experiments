@@ -7,37 +7,32 @@ import (
 )
 
 /**
- * MarkdownRow type(s) and functions
+ * ImageRow type(s) and functions
  */
-type MarkdownRow struct {
-	StepId           string `json:"stepId"`
-	IsTrivial        bool   `json:"isTrivial"`
-	Comment          string `json:"comment"`
-	MarkdownContents string `json:"markdownContents"`
+type ImageRow struct {
+	StepId        string `json:"stepId"`
+	IsTrivial     bool   `json:"isTrivial"`
+	Comment       string `json:"comment"`
+	ModalContents string `json:"modalContents"`
+	ImagePath     string `json:"imagePath"`
+	ImageSize     string `json:"imageSize"`
+	ImageCaption  string `json:"imageCaption"`
 }
 
 /**
  * Function(s) to convert a row to a more specific row
  */
 
-func toMarkdownRow(fromRow *Row) (*MarkdownRow, error) {
-	errorPrefix := "failed in toMarkdownRow"
+func toImageRow(fromRow *Row) (*ImageRow, error) {
+	errorPrefix := "failed in toImageRow"
 
 	//
 	// Check slide type
 	//
 	slide, err := toSlideType(fromRow.RowType)
-	if err != nil || slide != MarkdownSlide {
+	if err != nil || slide != ImageSlide {
 		return nil, fmt.Errorf("%s, called for wrong 'rowType' = %s", errorPrefix, fromRow.RowType)
 	}
-
-	//
-	// Check instruction field
-	//
-	if fromRow.Instruction == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
-	}
-	markdownContents := fromRow.Instruction
 
 	//
 	// Check trivial field
@@ -47,23 +42,26 @@ func toMarkdownRow(fromRow *Row) (*MarkdownRow, error) {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
-	return &MarkdownRow{
-		StepId:           fromRow.StepId,
-		IsTrivial:        trivial,
-		Comment:          fromRow.Comment,
-		MarkdownContents: markdownContents,
+	return &ImageRow{
+		StepId:        fromRow.StepId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		ModalContents: fromRow.ModalContents,
+		ImagePath:     fromRow.FilePath,
+		ImageSize:     fromRow.ImageSize,
+		ImageCaption:  fromRow.ImageCaption,
 	}, nil
 }
 
 /**
  * Function(s) to break down a row to steps
  */
-func breakdownMarkdownRow(r *MarkdownRow, finder *StepIdFinder, prevColumn state.ColumnType) []state.Step {
+func breakdownImageRow(r *ImageRow, finder *StepIdFinder, prevColumn state.ColumnType) []state.Step {
 	// - step creation
 	var steps []state.Step
 
 	// cleanup step
-	step := markdownStep(r, finder)
+	step := ImageStep(r, finder)
 	steps = append(steps, step)
 
 	return steps
@@ -72,8 +70,8 @@ func breakdownMarkdownRow(r *MarkdownRow, finder *StepIdFinder, prevColumn state
 /**
  * Function(s) to convert a row to a step
  */
-func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
-	subId := "markdownStep"
+func ImageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
+	subId := "ImageStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
 	step := state.Step{
@@ -87,8 +85,10 @@ func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
 			StepId:  stepId,
 			Comment: r.Comment,
 		},
-		MarkdownFields: state.MarkdownFields{
-			MarkdownContents: r.MarkdownContents,
+		ImageFields: state.ImageFields{
+			ImagePath:    r.ImagePath,
+			ImageSize:    r.ImageSize,
+			ImageCaption: r.ImageCaption,
 		},
 	}
 
@@ -97,19 +97,19 @@ func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
 	return step
 }
 
-func toMarkdownSteps(
+func toImageSteps(
 	r *Row,
 	finder *StepIdFinder,
 	prevColumn state.ColumnType,
 ) ([]state.Step, error) {
-	errorPrefix := "failed in func toMarkdownSteps"
+	errorPrefix := "failed in toImageSteps"
 
-	specificRow, err := toMarkdownRow(r)
+	specificRow, err := toImageRow(r)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
-	steps := breakdownMarkdownRow(specificRow, finder, prevColumn)
+	steps := breakdownImageRow(specificRow, finder, prevColumn)
 	if err != nil {
 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 	}

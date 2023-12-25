@@ -15,7 +15,7 @@ type TutorialTitleRow struct {
 	IsTrivial     bool   `json:"isTrivial"`
 	Comment       string `json:"comment"`
 	Title         string `json:"title"`
-	ImageFiles    string `json:"imageFiles"`
+	ImagePaths    string `json:"imagePaths"`
 	ImageSizes    string `json:"imageSizes"`
 	ImageCaptions string `json:"imageCaptions"`
 	ModalContents string `json:"modalContents"`
@@ -72,7 +72,7 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		Title:         tutorialTitle,
-		ImageFiles:    fromRow.FilePath,
+		ImagePaths:    fromRow.FilePath,
 		ImageSizes:    fromRow.ImageSize,
 		ImageCaptions: fromRow.ImageCaption,
 	}, nil
@@ -112,7 +112,7 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 		},
 		TutorialTitleFields: state.TutorialTitleFields{
 			TutorialTitle:              r.Title,
-			TutorialTitleImageFiles:    r.ImageFiles,
+			TutorialTitleImagePaths:    r.ImagePaths,
 			TutorialTitleImageSizes:    r.ImageSizes,
 			TutorialTitleImageCaptions: r.ImageCaptions,
 		},

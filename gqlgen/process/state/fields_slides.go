@@ -17,7 +17,7 @@ const (
  */
 type TutorialTitleFields struct {
 	TutorialTitle              string `json:"tutorialTitle"`
-	TutorialTitleImageFiles    string `json:"tutorialTitleImageFiles"`
+	TutorialTitleImagePaths    string `json:"tutorialTitleImagePaths"`
 	TutorialTitleImageSizes    string `json:"tutorialTitleImageSizes"`
 	TutorialTitleImageCaptions string `json:"tutorialTitleImageCaptions"`
 }
@@ -36,4 +36,13 @@ type MarkdownFields struct {
 	MarkdownContents string `json:"markdownContents"`
 	// MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment"`
 	// MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment"`
+}
+
+/**
+ * Image slide fields
+ */
+type ImageFields struct {
+	ImagePath    string `json:"ImagePath"`
+	ImageSize    string `json:"ImageSize"`
+	ImageCaption string `json:"ImageCaption"`
 }

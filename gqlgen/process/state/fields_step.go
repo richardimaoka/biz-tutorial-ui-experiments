@@ -23,6 +23,8 @@ type Step struct {
 
 	MarkdownFields
 
+	ImageFields
+
 	/**
 	 * Fields for each column type
 	 */
