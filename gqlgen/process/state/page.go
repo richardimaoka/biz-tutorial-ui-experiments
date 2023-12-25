@@ -134,7 +134,9 @@ func (p *Page) processStep(step *Step) error {
 	switch step.Mode {
 	case SlideshowMode:
 		switch step.SlideType {
-		// case TutorialTitleSlideType:
+		case TutorialTitleSlideType:
+			p.slide = NewTutorialTitleSlide(step.TutorialTitleFields)
+			return nil
 
 		case SectionTitleSlideType:
 			if p.sectionTitleSlide == nil {
@@ -143,7 +145,6 @@ func (p *Page) processStep(step *Step) error {
 			p.sectionTitleSlide.Update(step.SectionTitleFields)
 			p.slide = p.sectionTitleSlide
 			return nil
-
 			// case TocSlideType:
 			// case MarkdownSlideType:
 		case ImageSlideType:
@@ -198,6 +199,7 @@ func (p *Page) ProcessCurrentStep() error {
 	if err := p.processStep(&currentStep); err != nil {
 		return fmt.Errorf("Failed to process step = '%s', %s", currentStep.StepId, err)
 	}
+	p.mode = currentStep.Mode
 
 	// if everything is ok, then exit
 	return nil
