@@ -48,9 +48,10 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	// Check file and image fields
 	//
 	if fromRow.FilePath != "" {
-		files := strings.Split(fromRow.FilePath, "\n")
-		imageSize := strings.Split(fromRow.ImageSize, "\n")
-		imageCaptions := strings.Split(fromRow.ImageCaption, "\n")
+		delimiter := "\n"
+		files := strings.Split(fromRow.FilePath, delimiter)
+		imageSize := strings.Split(fromRow.ImageSize, delimiter)
+		imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
 
 		sameLength := len(files) == len(imageSize) && len(imageSize) == len(imageCaptions)
 		if !sameLength {
