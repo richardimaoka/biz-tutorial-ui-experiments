@@ -86,7 +86,12 @@ func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.SlideshowMode,
 		},
+		SlideFields: state.SlideFields{
+			SlideType: state.MarkdownSlideType,
+		},
+
 		MarkdownFields: state.MarkdownFields{
 			MarkdownContents: r.MarkdownContents,
 		},

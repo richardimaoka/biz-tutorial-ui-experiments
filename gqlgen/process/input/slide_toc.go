@@ -76,6 +76,10 @@ func TocStep(r *TocRow, StepIdFinder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.SlideshowMode,
+		},
+		SlideFields: state.SlideFields{
+			SlideType: state.TocSlideType,
 		},
 	}
 

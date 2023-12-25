@@ -346,6 +346,7 @@ func openBrowserStep(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) sta
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -379,6 +380,7 @@ func moveToBrowserStep(r *BrowserRow, finder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(move to Browser)",
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true

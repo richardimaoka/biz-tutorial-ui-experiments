@@ -61,7 +61,7 @@ func breakdownImageRow(r *ImageRow, finder *StepIdFinder, prevColumn state.Colum
 	var steps []state.Step
 
 	// cleanup step
-	step := ImageStep(r, finder)
+	step := imageStep(r, finder)
 	steps = append(steps, step)
 
 	return steps
@@ -70,7 +70,7 @@ func breakdownImageRow(r *ImageRow, finder *StepIdFinder, prevColumn state.Colum
 /**
  * Function(s) to convert a row to a step
  */
-func ImageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
+func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "ImageStep"
 	stepId := StepIdFinder.StepIdFor(r.StepId, subId)
 
@@ -84,6 +84,10 @@ func ImageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.SlideshowMode,
+		},
+		SlideFields: state.SlideFields{
+			SlideType: state.ImageSlideType,
 		},
 		ImageFields: state.ImageFields{
 			ImagePath:    r.ImagePath,

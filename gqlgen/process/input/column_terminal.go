@@ -292,6 +292,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -331,6 +332,7 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -369,6 +371,7 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(move to Terminal)",
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
@@ -403,6 +406,7 @@ func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "",
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true
@@ -437,6 +441,7 @@ func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "",
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true, //always true

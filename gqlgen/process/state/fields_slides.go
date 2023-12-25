@@ -9,7 +9,11 @@ type SlideType string
 const (
 	// `Type` suffix is needed to avoid conflict with structs
 	NoSlideType            SlideType = ""
-	TutorialTitleSlideType SlideType = "TutorialSlide"
+	TutorialTitleSlideType SlideType = "TutorialTitle"
+	SectionTitleSlideType  SlideType = "SectionTitle"
+	TocSlideType           SlideType = "Toc"
+	MarkdownSlideType      SlideType = "Markdown"
+	ImageSlideType         SlideType = "Image"
 )
 
 type SlideFields struct {

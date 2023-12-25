@@ -351,6 +351,7 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: "(file tree)",
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true,
@@ -383,6 +384,7 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -420,6 +422,7 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -459,6 +462,7 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: r.Comment,
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
@@ -496,6 +500,7 @@ func moveToSourceCodeStep(parentStepId string, StepIdFinder *StepIdFinder) state
 		IntrinsicFields: state.IntrinsicFields{
 			StepId:  stepId,
 			Comment: ("(move to source code)"),
+			Mode:    state.HandsonMode,
 		},
 		AnimationFields: state.AnimationFields{
 			IsTrivial: true,
