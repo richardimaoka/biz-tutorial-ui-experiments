@@ -17,18 +17,20 @@ func toSteps(
 	var allSteps []state.Step
 
 	for _, fromRow := range rows {
+		errorPrefix := fmt.Sprintf("toSteps() failed for row = '%s'", fromRow.StepId)
+
 		var steps []state.Step
 
 		mode, err := toMode(fromRow.Mode)
 		if err != nil {
-			return nil, fmt.Errorf("mode = '%s' is invalid", fromRow.Mode)
+			return nil, fmt.Errorf("%s, mode = '%s' is invalid", errorPrefix, fromRow.Mode)
 		}
 
 		switch mode {
 		case "slideshow":
 			slideType, err := toSlideType(fromRow.RowType)
 			if err != nil {
-				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.RowType)
+				return nil, fmt.Errorf("%s, slide = '%s' is invalid", errorPrefix, fromRow.RowType)
 			}
 
 			switch slideType {
@@ -41,17 +43,17 @@ func toSteps(
 			// case Image:
 			// 	steps, currentColumns, err = toBrowserSteps(&fromRow, finder, currentColumns)
 			default:
-				err = fmt.Errorf("slide = '%s' is not implemented", fromRow.RowType)
+				err = fmt.Errorf("%s, slide = '%s' is not implemented", errorPrefix, fromRow.RowType)
 			}
 
 			if err != nil {
-				return nil, fmt.Errorf("toSteps failed for step = %s, %s ", fromRow.StepId, err)
+				return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 			}
 
 		case "handson":
 			column, err := toColumnType(fromRow.RowType)
 			if err != nil {
-				return nil, fmt.Errorf("column = '%s' is invalid", fromRow.RowType)
+				return nil, fmt.Errorf("%s, column = '%s' is invalid", errorPrefix, fromRow.RowType)
 			}
 
 			switch column {
@@ -65,15 +67,15 @@ func toSteps(
 				steps, err = toBrowserSteps(&fromRow, finder, currentColumn)
 				currentColumn = state.BrowserColumnType
 			default:
-				err = fmt.Errorf("column = '%s' is not implemented", fromRow.RowType)
+				err = fmt.Errorf("%s, column = '%s' is not implemented", errorPrefix, fromRow.RowType)
 			}
 
 			if err != nil {
-				return nil, fmt.Errorf("toSteps failed for step = %s, %s ", fromRow.StepId, err)
+				return nil, fmt.Errorf("%s, %s ", errorPrefix, err)
 			}
 
 		default:
-			return nil, fmt.Errorf("toSteps failed for step = %s, mode = '%s' is invalid", fromRow.StepId, fromRow.Mode)
+			return nil, fmt.Errorf("%s, mode = '%s' is invalid", errorPrefix, fromRow.Mode)
 		}
 
 		allSteps = append(allSteps, steps...)

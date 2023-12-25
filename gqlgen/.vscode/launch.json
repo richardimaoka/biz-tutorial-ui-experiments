@@ -22,9 +22,9 @@
       "args": [
         "input",
         "-tutorial",
-        "docker-cmd-entrypoint",
+        "nextjs-deploy-cloudrun",
         "-repo",
-        "https://github.com/richardimaoka/article-docker-cmd-entrypoint"
+        "https://github.com/richardimaoka/nextjs-deploy-cloudrun"
       ]
     },
     {
