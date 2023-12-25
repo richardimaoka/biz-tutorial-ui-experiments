@@ -6,9 +6,11 @@ type Step struct {
 	 */
 	FromRowFields // Fields to make the step searchable for re-generation
 
+	IntrinsicFields
+
 	ColumnFields
 
-	IntrinsicFields
+	SlideFields
 
 	ModalFields
 

@@ -1,12 +1,25 @@
 package state
 
 /**
+ * Slide fields
+ */
+
+type Mode string
+
+const (
+	// `Type` suffix is needed to avoid conflict with structs
+	SlideshowMode Mode = "Slideshow"
+	HandsonMode   Mode = "Handson"
+)
+
+/**
  * Intrinsic step fields
  */
 
 type IntrinsicFields struct {
 	StepId  string `json:"stepId"`
 	Comment string `json:"comment"`
+	Mode    Mode   `json:"mode"`
 }
 
 /**
@@ -29,6 +42,6 @@ type ModalFields struct {
  * Animation fields
  */
 type AnimationFields struct {
-	DurationSeconds int  `json:"durationSeconds"`
-	IsTrivial       bool `json:"isTrivial"`
+	// DurationSeconds int  `json:"durationSeconds"`
+	IsTrivial bool `json:"isTrivial"`
 }

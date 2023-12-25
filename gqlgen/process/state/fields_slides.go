@@ -1,7 +1,7 @@
 package state
 
 /**
- * Column fields
+ * Slide fields
  */
 
 type SlideType string
@@ -11,6 +11,10 @@ const (
 	NoSlideType            SlideType = ""
 	TutorialTitleSlideType SlideType = "TutorialSlide"
 )
+
+type SlideFields struct {
+	SlideType SlideType `json:"slideType"`
+}
 
 /**
  * TutorialTitle slide fields
