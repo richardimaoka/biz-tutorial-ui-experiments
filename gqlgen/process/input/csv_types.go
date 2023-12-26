@@ -38,7 +38,7 @@ func (v *CsvInt) UnmarshalJSON(b []byte) error {
 
 		intValue, err := strconv.Atoi(stringValue)
 		if err != nil {
-			return fmt.Errorf("unmarshan to CsvInt failed, %s", err)
+			return fmt.Errorf("unmarshal to CsvInt failed, %s", err)
 		}
 		*v = CsvInt(intValue)
 		return nil

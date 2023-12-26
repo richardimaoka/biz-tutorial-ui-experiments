@@ -50,12 +50,12 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	if fromRow.FilePath != "" {
 		delimiter := "\n"
 		files := strings.Split(fromRow.FilePath, delimiter)
-		imageSize := strings.Split(fromRow.ImageSize, delimiter)
+		imageSizes := strings.Split(fromRow.ImageSize, delimiter)
 		imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
 
-		sameLength := len(files) == len(imageSize) && len(imageSize) == len(imageCaptions)
+		sameLength := len(files) == len(imageSizes) && len(imageSizes) == len(imageCaptions)
 		if !sameLength {
-			return nil, fmt.Errorf("%s, len(filePath) = %d, len(imageSize) = %d, len(imageCaptions) = %d should be same but got different", errorPrefix, len(files), len(imageSize), len(imageCaptions))
+			return nil, fmt.Errorf("%s, len(filePath) = %d, len(imageSize) = %d, len(imageCaptions) = %d should be same but got different", errorPrefix, len(files), len(imageSizes), len(imageCaptions))
 		}
 	}
 
