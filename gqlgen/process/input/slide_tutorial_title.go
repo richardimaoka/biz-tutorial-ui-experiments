@@ -55,15 +55,15 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 
 		if fromRow.ImageCaption == "" {
 			imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
-			sameLength := len(files) == fromRow.ImageWidths.Length() &&
-				fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length() &&
-				fromRow.ImageHeights.Length() == len(imageCaptions)
+			sameLength := len(files) == fromRow.ImageWidth.Length() &&
+				fromRow.ImageWidth.Length() == fromRow.ImageHeight.Length() &&
+				fromRow.ImageHeight.Length() == len(imageCaptions)
 			if !sameLength {
 				return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths, imageCaptions got different", errorPrefix)
 			}
 		} else {
-			sameLength := len(files) == fromRow.ImageWidths.Length() &&
-				fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length()
+			sameLength := len(files) == fromRow.ImageWidth.Length() &&
+				fromRow.ImageWidth.Length() == fromRow.ImageHeight.Length()
 			if !sameLength {
 				return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths got different", errorPrefix)
 			}
@@ -84,8 +84,8 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 		Comment:       fromRow.Comment,
 		Title:         tutorialTitle,
 		ImagePaths:    fromRow.FilePath,
-		ImageWidths:   fromRow.ImageWidths,
-		ImageHeights:  fromRow.ImageHeights,
+		ImageWidths:   fromRow.ImageWidth,
+		ImageHeights:  fromRow.ImageHeight,
 		ImageCaptions: fromRow.ImageCaption,
 	}, nil
 }

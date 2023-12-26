@@ -9,9 +9,9 @@ type ImageSlide struct {
 func NewImageSlide(fields ImageFields) *ImageSlide {
 	return &ImageSlide{
 		image: Image{
-			src: fields.ImagePath,
-			//  width: fields.ImageSize,
-			//  height: fields.ImageSize,
+			src:     fields.ImagePath,
+			width:   fields.ImageWidth,
+			height:  fields.ImageHeight,
 			caption: fields.ImageCaption,
 		},
 	}

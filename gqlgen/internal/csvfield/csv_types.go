@@ -87,6 +87,16 @@ func (v *MultiInt) Get(index int) int {
 	}
 }
 
+func (v *MultiInt) GetSingleValue() int {
+	if v.isZeroValue {
+		panic("trying to get single value of zero-value MultiInt")
+	} else if v.isMultiValue {
+		panic("trying to get single value of multi-value MultiInt")
+	} else {
+		return v.singularValue
+	}
+}
+
 func (v *MultiInt) UnmarshalJSON(b []byte) error {
 	// If it is a string value, suposedly empty string "" or multi `int` values delimited by "\n"
 	var stringValue string

@@ -3,6 +3,7 @@ package input
 import (
 	"fmt"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -10,13 +11,14 @@ import (
  * ImageRow type(s) and functions
  */
 type ImageRow struct {
-	RowId         string `json:"rowId"`
-	IsTrivial     bool   `json:"isTrivial"`
-	Comment       string `json:"comment"`
-	ModalContents string `json:"modalContents"`
-	ImagePath     string `json:"imagePath"`
-	ImageSize     string `json:"imageSize"`
-	ImageCaption  string `json:"imageCaption"`
+	RowId         string            `json:"rowId"`
+	IsTrivial     bool              `json:"isTrivial"`
+	Comment       string            `json:"comment"`
+	ModalContents string            `json:"modalContents"`
+	ImagePath     string            `json:"imagePath"`
+	ImageWidth    csvfield.MultiInt `json:"imageWidth"`
+	ImageHeight   csvfield.MultiInt `json:"imageHeight"`
+	ImageCaption  string            `json:"imageCaption"`
 }
 
 /**
@@ -48,7 +50,7 @@ func toImageRow(fromRow *Row) (*ImageRow, error) {
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
 		ImagePath:     fromRow.FilePath,
-		ImageSize:     fromRow.ImageSize,
+		ImageWidth:    fromRow.ImageWidth,
 		ImageCaption:  fromRow.ImageCaption,
 	}, nil
 }
@@ -74,6 +76,9 @@ func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 	subId := "ImageStep"
 	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
+	height := r.ImageHeight.GetSingleValue()
+	width := r.ImageWidth.GetSingleValue()
+
 	step := state.Step{
 		// fields to make the step searchable for re-generation
 		FromRowFields: state.FromRowFields{
@@ -89,7 +94,8 @@ func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 		},
 		ImageFields: state.ImageFields{
 			ImagePath:    r.ImagePath,
-			ImageSize:    r.ImageSize,
+			ImageWidth:   width,
+			ImageHeight:  height,
 			ImageCaption: r.ImageCaption,
 		},
 	}

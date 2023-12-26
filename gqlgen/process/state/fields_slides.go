@@ -50,6 +50,7 @@ type MarkdownFields struct {
  */
 type ImageFields struct {
 	ImagePath    string `json:"ImagePath"`
-	ImageSize    string `json:"ImageSize"`
+	ImageWidth   int    `json:"ImageWidth"`
+	ImageHeight  int    `json:"ImageHeight"`
 	ImageCaption string `json:"ImageCaption"`
 }
