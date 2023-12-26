@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
@@ -11,15 +12,15 @@ import (
  * TutorialTitleRow type(s) and functions
  */
 type TutorialTitleRow struct {
-	RowId         string      `json:"rowId"`
-	IsTrivial     bool        `json:"isTrivial"`
-	Comment       string      `json:"comment"`
-	Title         string      `json:"title"`
-	ImagePaths    string      `json:"imagePaths"`
-	ImageWidths   CsvMultiInt `json:"imageWidths"`
-	ImageHeights  CsvMultiInt `json:"imageHeights"`
-	ImageCaptions string      `json:"imageCaptions"`
-	ModalContents string      `json:"modalContents"`
+	RowId         string               `json:"rowId"`
+	IsTrivial     bool                 `json:"isTrivial"`
+	Comment       string               `json:"comment"`
+	Title         string               `json:"title"`
+	ImagePaths    string               `json:"imagePaths"`
+	ImageWidths   csvfield.CsvMultiInt `json:"imageWidths"`
+	ImageHeights  csvfield.CsvMultiInt `json:"imageHeights"`
+	ImageCaptions string               `json:"imageCaptions"`
+	ModalContents string               `json:"modalContents"`
 }
 
 /**

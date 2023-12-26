@@ -1,5 +1,7 @@
 package input
 
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
+
 type Row struct {
 	RowId   string `json:"rowId"`
 	Phase   string `json:"phase"`
@@ -26,11 +28,11 @@ type Row struct {
 	TerminalName string `json:"terminalName"`
 
 	// FilePath fileds
-	FilePath     string      `json:"filePath"`
-	ImageSize    string      `json:"imageSize"`
-	ImageWidths  CsvMultiInt `json:"imageWidths"`
-	ImageHeights CsvMultiInt `json:"imageHeights"`
-	ImageCaption string      `json:"imageCaption"`
+	FilePath     string               `json:"filePath"`
+	ImageSize    string               `json:"imageSize"`
+	ImageWidths  csvfield.CsvMultiInt `json:"imageWidths"`
+	ImageHeights csvfield.CsvMultiInt `json:"imageHeights"`
+	ImageCaption string               `json:"imageCaption"`
 
 	// Tooltip fileds
 	Tooltip       string      `json:"tooltip"`

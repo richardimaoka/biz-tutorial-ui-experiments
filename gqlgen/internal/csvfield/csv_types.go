@@ -1,4 +1,4 @@
-package input
+package csvfield
 
 import (
 	"encoding/json"

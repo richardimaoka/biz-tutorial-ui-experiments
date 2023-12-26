@@ -1,15 +1,15 @@
-package input_test
+package csvfield_test
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/input"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 )
 
 func TestCsvString(t *testing.T) {
 	cases := []struct {
-		expected   input.CsvString
+		expected   csvfield.CsvString
 		inputBytes []byte
 	}{
 		{"1", []byte(`1`)},
@@ -19,7 +19,7 @@ func TestCsvString(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(string(c.expected), func(t *testing.T) {
-			var result input.CsvString
+			var result csvfield.CsvString
 			err := json.Unmarshal(c.inputBytes, &result)
 
 			if err != nil {
@@ -36,7 +36,7 @@ func TestCsvString(t *testing.T) {
 func TestCsvInt(t *testing.T) {
 	cases := []struct {
 		name       string
-		expected   input.CsvInt
+		expected   csvfield.CsvInt
 		inputBytes []byte
 	}{
 		{"one", 1, []byte(`1`)},
@@ -46,7 +46,7 @@ func TestCsvInt(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			var result input.CsvInt
+			var result csvfield.CsvInt
 			err := json.Unmarshal(c.inputBytes, &result)
 
 			if err != nil {
