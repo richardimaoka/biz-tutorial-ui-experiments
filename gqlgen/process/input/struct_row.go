@@ -30,8 +30,8 @@ type Row struct {
 	// FilePath fileds
 	FilePath     string            `json:"filePath"`
 	ImageSize    string            `json:"imageSize"`
-	ImageWidths  csvfield.MultiInt `json:"imageWidths"`
-	ImageHeights csvfield.MultiInt `json:"imageHeights"`
+	ImageWidths  csvfield.MultiInt `json:"imageWidth"`
+	ImageHeights csvfield.MultiInt `json:"imageHeight"`
 	ImageCaption string            `json:"imageCaption"`
 
 	// Tooltip fileds

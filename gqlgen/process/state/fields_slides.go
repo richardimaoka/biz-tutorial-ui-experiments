@@ -1,5 +1,7 @@
 package state
 
+import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
+
 /**
  * Slide fields
  */
@@ -20,10 +22,11 @@ const (
  * TutorialTitle slide fields
  */
 type TutorialTitleFields struct {
-	TutorialTitle              string `json:"tutorialTitle"`
-	TutorialTitleImagePaths    string `json:"tutorialTitleImagePaths"`
-	TutorialTitleImageSizes    string `json:"tutorialTitleImageSizes"`
-	TutorialTitleImageCaptions string `json:"tutorialTitleImageCaptions"`
+	TutorialTitle              string            `json:"tutorialTitle"`
+	TutorialTitleImagePaths    string            `json:"tutorialTitleImagePaths"`
+	TutorialTitleImageWidths   csvfield.MultiInt `json:"tutorialTitleImageWidths"`
+	TutorialTitleImageHeights  csvfield.MultiInt `json:"tutorialTitleImageHeights"`
+	TutorialTitleImageCaptions string            `json:"tutorialTitleImageCaptions"`
 }
 
 /**

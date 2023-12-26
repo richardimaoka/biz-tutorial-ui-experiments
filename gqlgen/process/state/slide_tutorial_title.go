@@ -17,7 +17,10 @@ func NewTutorialTitleSlide(fields TutorialTitleFields, tutorial string) (*Tutori
 
 	var images []*Image
 	for i := 0; i < len(imagePaths); i++ {
-		image := NewImage(tutorial, imagePaths[i], 0, 0, "")
+		width := fields.TutorialTitleImageWidths.Get(i)
+		height := fields.TutorialTitleImageWidths.Get(i)
+
+		image := NewImage(tutorial, imagePaths[i], width, height, "")
 		if err := image.copyFile(); err != nil {
 			return nil, fmt.Errorf("NewTutorialTitleSlide faield, %s", err)
 		}

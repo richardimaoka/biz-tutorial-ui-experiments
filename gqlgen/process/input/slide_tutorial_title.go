@@ -52,14 +52,21 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	if fromRow.FilePath != "" {
 		delimiter := "\n"
 		files := strings.Split(fromRow.FilePath, delimiter)
-		imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
 
-		sameLength := len(files) == fromRow.ImageWidths.Length() &&
-			fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length() &&
-			fromRow.ImageHeights.Length() == len(imageCaptions)
-
-		if !sameLength {
-			return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths, imageCaptions got different", errorPrefix)
+		if fromRow.ImageCaption == "" {
+			imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
+			sameLength := len(files) == fromRow.ImageWidths.Length() &&
+				fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length() &&
+				fromRow.ImageHeights.Length() == len(imageCaptions)
+			if !sameLength {
+				return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths, imageCaptions got different", errorPrefix)
+			}
+		} else {
+			sameLength := len(files) == fromRow.ImageWidths.Length() &&
+				fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length()
+			if !sameLength {
+				return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths got different", errorPrefix)
+			}
 		}
 	}
 
@@ -118,9 +125,10 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 			SlideType: state.TutorialTitleSlideType,
 		},
 		TutorialTitleFields: state.TutorialTitleFields{
-			TutorialTitle:           r.Title,
-			TutorialTitleImagePaths: r.ImagePaths,
-			// TutorialTitleImageSizes:    r.ImageSizes,
+			TutorialTitle:              r.Title,
+			TutorialTitleImagePaths:    r.ImagePaths,
+			TutorialTitleImageWidths:   r.ImageWidths,
+			TutorialTitleImageHeights:  r.ImageHeights,
 			TutorialTitleImageCaptions: r.ImageCaptions,
 		},
 	}
