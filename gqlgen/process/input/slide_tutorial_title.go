@@ -12,15 +12,15 @@ import (
  * TutorialTitleRow type(s) and functions
  */
 type TutorialTitleRow struct {
-	RowId         string               `json:"rowId"`
-	IsTrivial     bool                 `json:"isTrivial"`
-	Comment       string               `json:"comment"`
-	Title         string               `json:"title"`
-	ImagePaths    string               `json:"imagePaths"`
-	ImageWidths   csvfield.CsvMultiInt `json:"imageWidths"`
-	ImageHeights  csvfield.CsvMultiInt `json:"imageHeights"`
-	ImageCaptions string               `json:"imageCaptions"`
-	ModalContents string               `json:"modalContents"`
+	RowId         string            `json:"rowId"`
+	IsTrivial     bool              `json:"isTrivial"`
+	Comment       string            `json:"comment"`
+	Title         string            `json:"title"`
+	ImagePaths    string            `json:"imagePaths"`
+	ImageWidths   csvfield.MultiInt `json:"imageWidths"`
+	ImageHeights  csvfield.MultiInt `json:"imageHeights"`
+	ImageCaptions string            `json:"imageCaptions"`
+	ModalContents string            `json:"modalContents"`
 }
 
 /**

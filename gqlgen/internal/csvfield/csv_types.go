@@ -7,33 +7,33 @@ import (
 	"strings"
 )
 
-type CsvString string //Whether it's an integer value or a string, forcefully convert to a String in Go
+type String string //Whether it's an integer value or a string, forcefully convert to a String in Go
 
-func (v *CsvString) UnmarshalJSON(b []byte) error {
+func (v *String) UnmarshalJSON(b []byte) error {
 	var intValue int
 	if err := json.Unmarshal(b, &intValue); err == nil {
 		// if no error, successfully unmarshaled to int, then convert the int to CsvString
-		*v = CsvString(strconv.Itoa(intValue))
+		*v = String(strconv.Itoa(intValue))
 		return nil
 	}
 
 	var stringValue string
 	if err := json.Unmarshal(b, &stringValue); err == nil {
 		// if no error, successfully unmarshaled to string
-		*v = CsvString(stringValue)
+		*v = String(stringValue)
 		return nil
 	} else {
 		return fmt.Errorf("unmarshal to CsvString failed, %s", err)
 	}
 }
 
-type CsvInt int
+type Int int
 
-func (v *CsvInt) UnmarshalJSON(b []byte) error {
+func (v *Int) UnmarshalJSON(b []byte) error {
 	var stringValue string
 	if err := json.Unmarshal(b, &stringValue); err == nil {
 		if stringValue == "" {
-			*v = CsvInt(0)
+			*v = Int(0)
 			return nil
 		}
 
@@ -41,7 +41,7 @@ func (v *CsvInt) UnmarshalJSON(b []byte) error {
 		if err != nil {
 			return fmt.Errorf("unmarshal to CsvInt failed, %s", err)
 		}
-		*v = CsvInt(intValue)
+		*v = Int(intValue)
 		return nil
 	}
 
@@ -49,25 +49,25 @@ func (v *CsvInt) UnmarshalJSON(b []byte) error {
 	err := json.Unmarshal(b, &intValue)
 	// if no error, successfully unmarshaled to int
 	if err == nil {
-		*v = CsvInt(intValue)
+		*v = Int(intValue)
 		return nil
 	}
 
 	return fmt.Errorf("unmarshal to CsvInt failed, %s", err)
 }
 
-type CsvMultiInt struct {
+type MultiInt struct {
 	singularValue int
 	multiValues   []int
 	isZeroValue   bool
 	isMultiValue  bool
 }
 
-func (v *CsvMultiInt) Delimiter() string {
+func (v *MultiInt) Delimiter() string {
 	return "\n"
 }
 
-func (v *CsvMultiInt) Length() int {
+func (v *MultiInt) Length() int {
 	if v.isZeroValue {
 		return 0
 	} else if v.isMultiValue {
@@ -77,7 +77,7 @@ func (v *CsvMultiInt) Length() int {
 	}
 }
 
-func (v *CsvMultiInt) UnmarshalJSON(b []byte) error {
+func (v *MultiInt) UnmarshalJSON(b []byte) error {
 	// If it is a string value, suposedly empty string "" or multi `int` values delimited by "\n"
 	var stringValue string
 	if err := json.Unmarshal(b, &stringValue); err == nil {
@@ -110,7 +110,7 @@ func (v *CsvMultiInt) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (v CsvMultiInt) MarshalJSON() ([]byte, error) {
+func (v MultiInt) MarshalJSON() ([]byte, error) {
 	if v.isZeroValue {
 		return nil, nil
 	}

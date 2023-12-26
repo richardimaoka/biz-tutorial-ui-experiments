@@ -9,7 +9,7 @@ import (
 
 func TestCsvString(t *testing.T) {
 	cases := []struct {
-		expected   csvfield.CsvString
+		expected   csvfield.String
 		inputBytes []byte
 	}{
 		{"1", []byte(`1`)},
@@ -19,7 +19,7 @@ func TestCsvString(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(string(c.expected), func(t *testing.T) {
-			var result csvfield.CsvString
+			var result csvfield.String
 			err := json.Unmarshal(c.inputBytes, &result)
 
 			if err != nil {
@@ -36,7 +36,7 @@ func TestCsvString(t *testing.T) {
 func TestCsvInt(t *testing.T) {
 	cases := []struct {
 		name       string
-		expected   csvfield.CsvInt
+		expected   csvfield.Int
 		inputBytes []byte
 	}{
 		{"one", 1, []byte(`1`)},
@@ -46,7 +46,7 @@ func TestCsvInt(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			var result csvfield.CsvInt
+			var result csvfield.Int
 			err := json.Unmarshal(c.inputBytes, &result)
 
 			if err != nil {
