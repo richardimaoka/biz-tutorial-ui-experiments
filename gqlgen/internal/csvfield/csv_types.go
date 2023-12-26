@@ -77,23 +77,23 @@ func (v *MultiInt) Length() int {
 	}
 }
 
-func (v *MultiInt) Get(index int) int {
+func (v *MultiInt) Get(index int) (int, error) {
 	if v.isZeroValue {
-		panic("trying to get [%s] of zero-value MultiInt")
+		return 0, fmt.Errorf("trying to get [%d] of zero-value MultiInt", index)
 	} else if v.isMultiValue {
-		return v.multiValues[index]
+		return v.multiValues[index], nil
 	} else {
-		panic("trying to get [%s] of single-value MultiInt")
+		return 0, fmt.Errorf("trying to get [%d] of single-value MultiInt", index)
 	}
 }
 
-func (v *MultiInt) GetSingleValue() int {
+func (v *MultiInt) GetSingleValue() (int, error) {
 	if v.isZeroValue {
-		panic("trying to get single value of zero-value MultiInt")
+		return 0, fmt.Errorf("trying to get single value of zero-value MultiInt")
 	} else if v.isMultiValue {
-		panic("trying to get single value of multi-value MultiInt")
+		return 0, fmt.Errorf("trying to get single value of multi-value MultiInt")
 	} else {
-		return v.singularValue
+		return v.singularValue, nil
 	}
 }
 

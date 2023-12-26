@@ -13,16 +13,25 @@ type TutorialTitleSlide struct {
 }
 
 func NewTutorialTitleSlide(fields TutorialTitleFields, tutorial string) (*TutorialTitleSlide, error) {
+	errorPrefix := "NewTutorialTitleSlide failed"
 	imagePaths := strings.Split(fields.TutorialTitleImagePaths, "\n")
+	captions := strings.Split(fields.TutorialTitleImageCaptions, "\n")
 
 	var images []*Image
 	for i := 0; i < len(imagePaths); i++ {
-		width := fields.TutorialTitleImageWidths.Get(i)
-		height := fields.TutorialTitleImageWidths.Get(i)
+		width, err := fields.TutorialTitleImageWidths.Get(i)
+		if err != nil {
+			return nil, fmt.Errorf("%s, invalid width, %s", errorPrefix, err)
+		}
 
-		image := NewImage(tutorial, imagePaths[i], width, height, "")
+		height, err := fields.TutorialTitleImageWidths.Get(i)
+		if err != nil {
+			return nil, fmt.Errorf("%s, invalid height, %s", errorPrefix, err)
+		}
+
+		image := NewImage(tutorial, imagePaths[i], width, height, captions[i])
 		if err := image.copyFile(); err != nil {
-			return nil, fmt.Errorf("NewTutorialTitleSlide faield, %s", err)
+			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}
 
 		images = append(images, image)
