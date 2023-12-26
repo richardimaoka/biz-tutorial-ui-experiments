@@ -124,8 +124,6 @@ func (p *Page) cleanUpPrevStep() error {
 }
 
 func (p *Page) processStep(step *Step) error {
-	errorPrefix := fmt.Errorf("Failed to process step = '%s'", step.StepId)
-
 	// Using switch, instead of interface, because stat changes pile up in the member fields
 	// of the Page struct. So upon every step, it is awkward to switch the implementation
 	// of the page itself or the members of the page
@@ -135,7 +133,11 @@ func (p *Page) processStep(step *Step) error {
 	case SlideshowMode:
 		switch step.SlideType {
 		case TutorialTitleSlideType:
-			p.slide = NewTutorialTitleSlide(step.TutorialTitleFields)
+			slide, err := NewTutorialTitleSlide(step.TutorialTitleFields, p.tutorial)
+			if err != nil {
+				return err
+			}
+			p.slide = slide
 			return nil
 
 		case SectionTitleSlideType:
@@ -156,7 +158,7 @@ func (p *Page) processStep(step *Step) error {
 			return nil
 
 		default:
-			return fmt.Errorf("%s, slide type = '%s' is not implemented", errorPrefix, step.SlideType)
+			return fmt.Errorf("slide type = '%s' is not implemented", step.SlideType)
 		}
 
 	case HandsonMode:
@@ -183,11 +185,11 @@ func (p *Page) processStep(step *Step) error {
 			return p.browserColumn.Update(&step.BrowserFields)
 
 		default:
-			return fmt.Errorf("%s, column type = '%s' is not implemented", errorPrefix, step.FocusColumn)
+			return fmt.Errorf("column type = '%s' is not implemented", step.FocusColumn)
 		}
 
 	default:
-		return fmt.Errorf("%s, mode = '%s' is invalid", errorPrefix, step.Mode)
+		return fmt.Errorf("mode = '%s' is invalid", step.Mode)
 	}
 }
 
@@ -218,6 +220,9 @@ func (p *Page) ToGraphQL() *model.Page {
 
 	// Handle slide
 	var slide *model.SlideWrapper
+	if p.slide != nil {
+		slide = p.slide.ToGraphQLSlideWrapper()
+	}
 
 	// Handle columns
 	var modelColumns []*model.ColumnWrapper
