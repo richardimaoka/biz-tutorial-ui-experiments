@@ -15,17 +15,19 @@ type Image struct {
 	caption  string
 }
 
-func NewImage(tutorial string,
+func NewImage(
+	tutorial string,
 	src string,
 	width int,
 	height int,
 	caption string) *Image {
 
-	return &Image{tutorial: tutorial,
-		src:     src,
-		width:   width,
-		height:  height,
-		caption: caption,
+	return &Image{
+		tutorial: tutorial,
+		src:      src,
+		width:    width,
+		height:   height,
+		caption:  caption,
 	}
 }
 

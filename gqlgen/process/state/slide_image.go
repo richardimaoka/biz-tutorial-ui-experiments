@@ -3,17 +3,18 @@ package state
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
 type ImageSlide struct {
-	image Image
+	image *Image
 }
 
-func NewImageSlide(fields ImageFields) *ImageSlide {
+func NewImageSlide(fields ImageFields, tutorial string) *ImageSlide {
 	return &ImageSlide{
-		image: Image{
-			src:     fields.ImagePath,
-			width:   fields.ImageWidth,
-			height:  fields.ImageHeight,
-			caption: fields.ImageCaption,
-		},
+		image: NewImage(
+			tutorial,
+			fields.ImagePath,
+			fields.ImageWidth,
+			fields.ImageHeight,
+			fields.ImageCaption,
+		),
 	}
 }
 
