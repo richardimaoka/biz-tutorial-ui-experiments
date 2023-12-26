@@ -26,9 +26,11 @@ type Row struct {
 	TerminalName string `json:"terminalName"`
 
 	// FilePath fileds
-	FilePath     string `json:"filePath"`
-	ImageSize    string `json:"imageSize"`
-	ImageCaption string `json:"imageCaption"`
+	FilePath     string      `json:"filePath"`
+	ImageSize    string      `json:"imageSize"`
+	ImageWidths  CsvMultiInt `json:"imageWidths"`
+	ImageHeights CsvMultiInt `json:"imageHeights"`
+	ImageCaption string      `json:"imageCaption"`
 
 	// Tooltip fileds
 	Tooltip       string      `json:"tooltip"`

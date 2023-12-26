@@ -11,14 +11,15 @@ import (
  * TutorialTitleRow type(s) and functions
  */
 type TutorialTitleRow struct {
-	RowId         string `json:"rowId"`
-	IsTrivial     bool   `json:"isTrivial"`
-	Comment       string `json:"comment"`
-	Title         string `json:"title"`
-	ImagePaths    string `json:"imagePaths"`
-	ImageSizes    string `json:"imageSizes"`
-	ImageCaptions string `json:"imageCaptions"`
-	ModalContents string `json:"modalContents"`
+	RowId         string      `json:"rowId"`
+	IsTrivial     bool        `json:"isTrivial"`
+	Comment       string      `json:"comment"`
+	Title         string      `json:"title"`
+	ImagePaths    string      `json:"imagePaths"`
+	ImageWidths   CsvMultiInt `json:"imageWidths"`
+	ImageHeights  CsvMultiInt `json:"imageHeights"`
+	ImageCaptions string      `json:"imageCaptions"`
+	ModalContents string      `json:"modalContents"`
 }
 
 /**
@@ -50,12 +51,14 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	if fromRow.FilePath != "" {
 		delimiter := "\n"
 		files := strings.Split(fromRow.FilePath, delimiter)
-		imageSizes := strings.Split(fromRow.ImageSize, delimiter)
 		imageCaptions := strings.Split(fromRow.ImageCaption, delimiter)
 
-		sameLength := len(files) == len(imageSizes) && len(imageSizes) == len(imageCaptions)
+		sameLength := len(files) == fromRow.ImageWidths.Length() &&
+			fromRow.ImageWidths.Length() == fromRow.ImageHeights.Length() &&
+			fromRow.ImageHeights.Length() == len(imageCaptions)
+
 		if !sameLength {
-			return nil, fmt.Errorf("%s, len(filePath) = %d, len(imageSize) = %d, len(imageCaptions) = %d should be same but got different", errorPrefix, len(files), len(imageSizes), len(imageCaptions))
+			return nil, fmt.Errorf("%s, length of filePaths, imageSizes, imageWidths, imageCaptions got different", errorPrefix)
 		}
 	}
 
@@ -73,7 +76,8 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 		Comment:       fromRow.Comment,
 		Title:         tutorialTitle,
 		ImagePaths:    fromRow.FilePath,
-		ImageSizes:    fromRow.ImageSize,
+		ImageWidths:   fromRow.ImageWidths,
+		ImageHeights:  fromRow.ImageHeights,
 		ImageCaptions: fromRow.ImageCaption,
 	}, nil
 }
@@ -113,9 +117,9 @@ func tutorialTitleStep(r *TutorialTitleRow, StepIdFinder *StepIdFinder) state.St
 			SlideType: state.TutorialTitleSlideType,
 		},
 		TutorialTitleFields: state.TutorialTitleFields{
-			TutorialTitle:              r.Title,
-			TutorialTitleImagePaths:    r.ImagePaths,
-			TutorialTitleImageSizes:    r.ImageSizes,
+			TutorialTitle:           r.Title,
+			TutorialTitleImagePaths: r.ImagePaths,
+			// TutorialTitleImageSizes:    r.ImageSizes,
 			TutorialTitleImageCaptions: r.ImageCaptions,
 		},
 	}

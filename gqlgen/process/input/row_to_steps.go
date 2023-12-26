@@ -14,10 +14,13 @@ func toSteps(
 
 	var allSteps []state.Step
 
-	for _, fromRow := range rows {
+	for i, fromRow := range rows {
+		var steps []state.Step
 		errorPrefix := fmt.Sprintf("toSteps() failed for row = '%s'", fromRow.RowId)
 
-		var steps []state.Step
+		if fromRow.RowId == "" {
+			return nil, fmt.Errorf("%s, rows[%d] got empty `rowId`", errorPrefix, i)
+		}
 
 		mode, err := toMode(fromRow.Mode)
 		if err != nil {

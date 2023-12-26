@@ -59,6 +59,7 @@ func (v *CsvInt) UnmarshalJSON(b []byte) error {
 type CsvMultiInt struct {
 	singularValue int
 	multiValues   []int
+	isZeroValue   bool
 	isMultiValue  bool
 }
 
@@ -66,12 +67,22 @@ func (v *CsvMultiInt) Delimiter() string {
 	return "\n"
 }
 
+func (v *CsvMultiInt) Length() int {
+	if v.isZeroValue {
+		return 0
+	} else if v.isMultiValue {
+		return len(v.multiValues)
+	} else {
+		return 1
+	}
+}
+
 func (v *CsvMultiInt) UnmarshalJSON(b []byte) error {
 	// If it is a string value, suposedly empty string "" or multi `int` values delimited by "\n"
 	var stringValue string
 	if err := json.Unmarshal(b, &stringValue); err == nil {
 		if stringValue == "" {
-			*v = CsvMultiInt{} // zero values handle this case
+			v.isZeroValue = true
 			return nil
 		}
 
@@ -100,6 +111,9 @@ func (v *CsvMultiInt) UnmarshalJSON(b []byte) error {
 }
 
 func (v CsvMultiInt) MarshalJSON() ([]byte, error) {
+	if v.isZeroValue {
+		return nil, nil
+	}
 	if v.isMultiValue {
 		var ss []string
 		for _, i := range v.multiValues {
@@ -107,8 +121,6 @@ func (v CsvMultiInt) MarshalJSON() ([]byte, error) {
 		}
 		joined := strings.Join(ss, v.Delimiter())
 		return json.Marshal(joined)
-	} else if v.singularValue == 0 {
-		return nil, nil
 	} else {
 		return json.Marshal(v.singularValue)
 	}
