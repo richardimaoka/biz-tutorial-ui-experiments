@@ -82,8 +82,10 @@ const (
 )
 
 type BrowserFields struct {
-	BrowserStepType  BrowserStepType
-	BrowserImagePath string `json:"browserImagePath"`
+	BrowserStepType    BrowserStepType
+	BrowserImagePath   string `json:"browserImagePath"`
+	BrowserImageWidth  int    `json:"browserImageWidth"`
+	BrowserImageHeight int    `json:"browserImageHeight"`
 }
 
 /**

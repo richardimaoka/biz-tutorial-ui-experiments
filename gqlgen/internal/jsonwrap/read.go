@@ -17,7 +17,7 @@ func ExtractTypeName(jsonBytes []byte, fromField string) (string, error) {
 
 	typeNameRaw, ok := unmarshaled[fromField]
 	if !ok {
-		return "", fmt.Errorf("\"%s\" does not exist in JSON", fromField)
+		return "", fmt.Errorf("\"%s\" does not exist in JSON = %s", fromField, jsonBytes)
 	}
 
 	typeName, ok := typeNameRaw.(string)

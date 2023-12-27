@@ -180,7 +180,7 @@ func (p *Page) processStep(step *Step) error {
 
 		case BrowserColumnType:
 			if p.browserColumn == nil {
-				p.browserColumn = NewBrowserColumn()
+				p.browserColumn = NewBrowserColumn(step.BrowserFields)
 				p.columns = append(p.columns, p.browserColumn)
 			}
 			return p.browserColumn.Update(&step.BrowserFields)

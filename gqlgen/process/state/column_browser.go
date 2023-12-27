@@ -3,10 +3,17 @@ package state
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
 type BrowserColumn struct {
+	imageFilePath   string
+	imageFileWidth  int
+	imageFileHeight int
 }
 
-func NewBrowserColumn() *BrowserColumn {
-	return &BrowserColumn{}
+func NewBrowserColumn(fields BrowserFields) *BrowserColumn {
+	return &BrowserColumn{
+		fields.BrowserImagePath,
+		fields.BrowserImageWidth,
+		fields.BrowserImageHeight,
+	}
 }
 
 func (c *BrowserColumn) Update(fields *BrowserFields) error {
