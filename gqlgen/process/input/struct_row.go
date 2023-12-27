@@ -18,9 +18,9 @@ type Row struct {
 	ModalPosition string `json:"modalPosition"`
 
 	// Instruction fileds
-	Instruction  string        `json:"instruction"`
-	Instruction2 string        `json:"instruction2"`
-	Instruction3 csvfield.Bool `json:"instruction3"`
+	Instruction     string        `json:"instruction"`
+	Instruction2    string        `json:"instruction2"`
+	TypingAnimation csvfield.Bool `json:"typingAnimation"`
 
 	// Contents fields
 	Contents     string `json:"contents"`

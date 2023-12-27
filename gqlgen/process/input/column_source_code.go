@@ -182,7 +182,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 		defaultOpenFilePath = instruction2
 	}
 
-	typingAnimation := bool(fromRow.Instruction3)
+	typingAnimation := bool(fromRow.TypingAnimation)
 
 	//
 	// Check tooltip field
