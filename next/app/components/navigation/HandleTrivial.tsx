@@ -16,7 +16,7 @@ export function HandleTrivial(props: Props) {
     let timeoutId: number | null;
     if (props.isTrivial && props.nextStep) {
       const path = `${pathname}?step=${props.nextStep}`;
-      const setTimeoutInterval = 1000; //milli-seconds
+      const setTimeoutInterval = 200; //milli-seconds
 
       timeoutId = window.setTimeout(
         () => router.push(path),
