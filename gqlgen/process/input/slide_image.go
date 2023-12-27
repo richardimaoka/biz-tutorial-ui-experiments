@@ -100,6 +100,9 @@ func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 			Mode:      state.SlideshowMode,
 			SlideType: state.ImageSlideType,
 		},
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+		},
 		ImageFields: state.ImageFields{
 			ImagePath:    r.ImagePath,
 			ImageWidth:   r.ImageWidth,

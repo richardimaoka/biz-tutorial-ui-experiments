@@ -89,7 +89,6 @@ func markdownStep(r *MarkdownRow, StepIdFinder *StepIdFinder) state.Step {
 			Mode:      state.SlideshowMode,
 			SlideType: state.MarkdownSlideType,
 		},
-
 		MarkdownFields: state.MarkdownFields{
 			MarkdownContents: r.MarkdownContents,
 		},

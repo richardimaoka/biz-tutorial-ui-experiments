@@ -24,6 +24,7 @@ type Page struct {
 	// meta fields which are updated upon every step
 	mode             Mode
 	currentStepIndex int
+	modalContents    string
 
 	// slide fields
 	sectionTitleSlide *SectionTitleSlide
@@ -206,6 +207,7 @@ func (p *Page) ProcessCurrentStep() error {
 		return fmt.Errorf("Failed to process step = '%s', %s", currentStep.StepId, err)
 	}
 	p.mode = currentStep.Mode
+	p.modalContents = currentStep.ModalContents
 
 	// if everything is ok, then exit
 	return nil
@@ -252,6 +254,14 @@ func (p *Page) ToGraphQL() *model.Page {
 	// Handle FocusColumn
 	focusColumn := stringRef(string(currentStep.FocusColumn))
 
+	// Handle Modal
+	var modal *model.Modal
+	if p.modalContents != "" {
+		modal = &model.Modal{
+			MarkdownBody: p.modalContents,
+		}
+	}
+
 	return &model.Page{
 		Step:      currentStepId,
 		NextStep:  nextStepId,
@@ -264,5 +274,7 @@ func (p *Page) ToGraphQL() *model.Page {
 
 		Columns:     modelColumns,
 		FocusColumn: focusColumn,
+
+		Modal: modal,
 	}
 }
