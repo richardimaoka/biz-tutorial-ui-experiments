@@ -182,10 +182,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 		defaultOpenFilePath = instruction2
 	}
 
-	typingAnimation, err := strToBool(fromRow.Instruction3)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction3' is invalid, %s", errorPrefix, err)
-	}
+	typingAnimation := bool(fromRow.Instruction3)
 
 	//
 	// Check tooltip field

@@ -7,6 +7,36 @@ import (
 	"strings"
 )
 
+type Bool bool //Whether it's an integer value or a string, forcefully convert to a String in Go
+
+func (v *Bool) UnmarshalJSON(b []byte) error {
+	var boolValue bool
+	if err := json.Unmarshal(b, &boolValue); err == nil {
+		// if no error, successfully unmarshaled to bool
+		*v = Bool(boolValue)
+		return nil
+	}
+
+	var stringValue string
+	if err := json.Unmarshal(b, &stringValue); err != nil {
+		return fmt.Errorf("unmarshal to csvfied.Bool failed, %s", err)
+	}
+
+	switch strings.ToLower(stringValue) {
+	case "":
+		*v = false // zero value
+		return nil
+	case "true":
+		*v = true
+		return nil
+	case "false":
+		*v = true
+		return nil
+	default:
+		return fmt.Errorf("unmarshal to csvfied.Bool failed, '%s' is invalid", stringValue)
+	}
+}
+
 type String string //Whether it's an integer value or a string, forcefully convert to a String in Go
 
 func (v *String) UnmarshalJSON(b []byte) error {
@@ -23,7 +53,7 @@ func (v *String) UnmarshalJSON(b []byte) error {
 		*v = String(stringValue)
 		return nil
 	} else {
-		return fmt.Errorf("unmarshal to CsvString failed, %s", err)
+		return fmt.Errorf("unmarshal to csvfield.String failed, %s", err)
 	}
 }
 
@@ -39,7 +69,7 @@ func (v *Int) UnmarshalJSON(b []byte) error {
 
 		intValue, err := strconv.Atoi(stringValue)
 		if err != nil {
-			return fmt.Errorf("unmarshal to CsvInt failed, %s", err)
+			return fmt.Errorf("unmarshal to csvfield.Int failed, %s", err)
 		}
 		*v = Int(intValue)
 		return nil
@@ -53,7 +83,7 @@ func (v *Int) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
-	return fmt.Errorf("unmarshal to CsvInt failed, %s", err)
+	return fmt.Errorf("unmarshal to csvfield.Int failed, %s", err)
 }
 
 type MultiInt struct {
@@ -111,7 +141,7 @@ func (v *MultiInt) UnmarshalJSON(b []byte) error {
 		for _, n := range numberStrings {
 			intValue, err := strconv.Atoi(n)
 			if err != nil {
-				return fmt.Errorf("CsvMultiInt failed to unmarshal, `%s` cannot be converted to int, %s", n, err)
+				return fmt.Errorf("csvfield.MultiInt failed to unmarshal, `%s` cannot be converted to int, %s", n, err)
 			}
 			v.multiValues = append(v.multiValues, intValue)
 			v.isMultiValue = true
@@ -124,7 +154,7 @@ func (v *MultiInt) UnmarshalJSON(b []byte) error {
 	err := json.Unmarshal(b, &intValue)
 	// if no error, successfully unmarshaled to int
 	if err != nil {
-		return fmt.Errorf("CsvMultiInt failed to unmarshal, %s", err)
+		return fmt.Errorf("csvfield.MultiInt failed to unmarshal, %s", err)
 	}
 	v.singularValue = intValue
 	return nil
