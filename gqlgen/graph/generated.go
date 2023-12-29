@@ -1067,14 +1067,11 @@ func (ec *executionContext) _Browser_image(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Image)
 	fc.Result = res
-	return ec.marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
+	return ec.marshalOImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Browser_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6926,9 +6923,6 @@ func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, 
 
 			out.Values[i] = ec._Browser_image(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9095,6 +9089,13 @@ func (ec *executionContext) marshalOImage2ᚕᚖgithubᚗcomᚋrichardimaokaᚋb
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalOImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx context.Context, sel ast.SelectionSet, v *model.Image) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Image(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {

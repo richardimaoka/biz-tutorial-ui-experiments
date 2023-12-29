@@ -1,38 +1,60 @@
 package state
 
-import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+import (
+	"fmt"
+
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
+)
 
 type BrowserColumn struct {
-	browser *Browser
+	tutorial string
+	browser  *Browser
 }
 
-func NewBrowserColumn(fields BrowserFields, tutorial string) *BrowserColumn {
+func NewBrowserColumn(tutorial string) *BrowserColumn {
 	return &BrowserColumn{
-		browser: NewBrowser(
-			tutorial,
-			fields.BrowserImagePath,
-			fields.BrowserImageWidth,
-			fields.BrowserImageHeight,
-		),
+		tutorial: tutorial,
+		browser:  NewBrowser(),
 	}
 }
 
+func (c *BrowserColumn) Open(fields *BrowserFields) error {
+	return c.browser.SetImage(
+		c.tutorial,
+		fields.BrowserImagePath,
+		fields.BrowserImageWidth,
+		fields.BrowserImageHeight,
+	)
+}
+
 func (c *BrowserColumn) Update(fields *BrowserFields) error {
-	c = &BrowserColumn{
-		browser: NewBrowser(
-			c.browser.image.tutorial,
-			fields.BrowserImagePath,
-			fields.BrowserImageWidth,
-			fields.BrowserImageHeight,
-		),
+	errorPrefix := fmt.Errorf("Update() failed")
+
+	var err error
+	switch fields.BrowserStepType {
+	case BrowserOpen:
+		err = c.Open(fields)
+	case BrowserMove:
+		// no update is needed, just changing FocusColumn is fine
+	default:
+		err = fmt.Errorf("browser step type = '%s' is not implemented yet", fields.BrowserStepType)
+	}
+	// check if error happend
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", errorPrefix, err)
 	}
 
 	return nil
 }
 
 func (c *BrowserColumn) ToGraphQL() *model.BrowserColumn {
+	var browserModel *model.Browser
+	if c.browser != nil {
+		browserModel = c.browser.ToGraphQL()
+	}
+
 	return &model.BrowserColumn{
-		Browser: c.browser.ToGraphQL(),
+		Browser: browserModel,
 	}
 }
 

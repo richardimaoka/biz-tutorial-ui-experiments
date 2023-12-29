@@ -119,16 +119,16 @@ func (c *SourceColumn) CleanUpPrevStep() error {
 }
 
 func (c *SourceColumn) Update(fields *SourceFields) error {
-	funcName := "Update()"
+	errorPrefix := "Update() failed"
 
 	err := c.sourceCode.clearEdits()
 	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
+		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
 	err = c.sourceCode.closeFileTree()
 	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
+		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
 	switch fields.SourceStepType {
@@ -137,16 +137,17 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 	case SourceMove:
 		// no update is needed, just changing FocusColumn is fine
 	case SourceOpen:
-		c.SourceOpen(fields)
+		err = c.SourceOpen(fields)
 	case SourceError:
 		err = c.SourceError(fields)
 	case SourceCommit:
 		err = c.Commit(fields)
+	default:
+		err = fmt.Errorf("soruce step type = '%s' is not implemented yet", fields.SourceStepType)
 	}
-
 	// check if error happend
 	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
+		return fmt.Errorf("%s failed, %s", errorPrefix, err)
 	}
 
 	return nil

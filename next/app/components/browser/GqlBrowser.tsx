@@ -21,6 +21,10 @@ export function GqlBrowser(props: Props) {
   const fragment = useFragment(fragmentDefinition, props.fragment);
   const image = fragment.image;
 
+  if (!image) {
+    return <></>;
+  }
+
   return (
     <Image
       className={styles.image}

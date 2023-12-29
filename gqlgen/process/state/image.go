@@ -40,7 +40,7 @@ func (i *Image) copyFile() error {
 	}
 
 	destPath := fmt.Sprintf("../next/public/images/%s/%s", i.tutorial, i.src)
-	if err := os.WriteFile(destPath, bytes, 666); err != nil {
+	if err := os.WriteFile(destPath, bytes, 0666); err != nil {
 		return fmt.Errorf("failed to copy file %s, %s", i.src, err)
 	}
 

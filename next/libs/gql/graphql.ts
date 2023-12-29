@@ -31,7 +31,7 @@ export type Scalars = {
 
 export type Browser = {
   __typename: "Browser";
-  image: Image;
+  image?: Maybe<Image>;
 };
 
 export type BrowserColumn = Column & {
@@ -275,13 +275,13 @@ export type AppTutorialPageQuery = {
 
 export type GqlBrowserFragment = {
   __typename: "Browser";
-  image: {
+  image?: {
     __typename: "Image";
     src: string;
     width: number;
     height: number;
     caption?: string | null;
-  };
+  } | null;
 } & { " $fragmentName"?: "GqlBrowserFragment" };
 
 export type GqlBrowserColumnFragment = {
