@@ -2,7 +2,8 @@
   height: 100%;
   background-color: var(--color-background);
 
-  overflow-x: hidden;
+  overflow-x: hidden; /* Hide the horizontal scroll bar for carousel */
+  overflow-y: hidden; /* Hide the vertical scroll bar when any of column content is long in y-axis */
 }
 
 .carouselSlider {
