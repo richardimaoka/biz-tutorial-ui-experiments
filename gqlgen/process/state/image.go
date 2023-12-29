@@ -50,7 +50,7 @@ func (i *Image) copyFile() error {
 func (i *Image) ToGraphQL() *model.Image {
 	src := fmt.Sprintf("/images/%s/%s", i.tutorial, i.src)
 	width := i.width
-	height := i.width
+	height := i.height
 	caption := stringRef(i.caption)
 
 	return &model.Image{
