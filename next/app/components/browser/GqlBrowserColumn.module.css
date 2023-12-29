@@ -1,0 +1,7 @@
+.component {
+  height: 100%;
+
+  /* coloring */
+  background-color: var(--color-background);
+  color: var(--color-primary-text);
+}

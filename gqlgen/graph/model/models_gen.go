@@ -19,9 +19,7 @@ type Slide interface {
 }
 
 type Browser struct {
-	Width  int    `json:"width"`
-	Height int    `json:"height"`
-	Path   string `json:"path"`
+	Image *Image `json:"image"`
 }
 
 type BrowserColumn struct {

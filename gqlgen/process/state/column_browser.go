@@ -3,25 +3,37 @@ package state
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/graph/model"
 
 type BrowserColumn struct {
-	imageFilePath   string
-	imageFileWidth  int
-	imageFileHeight int
+	browser *Browser
 }
 
-func NewBrowserColumn(fields BrowserFields) *BrowserColumn {
+func NewBrowserColumn(fields BrowserFields, tutorial string) *BrowserColumn {
 	return &BrowserColumn{
-		fields.BrowserImagePath,
-		fields.BrowserImageWidth,
-		fields.BrowserImageHeight,
+		browser: NewBrowser(
+			tutorial,
+			fields.BrowserImagePath,
+			fields.BrowserImageWidth,
+			fields.BrowserImageHeight,
+		),
 	}
 }
 
 func (c *BrowserColumn) Update(fields *BrowserFields) error {
+	c = &BrowserColumn{
+		browser: NewBrowser(
+			c.browser.image.tutorial,
+			fields.BrowserImagePath,
+			fields.BrowserImageWidth,
+			fields.BrowserImageHeight,
+		),
+	}
+
 	return nil
 }
 
 func (c *BrowserColumn) ToGraphQL() *model.BrowserColumn {
-	return nil //&model.BrowserColumn2{}
+	return &model.BrowserColumn{
+		Browser: c.browser.ToGraphQL(),
+	}
 }
 
 func (c *BrowserColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {

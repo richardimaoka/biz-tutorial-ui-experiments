@@ -46,9 +46,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Browser struct {
-		Height func(childComplexity int) int
-		Path   func(childComplexity int) int
-		Width  func(childComplexity int) int
+		Image func(childComplexity int) int
 	}
 
 	BrowserColumn struct {
@@ -240,26 +238,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Browser.height":
-		if e.complexity.Browser.Height == nil {
+	case "Browser.image":
+		if e.complexity.Browser.Image == nil {
 			break
 		}
 
-		return e.complexity.Browser.Height(childComplexity), true
-
-	case "Browser.path":
-		if e.complexity.Browser.Path == nil {
-			break
-		}
-
-		return e.complexity.Browser.Path(childComplexity), true
-
-	case "Browser.width":
-		if e.complexity.Browser.Width == nil {
-			break
-		}
-
-		return e.complexity.Browser.Width(childComplexity), true
+		return e.complexity.Browser.Image(childComplexity), true
 
 	case "BrowserColumn.browser":
 		if e.complexity.BrowserColumn.Browser == nil {
@@ -1062,8 +1046,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Browser_width(ctx context.Context, field graphql.CollectedField, obj *model.Browser) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Browser_width(ctx, field)
+func (ec *executionContext) _Browser_image(ctx context.Context, field graphql.CollectedField, obj *model.Browser) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Browser_image(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1076,7 +1060,7 @@ func (ec *executionContext) _Browser_width(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Width, nil
+		return obj.Image, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1088,107 +1072,29 @@ func (ec *executionContext) _Browser_width(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(*model.Image)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNImage2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Browser_width(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Browser_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Browser",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Browser_height(ctx context.Context, field graphql.CollectedField, obj *model.Browser) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Browser_height(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Height, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Browser_height(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Browser",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Browser_path(ctx context.Context, field graphql.CollectedField, obj *model.Browser) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Browser_path(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Path, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Browser_path(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Browser",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "src":
+				return ec.fieldContext_Image_src(ctx, field)
+			case "width":
+				return ec.fieldContext_Image_width(ctx, field)
+			case "height":
+				return ec.fieldContext_Image_height(ctx, field)
+			case "caption":
+				return ec.fieldContext_Image_caption(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
 		},
 	}
 	return fc, nil
@@ -1274,12 +1180,8 @@ func (ec *executionContext) fieldContext_BrowserColumn_browser(ctx context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "width":
-				return ec.fieldContext_Browser_width(ctx, field)
-			case "height":
-				return ec.fieldContext_Browser_height(ctx, field)
-			case "path":
-				return ec.fieldContext_Browser_path(ctx, field)
+			case "image":
+				return ec.fieldContext_Browser_image(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Browser", field.Name)
 		},
@@ -7020,23 +6922,9 @@ func (ec *executionContext) _Browser(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Browser")
-		case "width":
+		case "image":
 
-			out.Values[i] = ec._Browser_width(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "height":
-
-			out.Values[i] = ec._Browser_height(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "path":
-
-			out.Values[i] = ec._Browser_path(ctx, field, obj)
+			out.Values[i] = ec._Browser_image(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

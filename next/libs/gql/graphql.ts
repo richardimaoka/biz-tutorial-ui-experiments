@@ -31,9 +31,7 @@ export type Scalars = {
 
 export type Browser = {
   __typename: "Browser";
-  height: Scalars["Int"]["output"];
-  path: Scalars["String"]["output"];
-  width: Scalars["Int"]["output"];
+  image: Image;
 };
 
 export type BrowserColumn = Column & {
@@ -275,6 +273,24 @@ export type AppTutorialPageQuery = {
     | null;
 };
 
+export type GqlBrowserFragment = {
+  __typename: "Browser";
+  image: {
+    __typename: "Image";
+    src: string;
+    width: number;
+    height: number;
+    caption?: string | null;
+  };
+} & { " $fragmentName"?: "GqlBrowserFragment" };
+
+export type GqlBrowserColumnFragment = {
+  __typename: "BrowserColumn";
+  browser: { __typename: "Browser" } & {
+    " $fragmentRefs"?: { GqlBrowserFragment: GqlBrowserFragment };
+  };
+} & { " $fragmentName"?: "GqlBrowserColumnFragment" };
+
 export type GqlHandsonComponentFragment = ({ __typename: "Page" } & {
   " $fragmentRefs"?: {
     GqlHandsonHeaderFragment: GqlHandsonHeaderFragment;
@@ -286,7 +302,11 @@ export type GqlColumnWrapperFragment = {
   __typename: "ColumnWrapper";
   columnName: string;
   column:
-    | { __typename: "BrowserColumn" }
+    | ({ __typename: "BrowserColumn" } & {
+        " $fragmentRefs"?: {
+          GqlBrowserColumnFragment: GqlBrowserColumnFragment;
+        };
+      })
     | ({ __typename: "SourceCodeColumn" } & {
         " $fragmentRefs"?: {
           GqlSourceCodeColumnFragment: GqlSourceCodeColumnFragment;
@@ -1851,6 +1871,94 @@ export const GqlSourceCodeColumnFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlSourceCodeColumnFragment, unknown>;
+export const GqlBrowserFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlBrowserFragment, unknown>;
+export const GqlBrowserColumnFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlBrowserColumnFragment, unknown>;
 export const GqlColumnWrapperFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1900,6 +2008,22 @@ export const GqlColumnWrapperFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlSourceCodeColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlBrowserColumn" },
                       },
                     ],
                   },
@@ -2219,6 +2343,32 @@ export const GqlColumnWrapperFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlTerminalColumn" },
       typeCondition: {
         kind: "NamedType",
@@ -2279,6 +2429,32 @@ export const GqlColumnWrapperFragmentDoc = {
                       },
                     ],
                   },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
                 },
               ],
             },
@@ -2697,6 +2873,58 @@ export const GqlColumnWrappersFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -2741,6 +2969,22 @@ export const GqlColumnWrappersFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlSourceCodeColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlBrowserColumn" },
                       },
                     ],
                   },
@@ -3225,6 +3469,58 @@ export const GqlHandsonComponentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -3269,6 +3565,22 @@ export const GqlHandsonComponentFragmentDoc = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlSourceCodeColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlBrowserColumn" },
                       },
                     ],
                   },
@@ -4383,6 +4695,58 @@ export const AppTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -4427,6 +4791,22 @@ export const AppTutorialPageDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlSourceCodeColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlBrowserColumn" },
                       },
                     ],
                   },
@@ -5220,6 +5600,58 @@ export const AppTestTutorialColumnsPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowser" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Browser" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "image" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "src" } },
+                { kind: "Field", name: { kind: "Name", value: "width" } },
+                { kind: "Field", name: { kind: "Name", value: "height" } },
+                { kind: "Field", name: { kind: "Name", value: "caption" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlBrowserColumn" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BrowserColumn" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "browser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlBrowser" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -5264,6 +5696,22 @@ export const AppTestTutorialColumnsPageDocument = {
                       {
                         kind: "FragmentSpread",
                         name: { kind: "Name", value: "GqlSourceCodeColumn" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "BrowserColumn" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GqlBrowserColumn" },
                       },
                     ],
                   },

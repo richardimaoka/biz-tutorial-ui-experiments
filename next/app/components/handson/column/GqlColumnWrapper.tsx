@@ -1,3 +1,4 @@
+import { GqlBrowserColumn } from "../../browser/GqlBrowserColumn";
 import { GqlSourceCodeColumn } from "../../sourcecode/GqlSourceCodeColumn";
 import { GqlTerminalColumn } from "../../terminal/GqlTerminalColumn";
 import styles from "./GqlColumnWrapper.module.css";
@@ -18,6 +19,9 @@ const fragmentDefinition = graphql(`
       }
       ... on SourceCodeColumn {
         ...GqlSourceCodeColumn
+      }
+      ... on BrowserColumn {
+        ...GqlBrowserColumn
       }
     }
   }
@@ -57,7 +61,7 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
     case "BrowserColumn":
       return (
         <div className={styles.component}>
-          browser column not implemented yet
+          <GqlBrowserColumn fragment={column} />
         </div>
       );
   }

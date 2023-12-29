@@ -151,9 +151,7 @@ type Terminal {
 ###################################################
 
 type Browser {
-  width: Int!
-  height: Int!
-  path: String!
+  image: Image!
 }
 
 ###################################################
