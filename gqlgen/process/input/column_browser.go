@@ -2,37 +2,36 @@ package input
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
 
-type ImageFileSuffix = string
+// type ImageFileSuffix = string
 
-const (
-	JPG  ImageFileSuffix = "jpg"
-	JPEG ImageFileSuffix = "jpeg"
-	GIF  ImageFileSuffix = "gif"
-	PNG  ImageFileSuffix = "png"
-)
+// const (
+// 	JPG  ImageFileSuffix = "jpg"
+// 	JPEG ImageFileSuffix = "jpeg"
+// 	GIF  ImageFileSuffix = "gif"
+// 	PNG  ImageFileSuffix = "png"
+// )
 
-func toImageFileSuffix(s string) (ImageFileSuffix, error) {
-	switch strings.ToLower(s) {
-	case JPG:
-		return JPG, nil
-	case JPEG:
-		return JPEG, nil
-	case GIF:
-		return GIF, nil
-	case PNG:
-		return PNG, nil
-	case "":
-		return PNG, nil
-	default:
-		return "", fmt.Errorf("ImageFileSuffix value = '%s' is invalid", s)
-	}
-}
+// func toImageFileSuffix(s string) (ImageFileSuffix, error) {
+// 	switch strings.ToLower(s) {
+// 	case JPG:
+// 		return JPG, nil
+// 	case JPEG:
+// 		return JPEG, nil
+// 	case GIF:
+// 		return GIF, nil
+// 	case PNG:
+// 		return PNG, nil
+// 	case "":
+// 		return PNG, nil
+// 	default:
+// 		return "", fmt.Errorf("ImageFileSuffix value = '%s' is invalid", s)
+// 	}
+// }
 
 /**
  * BrowserSubType type(s) and functions
@@ -65,43 +64,45 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
  * Browser row type(s) and functions
  */
 
-type BrowserRow struct {
-	RowId          string   `json:"rowId"`
-	IsTrivial      bool     `json:"isTrivial"`
-	Comment        string   `json:"comment"`
-	ModalContents  string   `json:"modalContents"`
-	ImageFileNames []string `json:"imageFileNames"`
-}
+// type BrowserRow struct {
+// 	RowId          string   `json:"rowId"`
+// 	IsTrivial      bool     `json:"isTrivial"`
+// 	Comment        string   `json:"comment"`
+// 	ModalContents  string   `json:"modalContents"`
+// 	ModalPosition  string   `json:"modalPosition"`
+// 	ImageFileNames []string `json:"imageFileNames"`
+// }
 
 type BrowserSingleRow struct {
 	RowId           string `json:"rowId"`
 	IsTrivial       bool   `json:"isTrivial"`
 	Comment         string `json:"comment"`
 	ModalContents   string `json:"modalContents"`
+	ModalPosition   string `json:"modalPosition"`
 	ImageFilePath   string `json:"imageFilePath"`
 	ImageFileWidth  int    `json:"imageFileWidth"`
 	ImageFileHeight int    `json:"imageFileHeight"`
 }
 
-var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
+// var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
 
-type BrowserNumSeqRow struct {
-	StepId          string `json:"rowId"`
-	IsTrivial       bool   `json:"isTrivial"`
-	Comment         string `json:"comment"`
-	ModalContents   string `json:"modalContents"`
-	ImageBaseName   string `json:"imageFileBaseName"`
-	ImageFileSuffix string `json:"imageFileSuffix"`
-	NumImages       int    `json:"numImages"`
-}
+// type BrowserNumSeqRow struct {
+// 	StepId          string `json:"rowId"`
+// 	IsTrivial       bool   `json:"isTrivial"`
+// 	Comment         string `json:"comment"`
+// 	ModalContents   string `json:"modalContents"`
+// 	ImageBaseName   string `json:"imageFileBaseName"`
+// 	ImageFileSuffix string `json:"imageFileSuffix"`
+// 	NumImages       int    `json:"numImages"`
+// }
 
-type BrowserSequenceRow struct {
-	StepId         string   `json:"rowId"`
-	IsTrivial      bool     `json:"isTrivial"`
-	Comment        string   `json:"comment"`
-	ModalContents  string   `json:"modalContents"`
-	ImageFileNames []string `json:"imageFileNames"`
-}
+// type BrowserSequenceRow struct {
+// 	StepId         string   `json:"rowId"`
+// 	IsTrivial      bool     `json:"isTrivial"`
+// 	Comment        string   `json:"comment"`
+// 	ModalContents  string   `json:"modalContents"`
+// 	ImageFileNames []string `json:"imageFileNames"`
+// }
 
 func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	errorPrefix := "failed in toBrowserSingleRow"
@@ -150,6 +151,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 		IsTrivial:       trivial,
 		Comment:         fromRow.Comment,
 		ModalContents:   fromRow.ModalContents,
+		ModalPosition:   fromRow.ModalPosition,
 		ImageFilePath:   imageFileName,
 		ImageFileWidth:  width,
 		ImageFileHeight: height,
@@ -368,39 +370,39 @@ func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder) state.Step
 	return step
 }
 
-func openBrowserStepN(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) state.Step {
-	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
-	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
+// func openBrowserStepN(r *BrowserRow, StepIdFinder *StepIdFinder, nthFile int) state.Step {
+// 	subId := fmt.Sprintf("openBrowserStep-%03d", nthFile)
+// 	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
-	imageFileName := r.ImageFileNames[nthFile]
+// 	imageFileName := r.ImageFileNames[nthFile]
 
-	step := state.Step{
-		// fields to make the step searchable for re-generation
-		FromRowFields: state.FromRowFields{
-			IsFromRow:   true,
-			ParentRowId: r.RowId,
-			SubID:       subId,
-		},
-		IntrinsicFields: state.IntrinsicFields{
-			StepId:      stepId,
-			Comment:     r.Comment,
-			Mode:        state.HandsonMode,
-			FocusColumn: state.BrowserColumnType,
-		},
-		AnimationFields: state.AnimationFields{
-			IsTrivial: r.IsTrivial,
-		},
-		ModalFields: state.ModalFields{
-			ModalContents: r.ModalContents,
-		},
-		BrowserFields: state.BrowserFields{
-			BrowserStepType:  state.BrowserOpen,
-			BrowserImagePath: imageFileName,
-		},
-	}
+// 	step := state.Step{
+// 		// fields to make the step searchable for re-generation
+// 		FromRowFields: state.FromRowFields{
+// 			IsFromRow:   true,
+// 			ParentRowId: r.RowId,
+// 			SubID:       subId,
+// 		},
+// 		IntrinsicFields: state.IntrinsicFields{
+// 			StepId:      stepId,
+// 			Comment:     r.Comment,
+// 			Mode:        state.HandsonMode,
+// 			FocusColumn: state.BrowserColumnType,
+// 		},
+// 		AnimationFields: state.AnimationFields{
+// 			IsTrivial: r.IsTrivial,
+// 		},
+// 		ModalFields: state.ModalFields{
+// 			ModalContents: r.ModalContents,
+// 		},
+// 		BrowserFields: state.BrowserFields{
+// 			BrowserStepType:  state.BrowserOpen,
+// 			BrowserImagePath: imageFileName,
+// 		},
+// 	}
 
-	return step
-}
+// 	return step
+// }
 
 func moveToBrowserStep(rowId string, finder *StepIdFinder) state.Step {
 	subId := "moveToBrowserStep"
