@@ -170,18 +170,14 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check contents fields
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
 	commit := fromRow.Contents
 
-	var defaultOpenFilePath string
-	if instruction2 := fromRow.Instruction2; instruction2 != "" {
-		defaultOpenFilePath = instruction2
-	}
-
+	defaultOpenFilePath := fromRow.FilePath
 	typingAnimation := bool(fromRow.TypingAnimation)
 
 	//
@@ -227,10 +223,10 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	}
 
 	//
-	// Check instruction
+	// Check contents
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
 	filePath := fromRow.Contents
 
@@ -275,10 +271,10 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	}
 
 	//
-	// Check instruction
+	// Check contents
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
 	filepath := fromRow.Contents
 

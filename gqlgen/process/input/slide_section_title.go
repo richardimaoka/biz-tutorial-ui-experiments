@@ -32,10 +32,10 @@ func toSectionTitleRow(fromRow *Row) (*SectionTitleRow, error) {
 	}
 
 	//
-	// Check instruction field
+	// Check contents field
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
 	title := fromRow.Contents
 

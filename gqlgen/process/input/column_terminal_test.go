@@ -68,7 +68,7 @@ func TestToTerminalCommandRowError(t *testing.T) {
 		name      string
 		inputFile string
 	}{
-		{"empty instruction" /********/, "testdata/terminal/cmd-error1.json"},
+		{"empty contents" /********/, "testdata/terminal/cmd-error1.json"},
 		{"tooltip timing is wrong" /**/, "testdata/terminal/cmd-error2.json"},
 	}
 
@@ -93,7 +93,7 @@ func TestToTerminalOutputRowError(t *testing.T) {
 		name      string
 		inputFile string
 	}{
-		{"empty instruction" /********/, "testdata/terminal/output-error1.json"},
+		{"empty contents" /********/, "testdata/terminal/output-error1.json"},
 		{"tooltip timing is wrong" /**/, "testdata/terminal/output-error2.json"},
 	}
 

@@ -128,18 +128,19 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check contents fields
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
-	}
-	var terminalName string
-	if instruction2 := fromRow.Instruction2; instruction2 == "" {
-		terminalName = "default"
-	} else {
-		terminalName = instruction2
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
 
+	//
+	// Check terminal name
+	//
+	terminalName := fromRow.TerminalName
+	if terminalName == "" {
+		terminalName = "default"
+	}
 	//
 	// Check tooltip fields
 	//
@@ -185,16 +186,18 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check contents fields
 	//
 	if fromRow.Contents == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 	}
-	var terminalName string
-	if instruction2 := fromRow.Instruction2; instruction2 == "" {
+
+	//
+	// Check terminal name
+	//
+	terminalName := fromRow.TerminalName
+	if terminalName == "" {
 		terminalName = "default"
-	} else {
-		terminalName = instruction2
 	}
 
 	//
@@ -241,13 +244,11 @@ func toTerminalOpenRow(fromRow *Row) (*TerminalRow, error) {
 	}
 
 	//
-	// Check instruction fields
+	// Check terminal name
 	//
-	var terminalName string
-	if instruction2 := fromRow.Instruction2; instruction2 == "" {
+	terminalName := fromRow.TerminalName
+	if terminalName == "" {
 		terminalName = "default"
-	} else {
-		terminalName = instruction2
 	}
 
 	//

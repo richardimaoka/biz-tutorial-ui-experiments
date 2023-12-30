@@ -19,11 +19,8 @@ type Row struct {
 
 	// Contents fileds
 	Contents        string        `json:"contents"`
-	Instruction2    string        `json:"instruction2"`
 	TypingAnimation csvfield.Bool `json:"typingAnimation"`
-
-	// Contents fields
-	TerminalName string `json:"terminalName"`
+	TerminalName    string        `json:"terminalName"`
 
 	// FilePath fileds
 	FilePath     string            `json:"filePath"`

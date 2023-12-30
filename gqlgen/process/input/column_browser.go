@@ -182,25 +182,25 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 // 	}
 
 // 	//
-// 	// Check instruction
+// 	// Check contents
 // 	//
-// 	if fromRow.Instruction == "" {
-// 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+// 	if fromRow.Contents == "" {
+// 		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 // 	}
 
 // 	// extract num from (e.g.) filename[30].png
-// 	numFiles, err := numInSqBracket(fromRow.Instruction)
+// 	numFiles, err := numInSqBracket(fromRow.Contents)
 // 	if err != nil {
-// 		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
+// 		return nil, fmt.Errorf("%s, 'contents' is in wrong form, %s", errorPrefix, err)
 // 	}
 
-// 	baseName, err := fileBaseName(fromRow.Instruction)
+// 	baseName, err := fileBaseName(fromRow.Contents)
 // 	if err != nil {
-// 		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
+// 		return nil, fmt.Errorf("%s, 'contents' is invalid, %s", errorPrefix, err)
 // 	}
 // 	baseName = removeSqBrackets(baseName)
 
-// 	suffix, err := fileSuffix(fromRow.Instruction, fromRow)
+// 	suffix, err := fileSuffix(fromRow.Contents, fromRow)
 // 	if err != nil {
 // 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 // 	}
@@ -242,18 +242,18 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 // 	}
 
 // 	//
-// 	// Check instruction
+// 	// Check contents
 // 	//
-// 	if fromRow.Instruction == "" {
-// 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+// 	if fromRow.Contents == "" {
+// 		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
 // 	}
 
-// 	splitByComma := strings.Split(fromRow.Instruction, ",")
+// 	splitByComma := strings.Split(fromRow.Contents, ",")
 // 	var imgFiles []string
 // 	for _, v := range splitByComma {
 // 		baseName, err := fileBaseName(v)
 // 		if err != nil {
-// 			return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
+// 			return nil, fmt.Errorf("%s, 'contents' is invalid, %s", errorPrefix, err)
 // 		}
 // 		suffix, err := fileSuffix(v, fromRow)
 // 		if err != nil {
@@ -303,14 +303,14 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 // func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
 // 	splitByDot := strings.Split(fileNameCandidate, ".")
 // 	if len(splitByDot) == 1 {
-// 		// if 'instruction' doesn't have a '.', then the suffix must be in 'instruction2'
-// 		suffix, err := toImageFileSuffix(fromRow.Instruction2)
+// 		// if 'contents' doesn't have a '.', then the suffix must be in 'instruction2'
+// 		suffix, err := toImageFileSuffix(fromRow.Contents2)
 // 		if err != nil {
 // 			return "", fmt.Errorf("file name = '%s' has a wrong suffix, %s", fileNameCandidate, err)
 // 		}
 // 		return suffix, nil
 // 	} else if len(splitByDot) == 2 {
-// 		// if 'instruction' has a '.', then the suffix follows that .
+// 		// if 'contents' has a '.', then the suffix follows that .
 // 		suffix, err := toImageFileSuffix(splitByDot[1])
 // 		if err != nil {
 // 			return "", fmt.Errorf("'instruction2' has a wrong suffix, %s", err)
