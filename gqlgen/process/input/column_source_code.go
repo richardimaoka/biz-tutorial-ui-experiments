@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -151,9 +150,9 @@ type SourceErrorRow struct {
 }
 
 type FileTreeRow struct {
-	RowId     string        `json:"rowId"`
-	IsTrivial csvfield.Bool `json:"isTrivial"`
-	Comment   string        `json:"comment"`
+	RowId     string `json:"rowId"`
+	IsTrivial bool   `json:"isTrivial"`
+	Comment   string `json:"comment"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
@@ -314,10 +313,16 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
+	//
+	// Check isTrivial field
+	//
+
+	isTrivial := fromRow.Trivial.Value()
+
 	return &FileTreeRow{
 		RowId:     fromRow.RowId,
 		Comment:   fromRow.Comment,
-		IsTrivial: fromRow.Trivial,
+		IsTrivial: isTrivial,
 	}, nil
 }
 
@@ -342,7 +347,7 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 			FocusColumn: state.SourceColumnType,
 		},
 		AnimationFields: state.AnimationFields{
-			IsTrivial: true,
+			IsTrivial: r.IsTrivial,
 		},
 		// No ModalFields, as it is a trivial step
 		SourceFields: state.SourceFields{
