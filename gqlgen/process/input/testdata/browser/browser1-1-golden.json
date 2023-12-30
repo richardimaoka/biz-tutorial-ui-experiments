@@ -3,7 +3,7 @@
   "isTrivial": false,
   "comment": "",
   "modalContents": "",
-  "imageFileNames": [
-    "httpd.png"
-  ]
+  "imageFilePath": "httpd.png",
+  "imageFileWidth": 0,
+  "imageFileHeight": 0
 }

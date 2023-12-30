@@ -321,7 +321,7 @@
     "rowType": "browser",
     "subtype": "single",
     "trivial": "",
-    "instruction": "httpd.png",
+    "filePath": "httpd.png",
     "tooltip": "Apache HTTP Serverが立ち上がりました",
     "tooltipLine": "",
     "instruction2": "",

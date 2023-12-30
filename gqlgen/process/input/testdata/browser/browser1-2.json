@@ -4,8 +4,7 @@
   "comment": "",
   "rowType": "browser",
   "subtype": "single",
-  "instruction": "httpd.png",
-  "instruction2": "",
+  "filePath": "httpd.png",
   "tooltip": "Apache HTTP Serverが立ち上がりました",
   "tooltipTiming": "",
   "tooltipPosition": ""

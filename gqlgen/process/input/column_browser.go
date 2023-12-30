@@ -3,7 +3,6 @@ package input
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
@@ -157,180 +156,180 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	}, nil
 }
 
-func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
-	errorPrefix := "failed in toBrowserNumSeqRow"
+// func toBrowserNumSeqRow(fromRow *Row) (*BrowserRow, error) {
+// 	errorPrefix := "failed in toBrowserNumSeqRow"
 
-	//
-	// Check column and type
-	//
-	column, err := toColumnType(fromRow.RowType)
-	if err != nil || column != BrowserColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
-	}
-	subType, err := toBrowserSubType(fromRow.SubType)
-	if err != nil || subType != BrowserNumSeq {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
-	}
+// 	//
+// 	// Check column and type
+// 	//
+// 	column, err := toColumnType(fromRow.RowType)
+// 	if err != nil || column != BrowserColumn {
+// 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
+// 	}
+// 	subType, err := toBrowserSubType(fromRow.SubType)
+// 	if err != nil || subType != BrowserNumSeq {
+// 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
+// 	}
 
-	//
-	// Check instruction
-	//
-	if fromRow.Instruction == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
-	}
+// 	//
+// 	// Check instruction
+// 	//
+// 	if fromRow.Instruction == "" {
+// 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+// 	}
 
-	// extract num from (e.g.) filename[30].png
-	numFiles, err := numInSqBracket(fromRow.Instruction)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
-	}
+// 	// extract num from (e.g.) filename[30].png
+// 	numFiles, err := numInSqBracket(fromRow.Instruction)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s, 'instruction' is in wrong form, %s", errorPrefix, err)
+// 	}
 
-	baseName, err := fileBaseName(fromRow.Instruction)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
-	}
-	baseName = removeSqBrackets(baseName)
+// 	baseName, err := fileBaseName(fromRow.Instruction)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
+// 	}
+// 	baseName = removeSqBrackets(baseName)
 
-	suffix, err := fileSuffix(fromRow.Instruction, fromRow)
-	if err != nil {
-		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
-	}
+// 	suffix, err := fileSuffix(fromRow.Instruction, fromRow)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+// 	}
 
-	var imageFileNames []string
-	for i := 0; i < numFiles; i++ {
-		imageFileNames = append(imageFileNames, fmt.Sprintf("%s-%03d.%s", baseName, i, suffix))
-	}
+// 	var imageFileNames []string
+// 	for i := 0; i < numFiles; i++ {
+// 		imageFileNames = append(imageFileNames, fmt.Sprintf("%s-%03d.%s", baseName, i, suffix))
+// 	}
 
-	//
-	// Check trivial field
-	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+// 	//
+// 	// Check trivial field
+// 	//
+// 	trivial, err := strToBool(fromRow.Trivial)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+// 	}
 
-	return &BrowserRow{
-		RowId:          fromRow.RowId,
-		IsTrivial:      trivial,
-		Comment:        fromRow.Comment,
-		ImageFileNames: imageFileNames,
-	}, nil
-}
+// 	return &BrowserRow{
+// 		RowId:          fromRow.RowId,
+// 		IsTrivial:      trivial,
+// 		Comment:        fromRow.Comment,
+// 		ImageFileNames: imageFileNames,
+// 	}, nil
+// }
 
-func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
-	errorPrefix := "failed in toBrowserSequenceRow"
+// func toBrowserSequenceRow(fromRow *Row) (*BrowserRow, error) {
+// 	errorPrefix := "failed in toBrowserSequenceRow"
 
-	//
-	// Check column and type
-	//
-	column, err := toColumnType(fromRow.RowType)
-	if err != nil || column != BrowserColumn {
-		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
-	}
-	subType, err := toBrowserSubType(fromRow.SubType)
-	if err != nil || subType != BrowserSequence {
-		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
-	}
+// 	//
+// 	// Check column and type
+// 	//
+// 	column, err := toColumnType(fromRow.RowType)
+// 	if err != nil || column != BrowserColumn {
+// 		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
+// 	}
+// 	subType, err := toBrowserSubType(fromRow.SubType)
+// 	if err != nil || subType != BrowserSequence {
+// 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
+// 	}
 
-	//
-	// Check instruction
-	//
-	if fromRow.Instruction == "" {
-		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
-	}
+// 	//
+// 	// Check instruction
+// 	//
+// 	if fromRow.Instruction == "" {
+// 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
+// 	}
 
-	splitByComma := strings.Split(fromRow.Instruction, ",")
-	var imgFiles []string
-	for _, v := range splitByComma {
-		baseName, err := fileBaseName(v)
-		if err != nil {
-			return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
-		}
-		suffix, err := fileSuffix(v, fromRow)
-		if err != nil {
-			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
-		}
-		imgFiles = append(imgFiles, fmt.Sprintf("%s.%s", baseName, suffix))
-	}
+// 	splitByComma := strings.Split(fromRow.Instruction, ",")
+// 	var imgFiles []string
+// 	for _, v := range splitByComma {
+// 		baseName, err := fileBaseName(v)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("%s, 'instruction' is invalid, %s", errorPrefix, err)
+// 		}
+// 		suffix, err := fileSuffix(v, fromRow)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+// 		}
+// 		imgFiles = append(imgFiles, fmt.Sprintf("%s.%s", baseName, suffix))
+// 	}
 
-	//
-	// Check trivial field
-	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+// 	//
+// 	// Check trivial field
+// 	//
+// 	trivial, err := strToBool(fromRow.Trivial)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
+// 	}
 
-	return &BrowserRow{
-		RowId:          fromRow.RowId,
-		IsTrivial:      trivial,
-		Comment:        fromRow.Comment,
-		ImageFileNames: imgFiles,
-	}, nil
-}
+// 	return &BrowserRow{
+// 		RowId:          fromRow.RowId,
+// 		IsTrivial:      trivial,
+// 		Comment:        fromRow.Comment,
+// 		ImageFileNames: imgFiles,
+// 	}, nil
+// }
 
-func removeSqBrackets(s string) string {
-	split := strings.Split(s, "[")
-	return split[0]
-}
+// func removeSqBrackets(s string) string {
+// 	split := strings.Split(s, "[")
+// 	return split[0]
+// }
 
-// Get file base name from given file-name candidate
-func fileBaseName(s string) (string, error) {
-	if s == "" {
-		return "", fmt.Errorf("file name is empty")
-	}
+// // Get file base name from given file-name candidate
+// func fileBaseName(s string) (string, error) {
+// 	if s == "" {
+// 		return "", fmt.Errorf("file name is empty")
+// 	}
 
-	splitByDot := strings.Split(s, ".")
-	if len(splitByDot) == 1 {
-		return s, nil
-	} else if len(splitByDot) == 2 {
-		return splitByDot[0], nil
-	} else {
-		return "", fmt.Errorf("file name has too many dots")
-	}
-}
+// 	splitByDot := strings.Split(s, ".")
+// 	if len(splitByDot) == 1 {
+// 		return s, nil
+// 	} else if len(splitByDot) == 2 {
+// 		return splitByDot[0], nil
+// 	} else {
+// 		return "", fmt.Errorf("file name has too many dots")
+// 	}
+// }
 
-// Get file suffix from 1) given file-name candidate, 2) if not there, try finding from Row
-func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
-	splitByDot := strings.Split(fileNameCandidate, ".")
-	if len(splitByDot) == 1 {
-		// if 'instruction' doesn't have a '.', then the suffix must be in 'instruction2'
-		suffix, err := toImageFileSuffix(fromRow.Instruction2)
-		if err != nil {
-			return "", fmt.Errorf("file name = '%s' has a wrong suffix, %s", fileNameCandidate, err)
-		}
-		return suffix, nil
-	} else if len(splitByDot) == 2 {
-		// if 'instruction' has a '.', then the suffix follows that .
-		suffix, err := toImageFileSuffix(splitByDot[1])
-		if err != nil {
-			return "", fmt.Errorf("'instruction2' has a wrong suffix, %s", err)
-		}
-		return suffix, nil
-	} else {
-		return "", fmt.Errorf("file name = '%s' has too many dots", fileNameCandidate)
-	}
-}
+// // Get file suffix from 1) given file-name candidate, 2) if not there, try finding from Row
+// func fileSuffix(fileNameCandidate string, fromRow *Row) (string, error) {
+// 	splitByDot := strings.Split(fileNameCandidate, ".")
+// 	if len(splitByDot) == 1 {
+// 		// if 'instruction' doesn't have a '.', then the suffix must be in 'instruction2'
+// 		suffix, err := toImageFileSuffix(fromRow.Instruction2)
+// 		if err != nil {
+// 			return "", fmt.Errorf("file name = '%s' has a wrong suffix, %s", fileNameCandidate, err)
+// 		}
+// 		return suffix, nil
+// 	} else if len(splitByDot) == 2 {
+// 		// if 'instruction' has a '.', then the suffix follows that .
+// 		suffix, err := toImageFileSuffix(splitByDot[1])
+// 		if err != nil {
+// 			return "", fmt.Errorf("'instruction2' has a wrong suffix, %s", err)
+// 		}
+// 		return suffix, nil
+// 	} else {
+// 		return "", fmt.Errorf("file name = '%s' has too many dots", fileNameCandidate)
+// 	}
+// }
 
-// extract number from square bracket
-// s to be form of (e.g.) 'filename[42]'
-func numInSqBracket(s string) (int, error) {
-	found := BrowserNumSeqPattern.FindString(s)
-	if found == "" {
-		return 0, fmt.Errorf("the string doesn't have the form '[${num}]'")
-	}
+// // extract number from square bracket
+// // s to be form of (e.g.) 'filename[42]'
+// func numInSqBracket(s string) (int, error) {
+// 	found := BrowserNumSeqPattern.FindString(s)
+// 	if found == "" {
+// 		return 0, fmt.Errorf("the string doesn't have the form '[${num}]'")
+// 	}
 
-	// found = (e.g.) '[42]'
-	num, err := strconv.Atoi(found[1 : len(found)-1]) // remove '[' and ']' from 'found'
-	if err != nil {
-		return 0, err
-	}
-	if num < 1 {
-		return 0, fmt.Errorf("number in '[${num}]' is a negative number = %d", num)
-	}
+// 	// found = (e.g.) '[42]'
+// 	num, err := strconv.Atoi(found[1 : len(found)-1]) // remove '[' and ']' from 'found'
+// 	if err != nil {
+// 		return 0, err
+// 	}
+// 	if num < 1 {
+// 		return 0, fmt.Errorf("number in '[${num}]' is a negative number = %d", num)
+// 	}
 
-	return num, nil
-}
+// 	return num, nil
+// }
 
 /**
  * Function(s) to convert a row to a step
