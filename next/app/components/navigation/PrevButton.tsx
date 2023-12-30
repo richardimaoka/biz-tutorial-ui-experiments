@@ -12,26 +12,22 @@ interface Props {
 export function PrevButton(props: Props) {
   const pathname = usePathname();
 
-  const smartPhoneStyle = props.disabled
-    ? `${styles.smartphone} ${styles.disabled}`
-    : styles.smartphone;
-
-  const desktopStyle = props.disabled
-    ? `${styles.desktop} ${styles.disabled}`
-    : styles.desktop;
-
-  return (
-    <Link href={pathname + "?step=" + props.prevStep + "&skipAnimation=true"}>
-      <button className={styles.component}>
-        <div className={smartPhoneStyle}>
-          <div>prev</div>
-          <ChevronUpIcon />
-        </div>
-        <div className={desktopStyle}>
-          <div>PREV</div>
-          <ChevronUpIcon />
-        </div>
-      </button>
-    </Link>
-  );
+  if (props.disabled) {
+    return <></>;
+  } else {
+    return (
+      <Link href={pathname + "?step=" + props.prevStep + "&skipAnimation=true"}>
+        <button className={styles.component}>
+          <div className={styles.smartphone}>
+            <div>prev</div>
+            <ChevronUpIcon />
+          </div>
+          <div className={styles.desktop}>
+            <div>PREV</div>
+            <ChevronUpIcon />
+          </div>
+        </button>
+      </Link>
+    );
+  }
 }
