@@ -302,7 +302,6 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
-			ModalPosition: r.ModalPosition,
 		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCommand,

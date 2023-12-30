@@ -9,6 +9,7 @@ import (
 type BrowserColumn struct {
 	tutorial string
 	browser  *Browser
+	modal    *Modal
 }
 
 func NewBrowserColumn(tutorial string) *BrowserColumn {
@@ -18,22 +19,37 @@ func NewBrowserColumn(tutorial string) *BrowserColumn {
 	}
 }
 
-func (c *BrowserColumn) Open(fields *BrowserFields) error {
-	return c.browser.SetImage(
+func (c *BrowserColumn) Open(fields *BrowserFields, modalFields *ModalFields) error {
+	err := c.browser.SetImage(
 		c.tutorial,
 		fields.BrowserImagePath,
 		fields.BrowserImageWidth,
 		fields.BrowserImageHeight,
 	)
+	if err != nil {
+		return fmt.Errorf("BrowserColumn Open() failed, %s", err)
+	}
+
+	if modalFields.ModalContents == "" {
+		// clean up
+		c.modal = nil
+	} else {
+		c.modal = &Modal{
+			markdownBody: modalFields.ModalContents,
+			position:     modalFields.ModalPosition,
+		}
+	}
+
+	return nil
 }
 
-func (c *BrowserColumn) Update(fields *BrowserFields) error {
+func (c *BrowserColumn) Update(fields *BrowserFields, modalFields *ModalFields) error {
 	errorPrefix := fmt.Errorf("Update() failed")
 
 	var err error
 	switch fields.BrowserStepType {
 	case BrowserOpen:
-		err = c.Open(fields)
+		err = c.Open(fields, modalFields)
 	case BrowserMove:
 		// no update is needed, just changing FocusColumn is fine
 	default:
@@ -59,9 +75,15 @@ func (c *BrowserColumn) ToGraphQL() *model.BrowserColumn {
 }
 
 func (c *BrowserColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {
+	var modal *model.Modal
+	if c.modal != nil {
+		modal = c.modal.ToGraphQL()
+	}
+
 	return &model.ColumnWrapper{
 		Column:            c.ToGraphQL(),
 		ColumnName:        "Browser",
 		ColumnDisplayName: stringRef("BrowserColumn"),
+		Modal:             modal,
 	}
 }

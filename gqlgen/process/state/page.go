@@ -183,7 +183,7 @@ func (p *Page) processStep(step *Step) error {
 				p.browserColumn = NewBrowserColumn(p.tutorial)
 				p.columns = append(p.columns, p.browserColumn)
 			}
-			return p.browserColumn.Update(&step.BrowserFields)
+			return p.browserColumn.Update(&step.BrowserFields, &step.ModalFields)
 
 		default:
 			return fmt.Errorf("column type = '%s' is not implemented", step.FocusColumn)

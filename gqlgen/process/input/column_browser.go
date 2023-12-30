@@ -74,14 +74,14 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
 // }
 
 type BrowserSingleRow struct {
-	RowId           string `json:"rowId"`
-	IsTrivial       bool   `json:"isTrivial"`
-	Comment         string `json:"comment"`
-	ModalContents   string `json:"modalContents"`
-	ModalPosition   string `json:"modalPosition"`
-	ImageFilePath   string `json:"imageFilePath"`
-	ImageFileWidth  int    `json:"imageFileWidth"`
-	ImageFileHeight int    `json:"imageFileHeight"`
+	RowId           string        `json:"rowId"`
+	IsTrivial       bool          `json:"isTrivial"`
+	Comment         string        `json:"comment"`
+	ModalContents   string        `json:"modalContents"`
+	ModalPosition   ModalPosition `json:"modalPosition"`
+	ImageFilePath   string        `json:"imageFilePath"`
+	ImageFileWidth  int           `json:"imageFileWidth"`
+	ImageFileHeight int           `json:"imageFileHeight"`
 }
 
 // var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
@@ -146,12 +146,20 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
 	}
 
+	//
+	// Check trivial field(s)
+	//
+	modalPosition, err := toModalPosition(fromRow.ModalPosition)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'modalPosition' is invalid, %s", errorPrefix, err)
+	}
+
 	return &BrowserSingleRow{
 		RowId:           fromRow.RowId,
 		IsTrivial:       trivial,
 		Comment:         fromRow.Comment,
 		ModalContents:   fromRow.ModalContents,
-		ModalPosition:   fromRow.ModalPosition,
+		ModalPosition:   modalPosition,
 		ImageFilePath:   imageFileName,
 		ImageFileWidth:  width,
 		ImageFileHeight: height,
@@ -358,7 +366,7 @@ func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder) state.Step
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
-			ModalPosition: r.ModalPosition,
+			ModalPosition: r.ModalPosition.toState(),
 		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType:    state.BrowserOpen,

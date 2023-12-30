@@ -54,8 +54,8 @@ type FromRowFields struct {
  * Modal fields
  */
 type ModalFields struct {
-	ModalContents string `json:"modalContents"`
-	ModalPosition string `json:"modalPosition"`
+	ModalContents string        `json:"modalContents"`
+	ModalPosition ModalPosition `json:"modalPosition"`
 }
 
 /**
