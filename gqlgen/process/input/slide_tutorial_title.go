@@ -41,10 +41,10 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	//
 	// Check instruction field
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	tutorialTitle := fromRow.Instruction
+	tutorialTitle := fromRow.Contents
 
 	//
 	// Check file and image fields

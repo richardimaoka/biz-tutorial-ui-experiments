@@ -172,10 +172,10 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	// Check instruction fields
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	commit := fromRow.Instruction
+	commit := fromRow.Contents
 
 	var defaultOpenFilePath string
 	if instruction2 := fromRow.Instruction2; instruction2 != "" {
@@ -229,10 +229,10 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	// Check instruction
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	filePath := fromRow.Instruction
+	filePath := fromRow.Contents
 
 	//
 	// Check tooltip fields
@@ -277,10 +277,10 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check instruction
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	filepath := fromRow.Instruction
+	filepath := fromRow.Contents
 
 	//
 	// Check tooltip fields

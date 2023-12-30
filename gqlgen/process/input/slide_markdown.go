@@ -34,10 +34,10 @@ func toMarkdownRow(fromRow *Row) (*MarkdownRow, error) {
 	//
 	// Check instruction field
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
-	markdownContents := fromRow.Instruction
+	markdownContents := fromRow.Contents
 
 	//
 	// Check trivial field

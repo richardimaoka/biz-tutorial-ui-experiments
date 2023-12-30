@@ -17,13 +17,12 @@ type Row struct {
 	ModalContents string `json:"modalContents"`
 	ModalPosition string `json:"modalPosition"`
 
-	// Instruction fileds
-	Instruction     string        `json:"instruction"`
+	// Contents fileds
+	Contents        string        `json:"contents"`
 	Instruction2    string        `json:"instruction2"`
 	TypingAnimation csvfield.Bool `json:"typingAnimation"`
 
 	// Contents fields
-	Contents     string `json:"contents"`
 	TerminalName string `json:"terminalName"`
 
 	// FilePath fileds

@@ -4,7 +4,7 @@
   "comment": "some comment",
   "rowType": "terminal",
   "subtype": "command",
-  "instruction": "mkdir myproj",
+  "contents": "mkdir myproj",
   "tooltip": "チュートリアル用ディレクトリを作成します",
   "tooltipTiming": "",
   "tooltipPosition": ""

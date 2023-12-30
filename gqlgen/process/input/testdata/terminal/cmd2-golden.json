@@ -6,5 +6,6 @@
   "text": "mkdir myproj",
   "tooltip": null,
   "modalContents": "",
+  "modalPosition": "",
   "terminalName": "default"
 }

@@ -130,7 +130,7 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check instruction fields
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 	var terminalName string
@@ -163,7 +163,7 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 		ModalContents: fromRow.ModalContents,
 		ModalPosition: fromRow.ModalPosition,
 		Type:          subType,
-		Text:          fromRow.Instruction,
+		Text:          fromRow.Contents,
 		Tooltip:       terminalTooltip,
 		TerminalName:  terminalName,
 	}, nil
@@ -187,7 +187,7 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	//
 	// Check instruction fields
 	//
-	if fromRow.Instruction == "" {
+	if fromRow.Contents == "" {
 		return nil, fmt.Errorf("%s, 'instruction' is empty", errorPrefix)
 	}
 	var terminalName string
@@ -219,7 +219,7 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
 		Type:          subType,
-		Text:          fromRow.Instruction,
+		Text:          fromRow.Contents,
 		Tooltip:       terminalTooltip,
 		TerminalName:  terminalName,
 	}, nil

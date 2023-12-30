@@ -9,6 +9,7 @@
     "focusColumn": "Browser",
     "slideType": "",
     "modalContents": "",
+    "modalPosition": "TOP",
     "isTrivial": false,
     "tutorialTitle": "",
     "tutorialTitleImagePaths": "",

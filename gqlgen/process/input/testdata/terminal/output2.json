@@ -4,7 +4,7 @@
   "comment": "",
   "rowType": "terminal",
   "subtype": "output",
-  "instruction": "mkdir myproj",
+  "contents": "mkdir myproj",
   "tooltip": "aaaa",
   "tooltipTiming": "",
   "tooltipPosition": "this is ignored"
