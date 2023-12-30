@@ -8,7 +8,7 @@ const fragmentDefinition = graphql(`
     sourceCode {
       ...GqlFileTreePane
 
-      openFile {
+      openFile(filePath: $file) {
         ...GqlOpenFilePane
       }
     }

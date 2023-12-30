@@ -6,10 +6,9 @@ import styles from "./page.module.css";
 // import { print } from "graphql";
 
 const queryDefinition = graphql(`
-  query appTutorialPage($tutorial: String!, $step: String) {
+  query appTutorialPage($tutorial: String!, $step: String, $file: String) {
     page(tutorial: $tutorial, step: $step) {
       ...GqlHandsonComponent
-
       ...GqlSlideshowComponent
       mode
     }
@@ -28,6 +27,7 @@ interface PageParams {
   };
   searchParams: {
     step?: string;
+    file?: string;
   };
 }
 
@@ -43,6 +43,7 @@ export default async function Page(props: PageParams) {
   const variables = {
     tutorial: props.params.tutorial,
     step: props.searchParams.step,
+    file: props.searchParams.file,
   };
   const data = await request(gqlEndPoint, queryDefinition, variables);
 

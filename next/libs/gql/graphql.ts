@@ -259,6 +259,7 @@ export type TutorialTitleSlide = Slide & {
 export type AppTutorialPageQueryVariables = Exact<{
   tutorial: Scalars["String"]["input"];
   step?: InputMaybe<Scalars["String"]["input"]>;
+  file?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type AppTutorialPageQuery = {
@@ -602,7 +603,7 @@ export type GqlTutorialTitleSlideFragment = {
 } & { " $fragmentName"?: "GqlTutorialTitleSlideFragment" };
 
 export type AppTestTutorialColumnsPageQueryVariables = Exact<{
-  [key: string]: never;
+  file?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type AppTestTutorialColumnsPageQuery = {
@@ -1651,6 +1652,16 @@ export const GqlSourceCodeColumnFragmentDoc = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -2461,6 +2472,16 @@ export const GqlColumnWrapperFragmentDoc = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -2911,6 +2932,16 @@ export const GqlColumnWrappersFragmentDoc = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -3560,6 +3591,16 @@ export const GqlHandsonComponentFragmentDoc = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -4295,6 +4336,11 @@ export const AppTutorialPageDocument = {
           variable: { kind: "Variable", name: { kind: "Name", value: "step" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "file" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -4785,6 +4831,16 @@ export const AppTutorialPageDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -5232,6 +5288,13 @@ export const AppTestTutorialColumnsPageDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "appTestTutorialColumnsPage" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "file" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -5707,6 +5770,16 @@ export const AppTestTutorialColumnsPageDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "openFile" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "filePath" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "file" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [

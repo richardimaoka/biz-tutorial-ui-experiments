@@ -3,7 +3,7 @@ import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
 
 const queryDefinition = graphql(`
-  query appTestTutorialColumnsPage {
+  query appTestTutorialColumnsPage($file: String) {
     _test {
       appTestTutorialColumnsPage {
         ...GqlHandsonComponent
@@ -18,11 +18,9 @@ interface PageParams {
 
 export default async function Page({ searchParams }: PageParams) {
   // const variables = { step: stepNum };
-  const data = await request(
-    "http://localhost:8080/query",
-    queryDefinition
-    // variables
-  );
+  const data = await request("http://localhost:8080/query", queryDefinition, {
+    /* variables*/
+  });
 
   const fragment = data._test?.appTestTutorialColumnsPage;
 

@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n":
+  "\n  query appTutorialPage($tutorial: String!, $step: String, $file: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n":
     types.AppTutorialPageDocument,
   "\n  fragment GqlBrowser on Browser {\n    image {\n      src\n      width\n      height\n      caption\n    }\n  }\n":
     types.GqlBrowserFragmentDoc,
@@ -45,7 +45,7 @@ const documents = {
     types.GqlSlideWrapperFragmentDoc,
   "\n  fragment GqlSlideshowComponent on Page {\n    modal {\n      ...GqlModalComponent\n    }\n    slide {\n      ...GqlSlideWrapper\n    }\n    ...GqlNavigation\n  }\n":
     types.GqlSlideshowComponentFragmentDoc,
-  "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
+  "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile(filePath: $file) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n":
     types.GqlSourceCodeColumnFragmentDoc,
   "\n  fragment GqlFileTreePane on SourceCode {\n    ...GqlFileTreeHeader\n    ...GqlFileTreeComponent\n    isFoldFileTree\n  }\n":
     types.GqlFileTreePaneFragmentDoc,
@@ -75,7 +75,7 @@ const documents = {
     types.GqlTerminalTooltipFragmentDoc,
   "\n  fragment GqlTutorialTitleSlide on TutorialTitleSlide {\n    title\n    images {\n      src\n      width\n      height\n      caption\n    }\n  }\n":
     types.GqlTutorialTitleSlideFragmentDoc,
-  "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n":
+  "\n  query appTestTutorialColumnsPage($file: String) {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n":
     types.AppTestTutorialColumnsPageDocument,
   "\n  query appTestTerminalPage($step: Int) {\n    _test {\n      appTestTerminalPage(step: $step) {\n        ...GqlTerminalColumn\n      }\n    }\n  }\n":
     types.AppTestTerminalPageDocument,
@@ -99,8 +99,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n",
-): (typeof documents)["\n  query appTutorialPage($tutorial: String!, $step: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n"];
+  source: "\n  query appTutorialPage($tutorial: String!, $step: String, $file: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n",
+): (typeof documents)["\n  query appTutorialPage($tutorial: String!, $step: String, $file: String) {\n    page(tutorial: $tutorial, step: $step) {\n      ...GqlHandsonComponent\n      ...GqlSlideshowComponent\n      mode\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -195,8 +195,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n",
-): (typeof documents)["\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n"];
+  source: "\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile(filePath: $file) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n",
+): (typeof documents)["\n  fragment GqlSourceCodeColumn on SourceCodeColumn {\n    sourceCode {\n      ...GqlFileTreePane\n\n      openFile(filePath: $file) {\n        ...GqlOpenFilePane\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -285,8 +285,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query appTestTutorialColumnsPage {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n"];
+  source: "\n  query appTestTutorialColumnsPage($file: String) {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query appTestTutorialColumnsPage($file: String) {\n    _test {\n      appTestTutorialColumnsPage {\n        ...GqlHandsonComponent\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
