@@ -73,14 +73,11 @@ func toTutorialTitleRow(fromRow *Row) (*TutorialTitleRow, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	isTrivial := fromRow.Trivial.Value()
 
 	return &TutorialTitleRow{
 		RowId:         fromRow.RowId,
-		IsTrivial:     trivial,
+		IsTrivial:     isTrivial,
 		Comment:       fromRow.Comment,
 		Title:         tutorialTitle,
 		ImagePaths:    fromRow.FilePath,

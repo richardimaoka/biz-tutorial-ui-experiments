@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/gitwrap"
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/process/state"
 )
@@ -150,8 +151,9 @@ type SourceErrorRow struct {
 }
 
 type FileTreeRow struct {
-	RowId   string `json:"rowId"`
-	Comment string `json:"comment"`
+	RowId     string        `json:"rowId"`
+	IsTrivial csvfield.Bool `json:"isTrivial"`
+	Comment   string        `json:"comment"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
@@ -191,10 +193,7 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	// Check isTrivial field
 	//
-	isTrivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	isTrivial := fromRow.Trivial.Value()
 
 	return &SourceCommitRow{
 		RowId:               fromRow.RowId,
@@ -241,14 +240,11 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	// Check isTrivial field
 	//
-	isTrivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	trivial := fromRow.Trivial.Value()
 
 	return &SourceOpenRow{
 		RowId:     fromRow.RowId,
-		IsTrivial: isTrivial,
+		IsTrivial: trivial,
 		Comment:   fromRow.Comment,
 		FilePath:  filePath,
 		Tooltip:   tooltip,
@@ -292,10 +288,7 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	// Check trivial field
 	//
-	isTrivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	isTrivial := fromRow.Trivial.Value()
 
 	return &SourceErrorRow{
 		RowId:     fromRow.RowId,
@@ -322,8 +315,9 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 	}
 
 	return &FileTreeRow{
-		RowId:   fromRow.RowId,
-		Comment: fromRow.Comment,
+		RowId:     fromRow.RowId,
+		Comment:   fromRow.Comment,
+		IsTrivial: fromRow.Trivial,
 	}, nil
 }
 

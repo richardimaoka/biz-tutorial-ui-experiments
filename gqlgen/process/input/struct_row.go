@@ -3,10 +3,10 @@ package input
 import "github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/csvfield"
 
 type Row struct {
-	RowId   string `json:"rowId"`
-	Phase   string `json:"phase"`
-	Comment string `json:"comment"`
-	Trivial string `json:"trivial"`
+	RowId   string        `json:"rowId"`
+	Phase   string        `json:"phase"`
+	Comment string        `json:"comment"`
+	Trivial csvfield.Bool `json:"trivial"`
 
 	// Mode and type fileds
 	Mode    string `json:"mode"`

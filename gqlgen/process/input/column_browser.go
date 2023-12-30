@@ -141,10 +141,7 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	trivial := fromRow.Trivial.Value()
 
 	//
 	// Check trivial field(s)

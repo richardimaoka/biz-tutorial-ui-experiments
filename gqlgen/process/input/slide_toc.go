@@ -33,14 +33,11 @@ func toTocRow(fromRow *Row) (*TocRow, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	isTrivial := fromRow.Trivial.Value()
 
 	return &TocRow{
 		RowId:     fromRow.RowId,
-		IsTrivial: trivial,
+		IsTrivial: isTrivial,
 		Comment:   fromRow.Comment,
 	}, nil
 }

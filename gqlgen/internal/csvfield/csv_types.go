@@ -37,6 +37,10 @@ func (v *Bool) UnmarshalJSON(b []byte) error {
 	}
 }
 
+func (v *Bool) Value() bool {
+	return bool(*v)
+}
+
 type String string //Whether it's an integer value or a string, forcefully convert to a String in Go
 
 func (v *String) UnmarshalJSON(b []byte) error {

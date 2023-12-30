@@ -49,14 +49,11 @@ func toImageRow(fromRow *Row) (*ImageRow, error) {
 	//
 	// Check trivial field
 	//
-	trivial, err := strToBool(fromRow.Trivial)
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'trivial' is invalid, %s", errorPrefix, err)
-	}
+	isTrivial := fromRow.Trivial.Value()
 
 	return &ImageRow{
 		RowId:         fromRow.RowId,
-		IsTrivial:     trivial,
+		IsTrivial:     isTrivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
 		ImagePath:     fromRow.FilePath,
