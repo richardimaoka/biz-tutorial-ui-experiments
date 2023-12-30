@@ -92,6 +92,9 @@ type ColumnWrapper {
   columnName: String!
   columnDisplayName: String
   column: Column!
+
+  # Modal belongs to a column, and is common for all column types
+  modal: Modal
 }
 
 interface Column {

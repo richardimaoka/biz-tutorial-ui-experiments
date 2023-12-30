@@ -49,6 +49,7 @@ export type ColumnWrapper = {
   column: Column;
   columnDisplayName?: Maybe<Scalars["String"]["output"]>;
   columnName: Scalars["String"]["output"];
+  modal?: Maybe<Modal>;
 };
 
 export type EditSequence = {
@@ -317,6 +318,13 @@ export type GqlColumnWrapperFragment = {
           GqlTerminalColumnFragment: GqlTerminalColumnFragment;
         };
       });
+  modal?:
+    | ({ __typename: "Modal" } & {
+        " $fragmentRefs"?: {
+          GqlModalComponentFragment: GqlModalComponentFragment;
+        };
+      })
+    | null;
 } & { " $fragmentName"?: "GqlColumnWrapperFragment" };
 
 export type GqlColumnWrappersFragment = {
@@ -1959,6 +1967,26 @@ export const GqlBrowserColumnFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlBrowserColumnFragment, unknown>;
+export const GqlModalComponentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GqlModalComponentFragment, unknown>;
 export const GqlColumnWrapperFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2027,6 +2055,19 @@ export const GqlColumnWrapperFragmentDoc = {
                       },
                     ],
                   },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
                 },
               ],
             },
@@ -2459,6 +2500,21 @@ export const GqlColumnWrapperFragmentDoc = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
         ],
       },
     },
@@ -2925,6 +2981,21 @@ export const GqlColumnWrappersFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -2988,6 +3059,19 @@ export const GqlColumnWrappersFragmentDoc = {
                       },
                     ],
                   },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
                 },
               ],
             },
@@ -3521,6 +3605,21 @@ export const GqlHandsonComponentFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -3588,6 +3687,19 @@ export const GqlHandsonComponentFragmentDoc = {
               ],
             },
           },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -3638,26 +3750,6 @@ export const GqlHandsonComponentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GqlHandsonComponentFragment, unknown>;
-export const GqlModalComponentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlModalComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Modal" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
-          { kind: "Field", name: { kind: "Name", value: "position" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GqlModalComponentFragment, unknown>;
 export const GqlTutorialTitleSlideFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -4747,6 +4839,21 @@ export const AppTutorialPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -4814,6 +4921,19 @@ export const AppTutorialPageDocument = {
               ],
             },
           },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -4842,21 +4962,6 @@ export const AppTutorialPageDocument = {
               ],
             },
           },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GqlModalComponent" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Modal" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
-          { kind: "Field", name: { kind: "Name", value: "position" } },
         ],
       },
     },
@@ -5652,6 +5757,21 @@ export const AppTestTutorialColumnsPageDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GqlModalComponent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Modal" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "markdownBody" } },
+          { kind: "Field", name: { kind: "Name", value: "position" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GqlColumnWrapper" },
       typeCondition: {
         kind: "NamedType",
@@ -5715,6 +5835,19 @@ export const AppTestTutorialColumnsPageDocument = {
                       },
                     ],
                   },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "modal" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GqlModalComponent" },
                 },
               ],
             },

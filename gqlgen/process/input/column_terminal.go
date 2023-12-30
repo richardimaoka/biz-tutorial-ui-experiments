@@ -104,6 +104,7 @@ type TerminalRow struct {
 	Text          string           `json:"text"`
 	Tooltip       *TerminalTooltip `json:"tooltip"`
 	ModalContents string           `json:"modalContents"`
+	ModalPosition string           `json:"modalPosition"`
 	TerminalName  string           `json:"terminalName"`
 }
 
@@ -160,6 +161,7 @@ func toTerminalCommandRow(fromRow *Row) (*TerminalRow, error) {
 		IsTrivial:     trivial,
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
+		ModalPosition: fromRow.ModalPosition,
 		Type:          subType,
 		Text:          fromRow.Instruction,
 		Tooltip:       terminalTooltip,
@@ -300,6 +302,7 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition,
 		},
 		TerminalFields: state.TerminalFields{
 			TerminalStepType: state.TerminalCommand,

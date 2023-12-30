@@ -58,6 +58,7 @@ type ComplexityRoot struct {
 		Column            func(childComplexity int) int
 		ColumnDisplayName func(childComplexity int) int
 		ColumnName        func(childComplexity int) int
+		Modal             func(childComplexity int) int
 	}
 
 	EditSequence struct {
@@ -279,6 +280,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ColumnWrapper.ColumnName(childComplexity), true
+
+	case "ColumnWrapper.modal":
+		if e.complexity.ColumnWrapper.Modal == nil {
+			break
+		}
+
+		return e.complexity.ColumnWrapper.Modal(childComplexity), true
 
 	case "EditSequence.edits":
 		if e.complexity.EditSequence.Edits == nil {
@@ -1310,6 +1318,53 @@ func (ec *executionContext) fieldContext_ColumnWrapper_column(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ColumnWrapper_modal(ctx context.Context, field graphql.CollectedField, obj *model.ColumnWrapper) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ColumnWrapper_modal(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Modal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Modal)
+	fc.Result = res
+	return ec.marshalOModal2ᚖgithubᚗcomᚋrichardimaokaᚋbizᚑtutorialᚑuiᚑexperimentsᚋgqlgenᚋgraphᚋmodelᚐModal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ColumnWrapper_modal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ColumnWrapper",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "markdownBody":
+				return ec.fieldContext_Modal_markdownBody(ctx, field)
+			case "position":
+				return ec.fieldContext_Modal_position(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Modal", field.Name)
 		},
 	}
 	return fc, nil
@@ -3265,6 +3320,8 @@ func (ec *executionContext) fieldContext_Page_columns(ctx context.Context, field
 				return ec.fieldContext_ColumnWrapper_columnDisplayName(ctx, field)
 			case "column":
 				return ec.fieldContext_ColumnWrapper_column(ctx, field)
+			case "modal":
+				return ec.fieldContext_ColumnWrapper_modal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ColumnWrapper", field.Name)
 		},
@@ -6994,6 +7051,10 @@ func (ec *executionContext) _ColumnWrapper(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "modal":
+
+			out.Values[i] = ec._ColumnWrapper_modal(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

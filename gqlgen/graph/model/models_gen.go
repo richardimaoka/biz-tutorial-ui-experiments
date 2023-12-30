@@ -34,6 +34,7 @@ type ColumnWrapper struct {
 	ColumnName        string  `json:"columnName"`
 	ColumnDisplayName *string `json:"columnDisplayName"`
 	Column            Column  `json:"column"`
+	Modal             *Modal  `json:"modal"`
 }
 
 type EditSequence struct {

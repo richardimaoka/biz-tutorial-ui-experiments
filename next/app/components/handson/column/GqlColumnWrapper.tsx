@@ -1,4 +1,5 @@
 import { GqlBrowserColumn } from "../../browser/GqlBrowserColumn";
+import { GqlModalComponent } from "../../modal/GqlModalComponent";
 import { GqlSourceCodeColumn } from "../../sourcecode/GqlSourceCodeColumn";
 import { GqlTerminalColumn } from "../../terminal/GqlTerminalColumn";
 import styles from "./GqlColumnWrapper.module.css";
@@ -24,6 +25,9 @@ const fragmentDefinition = graphql(`
         ...GqlBrowserColumn
       }
     }
+    modal {
+      ...GqlModalComponent
+    }
   }
 `);
 
@@ -42,11 +46,14 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
     );
   }
 
+  const modal = fragment.modal;
+
   switch (column.__typename) {
     case "TerminalColumn":
       return (
         <div className={styles.component}>
           <GqlTerminalColumn fragment={column} selectIndex={0} />
+          {modal && <GqlModalComponent fragment={modal} />}
         </div>
       );
     case "SourceCodeColumn":
@@ -56,12 +63,14 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
             fragment={column}
             defaultFocusColumn={props.defaultFocusColumn}
           />
+          {modal && <GqlModalComponent fragment={modal} />}
         </div>
       );
     case "BrowserColumn":
       return (
         <div className={styles.component}>
           <GqlBrowserColumn fragment={column} />
+          {modal && <GqlModalComponent fragment={modal} />}
         </div>
       );
   }

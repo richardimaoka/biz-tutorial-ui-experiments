@@ -358,6 +358,7 @@ func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder) state.Step
 		},
 		ModalFields: state.ModalFields{
 			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition,
 		},
 		BrowserFields: state.BrowserFields{
 			BrowserStepType:    state.BrowserOpen,

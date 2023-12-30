@@ -15,6 +15,7 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 		Column            interface{} `json:"column"`
 		ColumnName        string      `json:"columnName"`
 		ColumnDisplayName *string     `json:"columnDisplayName"`
+		Modal             *Modal      `json:"modal"`
 	}{}
 
 	err := json.Unmarshal(b, &internals)
@@ -23,6 +24,7 @@ func (t *ColumnWrapper) UnmarshalJSON(b []byte) error {
 	}
 	t.ColumnName = internals.ColumnName
 	t.ColumnDisplayName = internals.ColumnDisplayName
+	t.Modal = internals.Modal
 
 	/**
 	 * Marshal `column` and unmarshal it back
