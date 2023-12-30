@@ -1,16 +1,15 @@
 import { GqlHandsonComponent } from "@/app/components/handson/GqlHandsonComponent";
 import { graphql } from "@/libs/gql";
 import { request } from "graphql-request";
-import { GqlNavigation } from "../components/navigation/GqlNavigation";
-import styles from "./page.module.css";
 import { GqlSlideshowComponent } from "../components/slideshow/GqlSlideshowComponent";
-import { print } from "graphql";
+import styles from "./page.module.css";
+// import { print } from "graphql";
 
 const queryDefinition = graphql(`
   query appTutorialPage($tutorial: String!, $step: String) {
     page(tutorial: $tutorial, step: $step) {
       ...GqlHandsonComponent
-      ...GqlNavigation
+
       ...GqlSlideshowComponent
       mode
     }
@@ -61,7 +60,6 @@ export default async function Page(props: PageParams) {
       return (
         <div className={styles.component}>
           {fragment && <GqlHandsonComponent fragment={fragment} />}
-          {fragment && <GqlNavigation fragment={fragment} />}
         </div>
       );
   }

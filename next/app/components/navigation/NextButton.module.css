@@ -7,9 +7,9 @@
   color: var(--color-primary-text);
   border-style: none;
 
-  /* TODO: remove - experimental positioning */
   position: absolute;
   top: 60%;
+  right: 0px;
   z-index: 1;
 }
 

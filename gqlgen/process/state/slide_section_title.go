@@ -8,7 +8,7 @@ type SectionTitleSlide struct {
 }
 
 func NewSectionTitleSlide() *SectionTitleSlide {
-	return &SectionTitleSlide{sectionNum: 1, title: ""}
+	return &SectionTitleSlide{sectionNum: 0, title: ""}
 }
 
 func (s *SectionTitleSlide) Update(fields SectionTitleFields) {
