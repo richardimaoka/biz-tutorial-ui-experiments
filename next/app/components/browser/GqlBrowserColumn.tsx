@@ -1,6 +1,6 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
 import { GqlBrowser } from "./GqlBrowser";
-import styles from "./GqlBrowser.module.css";
+import styles from "./GqlBrowserColumn.module.css";
 
 const fragmentDefinition = graphql(`
   fragment GqlBrowserColumn on BrowserColumn {

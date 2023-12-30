@@ -1,7 +1,25 @@
 .component {
   height: 100%;
 
+  overflow-y: auto;
+
   /* coloring */
   background-color: var(--color-background);
   color: var(--color-primary-text);
+}
+
+/**
+ * scroll bar style 
+ */
+.component::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #636363; /* or add it to the track */
+}
+.component::-webkit-scrollbar-thumb {
+  background: #37373d;
+  border-radius: 8px;
+}
+.component::-webkit-scrollbar-corner {
+  background-color: #535353;
 }
