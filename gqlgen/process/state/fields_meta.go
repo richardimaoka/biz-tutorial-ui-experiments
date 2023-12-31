@@ -34,34 +34,34 @@ func (m Mode) ToGraphQL() model.PageMode {
  */
 
 type IntrinsicFields struct {
-	StepId      string     `json:"stepId"`
-	Comment     string     `json:"comment"`
-	Mode        Mode       `json:"mode"`
-	FocusColumn ColumnType `json:"focusColumn"`
-	SlideType   SlideType  `json:"slideType"`
+	StepId      string     `json:"stepId,omitempty"`
+	Comment     string     `json:"comment,omitempty"`
+	Mode        Mode       `json:"mode,omitempty"`
+	FocusColumn ColumnType `json:"focusColumn,omitempty"`
+	SlideType   SlideType  `json:"slideType,omitempty"`
 }
 
 /**
  * From row fields.  to make the step searchable for re-generation
  */
 type FromRowFields struct {
-	IsFromRow   bool   `json:"isFromRow"`
-	SubID       string `json:"subId"`
-	ParentRowId string `json:"parentRowId"`
+	IsFromRow   bool   `json:"isFromRow,omitempty"`
+	SubID       string `json:"subId,omitempty"`
+	ParentRowId string `json:"parentRowId,omitempty"`
 }
 
 /**
  * Modal fields
  */
 type ModalFields struct {
-	ModalContents string        `json:"modalContents"`
-	ModalPosition ModalPosition `json:"modalPosition"`
+	ModalContents string        `json:"modalContents,omitempty"`
+	ModalPosition ModalPosition `json:"modalPosition,omitempty"`
 }
 
 /**
  * Animation fields
  */
 type AnimationFields struct {
-	// DurationSeconds int  `json:"durationSeconds"`
-	IsTrivial bool `json:"isTrivial"`
+	// DurationSeconds int  `json:"durationSeconds,omitempty"`
+	IsTrivial bool `json:"isTrivial,omitempty"`
 }

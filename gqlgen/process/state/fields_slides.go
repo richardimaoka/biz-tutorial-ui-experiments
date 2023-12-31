@@ -22,35 +22,35 @@ const (
  * TutorialTitle slide fields
  */
 type TutorialTitleFields struct {
-	TutorialTitle              string            `json:"tutorialTitle"`
-	TutorialTitleImagePaths    string            `json:"tutorialTitleImagePaths"`
-	TutorialTitleImageWidths   csvfield.MultiInt `json:"tutorialTitleImageWidths"`
-	TutorialTitleImageHeights  csvfield.MultiInt `json:"tutorialTitleImageHeights"`
-	TutorialTitleImageCaptions string            `json:"tutorialTitleImageCaptions"`
+	TutorialTitle              string            `json:"tutorialTitle,omitempty"`
+	TutorialTitleImagePaths    string            `json:"tutorialTitleImagePaths,omitempty"`
+	TutorialTitleImageWidths   csvfield.MultiInt `json:"tutorialTitleImageWidths,omitempty"`
+	TutorialTitleImageHeights  csvfield.MultiInt `json:"tutorialTitleImageHeights,omitempty"`
+	TutorialTitleImageCaptions string            `json:"tutorialTitleImageCaptions,omitempty"`
 }
 
 /**
  * SectionTitle slide fields
  */
 type SectionTitleFields struct {
-	SectionTitle string `json:"sectionTitle"`
+	SectionTitle string `json:"sectionTitle,omitempty"`
 }
 
 /**
  * Markdown slide fields
  */
 type MarkdownFields struct {
-	MarkdownContents string `json:"markdownContents"`
-	// MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment"`
-	// MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment"`
+	MarkdownContents string `json:"markdownContents,omitempty"`
+	// MarkdownVerticalAlignment   string `json:"markdownVerticalAlignment,omitempty"`
+	// MarkdownHorizontalAlignment string `json:"markdownHorizontalAlignment,omitempty"`
 }
 
 /**
  * Image slide fields
  */
 type ImageFields struct {
-	ImagePath    string `json:"ImagePath"`
-	ImageWidth   int    `json:"ImageWidth"`
-	ImageHeight  int    `json:"ImageHeight"`
-	ImageCaption string `json:"ImageCaption"`
+	ImagePath    string `json:"ImagePath,omitempty"`
+	ImageWidth   int    `json:"ImageWidth,omitempty"`
+	ImageHeight  int    `json:"ImageHeight,omitempty"`
+	ImageCaption string `json:"ImageCaption,omitempty"`
 }
