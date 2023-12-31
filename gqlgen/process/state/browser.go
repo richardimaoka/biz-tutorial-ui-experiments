@@ -14,15 +14,19 @@ func NewBrowser() *Browser {
 	return &Browser{}
 }
 
-func (b *Browser) SetImage(tutorial, src string, width, height int) error {
+func (b *Browser) SetImage(tutorial, src string) error {
 	errorPrefix := "SetImage failed"
 
-	b.image = NewImage(tutorial, src, width, height, "")
-
-	if err := b.image.copyFile(); err != nil {
+	image, err := NewImage(tutorial, src, "") // last parameter, caption = "" for browser
+	if err != nil {
 		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	if err := image.copyFile(); err != nil {
+		return fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	b.image = image
 	return nil
 }
 

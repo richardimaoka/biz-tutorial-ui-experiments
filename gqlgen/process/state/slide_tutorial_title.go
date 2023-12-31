@@ -19,17 +19,11 @@ func NewTutorialTitleSlide(fields TutorialTitleFields, tutorial string) (*Tutori
 
 	var images []*Image
 	for i := 0; i < len(imagePaths); i++ {
-		width, err := fields.TutorialTitleImageWidths.Get(i)
+		image, err := NewImage(tutorial, imagePaths[i], captions[i])
 		if err != nil {
-			return nil, fmt.Errorf("%s, invalid width, %s", errorPrefix, err)
+			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}
 
-		height, err := fields.TutorialTitleImageWidths.Get(i)
-		if err != nil {
-			return nil, fmt.Errorf("%s, invalid height, %s", errorPrefix, err)
-		}
-
-		image := NewImage(tutorial, imagePaths[i], width, height, captions[i])
 		if err := image.copyFile(); err != nil {
 			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}

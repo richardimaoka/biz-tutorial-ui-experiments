@@ -155,7 +155,11 @@ func (p *Page) processStep(step *Step) error {
 			return nil
 
 		case ImageSlideType:
-			p.slide = NewImageSlide(step.ImageFields, p.tutorial)
+			slide, err := NewImageSlide(step.ImageFields, p.tutorial)
+			if err != nil {
+				return err
+			}
+			p.slide = slide
 			return nil
 
 		default:

@@ -1,41 +1,32 @@
-package state_test
+package state
 
 import (
-	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"os"
 	"testing"
 )
 
 func Test(t *testing.T) {
 	cases := []struct {
-		src    string
-		width  int
-		height int
+		src            string
+		expectedWidth  int
+		expectedHeight int
 	}{
 		{"testdata/image/httpd.png", 531, 839},
 	}
 
 	for _, c := range cases {
 		t.Run(c.src, func(t *testing.T) {
-			reader, err := os.Open(c.src)
-			defer reader.Close()
-
+			img, err := NewImage("tutorial", c.src, "")
 			if err != nil {
-				t.Fatal(err)
+				t.Fatalf("failed to load image, %s", err)
 			}
 
-			im, _, err := image.DecodeConfig(reader)
-			if err != nil {
-				t.Fatal(err)
+			if img.height != c.expectedHeight {
+				t.Errorf("expected height = %d but got %d", c.expectedHeight, img.height)
 			}
-
-			if im.Height != c.height {
-				t.Errorf("expected height = %d but got %d", c.height, im.Height)
-			}
-			if im.Width != c.width {
-				t.Errorf("expected width = %d but got %d", c.width, im.Width)
+			if img.width != c.expectedWidth {
+				t.Errorf("expected width = %d but got %d", c.expectedWidth, img.width)
 			}
 		})
 	}

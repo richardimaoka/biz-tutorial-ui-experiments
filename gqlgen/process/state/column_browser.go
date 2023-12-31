@@ -23,8 +23,6 @@ func (c *BrowserColumn) Open(fields *BrowserFields, modalFields *ModalFields) er
 	err := c.browser.SetImage(
 		c.tutorial,
 		fields.BrowserImagePath,
-		fields.BrowserImageWidth,
-		fields.BrowserImageHeight,
 	)
 	if err != nil {
 		return fmt.Errorf("BrowserColumn Open() failed, %s", err)
