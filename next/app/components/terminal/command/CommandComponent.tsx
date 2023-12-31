@@ -43,11 +43,13 @@ export function CommandComponent(props: Props) {
     }
   } else {
     // If `!props.animate` supposedly the command is already executed so no animation at <all></all>
-    <div className={styles.component}>
-      <pre>
-        <CommandPrompt />
-        <CommandAlreadyExecuted command={props.command} />
-      </pre>
-    </div>;
+    return (
+      <div className={styles.component}>
+        <pre>
+          <CommandPrompt />
+          <CommandAlreadyExecuted command={props.command} />
+        </pre>
+      </div>
+    );
   }
 }
