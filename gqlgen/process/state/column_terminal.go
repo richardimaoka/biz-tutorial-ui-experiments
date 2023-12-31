@@ -48,11 +48,17 @@ func (c *TerminalColumn) TerminalCommand(
 func (c *TerminalColumn) TerminalCommandExecute(
 	fields *TerminalFields,
 ) error {
+	if fields.TerminalTooltipContents != "" {
+		return fmt.Errorf("TerminalColumn TerminalCd() failed, tooltip should be empty but = '%s'", fields.TerminalTooltipContents)
+	}
+
 	terminal := c.getOrCreateTerminal(fields.TerminalName)
 	err := terminal.ExecuteLastCommand()
 	if err != nil {
 		return fmt.Errorf("TerminalColumn TerminalCommandExecute() failed, %s", err)
 	}
+
+	terminal.ClearTooltip()
 
 	return nil
 }
@@ -75,6 +81,10 @@ func (c *TerminalColumn) TerminalCd(
 	name string,
 	fields *TerminalFields,
 ) error {
+	if fields.TerminalTooltipContents != "" {
+		return fmt.Errorf("TerminalColumn TerminalCd() failed, tooltip should be empty but = '%s'", fields.TerminalTooltipContents)
+	}
+
 	terminal := c.getOrCreateTerminal(name)
 
 	err := terminal.ExecuteLastCommand()
@@ -82,7 +92,9 @@ func (c *TerminalColumn) TerminalCd(
 		return fmt.Errorf("TerminalColumn TerminalCd() failed, %s", err)
 	}
 
+	terminal.ClearTooltip()
 	terminal.ChangeCurrentDirectory(fields.CurrentDir)
+
 	return nil
 }
 
