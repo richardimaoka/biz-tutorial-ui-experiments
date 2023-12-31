@@ -2,9 +2,10 @@
 
 import styles from "./CommandComponent.module.css";
 import { CommandPrompt } from "./CommandPrompt";
-import { CommandStringStatic } from "./CommandStringStatic";
-import { CommandStringAnimation } from "./CommandStringAnimation";
+import { CommandWaitingExecution } from "./CommandWaitingExecution";
+import { CommandTypingAnimation } from "./CommandTypingAnimation";
 import { useSearchParams } from "next/navigation";
+import { CommandAlreadyExecuted } from "./CommandAlreadyExecuted";
 
 interface Props {
   command: string;
@@ -15,16 +16,38 @@ export function CommandComponent(props: Props) {
   const searchParams = useSearchParams();
   const skipAnimation = searchParams.get("skipAnimation") === "true";
 
-  return (
+  if (props.animate) {
+    // If this command has `props.animate = true`, then the command is suppsedly the last command waiting for execution
+    if (skipAnimation) {
+      // This might feel weird, but `props.animate = true` && `skipAnimation (search params) = true`
+      // will only animate the flickering trail, indicating that the command is waiting for execution
+      return (
+        <div className={styles.component}>
+          <pre>
+            <CommandPrompt />
+            <CommandWaitingExecution command={props.command} />
+          </pre>
+        </div>
+      );
+    } else {
+      // `props.animate = true` && `!skipAnimation (search params)`
+      // Full animation = typing + flickering trail
+      return (
+        <div className={styles.component}>
+          <pre>
+            <CommandPrompt />
+            <CommandTypingAnimation command={props.command} />
+          </pre>
+        </div>
+      );
+    }
+  } else {
+    // If `!props.animate` supposedly the command is already executed so no animation at all
     <div className={styles.component}>
       <pre>
         <CommandPrompt />
-        {props.animate && !skipAnimation ? (
-          <CommandStringAnimation command={props.command} />
-        ) : (
-          <CommandStringStatic command={props.command} />
-        )}
+        <CommandAlreadyExecuted command={props.command} />
       </pre>
-    </div>
-  );
+    </div>;
+  }
 }

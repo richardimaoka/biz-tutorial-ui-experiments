@@ -6,7 +6,7 @@ interface Props {
   command: string;
 }
 
-export function CommandStringAnimation(props: Props) {
+export function CommandTypingAnimation(props: Props) {
   const [writtenLength, setWrittenLength] = useState(0);
   const command = props.command;
 
