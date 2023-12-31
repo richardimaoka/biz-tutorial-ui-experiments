@@ -74,14 +74,12 @@ func toBrowserSubType(s string) (BrowserSubType, error) {
 // }
 
 type BrowserSingleRow struct {
-	RowId           string        `json:"rowId"`
-	IsTrivial       bool          `json:"isTrivial"`
-	Comment         string        `json:"comment"`
-	ModalContents   string        `json:"modalContents"`
-	ModalPosition   ModalPosition `json:"modalPosition"`
-	ImageFilePath   string        `json:"imageFilePath"`
-	ImageFileWidth  int           `json:"imageFileWidth"`
-	ImageFileHeight int           `json:"imageFileHeight"`
+	RowId         string        `json:"rowId"`
+	IsTrivial     bool          `json:"isTrivial"`
+	Comment       string        `json:"comment"`
+	ModalContents string        `json:"modalContents"`
+	ModalPosition ModalPosition `json:"modalPosition"`
+	ImageFilePath string        `json:"imageFilePath"`
 }
 
 // var BrowserNumSeqPattern *regexp.Regexp = regexp.MustCompile(`\[[0-9]+\]`)
@@ -127,17 +125,6 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	}
 	imageFileName := fromRow.FilePath
 
-	// image width and height
-	height, err := fromRow.ImageHeight.GetSingleValue()
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'imageHeight' is invalid, %s", errorPrefix, err)
-	}
-
-	width, err := fromRow.ImageWidth.GetSingleValue()
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'imageWidth' is invalid, %s", errorPrefix, err)
-	}
-
 	//
 	// Check trivial field
 	//
@@ -152,14 +139,12 @@ func toBrowserSingleRow(fromRow *Row) (*BrowserSingleRow, error) {
 	}
 
 	return &BrowserSingleRow{
-		RowId:           fromRow.RowId,
-		IsTrivial:       trivial,
-		Comment:         fromRow.Comment,
-		ModalContents:   fromRow.ModalContents,
-		ModalPosition:   modalPosition,
-		ImageFilePath:   imageFileName,
-		ImageFileWidth:  width,
-		ImageFileHeight: height,
+		RowId:         fromRow.RowId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		ModalContents: fromRow.ModalContents,
+		ModalPosition: modalPosition,
+		ImageFilePath: imageFileName,
 	}, nil
 }
 
@@ -366,10 +351,8 @@ func openBrowserStep(r *BrowserSingleRow, StepIdFinder *StepIdFinder) state.Step
 			ModalPosition: r.ModalPosition.toState(),
 		},
 		BrowserFields: state.BrowserFields{
-			BrowserStepType:    state.BrowserOpen,
-			BrowserImagePath:   r.ImageFilePath,
-			BrowserImageWidth:  r.ImageFileWidth,
-			BrowserImageHeight: r.ImageFileHeight,
+			BrowserStepType:  state.BrowserOpen,
+			BrowserImagePath: r.ImageFilePath,
 		},
 	}
 

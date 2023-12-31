@@ -15,8 +15,6 @@ type ImageRow struct {
 	Comment       string `json:"comment"`
 	ModalContents string `json:"modalContents"`
 	ImagePath     string `json:"imagePath"`
-	ImageWidth    int    `json:"imageWidth"`
-	ImageHeight   int    `json:"imageHeight"`
 	ImageCaption  string `json:"imageCaption"`
 }
 
@@ -35,17 +33,6 @@ func toImageRow(fromRow *Row) (*ImageRow, error) {
 		return nil, fmt.Errorf("%s, called for wrong 'rowType' = %s", errorPrefix, fromRow.RowType)
 	}
 
-	// image width and height
-	height, err := fromRow.ImageHeight.GetSingleValue()
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'imageHeight' is invalid, %s", errorPrefix, err)
-	}
-
-	width, err := fromRow.ImageWidth.GetSingleValue()
-	if err != nil {
-		return nil, fmt.Errorf("%s, 'imageWidth' is invalid, %s", errorPrefix, err)
-	}
-
 	//
 	// Check trivial field
 	//
@@ -57,8 +44,6 @@ func toImageRow(fromRow *Row) (*ImageRow, error) {
 		Comment:       fromRow.Comment,
 		ModalContents: fromRow.ModalContents,
 		ImagePath:     fromRow.FilePath,
-		ImageWidth:    width,
-		ImageHeight:   height,
 		ImageCaption:  fromRow.ImageCaption,
 	}, nil
 }
@@ -102,8 +87,6 @@ func imageStep(r *ImageRow, StepIdFinder *StepIdFinder) state.Step {
 		},
 		ImageFields: state.ImageFields{
 			ImagePath:    r.ImagePath,
-			ImageWidth:   r.ImageWidth,
-			ImageHeight:  r.ImageHeight,
 			ImageCaption: r.ImageCaption,
 		},
 	}

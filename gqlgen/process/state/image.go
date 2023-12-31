@@ -59,6 +59,22 @@ func NewImage(
 	}, nil
 }
 
+func NewSvgImage(
+	tutorial string,
+	src string,
+	width int,
+	height int,
+	caption string) *Image {
+
+	return &Image{
+		tutorial: tutorial,
+		src:      src,
+		width:    width,
+		height:   height,
+		caption:  caption,
+	}
+}
+
 func (i *Image) copyFile() error {
 	sourcePath := sourceImagePath(i.tutorial, i.src)
 	destPath := destinationImagePath(i.tutorial, i.src)
