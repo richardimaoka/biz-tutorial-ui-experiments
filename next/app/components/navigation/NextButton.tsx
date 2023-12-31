@@ -11,7 +11,6 @@ interface Props {
 
 export function NextButton(props: Props) {
   const pathname = usePathname();
-  props.disabled = false;
 
   if (props.disabled) {
     return <></>;

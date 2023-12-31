@@ -15,12 +15,12 @@ export function HandleTrivial(props: Props) {
   useEffect(() => {
     let timeoutId: number | null;
     if (props.isTrivial && props.nextStep) {
-      // const path = `${pathname}?step=${props.nextStep}`;
-      // const setTimeoutInterval = 200; //milli-seconds
-      // timeoutId = window.setTimeout(
-      //   () => router.push(path),
-      //   setTimeoutInterval
-      // );
+      const path = `${pathname}?step=${props.nextStep}`;
+      const setTimeoutInterval = 200; //milli-seconds
+      timeoutId = window.setTimeout(
+        () => router.push(path),
+        setTimeoutInterval
+      );
     }
 
     // Don't forget to clean up

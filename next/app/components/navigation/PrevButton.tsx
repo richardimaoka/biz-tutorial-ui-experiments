@@ -11,7 +11,7 @@ interface Props {
 
 export function PrevButton(props: Props) {
   const pathname = usePathname();
-  props.disabled = false;
+
   if (props.disabled) {
     return <></>;
   } else {
