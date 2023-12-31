@@ -73,9 +73,10 @@ func (t TerminalEntryType) ToGraphQL() model.TerminalEntryType {
 }
 
 type TerminalEntry struct {
-	id        string
-	entryType TerminalEntryType
-	text      string
+	id                string
+	entryType         TerminalEntryType
+	text              string
+	isCommandExecuted bool
 }
 
 func (p *TerminalEntry) ToGraphQLTerminalEntry() *model.TerminalEntry {
@@ -112,6 +113,32 @@ func (t *Terminal) WriteCommand(id, command string) {
 	})
 }
 
+func (t *Terminal) ExecuteLastCommand() error {
+	errorPrefix := "Terminal ExecuteLastCommand() failed"
+
+	if len(t.entries) == 0 {
+		return fmt.Errorf("%s, terminal = '%s' is empty", errorPrefix, t.terminalName)
+	}
+
+	// Go pointer technique to change `t.entries[]` fields
+	lastEntry := &t.entries[len(t.entries)-1]
+	//   if we do `lastEntry := t.entries[...]`, then `lastEntry.isCommandExecuted = false`
+	//   will not change the original `t.entries[]`
+
+	if lastEntry.entryType != Command {
+		return fmt.Errorf(
+			"%s, last element (id = '%s') of terminal '%s' is expected entryType = Command but '%s'",
+			errorPrefix,
+			lastEntry.id,
+			t.terminalName,
+			lastEntry.entryType,
+		)
+	}
+
+	lastEntry.isCommandExecuted = true
+	return nil
+}
+
 func (t *Terminal) WriteOutput(id, output string) {
 	t.entries = append(t.entries, TerminalEntry{
 		id:        id,
@@ -141,10 +168,12 @@ func (t *Terminal) ToGraphQL() *model.Terminal {
 
 	var modelEntries []*model.TerminalEntry
 	for _, e := range t.entries {
+		executed := e.isCommandExecuted
 		modelEntries = append(modelEntries, &model.TerminalEntry{
-			ID:        e.id,
-			EntryType: e.entryType.ToGraphQL(),
-			Text:      e.text,
+			ID:                e.id,
+			EntryType:         e.entryType.ToGraphQL(),
+			Text:              e.text,
+			IsCommandExecuted: &executed,
 		})
 	}
 

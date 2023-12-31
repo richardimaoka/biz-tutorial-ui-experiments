@@ -135,10 +135,13 @@ enum TerminalEntryType {
   OUTPUT
 }
 
+# Not using interface/implements relationship for COMMAND/OUTPUT,
+# because that will unnecessarily complicate marshal/unmarshal code in Go
 type TerminalEntry {
   id: ID!
   entryType: TerminalEntryType!
   text: String! # command or output
+  isCommandExecuted: Boolean # only makes sense for `entryType` = 'COMMAND'
 }
 
 type Terminal {

@@ -164,9 +164,10 @@ func (TerminalColumn) IsColumn()                    {}
 func (this TerminalColumn) GetPlaceholder() *string { return this.Placeholder }
 
 type TerminalEntry struct {
-	ID        string            `json:"id"`
-	EntryType TerminalEntryType `json:"entryType"`
-	Text      string            `json:"text"`
+	ID                string            `json:"id"`
+	EntryType         TerminalEntryType `json:"entryType"`
+	Text              string            `json:"text"`
+	IsCommandExecuted *bool             `json:"isCommandExecuted"`
 }
 
 type TerminalTooltip struct {

@@ -186,9 +186,10 @@ type ComplexityRoot struct {
 	}
 
 	TerminalEntry struct {
-		EntryType func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Text      func(childComplexity int) int
+		EntryType         func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsCommandExecuted func(childComplexity int) int
+		Text              func(childComplexity int) int
 	}
 
 	TerminalTooltip struct {
@@ -780,6 +781,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TerminalEntry.ID(childComplexity), true
+
+	case "TerminalEntry.isCommandExecuted":
+		if e.complexity.TerminalEntry.IsCommandExecuted == nil {
+			break
+		}
+
+		return e.complexity.TerminalEntry.IsCommandExecuted(childComplexity), true
 
 	case "TerminalEntry.text":
 		if e.complexity.TerminalEntry.Text == nil {
@@ -4362,6 +4370,8 @@ func (ec *executionContext) fieldContext_Terminal_entries(ctx context.Context, f
 				return ec.fieldContext_TerminalEntry_entryType(ctx, field)
 			case "text":
 				return ec.fieldContext_TerminalEntry_text(ctx, field)
+			case "isCommandExecuted":
+				return ec.fieldContext_TerminalEntry_isCommandExecuted(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TerminalEntry", field.Name)
 		},
@@ -4638,6 +4648,47 @@ func (ec *executionContext) fieldContext_TerminalEntry_text(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TerminalEntry_isCommandExecuted(ctx context.Context, field graphql.CollectedField, obj *model.TerminalEntry) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TerminalEntry_isCommandExecuted(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsCommandExecuted, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TerminalEntry_isCommandExecuted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TerminalEntry",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7905,6 +7956,10 @@ func (ec *executionContext) _TerminalEntry(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "isCommandExecuted":
+
+			out.Values[i] = ec._TerminalEntry_isCommandExecuted(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

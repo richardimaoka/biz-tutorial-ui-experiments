@@ -50,11 +50,12 @@ type SourceFields struct {
 type TerminalStepType string
 
 const (
-	TerminalCommand TerminalStepType = "command"
-	TerminalOutput  TerminalStepType = "output"
-	TerminalCd      TerminalStepType = "cd"
-	TerminalMove    TerminalStepType = "move"
-	TerminalOpen    TerminalStepType = "open"
+	TerminalCommand         TerminalStepType = "command"
+	TerminalCommandExecuted TerminalStepType = "command executed"
+	TerminalOutput          TerminalStepType = "output"
+	TerminalCd              TerminalStepType = "cd"
+	TerminalMove            TerminalStepType = "move"
+	TerminalOpen            TerminalStepType = "open"
 )
 
 type TerminalTooltipFields struct {

@@ -220,6 +220,7 @@ export type TerminalEntry = {
   __typename: "TerminalEntry";
   entryType: TerminalEntryType;
   id: Scalars["ID"]["output"];
+  isCommandExecuted?: Maybe<Scalars["Boolean"]["output"]>;
   text: Scalars["String"]["output"];
 };
 

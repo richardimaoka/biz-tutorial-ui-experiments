@@ -33,56 +33,75 @@ func (c *TerminalColumn) getOrCreateTerminal(name string) *Terminal {
 
 func (c *TerminalColumn) TerminalCommand(
 	stepId string,
-	name string,
-	command string,
-	tooltipContents string,
-) {
-	terminal := c.getOrCreateTerminal(name)
-	terminal.WriteCommand(stepId, command)
-	if tooltipContents == "" {
+	fields *TerminalFields,
+) error {
+	terminal := c.getOrCreateTerminal(fields.TerminalName)
+	terminal.WriteCommand(stepId, fields.TerminalText)
+	if fields.TerminalTooltipContents == "" {
 		terminal.ClearTooltip()
 	} else {
-		terminal.SetTooltip(tooltipContents, TERMINAL_TOOLTIP_START)
+		terminal.SetTooltip(fields.TerminalTooltipContents, TERMINAL_TOOLTIP_START)
 	}
+	return nil
+}
+
+func (c *TerminalColumn) TerminalCommandExecute(
+	fields *TerminalFields,
+) error {
+	terminal := c.getOrCreateTerminal(fields.TerminalName)
+	err := terminal.ExecuteLastCommand()
+	if err != nil {
+		return fmt.Errorf("TerminalColumn TerminalCommandExecute() failed, %s", err)
+	}
+
+	return nil
 }
 
 func (c *TerminalColumn) TerminalOutput(
 	stepId string,
-	name string,
-	output string,
-	tooltipContents string,
-) {
-	terminal := c.getOrCreateTerminal(name)
-	terminal.WriteOutput(stepId, output)
-	if tooltipContents == "" {
+	fields *TerminalFields,
+) error {
+	terminal := c.getOrCreateTerminal(fields.TerminalName)
+	terminal.WriteOutput(stepId, fields.TerminalText)
+	if fields.TerminalTooltipContents == "" {
 		terminal.ClearTooltip()
 	} else {
-		terminal.SetTooltip(tooltipContents, TERMINAL_TOOLTIP_START)
+		terminal.SetTooltip(fields.TerminalTooltipContents, TERMINAL_TOOLTIP_START)
 	}
+	return nil
 }
 
 func (c *TerminalColumn) TerminalCd(
 	name string,
-	dirPath string,
-) {
+	fields *TerminalFields,
+) error {
 	terminal := c.getOrCreateTerminal(name)
-	terminal.ChangeCurrentDirectory(dirPath)
+	terminal.ChangeCurrentDirectory(fields.CurrentDir)
+	return nil
 }
 
 func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
+	var err error
+
 	switch fields.TerminalStepType {
-	case TerminalCommand:
-		c.TerminalCommand(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
 	case TerminalOutput:
-		c.TerminalOutput(stepId, fields.TerminalName, fields.TerminalText, fields.TerminalTooltipContents)
+		err = c.TerminalOutput(stepId, fields)
+	case TerminalCommand:
+		err = c.TerminalCommand(stepId, fields)
+	case TerminalCommandExecuted:
+		err = c.TerminalCommandExecute(fields)
 	case TerminalCd:
-		c.TerminalCd(fields.TerminalName, fields.CurrentDir)
+		err = c.TerminalCd(fields.TerminalName, fields)
 	case TerminalMove:
 		// no update is needed, just changing FocusColumn is fine
 	case TerminalOpen:
 		// no update is needed, just changing FocusColumn is fine
 	default:
-		return fmt.Errorf("Update failed, type = '%s' is not implemented", fields.TerminalStepType)
+		err = fmt.Errorf("type = '%s' is not implemented", fields.TerminalStepType)
+	}
+
+	if err != nil {
+		return fmt.Errorf("TerminalColumn Update() failed, %s", err)
 	}
 
 	return nil

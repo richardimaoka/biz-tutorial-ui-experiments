@@ -310,6 +310,34 @@ func terminalCommandStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step 
 	return step
 }
 
+func terminalCommandExecutedStep(r *TerminalRow, finder *StepIdFinder) state.Step {
+	subId := "terminalCommandExecutedStep"
+	stepId := finder.StepIdFor(r.RowId, subId)
+
+	step := state.Step{
+		// Fields to make the step searchable for re-generation
+		FromRowFields: state.FromRowFields{
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
+		},
+		IntrinsicFields: state.IntrinsicFields{
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
+		},
+		AnimationFields: state.AnimationFields{
+			IsTrivial: true,
+		},
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalCommandExecuted,
+			TerminalName:     r.TerminalName,
+		},
+	}
+	return step
+}
+
 func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.RowId, subId)
@@ -464,8 +492,11 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumn state
 
 		// cd step
 		if strings.HasPrefix(r.Text, "cd ") {
-			cmdStep := terminalCdStep(r, finder)
-			steps = append(steps, cmdStep)
+			cdStep := terminalCdStep(r, finder)
+			steps = append(steps, cdStep)
+		} else {
+			executedStep := terminalCommandExecutedStep(r, finder)
+			steps = append(steps, executedStep)
 		}
 	} else if r.Type == TerminalOutput {
 		outputStep := terminalOutputStep(r, finder)
