@@ -14,9 +14,10 @@ type TerminalSubType string
 
 const (
 	// Lower cases since they are from manual entries
-	TerminalCommand TerminalSubType = "command"
-	TerminalOutput  TerminalSubType = "output"
-	TerminalOpen    TerminalSubType = "open"
+	TerminalCommand         TerminalSubType = "command"
+	TerminalOutput          TerminalSubType = "output"
+	TerminalOutputOverwrite TerminalSubType = "output overwrite"
+	TerminalOpen            TerminalSubType = "open"
 )
 
 func toTerminalSubType(s string) (TerminalSubType, error) {
@@ -27,6 +28,8 @@ func toTerminalSubType(s string) (TerminalSubType, error) {
 		return TerminalCommand, nil
 	case string(TerminalOutput):
 		return TerminalOutput, nil
+	case string(TerminalOutputOverwrite):
+		return TerminalOutputOverwrite, nil
 	case string(TerminalOpen):
 		return TerminalOpen, nil
 	default:
@@ -179,6 +182,61 @@ func toTerminalOutputRow(fromRow *Row) (*TerminalRow, error) {
 	}
 	subType, err := toTerminalSubType(fromRow.SubType)
 	if err != nil || subType != TerminalOutput {
+		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
+	}
+
+	//
+	// Check contents fields
+	//
+	if fromRow.Contents == "" {
+		return nil, fmt.Errorf("%s, 'contents' is empty", errorPrefix)
+	}
+
+	//
+	// Check terminal name
+	//
+	terminalName := fromRow.TerminalName
+	if terminalName == "" {
+		terminalName = "default"
+	}
+
+	//
+	// Check tooltip fields
+	//
+	terminalTooltip, err := toTerminalTooltip(fromRow)
+	if err != nil {
+		return nil, fmt.Errorf("%s, %s", errorPrefix, err)
+	}
+
+	//
+	// Check trivial field
+	//
+	isTrivial := fromRow.Trivial.Value()
+
+	return &TerminalRow{
+		RowId:         fromRow.RowId,
+		IsTrivial:     isTrivial,
+		Comment:       fromRow.Comment,
+		ModalContents: fromRow.ModalContents,
+		Type:          subType,
+		Text:          fromRow.Contents,
+		Tooltip:       terminalTooltip,
+		TerminalName:  terminalName,
+	}, nil
+}
+
+func toTerminalOutputOverwriteRow(fromRow *Row) (*TerminalRow, error) {
+	errorPrefix := "failed in toTerminalOutputRow"
+
+	//
+	// Check column and type
+	//
+	column, err := toColumnType(fromRow.RowType)
+	if err != nil || column != TerminalColumn {
+		return nil, fmt.Errorf("%s, called for wrong 'column' = %s", errorPrefix, fromRow.RowType)
+	}
+	subType, err := toTerminalSubType(fromRow.SubType)
+	if err != nil || subType != TerminalOutputOverwrite {
 		return nil, fmt.Errorf("%s, called for wrong 'type' = %s", errorPrefix, fromRow.SubType)
 	}
 
@@ -410,6 +468,43 @@ func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	return step
 }
 
+func terminalOutputOverwriteStep(r *TerminalRow, finder *StepIdFinder) state.Step {
+	subId := "terminalOutputOverwriteStep"
+	stepId := finder.StepIdFor(r.RowId, subId)
+
+	step := state.Step{
+		// Fields to make the step searchable for re-generation
+		FromRowFields: state.FromRowFields{
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
+		},
+		IntrinsicFields: state.IntrinsicFields{
+			StepId:      stepId,
+			Comment:     r.Comment,
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
+		},
+		AnimationFields: state.AnimationFields{
+			IsTrivial: r.IsTrivial,
+		},
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+		},
+		TerminalFields: state.TerminalFields{
+			TerminalStepType: state.TerminalOutputOverwrite,
+			TerminalText:     r.Text,
+			TerminalName:     r.TerminalName,
+		},
+	}
+	if r.Tooltip != nil {
+		step.TerminalTooltipContents = r.Tooltip.Contents
+		step.TerminalTooltipTiming = r.Tooltip.Timing.toState()
+	}
+
+	return step
+}
+
 func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "moveToTerminalStep"
 	stepId := finder.StepIdFor(r.RowId, subId)
@@ -501,6 +596,9 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumn state
 	} else if r.Type == TerminalOutput {
 		outputStep := terminalOutputStep(r, finder)
 		steps = append(steps, outputStep)
+	} else if r.Type == TerminalOutputOverwrite {
+		overwriteStep := terminalOutputOverwriteStep(r, finder)
+		steps = append(steps, overwriteStep)
 	}
 
 	// cleanup step
@@ -538,6 +636,20 @@ func toTerminalSteps(
 	case TerminalOutput:
 		// row -> specific row
 		terminalRow, err := toTerminalOutputRow(r)
+		if err != nil {
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+
+		// specific row -> step
+		steps := breakdownTerminalRow(terminalRow, finder, prevColumn)
+		if err != nil {
+			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
+		}
+		return steps, nil
+
+	case TerminalOutputOverwrite:
+		// row -> specific row
+		terminalRow, err := toTerminalOutputOverwriteRow(r)
 		if err != nil {
 			return nil, fmt.Errorf("toTerminalSteps failed, %s", err)
 		}

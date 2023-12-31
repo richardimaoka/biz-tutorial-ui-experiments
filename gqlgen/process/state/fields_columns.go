@@ -53,6 +53,7 @@ const (
 	TerminalCommand         TerminalStepType = "command"
 	TerminalCommandExecuted TerminalStepType = "command executed"
 	TerminalOutput          TerminalStepType = "output"
+	TerminalOutputOverwrite TerminalStepType = "output overwrite"
 	TerminalCd              TerminalStepType = "cd"
 	TerminalMove            TerminalStepType = "move"
 	TerminalOpen            TerminalStepType = "open"

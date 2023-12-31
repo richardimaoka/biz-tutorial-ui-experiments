@@ -77,6 +77,24 @@ func (c *TerminalColumn) TerminalOutput(
 	return nil
 }
 
+func (c *TerminalColumn) TerminalOutputOverwrite(
+	stepId string,
+	fields *TerminalFields,
+) error {
+	terminal := c.getOrCreateTerminal(fields.TerminalName)
+	err := terminal.OverWriteOutput(stepId, fields.TerminalText)
+	if err != nil {
+		return fmt.Errorf("TerminalColumn TerminalOutputOverwrite() failed, %s", err)
+	}
+
+	if fields.TerminalTooltipContents == "" {
+		terminal.ClearTooltip()
+	} else {
+		terminal.SetTooltip(fields.TerminalTooltipContents, TERMINAL_TOOLTIP_START)
+	}
+	return nil
+}
+
 func (c *TerminalColumn) TerminalCd(
 	name string,
 	fields *TerminalFields,
@@ -104,6 +122,8 @@ func (c *TerminalColumn) Update(stepId string, fields *TerminalFields) error {
 	switch fields.TerminalStepType {
 	case TerminalOutput:
 		err = c.TerminalOutput(stepId, fields)
+	case TerminalOutputOverwrite:
+		err = c.TerminalOutputOverwrite(stepId, fields)
 	case TerminalCommand:
 		err = c.TerminalCommand(stepId, fields)
 	case TerminalCommandExecuted:

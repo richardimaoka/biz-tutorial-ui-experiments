@@ -147,6 +147,32 @@ func (t *Terminal) WriteOutput(id, output string) {
 	})
 }
 
+func (t *Terminal) OverWriteOutput(id, output string) error {
+	errorPrefix := "Terminal OverWriteOutput() failed"
+
+	if len(t.entries) == 0 {
+		return fmt.Errorf("%s, terminal = '%s' is empty", errorPrefix, t.terminalName)
+	}
+
+	// Go pointer technique to change `t.entries[]` fields
+	lastEntry := &t.entries[len(t.entries)-1]
+	//   if we do `lastEntry := t.entries[...]`, then `lastEntry.isCommandExecuted = false`
+	//   will not change the original `t.entries[]`
+
+	if lastEntry.entryType != Output {
+		return fmt.Errorf(
+			"%s, last element (id = '%s') of terminal '%s' is expected entryType = Output but '%s'",
+			errorPrefix,
+			lastEntry.id,
+			t.terminalName,
+			lastEntry.entryType,
+		)
+	}
+
+	lastEntry.text = output
+	return nil
+}
+
 func (t *Terminal) ChangeCurrentDirectory(dirPath string) {
 	t.currentDirectory = dirPath
 }
