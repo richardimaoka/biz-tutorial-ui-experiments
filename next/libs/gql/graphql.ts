@@ -574,6 +574,7 @@ export type GqlTerminalEntryComponentFragment = {
   __typename: "TerminalEntry";
   entryType: TerminalEntryType;
   text: string;
+  isCommandExecuted?: boolean | null;
 } & { " $fragmentName"?: "GqlTerminalEntryComponentFragment" };
 
 export type GqlTerminalHeaderFragment = {
@@ -928,6 +929,7 @@ export const GqlTerminalEntryComponentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -1008,6 +1010,7 @@ export const GqlTerminalContentsFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -1073,6 +1076,7 @@ export const GqlTerminalColumnFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -2126,6 +2130,7 @@ export const GqlColumnWrapperFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -2612,6 +2617,7 @@ export const GqlColumnWrappersFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -3271,6 +3277,7 @@ export const GqlHandsonComponentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -4511,6 +4518,7 @@ export const AppTutorialPageDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -5450,6 +5458,7 @@ export const AppTestTutorialColumnsPageDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },
@@ -6114,6 +6123,7 @@ export const AppTestTerminalPageDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "entryType" } },
           { kind: "Field", name: { kind: "Name", value: "text" } },
+          { kind: "Field", name: { kind: "Name", value: "isCommandExecuted" } },
         ],
       },
     },

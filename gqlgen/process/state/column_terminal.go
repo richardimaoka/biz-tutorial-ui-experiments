@@ -76,6 +76,12 @@ func (c *TerminalColumn) TerminalCd(
 	fields *TerminalFields,
 ) error {
 	terminal := c.getOrCreateTerminal(name)
+
+	err := terminal.ExecuteLastCommand()
+	if err != nil {
+		return fmt.Errorf("TerminalColumn TerminalCd() failed, %s", err)
+	}
+
 	terminal.ChangeCurrentDirectory(fields.CurrentDir)
 	return nil
 }

@@ -338,6 +338,41 @@ func terminalCommandExecutedStep(r *TerminalRow, finder *StepIdFinder) state.Ste
 	return step
 }
 
+func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
+	currentDir := strings.TrimPrefix(r.Text, "cd ")
+
+	subId := "terminalCdStep"
+	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
+
+	step := state.Step{
+		// fields to make the step searchable for re-generation
+		FromRowFields: state.FromRowFields{
+			IsFromRow:   true,
+			ParentRowId: r.RowId,
+			SubID:       subId,
+		},
+		IntrinsicFields: state.IntrinsicFields{
+			StepId:      stepId,
+			Comment:     "",
+			Mode:        state.HandsonMode,
+			FocusColumn: state.TerminalColumnType,
+		},
+		AnimationFields: state.AnimationFields{
+			IsTrivial: true, //always true
+		},
+		// No ModalFields, as it is a trivial step
+		TerminalFields: state.TerminalFields{
+			CurrentDir:       currentDir,
+			TerminalStepType: state.TerminalCd,
+			TerminalName:     r.TerminalName,
+		},
+	}
+
+	// No tooltip - trivial step and no tooltip to show
+
+	return step
+}
+
 func terminalOutputStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	subId := "terminalOutputStep"
 	stepId := finder.StepIdFor(r.RowId, subId)
@@ -406,71 +441,36 @@ func moveToTerminalStep(r *TerminalRow, finder *StepIdFinder) state.Step {
 	return step
 }
 
-func terminalCdStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
-	currentDir := strings.TrimPrefix(r.Text, "cd ")
+// func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
+// 	subId := "terminalCleanupStep"
+// 	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
 
-	subId := "terminalCdStep"
-	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
+// 	step := state.Step{
+// 		// fields to make the step searchable for re-generation
+// 		FromRowFields: state.FromRowFields{
+// 			IsFromRow:   true,
+// 			ParentRowId: r.RowId,
+// 			SubID:       subId,
+// 		},
+// 		IntrinsicFields: state.IntrinsicFields{
+// 			StepId:      stepId,
+// 			Comment:     "",
+// 			Mode:        state.HandsonMode,
+// 			FocusColumn: state.TerminalColumnType,
+// 		},
+// 		AnimationFields: state.AnimationFields{
+// 			IsTrivial: true, //always true
+// 		},
+// 		// No ModalFields, as it is a trivial step
+// 		TerminalFields: state.TerminalFields{
+// 			TerminalStepType: state.TerminalCd,
+// 		},
+// 	}
 
-	step := state.Step{
-		// fields to make the step searchable for re-generation
-		FromRowFields: state.FromRowFields{
-			IsFromRow:   true,
-			ParentRowId: r.RowId,
-			SubID:       subId,
-		},
-		IntrinsicFields: state.IntrinsicFields{
-			StepId:      stepId,
-			Comment:     "",
-			Mode:        state.HandsonMode,
-			FocusColumn: state.TerminalColumnType,
-		},
-		AnimationFields: state.AnimationFields{
-			IsTrivial: true, //always true
-		},
-		// No ModalFields, as it is a trivial step
-		TerminalFields: state.TerminalFields{
-			CurrentDir:       currentDir,
-			TerminalStepType: state.TerminalCd,
-			TerminalName:     r.TerminalName,
-		},
-	}
+// 	// No tooltip - trivial step and no tooltip to show
 
-	// No tooltip - trivial step and no tooltip to show
-
-	return step
-}
-
-func terminalCleanUpStep(r *TerminalRow, StepIdFinder *StepIdFinder) state.Step {
-	subId := "terminalCleanupStep"
-	stepId := StepIdFinder.StepIdFor(r.RowId, subId)
-
-	step := state.Step{
-		// fields to make the step searchable for re-generation
-		FromRowFields: state.FromRowFields{
-			IsFromRow:   true,
-			ParentRowId: r.RowId,
-			SubID:       subId,
-		},
-		IntrinsicFields: state.IntrinsicFields{
-			StepId:      stepId,
-			Comment:     "",
-			Mode:        state.HandsonMode,
-			FocusColumn: state.TerminalColumnType,
-		},
-		AnimationFields: state.AnimationFields{
-			IsTrivial: true, //always true
-		},
-		// No ModalFields, as it is a trivial step
-		TerminalFields: state.TerminalFields{
-			TerminalStepType: state.TerminalCd,
-		},
-	}
-
-	// No tooltip - trivial step and no tooltip to show
-
-	return step
-}
+// 	return step
+// }
 
 /**
  * Function(s) to break down a row to steps
@@ -504,8 +504,8 @@ func breakdownTerminalRow(r *TerminalRow, finder *StepIdFinder, prevColumn state
 	}
 
 	// cleanup step
-	step := terminalCleanUpStep(r, finder)
-	steps = append(steps, step)
+	// step := terminalCleanUpStep(r, finder)
+	// steps = append(steps, step)
 
 	return steps
 }

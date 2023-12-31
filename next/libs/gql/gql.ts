@@ -67,7 +67,7 @@ const documents = {
     types.GqlTerminalColumnFragmentDoc,
   "\n  fragment GqlTerminalContents on Terminal {\n    entries {\n      id\n      ...GqlTerminalEntryComponent\n    }\n    tooltip {\n      ...GqlTerminalTooltip\n    }\n  }\n":
     types.GqlTerminalContentsFragmentDoc,
-  "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n  }\n":
+  "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n    isCommandExecuted\n  }\n":
     types.GqlTerminalEntryComponentFragmentDoc,
   "\n  fragment GqlTerminalHeader on TerminalColumn {\n    terminals {\n      name\n      currentDirectory\n    }\n  }\n":
     types.GqlTerminalHeaderFragmentDoc,
@@ -261,8 +261,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n  }\n",
-): (typeof documents)["\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n  }\n"];
+  source: "\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n    isCommandExecuted\n  }\n",
+): (typeof documents)["\n  fragment GqlTerminalEntryComponent on TerminalEntry {\n    entryType\n    text\n    isCommandExecuted\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -32,7 +32,10 @@ export function GqlTerminalContents(props: Props) {
     <div className={styles.component}>
       {fragment.entries.map((n, i) => (
         <TerminalScrollIntoView key={n.id} doScroll={isLastEntry(i)}>
-          <GqlTerminalEntryComponent fragment={n} animate={isLastEntry(i)} />
+          <GqlTerminalEntryComponent
+            fragment={n}
+            isLastEntry={isLastEntry(i)}
+          />
           {
             // Terminal tooltip can be shown only at the bottom
             fragment.tooltip && isLastEntry(i) && (
