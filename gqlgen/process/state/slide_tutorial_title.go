@@ -29,7 +29,11 @@ func NewTutorialTitleSlide(fields TutorialTitleFields, tutorial string) (*Tutori
 			return nil, fmt.Errorf("%s, invalid height, %s", errorPrefix, err)
 		}
 
-		image := NewSvgImage(tutorial, imagePaths[i], width, height, captions[i])
+		image, err := NewImage(tutorial, imagePaths[i], width, height, captions[i])
+		if err != nil {
+			return nil, fmt.Errorf("%s, failed to get image, %s", errorPrefix, err)
+		}
+
 		if err := image.copyFile(); err != nil {
 			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}

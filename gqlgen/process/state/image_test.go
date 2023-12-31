@@ -17,7 +17,7 @@ func Test(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.src, func(t *testing.T) {
-			img, err := NewImage("tutorial", c.src, "")
+			img, err := NewImage("tutorial", c.src, 0, 0, "")
 			if err != nil {
 				t.Fatalf("failed to load image, %s", err)
 			}

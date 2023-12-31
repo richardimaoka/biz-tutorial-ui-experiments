@@ -14,11 +14,13 @@ func NewImageSlide(fields ImageFields, tutorial string) (*ImageSlide, error) {
 	image, err := NewImage(
 		tutorial,
 		fields.ImagePath,
+		fields.ImageWidth,
+		fields.ImageHeight,
 		fields.ImageCaption,
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("NewIamgeSlide() failed, %s", err)
+		return nil, fmt.Errorf("NewImageSlide() failed, %s", err)
 	}
 
 	return &ImageSlide{

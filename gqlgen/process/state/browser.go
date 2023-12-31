@@ -17,7 +17,7 @@ func NewBrowser() *Browser {
 func (b *Browser) SetImage(tutorial, src string) error {
 	errorPrefix := "SetImage failed"
 
-	image, err := NewImage(tutorial, src, "") // last parameter, caption = "" for browser
+	image, err := NewImage(tutorial, src, 0, 0, "") // last parameter, caption = "" for browser
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}

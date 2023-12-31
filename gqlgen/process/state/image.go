@@ -35,43 +35,42 @@ func destinationImagePath(tutorial, src string) string {
 func NewImage(
 	tutorial string,
 	src string,
+	width int,
+	height int,
 	caption string) (*Image, error) {
 	errorPrefix := "NewImage() failed"
 
-	sourcePath := sourceImagePath(tutorial, src)
-	reader, err := os.Open(sourcePath)
-	defer reader.Close()
-	if err != nil {
-		return nil, fmt.Errorf("%s, failed to open image file = %s, %s", errorPrefix, src, err)
-	}
+	if width == 0 || height == 0 {
+		// Either width or height is the zero value, then figure it out from the image file
+		sourcePath := sourceImagePath(tutorial, src)
+		reader, err := os.Open(sourcePath)
+		defer reader.Close()
+		if err != nil {
+			return nil, fmt.Errorf("%s, failed to open image file = %s, %s", errorPrefix, src, err)
+		}
 
-	imgConfig, _, err := image.DecodeConfig(reader)
-	if err != nil {
-		return nil, fmt.Errorf("%s, failed to get width/height of image file = %s, %s", errorPrefix, src, err)
-	}
+		imgConfig, _, err := image.DecodeConfig(reader)
+		if err != nil {
+			return nil, fmt.Errorf("%s, failed to get width/height of image file = %s, %s", errorPrefix, src, err)
+		}
 
-	return &Image{
-		tutorial: tutorial,
-		src:      src,
-		width:    imgConfig.Width,
-		height:   imgConfig.Height,
-		caption:  caption,
-	}, nil
-}
+		return &Image{
+			tutorial: tutorial,
+			src:      src,
+			width:    imgConfig.Width,
+			height:   imgConfig.Height,
+			caption:  caption,
+		}, nil
 
-func NewSvgImage(
-	tutorial string,
-	src string,
-	width int,
-	height int,
-	caption string) *Image {
-
-	return &Image{
-		tutorial: tutorial,
-		src:      src,
-		width:    width,
-		height:   height,
-		caption:  caption,
+	} else {
+		// If both width and height are given, then use them
+		return &Image{
+			tutorial: tutorial,
+			src:      src,
+			width:    width,
+			height:   height,
+			caption:  caption,
+		}, nil
 	}
 }
 
