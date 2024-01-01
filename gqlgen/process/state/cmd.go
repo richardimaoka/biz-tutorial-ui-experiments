@@ -112,6 +112,8 @@ func getRepoUrlFromFile(dirName string) (string, error) {
 }
 
 func Run(subArgs []string) error {
+	errorPrefix := "state.Run() failed, "
+
 	// Read command line arguments
 	stateCmd := flag.NewFlagSet("state", flag.ExitOnError)
 	tutorialName := stateCmd.String("tutorial", "", "tutorial name")
@@ -131,6 +133,11 @@ func Run(subArgs []string) error {
 	stepFile := fmt.Sprintf("%s/steps.json", dirName)
 	targetDir := fmt.Sprintf("%s/state", dirName)
 
+	// Validate arguments
+	if *tutorialName == "" {
+		return fmt.Errorf(errorPrefix + "tutorial argument is empty!")
+	}
+
 	var repoUrl string
 	if *repoUrlArg == "" {
 		var err error
@@ -138,7 +145,7 @@ func Run(subArgs []string) error {
 		if err != nil {
 			metadataFile := metadataFileName(dirName)
 			return fmt.Errorf(
-				"state.Run() failed, cannot get repoUrl from either of 'repo' command-line argument and '%s', %w",
+				errorPrefix+"cannot get repoUrl from either of 'repo' command-line argument and '%s', %w",
 				metadataFile,
 				err,
 			)
@@ -149,21 +156,21 @@ func Run(subArgs []string) error {
 	}
 	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
-		return fmt.Errorf("state.Run() failed, %s", err)
+		return fmt.Errorf(errorPrefix+"%s", err)
 	}
 
 	// Write RepoUrl to tutorial's metadata file
 	if repoUrlArg == nil {
 		err := writeRepoUrl(dirName, repoUrl)
 		if err != nil {
-			return fmt.Errorf("state.Run() failed, %s", err)
+			return fmt.Errorf(errorPrefix+"%s", err)
 		}
 	}
 
 	// Process the steps file and write to target
 	err = process(repo, *tutorialName, stepFile, targetDir)
 	if err != nil {
-		return fmt.Errorf("state.Run() failed, %s", err)
+		return fmt.Errorf(errorPrefix+"%s", err)
 	}
 
 	log.Printf("state.Run() successfully written files = '%s/{step-id}.json'", targetDir)

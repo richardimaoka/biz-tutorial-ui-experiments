@@ -19,7 +19,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["input", "-tutorial", "nextjs-deploy-cloudrun"]
+      "args": ["state", "-tutorial", "${input:tutorialName}"]
     },
     {
       "name": "state",
@@ -27,7 +27,15 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["state", "-tutorial", "docker-cmd-entrypoint"]
+      "args": ["state", "-tutorial", "${input:tutorialName}"]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "tutorialName",
+      "type": "promptString",
+      "description": "tutorial name"
+      // type specific configuration attributes
     }
   ]
 }

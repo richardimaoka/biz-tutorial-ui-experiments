@@ -35,6 +35,8 @@ func process(inputFile, targetFile string) error {
 }
 
 func Run(subArgs []string) error {
+	errorPrefix := "state.Run() failed, "
+
 	// Read command line arguments
 	inputCmd := flag.NewFlagSet("input", flag.ExitOnError)
 	tutorialName := inputCmd.String("tutorial", "", "tutorial name")
@@ -49,6 +51,11 @@ func Run(subArgs []string) error {
 
 	inputCmd.Parse(subArgs)
 
+	// Validate arguments
+	if *tutorialName == "" {
+		return fmt.Errorf(errorPrefix + "tutorial argument is empty!")
+	}
+
 	// Prepare variables based on parsed arguments
 	dirName := fmt.Sprintf("data/%s", *tutorialName)
 	inputFile := fmt.Sprintf("%s/input.json", dirName)
@@ -56,7 +63,7 @@ func Run(subArgs []string) error {
 
 	// Process the input file and write to target
 	if err := process(inputFile, targetFile); err != nil {
-		return fmt.Errorf("state.Run() failed, %s", err)
+		return fmt.Errorf(errorPrefix+"%s", err)
 	}
 
 	log.Printf("input.Run() successfully written file = '%s'", targetFile)
