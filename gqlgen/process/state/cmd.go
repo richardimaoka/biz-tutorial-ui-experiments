@@ -3,7 +3,6 @@ package state
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/go-git/go-git/v5"
@@ -173,6 +172,5 @@ func Run(subArgs []string) error {
 		return fmt.Errorf(errorPrefix+"%s", err)
 	}
 
-	log.Printf("state.Run() successfully written files = '%s/{step-id}.json'", targetDir)
 	return nil
 }

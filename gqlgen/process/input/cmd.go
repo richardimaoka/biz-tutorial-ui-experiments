@@ -3,7 +3,6 @@ package input
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/richardimaoka/biz-tutorial-ui-experiments/gqlgen/internal/jsonwrap"
@@ -35,7 +34,7 @@ func process(inputFile, targetFile string) error {
 }
 
 func Run(subArgs []string) error {
-	errorPrefix := "state.Run() failed, "
+	errorPrefix := "input.Run() failed, "
 
 	// Read command line arguments
 	inputCmd := flag.NewFlagSet("input", flag.ExitOnError)
@@ -66,6 +65,5 @@ func Run(subArgs []string) error {
 		return fmt.Errorf(errorPrefix+"%s", err)
 	}
 
-	log.Printf("input.Run() successfully written file = '%s'", targetFile)
 	return nil
 }

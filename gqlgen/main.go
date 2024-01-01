@@ -22,11 +22,24 @@ func main() {
 		if err != nil {
 			log.Print(err)
 		}
+		log.Printf("input.Run() successfully written file")
 	case "state":
 		err := state.Run(os.Args[2:]) //[:2] omit the first two args, main command and subcommand
 		if err != nil {
 			log.Print(err)
 		}
+		log.Printf("state.Run() successfully written files")
+	case "process":
+		err := input.Run(os.Args[2:]) //[:2] omit the first two args, main command and subcommand
+		if err != nil {
+			log.Print(err)
+		}
+		log.Printf("input.Run() successfully written file")
+		err = state.Run(os.Args[2:]) //[:2] omit the first two args, main command and subcommand
+		if err != nil {
+			log.Print(err)
+		}
+		log.Printf("state.Run() successfully written files")
 	case "server":
 		Server()
 	default:
