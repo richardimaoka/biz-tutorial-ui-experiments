@@ -27,13 +27,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": [
-        "state",
-        "-tutorial",
-        "docker-cmd-entrypoint",
-        "-repo",
-        "https://github.com/richardimaoka/article-docker-cmd-entrypoint"
-      ]
+      "args": ["state", "-tutorial", "docker-cmd-entrypoint"]
     }
   ]
 }

@@ -80,13 +80,44 @@ func process(repo *git.Repository, tutorial, stepFile, targetDir string) error {
 	return nil
 }
 
+type MetaData struct {
+	Repository string `json:"repository"`
+}
+
+func metadataFileName(dirName string) string {
+	return fmt.Sprintf("%s/metadata.json", dirName)
+}
+
+func writeRepoUrl(dirName, repoUrl string) error {
+	meta := MetaData{
+		Repository: repoUrl,
+	}
+
+	metadataFile := metadataFileName(dirName)
+	err := jsonwrap.WriteJsonToFile(&meta, metadataFile)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getRepoUrlFromFile(dirName string) (string, error) {
+	var meta MetaData
+	metadataFile := metadataFileName(dirName)
+	err := jsonwrap.Read(metadataFile, &meta)
+	if err != nil {
+		return "", err
+	}
+	return meta.Repository, nil
+}
+
 func Run(subArgs []string) error {
 	// Read command line arguments
 	stateCmd := flag.NewFlagSet("state", flag.ExitOnError)
-	tutorialName := stateCmd.String("tutorial", "", "tutorial name ")
-	repoUrl := stateCmd.String("repo", "", "GitHub Repository URL of the tutorial")
+	tutorialName := stateCmd.String("tutorial", "", "tutorial name")
+	repoUrlArg := stateCmd.String("repo", "", "(optional, if 'metadata.json' is already populated) GitHub Repository URL of the tutorial")
 
-	if len(subArgs) < 3 /* 3 = state, tutorial, repo */ {
+	if len(subArgs) < 2 /* 2 = state, tutorial */ {
 		writer := stateCmd.Output()
 		fmt.Fprintln(writer, "Error - insufficient options. Pass the following options:")
 		stateCmd.PrintDefaults()
@@ -96,14 +127,38 @@ func Run(subArgs []string) error {
 	stateCmd.Parse(subArgs)
 
 	// Prepare variables based on parsed arguments
-	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: *repoUrl})
+	dirName := fmt.Sprintf("data/%s", *tutorialName)
+	stepFile := fmt.Sprintf("%s/steps.json", dirName)
+	targetDir := fmt.Sprintf("%s/state", dirName)
+
+	var repoUrl string
+	if *repoUrlArg == "" {
+		var err error
+		repoUrl, err = getRepoUrlFromFile(dirName)
+		if err != nil {
+			metadataFile := metadataFileName(dirName)
+			return fmt.Errorf(
+				"state.Run() failed, cannot get repoUrl from either of 'repo' command-line argument and '%s', %w",
+				metadataFile,
+				err,
+			)
+
+		}
+	} else {
+		repoUrl = *repoUrlArg
+	}
+	repo, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{URL: repoUrl})
 	if err != nil {
 		return fmt.Errorf("state.Run() failed, %s", err)
 	}
 
-	dirName := fmt.Sprintf("data/%s", *tutorialName)
-	stepFile := fmt.Sprintf("%s/steps.json", dirName)
-	targetDir := fmt.Sprintf("%s/state", dirName)
+	// Write RepoUrl to tutorial's metadata file
+	if repoUrlArg == nil {
+		err := writeRepoUrl(dirName, repoUrl)
+		if err != nil {
+			return fmt.Errorf("state.Run() failed, %s", err)
+		}
+	}
 
 	// Process the steps file and write to target
 	err = process(repo, *tutorialName, stepFile, targetDir)

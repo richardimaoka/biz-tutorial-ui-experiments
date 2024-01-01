@@ -18,12 +18,12 @@ func main() {
 
 	switch subCmd {
 	case "input":
-		err := input.Run(os.Args[2:])
+		err := input.Run(os.Args[2:]) //[:2] omit the first two args, main command and subcommand
 		if err != nil {
 			log.Print(err)
 		}
 	case "state":
-		err := state.Run(os.Args[2:])
+		err := state.Run(os.Args[2:]) //[:2] omit the first two args, main command and subcommand
 		if err != nil {
 			log.Print(err)
 		}
