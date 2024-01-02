@@ -195,6 +195,31 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 	return nil
 }
 
+func (s *SourceCode) openFileBestGuess(commit string) (string, error) {
+	if s.commitHash == "" {
+		files, err := gitwrap.GetCommitFiles(s.repo, commit)
+		if err != nil {
+			return "", err
+		}
+		if len(files) == 1 {
+			return files[0].Name, nil // this should be a full path, as it is a path from the commit root tree
+		} else {
+			return "", nil
+		}
+	} else {
+		files, err := gitwrap.GetPatchFiles(s.repo, s.commitHash, commit)
+		if err != nil {
+			return "", err
+		}
+		if len(files) == 1 {
+			return files[0].Path(), nil
+		} else {
+			return "", nil
+		}
+	}
+
+}
+
 func (s *SourceCode) openFile(filePath string) {
 	s.DefaultOpenFilePath = filePath
 }

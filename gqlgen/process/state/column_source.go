@@ -22,34 +22,47 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 }
 
 func (c *SourceColumn) Commit(fields *SourceFields) error {
-	funcName := "Commit()"
+	errorPrefix := fmt.Sprintf("Commit() for %s failed", fields.Commit)
 
-	var err error
+	// guess file path
+	var filePath string
+	if fields.DefaultOpenFilePath == "" {
+		var err error
+		filePath, err = c.sourceCode.openFileBestGuess(fields.Commit)
+		if err != nil {
+			return fmt.Errorf("%s, %s", errorPrefix, err)
+		}
+	} else {
+		filePath = fields.DefaultOpenFilePath
+	}
 
 	// process commit
-	err = c.sourceCode.forwardCommit(fields.Commit)
+	err := c.sourceCode.forwardCommit(fields.Commit)
 	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
+		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
 	// open file
-	c.sourceCode.openFile(fields.DefaultOpenFilePath)
+	c.sourceCode.openFile(filePath)
 
 	// tooltip
 	if fields.SourceTooltipContents != "" {
 		if fields.SourceTooltipIsAppend {
-			err = c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+			err := c.sourceCode.appendTooltipContents(fields.SourceTooltipContents)
+			if err != nil {
+				return fmt.Errorf("%s, %s", errorPrefix, err)
+			}
 		} else {
-			err = c.sourceCode.newTooltip(
-				fields.DefaultOpenFilePath,
+			err := c.sourceCode.newTooltip(
+				filePath,
 				fields.SourceTooltipContents,
 				SourceCodeTooltipTiming(fields.SourceTooltipTiming),
 				fields.SourceTooltipLineNumber,
 			)
+			if err != nil {
+				return fmt.Errorf("%s, %s", errorPrefix, err)
+			}
 		}
-	}
-	if err != nil {
-		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
 	return nil
