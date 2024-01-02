@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { GqlFileTreeHeader } from "./header/GqlFileTreeHeader";
 import styles from "./GqlFileTreePane.module.css";
 import { GqlFileTreeComponent } from "./tree/GqlFileTreeComponent";
+import { FolderTreeIcon } from "../../icons/FolderTreeIcon";
 
 const fragmentDefinition = graphql(`
   fragment GqlFileTreePane on SourceCode {
@@ -33,28 +34,36 @@ export const GqlFileTreePane = (props: Props): JSX.Element => {
     }
   }, [props.step, fragment.isFoldFileTree]);
 
-  // TODO: replace this after experiments finished
   if (isFolded) {
     console.log("GqlFileTreePane is showing nothing during experiments");
-    return <></>;
+    return (
+      <div className={styles.folded}>
+        <button
+          className={styles.button}
+          onClick={() => {
+            setIsFolded(!isFolded);
+          }}
+        >
+          <FolderTreeIcon />
+        </button>
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.expanded}>
+        <GqlFileTreeHeader
+          fragment={fragment}
+          isFolded={isFolded}
+          onButtonClick={() => {
+            setIsFolded(!isFolded);
+          }}
+        />
+        <GqlFileTreeComponent
+          isFolded={isFolded}
+          fragment={fragment}
+          step={props.step}
+        />
+      </div>
+    );
   }
-
-  return (
-    <div
-      className={`${styles.pane} ${isFolded ? styles.folded : styles.expanded}`}
-    >
-      <GqlFileTreeHeader
-        fragment={fragment}
-        isFolded={isFolded}
-        onButtonClick={() => {
-          setIsFolded(!isFolded);
-        }}
-      />
-      <GqlFileTreeComponent
-        isFolded={isFolded}
-        fragment={fragment}
-        step={props.step}
-      />
-    </div>
-  );
 };

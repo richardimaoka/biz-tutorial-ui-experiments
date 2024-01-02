@@ -1,3 +1,4 @@
 .component {
   background-color: var(--color-menu);
+  margin-left: 40px;
 }

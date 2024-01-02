@@ -4,14 +4,11 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--color-menu);
-}
 
-.component.folded {
-  background-color: var(--color-sourcecode-menu-unfocused);
-  padding: 5px 4px;
-}
-
-.component.expanded {
   background-color: var(--color-menu);
   padding: 5px 8px;
+}
+
+.button {
+  color: var(--color-primary-text);
 }

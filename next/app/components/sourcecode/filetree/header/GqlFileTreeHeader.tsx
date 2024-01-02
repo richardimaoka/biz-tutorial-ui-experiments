@@ -20,15 +20,11 @@ interface FileTreeHeaderProps {
 export const GqlFileTreeHeader = (props: FileTreeHeaderProps): JSX.Element => {
   const fragment = useFragment(fragmentDefinition, props.fragment);
 
-  const componentStyle = props.isFolded
-    ? `${styles.component} ${styles.folded}`
-    : `${styles.component} ${styles.expanded}`;
-
   return (
-    <div className={componentStyle}>
-      {!props.isFolded && <ProjectDir projectDir={fragment.projectDir} />}
-      <button onClick={props.onButtonClick}>
-        {props.isFolded ? <AnglesRightIcon /> : <AnglesLeftIcon />}
+    <div className={styles.component}>
+      <ProjectDir projectDir={fragment.projectDir} />
+      <button className={styles.button} onClick={props.onButtonClick}>
+        <AnglesLeftIcon />
       </button>
     </div>
   );

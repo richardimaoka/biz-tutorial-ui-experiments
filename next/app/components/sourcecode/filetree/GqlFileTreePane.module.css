@@ -1,6 +1,7 @@
-.pane {
+.expanded {
   height: 100svh;
 
+  /* flex child = .header, .tree */
   display: flex;
   flex-direction: column;
 
@@ -10,15 +11,25 @@
   position: absolute;
   z-index: 100;
 
-  /* flex child = .header, .tree */
-}
-
-.pane.expanded {
   width: fit-content;
   max-width: 300px;
   box-shadow: 4px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-.pane.folded {
-  width: 24px; /* (icon 16px) + 2x(padding 4px) */
+.folded {
+  position: absolute;
+  z-index: 100;
+
+  height: 25px; /* same as openFile header - is there a better way than hardcoding? */
+  padding-left: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  display: block;
+  /* For folder-tree icon color */
+  color: rgb(194, 194, 194);
 }
