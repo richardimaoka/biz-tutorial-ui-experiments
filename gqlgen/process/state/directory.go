@@ -100,7 +100,13 @@ func (s *Directory) addFile(relativeFilePath string, file *File) error {
 		}
 
 		// if not found, add a directory
-		subDir := emptyDirectory(s.dirPath + "/" + targetSubDir)
+		var targetSubDirFullPath string
+		if s.dirPath == "" {
+			targetSubDirFullPath = targetSubDir
+		} else {
+			targetSubDirFullPath = s.dirPath + "/" + targetSubDir
+		}
+		subDir := emptyDirectory(targetSubDirFullPath)
 		s.subDirs = append(s.subDirs, subDir)
 		s.subDirs.sortSelf()
 		return subDir.addFile(nextRelativeFilePath, file)
