@@ -19,7 +19,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}",
-      "args": ["state", "-tutorial", "${input:tutorialName}"]
+      "args": ["input", "-tutorial", "${input:tutorialName}"]
     },
     {
       "name": "state",
