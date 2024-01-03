@@ -1,6 +1,7 @@
 package input
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -21,7 +22,6 @@ func toMode(s string) (Mode, error) {
 	case string(HandsonMode):
 		return HandsonMode, nil
 	default:
-		return HandsonMode, nil
-		// return "", fmt.Errorf("'%s' is an invalid mode", s)
+		return "", fmt.Errorf("'%s' is an invalid mode", s)
 	}
 }

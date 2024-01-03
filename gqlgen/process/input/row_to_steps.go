@@ -24,7 +24,7 @@ func toSteps(
 
 		mode, err := toMode(fromRow.Mode)
 		if err != nil {
-			return nil, fmt.Errorf("%s, mode = '%s' is invalid", errorPrefix, fromRow.Mode)
+			return nil, fmt.Errorf("%s, %s", errorPrefix, err)
 		}
 
 		switch mode {
