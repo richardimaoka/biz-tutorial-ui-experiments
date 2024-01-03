@@ -173,7 +173,7 @@ func (p *Page) processStep(step *Step) error {
 				p.sourceCodeColumn = NewSourceColumn(p.repo, p.projectDir, p.tutorial)
 				p.columns = append(p.columns, p.sourceCodeColumn)
 			}
-			return p.sourceCodeColumn.Update(&step.SourceFields)
+			return p.sourceCodeColumn.Update(&step.SourceFields, &step.ModalFields)
 
 		case TerminalColumnType:
 			if p.terminalColumn == nil {

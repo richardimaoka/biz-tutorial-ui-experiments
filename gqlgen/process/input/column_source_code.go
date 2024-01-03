@@ -131,28 +131,36 @@ type SourceCommitRow struct {
 	DefaultOpenFilePath string         `json:"defaultOpenFilePath"`
 	Tooltip             *SourceTooltip `json:"tooltip"`
 	TypingAnimation     bool           `json:"typingAnimation"`
+	ModalContents       string         `json:"modalContents"`
+	ModalPosition       ModalPosition  `json:"modalPosition"`
 }
 
 type SourceOpenRow struct {
-	RowId     string         `json:"rowId"`
-	IsTrivial bool           `json:"isTrivial"`
-	Comment   string         `json:"comment"`
-	FilePath  string         `json:"filePath"`
-	Tooltip   *SourceTooltip `json:"tooltip"`
+	RowId         string         `json:"rowId"`
+	IsTrivial     bool           `json:"isTrivial"`
+	Comment       string         `json:"comment"`
+	FilePath      string         `json:"filePath"`
+	Tooltip       *SourceTooltip `json:"tooltip"`
+	ModalContents string         `json:"modalContents"`
+	ModalPosition ModalPosition  `json:"modalPosition"`
 }
 
 type SourceErrorRow struct {
-	RowId     string         `json:"rowId"`
-	IsTrivial bool           `json:"isTrivial"`
-	Comment   string         `json:"comment"`
-	FilePath  string         `json:"filePath"`
-	Tooltip   *SourceTooltip `json:"tooltip"`
+	RowId         string         `json:"rowId"`
+	IsTrivial     bool           `json:"isTrivial"`
+	Comment       string         `json:"comment"`
+	FilePath      string         `json:"filePath"`
+	Tooltip       *SourceTooltip `json:"tooltip"`
+	ModalContents string         `json:"modalContents"`
+	ModalPosition ModalPosition  `json:"modalPosition"`
 }
 
 type FileTreeRow struct {
-	RowId     string `json:"rowId"`
-	IsTrivial bool   `json:"isTrivial"`
-	Comment   string `json:"comment"`
+	RowId         string        `json:"rowId"`
+	IsTrivial     bool          `json:"isTrivial"`
+	Comment       string        `json:"comment"`
+	ModalContents string        `json:"modalContents"`
+	ModalPosition ModalPosition `json:"modalPosition"`
 }
 
 func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
@@ -194,6 +202,12 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 	//
 	isTrivial := fromRow.Trivial.Value()
 
+	// Check modal position
+	modalPosition, err := toModalPosition(fromRow.ModalPosition)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'modalPosition' is invalid, %s", errorPrefix, err)
+	}
+
 	return &SourceCommitRow{
 		RowId:               fromRow.RowId,
 		IsTrivial:           isTrivial,
@@ -202,6 +216,8 @@ func toSourceCommitRow(fromRow *Row) (*SourceCommitRow, error) {
 		DefaultOpenFilePath: defaultOpenFilePath,
 		Tooltip:             tooltip,
 		TypingAnimation:     typingAnimation,
+		ModalContents:       fromRow.ModalContents,
+		ModalPosition:       modalPosition,
 	}, nil
 }
 
@@ -241,12 +257,20 @@ func toSourceOpenRow(fromRow *Row) (*SourceOpenRow, error) {
 	//
 	trivial := fromRow.Trivial.Value()
 
+	// Check modal position
+	modalPosition, err := toModalPosition(fromRow.ModalPosition)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'modalPosition' is invalid, %s", errorPrefix, err)
+	}
+
 	return &SourceOpenRow{
-		RowId:     fromRow.RowId,
-		IsTrivial: trivial,
-		Comment:   fromRow.Comment,
-		FilePath:  filePath,
-		Tooltip:   tooltip,
+		RowId:         fromRow.RowId,
+		IsTrivial:     trivial,
+		Comment:       fromRow.Comment,
+		FilePath:      filePath,
+		Tooltip:       tooltip,
+		ModalContents: fromRow.ModalContents,
+		ModalPosition: modalPosition,
 	}, nil
 }
 
@@ -289,12 +313,20 @@ func toSourceErrorRow(fromRow *Row) (*SourceErrorRow, error) {
 	//
 	isTrivial := fromRow.Trivial.Value()
 
+	// Check modal position
+	modalPosition, err := toModalPosition(fromRow.ModalPosition)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'modalPosition' is invalid, %s", errorPrefix, err)
+	}
+
 	return &SourceErrorRow{
-		RowId:     fromRow.RowId,
-		IsTrivial: isTrivial,
-		Comment:   fromRow.Comment,
-		FilePath:  filepath,
-		Tooltip:   tooltip,
+		RowId:         fromRow.RowId,
+		IsTrivial:     isTrivial,
+		Comment:       fromRow.Comment,
+		FilePath:      filepath,
+		Tooltip:       tooltip,
+		ModalContents: fromRow.ModalContents,
+		ModalPosition: modalPosition,
 	}, nil
 }
 
@@ -316,13 +348,20 @@ func toFileTreeRow(fromRow *Row) (*FileTreeRow, error) {
 	//
 	// Check isTrivial field
 	//
-
 	isTrivial := fromRow.Trivial.Value()
 
+	// Check modal position
+	modalPosition, err := toModalPosition(fromRow.ModalPosition)
+	if err != nil {
+		return nil, fmt.Errorf("%s, 'modalPosition' is invalid, %s", errorPrefix, err)
+	}
+
 	return &FileTreeRow{
-		RowId:     fromRow.RowId,
-		Comment:   fromRow.Comment,
-		IsTrivial: isTrivial,
+		RowId:         fromRow.RowId,
+		Comment:       fromRow.Comment,
+		IsTrivial:     isTrivial,
+		ModalContents: fromRow.ModalContents,
+		ModalPosition: modalPosition,
 	}, nil
 }
 
@@ -349,7 +388,10 @@ func fileTreeStep(r *FileTreeRow, StepIdFinder *StepIdFinder) state.Step {
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		// No ModalFields, as it is a trivial step
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition.toState(),
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType: state.FileTree,
 		},
@@ -380,7 +422,10 @@ func openFileStep(r *SourceOpenRow, StepIdFinder *StepIdFinder, filePath string)
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		// No ModalFields, as it is a trivial step
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition.toState(),
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceOpen,
 			DefaultOpenFilePath: filePath,
@@ -416,7 +461,10 @@ func sourceCommitStep(r *SourceCommitRow, StepIdFinder *StepIdFinder) state.Step
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		// No ModalFields, as it is a trivial step
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition.toState(),
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceCommit,
 			Commit:              r.Commit,
@@ -454,7 +502,10 @@ func openSourceErrorStep(r *SourceErrorRow, StepIdFinder *StepIdFinder, filePath
 		AnimationFields: state.AnimationFields{
 			IsTrivial: r.IsTrivial,
 		},
-		// No ModalFields, as it is a trivial step
+		ModalFields: state.ModalFields{
+			ModalContents: r.ModalContents,
+			ModalPosition: r.ModalPosition.toState(),
+		},
 		SourceFields: state.SourceFields{
 			SourceStepType:      state.SourceMove,
 			DefaultOpenFilePath: filePath,

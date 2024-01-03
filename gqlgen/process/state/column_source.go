@@ -13,6 +13,7 @@ import (
 
 type SourceColumn struct {
 	sourceCode *SourceCode
+	modal      *Modal
 }
 
 func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceColumn {
@@ -21,7 +22,7 @@ func NewSourceColumn(repo *git.Repository, projectDir, tutorial string) *SourceC
 	}
 }
 
-func (c *SourceColumn) Commit(fields *SourceFields) error {
+func (c *SourceColumn) Commit(fields *SourceFields, modalFields *ModalFields) error {
 	errorPrefix := fmt.Sprintf("Commit() for %s failed", fields.Commit)
 
 	// guess file path
@@ -65,15 +66,38 @@ func (c *SourceColumn) Commit(fields *SourceFields) error {
 		}
 	}
 
+	// Modal processing
+	if modalFields.ModalContents == "" {
+		// clean up
+		c.modal = nil
+	} else {
+		c.modal = &Modal{
+			markdownBody: modalFields.ModalContents,
+			position:     modalFields.ModalPosition,
+		}
+	}
+
 	return nil
 }
 
-func (c *SourceColumn) FileTree(fields *SourceFields) error {
+func (c *SourceColumn) FileTree(fields *SourceFields, modalFields *ModalFields) error {
 	c.sourceCode.showFileTree = true
+
+	// Modal processing
+	if modalFields.ModalContents == "" {
+		// clean up
+		c.modal = nil
+	} else {
+		c.modal = &Modal{
+			markdownBody: modalFields.ModalContents,
+			position:     modalFields.ModalPosition,
+		}
+	}
+
 	return nil
 }
 
-func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
+func (c *SourceColumn) SourceOpen(fields *SourceFields, modalFields *ModalFields) error {
 	funcName := "SourceOpen()"
 
 	// open file
@@ -97,10 +121,21 @@ func (c *SourceColumn) SourceOpen(fields *SourceFields) error {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
+	// Modal processing
+	if modalFields.ModalContents == "" {
+		// clean up
+		c.modal = nil
+	} else {
+		c.modal = &Modal{
+			markdownBody: modalFields.ModalContents,
+			position:     modalFields.ModalPosition,
+		}
+	}
+
 	return nil
 }
 
-func (c *SourceColumn) SourceError(fields *SourceFields) error {
+func (c *SourceColumn) SourceError(fields *SourceFields, modalFields *ModalFields) error {
 	funcName := "SourceError()"
 
 	// open file
@@ -117,6 +152,17 @@ func (c *SourceColumn) SourceError(fields *SourceFields) error {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
+	// Modal processing
+	if modalFields.ModalContents == "" {
+		// clean up
+		c.modal = nil
+	} else {
+		c.modal = &Modal{
+			markdownBody: modalFields.ModalContents,
+			position:     modalFields.ModalPosition,
+		}
+	}
+
 	return nil
 
 }
@@ -131,9 +177,11 @@ func (c *SourceColumn) CleanUpPrevStep() error {
 	return nil
 }
 
-func (c *SourceColumn) Update(fields *SourceFields) error {
+func (c *SourceColumn) Update(fields *SourceFields, modalFields *ModalFields) error {
 	errorPrefix := "Update() failed"
 
+	// Cleanup for every update
+	//   TODO: there are `cleanup for every update` and selective CleanUpPrevStep() - organize the code better...
 	err := c.sourceCode.clearEdits()
 	if err != nil {
 		return fmt.Errorf("%s, %s", errorPrefix, err)
@@ -144,17 +192,19 @@ func (c *SourceColumn) Update(fields *SourceFields) error {
 		return fmt.Errorf("%s, %s", errorPrefix, err)
 	}
 
+	c.modal = nil
+
 	switch fields.SourceStepType {
 	case FileTree:
-		err = c.FileTree(fields)
+		err = c.FileTree(fields, modalFields)
 	case SourceMove:
 		// no update is needed, just changing FocusColumn is fine
 	case SourceOpen:
-		err = c.SourceOpen(fields)
+		err = c.SourceOpen(fields, modalFields)
 	case SourceError:
-		err = c.SourceError(fields)
+		err = c.SourceError(fields, modalFields)
 	case SourceCommit:
-		err = c.Commit(fields)
+		err = c.Commit(fields, modalFields)
 	default:
 		err = fmt.Errorf("soruce step type = '%s' is not implemented yet", fields.SourceStepType)
 	}
@@ -173,9 +223,15 @@ func (c *SourceColumn) ToGraphQL() *model.SourceCodeColumn {
 }
 
 func (c *SourceColumn) ToGraphQLColumnWrapper() *model.ColumnWrapper {
+	var modal *model.Modal
+	if c.modal != nil {
+		modal = c.modal.ToGraphQL()
+	}
+
 	return &model.ColumnWrapper{
 		Column:            c.ToGraphQL(),
 		ColumnName:        "SourceCode",
 		ColumnDisplayName: stringRef("source"),
+		Modal:             modal,
 	}
 }
