@@ -6,6 +6,7 @@ import { FragmentType, graphql, useFragment } from "@/libs/gql";
 const fragmentDefinition = graphql(`
   fragment GqlFileNameTabBar on OpenFile {
     fileName
+    isAdded
   }
 `);
 
@@ -19,7 +20,7 @@ export function GqlFileNameTabBar(props: Props) {
 
   return (
     <div className={styles.component}>
-      <FileNameTab fileName={filename} />
+      <FileNameTab fileName={filename} isNewFile={fragment.isAdded} />
     </div>
   );
 }

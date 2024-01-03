@@ -231,6 +231,8 @@ type OpenFile {
   editSequence: EditSequence
   tooltip: SourceCodeTooltip
 
+  isAdded: Boolean
+
   # To be deprecated as Monaco Diff Editor will be used
   highlight: [FileHighlight]
 }

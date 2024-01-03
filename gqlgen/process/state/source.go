@@ -84,6 +84,12 @@ func (s *SourceCode) initialCommit(commitHash string) error {
 		return fmt.Errorf("%s failed, %s", funcName, err)
 	}
 
+	// ...then mark all files as adeed
+	err = s.markAddedFiles(files)
+	if err != nil {
+		return fmt.Errorf("%s failed, %s", funcName, err)
+	}
+
 	// Increment the commit
 	s.commitHash = commitHash
 	return nil
@@ -192,6 +198,19 @@ func (s *SourceCode) processPatch(patch *object.Patch) error {
 		}
 	}
 
+	return nil
+}
+
+func (s *SourceCode) markAddedFiles(files Files) error {
+	funcName := "markAddedFiles()"
+
+	for _, f := range files {
+		file, err := s.rootDir.findFile(f.filePath)
+		if err != nil {
+			return fmt.Errorf("%s failed, %s", funcName, err)
+		}
+		file.markAdded()
+	}
 	return nil
 }
 

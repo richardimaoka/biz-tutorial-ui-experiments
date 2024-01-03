@@ -177,6 +177,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 	trueValue := true
 	size := float64(s.size)
 	editSequence := toEditSequence(s.edits)
+	isAdded := s.isAdded
 
 	var tooltip *model.SourceCodeTooltip
 	if s.tooltip != nil {
@@ -193,6 +194,7 @@ func (s *File) ToGraphQLOpenFile() *model.OpenFile {
 		Size:          &size,
 		EditSequence:  editSequence,
 		Tooltip:       tooltip,
+		IsAdded:       &isAdded,
 	}
 }
 
@@ -202,7 +204,7 @@ func (s *File) ToGraphQLFileNode() *model.FileNode {
 	filePath := s.filePath
 	fileName := s.fileName
 	offset := s.offset
-	isUpdated := s.isUpdated || s.isAdded || s.isRenamed
+	isUpdated := s.isUpdated
 	isDeleted := s.isDeleted
 
 	return &model.FileNode{

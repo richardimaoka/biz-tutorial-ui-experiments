@@ -106,6 +106,7 @@ type OpenFile struct {
 	Size          *float64           `json:"size"`
 	EditSequence  *EditSequence      `json:"editSequence"`
 	Tooltip       *SourceCodeTooltip `json:"tooltip"`
+	IsAdded       *bool              `json:"isAdded"`
 	Highlight     []*FileHighlight   `json:"highlight"`
 }
 

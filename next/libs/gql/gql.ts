@@ -61,7 +61,7 @@ const documents = {
     types.GqlOpenFilePaneFragmentDoc,
   "\n  fragment GqlSourceCodeEditor on OpenFile {\n    content\n    oldContent\n    language\n    editSequence {\n      id\n      edits {\n        text\n        range {\n          startLineNumber\n          startColumn\n          endLineNumber\n          endColumn\n        }\n      }\n    }\n    tooltip {\n      markdownBody\n      lineNumber\n      timing\n    }\n  }\n":
     types.GqlSourceCodeEditorFragmentDoc,
-  "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n  }\n":
+  "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n    isAdded\n  }\n":
     types.GqlFileNameTabBarFragmentDoc,
   "\n  fragment GqlTerminalColumn on TerminalColumn {\n    ...GqlTerminalHeader\n    terminals {\n      ...GqlTerminalContents\n    }\n  }\n":
     types.GqlTerminalColumnFragmentDoc,
@@ -243,8 +243,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n  }\n",
-): (typeof documents)["\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n  }\n"];
+  source: "\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n    isAdded\n  }\n",
+): (typeof documents)["\n  fragment GqlFileNameTabBar on OpenFile {\n    fileName\n    isAdded\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

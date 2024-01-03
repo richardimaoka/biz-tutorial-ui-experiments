@@ -120,6 +120,7 @@ type ComplexityRoot struct {
 		FileName      func(childComplexity int) int
 		FilePath      func(childComplexity int) int
 		Highlight     func(childComplexity int) int
+		IsAdded       func(childComplexity int) int
 		IsFullContent func(childComplexity int) int
 		Language      func(childComplexity int) int
 		OldContent    func(childComplexity int) int
@@ -505,6 +506,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OpenFile.Highlight(childComplexity), true
+
+	case "OpenFile.isAdded":
+		if e.complexity.OpenFile.IsAdded == nil {
+			break
+		}
+
+		return e.complexity.OpenFile.IsAdded(childComplexity), true
 
 	case "OpenFile.isFullContent":
 		if e.complexity.OpenFile.IsFullContent == nil {
@@ -2898,6 +2906,47 @@ func (ec *executionContext) fieldContext_OpenFile_tooltip(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _OpenFile_isAdded(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OpenFile_isAdded(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsAdded, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OpenFile_isAdded(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpenFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OpenFile_highlight(ctx context.Context, field graphql.CollectedField, obj *model.OpenFile) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OpenFile_highlight(ctx, field)
 	if err != nil {
@@ -3994,6 +4043,8 @@ func (ec *executionContext) fieldContext_SourceCode_openFile(ctx context.Context
 				return ec.fieldContext_OpenFile_editSequence(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_OpenFile_tooltip(ctx, field)
+			case "isAdded":
+				return ec.fieldContext_OpenFile_isAdded(ctx, field)
 			case "highlight":
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
@@ -5013,6 +5064,8 @@ func (ec *executionContext) fieldContext_TestObjs_appTestSourcecodeFilecontentPa
 				return ec.fieldContext_OpenFile_editSequence(ctx, field)
 			case "tooltip":
 				return ec.fieldContext_OpenFile_tooltip(ctx, field)
+			case "isAdded":
+				return ec.fieldContext_OpenFile_isAdded(ctx, field)
 			case "highlight":
 				return ec.fieldContext_OpenFile_highlight(ctx, field)
 			}
@@ -7500,6 +7553,10 @@ func (ec *executionContext) _OpenFile(ctx context.Context, sel ast.SelectionSet,
 		case "tooltip":
 
 			out.Values[i] = ec._OpenFile_tooltip(ctx, field, obj)
+
+		case "isAdded":
+
+			out.Values[i] = ec._OpenFile_isAdded(ctx, field, obj)
 
 		case "highlight":
 

@@ -125,6 +125,7 @@ export type OpenFile = {
   fileName?: Maybe<Scalars["String"]["output"]>;
   filePath?: Maybe<Scalars["String"]["output"]>;
   highlight?: Maybe<Array<Maybe<FileHighlight>>>;
+  isAdded?: Maybe<Scalars["Boolean"]["output"]>;
   isFullContent?: Maybe<Scalars["Boolean"]["output"]>;
   language?: Maybe<Scalars["String"]["output"]>;
   oldContent?: Maybe<Scalars["String"]["output"]>;
@@ -537,6 +538,7 @@ export type GqlSourceCodeEditorFragment = {
 export type GqlFileNameTabBarFragment = {
   __typename: "OpenFile";
   fileName?: string | null;
+  isAdded?: boolean | null;
 } & { " $fragmentName"?: "GqlFileNameTabBarFragment" };
 
 export type GqlTerminalColumnFragment = ({
@@ -1429,6 +1431,7 @@ export const GqlFileNameTabBarFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -1550,6 +1553,7 @@ export const GqlOpenFilePaneFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -1771,6 +1775,7 @@ export const GqlSourceCodeColumnFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -2299,6 +2304,7 @@ export const GqlColumnWrapperFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -2816,6 +2822,7 @@ export const GqlColumnWrappersFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -3476,6 +3483,7 @@ export const GqlHandsonComponentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -4717,6 +4725,7 @@ export const AppTutorialPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
@@ -5657,6 +5666,7 @@ export const AppTestTutorialColumnsPageDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "isAdded" } },
         ],
       },
     },
