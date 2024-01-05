@@ -19,11 +19,11 @@ export function PrevButton(props: Props) {
       <Link href={pathname + "?step=" + props.prevStep + "&skipAnimation=true"}>
         <button className={styles.component}>
           <div className={styles.smartphone}>
-            <div>prev</div>
+            <div className={styles.unselectable}>prev</div>
             <ChevronUpIcon />
           </div>
           <div className={styles.desktop}>
-            <div>PREV</div>
+            <div className={styles.unselectable}>PREV</div>
             <ChevronUpIcon />
           </div>
         </button>

@@ -19,11 +19,11 @@ export function NextButton(props: Props) {
       <Link href={pathname + "?step=" + props.nextStep}>
         <button className={styles.component}>
           <div className={styles.smartphone}>
-            <div>next</div>
+            <div className={styles.unselectable}>next</div>
             <ChevronDownIcon />
           </div>
           <div className={styles.desktop}>
-            <div>NEXT</div>
+            <div className={styles.unselectable}>NEXT</div>
             <ChevronDownIcon />
           </div>
         </button>

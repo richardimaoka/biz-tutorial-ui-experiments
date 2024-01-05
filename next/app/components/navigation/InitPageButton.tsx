@@ -14,11 +14,11 @@ export function InitPageButton() {
     <Link href={pathname}>
       <button className={styles.component}>
         <div className={smartPhoneStyle}>
-          <div>p. 1</div>
+          <div className={styles.unselectable}>p. 1</div>
           <BackwardFastIcon />
         </div>
         <div className={desktopStyle}>
-          <div>p. 1</div>
+          <div className={styles.unselectable}>p. 1</div>
           <BackwardFastIcon />
         </div>
       </button>

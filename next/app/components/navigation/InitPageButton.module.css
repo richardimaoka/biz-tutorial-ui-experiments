@@ -4,7 +4,7 @@
 
   /* color and styles */
   background-color: var(--color-theme-transparent-white);
-  color: var(--color-primary-text);
+  color: #c2c2c2;
   border-style: none;
 
   /* TODO: remove - experimental positioning */
@@ -39,4 +39,9 @@
 
 .disabled {
   color: var(--color-theme-transparent-white);
+}
+
+.unselectable {
+  /* preven unexpected text-select upon button-press/tap attempt */
+  user-select: none;
 }
