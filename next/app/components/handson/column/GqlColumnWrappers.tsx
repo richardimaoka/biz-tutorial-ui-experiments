@@ -37,8 +37,10 @@ export function GqlColumnWrappers(props: Props): JSX.Element {
       columnNames={columnNames}
       defaultFocusColumn={defaultFocusColumn}
     >
+      {/* This <div> is needed as <Carousel> expects single-element children */}
       <div className={styles.component}>
         {columns.map((c) => (
+          // TODO: is this <div> needed?
           <div key={c.columnName} className={styles.column}>
             <GqlColumnWrapper
               fragment={c}

@@ -51,6 +51,8 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
   switch (column.__typename) {
     case "TerminalColumn":
       return (
+        // This <div> is needed (1) to set the common background color,
+        // and (2) to set `position: relative` to hold common `position: absolute` items (e.g.) navigation buttons
         <div className={styles.component}>
           <GqlTerminalColumn fragment={column} selectIndex={0} />
           {modal && <GqlModalComponent fragment={modal} />}
@@ -58,6 +60,8 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
       );
     case "SourceCodeColumn":
       return (
+        // This <div> is needed (1) to set the common background color,
+        // and (2) to set `position: relative` to hold common `position: absolute` items (e.g.) navigation buttons
         <div className={styles.component}>
           <GqlSourceCodeColumn
             fragment={column}
@@ -68,6 +72,8 @@ export function GqlColumnWrapper(props: Props): JSX.Element {
       );
     case "BrowserColumn":
       return (
+        // This <div> is needed (1) to set the common background color,
+        // and (2) to set `position: relative` to hold common `position: absolute` items (e.g.) navigation buttons
         <div className={styles.component}>
           <GqlBrowserColumn fragment={column} />
           {modal && <GqlModalComponent fragment={modal} />}
