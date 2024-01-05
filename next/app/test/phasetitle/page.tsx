@@ -1,4 +1,4 @@
-import { PhaseTitle } from "@/app/components/phasetitle/PhaseTitle";
+import { PhaseTitle } from "@/app/components/slideshow/slides/phasetitle/PhaseTitle";
 
 export default async function Page() {
   return (

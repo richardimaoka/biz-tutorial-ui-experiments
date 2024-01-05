@@ -1,9 +1,9 @@
 import { FragmentType, graphql, useFragment } from "@/libs/gql";
-import { MarkdownDefaultStyle } from "../markdown/server-component/MarkdownDefaultStyle";
+import { MarkdownDefaultStyle } from "../../../markdown/server-component/MarkdownDefaultStyle";
 import { GqlSectionTitleSlide } from "../sectiontitle/GqlSectionTitleSlide";
 import { GqlTutorialTitle } from "../tutorialtitle/GqlTutorialTitleSlide";
 import styles from "./GqlSlideWrapper.module.css";
-import { GqlImageSlide } from "../image/GqlImageSlide";
+import { GqlImageSlide } from "../../../image/GqlImageSlide";
 
 const fragmentDefinition = graphql(`
   fragment GqlSlideWrapper on SlideWrapper {
